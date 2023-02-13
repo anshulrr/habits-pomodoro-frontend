@@ -53,6 +53,8 @@ export default function AuthProvider({ children }) {
     }
 
     function logout() {
+        delete apiClient.defaults.headers.common["Authorization"];
+        console.log('logging out ' + username)
         setAuthenticated(false)
         setUsername(null)
         setToken(null)

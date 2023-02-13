@@ -8,7 +8,7 @@ export default function WelcomeComponent() {
         <div className="WelcomeComponent">
             <h1>Welcome {username}</h1>
             <div>
-                Manage your tasks - <Link to="/tasks">Go here</Link>
+                Manage your projects - <Link to="/projects">Go here</Link>
             </div>
         </div>
     )

@@ -7,6 +7,8 @@ import LoginComponent from './LoginComponent'
 
 import './AppRoutes.css'
 import AuthProvider, { useAuth } from '../services/auth/AuthContext'
+import ListProjectsComponent from './ListProjectsComponents'
+import ProjectComponent from './ProjectComponent'
 
 function AuthenticatedRoute({ children }) {
     const authContext = useAuth()
@@ -30,6 +32,18 @@ export default function AppRoutes() {
                         <Route path='/welcome/:username' element={
                             <AuthenticatedRoute>
                                 <WelcomeComponent />
+                            </AuthenticatedRoute>
+                        } />
+
+                        <Route path='/projects' element={
+                            <AuthenticatedRoute>
+                                <ListProjectsComponent />
+                            </AuthenticatedRoute>
+                        } />
+
+                        <Route path='/projects/:id' element={
+                            <AuthenticatedRoute>
+                                <ProjectComponent />
                             </AuthenticatedRoute>
                         } />
 

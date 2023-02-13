@@ -24,7 +24,7 @@ export default function HeaderComponent() {
                                 {isAuthenticated
                                     && <li className="nav-item fs-5"><Link className="nav-link" to={"/welcome/" + username}>Home</Link></li>}
                                 {isAuthenticated
-                                    && <li className="nav-item fs-5"><Link className="nav-link" to="/tasks">Tasks</Link></li>}
+                                    && <li className="nav-item fs-5"><Link className="nav-link" to="/projects">Projects</Link></li>}
                             </ul>
                         </div>
 
