@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom";
-import { deleteProjectApi, retrieveAllProjects } from "../services/api/ProjectApiService";
+import { Link, useNavigate } from "react-router-dom";
+import { retrieveAllProjects } from "../services/api/ProjectApiService";
 import { useAuth } from "../services/auth/AuthContext";
 
 export default function ListProjectsComponent() {
@@ -13,7 +13,7 @@ export default function ListProjectsComponent() {
 
     const [projects, setProjects] = useState([])
 
-    const [message, setMessage] = useState(null)
+    // const [message, setMessage] = useState(null)
 
     useEffect(
         () => refreshProjects(),
@@ -21,7 +21,7 @@ export default function ListProjectsComponent() {
     )
 
     function refreshProjects() {
-        retrieveAllProjects(username)
+        retrieveAllProjects()
             .then(response => {
                 console.log(response)
                 setProjects(response.data)
@@ -41,7 +41,7 @@ export default function ListProjectsComponent() {
     return (
         <div className="container">
             <h1>My Projects!</h1>
-            {message && <div className="alert alert-warning">{message}</div>}
+            {/* {message && <div className="alert alert-warning">{message}</div>} */}
             <div>
                 <table className='table'>
                     <thead>
@@ -56,7 +56,9 @@ export default function ListProjectsComponent() {
                             projects.map(
                                 project => (
                                     <tr key={project.id}>
-                                        <td>{project.name}</td>
+                                        <td>
+                                            <Link to={"/projects/" + project.id + "/tasks"}>{project.name}</Link>
+                                        </td>
                                         <td>{project.description}</td>
                                         <td> <button className="btn btn-success"
                                             onClick={() => updateProject(project.id)}>Update</button> </td>
