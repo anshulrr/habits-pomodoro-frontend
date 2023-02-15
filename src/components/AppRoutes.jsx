@@ -11,6 +11,7 @@ import ListProjectsComponent from './ListProjectsComponents'
 import ProjectComponent from './ProjectComponent'
 import ListTasksComponent from './ListTasksComponent'
 import TaskComponent from './TaskComponent'
+import PomodoroComponent from './PomodoroComponent'
 
 function AuthenticatedRoute({ children }) {
     const authContext = useAuth()
@@ -58,6 +59,12 @@ export default function AppRoutes() {
                         <Route path='/projects/:project_id/tasks/:id' element={
                             <AuthenticatedRoute>
                                 <TaskComponent />
+                            </AuthenticatedRoute>
+                        } />
+
+                        <Route path='/tasks/:task_id/pomodoros' element={
+                            <AuthenticatedRoute>
+                                <PomodoroComponent />
                             </AuthenticatedRoute>
                         } />
 

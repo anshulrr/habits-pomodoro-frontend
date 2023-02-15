@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { createPomodoroApi } from "../services/api/PomodoroApiService";
 import { retrieveAllTasks } from "../services/api/TaskApiService";
 import { useAuth } from "../services/auth/AuthContext";
 
@@ -35,6 +36,21 @@ export default function ListTasksComponent() {
         navigate(`/projects/${project_id}/tasks/-1`)
     }
 
+    function createNewPomodoro(task_id) {
+        console.log(task_id)
+
+        const pomodoro = {
+            startTime: new Date()
+        }
+
+        createPomodoroApi(pomodoro, task_id)
+            .then(response => {
+                console.log(response)
+                navigate(`/tasks/${task_id}/pomodoros`)
+            })
+            .catch(error => console.log(error))
+    }
+
     return (
         <div className="container">
             <h1>Tasks for project {project_id}</h1>
@@ -51,7 +67,10 @@ export default function ListTasksComponent() {
                             tasks.map(
                                 task => (
                                     <tr key={task.id}>
-                                        <td>{task.description}</td>
+                                        <td>
+                                            <span className="btn btn-warning m-5" onClick={() => createNewPomodoro(task.id)}>START</span>
+                                            {task.description}
+                                        </td>
                                     </tr>
                                 )
                             )
