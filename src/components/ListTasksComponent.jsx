@@ -46,7 +46,7 @@ export default function ListTasksComponent() {
         createPomodoroApi(pomodoro, task_id)
             .then(response => {
                 console.log(response)
-                navigate(`/tasks/${task_id}/pomodoros`)
+                navigate(`/tasks/${task_id}/pomodoros/${response.data.id}`)
             })
             .catch(error => console.log(error))
     }

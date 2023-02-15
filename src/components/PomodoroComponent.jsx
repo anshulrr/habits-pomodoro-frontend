@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom';
+import { pausePomodoroApi } from '../services/api/PomodoroApiService';
 
 export default function PomodoroComponent() {
 
@@ -12,7 +13,9 @@ export default function PomodoroComponent() {
 
     const [timer, setTimer] = useState('25:00')
 
-    const [status, setStatus] = useState('added')
+    const [timeElapsed, setTimeElapsed] = useState(0);
+
+    const [status, setStatus] = useState('started')
 
     const getTimeRemaining = (e) => {
         const total = Date.parse(e) - Date.parse(new Date());
@@ -35,6 +38,7 @@ export default function PomodoroComponent() {
                 (minutes > 9 ? minutes : '0' + minutes) + ':'
                 + (seconds > 9 ? seconds : '0' + seconds)
             )
+            setTimeElapsed(total / 1000);
         }
     }
     const clearTimer = (e) => {
@@ -49,9 +53,13 @@ export default function PomodoroComponent() {
         // after 1000ms or 1sec
         if (Ref.current) clearInterval(Ref.current);
         const id = setInterval(() => {
-            startTimer(e);
+            console.log(status);
+            if (status == 'started') {
+                startTimer(e);
+            }
         }, 1000)
         Ref.current = id;
+        return id;
     }
 
     const getDeadTime = () => {
@@ -69,12 +77,34 @@ export default function PomodoroComponent() {
     // We put empty array to act as componentDid
     // mount only
     useEffect(() => {
-        clearTimer(getDeadTime());
-    }, []);
+        const id = clearTimer(getDeadTime());
+        return () => {
+            clearInterval(id);  // fix for switching to different component
+        };
+    }, [status]);
+
+    const updatePomodoro = (id, s) => {
+        setStatus(s)
+        console.log("status updated to: ", status, timeElapsed)
+        const pomodoro = {
+            timeElapsed,
+            status: s  // // setState is not working for this
+        }
+
+        pausePomodoroApi(id, pomodoro)
+            .then(response => {
+                console.log(response)
+            })
+            .catch(error => console.log(error))
+    }
 
     return (
         <div className="PomodoroComponent">
             {timer}
+
+            <div className="btn btn-warning m-5" onClick={() => updatePomodoro(id, "paused")}>Pause</div>
+            <div className="btn btn-warning m-5" onClick={() => updatePomodoro(id, "started")}>Start</div>
+
         </div>
     )
 }
