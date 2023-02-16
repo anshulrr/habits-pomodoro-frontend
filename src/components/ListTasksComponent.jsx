@@ -40,7 +40,8 @@ export default function ListTasksComponent() {
         console.log(task_id)
 
         const pomodoro = {
-            startTime: new Date()
+            startTime: new Date(),
+            // length: 1
         }
 
         createPomodoroApi(pomodoro, task_id)

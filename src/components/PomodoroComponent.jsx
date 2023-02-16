@@ -39,6 +39,13 @@ export default function PomodoroComponent() {
                 + (seconds > 9 ? seconds : '0' + seconds)
             )
             setTimeRemaining(total / 1000);
+            if (total === 0) {
+                console.log(total)
+                // todo: find better way to update timeRemaining
+                // timeRemaing in this thread has different value
+                // hence passing it as method parameter
+                updatePomodoro(id, 'completed', total);
+            }
         }
     }
     const clearTimer = (e) => {
@@ -47,16 +54,16 @@ export default function PomodoroComponent() {
         // updating of timer Variable will be
         // after 1000ms or 1sec
         if (Ref.current) clearInterval(Ref.current);
-        const id = setInterval(() => {
-            console.log(status);
-            if (status == 'started') {
+        const interval_id = setInterval(() => {
+            console.log(status, timeRemaining);
+            if (status == 'completed') {
+                clearInterval(interval_id);
+            } else if (status == 'started') {
                 startTimer(e);
-            } else if (status == 'completed') {
-                clearInterval(id);
             }
         }, 1000)
-        Ref.current = id;
-        return id;
+        Ref.current = interval_id;
+        return interval_id;
     }
 
     const getDeadTime = () => {
@@ -80,7 +87,7 @@ export default function PomodoroComponent() {
         };
     }, [status]);
 
-    const updatePomodoro = (id, s) => {
+    const updatePomodoro = (id, s, timeRemaining) => {
         setStatus(s)
         console.log("status updated to: ", status, timeRemaining)
         const pomodoro = {
@@ -104,17 +111,17 @@ export default function PomodoroComponent() {
 
                 {
                     status == 'started' && status != 'completed'
-                    && <div className="btn btn-warning m-5" onClick={() => updatePomodoro(id, "paused")}>Pause</div>
+                    && <div className="btn btn-warning m-5" onClick={() => updatePomodoro(id, "paused", timeRemaining)}>Pause</div>
                 }
 
                 {
                     status == 'paused' && status != 'completed'
-                    && <div className="btn btn-success m-5" onClick={() => updatePomodoro(id, "started")}>Start</div>
+                    && <div className="btn btn-success m-5" onClick={() => updatePomodoro(id, "started", timeRemaining)}>Start</div>
                 }
 
                 {
                     status != 'completed'
-                    && <div className="btn btn-danger m-5" onClick={() => updatePomodoro(id, "completed")}>Mark Completed</div>
+                    && <div className="btn btn-danger m-5" onClick={() => updatePomodoro(id, "completed", timeRemaining)}>Mark Completed</div>
                 }
             </div>
 
