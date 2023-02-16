@@ -11,3 +11,7 @@ footer {
     width: 90%;
     height: 40px;
 }
+
+i {
+    cursor: pointer;
+}
