@@ -57,7 +57,7 @@ export default function ListTasksComponent() {
             <h1>Tasks for project {project_id}</h1>
             {/* {message && <div className="alert alert-warning">{message}</div>} */}
             <div>
-                <table className='table'>
+                <table className="table table-striped table-hover">
                     <thead>
                         <tr>
                             <th>Task</th>
@@ -68,8 +68,8 @@ export default function ListTasksComponent() {
                             tasks.map(
                                 task => (
                                     <tr key={task.id}>
-                                        <td>
-                                            <span className="btn btn-warning m-5" onClick={() => createNewPomodoro(task.id)}>START</span>
+                                        <td className="text-start">
+                                            <span className="btn btn-sm btn-warning m-1" onClick={() => createNewPomodoro(task.id)}>START</span>
                                             {task.description}
                                         </td>
                                     </tr>
