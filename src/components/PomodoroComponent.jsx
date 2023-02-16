@@ -51,6 +51,8 @@ export default function PomodoroComponent() {
             console.log(status);
             if (status == 'started') {
                 startTimer(e);
+            } else if (status == 'completed') {
+                clearInterval(id);
             }
         }, 1000)
         Ref.current = id;
@@ -100,8 +102,20 @@ export default function PomodoroComponent() {
                     {timer}
                 </div>
 
-                <div className="btn btn-warning m-5" onClick={() => updatePomodoro(id, "paused")}>Pause</div>
-                <div className="btn btn-success m-5" onClick={() => updatePomodoro(id, "started")}>Start</div>
+                {
+                    status == 'started' && status != 'completed'
+                    && <div className="btn btn-warning m-5" onClick={() => updatePomodoro(id, "paused")}>Pause</div>
+                }
+
+                {
+                    status == 'paused' && status != 'completed'
+                    && <div className="btn btn-success m-5" onClick={() => updatePomodoro(id, "started")}>Start</div>
+                }
+
+                {
+                    status != 'completed'
+                    && <div className="btn btn-danger m-5" onClick={() => updatePomodoro(id, "completed")}>Mark Completed</div>
+                }
             </div>
 
         </div>
