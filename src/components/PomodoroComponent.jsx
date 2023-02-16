@@ -9,15 +9,15 @@ export default function PomodoroComponent() {
     // stop it when needed
     const Ref = useRef(null);
 
-    const { task_id, id } = useParams()
+    const { task_id, id, length } = useParams()
 
-    const [timer, setTimer] = useState('25:00')
+    const [timer, setTimer] = useState(length + ':00')
 
-    const [timeElapsed, setTimeElapsed] = useState(0);
+    const [timeRemaining, setTimeRemaining] = useState(length * 60);
 
     const [status, setStatus] = useState('started')
 
-    const getTimeRemaining = (e) => {
+    const calculateTimeRemaining = (e) => {
         const total = Date.parse(e) - Date.parse(new Date());
         const seconds = Math.floor((total / 1000) % 60);
         const minutes = Math.floor((total / 1000 / 60) % 60);
@@ -28,7 +28,7 @@ export default function PomodoroComponent() {
 
     const startTimer = (e) => {
         let { total, minutes, seconds }
-            = getTimeRemaining(e);
+            = calculateTimeRemaining(e);
         if (total >= 0) {
 
             // update the timer
@@ -38,15 +38,10 @@ export default function PomodoroComponent() {
                 (minutes > 9 ? minutes : '0' + minutes) + ':'
                 + (seconds > 9 ? seconds : '0' + seconds)
             )
-            setTimeElapsed(total / 1000);
+            setTimeRemaining(total / 1000);
         }
     }
     const clearTimer = (e) => {
-
-        // If you adjust it you should also need to
-        // adjust the Endtime formula we are about
-        // to code next    
-        setTimer('25:00');
 
         // If you try to remove this line the 
         // updating of timer Variable will be
@@ -67,7 +62,7 @@ export default function PomodoroComponent() {
 
         // This is where you need to adjust if 
         // you entend to add more time
-        deadline.setSeconds(deadline.getSeconds() + 25 * 60);
+        deadline.setSeconds(deadline.getSeconds() + timeRemaining);
         return deadline;
     }
 
@@ -85,10 +80,10 @@ export default function PomodoroComponent() {
 
     const updatePomodoro = (id, s) => {
         setStatus(s)
-        console.log("status updated to: ", status, timeElapsed)
+        console.log("status updated to: ", status, timeRemaining)
         const pomodoro = {
-            timeElapsed,
-            status: s  // // setState is not working for this
+            timeElapsed: length * 60 - timeRemaining,
+            status: s  // // setState is not working for this synchronously
         }
 
         pausePomodoroApi(id, pomodoro)
@@ -100,10 +95,14 @@ export default function PomodoroComponent() {
 
     return (
         <div className="PomodoroComponent">
-            {timer}
+            <div className="container">
+                <div className="fs-1 p-3 mb-2 bg-danger text-white">
+                    {timer}
+                </div>
 
-            <div className="btn btn-warning m-5" onClick={() => updatePomodoro(id, "paused")}>Pause</div>
-            <div className="btn btn-warning m-5" onClick={() => updatePomodoro(id, "started")}>Start</div>
+                <div className="btn btn-warning m-5" onClick={() => updatePomodoro(id, "paused")}>Pause</div>
+                <div className="btn btn-success m-5" onClick={() => updatePomodoro(id, "started")}>Start</div>
+            </div>
 
         </div>
     )

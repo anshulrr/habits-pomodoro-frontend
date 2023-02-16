@@ -62,7 +62,7 @@ export default function AppRoutes() {
                             </AuthenticatedRoute>
                         } />
 
-                        <Route path='/tasks/:task_id/pomodoros/:id' element={
+                        <Route path='/tasks/:task_id/pomodoros/:id/:length' element={
                             <AuthenticatedRoute>
                                 <PomodoroComponent />
                             </AuthenticatedRoute>
