@@ -4,6 +4,7 @@ import HeaderComponent from './HeaderComponent'
 import ErrorComponent from './ErrorComponent'
 import WelcomeComponent from './WelcomeComponent'
 import LoginComponent from './LoginComponent'
+import ListPomodorosComponent from './ListPomodorosComponent'
 
 import './AppRoutes.css'
 import AuthProvider, { useAuth } from '../services/auth/AuthContext'
@@ -65,6 +66,12 @@ export default function AppRoutes() {
                         <Route path='/tasks/:task_id/pomodoros/:id/:length' element={
                             <AuthenticatedRoute>
                                 <PomodoroComponent />
+                            </AuthenticatedRoute>
+                        } />
+
+                        <Route path='/pomodoros' element={
+                            <AuthenticatedRoute>
+                                <ListPomodorosComponent />
                             </AuthenticatedRoute>
                         } />
 

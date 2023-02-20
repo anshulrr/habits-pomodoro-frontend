@@ -5,3 +5,6 @@ export const createPomodoroApi
 
 export const pausePomodoroApi
     = (id, pomodoro) => apiClient.put(`/pomodoros/${id}`, pomodoro)
+
+export const getPomodorosApi
+    = () => apiClient.get(`/pomodoros`)
