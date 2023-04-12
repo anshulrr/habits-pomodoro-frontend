@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react"
 import { getPomodorosApi } from "../services/api/PomodoroApiService";
 import moment from "moment"
+import { BarChart } from "./BarChart";
 
 
 export default function ListTasksComponent() {
 
     const [pomodoros, setPomodoros] = useState([])
+
+    const [chartData, setChartData] = useState(data)
 
     useEffect(
         () => retrieveTodayPomodoros(),
@@ -51,6 +54,23 @@ export default function ListTasksComponent() {
 
                 </table>
             </div >
+
+            <BarChart chartData={chartData} />
         </div >
     )
+}
+
+const data = {
+    labels: ['Red', 'Orange', 'Blue', 'Yellow'],
+    // datasets is an array of objects where each object represents a set of data to display corresponding to the labels above. for brevity, we'll keep it at one object
+    datasets: [
+        {
+            label: 'Popularity of colours',
+            data: [55, 23, 96, 80],
+            // you can set indiviual colors for each bar
+            borderWidth: 1,
+            barThickness: 6,  // number (pixels) or 'flex'
+            maxBarThickness: 8 // number (pixels)
+        }
+    ]
 }
