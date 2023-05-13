@@ -12,3 +12,6 @@ export const pausePomodoroApi
 
 export const getPomodorosApi
     = () => apiClient.get(`/pomodoros`)
+
+export const getProjectsPomodorosApi
+    = () => apiClient.get(`/pomodoros/projects-time`)

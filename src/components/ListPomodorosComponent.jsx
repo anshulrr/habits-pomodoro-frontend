@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getPomodorosApi } from "../services/api/PomodoroApiService";
+import { getPomodorosApi, getProjectsPomodorosApi } from "../services/api/PomodoroApiService";
 import moment from "moment"
 import { BarChart } from "./BarChart";
 
@@ -15,11 +15,34 @@ export default function ListTasksComponent() {
         []
     )
 
+    useEffect(
+        () => retrieveProjectsPomodoros(),
+        []
+    )
+
     function retrieveTodayPomodoros() {
         getPomodorosApi()
             .then(response => {
                 console.log(response)
                 setPomodoros(response.data)
+            })
+            .catch(response => console.log(response))
+    }
+
+    function retrieveProjectsPomodoros() {
+        getProjectsPomodorosApi()
+            .then(response => {
+                // console.log(response)
+                data.labels = [];
+                data.datasets[0].data = [];
+                data.datasets.label = "Project's Focus Time";
+                response.data.forEach(element => {
+                    // console.log(element);
+                    data.labels.push(element[1]);
+                    data.datasets[0].data.push(element[0]);
+                });
+                // console.log(data);
+                setChartData(data)
             })
             .catch(response => console.log(response))
     }
