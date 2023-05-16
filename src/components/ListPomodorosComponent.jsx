@@ -29,8 +29,8 @@ export default function ListTasksComponent() {
             .catch(response => console.log(response))
     }
 
-    function retrieveProjectsPomodoros() {
-        getProjectsPomodorosApi()
+    function retrieveProjectsPomodoros(limit) {
+        getProjectsPomodorosApi(limit ? limit : 'daily')
             .then(response => {
                 // console.log(response)
                 data.labels = [];
@@ -78,6 +78,10 @@ export default function ListTasksComponent() {
                 </table>
             </div >
 
+            <button type="button" class="btn btn-light" onClick={() => retrieveProjectsPomodoros('daily')}>Daily</button>
+            <button type="button" class="btn btn-light" onClick={() => retrieveProjectsPomodoros('weekly')}>Weekly</button>
+            <button type="button" class="btn btn-light" onClick={() => retrieveProjectsPomodoros('monthly')}>Monthly</button>
+
             <BarChart chartData={chartData} />
         </div >
     )
@@ -88,7 +92,7 @@ const data = {
     // datasets is an array of objects where each object represents a set of data to display corresponding to the labels above. for brevity, we'll keep it at one object
     datasets: [
         {
-            label: 'Popularity of colours',
+            label: 'time in minutes',
             data: [55, 23, 96, 80],
             // you can set indiviual colors for each bar
             borderWidth: 1,
