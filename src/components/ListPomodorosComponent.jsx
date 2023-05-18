@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react"
 import { getPomodorosApi, getProjectsPomodorosApi } from "../services/api/PomodoroApiService";
 import moment from "moment"
-import { BarChart } from "./BarChart";
+import { ProjectsChart } from "./ProjectsChart";
 
 
 export default function ListTasksComponent() {
 
     const [pomodoros, setPomodoros] = useState([])
 
-    const [chartData, setChartData] = useState(data)
+    const [chartData, setChartData] = useState({})
 
     // for first time load
     useEffect(
@@ -41,17 +41,18 @@ export default function ListTasksComponent() {
         getProjectsPomodorosApi(limit ? limit : 'daily')
             .then(response => {
                 // console.log(response)
-                data.labels = [];
-                data.datasets[0].data = [];
-                data.datasets.label = `Project's Focus Time (${limit})`;
+                const updated_data = {
+                    labels: [],
+                    data: [],
+                    label: `Project's Focus Time (${limit})`
+                }
                 response.data.forEach(element => {
                     // console.log(element);
-                    data.labels.push(element[1]);
-                    data.datasets[0].data.push(element[0]);
+                    updated_data.labels.push(element[1]);
+                    updated_data.data.push(element[0]);
                 });
-                // console.log(data);
-                // note: setting the same refrences doesn't make any change for useEffect
-                setChartData(structuredClone(data))
+                // console.log(updated_data);
+                setChartData(updated_data)
                 // console.log("retrieved updated data: ", chartData);
             })
             .catch(response => console.log(response))
@@ -92,22 +93,7 @@ export default function ListTasksComponent() {
             <button type="button" class="btn btn-light" onClick={() => retrieveProjectsPomodoros('weekly')}>Weekly</button>
             <button type="button" class="btn btn-light" onClick={() => retrieveProjectsPomodoros('monthly')}>Monthly</button>
 
-            <BarChart chartData={chartData} />
+            <ProjectsChart chartData={chartData} />
         </div >
     )
-}
-
-const data = {
-    labels: [],
-    // datasets is an array of objects where each object represents a set of data to display corresponding to the labels above. for brevity, we'll keep it at one object
-    datasets: [
-        {
-            label: 'time in minutes',
-            data: [],
-            // you can set indiviual colors for each bar
-            borderWidth: 1,
-            barThickness: 6,  // number (pixels) or 'flex'
-            maxBarThickness: 8 // number (pixels)
-        }
-    ]
 }
