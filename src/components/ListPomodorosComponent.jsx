@@ -10,14 +10,22 @@ export default function ListTasksComponent() {
 
     const [chartData, setChartData] = useState(data)
 
+    // for first time load
     useEffect(
         () => retrieveTodayPomodoros(),
         []
     )
 
+    // for first time load
     useEffect(
-        () => retrieveProjectsPomodoros(),
+        () => retrieveProjectsPomodoros('daily'),
         []
+    )
+
+    // for reload after click
+    useEffect(
+        () => console.log('chartData is updated'),
+        [chartData]
     )
 
     function retrieveTodayPomodoros() {
@@ -35,14 +43,16 @@ export default function ListTasksComponent() {
                 // console.log(response)
                 data.labels = [];
                 data.datasets[0].data = [];
-                data.datasets.label = "Project's Focus Time";
+                data.datasets.label = `Project's Focus Time (${limit})`;
                 response.data.forEach(element => {
                     // console.log(element);
                     data.labels.push(element[1]);
                     data.datasets[0].data.push(element[0]);
                 });
                 // console.log(data);
-                setChartData(data)
+                // note: setting the same refrences doesn't make any change for useEffect
+                setChartData(structuredClone(data))
+                // console.log("retrieved updated data: ", chartData);
             })
             .catch(response => console.log(response))
     }
@@ -88,12 +98,12 @@ export default function ListTasksComponent() {
 }
 
 const data = {
-    labels: ['Red', 'Orange', 'Blue', 'Yellow'],
+    labels: [],
     // datasets is an array of objects where each object represents a set of data to display corresponding to the labels above. for brevity, we'll keep it at one object
     datasets: [
         {
             label: 'time in minutes',
-            data: [55, 23, 96, 80],
+            data: [],
             // you can set indiviual colors for each bar
             borderWidth: 1,
             barThickness: 6,  // number (pixels) or 'flex'
