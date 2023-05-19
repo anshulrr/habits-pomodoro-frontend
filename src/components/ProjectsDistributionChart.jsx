@@ -1,27 +1,27 @@
-import { Bar, getDatasetAtEvent } from "react-chartjs-2";
+import { Doughnut } from "react-chartjs-2";
 
 import { CategoryScale } from 'chart.js';
 import Chart from 'chart.js/auto';
 Chart.register(CategoryScale);
 
-export const ProjectsChart = ({ chartData }) => {
+export const ProjectsDistributionChart = ({ chartData }) => {
     // console.log("hi", chartData);
 
     return (
         <div className="chart-container">
-            <Bar
+            <Doughnut
                 data={
                     {
                         labels: chartData.labels,
                         // datasets is an array of objects where each object represents a set of data to display corresponding to the labels above. for brevity, we'll keep it at one object
                         datasets: [
                             {
-                                label: 'time in minutes',
+                                label: 'Time in minutes',
                                 data: chartData.data,
                                 // you can set indiviual colors for each bar
-                                borderWidth: 1,
-                                barThickness: 6,  // number (pixels) or 'flex'
-                                maxBarThickness: 8 // number (pixels)
+                                // borderWidth: 1,
+                                // barThickness: 6,  // number (pixels) or 'flex'
+                                // maxBarThickness: 8 // number (pixels)
                             }
                         ]
                     }
@@ -32,10 +32,14 @@ export const ProjectsChart = ({ chartData }) => {
                     plugins: {
                         title: {
                             display: true,
-                            text: `Project's Focus Time (${chartData.label})`
+                            text: `Project's Distribution Time (${chartData.label})`
                         },
                         legend: {
-                            display: false
+                            display: true,
+                            position: 'right',
+                            labels: {
+                                boxWidth: 10
+                            }
                         }
                     }
                 }}

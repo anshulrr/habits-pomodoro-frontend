@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { getPomodorosApi, getProjectsPomodorosApi } from "../services/api/PomodoroApiService";
 import moment from "moment"
 import { ProjectsChart } from "./ProjectsChart";
+import { ProjectsDistributionChart } from "./ProjectsDistributionChart";
 
 
 export default function ListTasksComponent() {
@@ -44,7 +45,7 @@ export default function ListTasksComponent() {
                 const updated_data = {
                     labels: [],
                     data: [],
-                    label: `Project's Focus Time (${limit})`
+                    label: limit
                 }
                 response.data.forEach(element => {
                     // console.log(element);
@@ -60,6 +61,21 @@ export default function ListTasksComponent() {
 
     return (
         <div className="container">
+
+            <button type="button" class="btn btn-light" onClick={() => retrieveProjectsPomodoros('daily')}>Daily</button>
+            <button type="button" class="btn btn-light" onClick={() => retrieveProjectsPomodoros('weekly')}>Weekly</button>
+            <button type="button" class="btn btn-light" onClick={() => retrieveProjectsPomodoros('monthly')}>Monthly</button>
+
+
+            <div className="row">
+                <div className="col-6">
+                    <ProjectsChart chartData={chartData} />
+                </div>
+                <div className="col-4 offset-1">
+                    <ProjectsDistributionChart chartData={chartData} />
+                </div>
+            </div>
+
             <h1>Today's pomodoros</h1>
             <div>
                 <table className="table">
@@ -89,11 +105,6 @@ export default function ListTasksComponent() {
                 </table>
             </div >
 
-            <button type="button" class="btn btn-light" onClick={() => retrieveProjectsPomodoros('daily')}>Daily</button>
-            <button type="button" class="btn btn-light" onClick={() => retrieveProjectsPomodoros('weekly')}>Weekly</button>
-            <button type="button" class="btn btn-light" onClick={() => retrieveProjectsPomodoros('monthly')}>Monthly</button>
-
-            <ProjectsChart chartData={chartData} />
         </div >
     )
 }
