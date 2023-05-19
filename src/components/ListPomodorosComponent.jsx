@@ -45,10 +45,12 @@ export default function ListTasksComponent() {
                 const updated_data = {
                     labels: [],
                     data: [],
+                    colors: [],
                     label: limit
                 }
                 response.data.forEach(element => {
                     // console.log(element);
+                    updated_data.colors.push(element[2]);
                     updated_data.labels.push(element[1]);
                     updated_data.data.push(element[0]);
                 });

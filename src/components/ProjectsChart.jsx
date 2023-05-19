@@ -5,7 +5,7 @@ import Chart from 'chart.js/auto';
 Chart.register(CategoryScale);
 
 export const ProjectsChart = ({ chartData }) => {
-    // console.log("hi", chartData);
+    console.log("hi", chartData);
 
     return (
         <div className="chart-container">
@@ -19,6 +19,7 @@ export const ProjectsChart = ({ chartData }) => {
                                 label: 'time in minutes',
                                 data: chartData.data,
                                 // you can set indiviual colors for each bar
+                                backgroundColor: chartData.colors,
                                 borderWidth: 1,
                                 barThickness: 6,  // number (pixels) or 'flex'
                                 maxBarThickness: 8 // number (pixels)

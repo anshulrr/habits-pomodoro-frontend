@@ -19,6 +19,7 @@ export const ProjectsDistributionChart = ({ chartData }) => {
                                 label: 'Time in minutes',
                                 data: chartData.data,
                                 // you can set indiviual colors for each bar
+                                backgroundColor: chartData.colors,
                                 // borderWidth: 1,
                                 // barThickness: 6,  // number (pixels) or 'flex'
                                 // maxBarThickness: 8 // number (pixels)
