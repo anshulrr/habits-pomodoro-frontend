@@ -9,6 +9,7 @@ export default function ProjectComponent() {
 
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
+    const [color, setColor] = useState('blue')
 
     const navigate = useNavigate()
 
@@ -27,6 +28,7 @@ export default function ProjectComponent() {
             .then(response => {
                 setDescription(response.data.description)
                 setName(response.data.name)
+                setColor(response.data.color)
             })
             .catch(error => console.log(error))
     }
@@ -37,6 +39,7 @@ export default function ProjectComponent() {
             id,
             name: values.name,
             description: values.description,
+            color: values.color
         }
 
         if (id == -1) {
@@ -71,7 +74,7 @@ export default function ProjectComponent() {
         <div className="container">
             <h1>Enter Project Details </h1>
             <div>
-                <Formik initialValues={{ name, description }}
+                <Formik initialValues={{ name, description, color }}
                     enableReinitialize={true}
                     onSubmit={onSubmit}
                     validate={validate}
@@ -100,6 +103,10 @@ export default function ProjectComponent() {
                                 <fieldset className="form-group">
                                     <label>Description</label>
                                     <Field type="text" className="form-control" name="description" />
+                                </fieldset>
+                                <fieldset className="form-group">
+                                    <label>Color</label>
+                                    <Field type="text" className="form-control" name="color" />
                                 </fieldset>
                                 <div>
                                     <button className="btn btn-success m-5" type="submit">Save</button>

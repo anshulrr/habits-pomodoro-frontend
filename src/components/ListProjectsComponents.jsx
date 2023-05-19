@@ -48,6 +48,7 @@ export default function ListProjectsComponent() {
                         <tr>
                             <th>Project</th>
                             <th>Description</th>
+                            <th>Color</th>
                             <th>Update</th>
                         </tr>
                     </thead>
@@ -60,6 +61,7 @@ export default function ListProjectsComponent() {
                                             <Link to={"/projects/" + project.id + "/tasks"}>{project.name}</Link>
                                         </td>
                                         <td>{project.description}</td>
+                                        <td>{project.color}</td>
                                         <td> <button className="btn btn-success"
                                             onClick={() => updateProject(project.id)}>Update</button> </td>
                                     </tr>
