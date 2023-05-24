@@ -1,32 +1,17 @@
 import { useEffect, useState } from "react"
-import { getPomodorosApi, getProjectsPomodorosApi } from "../services/api/PomodoroApiService";
+import { getPomodorosApi } from "../services/api/PomodoroApiService";
 import moment from "moment"
-import { ProjectsChart } from "./ProjectsChart";
-import { ProjectsDistributionChart } from "./ProjectsDistributionChart";
-
+import { TasksChart } from "./charts/TasksChart";
+import { ProjectsDistributionChart } from "./charts/ProjectsDistributionChart";
 
 export default function ListTasksComponent() {
 
     const [pomodoros, setPomodoros] = useState([])
 
-    const [chartData, setChartData] = useState({})
-
     // for first time load
     useEffect(
         () => retrieveTodayPomodoros(),
         []
-    )
-
-    // for first time load
-    useEffect(
-        () => retrieveProjectsPomodoros('daily'),
-        []
-    )
-
-    // for reload after click
-    useEffect(
-        () => console.log('chartData is updated'),
-        [chartData]
     )
 
     function retrieveTodayPomodoros() {
@@ -38,43 +23,15 @@ export default function ListTasksComponent() {
             .catch(response => console.log(response))
     }
 
-    function retrieveProjectsPomodoros(limit) {
-        getProjectsPomodorosApi(limit ? limit : 'daily')
-            .then(response => {
-                // console.log(response)
-                const updated_data = {
-                    labels: [],
-                    data: [],
-                    colors: [],
-                    label: limit
-                }
-                response.data.forEach(element => {
-                    // console.log(element);
-                    updated_data.colors.push(element[2]);
-                    updated_data.labels.push(element[1]);
-                    updated_data.data.push(element[0]);
-                });
-                // console.log(updated_data);
-                setChartData(updated_data)
-                // console.log("retrieved updated data: ", chartData);
-            })
-            .catch(response => console.log(response))
-    }
-
     return (
         <div className="container">
 
-            <button type="button" class="btn btn-light" onClick={() => retrieveProjectsPomodoros('daily')}>Daily</button>
-            <button type="button" class="btn btn-light" onClick={() => retrieveProjectsPomodoros('weekly')}>Weekly</button>
-            <button type="button" class="btn btn-light" onClick={() => retrieveProjectsPomodoros('monthly')}>Monthly</button>
-
-
             <div className="row">
                 <div className="col-6">
-                    <ProjectsChart chartData={chartData} />
+                    <TasksChart />
                 </div>
                 <div className="col-4 offset-1">
-                    <ProjectsDistributionChart chartData={chartData} />
+                    <ProjectsDistributionChart />
                 </div>
             </div>
 

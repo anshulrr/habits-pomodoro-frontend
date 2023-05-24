@@ -13,5 +13,11 @@ export const pausePomodoroApi
 export const getPomodorosApi
     = () => apiClient.get(`/pomodoros`)
 
+export const getTasksPomodorosApi
+    = (limit) => apiClient.get(`/pomodoros/tasks-time?limit=${limit}`)
+
 export const getProjectsPomodorosApi
     = (limit) => apiClient.get(`/pomodoros/projects-time?limit=${limit}`)
+
+export const getTotalPomodorosApi
+    = (limit) => apiClient.get(`/pomodoros/total-time?limit=${limit}`)
