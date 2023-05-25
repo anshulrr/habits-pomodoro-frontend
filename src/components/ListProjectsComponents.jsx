@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom";
-import { retrieveAllProjects } from "../services/api/ProjectApiService";
+import { retrieveAllProjectsApi } from "../services/api/ProjectApiService";
 import { useAuth } from "../services/auth/AuthContext";
 
 export default function ListProjectsComponent() {
@@ -21,7 +21,7 @@ export default function ListProjectsComponent() {
     )
 
     function refreshProjects() {
-        retrieveAllProjects()
+        retrieveAllProjectsApi()
             .then(response => {
                 console.log(response)
                 setProjects(response.data)

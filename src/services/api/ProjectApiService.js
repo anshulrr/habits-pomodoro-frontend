@@ -1,6 +1,6 @@
 import { apiClient } from "./ApiClient";
 
-export const retrieveAllProjects
+export const retrieveAllProjectsApi
     = () => apiClient.get(`/projects`)
 
 export const retrieveProjectApi

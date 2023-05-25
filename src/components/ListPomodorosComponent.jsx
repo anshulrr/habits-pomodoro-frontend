@@ -3,6 +3,7 @@ import { getPomodorosApi } from "../services/api/PomodoroApiService";
 import moment from "moment"
 import { TasksChart } from "./charts/TasksChart";
 import { ProjectsDistributionChart } from "./charts/ProjectsDistributionChart";
+import { TotalChart } from "./charts/TotalChart";
 
 export default function ListTasksComponent() {
 
@@ -35,7 +36,15 @@ export default function ListTasksComponent() {
                 </div>
             </div>
 
-            <h1>Today's pomodoros</h1>
+            <div className="row">
+                <div className="col-12">
+                    <TotalChart />
+                </div>
+            </div>
+
+            <br />
+
+            <h3>Today's pomodoros</h3>
             <div>
                 <table className="table">
                     <thead>
