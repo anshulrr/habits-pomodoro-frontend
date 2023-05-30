@@ -1,31 +1,40 @@
 import { useEffect, useState } from "react"
-import { getTotalPomodorosApi } from "../../services/api/PomodoroApiService";
+import moment from "moment"
 
-import { Bar } from "react-chartjs-2";
+import { getTotalPomodorosApi } from "../../services/api/PomodoroApiService"
+import { Buttons } from "./Buttons";
 
-import { CategoryScale } from 'chart.js';
-import Chart from 'chart.js/auto';
-Chart.register(CategoryScale);
+import { Bar } from "react-chartjs-2"
+
+import { CategoryScale } from 'chart.js'
+import Chart from 'chart.js/auto'
+Chart.register(CategoryScale)
 
 export const TotalChart = () => {
     const [datasets, setDatasets] = useState([])
 
+    const [labels, setLabels] = useState([])
+
     // for first time load
     useEffect(
-        () => retrieveTotalPomodoros('daily'),
+        () => {
+            retrieveTotalPomodoros('daily', 0)
+            updateLabels('daily')
+        },
         []
     )
 
-    // for reload after click
+    // for reload data retrival
     useEffect(
-        () => console.log('chartData is updated'),
+        () => console.log('reload chart'),
         [datasets]
     )
 
-    function retrieveTotalPomodoros(limit) {
-        getTotalPomodorosApi(limit ? limit : 'daily')
+    function retrieveTotalPomodoros(limit, offset) {
+        updateLabels(limit)
+        getTotalPomodorosApi(limit, offset)
             .then(response => {
-                // console.log("stacked", response)
+                console.log("stacked", response)
                 const temp_datasets = [];
 
                 for (const key in response.data) {
@@ -33,11 +42,20 @@ export const TotalChart = () => {
                     const dataset = {
                         lable: key,
                         backgroundColor: response.data[key][0][3],
-                        data: new Array(32).fill(0)
+                        data: new Array(15).fill(0)
                     }
-                    for (const val of response.data[key]) {
-                        // console.log(val[0], val[1]);
-                        dataset.data[val[0]] = +val[1];
+                    if (limit == 'daily') {
+                        for (const val of response.data[key]) {
+                            // console.log(val[0], 14 - (moment().format('DD') - val[0]));
+                            dataset.data[14 - (moment().format('DD') - val[0])] = val[1];
+                        }
+                    } else if (limit == 'weekly') {
+                        for (const val of response.data[key]) {
+                            // console.log(val[0], val[1], moment().format('W'));
+                            dataset.data[14 - (moment().format('W') - val[0])] = val[1];
+                        }
+                    } else if (limit == 'monthly') {
+
                     }
                     temp_datasets.push(dataset);
                 }
@@ -48,38 +66,62 @@ export const TotalChart = () => {
             .catch(response => console.log(response))
     }
 
-    return (
-        <div className="chart-container">
-            <Bar
-                data={
-                    {
-                        labels: Array.from(Array(32).keys()),
-                        // datasets is an array of objects where each object represents a set of data to display corresponding to the labels above. for brevity, we'll keep it at one object
-                        datasets: datasets
-                    }
+    function updateLabels(limit) {
+        const labels = [];
+        if (limit == 'daily') {
+            for (let i = 0; i < 15; i++) {
+                const str = moment().add(-14 + i, 'd').format('DD MMM')
+                labels.push(str)
+            }
+        } else if (limit == 'weekly') {
+            const dow = moment().format('e');
+            for (let i = 0; i < 15; i++) {
+                const str = moment().add(-dow + 1, 'd').add(i - 14, 'w').format('DD MMM') + "-" + moment().add(-dow, 'd').add(i + 1 - 14, 'w').format('DD MMM')
+                labels.push(str);
+            }
+        } else if (limit == 'monthly') {
 
-                }
-                options={{
-                    responsive: true,
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: `Total Time (daily)`
-                        },
-                        legend: {
-                            display: false
+        }
+
+        setLabels(labels);
+    }
+
+    return (
+        <div>
+            <Buttons retrievePomodoros={retrieveTotalPomodoros} showDateString={false}></Buttons>
+
+            <div className="chart-container">
+                <Bar
+                    data={
+                        {
+                            labels: labels,
+                            // datasets is an array of objects where each object represents a set of data to display corresponding to the labels above. for brevity, we'll keep it at one object
+                            datasets: datasets
                         }
-                    },
-                    scales: {
-                        x: {
-                            stacked: true
-                        },
-                        y: {
-                            stacked: true
-                        }
+
                     }
-                }}
-            />
+                    options={{
+                        responsive: true,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: `Total Time (daily)`
+                            },
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            x: {
+                                stacked: true
+                            },
+                            y: {
+                                stacked: true
+                            }
+                        }
+                    }}
+                />
+            </div>
         </div>
     );
 };

@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react"
 import moment from "moment"
 
-export const Buttons = ({ retrievePomodoros }) => {
+export const Buttons = ({ retrievePomodoros, showDateString = true }) => {
 
-    const [limit, setLimit] = useState('daily');
+    const [limit, setLimit] = useState('daily')
 
     const [offset, setOffset] = useState(0)
 
-    const [dateString, setDateString] = useState(moment().format('DD MMM'));
+    const [dateString, setDateString] = useState(moment().format('DD MMM'))
 
     // to retrive data after click on bottons
     useEffect(
@@ -32,7 +32,8 @@ export const Buttons = ({ retrievePomodoros }) => {
         if (limit == 'daily') {
             setDateString(moment().add(offset, 'd').format('DD MMM'))
         } else if (limit == 'weekly') {
-            const str = moment().add(offset, 'w').format('DD MMM') + "-" + moment().add(offset + 1, 'w').format('DD MMM')
+            const dow = moment().format('e');
+            const str = moment().add(-dow + 1, 'd').add(offset, 'w').format('DD MMM') + "-" + moment().add(-dow, 'd').add(offset + 1, 'w').format('DD MMM')
             setDateString(str)
         } else if (limit == 'monthly') {
             const str = moment().add(offset, 'M').format('MMM')
@@ -53,7 +54,7 @@ export const Buttons = ({ retrievePomodoros }) => {
                     </div>
                     <div className="col-6">
                         <small>
-                            {dateString}
+                            {showDateString && dateString}
                         </small>
                     </div>
                     <div className="col-3">
