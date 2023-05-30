@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
-import { getTasksPomodorosApi } from "../../services/api/PomodoroApiService";
 
-import moment from "moment"
+import { getTasksPomodorosApi } from "../../services/api/PomodoroApiService";
+import { Buttons } from "./Buttons";
 
 import { Bar } from "react-chartjs-2";
 
@@ -14,22 +14,10 @@ export const TasksChart = () => {
 
     const [chartData, setChartData] = useState({})
 
-    const [limit, setLimit] = useState('daily');
-
-    const [offset, setOffset] = useState(0)
-
-    const [dateString, setDateString] = useState(moment().format('DD MMM'));
-
     // for first time load
     useEffect(
-        () => retrieveTasksPomodoros('daily'),
+        () => retrieveTasksPomodoros('daily', 0),
         []
-    )
-
-    // to retrive data after click on bottons
-    useEffect(
-        () => retrieveTasksPomodoros(),
-        [offset, limit]
     )
 
     // for reload data retrival
@@ -38,7 +26,7 @@ export const TasksChart = () => {
         [chartData]
     )
 
-    function retrieveTasksPomodoros() {
+    function retrieveTasksPomodoros(limit, offset) {
         console.log(limit, offset)
         getTasksPomodorosApi(limit, offset)
             .then(response => {
@@ -62,52 +50,9 @@ export const TasksChart = () => {
             .catch(response => console.log(response))
     }
 
-    function updateOffset(val) {
-        updateDateString(limit, offset + val)
-        setOffset(offset + val);
-    }
-
-    function updateLimit(val) {
-        updateDateString(val, 0)
-        setLimit(val);
-        setOffset(0);
-    }
-
-    // need to get updated limit and offset (to avoid asynchronous execution)
-    function updateDateString(limit, offset) {
-        // console.log('updated limit & offset: ', limit, offset)
-        if (limit == 'daily') {
-            setDateString(moment().add(offset, 'd').format('DD MMM'))
-        } else if (limit == 'weekly') {
-            const str = moment().add(offset, 'w').format('DD MMM') + "-" + moment().add(offset + 1, 'w').format('DD MMM')
-            setDateString(str)
-        } else if (limit == 'monthly') {
-            const str = moment().add(offset, 'M').format('MMM')
-            setDateString(str)
-        }
-    }
-
     return (
         <div>
-            <button type="button" class="btn btn-light" onClick={() => updateLimit('daily')}>Daily</button>
-            <button type="button" class="btn btn-light" onClick={() => updateLimit('weekly')}>Weekly</button>
-            <button type="button" class="btn btn-light" onClick={() => updateLimit('monthly')}>Monthly</button>
-            <div className="container">
-
-                <div className="row">
-                    <div className="col-3">
-                        <button type="button" class="btn btn-light" onClick={() => updateOffset(-1)}>prev</button>
-                    </div>
-                    <div className="col-6">
-                        <small>
-                            {dateString}
-                        </small>
-                    </div>
-                    <div className="col-3">
-                        <button type="button" class="btn btn-light" onClick={() => updateOffset(1)}>next</button>
-                    </div>
-                </div>
-            </div>
+            <Buttons retrievePomodoros={retrieveTasksPomodoros}></Buttons>
 
             <div className="chart-container">
                 <Bar

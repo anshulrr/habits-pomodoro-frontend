@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react"
+
 import { getProjectsPomodorosApi } from "../../services/api/PomodoroApiService";
+import { Buttons } from "./Buttons";
 
 import { Doughnut } from "react-chartjs-2";
 
@@ -14,18 +16,18 @@ export const ProjectsDistributionChart = () => {
 
     // for first time load
     useEffect(
-        () => retrieveProjectsPomodoros('daily'),
+        () => retrieveProjectsPomodoros('daily', 0),
         []
     )
 
-    // for reload after click
+    // to reload chart after data retrival
     useEffect(
-        () => console.log('chartData is updated'),
+        () => console.log('reload chart'),
         [chartData]
     )
 
-    function retrieveProjectsPomodoros(limit) {
-        getProjectsPomodorosApi(limit ? limit : 'daily')
+    function retrieveProjectsPomodoros(limit, offset) {
+        getProjectsPomodorosApi(limit, offset)
             .then(response => {
                 // console.log(response)
                 const updated_data = {
@@ -49,10 +51,7 @@ export const ProjectsDistributionChart = () => {
 
     return (
         <div>
-            <button type="button" class="btn btn-light" onClick={() => retrieveProjectsPomodoros('daily')}>Daily</button>
-            <button type="button" class="btn btn-light" onClick={() => retrieveProjectsPomodoros('weekly')}>Weekly</button>
-            <button type="button" class="btn btn-light" onClick={() => retrieveProjectsPomodoros('monthly')}>Monthly</button>
-
+            <Buttons retrievePomodoros={retrieveProjectsPomodoros}></Buttons>
             <div className="chart-container">
                 <Doughnut
                     data={

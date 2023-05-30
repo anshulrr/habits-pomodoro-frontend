@@ -17,7 +17,7 @@ export const getTasksPomodorosApi
     = (limit, offset) => apiClient.get(`/pomodoros/tasks-time?limit=${limit}&offset=${offset}`)
 
 export const getProjectsPomodorosApi
-    = (limit) => apiClient.get(`/pomodoros/projects-time?limit=${limit}`)
+    = (limit, offset) => apiClient.get(`/pomodoros/projects-time?limit=${limit}&offset=${offset}`)
 
 export const getTotalPomodorosApi
     = (limit) => apiClient.get(`/pomodoros/total-time?limit=${limit}`)
