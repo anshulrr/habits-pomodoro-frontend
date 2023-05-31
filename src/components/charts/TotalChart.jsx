@@ -31,7 +31,7 @@ export const TotalChart = () => {
     )
 
     function retrieveTotalPomodoros(limit, offset) {
-        updateLabels(limit)
+        updateLabels(limit, offset)
         getTotalPomodorosApi(limit, offset)
             .then(response => {
                 console.log("stacked", response)
@@ -66,17 +66,29 @@ export const TotalChart = () => {
             .catch(response => console.log(response))
     }
 
-    function updateLabels(limit) {
+    function updateLabels(limit, offset) {
         const labels = [];
         if (limit == 'daily') {
             for (let i = 0; i < 15; i++) {
-                const str = moment().add(-14 + i, 'd').format('DD MMM')
+                const str = moment()
+                    .add(15 * offset, 'd')
+                    .add(-14 + i, 'd')
+                    .format('DD MMM')
                 labels.push(str)
             }
         } else if (limit == 'weekly') {
             const dow = moment().format('e');
             for (let i = 0; i < 15; i++) {
-                const str = moment().add(-dow + 1, 'd').add(i - 14, 'w').format('DD MMM') + "-" + moment().add(-dow, 'd').add(i + 1 - 14, 'w').format('DD MMM')
+                const str = moment()
+                    .add(-dow + 1, 'd')
+                    .add(15 * 7 * offset, 'd')
+                    .add(i - 14, 'w')
+                    .format('DD MMM')
+                    + "-" + moment()
+                        .add(-dow, 'd')
+                        .add(15 * 7 * offset, 'd')
+                        .add(i + 1 - 14, 'w')
+                        .format('DD MMM')
                 labels.push(str);
             }
         } else if (limit == 'monthly') {
