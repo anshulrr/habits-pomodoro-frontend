@@ -47,16 +47,20 @@ export const TotalChart = () => {
                     if (limit == 'daily') {
                         for (const val of response.data[key]) {
                             // console.log(val[0], 14 - (moment().format('DD') - val[0]));
-                            dataset.data[14 - (moment().format('DD') - val[0])] = val[1];
+                            dataset.data[14 - (moment().add(15 * offset, 'd').format('DD') - val[0])] = val[1];
                         }
                     } else if (limit == 'weekly') {
                         for (const val of response.data[key]) {
                             // console.log(val[0], val[1], moment().format('W'));
-                            dataset.data[14 - (moment().format('W') - val[0])] = val[1];
+                            dataset.data[14 - (moment().add(15 * offset, 'W').format('W') - val[0])] = val[1];
                         }
                     } else if (limit == 'monthly') {
-
+                        for (const val of response.data[key]) {
+                            // console.log(val[0], val[1], moment().format('W'));
+                            dataset.data[14 - (moment().add(15 * offset, 'M').format('M') - val[0])] = val[1];
+                        }
                     }
+                    // console.log(dataset);
                     temp_datasets.push(dataset);
                 }
                 // console.log(temp_datasets)
@@ -77,16 +81,16 @@ export const TotalChart = () => {
                 labels.push(str)
             }
         } else if (limit == 'weekly') {
-            const dow = moment().format('e');
+            const dow = moment().format('e');   // day of week
             for (let i = 0; i < 15; i++) {
                 const str = moment()
                     .add(-dow + 1, 'd')
-                    .add(15 * 7 * offset, 'd')
+                    .add(15 * offset, 'w')
                     .add(i - 14, 'w')
                     .format('DD MMM')
                     + "-" + moment()
                         .add(-dow, 'd')
-                        .add(15 * 7 * offset, 'd')
+                        .add(15 * offset, 'w')
                         .add(i + 1 - 14, 'w')
                         .format('DD MMM')
                 labels.push(str);
