@@ -14,15 +14,15 @@ export const ProjectsDistributionChart = () => {
 
     const [chartData, setChartData] = useState({})
 
-    // for first time load
-    useEffect(
-        () => retrieveProjectsPomodoros('daily', 0),
-        []
-    )
+    // // for first time load (not needed)
+    // useEffect(
+    //     () => retrieveProjectsPomodoros('daily', 0),
+    //     []
+    // )
 
     // to reload chart after data retrival
     useEffect(
-        () => console.log('reload chart'),
+        () => console.log('reload projects chart'),
         [chartData]
     )
 

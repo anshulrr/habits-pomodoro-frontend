@@ -15,18 +15,18 @@ export const TotalChart = () => {
 
     const [labels, setLabels] = useState([])
 
-    // for first time load
-    useEffect(
-        () => {
-            retrieveTotalPomodoros('daily', 0)
-            updateLabels('daily')
-        },
-        []
-    )
+    // // for first time load (not needed)
+    // useEffect(
+    //     () => {
+    //         retrieveTotalPomodoros('daily', 0)
+    //         updateLabels('daily', 0)
+    //     },
+    //     []
+    // )
 
     // for reload data retrival
     useEffect(
-        () => console.log('reload chart'),
+        () => console.log('reload total chart'),
         [datasets]
     )
 

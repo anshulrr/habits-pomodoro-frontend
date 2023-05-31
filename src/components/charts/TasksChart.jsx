@@ -14,15 +14,15 @@ export const TasksChart = () => {
 
     const [chartData, setChartData] = useState({})
 
-    // for first time load
-    useEffect(
-        () => retrieveTasksPomodoros('daily', 0),
-        []
-    )
+    // // for first time load (not needed)
+    // useEffect(
+    //     () => retrieveTasksPomodoros('daily', 0),
+    //     []
+    // )
 
     // for reload data retrival
     useEffect(
-        () => console.log('reload chart'),
+        () => console.log('reload tasks chart'),
         [chartData]
     )
 

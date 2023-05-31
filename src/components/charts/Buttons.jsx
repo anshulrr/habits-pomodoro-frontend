@@ -21,6 +21,7 @@ export const Buttons = ({ retrievePomodoros, showDateString = true }) => {
     }
 
     function updateLimit(val) {
+        // console.log('updating limit')
         updateDateString(val, 0)
         setLimit(val);
         setOffset(0);
