@@ -92,7 +92,13 @@ export const TotalChart = () => {
                 labels.push(str);
             }
         } else if (limit == 'monthly') {
-
+            for (let i = 0; i < 15; i++) {
+                const str = moment()
+                    .add(15 * offset, 'M')
+                    .add(i - 14, 'M')
+                    .format('MMM YY')
+                labels.push(str);
+            }
         }
 
         setLabels(labels);
