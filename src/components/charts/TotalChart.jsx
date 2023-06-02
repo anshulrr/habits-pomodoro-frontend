@@ -46,18 +46,19 @@ export const TotalChart = () => {
                     }
                     if (limit == 'daily') {
                         for (const val of response.data[key]) {
-                            // console.log(val[0], 14 - (moment().format('DD') - val[0]));
-                            dataset.data[14 - (moment().add(15 * offset, 'd').format('DD') - val[0])] = val[1];
+                            // console.log(val[0], moment().add(-val[0] + 1, 'd').format('DD'));
+                            // todo: find cleaner solution for mapping data to labels
+                            dataset.data[15 - moment().add(-val[0] + 1, 'd').add(15 * offset, 'd').format('DD')] = val[1];
                         }
                     } else if (limit == 'weekly') {
                         for (const val of response.data[key]) {
                             // console.log(val[0], val[1], moment().format('W'));
-                            dataset.data[14 - (moment().add(15 * offset, 'W').format('W') - val[0])] = val[1];
+                            dataset.data[15 - moment().add(-val[0] + 1, 'W').add(15 * offset, 'W').format('W')] = val[1];
                         }
                     } else if (limit == 'monthly') {
                         for (const val of response.data[key]) {
                             // console.log(val[0], val[1], moment().format('W'));
-                            dataset.data[14 - (moment().add(15 * offset, 'M').format('M') - val[0])] = val[1];
+                            dataset.data[15 - (moment().add(-val[0] + 1, 'M').add(15 * offset, 'M').format('M'))] = val[1];
                         }
                     }
                     // console.log(dataset);
