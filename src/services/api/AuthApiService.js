@@ -1,8 +1,15 @@
 import { apiClient } from "./ApiClient";
 
-export const executeBasicAuthenticationService
-    = (token) => apiClient.get(`/`, {
+// export const executeBasicAuthenticationService
+//     = (token) => apiClient.get(`/`, {
+//         headers: {
+//             Authorization: token
+//         }
+//     })
+
+export const executeJwtAuthenticationService
+    = (username, password) => apiClient.post(`/authenticate`, {}, {
         headers: {
-            Authorization: token
+            Authorization: 'Basic ' + window.btoa(username + ":" + password)
         }
     })
