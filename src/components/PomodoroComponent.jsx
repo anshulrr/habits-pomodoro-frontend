@@ -108,7 +108,7 @@ export default function PomodoroComponent() {
         <div className="PomodoroComponent">
             <div className="container">
                 <h1>{state.task.description}</h1> <h6>({state.project.name})</h6>
-                <div className="fs-1 p-3 mb-2 bg-danger text-white">
+                <div className="fs-1 p-3 mb-2 text-white" style={{ backgroundColor: state.project.color }}>
                     {timer}
                 </div>
 
