@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import { createTaskApi } from '../services/api/TaskApiService'
 import { Formik, Form, ErrorMessage, Field } from 'formik'
 
 export default function TaskComponent() {
 
     const { project_id, id } = useParams()
+
+    const { state } = useLocation();
 
     const [description, setDescription] = useState('')
 
@@ -41,7 +43,8 @@ export default function TaskComponent() {
 
     return (
         <div className="container">
-            <h1>Enter Task Details for project {project_id}</h1>
+            <h1>{state.project.name}</h1>
+            <h6>Provide Task Details</h6>
             <div>
                 <Formik initialValues={{ description }}
                     enableReinitialize={true}

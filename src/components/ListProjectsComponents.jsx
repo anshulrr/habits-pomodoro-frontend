@@ -58,7 +58,7 @@ export default function ListProjectsComponent() {
                                 project => (
                                     <tr key={project.id}>
                                         <td>
-                                            <Link to={"/projects/" + project.id + "/tasks"}>{project.name}</Link>
+                                            <Link to={"/projects/" + project.id + "/tasks"} state={{ project }}>{project.name}</Link>
                                         </td>
                                         <td>{project.description}</td>
                                         <td>{project.color}</td>

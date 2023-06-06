@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation, Link } from 'react-router-dom';
 import { pausePomodoroApi } from '../services/api/PomodoroApiService';
 
 export default function PomodoroComponent() {
@@ -10,6 +10,8 @@ export default function PomodoroComponent() {
     const Ref = useRef(null);
 
     const { task_id, id, length } = useParams()
+
+    const { state } = useLocation();
 
     const [timer, setTimer] = useState(length + ':00')
 
@@ -105,6 +107,7 @@ export default function PomodoroComponent() {
     return (
         <div className="PomodoroComponent">
             <div className="container">
+                <h1>{state.task.description}</h1> <h6>({state.project.name})</h6>
                 <div className="fs-1 p-3 mb-2 bg-danger text-white">
                     {timer}
                 </div>
@@ -122,6 +125,11 @@ export default function PomodoroComponent() {
                 {
                     status != 'completed'
                     && <div className="btn btn-danger m-5" onClick={() => updatePomodoro(id, "completed", timeRemaining)}>Mark Completed</div>
+                }
+
+                {
+                    status == 'completed'
+                    && <Link to={"/projects/" + state.project.id + "/tasks"} state={{ project: state.project }}>Return to {state.project.name}</Link>
                 }
             </div>
 
