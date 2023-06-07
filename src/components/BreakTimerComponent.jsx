@@ -1,14 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
+import StopwatchComponent from './StopwatchComponent';
 
 export default function BreakTimerComponent() {
 
     const Ref = useRef(null);
 
-    const [breakStatus, setBreakStatus] = useState('idle')
+    // const [breakStatus, setBreakStatus] = useState('idle')
+    const [breakStatus, setBreakStatus] = useState('break_started')
 
-    const [breakTimer, setBreakTimer] = useState('1:00')
+    const [breakTimer, setBreakTimer] = useState('5:00')
 
-    const [breakTimeRemaining, setBreakTimeRemaining] = useState(1 * 60);
+    const [breakTimeRemaining, setBreakTimeRemaining] = useState(5 * 60);
 
     // without useState it is not passed to threads
     // const audio = new Audio('http://codeskulptor-demos.commondatastorage.googleapis.com/GalaxyInvaders/pause.wav');
@@ -38,7 +40,7 @@ export default function BreakTimerComponent() {
             console.log(total / 1000)
             setBreakTimeRemaining(total / 1000);
         } else {
-            console.log('from updateBreakTimer', total)
+            console.log('from updateBreakTimer error:', total / 1000)
             // todo: find better way to update timeRemaining
             // timeRemaing in this thread has different value
             // hence passing it as method parameter
@@ -128,7 +130,7 @@ export default function BreakTimerComponent() {
                         breakStatus == 'break_timer'
                         &&
                         <div>
-                            <p className="text-danger">Break has ended, start new pomodoro</p>
+                            <StopwatchComponent></StopwatchComponent>
                         </div>
                     }
                 </div>

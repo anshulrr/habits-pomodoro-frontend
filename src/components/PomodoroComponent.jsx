@@ -47,7 +47,7 @@ export default function PomodoroComponent() {
             setTimeRemaining(total / 1000);
         } else {
             // TODO: find fix for extra seconds elapsed due to inactive tab
-            console.log(total / 1000)
+            console.log('from pomodoro timer error:', total / 1000)
             // todo: find better way to update timeRemaining
             // timeRemaing in this thread has different value
             // hence passing it as method parameter
