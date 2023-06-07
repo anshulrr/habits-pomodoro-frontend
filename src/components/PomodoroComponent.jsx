@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useParams, useLocation, Link } from 'react-router-dom';
-import { pausePomodoroApi } from '../services/api/PomodoroApiService';
+import { updatePomodoroApi } from '../services/api/PomodoroApiService';
 import BreakTimerComponent from './BreakTimerComponent';
 
 export default function PomodoroComponent() {
@@ -20,8 +20,8 @@ export default function PomodoroComponent() {
 
     const [status, setStatus] = useState('started')
 
-    const calculateTimeRemaining = (e) => {
-        const total = Date.parse(e) - Date.parse(new Date());
+    const calculateTimeRemaining = (endTime) => {
+        const total = Date.parse(endTime) - Date.parse(new Date());
         const seconds = Math.floor((total / 1000) % 60);
         const minutes = Math.floor((total / 1000 / 60) % 60);
         return {
@@ -29,9 +29,9 @@ export default function PomodoroComponent() {
         };
     }
 
-    const startTimer = (e) => {
+    const updateTimer = (endTime) => {
         let { total, minutes, seconds }
-            = calculateTimeRemaining(e);
+            = calculateTimeRemaining(endTime);
         if (total >= 0) {
 
             // update the timer
@@ -52,31 +52,31 @@ export default function PomodoroComponent() {
             }
         }
     }
-    const clearTimer = (e) => {
+    const refreshTimer = (endTime) => {
 
         // If you try to remove this line the 
         // updating of timer Variable will be
         // after 1000ms or 1sec
         if (Ref.current) clearInterval(Ref.current);
         const interval_id = setInterval(() => {
-            // console.log(status, timeRemaining, e);
+            // console.log(status, timeRemaining, endTime);
             if (status == 'completed') {
                 clearInterval(interval_id);
             } else if (status == 'started') {
-                startTimer(e);
+                updateTimer(endTime);
             }
         }, 1000)
         Ref.current = interval_id;
         return interval_id;
     }
 
-    const getDeadTime = () => {
-        let deadline = new Date();
+    const getEndTime = () => {
+        let endTime = new Date();
 
         // This is where you need to adjust if 
         // you entend to add more time
-        deadline.setSeconds(deadline.getSeconds() + timeRemaining);
-        return deadline;
+        endTime.setSeconds(endTime.getSeconds() + timeRemaining);
+        return endTime;
     }
 
     // We can use useEffect so that when the component
@@ -85,7 +85,7 @@ export default function PomodoroComponent() {
     // We put empty array to act as componentDid
     // mount only
     useEffect(() => {
-        const id = clearTimer(getDeadTime());
+        const id = refreshTimer(getEndTime());
         return () => {
             clearInterval(id);  // fix for switching to different component
         };
@@ -93,15 +93,15 @@ export default function PomodoroComponent() {
 
     const updatePomodoro = (id, s, timeRemaining) => {
         setStatus(s)
-        console.log("status updated to: ", status, timeRemaining)
+        console.log("status updated to: ", s, timeRemaining)
         const pomodoro = {
             timeElapsed: length * 60 - timeRemaining,
             status: s  // // setState is not working for this synchronously
         }
 
-        pausePomodoroApi(id, pomodoro)
+        updatePomodoroApi(id, pomodoro)
             .then(response => {
-                console.log(response)
+                console.log(response.status)
             })
             .catch(error => console.log(error))
     }
@@ -109,7 +109,7 @@ export default function PomodoroComponent() {
     return (
         <div className="PomodoroComponent">
             <div className="container">
-                <h1>{state.task.description}</h1> <h6>({state.project.name})</h6>
+                <h3>{state.task.description}</h3> <h6>({state.project.name})</h6>
                 {
                     status != 'completed'
                     &&

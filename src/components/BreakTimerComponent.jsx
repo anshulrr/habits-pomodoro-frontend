@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react'
-import { useParams, useLocation, Link } from 'react-router-dom';
 
 export default function BreakTimerComponent() {
 
@@ -15,8 +14,8 @@ export default function BreakTimerComponent() {
     // const audio = new Audio('http://codeskulptor-demos.commondatastorage.googleapis.com/GalaxyInvaders/pause.wav');
     const [audio, setAudio] = useState(new Audio(process.env.PUBLIC_URL + '/ticking-clock_1-27477.mp3'))
 
-    const calculateTimeRemaining = (e) => {
-        const total = Date.parse(e) - Date.parse(new Date());
+    const calculateTimeRemaining = (endTime) => {
+        const total = Date.parse(endTime) - Date.parse(new Date());
         const seconds = Math.floor((total / 1000) % 60);
         const minutes = Math.floor((total / 1000 / 60) % 60);
         return {
@@ -24,9 +23,9 @@ export default function BreakTimerComponent() {
         };
     }
 
-    const startBreakTimer = (e) => {
+    const updateBreakTimer = (endTime) => {
         let { total, minutes, seconds }
-            = calculateTimeRemaining(e);
+            = calculateTimeRemaining(endTime);
         if (total >= 0) {
 
             // update the timer
@@ -38,7 +37,7 @@ export default function BreakTimerComponent() {
             )
             setBreakTimeRemaining(total / 1000);
             if (total === 0) {
-                console.log('from startBreakTimer', total)
+                console.log('from updateBreakTimer', total)
                 // todo: find better way to update timeRemaining
                 // timeRemaing in this thread has different value
                 // hence passing it as method parameter
@@ -47,16 +46,16 @@ export default function BreakTimerComponent() {
         }
     }
 
-    const clearBreakTimer = (e) => {
+    const refreshBreakTimer = (endTime) => {
 
         // If you try to remove this line the 
         // updating of timer Variable will be
         // after 1000ms or 1sec
         if (Ref.current) clearInterval(Ref.current);
         const interval_id = setInterval(() => {
-            console.log('break ', breakTimeRemaining);
+            console.log('break ', breakStatus, breakTimeRemaining);
             if (breakStatus == 'break_started') {
-                startBreakTimer(e);
+                updateBreakTimer(endTime);
             } else if (breakStatus == 'break_finished') {
                 clearInterval(interval_id);
             }
@@ -65,18 +64,18 @@ export default function BreakTimerComponent() {
         return interval_id;
     }
 
-    const getBreakDeadTime = () => {
-        let deadline = new Date();
+    const getBreakEndTime = () => {
+        let endTime = new Date();
 
         // This is where you need to adjust if 
         // you entend to add more time
-        deadline.setSeconds(deadline.getSeconds() + breakTimeRemaining);
-        console.log(deadline);
-        return deadline;
+        endTime.setSeconds(endTime.getSeconds() + breakTimeRemaining);
+        console.log(endTime);
+        return endTime;
     }
 
     const updateBreak = (s) => {
-        console.log(s);
+        // console.log(s);
         setBreakStatus(s);
         if (s == 'break_finished') {
             // console.log(audio);
@@ -87,7 +86,7 @@ export default function BreakTimerComponent() {
     }
 
     useEffect(() => {
-        const id = clearBreakTimer(getBreakDeadTime());
+        const id = refreshBreakTimer(getBreakEndTime());
         console.log('break status changed to ' + breakStatus)
         return () => {
             // console.log('fix for switch to different component')
@@ -123,6 +122,13 @@ export default function BreakTimerComponent() {
                         &&
                         <div>
                             <div className="btn btn-success m-5" onClick={() => updateBreak('break_finished')}>Finish Break</div>
+                        </div>
+                    }
+                    {
+                        breakStatus == 'break_timer'
+                        &&
+                        <div>
+                            <p className="text-danger">Break has ended, start new pomodoro</p>
                         </div>
                     }
                 </div>
