@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useParams, useLocation, Link } from 'react-router-dom';
 import { pausePomodoroApi } from '../services/api/PomodoroApiService';
+import BreakTimerComponent from './BreakTimerComponent';
 
 export default function PomodoroComponent() {
 
@@ -40,6 +41,7 @@ export default function PomodoroComponent() {
                 (minutes > 9 ? minutes : '0' + minutes) + ':'
                 + (seconds > 9 ? seconds : '0' + seconds)
             )
+            // console.log(timeRemaining, total / 1000)
             setTimeRemaining(total / 1000);
             if (total === 0) {
                 console.log(total)
@@ -57,7 +59,7 @@ export default function PomodoroComponent() {
         // after 1000ms or 1sec
         if (Ref.current) clearInterval(Ref.current);
         const interval_id = setInterval(() => {
-            console.log(status, timeRemaining);
+            // console.log(status, timeRemaining, e);
             if (status == 'completed') {
                 clearInterval(interval_id);
             } else if (status == 'started') {
@@ -108,9 +110,13 @@ export default function PomodoroComponent() {
         <div className="PomodoroComponent">
             <div className="container">
                 <h1>{state.task.description}</h1> <h6>({state.project.name})</h6>
-                <div className="fs-1 p-3 mb-2 text-white" style={{ backgroundColor: state.project.color }}>
-                    {timer}
-                </div>
+                {
+                    status != 'completed'
+                    &&
+                    <div className="fs-1 p-3 mb-2 text-white" style={{ backgroundColor: state.project.color }}>
+                        {timer}
+                    </div>
+                }
 
                 {
                     status == 'started' && status != 'completed'
@@ -130,6 +136,12 @@ export default function PomodoroComponent() {
                 {
                     status == 'completed'
                     && <Link to={"/projects/" + state.project.id + "/tasks"} state={{ project: state.project }}>Return to {state.project.name}</Link>
+                }
+
+                {
+                    status == 'completed'
+                    &&
+                    <BreakTimerComponent></BreakTimerComponent>
                 }
             </div>
 
