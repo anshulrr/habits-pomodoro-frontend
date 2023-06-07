@@ -11,6 +11,10 @@ export default function BreakTimerComponent() {
 
     const [breakTimeRemaining, setBreakTimeRemaining] = useState(1 * 60);
 
+    // without useState it is not passed to threads
+    // const audio = new Audio('http://codeskulptor-demos.commondatastorage.googleapis.com/GalaxyInvaders/pause.wav');
+    const [audio, setAudio] = useState(new Audio(process.env.PUBLIC_URL + '/ticking-clock_1-27477.mp3'))
+
     const calculateTimeRemaining = (e) => {
         const total = Date.parse(e) - Date.parse(new Date());
         const seconds = Math.floor((total / 1000) % 60);
@@ -74,6 +78,12 @@ export default function BreakTimerComponent() {
     const updateBreak = (s) => {
         console.log(s);
         setBreakStatus(s);
+        if (s == 'break_finished') {
+            // console.log(audio);
+            audio.setAttribute('loop', true)
+            audio.play();
+            setBreakStatus('break_timer');
+        }
     }
 
     useEffect(() => {
@@ -82,18 +92,25 @@ export default function BreakTimerComponent() {
         return () => {
             // console.log('fix for switch to different component')
             clearInterval(id);  // fix for switching to different component
+            if (breakStatus == 'break_timer') {
+                audio.pause();
+            }
         };
     }, [breakStatus]);
 
 
     return (
-        <div className="BerakComponent">
+        <div className="BreakComponent">
             <div className="container">
 
                 <div>
-                    <div className="fs-1 p-3 mb-2 text-white" style={{ backgroundColor: 'grey' }}>
-                        {breakTimer}
-                    </div>
+                    {
+                        breakStatus != 'break_finished' && breakStatus != 'break_timer'
+                        &&
+                        <div className="fs-1 p-3 mb-2 text-white" style={{ backgroundColor: 'grey' }}>
+                            {breakTimer}
+                        </div>
+                    }
                     {
                         breakStatus == 'idle'
                         &&
