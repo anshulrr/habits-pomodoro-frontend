@@ -34,7 +34,7 @@ export default function PomodoroComponent() {
     const updateTimer = (endTime) => {
         let { total, minutes, seconds }
             = calculateTimeRemaining(endTime);
-        if (total >= 0) {
+        if (total > 0) {
 
             // update the timer
             // check if less than 10 then we need to 
@@ -43,16 +43,16 @@ export default function PomodoroComponent() {
                 (minutes > 9 ? minutes : '0' + minutes) + ':'
                 + (seconds > 9 ? seconds : '0' + seconds)
             )
-            // console.log(timeRemaining, total / 1000)
+            console.log(timeRemaining, total / 1000)
             setTimeRemaining(total / 1000);
-            if (total === 0) {
-                console.log(total)
-                // todo: find better way to update timeRemaining
-                // timeRemaing in this thread has different value
-                // hence passing it as method parameter
-                updatePomodoro(id, 'completed', total);
-                audio.play();
-            }
+        } else {
+            // TODO: find fix for extra seconds elapsed due to inactive tab
+            console.log(total / 1000)
+            // todo: find better way to update timeRemaining
+            // timeRemaing in this thread has different value
+            // hence passing it as method parameter
+            updatePomodoro(id, 'completed', 0);
+            audio.play();
         }
     }
     const refreshTimer = (endTime) => {

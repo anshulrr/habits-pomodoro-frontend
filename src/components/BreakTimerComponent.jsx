@@ -26,7 +26,7 @@ export default function BreakTimerComponent() {
     const updateBreakTimer = (endTime) => {
         let { total, minutes, seconds }
             = calculateTimeRemaining(endTime);
-        if (total >= 0) {
+        if (total > 0) {
 
             // update the timer
             // check if less than 10 then we need to 
@@ -35,14 +35,14 @@ export default function BreakTimerComponent() {
                 (minutes > 9 ? minutes : '0' + minutes) + ':'
                 + (seconds > 9 ? seconds : '0' + seconds)
             )
+            console.log(total / 1000)
             setBreakTimeRemaining(total / 1000);
-            if (total === 0) {
-                console.log('from updateBreakTimer', total)
-                // todo: find better way to update timeRemaining
-                // timeRemaing in this thread has different value
-                // hence passing it as method parameter
-                updateBreak('break_finished')
-            }
+        } else {
+            console.log('from updateBreakTimer', total)
+            // todo: find better way to update timeRemaining
+            // timeRemaing in this thread has different value
+            // hence passing it as method parameter
+            updateBreak('break_finished')
         }
     }
 
