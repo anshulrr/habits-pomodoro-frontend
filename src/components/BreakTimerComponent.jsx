@@ -12,7 +12,7 @@ export default function BreakTimerComponent() {
 
     // without useState it is not passed to threads
     // const audio = new Audio('http://codeskulptor-demos.commondatastorage.googleapis.com/GalaxyInvaders/pause.wav');
-    const [audio, setAudio] = useState(new Audio(process.env.PUBLIC_URL + '/ticking-clock_1-27477.mp3'))
+    const [audio, setAudio] = useState(new Audio(process.env.PUBLIC_URL + '/audio/ticking-clock_1-27477.mp3'))
 
     const calculateTimeRemaining = (endTime) => {
         const total = Date.parse(endTime) - Date.parse(new Date());
@@ -53,7 +53,7 @@ export default function BreakTimerComponent() {
         // after 1000ms or 1sec
         if (Ref.current) clearInterval(Ref.current);
         const interval_id = setInterval(() => {
-            console.log('break ', breakStatus, breakTimeRemaining);
+            // console.log('break ', breakStatus, breakTimeRemaining);
             if (breakStatus == 'break_started') {
                 updateBreakTimer(endTime);
             } else if (breakStatus == 'break_finished') {
@@ -74,10 +74,10 @@ export default function BreakTimerComponent() {
         return endTime;
     }
 
-    const updateBreak = (s) => {
-        // console.log(s);
-        setBreakStatus(s);
-        if (s == 'break_finished') {
+    const updateBreak = (local_status) => {
+        // console.log(local_status);
+        setBreakStatus(local_status);
+        if (local_status == 'break_finished') {
             // console.log(audio);
             audio.setAttribute('loop', true)
             audio.play();
