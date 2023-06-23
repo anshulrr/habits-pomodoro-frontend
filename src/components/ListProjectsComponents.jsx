@@ -1,30 +1,47 @@
 import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom";
-import { retrieveAllProjectsApi } from "../services/api/ProjectApiService";
-import { useAuth } from "../services/auth/AuthContext";
+import { retrieveAllProjectsApi, getProjectsCountApi } from "../services/api/ProjectApiService";
+// import { useAuth } from "../services/auth/AuthContext";
+import Pagination from "../services/pagination/Pagination"
+
+let PageSize = 5;
 
 export default function ListProjectsComponent() {
 
-    const authContext = useAuth()
-
-    const username = authContext.username
+    // const authContext = useAuth()
+    // const username = authContext.username
 
     const navigate = useNavigate()
 
     const [projects, setProjects] = useState([])
 
-    // const [message, setMessage] = useState(null)
+    const [currentPage, setCurrentPage] = useState(1)
+
+    const [projectsCount, setProjectsCount] = useState(0)
 
     useEffect(
-        () => refreshProjects(),
+        () => getProjectsCount(),
         []
     )
 
+    useEffect(
+        () => refreshProjects(),
+        [currentPage]
+    )
+
     function refreshProjects() {
-        retrieveAllProjectsApi()
+        retrieveAllProjectsApi(PageSize, (currentPage - 1) * PageSize)
             .then(response => {
                 console.log(response)
                 setProjects(response.data)
+            })
+            .catch(response => console.log(response))
+    }
+
+    function getProjectsCount() {
+        getProjectsCountApi()
+            .then(response => {
+                setProjectsCount(response.data)
             })
             .catch(response => console.log(response))
     }
@@ -71,6 +88,15 @@ export default function ListProjectsComponent() {
                     </tbody>
 
                 </table>
+
+                <Pagination
+                    className="pagination-bar"
+                    currentPage={currentPage}
+                    totalCount={projectsCount}
+                    pageSize={PageSize}
+                    onPageChange={page => setCurrentPage(page)}
+                />
+
                 <div className="btn btn-success m-5" onClick={addNewProject}>Add New Project</div>
             </div>
         </div>
