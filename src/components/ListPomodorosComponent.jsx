@@ -5,6 +5,7 @@ import moment from "moment"
 import { TasksChart } from "./charts/TasksChart";
 import { ProjectsDistributionChart } from "./charts/ProjectsDistributionChart";
 import { TotalChart } from "./charts/TotalChart";
+import CategoryChecklistComponent from "./CategoryChecklistComponent";
 
 export default function ListTasksComponent() {
 
@@ -46,15 +47,15 @@ export default function ListTasksComponent() {
         <div className="container">
 
             <div className="row">
-                {
-                    categories.map(
-                        category => (
-                            <span key={category.id}>
-                                {category.name}
-                            </span>
-                        )
-                    )
-                }
+                <div className="col-4">
+                    <h5>Include Project Categories</h5>
+                    <CategoryChecklistComponent
+                        key={categories}
+                        categories={categories}
+                        setIncludeCategories={setIncludeCategories}
+                    ></CategoryChecklistComponent>
+                </div>
+                <hr />
             </div>
 
             <div className="row">
