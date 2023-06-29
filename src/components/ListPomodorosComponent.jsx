@@ -59,7 +59,8 @@ export default function ListTasksComponent() {
 
             <div className="row">
                 <div className="col-6">
-                    <TasksChart includeCategories={includeCategories} />
+                    {/* setting key for re-render */}
+                    <TasksChart key={includeCategories} includeCategories={includeCategories} />
                 </div>
                 <div className="col-4 offset-1">
                     <ProjectsDistributionChart />
