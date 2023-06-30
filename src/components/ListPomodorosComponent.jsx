@@ -64,7 +64,7 @@ export default function ListTasksComponent() {
                     <TasksChart key={includeCategories} includeCategories={includeCategories} />
                 </div>
                 <div className="col-4 offset-1">
-                    <ProjectsDistributionChart />
+                    <ProjectsDistributionChart key={includeCategories} includeCategories={includeCategories} />
                 </div>
             </div>
 
