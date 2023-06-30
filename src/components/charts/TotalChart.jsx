@@ -10,7 +10,7 @@ import { CategoryScale } from 'chart.js'
 import Chart from 'chart.js/auto'
 Chart.register(CategoryScale)
 
-export const TotalChart = ({ includeCategories }) => {
+export const TotalChart = ({ includeCategories, buttonsStates, setButtonsStates }) => {
     const [datasets, setDatasets] = useState([])
 
     const [labels, setLabels] = useState([])
@@ -112,7 +112,12 @@ export const TotalChart = ({ includeCategories }) => {
 
     return (
         <div>
-            <Buttons retrievePomodoros={retrieveTotalPomodoros} showDateString={false}></Buttons>
+            <Buttons
+                retrievePomodoros={retrieveTotalPomodoros}
+                buttonsStates={buttonsStates}
+                setButtonsStates={setButtonsStates}
+                showDateString={false}
+            />
 
             <div className="chart-container">
                 <Bar

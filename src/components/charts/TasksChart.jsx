@@ -9,7 +9,7 @@ import { CategoryScale } from 'chart.js';
 import Chart from 'chart.js/auto';
 Chart.register(CategoryScale);
 
-export const TasksChart = ({ includeCategories }) => {
+export const TasksChart = ({ includeCategories, buttonsStates, setButtonsStates }) => {
     // console.log("hi", chartData);
     // console.log(includeCategories)
 
@@ -54,7 +54,11 @@ export const TasksChart = ({ includeCategories }) => {
 
     return (
         <div>
-            <Buttons retrievePomodoros={retrieveTasksPomodoros}></Buttons>
+            <Buttons
+                retrievePomodoros={retrieveTasksPomodoros}
+                buttonsStates={buttonsStates}
+                setButtonsStates={setButtonsStates}
+            />
 
             <div className="chart-container">
                 <Bar

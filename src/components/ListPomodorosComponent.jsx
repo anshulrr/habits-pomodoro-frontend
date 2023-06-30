@@ -15,6 +15,24 @@ export default function ListTasksComponent() {
 
     const [includeCategories, setIncludeCategories] = useState([])
 
+    const [tasksChartButtonsStates, setTasksChartBButtonsStates] = useState({
+        limit: 'daily',
+        offset: 0,
+        dateString: moment().format('DD MMM')
+    })
+
+    const [projectsChartButtonsStates, setProjectsChartBButtonsStates] = useState({
+        limit: 'daily',
+        offset: 0,
+        dateString: moment().format('DD MMM')
+    })
+
+    const [totalChartButtonsStates, setTotalChartBButtonsStates] = useState({
+        limit: 'daily',
+        offset: 0,
+        dateString: ''
+    })
+
     // for first time load
     useEffect(
         () => {
@@ -61,16 +79,31 @@ export default function ListTasksComponent() {
             <div className="row">
                 <div className="col-6">
                     {/* setting key for re-render */}
-                    <TasksChart key={includeCategories} includeCategories={includeCategories} />
+                    <TasksChart
+                        key={includeCategories}
+                        includeCategories={includeCategories}
+                        buttonsStates={tasksChartButtonsStates}
+                        setButtonsStates={setTasksChartBButtonsStates}
+                    />
                 </div>
                 <div className="col-4 offset-1">
-                    <ProjectsDistributionChart key={includeCategories} includeCategories={includeCategories} />
+                    <ProjectsDistributionChart
+                        key={includeCategories}
+                        includeCategories={includeCategories}
+                        buttonsStates={projectsChartButtonsStates}
+                        setButtonsStates={setProjectsChartBButtonsStates}
+                    />
                 </div>
             </div>
 
             <div className="row">
                 <div className="col-12">
-                    <TotalChart key={includeCategories} includeCategories={includeCategories} />
+                    <TotalChart
+                        key={includeCategories}
+                        includeCategories={includeCategories}
+                        buttonsStates={totalChartButtonsStates}
+                        setButtonsStates={setTotalChartBButtonsStates}
+                    />
                 </div>
             </div>
 
