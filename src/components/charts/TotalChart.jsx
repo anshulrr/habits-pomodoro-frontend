@@ -36,6 +36,7 @@ export const TotalChart = ({ includeCategories }) => {
             .then(response => {
                 console.log("stacked", response)
                 const temp_datasets = [];
+                temp_datasets.label = limit;
 
                 for (const key in response.data) {
                     // console.log(key);
@@ -128,7 +129,7 @@ export const TotalChart = ({ includeCategories }) => {
                         plugins: {
                             title: {
                                 display: true,
-                                text: `Total Time (daily)`
+                                text: `Total Distribution Time (${datasets.label})`
                             },
                             legend: {
                                 display: false

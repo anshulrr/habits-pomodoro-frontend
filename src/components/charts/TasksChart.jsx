@@ -81,7 +81,7 @@ export const TasksChart = ({ includeCategories }) => {
                         plugins: {
                             title: {
                                 display: true,
-                                text: `Project's Focus Time (${chartData.label})`
+                                text: `Task's Distribution Time (${chartData.label})`
                             },
                             legend: {
                                 display: false
