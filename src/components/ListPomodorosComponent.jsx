@@ -70,7 +70,7 @@ export default function ListTasksComponent() {
 
             <div className="row">
                 <div className="col-12">
-                    <TotalChart />
+                    <TotalChart key={includeCategories} includeCategories={includeCategories} />
                 </div>
             </div>
 

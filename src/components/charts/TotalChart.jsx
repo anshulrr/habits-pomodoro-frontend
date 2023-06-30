@@ -10,7 +10,7 @@ import { CategoryScale } from 'chart.js'
 import Chart from 'chart.js/auto'
 Chart.register(CategoryScale)
 
-export const TotalChart = () => {
+export const TotalChart = ({ includeCategories }) => {
     const [datasets, setDatasets] = useState([])
 
     const [labels, setLabels] = useState([])
@@ -32,7 +32,7 @@ export const TotalChart = () => {
 
     function retrieveTotalPomodoros(limit, offset) {
         updateLabels(limit, offset)
-        getTotalPomodorosApi(limit, offset)
+        getTotalPomodorosApi(limit, offset, includeCategories)
             .then(response => {
                 console.log("stacked", response)
                 const temp_datasets = [];
