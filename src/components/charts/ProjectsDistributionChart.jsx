@@ -9,7 +9,7 @@ import { CategoryScale } from 'chart.js';
 import Chart from 'chart.js/auto';
 Chart.register(CategoryScale);
 
-export const ProjectsDistributionChart = () => {
+export const ProjectsDistributionChart = ({ includeCategories, buttonsStates, setButtonsStates }) => {
     // console.log("hi", chartData);
 
     const [chartData, setChartData] = useState({})
@@ -27,7 +27,7 @@ export const ProjectsDistributionChart = () => {
     )
 
     function retrieveProjectsPomodoros(limit, offset) {
-        getProjectsPomodorosApi(limit, offset)
+        getProjectsPomodorosApi(limit, offset, includeCategories)
             .then(response => {
                 // console.log(response)
                 const updated_data = {
@@ -51,7 +51,11 @@ export const ProjectsDistributionChart = () => {
 
     return (
         <div>
-            <Buttons retrievePomodoros={retrieveProjectsPomodoros}></Buttons>
+            <Buttons
+                retrievePomodoros={retrieveProjectsPomodoros}
+                buttonsStates={buttonsStates}
+                setButtonsStates={setButtonsStates}
+            />
             <div className="chart-container">
                 <Doughnut
                     data={

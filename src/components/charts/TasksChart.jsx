@@ -9,8 +9,9 @@ import { CategoryScale } from 'chart.js';
 import Chart from 'chart.js/auto';
 Chart.register(CategoryScale);
 
-export const TasksChart = () => {
+export const TasksChart = ({ includeCategories, buttonsStates, setButtonsStates }) => {
     // console.log("hi", chartData);
+    // console.log(includeCategories)
 
     const [chartData, setChartData] = useState({})
 
@@ -28,7 +29,8 @@ export const TasksChart = () => {
 
     function retrieveTasksPomodoros(limit, offset) {
         console.log(limit, offset)
-        getTasksPomodorosApi(limit, offset)
+        console.log(includeCategories)
+        getTasksPomodorosApi(limit, offset, includeCategories)
             .then(response => {
                 // console.log(response)
                 const updated_data = {
@@ -52,7 +54,11 @@ export const TasksChart = () => {
 
     return (
         <div>
-            <Buttons retrievePomodoros={retrieveTasksPomodoros}></Buttons>
+            <Buttons
+                retrievePomodoros={retrieveTasksPomodoros}
+                buttonsStates={buttonsStates}
+                setButtonsStates={setButtonsStates}
+            />
 
             <div className="chart-container">
                 <Bar
@@ -79,7 +85,7 @@ export const TasksChart = () => {
                         plugins: {
                             title: {
                                 display: true,
-                                text: `Project's Focus Time (${chartData.label})`
+                                text: `Task's Distribution Time (${chartData.label})`
                             },
                             legend: {
                                 display: false

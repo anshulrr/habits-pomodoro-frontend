@@ -14,10 +14,10 @@ export const getPomodorosApi
     = () => apiClient.get(`/pomodoros`)
 
 export const getTasksPomodorosApi
-    = (limit, offset) => apiClient.get(`/pomodoros/tasks-time?limit=${limit}&offset=${offset}`)
+    = (limit, offset, include_categories) => apiClient.get(`/pomodoros/tasks-time?limit=${limit}&offset=${offset}&include_categories=${include_categories}`)
 
 export const getProjectsPomodorosApi
-    = (limit, offset) => apiClient.get(`/pomodoros/projects-time?limit=${limit}&offset=${offset}`)
+    = (limit, offset, include_categories) => apiClient.get(`/pomodoros/projects-time?limit=${limit}&offset=${offset}&include_categories=${include_categories}`)
 
 export const getTotalPomodorosApi
-    = (limit, offset) => apiClient.get(`/pomodoros/total-time?limit=${limit}&offset=${offset}`)
+    = (limit, offset, include_categories) => apiClient.get(`/pomodoros/total-time?limit=${limit}&offset=${offset}&include_categories=${include_categories}`)

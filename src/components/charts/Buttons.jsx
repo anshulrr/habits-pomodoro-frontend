@@ -1,28 +1,34 @@
 import { useEffect, useState } from "react"
 import moment from "moment"
 
-export const Buttons = ({ retrievePomodoros, showDateString = true }) => {
+export const Buttons = ({ retrievePomodoros, buttonsStates, setButtonsStates, showDateString = true }) => {
 
-    const [limit, setLimit] = useState('daily')
+    const [limit, setLimit] = useState(buttonsStates.limit)
 
-    const [offset, setOffset] = useState(0)
+    const [offset, setOffset] = useState(buttonsStates.offset)
 
-    const [dateString, setDateString] = useState(moment().format('DD MMM'))
+    const [dateString, setDateString] = useState(buttonsStates.dateString)
 
     // to retrive data after click on bottons
     useEffect(
-        () => retrievePomodoros(limit, offset),
-        [offset, limit]
+        () => {
+            retrievePomodoros(limit, offset)
+            setButtonsStates({
+                limit: limit,
+                offset: offset,
+                dateString: dateString
+            })
+        }, [offset, limit]
     )
 
     function updateOffset(val) {
-        updateDateString(limit, offset + val)
+        showDateString && updateDateString(limit, offset + val)
         setOffset(offset + val);
     }
 
     function updateLimit(val) {
         // console.log('updating limit')
-        updateDateString(val, 0)
+        showDateString && updateDateString(val, 0)
         setLimit(val);
         setOffset(0);
     }
