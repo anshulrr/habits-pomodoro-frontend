@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { createProjectApi, retrieveProjectApi, updateProjectApi } from '../services/api/ProjectApiService'
+import { retrieveAllProjectCategoriesApi } from "../services/api/ProjectCategoryApiService";
 import { Formik, Form, ErrorMessage, Field } from 'formik'
 
 export default function ProjectComponent() {
@@ -10,13 +11,26 @@ export default function ProjectComponent() {
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [color, setColor] = useState('blue')
+    const [categories, setCategories] = useState([])
 
     const navigate = useNavigate()
 
     useEffect(
-        () => retrieveProject(),
+        () => {
+            retrieveProject()
+            retrieveProjectCategories()
+        },
         [id]
     )
+
+    function retrieveProjectCategories() {
+        // TODO: decide limit
+        retrieveAllProjectCategoriesApi(10, 0)
+            .then(response => {
+                setCategories(response.data)
+            })
+            .catch(response => console.log(response))
+    }
 
     function retrieveProject() {
 
@@ -43,7 +57,7 @@ export default function ProjectComponent() {
         }
 
         if (id == -1) {
-            createProjectApi(project)
+            createProjectApi(project, values.category_id)
                 .then(response => {
                     console.log(response)
                     navigate('/projects')
@@ -107,6 +121,18 @@ export default function ProjectComponent() {
                                 <fieldset className="form-group">
                                     <label>Color</label>
                                     <Field type="text" className="form-control" name="color" />
+                                </fieldset>
+                                <fieldset className="form-group">
+                                    <label>Category</label>
+                                    <Field as="select" className="form-select" name="category_id">
+                                        {
+                                            categories.map(
+                                                category => (
+                                                    <option value={category.id}>{category.name}</option>
+                                                )
+                                            )
+                                        }
+                                    </Field>
                                 </fieldset>
                                 <div>
                                     <button className="btn btn-success m-5" type="submit">Save</button>

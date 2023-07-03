@@ -13,4 +13,4 @@ export const updateProjectApi
     = (id, project) => apiClient.put(`/projects/${id}`, project)
 
 export const createProjectApi
-    = (project) => apiClient.post(`/projects`, project)
+    = (project, category_id) => apiClient.post(`project-categories/${category_id}/projects`, project)
