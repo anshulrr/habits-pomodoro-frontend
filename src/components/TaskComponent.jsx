@@ -24,7 +24,7 @@ export default function TaskComponent() {
             createTaskApi(project_id, task)
                 .then(response => {
                     console.log(response)
-                    navigate(`/projects/${project_id}/tasks`)
+                    navigate(`/projects/${project_id}/tasks`, { state: { project: state.project } })
                 })
                 .catch(error => console.log(error))
         }
