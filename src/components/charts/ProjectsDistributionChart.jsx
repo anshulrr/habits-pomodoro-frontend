@@ -20,11 +20,12 @@ export const ProjectsDistributionChart = ({ includeCategories, buttonsStates, se
     //     []
     // )
 
-    // to reload chart after data retrival
-    useEffect(
-        () => console.log('reload projects chart'),
-        [chartData]
-    )
+    // // not needed
+    // // to reload chart after data retrival
+    // useEffect(
+    //     () => console.log('reload projects chart'),
+    //     [chartData]
+    // )
 
     function retrieveProjectsPomodoros(limit, offset) {
         getProjectsPomodorosApi(limit, offset, includeCategories)

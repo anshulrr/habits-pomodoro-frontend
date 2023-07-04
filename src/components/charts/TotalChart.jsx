@@ -30,11 +30,12 @@ export const TotalChart = ({ includeCategories, buttonsStates, setButtonsStates 
     //     []
     // )
 
-    // for reload data retrival
-    useEffect(
-        () => console.log('reload total chart'),
-        [datasets]
-    )
+    // not needed
+    // // for reload data retrival
+    // useEffect(
+    //     () => console.log('reload total chart'),
+    //     [datasets]
+    // )
 
     function retrieveTotalPomodoros(limit, offset) {
         updateLabels(limit, offset)

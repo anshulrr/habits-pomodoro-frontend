@@ -21,11 +21,12 @@ export const TasksChart = ({ includeCategories, buttonsStates, setButtonsStates 
     //     []
     // )
 
-    // for reload data retrival
-    useEffect(
-        () => console.log('reload tasks chart'),
-        [chartData]
-    )
+    // // not needed
+    // // for reload data retrival
+    // useEffect(
+    //     () => console.log('reload tasks chart'),
+    //     [chartData]
+    // )
 
     function retrieveTasksPomodoros(limit, offset) {
         // console.log(limit, offset)
