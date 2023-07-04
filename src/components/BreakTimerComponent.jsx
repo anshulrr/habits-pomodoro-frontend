@@ -37,7 +37,7 @@ export default function BreakTimerComponent() {
                 (minutes > 9 ? minutes : '0' + minutes) + ':'
                 + (seconds > 9 ? seconds : '0' + seconds)
             )
-            console.log(total / 1000)
+            // console.log(total / 1000)
             setBreakTimeRemaining(total / 1000);
         } else {
             console.log('from updateBreakTimer error:', total / 1000)
@@ -72,7 +72,7 @@ export default function BreakTimerComponent() {
         // This is where you need to adjust if 
         // you entend to add more time
         endTime.setSeconds(endTime.getSeconds() + breakTimeRemaining);
-        console.log(endTime);
+        // console.log(endTime);
         return endTime;
     }
 

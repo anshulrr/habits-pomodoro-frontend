@@ -28,8 +28,8 @@ export const TasksChart = ({ includeCategories, buttonsStates, setButtonsStates 
     )
 
     function retrieveTasksPomodoros(limit, offset) {
-        console.log(limit, offset)
-        console.log(includeCategories)
+        // console.log(limit, offset)
+        // console.log(includeCategories)
         getTasksPomodorosApi(limit, offset, includeCategories)
             .then(response => {
                 // console.log(response)

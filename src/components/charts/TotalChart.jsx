@@ -40,7 +40,7 @@ export const TotalChart = ({ includeCategories, buttonsStates, setButtonsStates 
         updateLabels(limit, offset)
         getTotalPomodorosApi(limit, offset, includeCategories)
             .then(response => {
-                console.log("stacked", response)
+                // console.log("stacked", response)
                 const temp_datasets = [];
                 temp_datasets.label = limit;
                 if (limit === 'daily') {

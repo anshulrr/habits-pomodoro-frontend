@@ -32,7 +32,7 @@ export default function ListProjectsComponent() {
     function refreshProjects() {
         retrieveAllProjectsApi(PageSize, (currentPage - 1) * PageSize)
             .then(response => {
-                console.log(response)
+                // console.log(response)
                 setProjects(response.data)
             })
             .catch(response => console.log(response))

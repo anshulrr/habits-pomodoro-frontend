@@ -43,7 +43,7 @@ export default function PomodoroComponent() {
                 (minutes > 9 ? minutes : '0' + minutes) + ':'
                 + (seconds > 9 ? seconds : '0' + seconds)
             )
-            console.log(timeRemaining, total / 1000)
+            // console.log(timeRemaining, total / 1000)
             setTimeRemaining(total / 1000);
         } else {
             // TODO: find fix for extra seconds elapsed due to inactive tab
@@ -104,7 +104,7 @@ export default function PomodoroComponent() {
 
         updatePomodoroApi(id, pomodoro)
             .then(response => {
-                console.log(response.status)
+                // console.log(response.status)
             })
             .catch(error => console.log(error))
     }

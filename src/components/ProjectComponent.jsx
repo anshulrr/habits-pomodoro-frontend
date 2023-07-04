@@ -48,7 +48,7 @@ export default function ProjectComponent() {
     }
 
     function onSubmit(values) {
-        console.log(values)
+        // console.log(values)
         const project = {
             id,
             name: values.name,
@@ -59,14 +59,14 @@ export default function ProjectComponent() {
         if (id == -1) {
             createProjectApi(project, values.category_id)
                 .then(response => {
-                    console.log(response)
+                    // console.log(response)
                     navigate('/projects')
                 })
                 .catch(error => console.log(error))
         } else {
             updateProjectApi(id, project)
                 .then(response => {
-                    console.log(response)
+                    // console.log(response)
                     navigate('/projects')
                 })
                 .catch(error => console.log(error))
@@ -80,7 +80,7 @@ export default function ProjectComponent() {
             errors.name = 'Enter atleast 2 characters'
         }
 
-        console.log(values)
+        // console.log(values)
         return errors
     }
 

@@ -40,7 +40,7 @@ export default function ListTasksComponent() {
     }
 
     function createNewPomodoro(task) {
-        console.log(task.id)
+        // console.log(task.id)
 
         const pomodoro = {
             startTime: new Date(),
@@ -49,7 +49,7 @@ export default function ListTasksComponent() {
 
         createPomodoroApi(pomodoro, task.id)
             .then(response => {
-                console.log(response)
+                // console.log(response)
                 navigate(`/tasks/${task.id}/pomodoros/${response.data.id}/${response.data.length}`, { state: { project: state.project, task } })
             })
             .catch(error => console.log(error))

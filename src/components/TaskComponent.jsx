@@ -14,7 +14,7 @@ export default function TaskComponent() {
     const navigate = useNavigate()
 
     function onSubmit(values) {
-        console.log(values, id)
+        // console.log(values, id)
         const task = {
             id,
             description: values.description,
@@ -23,7 +23,7 @@ export default function TaskComponent() {
         if (id == -1) {
             createTaskApi(project_id, task)
                 .then(response => {
-                    console.log(response)
+                    // console.log(response)
                     navigate(`/projects/${project_id}/tasks`, { state: { project: state.project } })
                 })
                 .catch(error => console.log(error))
@@ -37,7 +37,7 @@ export default function TaskComponent() {
             errors.description = 'Enter atleast 2 characters'
         }
 
-        console.log(values)
+        // console.log(values)
         return errors
     }
 

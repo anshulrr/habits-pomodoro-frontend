@@ -45,7 +45,7 @@ export default function ListTasksComponent() {
     function retrieveTodayPomodoros() {
         getPomodorosApi()
             .then(response => {
-                console.log(response)
+                // console.log(response)
                 setPomodoros(response.data)
             })
             .catch(response => console.log(response))
@@ -54,7 +54,7 @@ export default function ListTasksComponent() {
     function retrieveProjectCategories() {
         retrieveAllProjectCategoriesApi(10, 0)
             .then(response => {
-                console.log(response)
+                // console.log(response)
                 setCategories(response.data)
                 setIncludeCategories(response.data.map(c => c.id))
             })
