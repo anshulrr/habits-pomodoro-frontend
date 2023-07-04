@@ -19,16 +19,18 @@ export default function HeaderComponent() {
                 <div className="row">
                     <nav className="navbar navbar-expand-lg">
 
-                        <div className="collapse navbar-collapse">
-                            <ul className="navbar-nav">
-                                {isAuthenticated
-                                    && <li className="nav-item fs-5"><Link className="nav-link" to={"/welcome/" + username}>Home</Link></li>}
-                                {isAuthenticated
-                                    && <li className="nav-item fs-5"><Link className="nav-link" to="/projects">Projects</Link></li>}
-                                {isAuthenticated
-                                    && <li className="nav-item fs-5"><Link className="nav-link" to="/pomodoros">Pomodoros</Link></li>}
-                            </ul>
-                        </div>
+                        {/* <ul className="navbar-nav">
+                            {isAuthenticated
+                                && <li className="nav-item fs-5"><Link className="nav-link" to={"/welcome/" + username}>Home</Link></li>}
+                        </ul> */}
+                        <ul className="navbar-nav">
+                            {isAuthenticated
+                                && <li className="nav-item fs-5"><Link className="nav-link" to="/projects">Projects</Link></li>}
+                        </ul>
+                        <ul className="navbar-nav">
+                            {isAuthenticated
+                                && <li className="nav-item fs-5"><Link className="nav-link" to="/pomodoros">Pomodoros</Link></li>}
+                        </ul>
 
                         <ul className="navbar-nav">
                             {!isAuthenticated
