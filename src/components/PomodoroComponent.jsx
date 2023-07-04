@@ -138,7 +138,7 @@ export default function PomodoroComponent() {
 
                 {
                     status == 'completed'
-                    && <Link to={"/projects/" + state.project.id + "/tasks"} state={{ project: state.project }}>Return to {state.project.name}</Link>
+                    && <Link to={"/projects"} state={{ project: state.project }}>Return</Link>
                 }
 
                 {

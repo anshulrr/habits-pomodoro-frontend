@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react"
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { retrieveAllProjectsApi, getProjectsCountApi } from "../services/api/ProjectApiService";
+import ListTasksComponent from './ListTasksComponent'
+
 // import { useAuth } from "../services/auth/AuthContext";
 import Pagination from "../services/pagination/Pagination"
 
-let PageSize = 5;
+const PAGESIZE = 5;
 
 export default function ListProjectsComponent() {
 
@@ -19,6 +21,9 @@ export default function ListProjectsComponent() {
 
     const [projectsCount, setProjectsCount] = useState(0)
 
+    const { state } = useLocation();
+    const [project, setProject] = useState(state ? state.project : null)
+
     useEffect(
         () => getProjectsCount(),
         []
@@ -30,7 +35,7 @@ export default function ListProjectsComponent() {
     )
 
     function refreshProjects() {
-        retrieveAllProjectsApi(PageSize, (currentPage - 1) * PageSize)
+        retrieveAllProjectsApi(PAGESIZE, (currentPage - 1) * PAGESIZE)
             .then(response => {
                 // console.log(response)
                 setProjects(response.data)
@@ -57,50 +62,55 @@ export default function ListProjectsComponent() {
 
     return (
         <div className="container">
-            <h1>My Projects!</h1>
-            {/* {message && <div className="alert alert-warning">{message}</div>} */}
-            <div>
-                <table className='table'>
-                    <thead>
-                        <tr>
-                            <th>Project</th>
-                            <th>Description</th>
-                            <th>Color</th>
-                            <th>Category</th>
-                            <th>Update</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            projects.map(
-                                project => (
-                                    <tr key={project.id}>
-                                        <td>
-                                            <Link to={"/projects/" + project.id + "/tasks"} state={{ project }}>{project.name}</Link>
-                                        </td>
-                                        <td>{project.description}</td>
-                                        <td>{project.color}</td>
-                                        <td>{project.projectCategory ? project.projectCategory.name : ''}</td>
-                                        <td> <button className="btn btn-success"
-                                            onClick={() => updateProject(project.id)}>Update</button> </td>
-                                    </tr>
-                                )
-                            )
-                        }
-                    </tbody>
+            <div className="row">
+                <div className="col-sm-4">
+                    {/* {message && <div className="alert alert-warning">{message}</div>} */}
+                    <div>
+                        <table className='table'>
+                            <thead>
+                                <tr>
+                                    <th>Projects</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    projects.map(
+                                        project => (
+                                            <tr key={project.id}>
+                                                <td align="left">
+                                                    {/* <Link to={"/projects/" + project.id + "/tasks"} state={{ project }}>{project.name}</Link> */}
+                                                    <span style={{ color: project.color }}>&#9632; </span>
+                                                    <button className="btn btn-sm  btn-light" onClick={() => setProject(project)} >{project.name}</button>
+                                                </td>
+                                                <td align="right">
+                                                    (<small>{project.projectCategory ? project.projectCategory.name : ''}</small>
+                                                    ) <i class="bi bi-pencil-square" onClick={() => updateProject(project.id)}></i>
+                                                </td>
+                                            </tr>
+                                        )
+                                    )
+                                }
+                            </tbody>
 
-                </table>
+                        </table>
 
-                <Pagination
-                    className="pagination-bar"
-                    currentPage={currentPage}
-                    totalCount={projectsCount}
-                    pageSize={PageSize}
-                    onPageChange={page => setCurrentPage(page)}
-                />
+                        <Pagination
+                            className="pagination-bar"
+                            currentPage={currentPage}
+                            totalCount={projectsCount}
+                            pageSize={PAGESIZE}
+                            onPageChange={page => setCurrentPage(page)}
+                        />
 
-                <div className="btn btn-success m-5" onClick={addNewProject}>Add New Project</div>
+                        <div className="btn btn-success btn-sm my-5" onClick={addNewProject}>Add New Project</div>
+                    </div>
+                </div>
+                <div className="col-sm-8">
+                    {project && <ListTasksComponent project={project} />}
+                </div>
             </div>
+
         </div>
     )
 }
