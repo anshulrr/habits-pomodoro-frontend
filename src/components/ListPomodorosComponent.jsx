@@ -65,7 +65,7 @@ export default function ListTasksComponent() {
         <div className="container">
 
             <div className="row">
-                <div className="col-4">
+                <div className="col-sm-4">
                     <h5>Include Project Categories</h5>
                     <CategoryChecklistComponent
                         key={categories}
@@ -77,7 +77,7 @@ export default function ListTasksComponent() {
             </div>
 
             <div className="row">
-                <div className="col-6">
+                <div className="col-sm-6">
                     {/* setting key for re-render */}
                     <TasksChart
                         key={includeCategories}
@@ -86,7 +86,7 @@ export default function ListTasksComponent() {
                         setButtonsStates={setTasksChartBButtonsStates}
                     />
                 </div>
-                <div className="col-4 offset-1">
+                <div className="col-sm-4 offset-sm-1">
                     <ProjectsDistributionChart
                         key={includeCategories}
                         includeCategories={includeCategories}
@@ -97,7 +97,7 @@ export default function ListTasksComponent() {
             </div>
 
             <div className="row">
-                <div className="col-12">
+                <div className="col-sm-12">
                     <TotalChart
                         key={includeCategories}
                         includeCategories={includeCategories}
