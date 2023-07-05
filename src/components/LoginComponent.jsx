@@ -35,19 +35,19 @@ export default function LoginComponent() {
     return (
         <div className="Login">
             {showErrorMessage && <div className="ErrorMessage">Authentication Failed. Please check your credentials</div>}
-            <div className="LoginForm">
+            <form className="LoginForm">
                 <div>
-                    <label className="login-label">User Name</label>
-                    <input type="text" name="username" value={username} onChange={handleUsernameChange} />
+                    <label className="login-label">Username</label>
+                    <input type="text" name="username" value={username} onChange={handleUsernameChange} autoComplete="username" />
                 </div>
                 <div>
                     <label className="login-label">Password</label>
-                    <input type="password" name="password" value={password} onChange={handlePasswordChange} />
+                    <input type="password" name="password" value={password} onChange={handlePasswordChange} autoComplete="current-password" />
                 </div>
                 <div>
                     <button type="button" name="login" onClick={handleSubmit}>login</button>
                 </div>
-            </div>
+            </form>
         </div>
     )
 }

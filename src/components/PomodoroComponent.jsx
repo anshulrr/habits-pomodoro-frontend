@@ -112,7 +112,7 @@ export default function PomodoroComponent() {
     return (
         <div className="PomodoroComponent">
             <div className="container">
-                <small><i class="bi bi-folder-plus"> </i>{state.project.name}</small>
+                <small><i className="bi bi-folder-plus"> </i>{state.project.name}</small>
                 <h5>{state.task.description}</h5>
                 {
                     status != 'completed'

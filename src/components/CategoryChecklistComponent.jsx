@@ -46,7 +46,7 @@ export default function CategoryChecklistComponent({ categories, setIncludeCateg
                             checked={checkedState[index]}
                             onChange={() => handleOnChange(index)}
                         />
-                        <label className="form-check-label" for={`custom-checkbox-${index}`}>{name}</label>
+                        <label className="form-check-label" htmlFor={`custom-checkbox-${index}`}>{name}</label>
                     </div>
                 );
             })}

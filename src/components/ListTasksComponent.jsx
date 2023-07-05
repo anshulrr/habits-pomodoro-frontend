@@ -24,7 +24,7 @@ export default function ListTasksComponent({ project }) {
     function refreshTasks() {
         retrieveAllTasks(project.id)
             .then(response => {
-                console.log(response)
+                // console.log(response)
                 setTasks(response.data)
             })
             .catch(response => console.log(response))

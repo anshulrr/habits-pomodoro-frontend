@@ -57,7 +57,7 @@ export const Buttons = ({ retrievePomodoros, buttonsStates, setButtonsStates, sh
 
                 <div className="row">
                     <div className="col-3">
-                        <i class="bi bi-arrow-left-square" onClick={() => updateOffset(-1)}></i>
+                        <i className="bi bi-arrow-left-square" onClick={() => updateOffset(-1)}></i>
                     </div>
                     <div className="col-6">
                         <small>
@@ -65,7 +65,7 @@ export const Buttons = ({ retrievePomodoros, buttonsStates, setButtonsStates, sh
                         </small>
                     </div>
                     <div className="col-3">
-                        <i class="bi bi-arrow-right-square" onClick={() => updateOffset(1)}></i>
+                        <i className="bi bi-arrow-right-square" onClick={() => updateOffset(1)}></i>
                     </div>
                 </div>
             </div>
