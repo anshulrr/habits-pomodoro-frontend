@@ -50,14 +50,14 @@ export const Buttons = ({ retrievePomodoros, buttonsStates, setButtonsStates, sh
 
     return (
         <div className="container">
-            <button type="button" className="btn btn-light" onClick={() => updateLimit('daily')}>Daily</button>
-            <button type="button" className="btn btn-light" onClick={() => updateLimit('weekly')}>Weekly</button>
-            <button type="button" className="btn btn-light" onClick={() => updateLimit('monthly')}>Monthly</button>
+            <button type="button" className="btn btn-sm btn-light" onClick={() => updateLimit('daily')}>Daily</button>
+            <button type="button" className="btn btn-sm btn-light" onClick={() => updateLimit('weekly')}>Weekly</button>
+            <button type="button" className="btn btn-sm btn-light" onClick={() => updateLimit('monthly')}>Monthly</button>
             <div className="container">
 
                 <div className="row">
                     <div className="col-3">
-                        <button type="button" className="btn btn-light" onClick={() => updateOffset(-1)}>prev</button>
+                        <i class="bi bi-arrow-left-square" onClick={() => updateOffset(-1)}></i>
                     </div>
                     <div className="col-6">
                         <small>
@@ -65,7 +65,7 @@ export const Buttons = ({ retrievePomodoros, buttonsStates, setButtonsStates, sh
                         </small>
                     </div>
                     <div className="col-3">
-                        <button type="button" className="btn btn-light" onClick={() => updateOffset(1)}>next</button>
+                        <i class="bi bi-arrow-right-square" onClick={() => updateOffset(1)}></i>
                     </div>
                 </div>
             </div>

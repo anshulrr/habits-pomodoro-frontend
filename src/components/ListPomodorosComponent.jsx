@@ -66,7 +66,7 @@ export default function ListTasksComponent() {
 
             <div className="row">
                 <div className="col-sm-4">
-                    <h5>Include Project Categories</h5>
+                    <h6>Included Project Categories</h6>
                     <CategoryChecklistComponent
                         key={categories}
                         categories={categories}
@@ -106,31 +106,33 @@ export default function ListTasksComponent() {
                     <hr />
                 </div>
                 <div className="col-sm-4">
-                    <h5>Today's pomodoros</h5>
-                    <table className="table">
-                        <thead>
-                            <tr>
-                                <th>Start</th>
-                                <th>End</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                pomodoros.map(
-                                    pomodoro => (
-                                        <tr key={pomodoro.id}>
-                                            <td>
-                                                {moment.utc(pomodoro.startTime).local().format('H:mm')}
-                                            </td>
-                                            <td>
-                                                {moment.utc(pomodoro.endTime).local().format('H:mm')}
-                                            </td>
-                                        </tr>
+                    <h6>Today's pomodoros</h6>
+                    <small>
+                        <table className="table table-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Start</th>
+                                    <th>End</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    pomodoros.map(
+                                        pomodoro => (
+                                            <tr key={pomodoro.id}>
+                                                <td>
+                                                    {moment.utc(pomodoro.startTime).local().format('H:mm')}
+                                                </td>
+                                                <td>
+                                                    {moment.utc(pomodoro.endTime).local().format('H:mm')}
+                                                </td>
+                                            </tr>
+                                        )
                                     )
-                                )
-                            }
-                        </tbody>
-                    </table>
+                                }
+                            </tbody>
+                        </table>
+                    </small>
                 </div >
             </div >
         </div >
