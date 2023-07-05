@@ -147,6 +147,8 @@ export const TotalChart = ({ includeCategories, buttonsStates, setButtonsStates 
                     }
                     options={{
                         responsive: true,
+                        maintainAspectRatio: true,
+                        aspectRatio: 0.75,
                         plugins: {
                             title: {
                                 display: true,
@@ -154,6 +156,13 @@ export const TotalChart = ({ includeCategories, buttonsStates, setButtonsStates 
                             },
                             legend: {
                                 display: true
+                            },
+                            legend: {
+                                display: true,
+                                position: 'top',
+                                labels: {
+                                    boxWidth: 10
+                                }
                             },
                             annotation: {
                                 annotations: {

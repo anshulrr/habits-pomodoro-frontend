@@ -10,7 +10,7 @@ export default function ProjectComponent() {
 
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
-    const [color, setColor] = useState('blue')
+    const [color, setColor] = useState('#00FFFF')
     const [categories, setCategories] = useState([])
 
     const navigate = useNavigate()
@@ -120,7 +120,7 @@ export default function ProjectComponent() {
                                 </fieldset>
                                 <fieldset className="form-group">
                                     <label>Color</label>
-                                    <Field type="text" className="form-control" name="color" />
+                                    <Field type="color" className="form-control" name="color" />
                                 </fieldset>
                                 <fieldset className="form-group">
                                     <label>Category</label>
@@ -128,7 +128,7 @@ export default function ProjectComponent() {
                                         {
                                             categories.map(
                                                 category => (
-                                                    <option value={category.id}>{category.name}</option>
+                                                    <option key={category.id} value={category.id}>{category.name}</option>
                                                 )
                                             )
                                         }

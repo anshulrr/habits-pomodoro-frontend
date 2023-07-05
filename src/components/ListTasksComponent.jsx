@@ -4,12 +4,7 @@ import { createPomodoroApi } from "../services/api/PomodoroApiService";
 import { retrieveAllTasks } from "../services/api/TaskApiService";
 import { useAuth } from "../services/auth/AuthContext";
 
-export default function ListTasksComponent() {
-
-    const { project_id } = useParams()
-
-    const { state } = useLocation();
-    // console.log(useLocation());
+export default function ListTasksComponent({ project }) {
 
     const authContext = useAuth()
 
@@ -23,20 +18,20 @@ export default function ListTasksComponent() {
 
     useEffect(
         () => refreshTasks(),
-        []
+        [project]
     )
 
     function refreshTasks() {
-        retrieveAllTasks(project_id)
+        retrieveAllTasks(project.id)
             .then(response => {
-                console.log(response)
+                // console.log(response)
                 setTasks(response.data)
             })
             .catch(response => console.log(response))
     }
 
     function addNewTask() {
-        navigate(`/projects/${project_id}/tasks/-1`, { state })
+        navigate(`/projects/${project.id}/tasks/-1`, { state: { project } })
     }
 
     function createNewPomodoro(task) {
@@ -50,39 +45,37 @@ export default function ListTasksComponent() {
         createPomodoroApi(pomodoro, task.id)
             .then(response => {
                 // console.log(response)
-                navigate(`/tasks/${task.id}/pomodoros/${response.data.id}/${response.data.length}`, { state: { project: state.project, task } })
+                navigate(`/tasks/${task.id}/pomodoros/${response.data.id}/${response.data.length}`, { state: { project: project, task } })
             })
             .catch(error => console.log(error))
     }
 
     return (
-        <div className="container">
-            <h1>{state.project.name}</h1>
+        <div>
+            <h5>{project.name}</h5>
             {/* {message && <div className="alert alert-warning">{message}</div>} */}
             <div>
-                <table className="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Tasks</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            tasks.map(
-                                task => (
-                                    <tr key={task.id}>
-                                        <td className="text-start">
-                                            <i className="bi bi-play-circle" onClick={() => createNewPomodoro(task)}></i>
-                                            {' ' + task.description}
-                                        </td>
-                                    </tr>
+                <small>
+                    <table className="table table-hover">
+                        <tbody>
+                            {
+                                tasks.map(
+                                    task => (
+                                        <tr key={task.id}>
+                                            <td className="text-start">
+                                                <i className="bi bi-play-circle" onClick={() => createNewPomodoro(task)}></i>
+                                                <span>
+                                                    {' ' + task.description}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    )
                                 )
-                            )
-                        }
-                    </tbody>
-
-                </table>
-                <div className="btn btn-success m-5" onClick={addNewTask}>Add New Task</div>
+                            }
+                        </tbody>
+                    </table>
+                </small>
+                <div className="btn btn-success btn-sm my-5" onClick={addNewTask}>Add New Task</div>
             </div>
         </div>
     )

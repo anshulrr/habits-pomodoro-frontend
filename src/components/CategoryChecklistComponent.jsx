@@ -33,26 +33,23 @@ export default function CategoryChecklistComponent({ categories, setIncludeCateg
     };
 
     return (
-        <div>
-            <ul className="categories-list">
-                {categories.map(({ name }, index) => {
-                    return (
-                        <li key={index}>
-                            <div className="categories-list-item">
-                                <input
-                                    type="checkbox"
-                                    id={`custom-checkbox-${index}`}
-                                    name={name}
-                                    value={name}
-                                    checked={checkedState[index]}
-                                    onChange={() => handleOnChange(index)}
-                                />
-                                <label htmlFor={`custom-checkbox-${index}`}>{name}</label>
-                            </div>
-                        </li>
-                    );
-                })}
-            </ul>
+        <div className="text-start">
+            {categories.map(({ name }, index) => {
+                return (
+                    <div key={index} className="form-check">
+                        <input
+                            type="checkbox"
+                            className="form-check-input"
+                            id={`custom-checkbox-${index}`}
+                            name={name}
+                            value={name}
+                            checked={checkedState[index]}
+                            onChange={() => handleOnChange(index)}
+                        />
+                        <label className="form-check-label" htmlFor={`custom-checkbox-${index}`}>{name}</label>
+                    </div>
+                );
+            })}
         </div>
     )
 }

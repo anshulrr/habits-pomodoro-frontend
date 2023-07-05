@@ -112,7 +112,8 @@ export default function PomodoroComponent() {
     return (
         <div className="PomodoroComponent">
             <div className="container">
-                <h3>{state.task.description}</h3> <h6>({state.project.name})</h6>
+                <small><i className="bi bi-folder-plus"> </i>{state.project.name}</small>
+                <h5>{state.task.description}</h5>
                 {
                     status != 'completed'
                     &&
@@ -123,28 +124,28 @@ export default function PomodoroComponent() {
 
                 {
                     status == 'started' && status != 'completed'
-                    && <div className="btn btn-warning m-5" onClick={() => updatePomodoro(id, "paused", timeRemaining)}>Pause</div>
+                    && <div className="btn btn-warning m-4" onClick={() => updatePomodoro(id, "paused", timeRemaining)}>Pause</div>
                 }
 
                 {
                     status == 'paused' && status != 'completed'
-                    && <div className="btn btn-success m-5" onClick={() => updatePomodoro(id, "started", timeRemaining)}>Start</div>
+                    && <div className="btn btn-success m-4" onClick={() => updatePomodoro(id, "started", timeRemaining)}>Start</div>
                 }
 
                 {
                     status != 'completed'
-                    && <div className="btn btn-danger m-5" onClick={() => updatePomodoro(id, "completed", timeRemaining)}>Mark Completed</div>
-                }
-
-                {
-                    status == 'completed'
-                    && <Link to={"/projects/" + state.project.id + "/tasks"} state={{ project: state.project }}>Return to {state.project.name}</Link>
+                    && <div className="btn btn-danger m-4" onClick={() => updatePomodoro(id, "completed", timeRemaining)}>Mark Completed</div>
                 }
 
                 {
                     status == 'completed'
                     &&
                     <BreakTimerComponent></BreakTimerComponent>
+                }
+
+                {
+                    status == 'completed'
+                    && <Link to={"/projects"} state={{ project: state.project }}>Return</Link>
                 }
             </div>
 

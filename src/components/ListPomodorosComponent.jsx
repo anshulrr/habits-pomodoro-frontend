@@ -65,19 +65,15 @@ export default function ListTasksComponent() {
         <div className="container">
 
             <div className="row">
-                <div className="col-4">
-                    <h5>Include Project Categories</h5>
+                <div className="col-sm-4">
+                    <h6>Included Project Categories</h6>
                     <CategoryChecklistComponent
                         key={categories}
                         categories={categories}
                         setIncludeCategories={setIncludeCategories}
                     ></CategoryChecklistComponent>
                 </div>
-                <hr />
-            </div>
-
-            <div className="row">
-                <div className="col-6">
+                <div className="col-sm-4">
                     {/* setting key for re-render */}
                     <TasksChart
                         key={includeCategories}
@@ -85,59 +81,60 @@ export default function ListTasksComponent() {
                         buttonsStates={tasksChartButtonsStates}
                         setButtonsStates={setTasksChartBButtonsStates}
                     />
+                    <hr />
                 </div>
-                <div className="col-4 offset-1">
+                <div className="col-sm-4">
                     <ProjectsDistributionChart
                         key={includeCategories}
                         includeCategories={includeCategories}
                         buttonsStates={projectsChartButtonsStates}
                         setButtonsStates={setProjectsChartBButtonsStates}
                     />
+                    <hr />
                 </div>
             </div>
 
             <div className="row">
-                <div className="col-12">
+
+                <div className="col-sm-4 offset-sm-4">
                     <TotalChart
                         key={includeCategories}
                         includeCategories={includeCategories}
                         buttonsStates={totalChartButtonsStates}
                         setButtonsStates={setTotalChartBButtonsStates}
                     />
+                    <hr />
                 </div>
-            </div>
-
-            <br />
-
-            <h3>Today's pomodoros</h3>
-            <div>
-                <table className="table">
-                    <thead>
-                        <tr>
-                            <th>Start Time</th>
-                            <th>End Time</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            pomodoros.map(
-                                pomodoro => (
-                                    <tr key={pomodoro.id}>
-                                        <td>
-                                            {moment.utc(pomodoro.startTime).local().format('H:mm')}
-                                        </td>
-                                        <td>
-                                            {moment.utc(pomodoro.endTime).local().format('H:mm')}
-                                        </td>
-                                    </tr>
-                                )
-                            )
-                        }
-                    </tbody>
-
-                </table>
+                <div className="col-sm-4">
+                    <h6>Today's pomodoros</h6>
+                    <small>
+                        <table className="table table-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Start</th>
+                                    <th>End</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    pomodoros.map(
+                                        pomodoro => (
+                                            <tr key={pomodoro.id}>
+                                                <td>
+                                                    {moment.utc(pomodoro.startTime).local().format('H:mm')}
+                                                </td>
+                                                <td>
+                                                    {moment.utc(pomodoro.endTime).local().format('H:mm')}
+                                                </td>
+                                            </tr>
+                                        )
+                                    )
+                                }
+                            </tbody>
+                        </table>
+                    </small>
+                </div >
             </div >
-
         </div >
     )
 }

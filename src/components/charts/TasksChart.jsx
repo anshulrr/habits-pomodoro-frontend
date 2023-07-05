@@ -83,6 +83,8 @@ export const TasksChart = ({ includeCategories, buttonsStates, setButtonsStates 
                     }
                     options={{
                         responsive: true,
+                        maintainAspectRatio: true,
+                        aspectRatio: 1,
                         plugins: {
                             title: {
                                 display: true,
