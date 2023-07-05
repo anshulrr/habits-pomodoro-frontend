@@ -66,7 +66,7 @@ export default function ListProjectsComponent() {
                 <div className="col-sm-4">
                     {/* {message && <div className="alert alert-warning">{message}</div>} */}
                     <div>
-                        <table className='table'>
+                        <table className='table table-hover'>
                             <thead>
                                 <tr>
                                     <th>Projects</th>
@@ -77,11 +77,11 @@ export default function ListProjectsComponent() {
                                 {
                                     projects.map(
                                         project => (
-                                            <tr key={project.id}>
+                                            <tr key={project.id} onClick={() => setProject(project)}>
                                                 <td align="left">
                                                     {/* <Link to={"/projects/" + project.id + "/tasks"} state={{ project }}>{project.name}</Link> */}
                                                     <span style={{ color: project.color }}>&#9632; </span>
-                                                    <button className="btn btn-sm  btn-light" onClick={() => setProject(project)} >{project.name}</button>
+                                                    <span>{project.name}</span>
                                                 </td>
                                                 <td align="right">
                                                     (<small>{project.projectCategory ? project.projectCategory.name : ''}</small>

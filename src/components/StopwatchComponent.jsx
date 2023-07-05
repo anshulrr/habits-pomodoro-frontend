@@ -24,7 +24,7 @@ export default function StopwatchComponent() {
             (minutes > 9 ? minutes : '0' + minutes) + ':'
             + (seconds > 9 ? seconds : '0' + seconds)
         )
-        console.log(total / 1000)
+        // console.log(total / 1000)
     }
 
     const refreshStopwatch = (startTime) => {

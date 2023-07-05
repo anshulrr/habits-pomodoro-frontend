@@ -52,31 +52,29 @@ export default function ListTasksComponent({ project }) {
 
     return (
         <div>
-            <h4>{project.name}</h4>
+            <h5>{project.name}</h5>
             {/* {message && <div className="alert alert-warning">{message}</div>} */}
             <div>
-                <table className="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Tasks</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            tasks.map(
-                                task => (
-                                    <tr key={task.id}>
-                                        <td className="text-start">
-                                            <i className="bi bi-play-circle" onClick={() => createNewPomodoro(task)}></i>
-                                            {' ' + task.description}
-                                        </td>
-                                    </tr>
+                <small>
+                    <table className="table table-hover">
+                        <tbody>
+                            {
+                                tasks.map(
+                                    task => (
+                                        <tr key={task.id}>
+                                            <td className="text-start">
+                                                <i className="bi bi-play-circle" onClick={() => createNewPomodoro(task)}></i>
+                                                <span>
+                                                    {' ' + task.description}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    )
                                 )
-                            )
-                        }
-                    </tbody>
-
-                </table>
+                            }
+                        </tbody>
+                    </table>
+                </small>
                 <div className="btn btn-success btn-sm my-5" onClick={addNewTask}>Add New Task</div>
             </div>
         </div>
