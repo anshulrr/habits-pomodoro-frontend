@@ -126,8 +126,6 @@ export const TotalChart = ({ includeCategories, buttonsStates, setButtonsStates 
         setLabels(labels);
     }
 
-    console.log(window.innerWidth);
-
     return (
         <div>
             <Buttons
@@ -150,7 +148,7 @@ export const TotalChart = ({ includeCategories, buttonsStates, setButtonsStates 
                     options={{
                         responsive: true,
                         maintainAspectRatio: true,
-                        aspectRatio: window.innerWidth / 600,
+                        aspectRatio: 0.5,
                         plugins: {
                             title: {
                                 display: true,
