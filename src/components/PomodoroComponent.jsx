@@ -1,22 +1,21 @@
 import { useEffect, useRef, useState } from 'react'
-import { useParams, useLocation, Link } from 'react-router-dom';
+// import { useParams, useLocation, Link } from 'react-router-dom';
 import { updatePomodoroApi } from '../services/api/PomodoroApiService';
 import BreakTimerComponent from './BreakTimerComponent';
 
-export default function PomodoroComponent() {
+export default function PomodoroComponent({ pomodoro, setPomodoro, createNewPomodoro }) {
 
     // We need ref in this, because we are dealing
     // with JS setInterval to keep track of it and
     // stop it when needed
     const Ref = useRef(null);
 
-    const { task_id, id, length } = useParams()
+    // const { task_id, pomodoro.id, pomodoro.length } = useParams()
+    // const { state } = useLocation();
 
-    const { state } = useLocation();
+    const [timer, setTimer] = useState(pomodoro.length + ':00')
 
-    const [timer, setTimer] = useState(length + ':00')
-
-    const [timeRemaining, setTimeRemaining] = useState(length * 60);
+    const [timeRemaining, setTimeRemaining] = useState(pomodoro.length * 60);
 
     const [status, setStatus] = useState('started')
 
@@ -49,7 +48,7 @@ export default function PomodoroComponent() {
             // todo: find better way to update timeRemaining
             // timeRemaing in this thread has different value
             // hence passing it as method parameter
-            updatePomodoro(id, 'completed', 0);
+            updatePomodoro('completed', 0);
             const audio = new Audio(process.env.PUBLIC_URL + '/audio/success-1-6297.mp3')
             audio.play();
         }
@@ -87,67 +86,74 @@ export default function PomodoroComponent() {
     // We put empty array to act as componentDid
     // mount only
     useEffect(() => {
-        const id = refreshTimer(getEndTime());
+        const interval_id = refreshTimer(getEndTime());
         return () => {
-            clearInterval(id);  // fix for switching to different component
+            clearInterval(interval_id);  // fix for switching to different component
         };
     }, [status]);
 
-    const updatePomodoro = (id, local_status, timeRemaining) => {
+    const updatePomodoro = (local_status, timeRemaining) => {
         setStatus(local_status)
-        console.log("status updated to: ", local_status, timeRemaining)
-        const pomodoro = {
-            timeElapsed: length * 60 - timeRemaining,
+        console.log("status updated to: ", local_status, timeRemaining, pomodoro)
+        const pomodoro_data = {
+            timeElapsed: pomodoro.length * 60 - timeRemaining,
             status: local_status  // // setState is not working for this synchronously
         }
 
-        updatePomodoroApi(id, pomodoro)
+        updatePomodoroApi(pomodoro.id, pomodoro_data)
             .then(response => {
                 // console.log(response.status)
             })
             .catch(error => console.log(error))
     }
 
+    const startAgain = () => {
+        setPomodoro(null)
+        createNewPomodoro(pomodoro.task)
+    }
+
     return (
         <div className="PomodoroComponent">
             <div className="container">
-                <small><i className="bi bi-folder-plus"> </i>{state.project.name}</small>
-                <h5>{state.task.description}</h5>
+                <small><i className="bi bi-folder-plus"> </i>{pomodoro.task.project.name}</small>
+                <h5>{pomodoro.task.description}</h5>
                 {
-                    status != 'completed'
-                    &&
-                    <div className="fs-1 p-3 mb-2 text-white" style={{ backgroundColor: state.project.color }}>
+                    status != 'completed' &&
+                    <div className="fs-1 p-3 mb-2 text-white" style={{ backgroundColor: pomodoro.task.project.color }}>
                         {timer}
                     </div>
                 }
 
                 {
-                    status == 'started' && status != 'completed'
-                    && <div className="btn btn-warning m-4" onClick={() => updatePomodoro(id, "paused", timeRemaining)}>Pause</div>
+                    status == 'started' && status != 'completed' &&
+                    <div className="btn btn-warning m-4" onClick={() => updatePomodoro("paused", timeRemaining)}>Pause</div>
                 }
 
                 {
-                    status == 'paused' && status != 'completed'
-                    && <div className="btn btn-success m-4" onClick={() => updatePomodoro(id, "started", timeRemaining)}>Start</div>
+                    status == 'paused' && status != 'completed' &&
+                    <div className="btn btn-success m-4" onClick={() => updatePomodoro("started", timeRemaining)}>Start</div>
                 }
 
                 {
-                    status != 'completed'
-                    && <div className="btn btn-danger m-4" onClick={() => updatePomodoro(id, "completed", timeRemaining)}>Mark Completed</div>
+                    status != 'completed' &&
+                    <div className="btn btn-danger m-4" onClick={() => updatePomodoro("completed", timeRemaining)}>Mark Completed</div>
                 }
 
                 {
-                    status == 'completed'
-                    &&
+                    status == 'completed' &&
                     <BreakTimerComponent></BreakTimerComponent>
                 }
 
                 {
-                    status == 'completed'
-                    && <Link to={"/projects"} state={{ project: state.project }}>Return</Link>
+                    status == 'completed' &&
+                    <div className="btn btn-outline-success m-4" onClick={() => setPomodoro(null)}>Return</div>
+                }
+
+                {
+                    status == 'completed' &&
+                    <div className="btn btn-outline-success m-4" onClick={startAgain}>Start Again</div>
                 }
             </div>
-
         </div>
     )
 }

@@ -103,11 +103,14 @@ export default function ListProjectsComponent() {
                             onPageChange={page => setCurrentPage(page)}
                         />
 
-                        <div className="btn btn-success btn-sm my-5" onClick={addNewProject}>Add New Project</div>
+                        <div className="btn btn-outline-success btn-sm my-5" onClick={addNewProject}>Add New Project</div>
                     </div>
                 </div>
                 <div className="col-sm-8">
-                    {project && <ListTasksComponent project={project} />}
+                    {
+                        project &&
+                        <ListTasksComponent project={project} />
+                    }
                 </div>
             </div>
 

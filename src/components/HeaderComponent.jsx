@@ -17,7 +17,7 @@ export default function HeaderComponent() {
         <header className="border-bottom border-light border-5 mb-5 p-2">
             <div className="container">
                 <div className="row">
-                    <nav className="navbar navbar-expand-lg">
+                    <nav className="navbar navbar-expand-lg justify-content-between">
 
                         {/* <ul className="navbar-nav">
                             {isAuthenticated

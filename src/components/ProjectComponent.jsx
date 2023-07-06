@@ -10,6 +10,7 @@ export default function ProjectComponent() {
 
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
+    const [categoryId, setCategoryId] = useState('')
     const [color, setColor] = useState('#00FFFF')
     const [categories, setCategories] = useState([])
 
@@ -17,22 +18,30 @@ export default function ProjectComponent() {
 
     useEffect(
         () => {
-            retrieveProject()
-            retrieveProjectCategories()
+            (async function () {
+                try {
+                    // using async await for correct initialization of categoryId
+                    await retrieveProjectCategories()
+                    await retrieveProject()
+                } catch (e) {
+                    console.error(e)
+                }
+            })();
         },
         [id]
     )
 
-    function retrieveProjectCategories() {
+    async function retrieveProjectCategories() {
         // TODO: decide limit
         retrieveAllProjectCategoriesApi(10, 0)
             .then(response => {
                 setCategories(response.data)
+                setCategoryId(response.data[0].id)
             })
             .catch(response => console.log(response))
     }
 
-    function retrieveProject() {
+    async function retrieveProject() {
 
         if (id == -1) {
             return;
@@ -43,12 +52,14 @@ export default function ProjectComponent() {
                 setDescription(response.data.description)
                 setName(response.data.name)
                 setColor(response.data.color)
+                // todo: set project category id: done
+                setCategoryId(response.data.projectCategory.id)
             })
             .catch(error => console.log(error))
     }
 
     function onSubmit(values) {
-        // console.log(values)
+        console.log(values)
         const project = {
             id,
             name: values.name,
@@ -59,15 +70,15 @@ export default function ProjectComponent() {
         if (id == -1) {
             createProjectApi(project, values.category_id)
                 .then(response => {
-                    // console.log(response)
-                    navigate('/projects')
+                    console.log(response)
+                    navigate('/projects', { state: { project: response.data } })
                 })
                 .catch(error => console.log(error))
         } else {
             updateProjectApi(id, project)
                 .then(response => {
                     // console.log(response)
-                    navigate('/projects')
+                    navigate('/projects', { state: { project: response.data } })
                 })
                 .catch(error => console.log(error))
         }
@@ -88,7 +99,7 @@ export default function ProjectComponent() {
         <div className="container">
             <h1>Enter Project Details </h1>
             <div>
-                <Formik initialValues={{ name, description, color }}
+                <Formik initialValues={{ name, description, color, category_id: categoryId }}
                     enableReinitialize={true}
                     onSubmit={onSubmit}
                     validate={validate}
