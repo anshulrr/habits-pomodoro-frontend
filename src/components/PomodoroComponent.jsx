@@ -19,8 +19,6 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, createNewPomo
 
     const [status, setStatus] = useState('started')
 
-    const [audio, setAudio] = useState(new Audio(process.env.PUBLIC_URL + '/audio/success-1-6297.mp3'))
-
     const calculateTimeRemaining = (endTime) => {
         const total = Date.parse(endTime) - Date.parse(new Date());
         const seconds = Math.floor((total / 1000) % 60);
@@ -51,6 +49,7 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, createNewPomo
             // timeRemaing in this thread has different value
             // hence passing it as method parameter
             updatePomodoro('completed', 0);
+            const audio = new Audio(process.env.PUBLIC_URL + '/audio/success-1-6297.mp3')
             audio.play();
         }
     }
