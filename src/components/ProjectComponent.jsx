@@ -19,6 +19,7 @@ export default function ProjectComponent() {
     useEffect(
         () => {
             (async function () {
+                // console.log('re-render ProjectComponents')
                 try {
                     // using async await for correct initialization of categoryId
                     await retrieveProjectCategories()
@@ -27,8 +28,7 @@ export default function ProjectComponent() {
                     console.error(e)
                 }
             })();
-        },
-        [id]
+        }, [id] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
     async function retrieveProjectCategories() {
@@ -43,7 +43,7 @@ export default function ProjectComponent() {
 
     async function retrieveProject() {
 
-        if (id === -1) {
+        if (parseInt(id) === -1) {
             return;
         }
 
@@ -67,7 +67,7 @@ export default function ProjectComponent() {
             color: values.color
         }
 
-        if (id === -1) {
+        if (parseInt(id) === -1) {
             createProjectApi(project, values.category_id)
                 .then(response => {
                     console.log(response)

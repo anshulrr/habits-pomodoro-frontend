@@ -19,8 +19,10 @@ export default function ListTasksComponent({ project }) {
     // const [message, setMessage] = useState(null)
 
     useEffect(
-        () => refreshTasks(),
-        [project]
+        () => {
+            // console.log('re-render ListTasksComponents')
+            refreshTasks()
+        }, [project] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
     function refreshTasks() {

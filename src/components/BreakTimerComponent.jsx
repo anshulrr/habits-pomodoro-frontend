@@ -91,6 +91,7 @@ export default function BreakTimerComponent() {
     }
 
     useEffect(() => {
+        // console.log('re-render BreakTimerComponent')
         const id = refreshBreakTimer(getBreakEndTime());
         console.log('break status changed to ' + breakStatus)
         return () => {
@@ -100,7 +101,7 @@ export default function BreakTimerComponent() {
                 audio.pause();
             }
         };
-    }, [breakStatus]);
+    }, [breakStatus]); // eslint-disable-line react-hooks/exhaustive-deps
 
 
     return (

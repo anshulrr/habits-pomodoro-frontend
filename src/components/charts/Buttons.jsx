@@ -12,13 +12,14 @@ export const Buttons = ({ retrievePomodoros, buttonsStates, setButtonsStates, sh
     // to retrive data after click on bottons
     useEffect(
         () => {
+            // console.log('re-render Buttons')
             retrievePomodoros(limit, offset)
             setButtonsStates({
                 limit: limit,
                 offset: offset,
                 dateString: dateString
             })
-        }, [offset, limit]
+        }, [offset, limit] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
     function updateOffset(val) {

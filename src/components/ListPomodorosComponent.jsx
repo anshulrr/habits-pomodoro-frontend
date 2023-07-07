@@ -36,10 +36,10 @@ export default function ListTasksComponent() {
     // for first time load
     useEffect(
         () => {
+            // console.log('re-render ListPomodorosComponent')
             retrieveTodayPomodoros()
             retrieveProjectCategories()
-        },
-        []
+        }, []   // eslint-disable-line react-hooks/exhaustive-deps
     )
 
     function retrieveTodayPomodoros() {

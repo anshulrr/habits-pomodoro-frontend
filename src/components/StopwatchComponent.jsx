@@ -43,10 +43,11 @@ export default function StopwatchComponent() {
 
     useEffect(() => {
         let intervalId = refreshStopwatch(Date.now())
+        // console.log('re-render StopwatchComponent', intervalId)
         return (() => {
             clearInterval(intervalId)
         })
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div className="BreakComponent">

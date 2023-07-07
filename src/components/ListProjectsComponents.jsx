@@ -30,8 +30,10 @@ export default function ListProjectsComponent() {
     )
 
     useEffect(
-        () => refreshProjects(),
-        [currentPage]
+        () => {
+            // console.log('re-render ListProjectsComponents')
+            refreshProjects()
+        }, [currentPage] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
     function refreshProjects() {

@@ -87,10 +87,11 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, createNewPomo
     // mount only
     useEffect(() => {
         const interval_id = refreshTimer(getEndTime());
+        // console.log('re-render PomodorosComponents', interval_id)
         return () => {
             clearInterval(interval_id);  // fix for switching to different component
         };
-    }, [status]);
+    }, [status]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const updatePomodoro = (local_status, timeRemaining) => {
         setStatus(local_status)
