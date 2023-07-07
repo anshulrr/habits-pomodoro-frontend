@@ -68,13 +68,8 @@ export default function ListProjectsComponent() {
                 <div className="col-sm-4">
                     {/* {message && <div className="alert alert-warning">{message}</div>} */}
                     <div>
+                        <h4>Projects</h4>
                         <table className='table table-hover'>
-                            <thead>
-                                <tr>
-                                    <th>Projects</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
                             <tbody>
                                 {
                                     projects.map(
@@ -105,7 +100,7 @@ export default function ListProjectsComponent() {
                             onPageChange={page => setCurrentPage(page)}
                         />
 
-                        <div className="btn btn-outline-success btn-sm my-5" onClick={addNewProject}>Add New Project</div>
+                        <div className="btn btn-outline-success btn-sm my-2" onClick={addNewProject}>Add New Project</div>
                     </div>
                 </div>
                 <div className="col-sm-8">

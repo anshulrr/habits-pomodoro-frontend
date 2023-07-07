@@ -86,7 +86,7 @@ export default function ListTasksComponent({ project }) {
                         </tbody>
                     </table>
                 </small>
-                <div className="btn btn-outline-success btn-sm my-5" onClick={addNewTask}>Add New Task</div>
+                <div className="btn btn-outline-success btn-sm my-2" onClick={addNewTask}>Add New Task</div>
             </div>
 
             {
