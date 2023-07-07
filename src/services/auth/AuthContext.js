@@ -3,7 +3,7 @@
 // Share the created context with other components
 
 import { createContext, useContext, useState } from "react";
-import { executeBasicAuthenticationService, executeJwtAuthenticationService } from "../api/AuthApiService";
+import { executeJwtAuthenticationService } from "../api/AuthApiService";
 import { apiClient } from "../api/ApiClient";
 
 const AuthContext = createContext();

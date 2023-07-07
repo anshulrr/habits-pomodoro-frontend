@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react"
-import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { createPomodoroApi } from "../services/api/PomodoroApiService";
 import { retrieveAllTasks } from "../services/api/TaskApiService";
-import { useAuth } from "../services/auth/AuthContext";
 import PomodoroComponent from "./PomodoroComponent";
 
 export default function ListTasksComponent({ project }) {
 
-    const authContext = useAuth()
+    // const authContext = useAuth()
 
-    const username = authContext.username
+    // const username = authContext.username
 
     const navigate = useNavigate()
 

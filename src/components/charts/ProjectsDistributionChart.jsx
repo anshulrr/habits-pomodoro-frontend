@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 import { getProjectsPomodorosApi } from "../../services/api/PomodoroApiService";
 import { Buttons } from "./Buttons";

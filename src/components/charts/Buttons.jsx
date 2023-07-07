@@ -36,13 +36,13 @@ export const Buttons = ({ retrievePomodoros, buttonsStates, setButtonsStates, sh
     // need to get updated limit and offset (to avoid asynchronous execution)
     function updateDateString(limit, offset) {
         // console.log('updated limit & offset: ', limit, offset)
-        if (limit == 'daily') {
+        if (limit === 'daily') {
             setDateString(moment().add(offset, 'd').format('DD MMM'))
-        } else if (limit == 'weekly') {
+        } else if (limit === 'weekly') {
             const dow = moment().format('e');
             const str = moment().add(-dow + 1, 'd').add(offset, 'w').format('DD MMM') + "-" + moment().add(-dow, 'd').add(offset + 1, 'w').format('DD MMM')
             setDateString(str)
-        } else if (limit == 'monthly') {
+        } else if (limit === 'monthly') {
             const str = moment().add(offset, 'M').format('MMM')
             setDateString(str)
         }

@@ -43,7 +43,7 @@ export default function ProjectComponent() {
 
     async function retrieveProject() {
 
-        if (id == -1) {
+        if (id === -1) {
             return;
         }
 
@@ -67,7 +67,7 @@ export default function ProjectComponent() {
             color: values.color
         }
 
-        if (id == -1) {
+        if (id === -1) {
             createProjectApi(project, values.category_id)
                 .then(response => {
                     console.log(response)
