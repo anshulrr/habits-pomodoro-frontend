@@ -84,7 +84,7 @@ export default function ListProjectsComponent() {
                                                     <span>{project.name}</span>
                                                 </td>
                                                 <td align="right">
-                                                    (<small>{project.projectCategory ? project.projectCategory.name : ''}</small>
+                                                    (<small>{project.category}</small>
                                                     ) <i className="bi bi-pencil-square" onClick={() => updateProject(project.id)}></i>
                                                 </td>
                                             </tr>

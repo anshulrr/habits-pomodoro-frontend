@@ -74,7 +74,6 @@ export default function ListTasksComponent() {
                     ></CategoryChecklistComponent>
                 </div>
                 <div className="col-sm-4">
-                    {/* setting key for re-render */}
                     <TasksChart
                         key={includeCategories}
                         includeCategories={includeCategories}
@@ -109,21 +108,19 @@ export default function ListTasksComponent() {
                     <h6>Today's pomodoros</h6>
                     <small>
                         <table className="table table-sm table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Start</th>
-                                    <th>End</th>
-                                </tr>
-                            </thead>
                             <tbody>
                                 {
                                     pomodoros.map(
                                         pomodoro => (
                                             <tr key={pomodoro.id}>
-                                                <td>
-                                                    {moment.utc(pomodoro.startTime).local().format('H:mm')}
+                                                <td className="text-start">
+                                                    {pomodoro.task}
                                                 </td>
                                                 <td>
+                                                    {parseInt(pomodoro.timeElapsed / 60)}
+                                                </td>
+                                                <td className="text-muted">
+                                                    {moment.utc(pomodoro.startTime).local().format('H:mm')}-
                                                     {moment.utc(pomodoro.endTime).local().format('H:mm')}
                                                 </td>
                                             </tr>
