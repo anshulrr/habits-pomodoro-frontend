@@ -61,9 +61,9 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, createNewPomo
         if (Ref.current) clearInterval(Ref.current);
         const interval_id = setInterval(() => {
             // console.log(status, timeRemaining, endTime);
-            if (status == 'completed') {
+            if (status === 'completed') {
                 clearInterval(interval_id);
-            } else if (status == 'started') {
+            } else if (status === 'started') {
                 updateTimer(endTime);
             }
         }, 1000)
@@ -87,10 +87,11 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, createNewPomo
     // mount only
     useEffect(() => {
         const interval_id = refreshTimer(getEndTime());
+        // console.log('re-render PomodorosComponents', interval_id)
         return () => {
             clearInterval(interval_id);  // fix for switching to different component
         };
-    }, [status]);
+    }, [status]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const updatePomodoro = (local_status, timeRemaining) => {
         setStatus(local_status)
@@ -118,39 +119,39 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, createNewPomo
                 <small><i className="bi bi-folder-plus"> </i>{pomodoro.task.project.name}</small>
                 <h5>{pomodoro.task.description}</h5>
                 {
-                    status != 'completed' &&
+                    status !== 'completed' &&
                     <div className="fs-1 p-3 mb-2 text-white" style={{ backgroundColor: pomodoro.task.project.color }}>
                         {timer}
                     </div>
                 }
 
                 {
-                    status == 'started' && status != 'completed' &&
+                    status === 'started' && status !== 'completed' &&
                     <div className="btn btn-warning m-4" onClick={() => updatePomodoro("paused", timeRemaining)}>Pause</div>
                 }
 
                 {
-                    status == 'paused' && status != 'completed' &&
+                    status === 'paused' && status !== 'completed' &&
                     <div className="btn btn-success m-4" onClick={() => updatePomodoro("started", timeRemaining)}>Start</div>
                 }
 
                 {
-                    status != 'completed' &&
+                    status !== 'completed' &&
                     <div className="btn btn-danger m-4" onClick={() => updatePomodoro("completed", timeRemaining)}>Mark Completed</div>
                 }
 
                 {
-                    status == 'completed' &&
+                    status === 'completed' &&
                     <BreakTimerComponent></BreakTimerComponent>
                 }
 
                 {
-                    status == 'completed' &&
+                    status === 'completed' &&
                     <div className="btn btn-outline-success m-4" onClick={() => setPomodoro(null)}>Return</div>
                 }
 
                 {
-                    status == 'completed' &&
+                    status === 'completed' &&
                     <div className="btn btn-outline-success m-4" onClick={startAgain}>Start Again</div>
                 }
             </div>

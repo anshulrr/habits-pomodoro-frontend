@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react"
-import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { createPomodoroApi } from "../services/api/PomodoroApiService";
 import { retrieveAllTasks } from "../services/api/TaskApiService";
-import { useAuth } from "../services/auth/AuthContext";
 import PomodoroComponent from "./PomodoroComponent";
 
 export default function ListTasksComponent({ project }) {
 
-    const authContext = useAuth()
+    // const authContext = useAuth()
 
-    const username = authContext.username
+    // const username = authContext.username
 
     const navigate = useNavigate()
 
@@ -20,8 +19,10 @@ export default function ListTasksComponent({ project }) {
     // const [message, setMessage] = useState(null)
 
     useEffect(
-        () => refreshTasks(),
-        [project]
+        () => {
+            // console.log('re-render ListTasksComponents')
+            refreshTasks()
+        }, [project] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
     function refreshTasks() {
@@ -85,7 +86,7 @@ export default function ListTasksComponent({ project }) {
                         </tbody>
                     </table>
                 </small>
-                <div className="btn btn-outline-success btn-sm my-5" onClick={addNewTask}>Add New Task</div>
+                <div className="btn btn-outline-success btn-sm my-2" onClick={addNewTask}>Add New Task</div>
             </div>
 
             {

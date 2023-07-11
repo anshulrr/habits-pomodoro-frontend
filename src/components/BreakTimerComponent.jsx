@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import StopwatchComponent from './StopwatchComponent';
+import StopwatchComponent from './StopwatchComponent'
 
 export default function BreakTimerComponent() {
 
@@ -57,9 +57,9 @@ export default function BreakTimerComponent() {
         if (Ref.current) clearInterval(Ref.current);
         const interval_id = setInterval(() => {
             // console.log('break ', breakStatus, breakTimeRemaining);
-            if (breakStatus == 'break_started') {
+            if (breakStatus === 'break_started') {
                 updateBreakTimer(endTime);
-            } else if (breakStatus == 'break_finished') {
+            } else if (breakStatus === 'break_finished') {
                 clearInterval(interval_id);
             }
         }, 1000)
@@ -80,7 +80,7 @@ export default function BreakTimerComponent() {
     const updateBreak = (local_status) => {
         // console.log(local_status);
         setBreakStatus(local_status);
-        if (local_status == 'break_finished') {
+        if (local_status === 'break_finished') {
             // console.log(audio);
             const local_audio = new Audio(process.env.PUBLIC_URL + '/audio/ticking-clock_1-27477.mp3')
             local_audio.setAttribute('loop', true)
@@ -91,16 +91,17 @@ export default function BreakTimerComponent() {
     }
 
     useEffect(() => {
+        // console.log('re-render BreakTimerComponent')
         const id = refreshBreakTimer(getBreakEndTime());
         console.log('break status changed to ' + breakStatus)
         return () => {
             // console.log('fix for switch to different component')
             clearInterval(id);  // fix for switching to different component
-            if (breakStatus == 'break_timer') {
+            if (breakStatus === 'break_timer') {
                 audio.pause();
             }
         };
-    }, [breakStatus]);
+    }, [breakStatus]); // eslint-disable-line react-hooks/exhaustive-deps
 
 
     return (
@@ -109,28 +110,28 @@ export default function BreakTimerComponent() {
 
                 <div>
                     {
-                        breakStatus != 'break_finished' && breakStatus != 'break_timer'
+                        breakStatus !== 'break_finished' && breakStatus !== 'break_timer'
                         &&
                         <div className="fs-1 p-3 mb-2 text-white" style={{ backgroundColor: 'grey' }}>
                             {breakTimer}
                         </div>
                     }
                     {
-                        breakStatus == 'idle'
+                        breakStatus === 'idle'
                         &&
                         <div>
                             <div className="btn btn-success m-4" onClick={() => updateBreak('break_started')}>Start Break</div>
                         </div>
                     }
                     {
-                        breakStatus == 'break_started'
+                        breakStatus === 'break_started'
                         &&
                         <div>
                             <div className="btn btn-success m-4" onClick={() => updateBreak('break_finished')}>Finish Break</div>
                         </div>
                     }
                     {
-                        breakStatus == 'break_timer'
+                        breakStatus === 'break_timer'
                         &&
                         <div>
                             <StopwatchComponent></StopwatchComponent>

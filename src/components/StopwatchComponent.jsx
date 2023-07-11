@@ -10,11 +10,11 @@ export default function StopwatchComponent() {
         const total = Date.now() - startTime;
         const seconds = Math.floor((total / 1000) % 60);
         const minutes = Math.floor((total / 1000 / 60) % 60);
-        return { total, minutes, seconds };
+        return { minutes, seconds };
     }
 
     const updateStopwatch = (startTime) => {
-        let { total, minutes, seconds }
+        let { minutes, seconds }
             = calculateStopwatchTime(startTime);
 
         // update the timer
@@ -43,10 +43,11 @@ export default function StopwatchComponent() {
 
     useEffect(() => {
         let intervalId = refreshStopwatch(Date.now())
+        // console.log('re-render StopwatchComponent', intervalId)
         return (() => {
             clearInterval(intervalId)
         })
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div className="BreakComponent">
