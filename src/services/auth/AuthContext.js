@@ -12,8 +12,9 @@ export const useAuth = () => useContext(AuthContext)
 
 export default function AuthProvider({ children }) {
 
-    const [isAuthenticated, setAuthenticated] = useState(false);
+    const [isAuthenticated, setAuthenticated] = useState(localStorage.getItem('token') ? true : false);
 
+    // Todo: how to set username after page refresh
     const [username, setUsername] = useState(null)
 
     const [token, setToken] = useState(null)
@@ -70,6 +71,7 @@ export default function AuthProvider({ children }) {
                     (config) => {
                         // console.log('intercepting and adding a token')
                         config.headers.Authorization = jwtToken
+                        localStorage.setItem("token", jwtToken)
                         return config
                     }
                 )
@@ -90,6 +92,7 @@ export default function AuthProvider({ children }) {
     function logout() {
         delete apiClient.defaults.headers.common["Authorization"];
         console.log('logging out ' + username)
+        localStorage.removeItem('token')
         setAuthenticated(false)
         setUsername(null)
         setToken(null)
