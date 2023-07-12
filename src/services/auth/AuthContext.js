@@ -12,12 +12,45 @@ export const useAuth = () => useContext(AuthContext)
 
 export default function AuthProvider({ children }) {
 
-    const [isAuthenticated, setAuthenticated] = useState(localStorage.getItem('token') ? true : false);
+    const [isAuthenticated, setAuthenticated] = useState(checkAuthentication());
 
     // Todo: how to set username after page refresh
     const [username, setUsername] = useState(null)
 
     const [token, setToken] = useState(null)
+
+    function checkAuthentication() {
+        // check if token is present in local storage
+        // parse the token
+        // check if it is expired
+        // if expired: delete from local storage
+        // TODO: make an api call to authenticate using refresh token
+        const jwt = localStorage.getItem('token');
+        if (jwt == null) {
+            return false;
+        }
+
+        const expiry = parseJwt(jwt).exp;
+        const isExpired = expiry < (Date.now() / 1000);
+
+        if (isExpired == true) {
+            localStorage.setItem('item', null);
+        }
+
+        return !isExpired;
+    }
+
+    function parseJwt(token) {
+        if (token == null)
+            return false;
+        var base64Url = token.split('.')[1];
+        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+
+        return JSON.parse(jsonPayload);
+    }
 
     // async function login(username, password) {
 
@@ -71,7 +104,7 @@ export default function AuthProvider({ children }) {
                     (config) => {
                         // console.log('intercepting and adding a token')
                         config.headers.Authorization = jwtToken
-                        localStorage.setItem("token", jwtToken)
+                        localStorage.setItem('token', jwtToken)
                         return config
                     }
                 )
