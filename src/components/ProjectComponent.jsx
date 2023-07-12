@@ -12,6 +12,7 @@ export default function ProjectComponent() {
     const [description, setDescription] = useState('')
     const [categoryId, setCategoryId] = useState('')
     const [color, setColor] = useState('#00FFFF')
+    const [pomodoroLength, setPomodoroLength] = useState(25)    // todo: get this from user settings
     const [categories, setCategories] = useState([])
 
     const navigate = useNavigate()
@@ -52,6 +53,7 @@ export default function ProjectComponent() {
                 setDescription(response.data.description)
                 setName(response.data.name)
                 setColor(response.data.color)
+                setPomodoroLength(response.data.pomodoroLength)
                 // todo: set project category id: done
                 setCategoryId(response.data.projectCategory.id)
             })
@@ -59,12 +61,14 @@ export default function ProjectComponent() {
     }
 
     function onSubmit(values) {
-        console.log(values)
+        // console.log({ name, description, categoryId, color, pomodoroLength })
+        // console.log(values)
         const project = {
             id,
             name: values.name,
             description: values.description,
-            color: values.color
+            color: values.color,
+            pomodoroLength: values.pomodoroLength
         }
 
         if (parseInt(id) === -1) {
@@ -99,7 +103,7 @@ export default function ProjectComponent() {
         <div className="container">
             <h1>Enter Project Details </h1>
             <div>
-                <Formik initialValues={{ name, description, color, category_id: categoryId }}
+                <Formik initialValues={{ name, description, color, pomodoroLength, category_id: categoryId }}
                     enableReinitialize={true}
                     onSubmit={onSubmit}
                     validate={validate}
@@ -132,6 +136,11 @@ export default function ProjectComponent() {
                                 <fieldset className="form-group">
                                     <label>Color</label>
                                     <Field type="color" className="form-control" name="color" />
+                                </fieldset>
+                                <fieldset className="form-group">
+                                    <label>Default Pomodoro Length </label>
+                                    <Field type="number" className="form-control" name="pomodoroLength" />
+                                    <small>(Leave it blank, if you want to use general pomodoro settings)</small>
                                 </fieldset>
                                 <fieldset className="form-group">
                                     <label>Category</label>
