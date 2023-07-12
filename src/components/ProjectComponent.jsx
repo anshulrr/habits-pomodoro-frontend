@@ -79,7 +79,7 @@ export default function ProjectComponent() {
                 })
                 .catch(error => console.log(error))
         } else {
-            updateProjectApi(id, project)
+            updateProjectApi(id, project, values.category_id)
                 .then(response => {
                     // console.log(response)
                     navigate('/projects', { state: { project: response.data } })
