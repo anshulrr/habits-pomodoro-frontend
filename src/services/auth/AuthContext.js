@@ -30,6 +30,7 @@ export default function AuthProvider({ children }) {
             return false;
         }
 
+        // console.log(parseJwt(jwt).exp, Date.now() / 1000)
         const expiry = parseJwt(jwt).exp;
         const isExpired = expiry < (Date.now() / 1000);
 

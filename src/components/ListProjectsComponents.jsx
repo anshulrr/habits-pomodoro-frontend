@@ -69,20 +69,20 @@ export default function ListProjectsComponent() {
                     {/* {message && <div className="alert alert-warning">{message}</div>} */}
                     <div>
                         <h4>Projects</h4>
-                        <table className='table table-hover'>
+                        <table className="table table-hover">
                             <tbody>
                                 {
                                     projects.map(
                                         project => (
                                             <tr key={project.id} onClick={() => setProject(project)}>
-                                                <td align="left">
+                                                <td align="left" className="text-truncate" style={{ maxWidth: '150px' }}>
                                                     {/* <Link to={"/projects/" + project.id + "/tasks"} state={{ project }}>{project.name}</Link> */}
                                                     <span style={{ color: project.color }}>&#9632; </span>
                                                     <span>{project.name}</span>
                                                 </td>
                                                 <td align="right">
-                                                    (<small>{project.category}</small>
-                                                    ) <i className="bi bi-pencil-square" onClick={() => updateProject(project.id)}></i>
+                                                    <small>{project.category} </small>
+                                                    <i className="bi bi-pencil-square" onClick={() => updateProject(project.id)}></i>
                                                 </td>
                                             </tr>
                                         )
