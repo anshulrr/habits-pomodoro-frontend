@@ -11,6 +11,8 @@ export default function TaskComponent() {
 
     const [description] = useState('')
 
+    const [pomodoroLength] = useState(state.project.pomodoroLength || 25)    // todo: get this from user settings
+
     const navigate = useNavigate()
 
     function onSubmit(values) {
@@ -18,6 +20,7 @@ export default function TaskComponent() {
         const task = {
             id,
             description: values.description,
+            pomodoroLength: values.pomodoroLength
         }
 
         if (parseInt(id) === -1) {
@@ -46,7 +49,7 @@ export default function TaskComponent() {
             <h1>{state.project.name}</h1>
             <h6>Provide Task Details</h6>
             <div>
-                <Formik initialValues={{ description }}
+                <Formik initialValues={{ description, pomodoroLength }}
                     enableReinitialize={true}
                     onSubmit={onSubmit}
                     validate={validate}
@@ -71,6 +74,11 @@ export default function TaskComponent() {
                                 <fieldset className="form-group">
                                     <label>Description</label>
                                     <Field type="text" className="form-control" name="description" />
+                                </fieldset>
+                                <fieldset className="form-group">
+                                    <label>Default Pomodoro Length </label>
+                                    <Field type="number" className="form-control" name="pomodoroLength" />
+                                    <small>(Leave it blank, if you want to use project's settings)</small>
                                 </fieldset>
                                 <div>
                                     <button className="btn btn-success m-5" type="submit">Save</button>
