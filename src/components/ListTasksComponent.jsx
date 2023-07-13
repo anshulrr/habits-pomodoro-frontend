@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import { createPomodoroApi } from "../services/api/PomodoroApiService";
+import { getRunningPomodoroApi } from '../services/api/PomodoroApiService';
 import { retrieveAllTasks } from "../services/api/TaskApiService";
 import PomodoroComponent from "./PomodoroComponent";
 
@@ -16,7 +17,7 @@ export default function ListTasksComponent({ project }) {
 
     const [pomodoro, setPomodoro] = useState(null)
 
-    const [message, setMessage] = useState(null)
+    const [message, setMessage] = useState('')
 
     useEffect(
         () => {
@@ -41,6 +42,10 @@ export default function ListTasksComponent({ project }) {
     function createNewPomodoro(task) {
         // console.log(task.id)
 
+        if (pomodoro !== null) {
+            return;
+        }
+
         const pomodoro_data = {
             startTime: new Date(),
             // length: 1
@@ -53,12 +58,31 @@ export default function ListTasksComponent({ project }) {
                 response.data.task = task
                 // console.log(response.data)
                 setPomodoro(response.data)
+                setMessage('')
                 // navigate(`/tasks/${task.id}/pomodoros/${response.data.id}/${response.data.length}`, { state: { project: project, task } })
             })
             .catch(error => {
-                console.log('error: ', error, error.response.status)
-                if (error.response.status === 400) {
+                console.error('error: ', error, error.response)
+                if (error.response && error.response.status === 400) {
                     setMessage('Please complete the already running pomodoro');
+                }
+            })
+    }
+
+    const getRunningPomodoro = () => {
+        getRunningPomodoroApi()
+            .then(response => {
+                // console.log(response)
+                const running_pomodoro = response.data;
+                running_pomodoro.task = response.data.task;
+                running_pomodoro.task.project = response.data.project;
+                setPomodoro(running_pomodoro);
+                setMessage('');
+            })
+            .catch(error => {
+                console.error('error: ', error, error.response)
+                if (error.response && error.response.status === 400) {
+                    setMessage('No running pomodoro');
                 }
             })
     }
@@ -92,8 +116,12 @@ export default function ListTasksComponent({ project }) {
                     </table>
                 </small>
 
-                <p className="text-danger">
-                    <small>{message}</small>
+                <p>
+                    <small className="text-danger">{message} </small>
+                    {
+                        pomodoro === null &&
+                        <i className="bi bi-arrow-clockwise" onClick={() => getRunningPomodoro()}></i>
+                    }
                 </p>
 
                 <div className="btn btn-outline-success btn-sm my-2" onClick={addNewTask}>Add New Task</div>

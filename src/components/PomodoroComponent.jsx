@@ -13,11 +13,18 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, createNewPomo
     // const { task_id, pomodoro.id, pomodoro.length } = useParams()
     // const { state } = useLocation();
 
-    const [timer, setTimer] = useState(pomodoro.length + ':00')
+    const initialTimeRemaining = pomodoro.length * 60 - pomodoro.timeElapsed;
+    const minutes = parseInt(initialTimeRemaining / 60);
+    const seconds = initialTimeRemaining % 60;
 
-    const [timeRemaining, setTimeRemaining] = useState(pomodoro.length * 60);
+    const [timer, setTimer] = useState(
+        (minutes > 9 ? minutes : '0' + minutes) + ':'
+        + (seconds > 9 ? seconds : '0' + seconds)
+    )
 
-    const [status, setStatus] = useState('started')
+    const [timeRemaining, setTimeRemaining] = useState(initialTimeRemaining)
+
+    const [status, setStatus] = useState(pomodoro.status)
 
     const calculateTimeRemaining = (endTime) => {
         const total = Date.parse(endTime) - Date.parse(new Date());
