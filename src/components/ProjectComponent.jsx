@@ -12,7 +12,7 @@ export default function ProjectComponent() {
     const [description, setDescription] = useState('')
     const [categoryId, setCategoryId] = useState('')
     const [color, setColor] = useState('#00FFFF')
-    const [pomodoroLength, setPomodoroLength] = useState(25)    // todo: get this from user settings
+    const [pomodoroLength, setPomodoroLength] = useState(0)
     const [categories, setCategories] = useState([])
 
     const navigate = useNavigate()
@@ -140,7 +140,7 @@ export default function ProjectComponent() {
                                 <fieldset className="form-group">
                                     <label>Default Pomodoro Length </label>
                                     <Field type="number" className="form-control" name="pomodoroLength" />
-                                    <small>(Leave it blank, if you want to use general pomodoro settings)</small>
+                                    <small>(Set it to zero, if you want to use general pomodoro settings)</small>
                                 </fieldset>
                                 <fieldset className="form-group">
                                     <label>Category</label>
