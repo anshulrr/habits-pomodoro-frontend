@@ -43,6 +43,7 @@ export default function ListTasksComponent({ project }) {
         // console.log(task.id)
 
         if (pomodoro !== null) {
+            setMessage('Please complete the already running pomodoro');
             return;
         }
 
@@ -70,6 +71,8 @@ export default function ListTasksComponent({ project }) {
     }
 
     const getRunningPomodoro = () => {
+        // first unload the timer component
+        setPomodoro(null);
         getRunningPomodoroApi()
             .then(response => {
                 // console.log(response)
@@ -116,13 +119,10 @@ export default function ListTasksComponent({ project }) {
                     </table>
                 </small>
 
-                <p>
+                <div>
                     <small className="text-danger">{message} </small>
-                    {
-                        pomodoro === null &&
-                        <i className="bi bi-arrow-clockwise" onClick={() => getRunningPomodoro()}></i>
-                    }
-                </p>
+                    <i className="bi bi-arrow-clockwise" onClick={() => getRunningPomodoro()}></i>
+                </div>
 
                 <div className="btn btn-outline-success btn-sm my-2" onClick={addNewTask}>Add New Task</div>
             </div>

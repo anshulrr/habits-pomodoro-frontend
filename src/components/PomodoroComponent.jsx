@@ -115,7 +115,10 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, createNewPomo
                     setTasksMessage('');
                 }
             })
-            .catch(error => console.log(error))
+            .catch(error => {
+                console.error(error)
+                setPomodoro(null)
+            })
     }
 
     const startAgain = () => {
