@@ -39,10 +39,9 @@ export default function ListTasksComponent({ project }) {
         navigate(`/projects/${project.id}/tasks/-1`, { state: { project } })
     }
 
-    function createNewPomodoro(task) {
-        // console.log(task.id)
-
-        if (pomodoro !== null) {
+    function createNewPomodoro(pomodoro_task, task_project, start_again = false) {
+        // console.log(pomodoro_task.id)
+        if (pomodoro !== null && !start_again) {
             setMessage('Please complete the already running pomodoro');
             return;
         }
@@ -52,11 +51,11 @@ export default function ListTasksComponent({ project }) {
             // length: 1
         }
 
-        createPomodoroApi(pomodoro_data, task.id)
+        createPomodoroApi(pomodoro_data, pomodoro_task.id)
             .then(response => {
                 // console.log(response)
-                task.project = project
-                response.data.task = task
+                pomodoro_task.project = task_project
+                response.data.task = pomodoro_task
                 // console.log(response.data)
                 setPomodoro(response.data)
                 setMessage('')
@@ -113,7 +112,7 @@ export default function ListTasksComponent({ project }) {
                                     task => (
                                         <tr key={task.id}>
                                             <td className="text-start">
-                                                <i className="bi bi-play-circle" onClick={() => createNewPomodoro(task)}></i>
+                                                <i className="bi bi-play-circle" onClick={() => createNewPomodoro(task, project)}></i>
                                                 <span>
                                                     {' ' + task.description}
                                                 </span>
@@ -127,7 +126,7 @@ export default function ListTasksComponent({ project }) {
                 </small>
 
                 <div className="row">
-                    <div className="col-11">
+                    <div className="col-11 text-start">
                         <small className="text-danger">{message} </small>
                     </div>
                     <div className="col-1">

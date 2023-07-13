@@ -123,7 +123,7 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, createNewPomo
 
     const startAgain = () => {
         setPomodoro(null)
-        createNewPomodoro(pomodoro.task)
+        createNewPomodoro(pomodoro.task, pomodoro.task.project, true)
     }
 
     return (
@@ -155,17 +155,17 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, createNewPomo
 
                 {
                     status === 'completed' &&
-                    <BreakTimerComponent></BreakTimerComponent>
-                }
-
-                {
-                    status === 'completed' &&
                     <div className="btn btn-outline-success m-4" onClick={() => setPomodoro(null)}>Return</div>
                 }
 
                 {
                     status === 'completed' &&
                     <div className="btn btn-outline-success m-4" onClick={startAgain}>Start Again</div>
+                }
+
+                {
+                    status === 'completed' &&
+                    <BreakTimerComponent></BreakTimerComponent>
                 }
             </div>
         </div>
