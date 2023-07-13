@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { updatePomodoroApi } from '../services/api/PomodoroApiService';
 import BreakTimerComponent from './BreakTimerComponent';
 
-export default function PomodoroComponent({ pomodoro, setPomodoro, createNewPomodoro }) {
+export default function PomodoroComponent({ pomodoro, setPomodoro, createNewPomodoro, setTasksMessage }) {
 
     // We need ref in this, because we are dealing
     // with JS setInterval to keep track of it and
@@ -13,11 +13,18 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, createNewPomo
     // const { task_id, pomodoro.id, pomodoro.length } = useParams()
     // const { state } = useLocation();
 
-    const [timer, setTimer] = useState(pomodoro.length + ':00')
+    const initialTimeRemaining = pomodoro.length * 60 - pomodoro.timeElapsed;
+    const minutes = parseInt(initialTimeRemaining / 60);
+    const seconds = initialTimeRemaining % 60;
 
-    const [timeRemaining, setTimeRemaining] = useState(pomodoro.length * 60);
+    const [timer, setTimer] = useState(
+        (minutes > 9 ? minutes : '0' + minutes) + ':'
+        + (seconds > 9 ? seconds : '0' + seconds)
+    )
 
-    const [status, setStatus] = useState('started')
+    const [timeRemaining, setTimeRemaining] = useState(initialTimeRemaining)
+
+    const [status, setStatus] = useState(pomodoro.status)
 
     const calculateTimeRemaining = (endTime) => {
         const total = Date.parse(endTime) - Date.parse(new Date());
@@ -104,13 +111,19 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, createNewPomo
         updatePomodoroApi(pomodoro.id, pomodoro_data)
             .then(response => {
                 // console.log(response.status)
+                if (local_status === 'completed') {
+                    setTasksMessage('');
+                }
             })
-            .catch(error => console.log(error))
+            .catch(error => {
+                console.error(error)
+                setPomodoro(null)
+            })
     }
 
     const startAgain = () => {
         setPomodoro(null)
-        createNewPomodoro(pomodoro.task)
+        createNewPomodoro(pomodoro.task, pomodoro.task.project, true)
     }
 
     return (
@@ -142,17 +155,17 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, createNewPomo
 
                 {
                     status === 'completed' &&
-                    <BreakTimerComponent></BreakTimerComponent>
-                }
-
-                {
-                    status === 'completed' &&
                     <div className="btn btn-outline-success m-4" onClick={() => setPomodoro(null)}>Return</div>
                 }
 
                 {
                     status === 'completed' &&
                     <div className="btn btn-outline-success m-4" onClick={startAgain}>Start Again</div>
+                }
+
+                {
+                    status === 'completed' &&
+                    <BreakTimerComponent></BreakTimerComponent>
                 }
             </div>
         </div>

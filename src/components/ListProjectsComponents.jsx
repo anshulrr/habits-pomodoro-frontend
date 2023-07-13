@@ -68,7 +68,14 @@ export default function ListProjectsComponent() {
                 <div className="col-sm-4">
                     {/* {message && <div className="alert alert-warning">{message}</div>} */}
                     <div>
-                        <h4>Projects</h4>
+                        <div className="row">
+                            <div className="col-10">
+                                <h4>Projects</h4>
+                            </div>
+                            <div className="col-2">
+                                <i class="bi bi-plus-square" onClick={addNewProject}></i>
+                            </div>
+                        </div>
                         <table className="table table-hover">
                             <tbody>
                                 {
@@ -99,8 +106,6 @@ export default function ListProjectsComponent() {
                             pageSize={PAGESIZE}
                             onPageChange={page => setCurrentPage(page)}
                         />
-
-                        <div className="btn btn-outline-success btn-sm my-2" onClick={addNewProject}>Add New Project</div>
                     </div>
                 </div>
                 <div className="col-sm-8">

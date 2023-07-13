@@ -13,6 +13,9 @@ export const updatePomodoroApi
 export const getPomodorosApi
     = () => apiClient.get(`/pomodoros`)
 
+export const getRunningPomodoroApi
+    = () => apiClient.get(`/pomodoros/running`)
+
 export const getTasksPomodorosApi
     = (limit, offset, include_categories) => apiClient.get(`/pomodoros/tasks-time?limit=${limit}&offset=${offset}&include_categories=${include_categories}`)
 
