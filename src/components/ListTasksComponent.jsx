@@ -16,7 +16,7 @@ export default function ListTasksComponent({ project }) {
 
     const [pomodoro, setPomodoro] = useState(null)
 
-    // const [message, setMessage] = useState(null)
+    const [message, setMessage] = useState(null)
 
     useEffect(
         () => {
@@ -55,7 +55,12 @@ export default function ListTasksComponent({ project }) {
                 setPomodoro(response.data)
                 // navigate(`/tasks/${task.id}/pomodoros/${response.data.id}/${response.data.length}`, { state: { project: project, task } })
             })
-            .catch(error => console.log(error))
+            .catch(error => {
+                console.log('error: ', error, error.response.status)
+                if (error.response.status === 400) {
+                    setMessage('Please complete the already running pomodoro');
+                }
+            })
     }
 
     return (
@@ -86,6 +91,11 @@ export default function ListTasksComponent({ project }) {
                         </tbody>
                     </table>
                 </small>
+
+                <p className="text-danger">
+                    <small>{message}</small>
+                </p>
+
                 <div className="btn btn-outline-success btn-sm my-2" onClick={addNewTask}>Add New Task</div>
             </div>
 
@@ -95,6 +105,7 @@ export default function ListTasksComponent({ project }) {
                     pomodoro={pomodoro}
                     setPomodoro={setPomodoro}
                     createNewPomodoro={createNewPomodoro}
+                    setTasksMessage={setMessage}
                 ></PomodoroComponent>
             }
         </div>

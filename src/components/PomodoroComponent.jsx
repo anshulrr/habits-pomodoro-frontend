@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { updatePomodoroApi } from '../services/api/PomodoroApiService';
 import BreakTimerComponent from './BreakTimerComponent';
 
-export default function PomodoroComponent({ pomodoro, setPomodoro, createNewPomodoro }) {
+export default function PomodoroComponent({ pomodoro, setPomodoro, createNewPomodoro, setTasksMessage }) {
 
     // We need ref in this, because we are dealing
     // with JS setInterval to keep track of it and
@@ -104,6 +104,9 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, createNewPomo
         updatePomodoroApi(pomodoro.id, pomodoro_data)
             .then(response => {
                 // console.log(response.status)
+                if (local_status === 'completed') {
+                    setTasksMessage('');
+                }
             })
             .catch(error => console.log(error))
     }
