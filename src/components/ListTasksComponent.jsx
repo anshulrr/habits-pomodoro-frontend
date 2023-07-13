@@ -91,8 +91,15 @@ export default function ListTasksComponent({ project }) {
     }
 
     return (
-        <div>
-            <h5>{project.name}</h5>
+        <div className="container">
+            <div className="row">
+                <div className="col-11">
+                    <h5>{project.name} </h5>
+                </div>
+                <div className="col-1">
+                    <i class="bi bi-plus-circle" onClick={addNewTask}></i>
+                </div>
+            </div>
             <div>
                 <small>
                     {
@@ -119,13 +126,15 @@ export default function ListTasksComponent({ project }) {
                     </table>
                 </small>
 
-                <div>
-                    <small className="text-danger">{message} </small>
-                    <i className="bi bi-arrow-clockwise" onClick={() => getRunningPomodoro()}></i>
+                <div className="row">
+                    <div className="col-11">
+                        <small className="text-danger">{message} </small>
+                    </div>
+                    <div className="col-1">
+                        <i className="bi bi-arrow-clockwise" onClick={() => getRunningPomodoro()}></i>
+                    </div>
                 </div>
-
-                <div className="btn btn-outline-success btn-sm my-2" onClick={addNewTask}>Add New Task</div>
-            </div>
+            </div >
 
             {
                 pomodoro !== null &&
@@ -136,6 +145,6 @@ export default function ListTasksComponent({ project }) {
                     setTasksMessage={setMessage}
                 ></PomodoroComponent>
             }
-        </div>
+        </div >
     )
 }
