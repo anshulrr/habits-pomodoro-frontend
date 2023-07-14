@@ -93,10 +93,10 @@ export default function ListTasksComponent({ project }) {
         <div className="container">
             <div className="row">
                 <div className="col-11">
-                    <h5>{project.name} </h5>
+                    <h6>{project.name} </h6>
                 </div>
                 <div className="col-1">
-                    <i class="bi bi-plus-circle" onClick={addNewTask}></i>
+                    <i className="bi bi-plus-circle" onClick={addNewTask}></i>
                 </div>
             </div>
             <div>

@@ -46,8 +46,7 @@ export default function TaskComponent() {
 
     return (
         <div className="container">
-            <h1>{state.project.name}</h1>
-            <h6>Provide Task Details</h6>
+            <h4>{state.project.name}</h4>
             <div>
                 <Formik initialValues={{ description, pomodoroLength }}
                     enableReinitialize={true}
@@ -71,17 +70,17 @@ export default function TaskComponent() {
                                     className="alert alert-warning"
                                 />
 
-                                <fieldset className="form-group">
-                                    <label>Description</label>
-                                    <Field type="text" className="form-control" name="description" />
-                                </fieldset>
-                                <fieldset className="form-group">
-                                    <label>Default Pomodoro Length </label>
-                                    <Field type="number" className="form-control" name="pomodoroLength" />
-                                    <small>(Set it to zero, if you want to use project's settings)</small>
-                                </fieldset>
-                                <div>
-                                    <button className="btn btn-success m-5" type="submit">Save</button>
+                                <div className="row">
+                                    <div className="col-sm-6 mb-3">
+                                        <Field type="text" className="form-control form-control-sm" name="description" placeholder="Description" />
+                                    </div>
+                                    <div className="col-sm-6 mb-3">
+                                        <Field type="number" className="form-control form-control-sm" name="pomodoroLength" placeholder="Default Pomodoro Length" />
+                                        <small>(Set default pomodoro length to zero, if you want to use project's settings)</small>
+                                    </div>
+                                    <div className="col-sm-12 mb-3">
+                                        <button className="btn btn-sm btn-success" type="submit">Save Task</button>
+                                    </div>
                                 </div>
                             </Form>
                         )

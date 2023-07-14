@@ -96,7 +96,7 @@ export default function ProjectComponent() {
 
     return (
         <div className="container">
-            <h1>Enter Project Details </h1>
+            <h4>Enter Project Details </h4>
             <div>
                 <Formik initialValues={{ name, description, color, pomodoroLength, project_category_id: projectCategoryId }}
                     enableReinitialize={true}
@@ -104,48 +104,45 @@ export default function ProjectComponent() {
                     validate={validate}
                     validateOnChange={false}
                     validateOnBlur={false}
-
                 >
                     {
-                        ({ errors }) => (
-                            <Form>
-                                <fieldset className="form-group">
-                                    <label>Project Name</label>
-                                    <Field type="text" className="form-control" name="name" />
-                                </fieldset>
-                                <ErrorMessage name="name" component="div" className="small text-danger" />
-                                <fieldset className="form-group">
-                                    <label>Description</label>
-                                    <Field type="text" className="form-control" name="description" />
-                                </fieldset>
-                                <fieldset className="form-group">
-                                    <label>Color</label>
-                                    <Field type="color" className="form-control" name="color" />
-                                </fieldset>
-                                <fieldset className="form-group">
-                                    <label>Default Pomodoro Length </label>
-                                    <Field type="number" className="form-control" name="pomodoroLength" />
-                                    <small>(Set it to zero, if you want to use general pomodoro settings)</small>
-                                </fieldset>
-                                <fieldset className="form-group">
-                                    <label>Category</label>
-                                    <Field as="select" defaultValue="0" className="form-select" name="project_category_id">
-                                        {/* default disabled value for dropdown to avoid confusion of initial selection */}
-                                        <option value="0" disabled>Select a Category</option>
-                                        {
-                                            projectCategories.map(
-                                                projectCategory => (
-                                                    <option key={projectCategory.id} value={projectCategory.id}>{projectCategory.name}</option>
+                        ({ errors, handleSubmit }) => (
+                            <form onSubmit={handleSubmit}>
+                                <div className="row">
+                                    <div className="col-sm-6 mb-3">
+                                        <Field type="text" className="form-control form-control-sm" name="name" placeholder="Project Name" />
+                                        <ErrorMessage name="name" component="div" className="small text-danger" />
+                                    </div>
+                                    <div className="col-sm-6 mb-3">
+                                        <Field type="text" className="form-control form-control-sm" name="description" placeholder="Description" />
+                                    </div>
+                                    <div className="col-sm-4 mb-3">
+                                        <Field type="color" className="form-control form-control-sm" name="color" placeholder="color" />
+                                    </div>
+                                    <div className="col-sm-4 mb-3">
+                                        <Field type="number" className="form-control form-control-sm" name="pomodoroLength" placeholder="Default Pomodoro Length" />
+                                        <small>(Set default pomodoro length to zero, if you want to use general pomodoro settings)</small>
+                                    </div>
+                                    <div className="col-sm-4 mb-3">
+                                        <Field as="select" defaultValue="0" className="form-select form-select-sm" name="project_category_id">
+                                            {/* default disabled value for dropdown to avoid confusion of initial selection */}
+                                            <option value="0" disabled>Select a Category</option>
+                                            {
+                                                projectCategories.map(
+                                                    projectCategory => (
+                                                        <option key={projectCategory.id} value={projectCategory.id}>{projectCategory.name}</option>
+                                                    )
                                                 )
-                                            )
-                                        }
-                                    </Field>
-                                </fieldset>
-                                {errors.project_category_id && <div className="text-danger small">{errors.project_category_id}</div>}
-                                {/* <ErrorMessage name="project_category_id" component="div" className="text-danger small" /> */}
-
-                                <button className="btn btn-success m-5" type="submit">Save</button>
-                            </Form>
+                                            }
+                                        </Field>
+                                        {errors.project_category_id && <div className="text-danger small">{errors.project_category_id}</div>}
+                                        {/* <ErrorMessage name="project_category_id" component="div" className="text-danger small" /> */}
+                                    </div>
+                                    <div className="col-sm-12 mb-3">
+                                        <button className="btn btn-sm btn-success" type="submit">Save Project</button>
+                                    </div>
+                                </div>
+                            </form>
                         )
                     }
                 </Formik>
