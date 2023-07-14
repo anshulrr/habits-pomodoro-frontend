@@ -12,8 +12,8 @@ import annotationPlugin from "chartjs-plugin-annotation";
 Chart.register(CategoryScale)
 Chart.register(annotationPlugin);
 
-const DAILY_GOAL = 4;
-const DAILY_THRESHOLD = 3;
+const DAILY_GOAL = 16;
+const DAILY_THRESHOLD = 14;
 const POMODORO_LENGTH = 25;
 
 export const TotalChart = ({ includeCategories, buttonsStates, setButtonsStates }) => {

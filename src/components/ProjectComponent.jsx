@@ -62,18 +62,19 @@ export default function ProjectComponent() {
             name: values.name,
             description: values.description,
             color: values.color,
-            pomodoroLength: values.pomodoroLength
+            pomodoroLength: values.pomodoroLength,
+            projectCategoryId: values.project_category_id
         }
 
         if (parseInt(id) === -1) {
-            createProjectApi(project, values.project_category_id)
+            createProjectApi(project)
                 .then(response => {
                     console.log(response)
                     navigate('/projects', { state: { project: response.data } })
                 })
                 .catch(error => console.log(error))
         } else {
-            updateProjectApi(id, project, values.project_category_id)
+            updateProjectApi(id, project)
                 .then(response => {
                     // console.log(response)
                     navigate('/projects', { state: { project: response.data } })

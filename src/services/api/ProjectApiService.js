@@ -10,7 +10,7 @@ export const retrieveProjectApi
     = (id) => apiClient.get(`/projects/${id}`)
 
 export const updateProjectApi
-    = (id, project, category_id) => apiClient.put(`project-categories/${category_id}/projects/${id}`, project)
+    = (id, project) => apiClient.put(`projects/${id}`, project)
 
 export const createProjectApi
-    = (project, category_id) => apiClient.post(`project-categories/${category_id}/projects`, project)
+    = (project) => apiClient.post(`projects`, project)
