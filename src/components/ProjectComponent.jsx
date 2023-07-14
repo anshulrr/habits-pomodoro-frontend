@@ -11,7 +11,7 @@ export default function ProjectComponent() {
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [projectCategoryId, setProjectCategoryId] = useState(0)
-    const [color, setColor] = useState('#00FFFF')
+    const [color, setColor] = useState('#228B22')
     const [pomodoroLength, setPomodoroLength] = useState(0)
     const [projectCategories, setProjectCategories] = useState([])
 
