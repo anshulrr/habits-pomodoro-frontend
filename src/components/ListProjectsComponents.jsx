@@ -6,7 +6,8 @@ import ListTasksComponent from './ListTasksComponent'
 // import { useAuth } from "../services/auth/AuthContext";
 import Pagination from "../services/pagination/Pagination"
 
-const PAGESIZE = 5;
+// console.log(window.innerWidth);
+const PAGESIZE = window.innerWidth <= 520 ? 5 : 12;
 
 export default function ListProjectsComponent() {
 
@@ -70,10 +71,10 @@ export default function ListProjectsComponent() {
                     <div>
                         <div className="row">
                             <div className="col-10">
-                                <h4>Projects</h4>
+                                <h5>Projects</h5>
                             </div>
                             <div className="col-2">
-                                <i class="bi bi-plus-square" onClick={addNewProject}></i>
+                                <i className="bi bi-plus-square" onClick={addNewProject}></i>
                             </div>
                         </div>
                         <table className="table table-hover">
@@ -82,12 +83,14 @@ export default function ListProjectsComponent() {
                                     projects.map(
                                         project => (
                                             <tr key={project.id} onClick={() => setProject(project)}>
-                                                <td align="left" className="text-truncate" style={{ maxWidth: '150px' }}>
+                                                {/* todo: decide better solution for maxWidth */}
+                                                <td align="left" className="text-truncate" style={{ maxWidth: '100px' }}>
                                                     {/* <Link to={"/projects/" + project.id + "/tasks"} state={{ project }}>{project.name}</Link> */}
                                                     <span style={{ color: project.color }}>&#9632; </span>
                                                     <span>{project.name}</span>
                                                 </td>
-                                                <td align="right">
+                                                <td align="right" className="text-secondary text-truncate">
+                                                    <small>{project.pomodoroLength || 25} </small>
                                                     <small>{project.category} </small>
                                                     <i className="bi bi-pencil-square" onClick={() => updateProject(project.id)}></i>
                                                 </td>
