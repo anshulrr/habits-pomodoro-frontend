@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, useParams, useLocation } from 'react-router-dom'
-import { createTaskApi } from '../services/api/TaskApiService'
+import { createTaskApi, retrieveTaskApi, updateTaskApi } from '../services/api/TaskApiService'
 import { Formik, Form, ErrorMessage, Field } from 'formik'
 
 export default function TaskComponent() {
@@ -9,22 +9,48 @@ export default function TaskComponent() {
 
     const { state } = useLocation();
 
-    const [description] = useState('')
+    const [description, setDescription] = useState('')
 
-    const [pomodoroLength] = useState(state.project.pomodoroLength)    // todo: get this from user settings
+    const [pomodoroLength, setPomodoroLength] = useState(0)    // todo: get this from user settings
+
+    const [status, setStatus] = useState('added')
 
     const navigate = useNavigate()
+
+    useEffect(() => retrieveTask(), [])
+
+    function retrieveTask() {
+        if (parseInt(id) === -1) {
+            return;
+        }
+
+        retrieveTaskApi(project_id, id)
+            .then(response => {
+                setDescription(response.data.description)
+                setPomodoroLength(response.data.pomodoroLength)
+                setStatus(response.data.status)
+            })
+            .catch(error => console.error(error))
+    }
 
     function onSubmit(values) {
         // console.log(values, id)
         const task = {
             id,
             description: values.description,
-            pomodoroLength: values.pomodoroLength
+            pomodoroLength: values.pomodoroLength,
+            status: values.status
         }
 
         if (parseInt(id) === -1) {
             createTaskApi(project_id, task)
+                .then(response => {
+                    // console.log(response)
+                    navigate(`/projects`, { state: { project: state.project } })
+                })
+                .catch(error => console.log(error))
+        } else {
+            updateTaskApi(project_id, id, task)
                 .then(response => {
                     // console.log(response)
                     navigate(`/projects`, { state: { project: state.project } })
@@ -35,11 +61,12 @@ export default function TaskComponent() {
 
     function validate(values) {
         let errors = {}
-
         if (values.description.length < 2) {
             errors.description = 'Enter atleast 2 characters'
         }
-
+        if (values.pomodoroLength === '' || values.pomodoroLength < 0) {
+            errors.pomodoroLength = 'Enter zero or positive value'
+        }
         // console.log(values)
         return errors
     }
@@ -48,7 +75,7 @@ export default function TaskComponent() {
         <div className="container">
             <h4>{state.project.name}</h4>
             <div>
-                <Formik initialValues={{ description, pomodoroLength }}
+                <Formik initialValues={{ description, pomodoroLength, status }}
                     enableReinitialize={true}
                     onSubmit={onSubmit}
                     validate={validate}
@@ -77,6 +104,14 @@ export default function TaskComponent() {
                                     <div className="col-sm-6 mb-3">
                                         <Field type="number" className="form-control form-control-sm" name="pomodoroLength" placeholder="Default Pomodoro Length" />
                                         <small>(Set default pomodoro length to zero, if you want to use project's settings)</small>
+                                        {props.errors.pomodoroLength && <div className="text-danger small">{props.errors.pomodoroLength}</div>}
+                                    </div>
+                                    <div className="col-sm-4 mb-3">
+                                        <Field as="select" className="form-select form-select-sm" name="status">
+                                            {/* disabled option with value 0 for dropdown to avoid confusion of initial selection */}
+                                            <option value="added">added</option>
+                                            <option value="completed">completed</option>
+                                        </Field>
                                     </div>
                                     <div className="col-sm-12 mb-3">
                                         <button className="btn btn-sm btn-success" type="submit">Save Task</button>

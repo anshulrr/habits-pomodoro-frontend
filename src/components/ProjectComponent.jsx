@@ -51,7 +51,7 @@ export default function ProjectComponent() {
                 // todo: set project projectCategory id: done
                 setProjectCategoryId(response.data.projectCategoryId)
             })
-            .catch(error => console.log(error))
+            .catch(error => console.error(error))
     }
 
     function onSubmit(values) {
