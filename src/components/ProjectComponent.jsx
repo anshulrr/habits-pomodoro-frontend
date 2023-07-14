@@ -10,39 +10,33 @@ export default function ProjectComponent() {
 
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
-    const [categoryId, setCategoryId] = useState('')
+    const [projectCategoryId, setProjectCategoryId] = useState(0)
     const [color, setColor] = useState('#00FFFF')
     const [pomodoroLength, setPomodoroLength] = useState(0)
-    const [categories, setCategories] = useState([])
+    const [projectCategories, setProjectCategories] = useState([])
 
     const navigate = useNavigate()
 
     useEffect(
         () => {
-            (async function () {
+            (() => {
                 // console.log('re-render ProjectComponents')
-                try {
-                    // using async await for correct initialization of categoryId
-                    await retrieveProjectCategories()
-                    await retrieveProject()
-                } catch (e) {
-                    console.error(e)
-                }
+                retrieveProjectCategories()
+                retrieveProject()
             })();
-        }, [id] // eslint-disable-line react-hooks/exhaustive-deps
+        }, [] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
-    async function retrieveProjectCategories() {
+    function retrieveProjectCategories() {
         // TODO: decide limit
         retrieveAllProjectCategoriesApi(10, 0)
             .then(response => {
-                setCategories(response.data)
-                setCategoryId(response.data[0].id)
+                setProjectCategories(response.data)
             })
             .catch(response => console.log(response))
     }
 
-    async function retrieveProject() {
+    function retrieveProject() {
 
         if (parseInt(id) === -1) {
             return;
@@ -54,14 +48,14 @@ export default function ProjectComponent() {
                 setName(response.data.name)
                 setColor(response.data.color)
                 setPomodoroLength(response.data.pomodoroLength)
-                // todo: set project category id: done
-                setCategoryId(response.data.projectCategory.id)
+                // todo: set project projectCategory id: done
+                setProjectCategoryId(response.data.projectCategoryId)
             })
             .catch(error => console.log(error))
     }
 
     function onSubmit(values) {
-        // console.log({ name, description, categoryId, color, pomodoroLength })
+        // console.log({ name, description, projectCategoryId, color, pomodoroLength })
         // console.log(values)
         const project = {
             id,
@@ -72,14 +66,14 @@ export default function ProjectComponent() {
         }
 
         if (parseInt(id) === -1) {
-            createProjectApi(project, values.category_id)
+            createProjectApi(project, values.project_category_id)
                 .then(response => {
                     console.log(response)
                     navigate('/projects', { state: { project: response.data } })
                 })
                 .catch(error => console.log(error))
         } else {
-            updateProjectApi(id, project, values.category_id)
+            updateProjectApi(id, project, values.project_category_id)
                 .then(response => {
                     // console.log(response)
                     navigate('/projects', { state: { project: response.data } })
@@ -90,11 +84,12 @@ export default function ProjectComponent() {
 
     function validate(values) {
         let errors = {}
-
         if (values.name.length < 2) {
             errors.name = 'Enter atleast 2 characters'
         }
-
+        if (values.project_category_id === 0) {
+            errors.project_category_id = 'Select a category'
+        }
         // console.log(values)
         return errors
     }
@@ -103,32 +98,22 @@ export default function ProjectComponent() {
         <div className="container">
             <h1>Enter Project Details </h1>
             <div>
-                <Formik initialValues={{ name, description, color, pomodoroLength, category_id: categoryId }}
+                <Formik initialValues={{ name, description, color, pomodoroLength, project_category_id: projectCategoryId }}
                     enableReinitialize={true}
                     onSubmit={onSubmit}
                     validate={validate}
                     validateOnChange={false}
                     validateOnBlur={false}
+
                 >
                     {
-                        (props) => (
+                        ({ errors }) => (
                             <Form>
-                                <ErrorMessage
-                                    name="name"
-                                    component="div"
-                                    className="alert alert-warning"
-                                />
-
-                                <ErrorMessage
-                                    name="description"
-                                    component="div"
-                                    className="alert alert-warning"
-                                />
-
                                 <fieldset className="form-group">
                                     <label>Project Name</label>
                                     <Field type="text" className="form-control" name="name" />
                                 </fieldset>
+                                <ErrorMessage name="name" component="div" className="small text-danger" />
                                 <fieldset className="form-group">
                                     <label>Description</label>
                                     <Field type="text" className="form-control" name="description" />
@@ -144,19 +129,22 @@ export default function ProjectComponent() {
                                 </fieldset>
                                 <fieldset className="form-group">
                                     <label>Category</label>
-                                    <Field as="select" className="form-select" name="category_id">
+                                    <Field as="select" defaultValue="0" className="form-select" name="project_category_id">
+                                        {/* default disabled value for dropdown to avoid confusion of initial selection */}
+                                        <option value="0" disabled>Select a Category</option>
                                         {
-                                            categories.map(
-                                                category => (
-                                                    <option key={category.id} value={category.id}>{category.name}</option>
+                                            projectCategories.map(
+                                                projectCategory => (
+                                                    <option key={projectCategory.id} value={projectCategory.id}>{projectCategory.name}</option>
                                                 )
                                             )
                                         }
                                     </Field>
                                 </fieldset>
-                                <div>
-                                    <button className="btn btn-success m-5" type="submit">Save</button>
-                                </div>
+                                {errors.project_category_id && <div className="text-danger small">{errors.project_category_id}</div>}
+                                {/* <ErrorMessage name="project_category_id" component="div" className="text-danger small" /> */}
+
+                                <button className="btn btn-success m-5" type="submit">Save</button>
                             </Form>
                         )
                     }
