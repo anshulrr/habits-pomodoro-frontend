@@ -10,7 +10,7 @@ export default function ProjectComponent() {
 
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
-    const [projectCategoryId, setProjectCategoryId] = useState(0)
+    const [projectCategoryId, setProjectCategoryId] = useState(0)   // value for disabled option in dropdown
     const [color, setColor] = useState('#228B22')
     const [pomodoroLength, setPomodoroLength] = useState(0)
     const [projectCategories, setProjectCategories] = useState([])
@@ -125,8 +125,8 @@ export default function ProjectComponent() {
                                         <small>(Set default pomodoro length to zero, if you want to use general pomodoro settings)</small>
                                     </div>
                                     <div className="col-sm-4 mb-3">
-                                        <Field as="select" defaultValue="0" className="form-select form-select-sm" name="project_category_id">
-                                            {/* default disabled value for dropdown to avoid confusion of initial selection */}
+                                        <Field as="select" className="form-select form-select-sm" name="project_category_id">
+                                            {/* disabled option with value 0 for dropdown to avoid confusion of initial selection */}
                                             <option value="0" disabled>Select a Category</option>
                                             {
                                                 projectCategories.map(
