@@ -133,34 +133,34 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, createNewPomo
                 <h5>{pomodoro.task.description}</h5>
                 {
                     status !== 'completed' &&
-                    <div className="fs-1 p-3 mb-2 text-white" style={{ backgroundColor: pomodoro.task.project.color }}>
+                    <div className="fs-1 p-3 text-white" style={{ backgroundColor: pomodoro.task.project.color }}>
                         {timer}
                     </div>
                 }
 
                 {
                     status === 'started' && status !== 'completed' &&
-                    <div className="btn btn-warning m-4" onClick={() => updatePomodoro("paused", timeRemaining)}>Pause</div>
+                    <div className="btn btn-sm btn-warning m-2" onClick={() => updatePomodoro("paused", timeRemaining)}>Pause</div>
                 }
 
                 {
                     status === 'paused' && status !== 'completed' &&
-                    <div className="btn btn-success m-4" onClick={() => updatePomodoro("started", timeRemaining)}>Start</div>
+                    <div className="btn btn-sm btn-success m-2" onClick={() => updatePomodoro("started", timeRemaining)}>Start</div>
                 }
 
                 {
                     status !== 'completed' &&
-                    <div className="btn btn-danger m-4" onClick={() => updatePomodoro("completed", timeRemaining)}>Mark Completed</div>
+                    <div className="btn btn-sm btn-danger m-2" onClick={() => updatePomodoro("completed", timeRemaining)}>Mark Completed</div>
                 }
 
                 {
                     status === 'completed' &&
-                    <div className="btn btn-outline-success m-4" onClick={() => setPomodoro(null)}>Return</div>
+                    <div className="btn btn-sm btn-outline-success m-2" onClick={() => setPomodoro(null)}>Return</div>
                 }
 
                 {
                     status === 'completed' &&
-                    <div className="btn btn-outline-success m-4" onClick={startAgain}>Start Again</div>
+                    <div className="btn btn-sm btn-outline-success m-2" onClick={startAgain}>Start Again</div>
                 }
 
                 {

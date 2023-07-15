@@ -120,14 +120,14 @@ export default function BreakTimerComponent() {
                         breakStatus === 'idle'
                         &&
                         <div>
-                            <div className="btn btn-success m-4" onClick={() => updateBreak('break_started')}>Start Break</div>
+                            <div className="btn btn-sm btn-success m-2" onClick={() => updateBreak('break_started')}>Start Break</div>
                         </div>
                     }
                     {
                         breakStatus === 'break_started'
                         &&
                         <div>
-                            <div className="btn btn-success m-4" onClick={() => updateBreak('break_finished')}>Finish Break</div>
+                            <div className="btn btn-sm btn-success m-2" onClick={() => updateBreak('break_finished')}>Finish Break</div>
                         </div>
                     }
                     {

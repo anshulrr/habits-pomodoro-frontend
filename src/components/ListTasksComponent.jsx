@@ -108,7 +108,7 @@ export default function ListTasksComponent({ project }) {
                     <i className="bi bi-plus-circle" onClick={addNewTask}></i>
                 </div>
             </div>
-            <div className="overflow-scroll bg-white" style={{ maxHeight: "40vh" }}>
+            <div className="overflow-scroll bg-white" style={{ maxHeight: "25vh" }}>
                 {
                     tasks.length === 0 &&
                     <div className="alert alert-warning">No task is added to this project</div>
