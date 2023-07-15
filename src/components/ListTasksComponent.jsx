@@ -3,13 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { createPomodoroApi } from "../services/api/PomodoroApiService";
 import { getRunningPomodoroApi } from '../services/api/PomodoroApiService';
 import { retrieveAllTasks } from "../services/api/TaskApiService";
+import ListTasksRowsComponent from "./ListTasksRowsComponent";
 import PomodoroComponent from "./PomodoroComponent";
 
 export default function ListTasksComponent({ project }) {
-
-    // const authContext = useAuth()
-
-    // const username = authContext.username
 
     const navigate = useNavigate()
 
@@ -102,7 +99,7 @@ export default function ListTasksComponent({ project }) {
         <div className="container">
             <div className="row">
                 <div className="col-11">
-                    <h6>{project.name} </h6>
+                    <h6>{project.name} ({tasks.length})</h6>
                 </div>
                 <div className="col-1 text-end">
                     <i className="bi bi-plus-circle" onClick={addNewTask}></i>
@@ -113,56 +110,27 @@ export default function ListTasksComponent({ project }) {
                     tasks.length === 0 &&
                     <div className="alert alert-warning">No task is added to this project</div>
                 }
-                <table className="table table-hover">
-                    <tbody>
-                        {
-                            tasks.map(
-                                task => (
-                                    <tr key={task.id}>
-                                        <td className="text-start">
-                                            <i className="bi bi-play-circle" onClick={() => createNewPomodoro(task, project)}></i>
-                                            <span>
-                                                {' ' + task.description}
-                                            </span>
-                                        </td>
-
-                                        <td align="right" className="text-secondary text-truncate">
-                                            <small>{task.pomodoroLength || project.pomodoroLength || 25} </small>
-                                            <i className="bi bi-pencil-square" onClick={() => updateTask(task.id)}></i>
-                                        </td>
-                                    </tr>
-                                )
-                            )
-                        }
-                    </tbody>
-                </table>
-                <span className="badge text-bg-light" style={{ cursor: "pointer" }} onClick={() => setShowCompleted(!showCompleted)}>
-                    {!showCompleted && <span>Show Completed Tasks <i className="bi bi-arrow-down"></i></span>}
-                    {showCompleted && <span>Hide Completed Tasks <i className="bi bi-arrow-up"></i></span>}
+                <ListTasksRowsComponent
+                    key={tasks}
+                    tasks={tasks}
+                    project={project}
+                    createNewPomodoro={createNewPomodoro}
+                    updateTask={updateTask}
+                />
+                <span className="badge text-bg-light mt-3" style={{ cursor: "pointer" }} onClick={() => setShowCompleted(!showCompleted)}>
+                    {!showCompleted && <span>Show Completed Tasks ({completedTasks.length})<i className="bi bi-arrow-down"></i></span>}
+                    {showCompleted && <span>Hide Completed Tasks ({completedTasks.length})<i className="bi bi-arrow-up"></i></span>}
                 </span>
                 <small>
                     {
                         showCompleted &&
-                        <table className="table table-hover">
-                            <tbody>
-                                {
-                                    completedTasks.map(
-                                        task => (
-                                            <tr key={task.id}>
-                                                <td className="text-start">
-                                                    {task.description}
-                                                </td>
-
-                                                <td align="right" className="text-secondary text-truncate">
-                                                    <small>{task.pomodoroLength || project.pomodoroLength || 25} </small>
-                                                    <i className="bi bi-pencil-square" onClick={() => updateTask(task.id)}></i>
-                                                </td>
-                                            </tr>
-                                        )
-                                    )
-                                }
-                            </tbody>
-                        </table>
+                        <ListTasksRowsComponent
+                            key={completedTasks}
+                            tasks={completedTasks}
+                            project={project}
+                            createNewPomodoro={createNewPomodoro}
+                            updateTask={updateTask}
+                        />
                     }
                 </small>
             </div >
@@ -171,7 +139,7 @@ export default function ListTasksComponent({ project }) {
                 <div className="col-11 text-start">
                     <small className="text-danger">{message} </small>
                 </div>
-                <div className="col-1">
+                <div className="col-1 text-end">
                     <i className="bi bi-arrow-clockwise" onClick={() => getRunningPomodoro()}></i>
                 </div>
             </div>

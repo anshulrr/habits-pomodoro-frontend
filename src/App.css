@@ -77,3 +77,17 @@
 .list-row:hover .list-secondary-text {
   display: none;
 } */
+
+
+/* for tasks list */
+.task-list-row {
+  border-bottom: thin solid #dee2e6;
+}
+
+.task-list-row .task-list-button {
+  display: none;
+}
+
+.task-list-row:hover .task-list-button {
+  display: inline;
+}

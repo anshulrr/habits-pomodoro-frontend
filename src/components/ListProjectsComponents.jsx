@@ -71,7 +71,7 @@ export default function ListProjectsComponent() {
                     <div>
                         <div className="row">
                             <div className="col-10">
-                                <h5>Projects</h5>
+                                <h5>Projects ({projectsCount})</h5>
                             </div>
                             <div className="col-2 text-end">
                                 <i className="bi bi-plus-square" onClick={addNewProject}></i>
@@ -104,7 +104,7 @@ export default function ListProjectsComponent() {
                         }
 
                         <Pagination
-                            className="pagination-bar"
+                            className="pagination-bar mt-3"
                             currentPage={currentPage}
                             totalCount={projectsCount}
                             pageSize={PAGESIZE}
