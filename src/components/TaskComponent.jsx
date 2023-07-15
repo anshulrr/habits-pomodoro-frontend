@@ -98,22 +98,22 @@ export default function TaskComponent() {
                                 />
 
                                 <div className="row">
-                                    <div className="col-sm-6 mb-3">
+                                    <div className="col-md-6 mb-3">
                                         <Field type="text" className="form-control form-control-sm" name="description" placeholder="Description" />
                                     </div>
-                                    <div className="col-sm-6 mb-3">
+                                    <div className="col-md-6 mb-3">
                                         <Field type="number" className="form-control form-control-sm" name="pomodoroLength" placeholder="Default Pomodoro Length" />
                                         <small>(Set default pomodoro length to zero, if you want to use project's settings)</small>
                                         {props.errors.pomodoroLength && <div className="text-danger small">{props.errors.pomodoroLength}</div>}
                                     </div>
-                                    <div className="col-sm-4 mb-3">
+                                    <div className="col-md-4 mb-3">
                                         <Field as="select" className="form-select form-select-sm" name="status">
                                             {/* disabled option with value 0 for dropdown to avoid confusion of initial selection */}
                                             <option value="added">added</option>
                                             <option value="completed">completed</option>
                                         </Field>
                                     </div>
-                                    <div className="col-sm-12 mb-3">
+                                    <div className="col-md-12 mb-3">
                                         <button className="btn btn-sm btn-success" type="submit">Save Task</button>
                                     </div>
                                 </div>

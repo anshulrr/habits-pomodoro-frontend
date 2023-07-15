@@ -110,21 +110,21 @@ export default function ProjectComponent() {
                         ({ errors, handleSubmit }) => (
                             <form onSubmit={handleSubmit}>
                                 <div className="row">
-                                    <div className="col-sm-6 mb-3">
+                                    <div className="col-md-6 mb-3">
                                         <Field type="text" className="form-control form-control-sm" name="name" placeholder="Project Name" />
                                         <ErrorMessage name="name" component="div" className="small text-danger" />
                                     </div>
-                                    <div className="col-sm-6 mb-3">
+                                    <div className="col-md-6 mb-3">
                                         <Field type="text" className="form-control form-control-sm" name="description" placeholder="Description" />
                                     </div>
-                                    <div className="col-sm-4 mb-3">
+                                    <div className="col-md-4 mb-3">
                                         <Field type="color" className="form-control form-control-sm" name="color" placeholder="color" />
                                     </div>
-                                    <div className="col-sm-4 mb-3">
+                                    <div className="col-md-4 mb-3">
                                         <Field type="number" className="form-control form-control-sm" name="pomodoroLength" placeholder="Default Pomodoro Length" />
                                         <small>(Set default pomodoro length to zero, if you want to use general pomodoro settings)</small>
                                     </div>
-                                    <div className="col-sm-4 mb-3">
+                                    <div className="col-md-4 mb-3">
                                         <Field as="select" className="form-select form-select-sm" name="project_category_id">
                                             {/* disabled option with value 0 for dropdown to avoid confusion of initial selection */}
                                             <option value="0" disabled>Select a Category</option>
@@ -139,7 +139,7 @@ export default function ProjectComponent() {
                                         {errors.project_category_id && <div className="text-danger small">{errors.project_category_id}</div>}
                                         {/* <ErrorMessage name="project_category_id" component="div" className="text-danger small" /> */}
                                     </div>
-                                    <div className="col-sm-12 mb-3">
+                                    <div className="col-md-12 mb-3">
                                         <button className="btn btn-sm btn-success" type="submit">Save Project</button>
                                     </div>
                                 </div>

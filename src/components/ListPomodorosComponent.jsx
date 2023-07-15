@@ -65,7 +65,7 @@ export default function ListTasksComponent() {
         <div className="container">
 
             <div className="row">
-                <div className="col-sm-4">
+                <div className="col-md-4">
                     <h6>Included Project Categories</h6>
                     <CategoryChecklistComponent
                         key={categories}
@@ -73,7 +73,7 @@ export default function ListTasksComponent() {
                         setIncludeCategories={setIncludeCategories}
                     ></CategoryChecklistComponent>
                 </div>
-                <div className="col-sm-4">
+                <div className="col-md-4">
                     <TasksChart
                         key={includeCategories}
                         includeCategories={includeCategories}
@@ -82,7 +82,7 @@ export default function ListTasksComponent() {
                     />
                     <hr />
                 </div>
-                <div className="col-sm-4">
+                <div className="col-md-4">
                     <ProjectsDistributionChart
                         key={includeCategories}
                         includeCategories={includeCategories}
@@ -95,7 +95,7 @@ export default function ListTasksComponent() {
 
             <div className="row">
 
-                <div className="col-sm-4 offset-sm-4">
+                <div className="col-md-4 offset-md-4">
                     <TotalChart
                         key={includeCategories}
                         includeCategories={includeCategories}
@@ -104,7 +104,7 @@ export default function ListTasksComponent() {
                     />
                     <hr />
                 </div>
-                <div className="col-sm-4">
+                <div className="col-md-4">
                     <h6>Today's pomodoros</h6>
                     <small>
                         <table className="table table-sm table-striped">

@@ -104,45 +104,41 @@ export default function ListTasksComponent({ project }) {
                 <div className="col-11">
                     <h6>{project.name} </h6>
                 </div>
-                <div className="col-1">
+                <div className="col-1 text-end">
                     <i className="bi bi-plus-circle" onClick={addNewTask}></i>
                 </div>
             </div>
-            <div className="row">
-                <small>
-                    {
-                        tasks.length === 0 &&
-                        <div className="alert alert-warning">No task is added to this project</div>
-                    }
-                    <table className="table table-hover">
-                        <tbody>
-                            {
-                                tasks.map(
-                                    task => (
-                                        <tr key={task.id}>
-                                            <td className="text-start">
-                                                <i className="bi bi-play-circle" onClick={() => createNewPomodoro(task, project)}></i>
-                                                <span>
-                                                    {' ' + task.description}
-                                                </span>
-                                            </td>
+            <div className="overflow-scroll bg-white" style={{ maxHeight: "40vh" }}>
+                {
+                    tasks.length === 0 &&
+                    <div className="alert alert-warning">No task is added to this project</div>
+                }
+                <table className="table table-hover">
+                    <tbody>
+                        {
+                            tasks.map(
+                                task => (
+                                    <tr key={task.id}>
+                                        <td className="text-start">
+                                            <i className="bi bi-play-circle" onClick={() => createNewPomodoro(task, project)}></i>
+                                            <span>
+                                                {' ' + task.description}
+                                            </span>
+                                        </td>
 
-                                            <td align="right" className="text-secondary text-truncate">
-                                                <small>{task.pomodoroLength || project.pomodoroLength || 25} </small>
-                                                <i className="bi bi-pencil-square" onClick={() => updateTask(task.id)}></i>
-                                            </td>
-                                        </tr>
-                                    )
+                                        <td align="right" className="text-secondary text-truncate">
+                                            <small>{task.pomodoroLength || project.pomodoroLength || 25} </small>
+                                            <i className="bi bi-pencil-square" onClick={() => updateTask(task.id)}></i>
+                                        </td>
+                                    </tr>
                                 )
-                            }
-                        </tbody>
-                    </table>
-                </small>
-            </div>
-
-            <div>
+                            )
+                        }
+                    </tbody>
+                </table>
                 <span className="badge text-bg-light" onClick={() => setShowCompleted(!showCompleted)}>
-                    Show Completed <i className="bi bi-arrow-down"></i>
+                    {!showCompleted && <span>Show Completed Tasks <i className="bi bi-arrow-down"></i></span>}
+                    {showCompleted && <span>Hide Completed Tasks <i className="bi bi-arrow-up"></i></span>}
                 </span>
                 <small>
                     {
@@ -171,7 +167,7 @@ export default function ListTasksComponent({ project }) {
                 </small>
             </div >
 
-            <div className="row mb-3">
+            <div className="row my-3">
                 <div className="col-11 text-start">
                     <small className="text-danger">{message} </small>
                 </div>

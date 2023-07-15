@@ -7,7 +7,7 @@ import ListTasksComponent from './ListTasksComponent'
 import Pagination from "../services/pagination/Pagination"
 
 // console.log(window.innerWidth);
-const PAGESIZE = window.innerWidth <= 520 ? 5 : 12;
+const PAGESIZE = window.innerWidth <= 768 ? 5 : 15;
 
 export default function ListProjectsComponent() {
 
@@ -66,14 +66,14 @@ export default function ListProjectsComponent() {
     return (
         <div className="container">
             <div className="row">
-                <div className="col-sm-4">
+                <div className="col-md-4">
                     {/* {message && <div className="alert alert-warning">{message}</div>} */}
                     <div>
                         <div className="row">
-                            <div className="col-10">
+                            <div className="col-11">
                                 <h5>Projects</h5>
                             </div>
-                            <div className="col-2">
+                            <div className="col-1 text-end">
                                 <i className="bi bi-plus-square" onClick={addNewProject}></i>
                             </div>
                         </div>
@@ -81,18 +81,22 @@ export default function ListProjectsComponent() {
                             <tbody>
                                 {
                                     projects.map(
-                                        project => (
-                                            <tr key={project.id} onClick={() => setProject(project)}>
+                                        proj => (
+                                            <tr
+                                                key={proj.id}
+                                                className={project && proj.id === project.id ? "bg-info" : ""}
+                                                onClick={() => setProject(proj)}
+                                            >
                                                 {/* todo: decide better solution for maxWidth */}
                                                 <td align="left" className="text-truncate" style={{ maxWidth: '100px' }}>
-                                                    {/* <Link to={"/projects/" + project.id + "/tasks"} state={{ project }}>{project.name}</Link> */}
-                                                    <span style={{ color: project.color }}>&#9632; </span>
-                                                    <span>{project.name}</span>
+                                                    {/* <Link to={"/projects/" + proj.id + "/tasks"} state={{ proj }}>{proj.name}</Link> */}
+                                                    <span style={{ color: proj.color }}>&#9632; </span>
+                                                    <span>{proj.name}</span>
                                                 </td>
                                                 <td align="right" className="text-secondary text-truncate">
-                                                    <small>{project.pomodoroLength || 25} </small>
-                                                    <small>{project.category} </small>
-                                                    <i className="bi bi-pencil-square" onClick={() => updateProject(project.id)}></i>
+                                                    <small>{proj.pomodoroLength || 25} </small>
+                                                    <small>{proj.category} </small>
+                                                    <i className="bi bi-pencil-square" onClick={() => updateProject(proj.id)}></i>
                                                 </td>
                                             </tr>
                                         )
@@ -111,7 +115,7 @@ export default function ListProjectsComponent() {
                         />
                     </div>
                 </div>
-                <div className="col-sm-8">
+                <div className="col-md-8">
                     {
                         project &&
                         <ListTasksComponent project={project} />
