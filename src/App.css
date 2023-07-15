@@ -32,7 +32,62 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+/* css for projects list */
+
+.list-row {
+  cursor: pointer;
+  border-bottom: thin solid #dee2e6;
+}
+
+.list-row .list-button {
+  display: none;
+}
+
+/* change color if list row is selected */
+.list-selected {
+  background-color: #0dcaf0;
+  pointer-events: none;
+}
+
+/* display the button if list row is selected */
+.list-selected .list-button {
+  display: block;
+  pointer-events: all;
+  cursor: default;
+}
+
+/* hover doesn't work correctly on mobile device */
+
+/* @media screen and (min-width: 768px) { */
+
+/* .list:hover {
+  background-color: #dee2e6;
+} */
+
+/* .list-row:hover .list-button {
+  display: block;
+}
+
+.list-row:hover .list-secondary-text {
+  display: none;
+} */
+
+
+/* for tasks list */
+.task-list-row {
+  border-bottom: thin solid #dee2e6;
+}
+
+.task-list-row .task-list-button {
+  display: none;
+}
+
+.task-list-row:hover .task-list-button {
+  display: inline;
 }

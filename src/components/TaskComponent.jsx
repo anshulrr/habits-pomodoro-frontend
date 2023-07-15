@@ -17,7 +17,10 @@ export default function TaskComponent() {
 
     const navigate = useNavigate()
 
-    useEffect(() => retrieveTask(), [])
+    useEffect(
+        () => retrieveTask()
+        , []  // eslint-disable-line react-hooks/exhaustive-deps
+    )
 
     function retrieveTask() {
         if (parseInt(id) === -1) {

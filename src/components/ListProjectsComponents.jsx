@@ -70,44 +70,41 @@ export default function ListProjectsComponent() {
                     {/* {message && <div className="alert alert-warning">{message}</div>} */}
                     <div>
                         <div className="row">
-                            <div className="col-11">
-                                <h5>Projects</h5>
+                            <div className="col-10">
+                                <h5>Projects ({projectsCount})</h5>
                             </div>
-                            <div className="col-1 text-end">
+                            <div className="col-2 text-end">
                                 <i className="bi bi-plus-square" onClick={addNewProject}></i>
                             </div>
                         </div>
-                        <table className="table table-hover">
-                            <tbody>
-                                {
-                                    projects.map(
-                                        proj => (
-                                            <tr
-                                                key={proj.id}
-                                                className={project && proj.id === project.id ? "bg-info" : ""}
-                                                onClick={() => setProject(proj)}
-                                            >
-                                                {/* todo: decide better solution for maxWidth */}
-                                                <td align="left" className="text-truncate" style={{ maxWidth: '100px' }}>
-                                                    {/* <Link to={"/projects/" + proj.id + "/tasks"} state={{ proj }}>{proj.name}</Link> */}
-                                                    <span style={{ color: proj.color }}>&#9632; </span>
-                                                    <span>{proj.name}</span>
-                                                </td>
-                                                <td align="right" className="text-secondary text-truncate">
-                                                    <small>{proj.pomodoroLength || 25} </small>
-                                                    <small>{proj.category} </small>
-                                                    <i className="bi bi-pencil-square" onClick={() => updateProject(proj.id)}></i>
-                                                </td>
-                                            </tr>
-                                        )
-                                    )
-                                }
-                            </tbody>
-
-                        </table>
+                        {
+                            projects.map(
+                                proj => (
+                                    <div
+                                        key={proj.id}
+                                        className={(project && proj.id === project.id ? "list-selected " : "") + "row py-2 list-row"}
+                                        onClick={() => setProject(proj)}
+                                    >
+                                        {/* todo: decide better solution for maxWidth */}
+                                        <div className="col-8 text-truncate text-start">
+                                            {/* <Link to={"/projects/" + proj.id + "/tasks"} state={{ proj }}>{proj.name}</Link> */}
+                                            <span style={{ color: proj.color }}>&#9632; </span>
+                                            <span>{proj.name}</span>
+                                        </div>
+                                        <div className="col text-secondary text-truncate text-end">
+                                            <small>{proj.pomodoroLength || 25} </small>
+                                            <small>{proj.category} </small>
+                                        </div>
+                                        <div className="col-2 text-secondary text-end list-button">
+                                            <i className="bi bi-pencil-square" onClick={() => updateProject(proj.id)}></i>
+                                        </div>
+                                    </div>
+                                )
+                            )
+                        }
 
                         <Pagination
-                            className="pagination-bar"
+                            className="pagination-bar mt-3"
                             currentPage={currentPage}
                             totalCount={projectsCount}
                             pageSize={PAGESIZE}
