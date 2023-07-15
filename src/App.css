@@ -32,7 +32,22 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+.list :hover {
+  background-color: #dee2e6;
+}
+
+.list-row {
+  cursor: pointer;
+  border-bottom: thin solid #dee2e6;
+}
+
+.list-selected {
+  background-color: #0dcaf0;
+  pointer-events: none;
 }

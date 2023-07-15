@@ -136,7 +136,7 @@ export default function ListTasksComponent({ project }) {
                         }
                     </tbody>
                 </table>
-                <span className="badge text-bg-light" onClick={() => setShowCompleted(!showCompleted)}>
+                <span className="badge text-bg-light" style={{ cursor: "pointer" }} onClick={() => setShowCompleted(!showCompleted)}>
                     {!showCompleted && <span>Show Completed Tasks <i className="bi bi-arrow-down"></i></span>}
                     {showCompleted && <span>Hide Completed Tasks <i className="bi bi-arrow-up"></i></span>}
                 </span>
