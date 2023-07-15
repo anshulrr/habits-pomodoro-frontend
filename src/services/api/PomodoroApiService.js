@@ -11,16 +11,16 @@ export const updatePomodoroApi
     = (id, pomodoro) => apiClient.put(`/pomodoros/${id}?timeElapsed=${pomodoro.timeElapsed}&status=${pomodoro.status}`)
 
 export const getPomodorosApi
-    = () => apiClient.get(`/pomodoros`)
+    = (include_categories) => apiClient.get(`/pomodoros?include_categories=${include_categories}`)
 
 export const getRunningPomodoroApi
     = () => apiClient.get(`/pomodoros/running`)
 
 export const getTasksPomodorosApi
-    = (limit, offset, include_categories) => apiClient.get(`/pomodoros/tasks-time?limit=${limit}&offset=${offset}&include_categories=${include_categories}`)
+    = (limit, offset, include_categories) => apiClient.get(`/stats/tasks-time?limit=${limit}&offset=${offset}&include_categories=${include_categories}`)
 
 export const getProjectsPomodorosApi
-    = (limit, offset, include_categories) => apiClient.get(`/pomodoros/projects-time?limit=${limit}&offset=${offset}&include_categories=${include_categories}`)
+    = (limit, offset, include_categories) => apiClient.get(`/stats/projects-time?limit=${limit}&offset=${offset}&include_categories=${include_categories}`)
 
 export const getTotalPomodorosApi
-    = (limit, offset, include_categories) => apiClient.get(`/pomodoros/total-time?limit=${limit}&offset=${offset}&include_categories=${include_categories}`)
+    = (limit, offset, include_categories) => apiClient.get(`/stats/total-time?limit=${limit}&offset=${offset}&include_categories=${include_categories}`)

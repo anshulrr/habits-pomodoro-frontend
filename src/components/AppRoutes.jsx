@@ -4,7 +4,7 @@ import HeaderComponent from './HeaderComponent'
 import ErrorComponent from './ErrorComponent'
 import WelcomeComponent from './WelcomeComponent'
 import LoginComponent from './LoginComponent'
-import ListPomodorosComponent from './ListPomodorosComponent'
+import StatsComponent from './StatsComponent'
 
 import './AppRoutes.css'
 import AuthProvider, { useAuth } from '../services/auth/AuthContext'
@@ -69,9 +69,9 @@ export default function AppRoutes() {
                             </AuthenticatedRoute>
                         } />
 
-                        <Route path='/pomodoros' element={
+                        <Route path='/stats' element={
                             <AuthenticatedRoute>
-                                <ListPomodorosComponent />
+                                <StatsComponent />
                             </AuthenticatedRoute>
                         } />
 
