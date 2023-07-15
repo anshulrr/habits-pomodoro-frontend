@@ -38,16 +38,42 @@
   }
 }
 
-.list :hover {
-  background-color: #dee2e6;
-}
+/* css for projects list */
 
 .list-row {
   cursor: pointer;
   border-bottom: thin solid #dee2e6;
 }
 
+.list-row .list-button {
+  display: none;
+}
+
+/* change color if list row is selected */
 .list-selected {
   background-color: #0dcaf0;
   pointer-events: none;
 }
+
+/* display the button if list row is selected */
+.list-selected .list-button {
+  display: block;
+  pointer-events: all;
+  cursor: default;
+}
+
+/* hover doesn't work correctly on mobile device */
+
+/* @media screen and (min-width: 768px) { */
+
+/* .list:hover {
+  background-color: #dee2e6;
+} */
+
+/* .list-row:hover .list-button {
+  display: block;
+}
+
+.list-row:hover .list-secondary-text {
+  display: none;
+} */
