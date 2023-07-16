@@ -13,6 +13,7 @@ import ProjectComponent from './ProjectComponent'
 import ListTasksComponent from './ListTasksComponent'
 import TaskComponent from './TaskComponent'
 import PomodoroComponent from './PomodoroComponent'
+import SettingsComponent from './SettingsComponent'
 
 function AuthenticatedRoute({ children }) {
     const authContext = useAuth()
@@ -78,6 +79,12 @@ export default function AppRoutes() {
                         <Route path='/logout' element={
                             <AuthenticatedRoute>
                                 <LogoutComponent />
+                            </AuthenticatedRoute>
+                        } />
+
+                        <Route path='/settings' element={
+                            <AuthenticatedRoute>
+                                <SettingsComponent />
                             </AuthenticatedRoute>
                         } />
 
