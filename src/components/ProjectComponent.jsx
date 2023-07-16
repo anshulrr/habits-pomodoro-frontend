@@ -91,6 +91,9 @@ export default function ProjectComponent() {
         if (values.project_category_id === 0) {
             errors.project_category_id = 'Select a category'
         }
+        if (values.pomodoroLength === '' || values.pomodoroLength < 0) {
+            errors.pomodoroLength = 'Enter zero or positive value'
+        }
         // console.log(values)
         return errors
     }
@@ -122,7 +125,8 @@ export default function ProjectComponent() {
                                     </div>
                                     <div className="col-md-4 mb-3">
                                         <Field type="number" className="form-control form-control-sm" name="pomodoroLength" placeholder="Default Pomodoro Length" />
-                                        <small>(Set default pomodoro length to zero, if you want to use general pomodoro settings)</small>
+                                        <small>(To use general settings, set length to zero)</small>
+                                        {errors.pomodoroLength && <div className="text-danger small">{errors.pomodoroLength}</div>}
                                     </div>
                                     <div className="col-md-4 mb-3">
                                         <Field as="select" className="form-select form-select-sm" name="project_category_id">
