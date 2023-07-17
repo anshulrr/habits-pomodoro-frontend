@@ -5,7 +5,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { executeJwtAuthenticationService } from "../api/AuthApiService";
 import { apiClient } from "../api/ApiClient";
-import axios from "axios";
 
 const AuthContext = createContext();
 
@@ -106,12 +105,15 @@ export default function AuthProvider({ children }) {
     // }
 
     async function login(username, password) {
-
         try {
+            console.log('removing interceptors before login')
+            apiClient.interceptors.request.eject(requestInterceptor)
+            apiClient.interceptors.response.eject(responseInterceptor)
+
             const response = await executeJwtAuthenticationService(username, password)
 
             if (response.status === 200) {
-                console.log('success')
+                console.log('login success')
 
                 const jwtToken = 'Bearer ' + response.data.token;
 
@@ -130,7 +132,7 @@ export default function AuthProvider({ children }) {
                 return false;
             }
         } catch (error) {
-            console.log('error in api')
+            console.log('error in login api')
             logout();
             return false;
         }
@@ -140,7 +142,7 @@ export default function AuthProvider({ children }) {
         console.log('adding interceptors. Old interceptors: ', requestInterceptor, responseInterceptor);
         // remove old interceptors
         apiClient.interceptors.request.eject(requestInterceptor)
-        apiClient.interceptors.request.eject(responseInterceptor)
+        apiClient.interceptors.response.eject(responseInterceptor)
         console.log('ejected interceptors')
 
         // to set headers on each API call
@@ -185,8 +187,8 @@ export default function AuthProvider({ children }) {
         // one working solution to remove authorization header from app for each call
         console.log(requestInterceptor, responseInterceptor)
         apiClient.interceptors.request.eject(requestInterceptor)
-        apiClient.interceptors.request.eject(responseInterceptor)
-        console.log('removed interceptors')
+        apiClient.interceptors.response.eject(responseInterceptor)
+        console.log('removed request interceptors after logout')
         setAuthenticated(false)
         setUsername(null)
         setToken(null)
