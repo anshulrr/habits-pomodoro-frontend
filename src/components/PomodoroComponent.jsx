@@ -14,13 +14,16 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, createNewPomo
     // const { state } = useLocation();
 
     const initialTimeRemaining = pomodoro.length * 60 - pomodoro.timeElapsed;
-    const minutes = parseInt(initialTimeRemaining / 60);
+    const hours = parseInt(initialTimeRemaining / 60 / 60) % 24;
+    const minutes = parseInt(initialTimeRemaining / 60) % 60;
     const seconds = initialTimeRemaining % 60;
 
     const [timer, setTimer] = useState(
-        (minutes > 9 ? minutes : '0' + minutes) + ':'
-        + (seconds > 9 ? seconds : '0' + seconds)
+        (hours > 9 ? hours : '0' + hours) + ':' +
+        (minutes > 9 ? minutes : '0' + minutes) + ':' +
+        (seconds > 9 ? seconds : '0' + seconds)
     )
+    // console.log(timer);
 
     const [timeRemaining, setTimeRemaining] = useState(initialTimeRemaining)
 
@@ -30,13 +33,14 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, createNewPomo
         const total = Date.parse(endTime) - Date.parse(new Date());
         const seconds = Math.floor((total / 1000) % 60);
         const minutes = Math.floor((total / 1000 / 60) % 60);
+        const hours = Math.floor((total / 1000 / 60 / 60) % 24);
         return {
-            total, minutes, seconds
+            total, hours, minutes, seconds
         };
     }
 
     const updateTimer = (endTime) => {
-        let { total, minutes, seconds }
+        let { total, hours, minutes, seconds }
             = calculateTimeRemaining(endTime);
         if (total > 0) {
 
@@ -44,8 +48,9 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, createNewPomo
             // check if less than 10 then we need to 
             // add '0' at the beginning of the variable
             setTimer(
-                (minutes > 9 ? minutes : '0' + minutes) + ':'
-                + (seconds > 9 ? seconds : '0' + seconds)
+                (hours > 9 ? hours : '0' + hours) + ':' +
+                (minutes > 9 ? minutes : '0' + minutes) + ':' +
+                (seconds > 9 ? seconds : '0' + seconds)
             )
             // console.log(timeRemaining, total / 1000)
             setTimeRemaining(total / 1000);
