@@ -2,9 +2,10 @@
 // Put some state in the context
 // Share the created context with other components
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { executeJwtAuthenticationService } from "../api/AuthApiService";
 import { apiClient } from "../api/ApiClient";
+import axios from "axios";
 
 const AuthContext = createContext();
 
@@ -12,33 +13,50 @@ export const useAuth = () => useContext(AuthContext)
 
 export default function AuthProvider({ children }) {
 
-    const [isAuthenticated, setAuthenticated] = useState(checkAuthentication());
-
     // Todo: how to set username after page refresh
     const [username, setUsername] = useState(null)
 
+    const [requestInterceptor, setRequestInterceptor] = useState(null)
+
+    const [responseInterceptor, setResponseInterceptor] = useState(null)
+
+    const [isAuthenticated, setAuthenticated] = useState(checkAuthenticationLocally());
+
     const [token, setToken] = useState(null)
 
-    function checkAuthentication() {
+    useEffect(
+        () => {
+            // to set header on page refresh
+            if (isAuthenticated) {
+                console.log('adding interceptors after refresh')
+                addInterceptors(localStorage.getItem('token'));
+            }
+        }, []
+    )
+
+    // to use jwt token on page refresh
+    function checkAuthenticationLocally() {
         // check if token is present in local storage
         // parse the token
         // check if it is expired
         // if expired: delete from local storage
         // TODO: make an api call to authenticate using refresh token
         const jwt = localStorage.getItem('token');
-        if (jwt == null) {
+        if (jwt === null) {
             return false;
         }
 
-        // console.log(parseJwt(jwt).exp, Date.now() / 1000)
-        const expiry = parseJwt(jwt).exp;
-        const isExpired = expiry < (Date.now() / 1000);
+        const parsedJwt = parseJwt(jwt);
+        // console.log(parsedJwt)
+        // console.log(parsedJwt.exp, Date.now() / 1000)
+        const isExpired = parsedJwt.exp < (Date.now() / 1000);
 
-        if (isExpired == true) {
-            localStorage.setItem('item', null);
+        if (isExpired === true) {
+            localStorage.removeItem('token');
+            return false;
         }
 
-        return !isExpired;
+        return true;
     }
 
     function parseJwt(token) {
@@ -101,14 +119,9 @@ export default function AuthProvider({ children }) {
                 setUsername(username)
                 setToken(jwtToken)
 
-                apiClient.interceptors.request.use(
-                    (config) => {
-                        // console.log('intercepting and adding a token')
-                        config.headers.Authorization = jwtToken
-                        localStorage.setItem('token', jwtToken)
-                        return config
-                    }
-                )
+                // add interceptors
+                console.log('adding interceptors after login')
+                addInterceptors(jwtToken)
 
                 return true;
             } else {
@@ -123,13 +136,63 @@ export default function AuthProvider({ children }) {
         }
     }
 
+    function addInterceptors(jwtToken) {
+        console.log('adding interceptors. Old interceptors: ', requestInterceptor, responseInterceptor);
+        // remove old interceptors
+        apiClient.interceptors.request.eject(requestInterceptor)
+        apiClient.interceptors.request.eject(responseInterceptor)
+        console.log('ejected interceptors')
+
+        // to set headers on each API call
+        const myRequestInterceptor = apiClient.interceptors.request.use(
+            (config) => {
+                console.log('from added request interceptor. Old interceptors: ', requestInterceptor, responseInterceptor);
+                config.headers.Authorization = jwtToken
+                localStorage.setItem('token', jwtToken)
+                return config
+            }
+        )
+
+        setRequestInterceptor(myRequestInterceptor);
+
+        const myResponseInterceptor = apiClient.interceptors.response.use(function (response) {
+            console.log('from added response interceptor. Old interceptors: ', requestInterceptor, responseInterceptor);
+            // Any status code that lie within the range of 2xx cause this function to trigger
+            // Do something with response data
+            return response;
+        }, function (error) {
+            console.log('from added response interceptor error. Old interceptors: ', requestInterceptor, responseInterceptor);
+            // Any status codes that falls outside the range of 2xx cause this function to trigger
+            // Do something with response error
+            // console.log("from interceptor", error)
+            if (error.response && error.response.status === 401) {
+                console.error('jwt is not valid')
+                logout();
+            }
+            return Promise.reject(error);
+        });
+
+        setResponseInterceptor(myResponseInterceptor);
+    }
+
     function logout() {
-        delete apiClient.defaults.headers.common["Authorization"];
         console.log('logging out ' + username)
         localStorage.removeItem('token')
+
+        // console.log(apiClient.defaults.headers.common["Authorization"])
+        // delete apiClient.defaults.headers.common["Authorization"];
+
+        // one working solution to remove authorization header from app for each call
+        console.log(requestInterceptor, responseInterceptor)
+        apiClient.interceptors.request.eject(requestInterceptor)
+        apiClient.interceptors.request.eject(responseInterceptor)
+        console.log('removed interceptors')
         setAuthenticated(false)
         setUsername(null)
         setToken(null)
+
+        // second working solution to remove authorization header from app
+        // window.location.reload()
     }
 
     const valuesToBeShared = { isAuthenticated, login, logout, username, token }
