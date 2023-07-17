@@ -88,25 +88,14 @@ export default function TaskComponent() {
                     {
                         (props) => (
                             <Form>
-                                <ErrorMessage
-                                    name="name"
-                                    component="div"
-                                    className="alert alert-warning"
-                                />
-
-                                <ErrorMessage
-                                    name="description"
-                                    component="div"
-                                    className="alert alert-warning"
-                                />
-
                                 <div className="row">
                                     <div className="col-md-6 mb-3">
                                         <Field type="text" className="form-control form-control-sm" name="description" placeholder="Description" />
+                                        <ErrorMessage name="description" component="small" className="text-danger small" />
                                     </div>
                                     <div className="col-md-6 mb-3">
                                         <Field type="number" className="form-control form-control-sm" name="pomodoroLength" placeholder="Default Pomodoro Length" />
-                                        <small>(Set default pomodoro length to zero, if you want to use project's settings)</small>
+                                        <small>(To use project's settings, set length to zero)</small>
                                         {props.errors.pomodoroLength && <div className="text-danger small">{props.errors.pomodoroLength}</div>}
                                     </div>
                                     <div className="col-md-4 mb-3">

@@ -34,18 +34,20 @@ export default function LoginComponent() {
 
     return (
         <div className="Login">
-            {showErrorMessage && <div className="ErrorMessage">Authentication Failed. Please check your credentials</div>}
             <form className="LoginForm">
-                <div>
-                    <label className="login-label">Username</label>
-                    <input type="text" name="username" value={username} onChange={handleUsernameChange} autoComplete="username" />
-                </div>
-                <div>
-                    <label className="login-label">Password</label>
-                    <input type="password" name="password" value={password} onChange={handlePasswordChange} autoComplete="current-password" />
-                </div>
-                <div>
-                    <button type="button" name="login" onClick={handleSubmit}>login</button>
+                <div className="container">
+                    <div className="row">
+                        <div className="col-md-4 offset-md-4 mb-3">
+                            <input type="text" name="username" className="form-control form-control-sm" value={username} onChange={handleUsernameChange} autoComplete="username" placeholder="username" />
+                        </div>
+                        <div className="col-md-4 offset-md-4 mb-3">
+                            <input type="password" name="password" className="form-control form-control-sm" value={password} onChange={handlePasswordChange} autoComplete="current-password" placeholder='password' />
+                        </div>
+                        <div className="col-md-4 offset-md-4 mb-3">
+                            <button type="button" className="btn btn-sm btn-outline-success" name="login" onClick={handleSubmit}>login</button>
+                        </div>
+                        {showErrorMessage && <div className="ErrorMessage text-danger"><small>Authentication Failed. Please check your credentials</small></div>}
+                    </div>
                 </div>
             </form>
         </div>
