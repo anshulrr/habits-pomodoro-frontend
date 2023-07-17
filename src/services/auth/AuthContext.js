@@ -27,7 +27,7 @@ export default function AuthProvider({ children }) {
         () => {
             // to set header on page refresh
             if (isAuthenticated) {
-                console.log('adding interceptors after refresh')
+                // console.log('adding interceptors after refresh')
                 addInterceptors(localStorage.getItem('token'));
             }
         }, []
@@ -106,9 +106,15 @@ export default function AuthProvider({ children }) {
 
     async function login(username, password) {
         try {
-            console.log('removing interceptors before login')
+            // remove interceptors before login to avoid bearer token attached
+            // console.log('removing interceptors before login')
             apiClient.interceptors.request.eject(requestInterceptor)
             apiClient.interceptors.response.eject(responseInterceptor)
+
+            // we also need to remove header added from local storage
+            // scenario: after refresh if first API call
+            // console.log(apiClient.defaults)
+            delete apiClient.defaults.headers["Authorization"];
 
             const response = await executeJwtAuthenticationService(username, password)
 
@@ -139,16 +145,16 @@ export default function AuthProvider({ children }) {
     }
 
     function addInterceptors(jwtToken) {
-        console.log('adding interceptors. Old interceptors: ', requestInterceptor, responseInterceptor);
-        // remove old interceptors
+        // console.log('adding interceptors. Old interceptors: ', requestInterceptor, responseInterceptor);
+        // remove old interceptors before adding new one
         apiClient.interceptors.request.eject(requestInterceptor)
         apiClient.interceptors.response.eject(responseInterceptor)
-        console.log('ejected interceptors')
+        // console.log('ejected interceptors')
 
         // to set headers on each API call
         const myRequestInterceptor = apiClient.interceptors.request.use(
             (config) => {
-                console.log('from added request interceptor. Old interceptors: ', requestInterceptor, responseInterceptor);
+                // console.log('from added request interceptor. Old interceptors: ', requestInterceptor, responseInterceptor);
                 config.headers.Authorization = jwtToken
                 localStorage.setItem('token', jwtToken)
                 return config
@@ -158,17 +164,19 @@ export default function AuthProvider({ children }) {
         setRequestInterceptor(myRequestInterceptor);
 
         const myResponseInterceptor = apiClient.interceptors.response.use(function (response) {
-            console.log('from added response interceptor. Old interceptors: ', requestInterceptor, responseInterceptor);
+            // console.log('from added response interceptor. Old interceptors: ', requestInterceptor, responseInterceptor);
             // Any status code that lie within the range of 2xx cause this function to trigger
             // Do something with response data
             return response;
         }, function (error) {
-            console.log('from added response interceptor error. Old interceptors: ', requestInterceptor, responseInterceptor);
+            // console.log('from added response interceptor error. Old interceptors: ', requestInterceptor, responseInterceptor);
             // Any status codes that falls outside the range of 2xx cause this function to trigger
             // Do something with response error
             // console.log("from interceptor", error)
             if (error.response && error.response.status === 401) {
                 console.error('jwt is not valid')
+                // I think there is no easy way to pass current interceptors id's to this login function.
+                // Hence it is better to do removal in login instead of logout
                 logout();
             }
             return Promise.reject(error);
@@ -184,11 +192,16 @@ export default function AuthProvider({ children }) {
         // console.log(apiClient.defaults.headers.common["Authorization"])
         // delete apiClient.defaults.headers.common["Authorization"];
 
-        // one working solution to remove authorization header from app for each call
-        console.log(requestInterceptor, responseInterceptor)
-        apiClient.interceptors.request.eject(requestInterceptor)
-        apiClient.interceptors.response.eject(responseInterceptor)
-        console.log('removed request interceptors after logout')
+        /* one working solution to remove authorization header from app for each call
+         * But it doesn't work with response interceptor internal call 
+         * (will have id's of previous interceptors)
+         * hence user might need to login two times (in case of invalid jwt)
+         */
+        // console.log(requestInterceptor, responseInterceptor)
+        // apiClient.interceptors.request.eject(requestInterceptor)
+        // apiClient.interceptors.response.eject(responseInterceptor)
+        // console.log('removed request interceptors after logout')
+
         setAuthenticated(false)
         setUsername(null)
         setToken(null)
