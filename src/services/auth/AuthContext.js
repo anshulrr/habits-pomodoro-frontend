@@ -121,7 +121,7 @@ export default function AuthProvider({ children }) {
             const response = await executeJwtAuthenticationService(username, password)
 
             if (response.status === 200) {
-                console.log('login success')
+                // console.log('login success')
 
                 const jwtToken = 'Bearer ' + response.data.token;
 
@@ -130,17 +130,17 @@ export default function AuthProvider({ children }) {
                 setToken(jwtToken)
 
                 // add interceptors
-                console.log('adding interceptors after login')
+                // console.log('adding interceptors after login')
                 addInterceptors(jwtToken)
 
                 return true;
             } else {
-                console.log('bad creds')
+                console.error('bad creds')
                 logout();
                 return false;
             }
         } catch (error) {
-            console.log('error in login api')
+            console.error('error in login api')
             logout();
             return false;
         }
@@ -169,12 +169,13 @@ export default function AuthProvider({ children }) {
             // console.log('from added response interceptor. Old interceptors: ', requestInterceptor, responseInterceptor);
             // Any status code that lie within the range of 2xx cause this function to trigger
             // Do something with response data
+            // console.log('from interceptor', response);
             return response;
         }, function (error) {
             // console.log('from added response interceptor error. Old interceptors: ', requestInterceptor, responseInterceptor);
             // Any status codes that falls outside the range of 2xx cause this function to trigger
             // Do something with response error
-            // console.log("from interceptor", error)
+            // console.error('from interceptor', error)
             if (error.response && error.response.status === 401) {
                 console.error('jwt is not valid')
                 // I think there is no easy way to pass current interceptors id's to this login function.
@@ -188,7 +189,7 @@ export default function AuthProvider({ children }) {
     }
 
     function logout() {
-        console.log('logging out ' + username)
+        // console.log('logging out ' + username)
         localStorage.removeItem('token')
 
         // console.log(apiClient.defaults.headers.common["Authorization"])

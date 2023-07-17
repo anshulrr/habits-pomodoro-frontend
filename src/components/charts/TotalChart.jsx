@@ -85,7 +85,7 @@ export const TotalChart = ({ includeCategories, buttonsStates, setButtonsStates 
                 setDatasets(temp_datasets);
                 // setDatasets(structuredClone(datasets))
             })
-            .catch(response => console.log(response))
+            .catch(error => console.error(error.message))
     }
 
     function updateLabels(limit, offset) {

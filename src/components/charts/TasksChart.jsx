@@ -50,7 +50,7 @@ export const TasksChart = ({ includeCategories, buttonsStates, setButtonsStates 
                 setChartData(updated_data)
                 // console.log("retrieved updated data: ", chartData);
             })
-            .catch(response => console.log(response))
+            .catch(error => console.error(error.message))
     }
 
     return (

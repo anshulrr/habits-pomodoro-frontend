@@ -46,7 +46,7 @@ export default function ListTasksComponent() {
                 setCategories(response.data)
                 setIncludeCategories(response.data.map(c => c.id))
             })
-            .catch(response => console.log(response))
+            .catch(error => console.error(error.message))
     }
 
     return (

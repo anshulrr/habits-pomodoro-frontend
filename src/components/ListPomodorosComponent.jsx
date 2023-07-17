@@ -23,7 +23,7 @@ export default function ListPomodorosComponent({ includeCategories }) {
                 // console.log(response)
                 setPomodoros(response.data)
             })
-            .catch(response => console.log(response))
+            .catch(error => console.error(error.message))
     }
 
     return (

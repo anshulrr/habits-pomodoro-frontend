@@ -47,7 +47,7 @@ export const ProjectsDistributionChart = ({ includeCategories, buttonsStates, se
                 setChartData(updated_data)
                 // console.log("retrieved updated data: ", chartData);
             })
-            .catch(response => console.log(response))
+            .catch(error => console.error(error.message))
     }
 
     return (

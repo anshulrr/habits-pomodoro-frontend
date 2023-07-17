@@ -32,7 +32,7 @@ export default function SettingsComponent() {
                     // console.log(response)
                     setSuccessMessage('Password Changed Successfully')
                 })
-                .catch(response => console.error(response))
+                .catch(error => console.error(error.message))
         }
     }
 

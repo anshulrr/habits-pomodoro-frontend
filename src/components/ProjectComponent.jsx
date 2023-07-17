@@ -33,7 +33,7 @@ export default function ProjectComponent() {
             .then(response => {
                 setProjectCategories(response.data)
             })
-            .catch(response => console.log(response))
+            .catch(error => console.error(error.message))
     }
 
     function retrieveProject() {
@@ -51,7 +51,7 @@ export default function ProjectComponent() {
                 // todo: set project projectCategory id: done
                 setProjectCategoryId(response.data.projectCategoryId)
             })
-            .catch(error => console.error(error))
+            .catch(error => console.error(error.message))
     }
 
     function onSubmit(values) {
@@ -69,17 +69,17 @@ export default function ProjectComponent() {
         if (parseInt(id) === -1) {
             createProjectApi(project)
                 .then(response => {
-                    console.log(response)
+                    // console.log(response)
                     navigate('/projects', { state: { project: response.data } })
                 })
-                .catch(error => console.log(error))
+                .catch(error => console.error(error.message))
         } else {
             updateProjectApi(id, project)
                 .then(response => {
                     // console.log(response)
                     navigate('/projects', { state: { project: response.data } })
                 })
-                .catch(error => console.log(error))
+                .catch(error => console.error(error.message))
         }
     }
 

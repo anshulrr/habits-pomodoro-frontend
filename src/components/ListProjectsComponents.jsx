@@ -43,7 +43,7 @@ export default function ListProjectsComponent() {
                 // console.log(response)
                 setProjects(response.data)
             })
-            .catch(response => console.log(response))
+            .catch(error => console.error(error.message))
     }
 
     function getProjectsCount() {
@@ -51,7 +51,7 @@ export default function ListProjectsComponent() {
             .then(response => {
                 setProjectsCount(response.data)
             })
-            .catch(response => console.log(response))
+            .catch(error => console.error(error.message))
     }
 
     function updateProject(id) {

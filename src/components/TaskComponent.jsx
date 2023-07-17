@@ -33,7 +33,7 @@ export default function TaskComponent() {
                 setPomodoroLength(response.data.pomodoroLength)
                 setStatus(response.data.status)
             })
-            .catch(error => console.error(error))
+            .catch(error => console.error(error.message))
     }
 
     function onSubmit(values) {
@@ -51,14 +51,14 @@ export default function TaskComponent() {
                     // console.log(response)
                     navigate(`/projects`, { state: { project: state.project } })
                 })
-                .catch(error => console.log(error))
+                .catch(error => console.error(error.message))
         } else {
             updateTaskApi(project_id, id, task)
                 .then(response => {
                     // console.log(response)
                     navigate(`/projects`, { state: { project: state.project } })
                 })
-                .catch(error => console.log(error))
+                .catch(error => console.error(error.message))
         }
     }
 

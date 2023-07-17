@@ -34,7 +34,7 @@ export default function ListTasksComponent({ project }) {
                 // console.log(response)
                 setContainer(response.data)
             })
-            .catch(response => console.log(response))
+            .catch(error => console.error(error.message))
     }
 
     function updateTask(id) {
@@ -68,7 +68,7 @@ export default function ListTasksComponent({ project }) {
                 // navigate(`/tasks/${task.id}/pomodoros/${response.data.id}/${response.data.length}`, { state: { project: project, task } })
             })
             .catch(error => {
-                console.error('error: ', error, error.response)
+                console.error(error.message)
                 if (error.response && error.response.status === 400) {
                     setMessage('Please complete the already running pomodoro');
                 }
@@ -88,7 +88,7 @@ export default function ListTasksComponent({ project }) {
                 setMessage('');
             })
             .catch(error => {
-                console.error('error: ', error, error.response)
+                console.error(error.message)
                 if (error.response && error.response.status === 400) {
                     setMessage('No running pomodoro');
                 }

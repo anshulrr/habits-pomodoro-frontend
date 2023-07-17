@@ -121,7 +121,7 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, createNewPomo
                 }
             })
             .catch(error => {
-                console.error(error)
+                console.error(error.message)
                 setPomodoro(null)
             })
     }
