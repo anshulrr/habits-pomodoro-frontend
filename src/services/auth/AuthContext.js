@@ -28,6 +28,8 @@ export default function AuthProvider({ children }) {
             // to set header on page refresh
             if (isAuthenticated) {
                 // console.log('adding interceptors after refresh')
+                // note: it doesn't executes for first API call
+                // so we need to set it seperately, even before useEffect
                 addInterceptors(localStorage.getItem('token'));
             }
         }, []
@@ -114,7 +116,7 @@ export default function AuthProvider({ children }) {
             // we also need to remove header added from local storage
             // scenario: after refresh if first API call
             // console.log(apiClient.defaults)
-            delete apiClient.defaults.headers["Authorization"];
+            delete apiClient.defaults.headers.common['Authorization'];
 
             const response = await executeJwtAuthenticationService(username, password)
 
