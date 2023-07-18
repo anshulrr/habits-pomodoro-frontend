@@ -112,7 +112,7 @@ export default function BreakTimerComponent() {
                     {
                         breakStatus !== 'break_finished' && breakStatus !== 'break_timer'
                         &&
-                        <div className="fs-1 p-3 mb-2 text-white" style={{ backgroundColor: 'grey' }}>
+                        <div className="fs-1 p-3 mb-2 text-white" style={{ backgroundColor: 'grey', fontVariantNumeric: "tabular-nums" }}>
                             {breakTimer}
                         </div>
                     }
