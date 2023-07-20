@@ -119,7 +119,8 @@ export default function AuthProvider({ children }) {
             // console.log(apiClient.defaults)
             delete apiClient.defaults.headers.common['Authorization'];
 
-            const response = await executeJwtAuthenticationService(username, password)
+            // todo: implement better fix for case sensitive username 
+            const response = await executeJwtAuthenticationService(username.toLowerCase(), password)
 
             if (response.status === 200) {
                 // console.log('login success')
