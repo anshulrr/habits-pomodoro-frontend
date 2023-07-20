@@ -145,6 +145,9 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, createNewPomo
             width: 120,
             height: 120,
         });
+        // copy style sheets to new window
+        copyStyleSheets(pipWindow)
+
         // Move the player to the Picture-in-Picture window.
         pipWindow.document.body.append(player);
 
@@ -159,13 +162,34 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, createNewPomo
         });
     }
 
+    function copyStyleSheets(pipWindow) {
+        // Copy style sheets over from the initial document
+        // so that the player looks the same.
+        [...document.styleSheets].forEach((styleSheet) => {
+            try {
+                const cssRules = [...styleSheet.cssRules].map((rule) => rule.cssText).join('');
+                const style = document.createElement('style');
+
+                style.textContent = cssRules;
+                pipWindow.document.head.appendChild(style);
+            } catch (e) {
+                const link = document.createElement('link');
+
+                link.rel = 'stylesheet';
+                link.type = styleSheet.type;
+                link.media = styleSheet.media;
+                link.href = styleSheet.href;
+                pipWindow.document.head.appendChild(link);
+            }
+        });
+    }
+
     return (
         <div id="pomodoro-player-container" className="PomodoroComponent">
             <div className="" id="pomodoro-player">
                 {
                     openPipWindow &&
                     <div className="row">
-                        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossOrigin="anonymous" />
                         <div className="col-12 text-center">
                             <small><i className="bi bi-folder-plus"> </i>{pomodoro.task.project.name}</small>
                             <h6>{pomodoro.task.description}</h6>
