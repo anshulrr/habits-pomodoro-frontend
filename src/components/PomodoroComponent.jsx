@@ -13,6 +13,11 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, createNewPomo
     // const { task_id, pomodoro.id, pomodoro.length } = useParams()
     // const { state } = useLocation();
 
+
+    const [openPipWindow, setOpenPipWindow] = useState(false)
+
+    const [pipWindow, setPipWindow] = useState(null)
+
     const initialTimeRemaining = pomodoro.length * 60 - pomodoro.timeElapsed;
     const hours = parseInt(initialTimeRemaining / 60 / 60) % 24;
     const minutes = parseInt(initialTimeRemaining / 60) % 60;
@@ -75,6 +80,8 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, createNewPomo
             // console.log(status, timeRemaining, endTime);
             if (status === 'completed') {
                 clearInterval(interval_id);
+                pipWindow.close();
+                setPipWindow(null);
             } else if (status === 'started') {
                 updateTimer(endTime);
             }
@@ -131,10 +138,61 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, createNewPomo
         createNewPomodoro(pomodoro.task, pomodoro.task.project, true)
     }
 
+    async function openPip() {
+        const player = document.querySelector("#pomodoro-player");
+        // Open a Picture-in-Picture window.
+        const pipWindow = await window.documentPictureInPicture.requestWindow({
+            width: 120,
+            height: 120,
+        });
+        // Move the player to the Picture-in-Picture window.
+        pipWindow.document.body.append(player);
+
+        setOpenPipWindow(true);
+        setPipWindow(pipWindow);
+
+        pipWindow.addEventListener("pagehide", (event) => {
+            setOpenPipWindow(false);
+            const playerContainer = document.querySelector("#pomodoro-player-container");
+            const pipPlayer = event.target.querySelector("#pomodoro-player");
+            playerContainer.append(pipPlayer);
+        });
+    }
+
     return (
-        <div className="PomodoroComponent">
-            <div className="container">
-                <small><i className="bi bi-folder-plus"> </i>{pomodoro.task.project.name}</small>
+        <div id="pomodoro-player-container" className="PomodoroComponent">
+            <div className="" id="pomodoro-player">
+                {
+                    openPipWindow &&
+                    <div className="row">
+                        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossOrigin="anonymous" />
+                        <div className="col-12 text-center">
+                            <small><i className="bi bi-folder-plus"> </i>{pomodoro.task.project.name}</small>
+                            <h6>{pomodoro.task.description}</h6>
+                            {
+                                status !== 'completed' &&
+                                <div className="fs-1 p-3 text-white" style={{ backgroundColor: pomodoro.task.project.color }}>
+                                    {timer}
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div>
+                <div className="mx-1" style={{ position: "relative" }}>
+                    <small>
+                        <i className="bi bi-folder-plus" style={{ cursor: "text" }} />
+                        <span> {pomodoro.task.project.name} </span>
+                    </small>
+                    {
+                        'documentPictureInPicture' in window && !openPipWindow &&
+                        <span style={{ position: "absolute", right: 0 }}>
+                            <i className="bi bi-pip" onClick={openPip} />
+                        </span>
+                    }
+                </div>
                 <h5>{pomodoro.task.description}</h5>
                 {
                     status !== 'completed' &&

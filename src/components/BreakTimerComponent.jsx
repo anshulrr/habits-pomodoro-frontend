@@ -106,7 +106,7 @@ export default function BreakTimerComponent() {
 
     return (
         <div className="BreakComponent">
-            <div className="container">
+            <div className="">
 
                 <div>
                     {
