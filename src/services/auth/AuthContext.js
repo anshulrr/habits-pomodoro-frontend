@@ -32,7 +32,7 @@ export default function AuthProvider({ children }) {
                 // so we need to set it seperately, even before useEffect
                 addInterceptors(localStorage.getItem('token'));
             }
-        }, []
+        }, []   // eslint-disable-line react-hooks/exhaustive-deps
     )
 
     // to use jwt token on page refresh
