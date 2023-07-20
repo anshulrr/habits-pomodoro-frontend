@@ -42,6 +42,9 @@ export default function ListProjectsComponent() {
             .then(response => {
                 // console.log(response)
                 setProjects(response.data)
+                if (project === null && response.data.length > 0) {
+                    setProject(response.data[0])
+                }
             })
             .catch(error => console.error(error.message))
     }

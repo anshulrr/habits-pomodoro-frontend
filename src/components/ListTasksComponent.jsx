@@ -25,6 +25,9 @@ export default function ListTasksComponent({ project }) {
             // console.log('re-render ListTasksComponents')
             refreshTasks('added', setTasks)
             refreshTasks('completed', setCompletedTasks)
+            if (pomodoro === null) {
+                getRunningPomodoro()
+            }
         }, [project] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
