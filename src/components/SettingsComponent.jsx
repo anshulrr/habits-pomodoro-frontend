@@ -35,6 +35,7 @@ export default function SettingsComponent() {
 
     return (
         <div className="ChangePassword">
+            Change Password
             <form className="ChangePasswordForm">
                 <div className="container">
                     <div className="row">

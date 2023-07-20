@@ -31,6 +31,7 @@ export default function AuthProvider({ children }) {
                 // note: it doesn't executes for first API call
                 // so we need to set it seperately, even before useEffect
                 addInterceptors(localStorage.getItem('token'));
+                setUsername(localStorage.getItem('token') ? parseJwt(localStorage.getItem('token')).sub : null);
             }
         }, []   // eslint-disable-line react-hooks/exhaustive-deps
     )
