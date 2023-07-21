@@ -14,8 +14,8 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, createNewPomo
     // const { state } = useLocation();
 
     const initialTimeRemaining = pomodoro.length * 60 - pomodoro.timeElapsed;
-    const hours = parseInt(initialTimeRemaining / 60 / 60) % 24;
-    const minutes = parseInt(initialTimeRemaining / 60) % 60;
+    const hours = Math.floor(initialTimeRemaining / 60 / 60) % 24;
+    const minutes = Math.floor(initialTimeRemaining / 60) % 60;
     const seconds = initialTimeRemaining % 60;
 
     const [timer, setTimer] = useState(

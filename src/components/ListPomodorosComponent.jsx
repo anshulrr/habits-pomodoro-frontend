@@ -6,6 +6,8 @@ export default function ListPomodorosComponent({ includeCategories }) {
 
     const [pomodoros, setPomodoros] = useState([])
 
+    const [totalTimeElapsed, setTotalTimeElapsed] = useState('0h0m');
+
     useEffect(
         () => {
             // console.log('re-render ListPomodorosComponent')
@@ -22,13 +24,22 @@ export default function ListPomodorosComponent({ includeCategories }) {
             .then(response => {
                 // console.log(response)
                 setPomodoros(response.data)
+                const total = pomodoros.reduce((acc, curr) => acc + Math.round(curr.timeElapsed / 60), 0);
+                const hours = Math.floor(total / 60);
+                const minutes = total % 60;
+                setTotalTimeElapsed(
+                    (hours > 9 ? hours : '0' + hours) + ':' +
+                    (minutes > 9 ? minutes : '0' + minutes)
+                )
             })
             .catch(error => console.error(error.message))
     }
 
     return (
         <>
-            <h6>Today's pomodoros</h6>
+            <h6>
+                Today's pomodoros ({totalTimeElapsed})
+            </h6>
             <small>
                 <table className="table table-sm table-striped">
                     <tbody>
@@ -40,7 +51,7 @@ export default function ListPomodorosComponent({ includeCategories }) {
                                             {pomodoro.task}
                                         </td>
                                         <td>
-                                            {parseInt(pomodoro.timeElapsed / 60)}
+                                            {Math.round(pomodoro.timeElapsed / 60)}
                                         </td>
                                         <td className="text-muted">
                                             {moment.utc(pomodoro.startTime).local().format('H:mm')}-
