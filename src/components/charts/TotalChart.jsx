@@ -161,38 +161,38 @@ export const TotalChart = ({ includeCategories, buttonsStates, setButtonsStates 
                                     boxWidth: 10
                                 }
                             },
-                            annotation: {
-                                annotations: {
-                                    line1: {
-                                        type: 'line',
-                                        yMin: datasets.goal,
-                                        yMax: datasets.goal,
-                                        borderColor: 'green',
-                                        borderWidth: 1,
-                                        borderDash: [1, 1],
-                                        label: {
-                                            content: 'goal',
-                                            display: true,
-                                            backgroundColor: 'white',
-                                            color: 'gray'
-                                        }
-                                    },
-                                    line2: {
-                                        type: 'line',
-                                        yMin: datasets.threshold,
-                                        yMax: datasets.threshold,
-                                        borderColor: 'red',
-                                        borderWidth: 1,
-                                        borderDash: [1, 1],
-                                        label: {
-                                            content: '',
-                                            display: true,
-                                            backgroundColor: 'white',
-                                            color: 'gray'
-                                        }
-                                    }
-                                }
-                            }
+                            // annotation: {
+                            //     annotations: {
+                            //         line1: {
+                            //             type: 'line',
+                            //             yMin: datasets.goal,
+                            //             yMax: datasets.goal,
+                            //             borderColor: 'green',
+                            //             borderWidth: 1,
+                            //             borderDash: [1, 1],
+                            //             label: {
+                            //                 content: 'goal',
+                            //                 display: true,
+                            //                 backgroundColor: 'white',
+                            //                 color: 'gray'
+                            //             }
+                            //         },
+                            //         line2: {
+                            //             type: 'line',
+                            //             yMin: datasets.threshold,
+                            //             yMax: datasets.threshold,
+                            //             borderColor: 'red',
+                            //             borderWidth: 1,
+                            //             borderDash: [1, 1],
+                            //             label: {
+                            //                 content: '',
+                            //                 display: true,
+                            //                 backgroundColor: 'white',
+                            //                 color: 'gray'
+                            //             }
+                            //         }
+                            //     }
+                            // }
                         },
                         scales: {
                             x: {
