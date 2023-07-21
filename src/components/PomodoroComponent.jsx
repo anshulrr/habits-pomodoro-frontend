@@ -29,6 +29,8 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
 
     const [status, setStatus] = useState(pomodoro.status)
 
+    const [webWorker, setWebWorker] = useState()
+
     const calculateTimeRemaining = (endTime) => {
         const total = Date.parse(endTime) - Date.parse(new Date());
         const seconds = Math.floor((total / 1000) % 60);
@@ -92,6 +94,13 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
         return endTime;
     }
 
+    useEffect(() => {
+        notificationSetup()
+        return () => {
+            stopWorker()
+        }
+    }, []);
+
     // We can use useEffect so that when the component
     // mount the timer will start as soon as possible
 
@@ -120,6 +129,12 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
                     setTasksMessage('');
                     setPomodoroStatus('completed');
                 }
+                if (local_status === 'started' && webWorker != undefined) {
+                    webWorker.postMessage({
+                        timeRemaining: timeRemaining,
+                        status: pomodoro.task.description + " is completed 2"
+                    })
+                }
             })
             .catch(error => {
                 console.error(error.message)
@@ -130,6 +145,47 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
     const startAgain = () => {
         setPomodoro(null)
         createNewPomodoro(pomodoro.task, pomodoro.task.project, true)
+    }
+
+    function notificationSetup() {
+        window.Notification.requestPermission().then((result) => {
+            if (result === "granted") {
+                startWorker()
+            } else if (Notification.permission !== "denied") {
+                // We need to ask the user for permission
+                window.Notification.requestPermission().then((permission) => {
+                    if (permission === "granted") {
+                        console.log('got the permission for notifications')
+                    }
+                });
+            }
+        })
+    }
+
+    function startWorker() {
+        console.log('starting worker')
+        if (typeof (Worker) !== "undefined") {
+            let temp_w;
+            if (typeof (webWorker) == "undefined") {
+                temp_w = new Worker("timer_worker.js");
+                setWebWorker(temp_w)
+            }
+
+            temp_w.postMessage({
+                timeRemaining: timeRemaining,
+                status: pomodoro.task.description + " is completed"
+            })
+        } else {
+            document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Workers...";
+        }
+    }
+
+    function stopWorker() {
+        console.log('stopping worker')
+        if (webWorker != undefined) {
+            webWorker.terminate();
+            setWebWorker(undefined);
+        }
     }
 
     return (
