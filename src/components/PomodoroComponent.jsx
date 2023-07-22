@@ -8,10 +8,7 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
     // We need ref in this, because we are dealing
     // with JS setInterval to keep track of it and
     // stop it when needed
-    const Ref = useRef(null);
-
-    // const { task_id, pomodoro.id, pomodoro.length } = useParams()
-    // const { state } = useLocation();
+    const intervalRef = useRef(null);
 
     const initialTimeRemaining = pomodoro.length * 60 - pomodoro.timeElapsed;
     const hours = Math.floor(initialTimeRemaining / 60 / 60) % 24;
@@ -54,7 +51,7 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
                 (minutes > 9 ? minutes : '0' + minutes) + ':' +
                 (seconds > 9 ? seconds : '0' + seconds)
             )
-            // console.log(timeRemaining, total / 1000)
+            console.log(timeRemaining, total / 1000)
             setTimeRemaining(total / 1000);
         } else {
             // TODO: find fix for extra seconds elapsed due to inactive tab
@@ -72,16 +69,18 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
         // If you try to remove this line the 
         // updating of timer Variable will be
         // after 1000ms or 1sec
-        if (Ref.current) clearInterval(Ref.current);
+        console.log("interval id:", intervalRef.current);
+        if (intervalRef.current) clearInterval(intervalRef.current);
         const interval_id = setInterval(() => {
             // console.log(status, timeRemaining, endTime);
             if (status === 'completed') {
+                console.log('status is updated to completed by user')
                 clearInterval(interval_id);
             } else if (status === 'started') {
                 updateTimer(endTime);
             }
         }, 1000)
-        Ref.current = interval_id;
+        intervalRef.current = interval_id;
         return interval_id;
     }
 
@@ -116,7 +115,7 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
 
     const updatePomodoro = (local_status, timeRemaining) => {
         setStatus(local_status)
-        console.log("status updated to: ", local_status, timeRemaining, pomodoro)
+        console.log("status updated to: ", local_status, timeRemaining)
         const pomodoro_data = {
             timeElapsed: pomodoro.length * 60 - timeRemaining,
             status: local_status  // // setState is not working for this synchronously
@@ -129,10 +128,11 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
                     setTasksMessage('');
                     setPomodoroStatus('completed');
                 }
-                if (local_status === 'started' && webWorker != undefined) {
+                if (webWorker !== undefined) {
                     webWorker.postMessage({
                         timeRemaining: timeRemaining,
-                        status: pomodoro.task.description + " is completed 2"
+                        task: pomodoro.task.description,
+                        status: local_status
                     })
                 }
             })
@@ -166,23 +166,30 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
         console.log('starting worker')
         if (typeof (Worker) !== "undefined") {
             let temp_w;
-            if (typeof (webWorker) == "undefined") {
+            if (typeof (webWorker) === "undefined") {
                 temp_w = new Worker("timer_worker.js");
                 setWebWorker(temp_w)
             }
 
             temp_w.postMessage({
                 timeRemaining: timeRemaining,
-                status: pomodoro.task.description + " is completed"
+                task: pomodoro.task.description,
+                status: status
             })
+
+            temp_w.onmessage = function (event) {
+                console.log('got termination message from web worker: ' + event.data)
+                // todo: terminating it after every render is not a good way, fix is using global webWorker
+                stopWorker()
+            }
         } else {
             document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Workers...";
         }
     }
 
     function stopWorker() {
-        console.log('stopping worker')
-        if (webWorker != undefined) {
+        if (webWorker !== undefined) {
+            console.log('stopping worker')
             webWorker.terminate();
             setWebWorker(undefined);
         }
