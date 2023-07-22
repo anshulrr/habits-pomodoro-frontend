@@ -26,8 +26,6 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
 
     const [status, setStatus] = useState(pomodoro.status)
 
-    const [webWorker, setWebWorker] = useState()
-
     const calculateTimeRemaining = (endTime) => {
         const total = Date.parse(endTime) - Date.parse(new Date());
         const seconds = Math.floor((total / 1000) % 60);
@@ -95,9 +93,6 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
 
     useEffect(() => {
         notificationSetup()
-        return () => {
-            stopWorker(webWorker)
-        }
     }, []);
 
     // We can use useEffect so that when the component
@@ -128,13 +123,15 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
                     setTasksMessage('');
                     setPomodoroStatus('completed');
                 }
-                if (webWorker !== undefined) {
-                    webWorker.postMessage({
+
+                navigator.serviceWorker.ready.then((registration) => {
+                    // console.log('using postMessage')
+                    registration.active.postMessage({
                         timeRemaining: timeRemaining,
                         task: pomodoro.task.description,
                         status: local_status
                     })
-                }
+                })
             })
             .catch(error => {
                 console.error(error.message)
@@ -148,12 +145,12 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
     }
 
     function notificationSetup() {
-        window.Notification.requestPermission().then((result) => {
+        Notification.requestPermission().then((result) => {
             if (result === "granted") {
-                startWorker()
+                initializeNotification()
             } else if (Notification.permission !== "denied") {
                 // We need to ask the user for permission
-                window.Notification.requestPermission().then((permission) => {
+                Notification.requestPermission().then((permission) => {
                     if (permission === "granted") {
                         console.log('got the permission for notifications')
                     }
@@ -162,46 +159,15 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
         })
     }
 
-    function startWorker() {
-        console.log('starting worker')
-        if (typeof (Worker) !== "undefined") {
-            let temp_w;
-            if (typeof (webWorker) === "undefined") {
-                temp_w = new Worker("timer_worker.js");
-                setWebWorker(temp_w)
-            }
-
-            temp_w.postMessage({
+    function initializeNotification() {
+        console.log('init notification')
+        navigator.serviceWorker.ready.then((registration) => {
+            // console.log('using postMessage')
+            registration.active.postMessage({
                 timeRemaining: timeRemaining,
                 task: pomodoro.task.description,
                 status: status
             })
-
-            temp_w.onmessage = function (event) {
-                console.log('got termination message from web worker: ' + event.data)
-                // todo: terminating it after every render is not a good way, fix is using global webWorker
-                stopWorker(temp_w)
-            }
-        } else {
-            document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Workers...";
-        }
-    }
-
-    function stopWorker(webWorker) {
-        console.log('stopping worker:', webWorker)
-        if (webWorker !== undefined) {
-            webWorker.terminate();
-            setWebWorker(undefined);
-        }
-    }
-
-    // for testing purpose only
-    function testingWorkerTimer() {
-        console.log("updating web worker")
-        webWorker.postMessage({
-            timeRemaining: -1,
-            task: 'testing web worker',
-            status: 'started'
         })
     }
 
@@ -216,8 +182,6 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
                         {timer}
                     </div>
                 }
-                {/* for testing purpose only */}
-                <button className="btn btn-sm btn-secondary m-2" onClick={testingWorkerTimer}>Test Web Worker</button>
 
                 {
                     status === 'started' && status !== 'completed' &&
