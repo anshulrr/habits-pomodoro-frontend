@@ -171,6 +171,20 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
         })
     }
 
+    function testingWorkerTimer() {
+        const options = {
+            vibrate: [500, 110, 500, 110, 450, 110, 200, 110, 170, 40, 450, 110, 200, 110, 170, 40, 500]
+        };
+        navigator.serviceWorker.ready.then((registration) => {
+            // console.log('using postMessage')
+            registration.active.postMessage({
+                timeRemaining: -1,
+                task: 'testing web worker',
+                status: 'started'
+            }, options)
+        })
+    }
+
     return (
         <div className="PomodoroComponent">
             <div className="container">
@@ -182,6 +196,9 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
                         {timer}
                     </div>
                 }
+
+                {/* for testing purpose only */}
+                <button className="btn btn-sm btn-secondary m-2" onClick={testingWorkerTimer}>Test Web Worker</button>
 
                 {
                     status === 'started' && status !== 'completed' &&
