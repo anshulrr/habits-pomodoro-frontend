@@ -19,3 +19,15 @@ function showNotification(message) {
     new Notification(message)
     postMessage('notification popped')
 }
+
+// for testing purpose only
+var count = 0;
+function testTermination() {
+    count++;
+    setTimeout(() => {
+        console.log('from running web worker, running since minutes:', count)
+        testTermination();
+    }, 1000 * 60)
+}
+
+testTermination()

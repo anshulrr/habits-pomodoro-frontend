@@ -51,7 +51,7 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
                 (minutes > 9 ? minutes : '0' + minutes) + ':' +
                 (seconds > 9 ? seconds : '0' + seconds)
             )
-            console.log(timeRemaining, total / 1000)
+            // console.log(timeRemaining, total / 1000)
             setTimeRemaining(total / 1000);
         } else {
             // TODO: find fix for extra seconds elapsed due to inactive tab
@@ -96,7 +96,7 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
     useEffect(() => {
         notificationSetup()
         return () => {
-            stopWorker()
+            stopWorker(webWorker)
         }
     }, []);
 
@@ -180,19 +180,29 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
             temp_w.onmessage = function (event) {
                 console.log('got termination message from web worker: ' + event.data)
                 // todo: terminating it after every render is not a good way, fix is using global webWorker
-                stopWorker()
+                stopWorker(temp_w)
             }
         } else {
             document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Workers...";
         }
     }
 
-    function stopWorker() {
+    function stopWorker(webWorker) {
+        console.log('stopping worker:', webWorker)
         if (webWorker !== undefined) {
-            console.log('stopping worker')
             webWorker.terminate();
             setWebWorker(undefined);
         }
+    }
+
+    // for testing purpose only
+    function testingWorkerTimer() {
+        console.log("updating web worker")
+        webWorker.postMessage({
+            timeRemaining: -1,
+            task: 'testing web worker',
+            status: 'started'
+        })
     }
 
     return (
@@ -206,6 +216,8 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
                         {timer}
                     </div>
                 }
+                {/* for testing purpose only */}
+                <button className="btn btn-sm btn-secondary m-2" onClick={testingWorkerTimer}>Test Web Worker</button>
 
                 {
                     status === 'started' && status !== 'completed' &&
