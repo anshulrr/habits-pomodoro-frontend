@@ -10,7 +10,7 @@ self.onmessage = (event) => {
     }
 
     if (event.data.status === 'started') {
-        timeout = setTimeout(showNotification, 1000 * event.data.timeRemaining, event.data.task + " is " + event.data.status + " after " + event.data.timeRemaining + "s")
+        timeout = setTimeout(showNotification, 1000 * event.data.timeRemaining, event.data.task + " has been running for " + event.data.timeRemaining + "s without any change")
     }
 }
 
@@ -20,13 +20,14 @@ function showNotification(message) {
 }
 
 // for testing purpose only
+// running it after every 29 seconds, to avoid disabling the service worker after 30sec
 var count = 0;
 function testTermination() {
-    count++;
+    count += 29;
     setTimeout(() => {
-        console.log('from running sw, running since minutes:', count)
+        console.log('from running sw, running for ', Math.floor(count / 60) + "minutes " + count % 60 + "seconds")
         testTermination();
-    }, 1000 * 60)
+    }, 1000 * 29)
 }
 
 testTermination()

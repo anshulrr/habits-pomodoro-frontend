@@ -176,7 +176,6 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
             vibrate: [500, 110, 500, 110, 450, 110, 200, 110, 170, 40, 450, 110, 200, 110, 170, 40, 500]
         };
         navigator.serviceWorker.ready.then((registration) => {
-            // console.log('using postMessage')
             registration.active.postMessage({
                 timeRemaining: -1,
                 task: 'testing web worker',
