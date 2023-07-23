@@ -3,6 +3,10 @@ console.log("from initialized sw")
 var timeout = null;
 
 self.onmessage = (event) => {
+    console.log(event.data)
+    if (event.data === 'keep alive') {
+        return;
+    }
     if (timeout !== null) {
         console.log('clearing old timeout: ' + timeout + ', for notification, current status:', event.data.status)
         clearTimeout(timeout);
@@ -20,7 +24,7 @@ function showNotification(message) {
 }
 
 // for testing purpose only
-// running it after every 29 seconds, to avoid disabling the service worker after 30sec
+// running it after every 29 seconds, to avoid termination of the service worker after 30sec
 var count = 0;
 function testTermination() {
     count += 29;

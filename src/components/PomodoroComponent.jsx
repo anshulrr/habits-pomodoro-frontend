@@ -51,6 +51,12 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
             )
             // console.log(timeRemaining, total / 1000)
             setTimeRemaining(total / 1000);
+            // temp fix to keep service worker alive
+            if ((total / 1000) % 20 === 0) {
+                navigator.serviceWorker.ready.then((registration) => {
+                    registration.active.postMessage('keep alive')
+                })
+            }
         } else {
             // TODO: find fix for extra seconds elapsed due to inactive tab
             console.log('from pomodoro timer error:', total / 1000)
