@@ -51,12 +51,13 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
             )
             // console.log(timeRemaining, total / 1000)
             setTimeRemaining(total / 1000);
-            // temp fix to keep service worker alive
-            if ((total / 1000) % 20 === 0) {
-                navigator.serviceWorker.ready.then((registration) => {
-                    registration.active.postMessage('keep alive')
-                })
-            }
+            // // temp fix to keep service worker alive
+            // // (no effect) (works only for few more seconds until page is awake)
+            // if ((total / 1000) % 20 === 0) {
+            //     navigator.serviceWorker.ready.then((registration) => {
+            //         registration.active.postMessage('keep alive')
+            //     })
+            // }
         } else {
             // TODO: find fix for extra seconds elapsed due to inactive tab
             console.log('from pomodoro timer error:', total / 1000)
@@ -98,7 +99,9 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
     }
 
     useEffect(() => {
-        notificationSetup()
+        if (!navigator.userAgentData.mobile) {
+            notificationSetup()
+        }
     }, []);
 
     // We can use useEffect so that when the component
@@ -130,14 +133,16 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
                     setPomodoroStatus('completed');
                 }
 
-                navigator.serviceWorker.ready.then((registration) => {
-                    // console.log('using postMessage')
-                    registration.active.postMessage({
-                        timeRemaining: timeRemaining,
-                        task: pomodoro.task.description,
-                        status: local_status
+                if ("serviceWorker" in navigator && !navigator.userAgentData.mobile) {
+                    navigator.serviceWorker.ready.then((registration) => {
+                        // console.log('using postMessage')
+                        registration.active.postMessage({
+                            timeRemaining: timeRemaining,
+                            task: pomodoro.task.description,
+                            status: local_status
+                        })
                     })
-                })
+                }
             })
             .catch(error => {
                 console.error(error.message)
@@ -166,29 +171,32 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
     }
 
     function initializeNotification() {
-        console.log('init notification')
-        navigator.serviceWorker.ready.then((registration) => {
-            // console.log('using postMessage')
-            registration.active.postMessage({
-                timeRemaining: timeRemaining,
-                task: pomodoro.task.description,
-                status: status
+        if ("serviceWorker" in navigator && !navigator.userAgentData.mobile) {
+            console.log('init notification')
+            navigator.serviceWorker.ready.then((registration) => {
+                // console.log('using postMessage')
+                registration.active.postMessage({
+                    timeRemaining: timeRemaining,
+                    task: pomodoro.task.description,
+                    status: status
+                })
             })
-        })
+        }
     }
 
-    function testingWorkerTimer() {
-        const options = {
-            vibrate: [500, 110, 500, 110, 450, 110, 200, 110, 170, 40, 450, 110, 200, 110, 170, 40, 500]
-        };
-        navigator.serviceWorker.ready.then((registration) => {
-            registration.active.postMessage({
-                timeRemaining: -1,
-                task: 'testing web worker',
-                status: 'started'
-            }, options)
-        })
-    }
+    // // for testing purpose only
+    // function testingWorkerTimer() {
+    //     const options = {
+    //         vibrate: [500, 110, 500, 110, 450, 110, 200, 110, 170, 40, 450, 110, 200, 110, 170, 40, 500]
+    //     };
+    //     navigator.serviceWorker.ready.then((registration) => {
+    //         registration.active.postMessage({
+    //             timeRemaining: -1,
+    //             task: 'testing web worker',
+    //             status: 'started'
+    //         }, options)
+    //     })
+    // }
 
     return (
         <div className="PomodoroComponent">
@@ -202,8 +210,8 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
                     </div>
                 }
 
-                {/* for testing purpose only */}
-                <button className="btn btn-sm btn-secondary m-2" onClick={testingWorkerTimer}>Test Web Worker</button>
+                {/* for testing purpose only
+                <button className="btn btn-sm btn-secondary m-2" onClick={testingWorkerTimer}>Test Web Worker</button> */}
 
                 {
                     status === 'started' && status !== 'completed' &&
