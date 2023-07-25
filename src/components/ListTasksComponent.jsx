@@ -6,6 +6,7 @@ import { retrieveAllTasks } from "../services/api/TaskApiService";
 import ListTasksRowsComponent from "./ListTasksRowsComponent";
 import PomodoroComponent from "./PomodoroComponent";
 import StopwatchComponent from "./StopwatchComponent";
+import ListPomodorosComponent from "./ListPomodorosComponent";
 
 export default function ListTasksComponent({ project }) {
 
@@ -18,6 +19,8 @@ export default function ListTasksComponent({ project }) {
     const [showCompleted, setShowCompleted] = useState(false)
 
     const [pomodoro, setPomodoro] = useState(null)
+
+    const [pomodoroStatus, setPomodoroStatus] = useState(null)
 
     const [message, setMessage] = useState('')
 
@@ -68,6 +71,7 @@ export default function ListTasksComponent({ project }) {
                 response.data.task = pomodoro_task
                 // console.log(response.data)
                 setPomodoro(response.data)
+                setPomodoroStatus('started')
                 setMessage('')
                 // navigate(`/tasks/${task.id}/pomodoros/${response.data.id}/${response.data.length}`, { state: { project: project, task } })
             })
@@ -154,6 +158,7 @@ export default function ListTasksComponent({ project }) {
                 <PomodoroComponent
                     pomodoro={pomodoro}
                     setPomodoro={setPomodoro}
+                    setPomodoroStatus={setPomodoroStatus}
                     createNewPomodoro={createNewPomodoro}
                     setTasksMessage={setMessage}
                 ></PomodoroComponent>
@@ -163,6 +168,12 @@ export default function ListTasksComponent({ project }) {
                 pomodoro === null &&
                 <StopwatchComponent message={'Start a new task.'} />
             }
+
+            <div className="overflow-scroll bg-white mt-3 px-3" style={{ maxHeight: "25vh" }}>
+                <ListPomodorosComponent
+                    key={pomodoroStatus}
+                />
+            </div >
 
         </div >
     )

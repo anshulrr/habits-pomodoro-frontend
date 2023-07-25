@@ -1,21 +1,35 @@
 import { useEffect, useState } from "react"
 import { getPomodorosApi } from "../services/api/PomodoroApiService";
 import moment from "moment"
+import { retrieveAllProjectCategoriesApi } from "../services/api/ProjectCategoryApiService";
 
 export default function ListPomodorosComponent({ includeCategories }) {
 
     const [pomodoros, setPomodoros] = useState([])
 
-    const [totalTimeElapsed, setTotalTimeElapsed] = useState('0h0m');
+    const [totalTimeElapsed, setTotalTimeElapsed] = useState('00:00');
 
     useEffect(
         () => {
             // console.log('re-render ListPomodorosComponent')
-            retrieveTodayPomodoros()
+            if (!includeCategories) {
+                retrieveProjectCategories();
+            } else {
+                retrieveTodayPomodoros(includeCategories)
+            }
         }, []   // eslint-disable-line react-hooks/exhaustive-deps
     )
 
-    function retrieveTodayPomodoros() {
+    function retrieveProjectCategories() {
+        // todo: decide default limit
+        retrieveAllProjectCategoriesApi(100, 0)
+            .then(response => {
+                retrieveTodayPomodoros(response.data.map(c => c.id))
+            })
+            .catch(error => console.error(error.message))
+    }
+
+    function retrieveTodayPomodoros(includeCategories) {
         if (includeCategories.length === 0) {
             // console.log('categories length is zero')
             return;
@@ -24,7 +38,7 @@ export default function ListPomodorosComponent({ includeCategories }) {
             .then(response => {
                 // console.log(response)
                 setPomodoros(response.data)
-                const total = pomodoros.reduce((acc, curr) => acc + Math.round(curr.timeElapsed / 60), 0);
+                const total = response.data.reduce((acc, curr) => acc + Math.round(curr.timeElapsed / 60), 0);
                 const hours = Math.floor(total / 60);
                 const minutes = total % 60;
                 setTotalTimeElapsed(
