@@ -5,6 +5,7 @@ import { getRunningPomodoroApi } from '../services/api/PomodoroApiService';
 import { retrieveAllTasks } from "../services/api/TaskApiService";
 import ListTasksRowsComponent from "./ListTasksRowsComponent";
 import PomodoroComponent from "./PomodoroComponent";
+import StopwatchComponent from "./StopwatchComponent";
 
 export default function ListTasksComponent({ project }) {
 
@@ -156,6 +157,11 @@ export default function ListTasksComponent({ project }) {
                     createNewPomodoro={createNewPomodoro}
                     setTasksMessage={setMessage}
                 ></PomodoroComponent>
+            }
+
+            {
+                pomodoro === null &&
+                <StopwatchComponent message={'Start a new task.'} />
             }
 
         </div >

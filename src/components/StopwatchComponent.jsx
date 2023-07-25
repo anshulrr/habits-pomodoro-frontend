@@ -1,26 +1,28 @@
 import { useEffect, useRef, useState } from 'react'
 
-export default function StopwatchComponent() {
+export default function StopwatchComponent({ message = 'Break has ended, start a new task' }) {
 
     const Ref = useRef(null);
 
-    const [stopwatch, setStopwatch] = useState('00:00')
+    const [stopwatch, setStopwatch] = useState('00:00:00')
 
     const calculateStopwatchTime = (startTime) => {
         const total = Date.now() - startTime;
         const seconds = Math.floor((total / 1000) % 60);
         const minutes = Math.floor((total / 1000 / 60) % 60);
-        return { minutes, seconds };
+        const hours = Math.floor((total / 1000 / 60 / 60) % 24);
+        return { hours, minutes, seconds };
     }
 
     const updateStopwatch = (startTime) => {
-        let { minutes, seconds }
+        let { hours, minutes, seconds }
             = calculateStopwatchTime(startTime);
 
         // update the timer
         // check if less than 10 then we need to 
         // add '0' at the beginning of the variable
         setStopwatch(
+            (hours > 9 ? hours : '0' + hours) + ':' +
             (minutes > 9 ? minutes : '0' + minutes) + ':'
             + (seconds > 9 ? seconds : '0' + seconds)
         )
@@ -55,7 +57,7 @@ export default function StopwatchComponent() {
             <div className="fs-1 mb-2" style={{ backgroundColor: 'white', fontVariantNumeric: "tabular-nums" }}>
                 {stopwatch}
             </div>
-            <p className="text-danger">Break has ended, start new pomodoro</p>
+            <p className="text-danger">{message}</p>
 
         </div>
     )
