@@ -36,31 +36,13 @@ export default function LoginComponent() {
     }
 
     function signInWithGoogle() {
-
-        // signInWithPopup(auth, provider)
-        //     .then((result) => {
-        //         // This gives you a Google Access Token. You can use it to access the Google API.
-        //         const credential = GoogleAuthProvider.credentialFromResult(result);
-        //         const token = credential.accessToken;
-        //         // The signed-in user info.
-        //         const user = result.user;
-        //         // IdP data available using getAdditionalUserInfo(result)
-        //         // ...
-        //     }).catch((error) => {
-        //         // Handle Errors here.
-        //         const errorCode = error.code;
-        //         const errorMessage = error.message;
-        //         // The email of the user's account used.
-        //         const email = error.customData.email;
-        //         // The AuthCredential type that was used.
-        //         const credential = GoogleAuthProvider.credentialFromError(error);
-        //         // ...
-        //     });
-
-
-
-
-        signInWithPopup(auth, provider).then((a) => console.log(a))
+        signInWithPopup(auth, provider)
+            .then((response) => {
+                // console.log(response)
+                authContext.googleSignIn(response.user.accessToken);
+            }).catch((error) => {
+                console.log(error);
+            });
     }
 
     return (
@@ -88,7 +70,8 @@ export default function LoginComponent() {
             }
 
             {
-                <button type="button" className="btn btn-sm btn-outline-success" name="login" onClick={signInWithGoogle}>Google SignIn</button>
+                !authContext.isAuthenticated &&
+                <button type="button" className="btn btn-sm btn-outline-success" name="login" onClick={signInWithGoogle}>SignIn with Google</button>
             }
 
             {

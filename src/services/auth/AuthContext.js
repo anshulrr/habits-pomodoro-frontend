@@ -148,6 +148,21 @@ export default function AuthProvider({ children }) {
         }
     }
 
+    function googleSignIn(token) {
+        // console.log('login success')
+        const jwtToken = 'Bearer ' + token;
+
+        setAuthenticated(true);
+        setUsername(username)
+        setToken(jwtToken)
+
+        // add interceptors
+        // console.log('adding interceptors after login')
+        addInterceptors(jwtToken)
+
+        return true;
+    }
+
     function addInterceptors(jwtToken) {
         // console.log('adding interceptors. Old interceptors: ', requestInterceptor, responseInterceptor);
         // remove old interceptors before adding new one
@@ -215,7 +230,7 @@ export default function AuthProvider({ children }) {
         // window.location.reload()
     }
 
-    const valuesToBeShared = { isAuthenticated, login, logout, username, token }
+    const valuesToBeShared = { isAuthenticated, login, logout, username, token, googleSignIn }
 
     return (
         <AuthContext.Provider value={valuesToBeShared}>
