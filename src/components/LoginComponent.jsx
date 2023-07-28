@@ -47,7 +47,7 @@ export default function LoginComponent() {
 
     return (
         <div>
-            {
+            {/* {
                 !authContext.isAuthenticated &&
                 <div className="Login">
                     <form className="LoginForm">
@@ -67,11 +67,14 @@ export default function LoginComponent() {
                         </div>
                     </form>
                 </div>
-            }
+            } */}
 
             {
                 !authContext.isAuthenticated &&
-                <button type="button" className="btn btn-sm btn-outline-success" name="login" onClick={signInWithGoogle}>SignIn with Google</button>
+                <button type="button" className="btn btn-sm btn-primary p-0" name="login" onClick={signInWithGoogle}>
+                    <img src="btn_google_dark_normal_ios.svg" /> Sign in with Google &nbsp;
+                </button>
+                // <input type="image" style={{ height: '60px' }} src="btn_google_signin_dark_normal_web.png" onClick={signInWithGoogle} />
             }
 
             {
