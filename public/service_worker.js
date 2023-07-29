@@ -25,15 +25,15 @@ function showNotification(message) {
     self.registration.showNotification(message)
 }
 
-// for testing purpose only
-// (no effect) running it after every 29 seconds, to avoid termination of the service worker after 30sec
-var count = 0;
-function testTermination() {
-    count += 29;
-    setTimeout(() => {
-        console.log('from running sw, running for ', Math.floor(count / 60) + "minutes " + count % 60 + "seconds")
-        testTermination();
-    }, 1000 * 29)
-}
+// // for testing purpose only
+// // (no effect) running it after every 29 seconds, to avoid termination of the service worker after 30sec
+// var count = 0;
+// function testTermination() {
+//     count += 29;
+//     setTimeout(() => {
+//         console.log('from running sw, running for ', Math.floor(count / 60) + "minutes " + count % 60 + "seconds")
+//         testTermination();
+//     }, 1000 * 29)
+// }
 
-testTermination()
+// testTermination()
