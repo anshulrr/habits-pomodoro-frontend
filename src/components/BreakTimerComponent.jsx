@@ -86,7 +86,7 @@ export default function BreakTimerComponent() {
             local_audio.setAttribute('loop', true)
             local_audio.play()
             setAudio(local_audio)
-            setBreakStatus('break_timer');
+            setBreakStatus('break_stopwatch');
         }
     }
 
@@ -97,7 +97,7 @@ export default function BreakTimerComponent() {
         return () => {
             // console.log('fix for switch to different component')
             clearInterval(id);  // fix for switching to different component
-            if (breakStatus === 'break_timer') {
+            if (breakStatus === 'break_stopwatch') {
                 audio.pause();
             }
         };
@@ -110,7 +110,7 @@ export default function BreakTimerComponent() {
 
                 <div>
                     {
-                        breakStatus !== 'break_finished' && breakStatus !== 'break_timer'
+                        breakStatus !== 'break_finished' && breakStatus !== 'break_stopwatch'
                         &&
                         <div className="fs-1 p-3 mb-2 text-white" style={{ backgroundColor: 'grey', fontVariantNumeric: "tabular-nums" }}>
                             {breakTimer}
@@ -131,7 +131,7 @@ export default function BreakTimerComponent() {
                         </div>
                     }
                     {
-                        breakStatus === 'break_timer'
+                        breakStatus === 'break_stopwatch'
                         &&
                         <div>
                             <StopwatchComponent></StopwatchComponent>

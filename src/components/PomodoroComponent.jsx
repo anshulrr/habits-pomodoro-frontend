@@ -8,10 +8,7 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
     // We need ref in this, because we are dealing
     // with JS setInterval to keep track of it and
     // stop it when needed
-    const Ref = useRef(null);
-
-    // const { task_id, pomodoro.id, pomodoro.length } = useParams()
-    // const { state } = useLocation();
+    const intervalRef = useRef(null);
 
     const initialTimeRemaining = pomodoro.length * 60 - pomodoro.timeElapsed;
     const hours = Math.floor(initialTimeRemaining / 60 / 60) % 24;
@@ -54,6 +51,13 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
             )
             // console.log(timeRemaining, total / 1000)
             setTimeRemaining(total / 1000);
+            // // temp fix to keep service worker alive
+            // // (no effect) (works only for few more seconds until page is awake)
+            // if ((total / 1000) % 20 === 0) {
+            //     navigator.serviceWorker.ready.then((registration) => {
+            //         registration.active.postMessage('keep alive')
+            //     })
+            // }
         } else {
             // TODO: find fix for extra seconds elapsed due to inactive tab
             console.log('from pomodoro timer error:', total / 1000)
@@ -70,16 +74,18 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
         // If you try to remove this line the 
         // updating of timer Variable will be
         // after 1000ms or 1sec
-        if (Ref.current) clearInterval(Ref.current);
+        console.log("interval id:", intervalRef.current);
+        if (intervalRef.current) clearInterval(intervalRef.current);
         const interval_id = setInterval(() => {
             // console.log(status, timeRemaining, endTime);
             if (status === 'completed') {
+                console.log('status is updated to completed by user')
                 clearInterval(interval_id);
             } else if (status === 'started') {
                 updateTimer(endTime);
             }
         }, 1000)
-        Ref.current = interval_id;
+        intervalRef.current = interval_id;
         return interval_id;
     }
 
@@ -91,6 +97,12 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
         endTime.setSeconds(endTime.getSeconds() + timeRemaining);
         return endTime;
     }
+
+    useEffect(() => {
+        if (!navigator.userAgentData.mobile) {
+            notificationSetup()
+        }
+    }, []);
 
     // We can use useEffect so that when the component
     // mount the timer will start as soon as possible
@@ -107,7 +119,7 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
 
     const updatePomodoro = (local_status, timeRemaining) => {
         setStatus(local_status)
-        console.log("status updated to: ", local_status, timeRemaining, pomodoro)
+        console.log("status updated to: ", local_status, timeRemaining)
         const pomodoro_data = {
             timeElapsed: pomodoro.length * 60 - timeRemaining,
             status: local_status  // // setState is not working for this synchronously
@@ -119,6 +131,17 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
                 if (local_status === 'completed') {
                     setTasksMessage('');
                     setPomodoroStatus('completed');
+                }
+
+                if ("serviceWorker" in navigator && !navigator.userAgentData.mobile) {
+                    navigator.serviceWorker.ready.then((registration) => {
+                        // console.log('using postMessage')
+                        registration.active.postMessage({
+                            timeRemaining: timeRemaining,
+                            task: pomodoro.task.description,
+                            status: local_status
+                        })
+                    })
                 }
             })
             .catch(error => {
@@ -132,6 +155,49 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
         createNewPomodoro(pomodoro.task, pomodoro.task.project, true)
     }
 
+    function notificationSetup() {
+        Notification.requestPermission().then((result) => {
+            if (result === "granted") {
+                initializeNotification()
+            } else if (Notification.permission !== "denied") {
+                // We need to ask the user for permission
+                Notification.requestPermission().then((permission) => {
+                    if (permission === "granted") {
+                        console.log('got the permission for notifications')
+                    }
+                });
+            }
+        })
+    }
+
+    function initializeNotification() {
+        if ("serviceWorker" in navigator && !navigator.userAgentData.mobile) {
+            console.log('init notification')
+            navigator.serviceWorker.ready.then((registration) => {
+                // console.log('using postMessage')
+                registration.active.postMessage({
+                    timeRemaining: timeRemaining,
+                    task: pomodoro.task.description,
+                    status: status
+                })
+            })
+        }
+    }
+
+    // // for testing purpose only
+    // function testingWorkerTimer() {
+    //     const options = {
+    //         vibrate: [500, 110, 500, 110, 450, 110, 200, 110, 170, 40, 450, 110, 200, 110, 170, 40, 500]
+    //     };
+    //     navigator.serviceWorker.ready.then((registration) => {
+    //         registration.active.postMessage({
+    //             timeRemaining: -1,
+    //             task: 'testing web worker',
+    //             status: 'started'
+    //         }, options)
+    //     })
+    // }
+
     return (
         <div className="PomodoroComponent">
             <div className="container">
@@ -143,6 +209,9 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
                         {timer}
                     </div>
                 }
+
+                {/* for testing purpose only
+                <button className="btn btn-sm btn-secondary m-2" onClick={testingWorkerTimer}>Test Web Worker</button> */}
 
                 {
                     status === 'started' && status !== 'completed' &&
