@@ -31,7 +31,7 @@ export default function AuthProvider({ children }) {
                 // note: it doesn't executes for first API call
                 // so we need to set it seperately, even before useEffect
                 addInterceptors(localStorage.getItem('token'));
-                setUsername(localStorage.getItem('token') ? parseJwt(localStorage.getItem('token')).sub : null);
+                setUsername(localStorage.getItem('token') ? parseJwt(localStorage.getItem('token')).name : null);
             }
         }, []   // eslint-disable-line react-hooks/exhaustive-deps
     )
@@ -148,6 +148,26 @@ export default function AuthProvider({ children }) {
         }
     }
 
+    function googleSignIn(token) {
+        // console.log('login success')
+        const jwtToken = 'Bearer ' + token;
+
+        const parsedJwt = parseJwt(jwtToken)
+
+        setAuthenticated(true);
+        setUsername(parsedJwt.name)
+        setToken(jwtToken)
+
+        // for home page reload
+        localStorage.setItem('token', jwtToken)
+
+        // add interceptors
+        // console.log('adding interceptors after login')
+        addInterceptors(jwtToken)
+
+        return true;
+    }
+
     function addInterceptors(jwtToken) {
         // console.log('adding interceptors. Old interceptors: ', requestInterceptor, responseInterceptor);
         // remove old interceptors before adding new one
@@ -160,7 +180,7 @@ export default function AuthProvider({ children }) {
             (config) => {
                 // console.log('from added request interceptor. Old interceptors: ', requestInterceptor, responseInterceptor);
                 config.headers.Authorization = jwtToken
-                localStorage.setItem('token', jwtToken)
+                // localStorage.setItem('token', jwtToken) don't set it on every api call
                 return config
             }
         )
@@ -215,7 +235,7 @@ export default function AuthProvider({ children }) {
         // window.location.reload()
     }
 
-    const valuesToBeShared = { isAuthenticated, login, logout, username, token }
+    const valuesToBeShared = { isAuthenticated, login, logout, username, token, googleSignIn }
 
     return (
         <AuthContext.Provider value={valuesToBeShared}>
