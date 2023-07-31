@@ -71,10 +71,15 @@ export default function LoginComponent() {
 
             {
                 !authContext.isAuthenticated &&
-                <button type="button" className="btn btn-sm btn-primary p-0" name="login" onClick={signInWithGoogle}>
-                    <img src="btn_google_dark_normal_ios.svg" /> Sign in with Google &nbsp;
-                </button>
-                // <input type="image" style={{ height: '60px' }} src="btn_google_signin_dark_normal_web.png" onClick={signInWithGoogle} />
+                // <button type="button" className="btn btn-primary p-0" style={{ backgroundColor: '#4285F4' }} name="login" onClick={signInWithGoogle}>
+                //     <img src="btn_google_dark_normal_ios.svg" /> Sign in with Google &nbsp;
+                // </button>
+                <input
+                    type="image"
+                    style={{ height: '60px', imageRendering: '-webkit-optimize-contrast' }}
+                    src="btn_google_signin_dark_normal_web@2x.png"
+                    onClick={signInWithGoogle}
+                />
             }
 
             {
