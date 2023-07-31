@@ -155,7 +155,7 @@ export default function AuthProvider({ children }) {
         const jwtToken = 'Bearer ' + token;
 
         const parsedJwt = parseJwt(jwtToken)
-        console.log(parsedJwt)
+        // console.log(parsedJwt)
 
         setAuthenticated(true);
         setUsername(parsedJwt.name)

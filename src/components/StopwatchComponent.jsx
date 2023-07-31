@@ -53,12 +53,9 @@ export default function StopwatchComponent({ message = 'Break has ended, start a
 
     return (
         <div className="BreakComponent">
-
-            <div className="fs-1 mb-2" style={{ backgroundColor: 'white', fontVariantNumeric: "tabular-nums" }}>
-                {stopwatch}
+            <div className="text-danger text-end" style={{ fontVariantNumeric: "tabular-nums" }}>
+                {message} ({stopwatch})
             </div>
-            <p className="text-danger">{message}</p>
-
-        </div>
+        </div >
     )
 }

@@ -54,10 +54,12 @@ export default function ListTasksComponent({ project }) {
 
     function createNewPomodoro(pomodoro_task, task_project, start_again = false) {
         // console.log(pomodoro_task.id)
-        if (pomodoro !== null && !start_again) {
+        if (pomodoro !== null && !start_again && pomodoroStatus != 'completed') {
             setMessage('Please complete the already running pomodoro');
             return;
         }
+        // if break is running, first remove the component
+        setPomodoro(null);
 
         const pomodoro_data = {
             startTime: new Date(),
@@ -166,7 +168,7 @@ export default function ListTasksComponent({ project }) {
 
             {
                 pomodoro === null &&
-                <StopwatchComponent message={'Start a new task.'} />
+                <StopwatchComponent message={'Start a new task'} />
             }
 
             <div className="overflow-scroll bg-white mt-3 px-3" style={{ maxHeight: "25vh" }}>
