@@ -3,8 +3,10 @@
 // Share the created context with other components
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { executeJwtAuthenticationService } from "../api/AuthApiService";
+import { executeJwtAuthenticationService, startApi } from "../api/AuthApiService";
 import { apiClient } from "../api/ApiClient";
+
+import { auth, provider, signInWithPopup } from '../firebaseConfig';
 
 const AuthContext = createContext();
 
@@ -148,22 +150,29 @@ export default function AuthProvider({ children }) {
         }
     }
 
-    function googleSignIn(token) {
+    async function googleSignIn(token) {
         // console.log('login success')
         const jwtToken = 'Bearer ' + token;
 
         const parsedJwt = parseJwt(jwtToken)
+        console.log(parsedJwt)
 
         setAuthenticated(true);
         setUsername(parsedJwt.name)
         setToken(jwtToken)
 
-        // for home page reload
+        // for page reload
         localStorage.setItem('token', jwtToken)
 
         // add interceptors
         // console.log('adding interceptors after login')
         addInterceptors(jwtToken)
+
+        // if new user; save it in the backend
+        const response = await startApi();
+        if (response.status === 200) {
+            console.log("if new user; saved in the backend")
+        }
 
         return true;
     }
@@ -177,9 +186,20 @@ export default function AuthProvider({ children }) {
 
         // to set headers on each API call
         const myRequestInterceptor = apiClient.interceptors.request.use(
-            (config) => {
+            async (config) => {
                 // console.log('from added request interceptor. Old interceptors: ', requestInterceptor, responseInterceptor);
-                config.headers.Authorization = jwtToken
+
+                // Check jwt expiry, get a new token if required
+                // console.log(parseJwt(jwtToken).exp - (Date.now() / 1000));
+                if (parseJwt(jwtToken).exp - (Date.now() / 1000) <= 60) {
+                    // todo: handle error response gracefully
+                    jwtToken = 'Bearer ' + await auth.currentUser.getIdToken(/* forceRefresh */ true);
+                    // update local storage
+                    localStorage.setItem('token', jwtToken)
+                    // console.log(parseJwt(jwtToken).exp - (Date.now() / 1000));
+                }
+
+                config.headers.Authorization = jwtToken;
                 // localStorage.setItem('token', jwtToken) don't set it on every api call
                 return config
             }
