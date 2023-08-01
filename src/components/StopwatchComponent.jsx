@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-export default function StopwatchComponent({ message = 'Break has ended, start a new task' }) {
+export default function StopwatchComponent({ message = 'Break has ended, start again?' }) {
 
     const Ref = useRef(null);
 
@@ -53,12 +53,11 @@ export default function StopwatchComponent({ message = 'Break has ended, start a
 
     return (
         <div className="BreakComponent">
-
-            <div className="fs-1 mb-2" style={{ backgroundColor: 'white', fontVariantNumeric: "tabular-nums" }}>
-                {stopwatch}
+            <div className="text-danger text-end" style={{ fontVariantNumeric: "tabular-nums" }}>
+                <small>
+                    {message} ({stopwatch})
+                </small>
             </div>
-            <p className="text-danger">{message}</p>
-
-        </div>
+        </div >
     )
 }

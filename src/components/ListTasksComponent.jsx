@@ -15,8 +15,10 @@ export default function ListTasksComponent({ project }) {
     const [tasks, setTasks] = useState([])
 
     const [completedTasks, setCompletedTasks] = useState([])
-
     const [showCompleted, setShowCompleted] = useState(false)
+
+    const [archivedTasks, setArchivedTasks] = useState([])
+    const [showArchived, setShowArchived] = useState(false)
 
     const [pomodoro, setPomodoro] = useState(null)
 
@@ -28,11 +30,22 @@ export default function ListTasksComponent({ project }) {
         () => {
             // console.log('re-render ListTasksComponents')
             refreshTasks('added', setTasks)
+            refreshTasks('archived', setArchivedTasks)
             refreshTasks('completed', setCompletedTasks)
             if (pomodoro === null) {
                 getRunningPomodoro()
             }
         }, [project] // eslint-disable-line react-hooks/exhaustive-deps
+    )
+
+    useEffect(
+        // need to rerender tasks list after completion of tasks to update pomodorosTimeElapsed
+        () => {
+            if (pomodoroStatus === 'completed') {
+                // console.log('re-render ListTasksComponents for completed pomodoro')
+                refreshTasks('added', setTasks)
+            }
+        }, [pomodoroStatus] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
     function refreshTasks(status, setContainer) {
@@ -54,10 +67,12 @@ export default function ListTasksComponent({ project }) {
 
     function createNewPomodoro(pomodoro_task, task_project, start_again = false) {
         // console.log(pomodoro_task.id)
-        if (pomodoro !== null && !start_again) {
+        if (pomodoro !== null && !start_again && pomodoroStatus != 'completed') {
             setMessage('Please complete the already running pomodoro');
             return;
         }
+        // if break is running, first remove the component
+        setPomodoro(null);
 
         const pomodoro_data = {
             startTime: new Date(),
@@ -77,8 +92,9 @@ export default function ListTasksComponent({ project }) {
             })
             .catch(error => {
                 console.error(error.message)
-                if (error.response && error.response.status === 400) {
+                if (error.response && error.response.status === 405) {
                     setMessage('Please complete the already running pomodoro');
+                    getRunningPomodoro();
                 }
             })
     }
@@ -89,6 +105,10 @@ export default function ListTasksComponent({ project }) {
         getRunningPomodoroApi()
             .then(response => {
                 // console.log(response)
+                if (response.status === 204) {
+                    setMessage('No running pomodoro');
+                    return;
+                }
                 const running_pomodoro = response.data;
                 running_pomodoro.task = response.data.task;
                 running_pomodoro.task.project = response.data.project;
@@ -97,9 +117,6 @@ export default function ListTasksComponent({ project }) {
             })
             .catch(error => {
                 console.error(error.message)
-                if (error.response && error.response.status === 400) {
-                    setMessage('No running pomodoro');
-                }
             })
     }
 
@@ -126,22 +143,44 @@ export default function ListTasksComponent({ project }) {
                     createNewPomodoro={createNewPomodoro}
                     updateTask={updateTask}
                 />
-                <span className="badge text-bg-light mt-3" style={{ cursor: "pointer" }} onClick={() => setShowCompleted(!showCompleted)}>
-                    {!showCompleted && <span>Show Completed Tasks ({completedTasks.length})<i className="bi bi-arrow-down"></i></span>}
-                    {showCompleted && <span>Hide Completed Tasks ({completedTasks.length})<i className="bi bi-arrow-up"></i></span>}
-                </span>
-                <small>
-                    {
-                        showCompleted &&
-                        <ListTasksRowsComponent
-                            key={completedTasks}
-                            tasks={completedTasks}
-                            project={project}
-                            createNewPomodoro={createNewPomodoro}
-                            updateTask={updateTask}
-                        />
-                    }
-                </small>
+
+                <div>
+                    <span className="badge text-bg-light mt-3" style={{ cursor: "pointer" }} onClick={() => setShowArchived(!showArchived)}>
+                        {!showArchived && <span>Show Archived Tasks ({archivedTasks.length})<i className="bi bi-arrow-down"></i></span>}
+                        {showArchived && <span>Hide Archived Tasks ({archivedTasks.length})<i className="bi bi-arrow-up"></i></span>}
+                    </span>
+                    <small>
+                        {
+                            showArchived &&
+                            <ListTasksRowsComponent
+                                key={archivedTasks}
+                                tasks={archivedTasks}
+                                project={project}
+                                createNewPomodoro={createNewPomodoro}
+                                updateTask={updateTask}
+                            />
+                        }
+                    </small>
+                </div>
+
+                <div>
+                    <span className="badge text-bg-light mt-3" style={{ cursor: "pointer" }} onClick={() => setShowCompleted(!showCompleted)}>
+                        {!showCompleted && <span>Show Completed Tasks ({completedTasks.length})<i className="bi bi-arrow-down"></i></span>}
+                        {showCompleted && <span>Hide Completed Tasks ({completedTasks.length})<i className="bi bi-arrow-up"></i></span>}
+                    </span>
+                    <small>
+                        {
+                            showCompleted &&
+                            <ListTasksRowsComponent
+                                key={completedTasks}
+                                tasks={completedTasks}
+                                project={project}
+                                createNewPomodoro={createNewPomodoro}
+                                updateTask={updateTask}
+                            />
+                        }
+                    </small>
+                </div>
             </div >
 
             <div className="row my-3">
@@ -166,7 +205,7 @@ export default function ListTasksComponent({ project }) {
 
             {
                 pomodoro === null &&
-                <StopwatchComponent message={'Start a new task.'} />
+                <StopwatchComponent message={'Start a new task'} />
             }
 
             <div className="overflow-scroll bg-white mt-3 px-3" style={{ maxHeight: "25vh" }}>

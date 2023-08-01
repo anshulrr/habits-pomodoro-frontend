@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import StopwatchComponent from './StopwatchComponent'
 
-export default function BreakTimerComponent() {
+export default function BreakTimerComponent({ startAgain }) {
 
     const Ref = useRef(null);
 
@@ -106,39 +106,32 @@ export default function BreakTimerComponent() {
 
     return (
         <div className="BreakComponent">
-            <div className="container">
 
-                <div>
-                    {
-                        breakStatus !== 'break_finished' && breakStatus !== 'break_stopwatch'
-                        &&
-                        <div className="fs-1 p-3 mb-2 text-white" style={{ backgroundColor: 'grey', fontVariantNumeric: "tabular-nums" }}>
-                            {breakTimer}
-                        </div>
-                    }
-                    {
-                        breakStatus === 'idle'
-                        &&
-                        <div>
-                            <div className="btn btn-sm btn-success m-2" onClick={() => updateBreak('break_started')}>Start Break</div>
-                        </div>
-                    }
-                    {
-                        breakStatus === 'break_started'
-                        &&
-                        <div>
-                            <div className="btn btn-sm btn-success m-2" onClick={() => updateBreak('break_finished')}>Finish Break</div>
-                        </div>
-                    }
-                    {
-                        breakStatus === 'break_stopwatch'
-                        &&
-                        <div>
-                            <StopwatchComponent></StopwatchComponent>
-                        </div>
-                    }
+            {
+                breakStatus !== 'break_finished' && breakStatus !== 'break_stopwatch' &&
+                <div className="fs-1 p-3 text-secondary" style={{ fontVariantNumeric: "tabular-nums" }}>
+                    {breakTimer}
                 </div>
-            </div>
+            }
+
+            {
+                breakStatus === 'idle' &&
+                <div className="btn btn-sm btn-success m-2" onClick={() => updateBreak('break_started')}>Start Break</div>
+            }
+
+            {
+                breakStatus === 'break_started' &&
+                <div className="btn btn-sm btn-outline-success m-2" onClick={() => updateBreak('break_finished')}>Finish Break</div>
+            }
+
+            {
+                <div className="btn btn-sm btn-success m-2" onClick={startAgain}>Start Again</div>
+            }
+
+            {
+                breakStatus === 'break_stopwatch' &&
+                <StopwatchComponent></StopwatchComponent>
+            }
 
         </div>
     )
