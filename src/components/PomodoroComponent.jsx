@@ -11,9 +11,9 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
     const intervalRef = useRef(null);
 
     const initialTimeRemaining = pomodoro.length * 60 - pomodoro.timeElapsed;
-    const hours = Math.floor(initialTimeRemaining / 60 / 60) % 24;
-    const minutes = Math.floor(initialTimeRemaining / 60) % 60;
     const seconds = initialTimeRemaining % 60;
+    const minutes = Math.floor(initialTimeRemaining / 60) % 60;
+    const hours = Math.floor(initialTimeRemaining / 60 / 60);
 
     const [timer, setTimer] = useState(
         (hours > 9 ? hours : '0' + hours) + ':' +
@@ -28,9 +28,9 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
 
     const calculateTimeRemaining = (endTime) => {
         const total = Date.parse(endTime) - Date.parse(new Date());
-        const seconds = Math.floor((total / 1000) % 60);
-        const minutes = Math.floor((total / 1000 / 60) % 60);
-        const hours = Math.floor((total / 1000 / 60 / 60) % 24);
+        const seconds = Math.floor(total / 1000) % 60;
+        const minutes = Math.floor(total / 1000 / 60) % 60;
+        const hours = Math.floor(total / 1000 / 60 / 60);    // use % 24: if showing day separately
         return {
             total, hours, minutes, seconds
         };

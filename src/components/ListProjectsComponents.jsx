@@ -95,11 +95,13 @@ export default function ListProjectsComponent() {
                                             <span>{proj.name}</span>
                                         </div>
                                         <div className="col text-secondary text-truncate text-end">
-                                            <small>{proj.pomodoroLength || 25} </small>
-                                            <small>{proj.category} </small>
-                                        </div>
-                                        <div className="col-2 text-secondary text-end list-button">
-                                            <i className="bi bi-pencil-square" onClick={() => updateProject(proj.id)}></i>
+                                            <span>
+                                                <small>{proj.pomodoroLength || 25} </small>
+                                                <small>{proj.category} </small>
+                                            </span>
+                                            <span className="list-button">
+                                                <i className="bi bi-pencil-square" onClick={() => updateProject(proj.id)}></i>
+                                            </span>
                                         </div>
                                     </div>
                                 )

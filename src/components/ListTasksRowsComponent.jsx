@@ -1,5 +1,20 @@
 export default function ListTasksRowsComponent({ project, tasks, createNewPomodoro, updateTask }) {
 
+    function timeToDisplay(total_minutes) {
+        if (total_minutes < 60) {
+            return Math.floor(total_minutes);
+        }
+        const minutes = Math.floor(total_minutes % 60);
+        const hours = Math.floor(total_minutes / 60);
+        // console.log(total, minutes, hours);
+
+        let time_string = '';
+        time_string += hours + ':';
+        time_string += minutes > 9 ? minutes : '0' + minutes;
+
+        return time_string;
+    }
+
     return (
         <>
             {
@@ -19,8 +34,10 @@ export default function ListTasksRowsComponent({ project, tasks, createNewPomodo
                                 </span>
                             </div>
 
-                            <div className="col text-secondary text-truncate text-end">
-                                <small>{Math.round(task.pomodorosTimeElapsed / 60)} / {task.pomodoroLength || project.pomodoroLength || 25} </small>
+                            <div className="col text-secondary text-end">
+                                <span className="text-truncate">
+                                    <small>{timeToDisplay(task.pomodorosTimeElapsed / 60)} / {timeToDisplay(task.pomodoroLength || project.pomodoroLength || 25)} </small>
+                                </span>
                                 {
                                     task.status !== 'completed' &&
                                     <span className="task-list-button">

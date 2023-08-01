@@ -57,7 +57,7 @@
 
 /* display the button if list row is selected */
 .list-selected .list-button {
-  display: block;
+  display: inline;
   pointer-events: all;
   cursor: default;
 }

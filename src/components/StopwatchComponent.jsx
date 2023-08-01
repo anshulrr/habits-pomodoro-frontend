@@ -7,10 +7,10 @@ export default function StopwatchComponent({ message = 'Break has ended, start a
     const [stopwatch, setStopwatch] = useState('00:00:00')
 
     const calculateStopwatchTime = (startTime) => {
-        const total = Date.now() - startTime;
-        const seconds = Math.floor((total / 1000) % 60);
-        const minutes = Math.floor((total / 1000 / 60) % 60);
-        const hours = Math.floor((total / 1000 / 60 / 60) % 24);
+        let total = Date.now() - startTime;
+        const seconds = Math.floor(total / 1000) % 60;
+        const minutes = Math.floor(total / 1000 / 60) % 60;
+        const hours = Math.floor(total / 1000 / 60 / 60);
         return { hours, minutes, seconds };
     }
 
