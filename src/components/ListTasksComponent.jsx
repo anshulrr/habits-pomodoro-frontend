@@ -35,6 +35,16 @@ export default function ListTasksComponent({ project }) {
         }, [project] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
+    useEffect(
+        // need to rerender tasks list after completion of tasks to update pomodorosTimeElapsed
+        () => {
+            if (pomodoroStatus === 'completed') {
+                // console.log('re-render ListTasksComponents for completed pomodoro')
+                refreshTasks('added', setTasks)
+            }
+        }, [pomodoroStatus] // eslint-disable-line react-hooks/exhaustive-deps
+    )
+
     function refreshTasks(status, setContainer) {
         retrieveAllTasks(project.id, status)
             .then(response => {

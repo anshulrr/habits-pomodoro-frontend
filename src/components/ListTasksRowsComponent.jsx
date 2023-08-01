@@ -20,7 +20,7 @@ export default function ListTasksRowsComponent({ project, tasks, createNewPomodo
                             </div>
 
                             <div className="col text-secondary text-truncate text-end">
-                                <small>{task.pomodoroLength || project.pomodoroLength || 25} </small>
+                                <small>{Math.round(task.pomodorosTimeElapsed / 60)} / {task.pomodoroLength || project.pomodoroLength || 25} </small>
                                 <span className="task-list-button">
                                     <i className="bi bi-pencil-square" onClick={() => updateTask(task.id)}></i>
                                 </span>
