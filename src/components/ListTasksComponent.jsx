@@ -79,8 +79,9 @@ export default function ListTasksComponent({ project }) {
             })
             .catch(error => {
                 console.error(error.message)
-                if (error.response && error.response.status === 400) {
+                if (error.response && error.response.status === 405) {
                     setMessage('Please complete the already running pomodoro');
+                    getRunningPomodoro();
                 }
             })
     }
@@ -91,6 +92,10 @@ export default function ListTasksComponent({ project }) {
         getRunningPomodoroApi()
             .then(response => {
                 // console.log(response)
+                if (response.status === 204) {
+                    setMessage('No running pomodoro');
+                    return;
+                }
                 const running_pomodoro = response.data;
                 running_pomodoro.task = response.data.task;
                 running_pomodoro.task.project = response.data.project;
@@ -99,9 +104,6 @@ export default function ListTasksComponent({ project }) {
             })
             .catch(error => {
                 console.error(error.message)
-                if (error.response && error.response.status === 400) {
-                    setMessage('No running pomodoro');
-                }
             })
     }
 
