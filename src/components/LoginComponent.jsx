@@ -3,22 +3,21 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../services/auth/AuthContext'
 import WelcomeComponent from './WelcomeComponent'
 
-import { auth, provider, signInWithPopup } from '../services/firebaseConfig';
+import { auth, provider, signInWithPopup, signInWithEmailAndPassword } from '../services/firebaseConfig';
 
 export default function LoginComponent() {
 
     const authContext = useAuth()
 
-    const [username, setUsername] = useState('')
-
+    const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    const [showErrorMessage, setShowErrorMessage] = useState(false)
+    const [errorMessage, setErrorMessage] = useState('')
 
     const navigate = useNavigate();
 
-    function handleUsernameChange(event) {
-        setUsername(event.target.value);
+    function handleEmailChange(event) {
+        setEmail(event.target.value);
     }
 
     function handlePasswordChange(event) {
@@ -26,48 +25,59 @@ export default function LoginComponent() {
     }
 
     async function handleSubmit() {
-        if (await authContext.login(username, password)) {
-            // navigate(`/welcome/${username}`);
-            navigate(`/projects`);
-        } else {
-            // console.debug('handle submitt')
-            setShowErrorMessage(true)
+        try {
+            const response = await signInWithEmailAndPassword(auth, email, password)
+            console.debug(response);
+            if (response.user.emailVerified) {
+                await authContext.jwtSignIn(response.user.accessToken);
+                // navigate(`/welcome/${email}`);
+                navigate(`/projects`);
+            } else {
+                setErrorMessage("Please click on the verfication link sent to your email")
+            }
+        } catch (error) {
+            console.error(error);
+            setErrorMessage("Authentication Failed. Please check your credentials");
         }
     }
 
-    function signInWithGoogle() {
-        signInWithPopup(auth, provider)
-            .then((response) => {
-                // console.debug(response)
-                authContext.googleSignIn(response.user.accessToken);
-            }).catch((error) => {
-                console.error(error);
-            });
+    async function signInWithGoogle() {
+        try {
+            const response = await signInWithPopup(auth, provider);
+            await authContext.jwtSignIn(response.user.accessToken);
+            navigate(`/projects`);
+        } catch (error) {
+            console.error(error);
+            setErrorMessage("Authentication Failed. Please check your credentials");
+        }
     }
 
     return (
         <div>
-            {/* {
+            {
                 !authContext.isAuthenticated &&
                 <div className="Login">
                     <form className="LoginForm">
                         <div className="container">
                             <div className="row">
                                 <div className="col-md-4 offset-md-4 mb-3">
-                                    <input type="text" name="username" className="form-control form-control-sm" value={username} onChange={handleUsernameChange} autoComplete="username" placeholder="username" />
+                                    <input type="email" name="email" className="form-control form-control-sm" value={email} onChange={handleEmailChange} autoComplete="email" placeholder="email" />
                                 </div>
                                 <div className="col-md-4 offset-md-4 mb-3">
                                     <input type="password" name="password" className="form-control form-control-sm" value={password} onChange={handlePasswordChange} autoComplete="current-password" placeholder='password' />
                                 </div>
                                 <div className="col-md-4 offset-md-4 mb-3">
-                                    <button type="button" className="btn btn-sm btn-outline-success" name="login" onClick={handleSubmit}>login</button>
+                                    <button type="button" className="btn btn-sm btn-outline-success" name="login" onClick={handleSubmit}>Sign in</button>
                                 </div>
-                                {showErrorMessage && <div className="ErrorMessage text-danger"><small>Authentication Failed. Please check your credentials</small></div>}
+                                <div className="ErrorMessage text-danger"><small>{errorMessage}</small></div>
+                                <div className="col-md-4 offset-md-4 mb-3">
+                                    <button type="button" className="btn btn-sm btn-outline-secondary" name="signup" onClick={() => navigate('/signup')}>New user? Register here</button>
+                                </div>
                             </div>
                         </div>
                     </form>
                 </div>
-            } */}
+            }
 
             {
                 !authContext.isAuthenticated &&
@@ -85,7 +95,6 @@ export default function LoginComponent() {
             {
                 authContext.isAuthenticated &&
                 <WelcomeComponent username={authContext.username} />
-
             }
         </div>
     )

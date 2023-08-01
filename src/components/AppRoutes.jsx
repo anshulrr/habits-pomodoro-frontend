@@ -14,6 +14,7 @@ import ListTasksComponent from './ListTasksComponent'
 import TaskComponent from './TaskComponent'
 import PomodoroComponent from './PomodoroComponent'
 import SettingsComponent from './SettingsComponent'
+import SignupComponent from './SignupComponent'
 
 function AuthenticatedRoute({ children }) {
     const authContext = useAuth()
@@ -33,6 +34,7 @@ export default function AppRoutes() {
                     <Routes>
                         <Route path='/' element={<LoginComponent />} />
                         <Route path='/login' element={<LoginComponent />} />
+                        <Route path='/signup' element={<SignupComponent />} />
 
                         <Route path='/welcome/:username' element={
                             <AuthenticatedRoute>
