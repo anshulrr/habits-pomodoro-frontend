@@ -19,8 +19,9 @@ export default function SettingsComponent() {
     async function handleSubmit() {
         setErrorMessage('')
         setSuccessMessage('')
+        // todo: decide and check password rules
         if (password !== confirmPassword) {
-            setErrorMessage("Passwords doesn't match");
+            setErrorMessage("Password doesn't match");
             return;
         }
         try {

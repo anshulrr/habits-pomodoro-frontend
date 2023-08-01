@@ -15,6 +15,10 @@ export default function ForgotPasswordComponent() {
         setErrorMessage('')
         setSuccessMessage('')
         // todo: validate email
+        if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+            setErrorMessage('Invalid email address')
+            return
+        }
         try {
             await sendPasswordResetEmail(auth, email)
             setSuccessMessage("Email sent successfully")

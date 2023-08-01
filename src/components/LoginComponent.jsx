@@ -25,6 +25,11 @@ export default function LoginComponent() {
     }
 
     async function handleSubmit() {
+        if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+            setErrorMessage('Invalid email address')
+            return
+        }
+        // todo: decide and check password rules
         try {
             const response = await signInWithEmailAndPassword(auth, email, password)
             console.debug(response);

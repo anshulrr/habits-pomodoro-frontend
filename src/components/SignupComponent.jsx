@@ -28,14 +28,19 @@ export default function SignupComponent() {
         // console.debug(email, password, confirmPassword)
         setErrorMessage('')
         setSuccessMessage('')
+        if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+            setErrorMessage('Invalid email address')
+            return;
+        }
+        // todo: decide and check password rules
         if (password !== confirmPassword) {
-            setErrorMessage("Passwords doesn't match");
+            setErrorMessage("Password doesn't match");
             return;
         }
         try {
-            const response = await createUserWithEmailAndPassword(auth, email, password)
+            await createUserWithEmailAndPassword(auth, email, password)
             // console.debug(response);
-            const email_response = await sendEmailVerification(auth.currentUser);
+            await sendEmailVerification(auth.currentUser);
             // console.debug(email_response);
             setSuccessMessage("Sign up is completed. To verify email, please click on the verification link sent to your email")
         } catch (error) {
