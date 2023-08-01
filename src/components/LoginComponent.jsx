@@ -60,23 +60,28 @@ export default function LoginComponent() {
                     <form className="LoginForm">
                         <div className="container">
                             <div className="row">
-                                <div className="col-md-4 offset-md-4 mb-3">
-                                    <input type="email" name="email" className="form-control form-control-sm" value={email} onChange={handleEmailChange} autoComplete="email" placeholder="email" />
-                                </div>
-                                <div className="col-md-4 offset-md-4 mb-3">
-                                    <input type="password" name="password" className="form-control form-control-sm" value={password} onChange={handlePasswordChange} autoComplete="current-password" placeholder='password' />
-                                </div>
-                                <div className="col-md-4 offset-md-4 mb-3">
-                                    <button type="button" className="btn btn-sm btn-outline-success" name="login" onClick={handleSubmit}>Sign in</button>
-                                </div>
-                                <div className="ErrorMessage text-danger"><small>{errorMessage}</small></div>
-                                <div className="col-md-4 offset-md-4 mb-3">
-                                    <button type="button" className="btn btn-sm btn-outline-secondary" name="signup" onClick={() => navigate('/signup')}>New user? Register here</button>
+                                <div className="col-md-4 offset-md-4">
+                                    <div className="row">
+                                        <div className="col-md-12 mb-3">
+                                            <input type="email" name="email" className="form-control form-control-sm" value={email} onChange={handleEmailChange} autoComplete="email" placeholder="email" />
+                                        </div>
+                                        <div className="col-md-12 mb-3">
+                                            <input type="password" name="password" className="form-control form-control-sm" value={password} onChange={handlePasswordChange} autoComplete="current-password" placeholder='password' />
+                                        </div>
+                                        <div className="col-md-12 mb-3">
+                                            <button type="button" className="btn btn-sm btn-outline-success" name="login" onClick={handleSubmit}>Sign in</button>
+                                        </div>
+                                        <div className="ErrorMessage text-danger"><small>{errorMessage}</small></div>
+                                        <div className="col-md-12 mb-3 text-center">
+                                            <button type="button" className="btn btn-sm btn-link" name="forgot-password" onClick={() => navigate('/forgot-password')}>Forgot Password?</button>
+                                            <button type="button" className="btn btn-sm btn-link" name="signup" onClick={() => navigate('/signup')}>New user? Register here</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </form>
-                </div>
+                </div >
             }
 
             {
@@ -96,6 +101,6 @@ export default function LoginComponent() {
                 authContext.isAuthenticated &&
                 <WelcomeComponent username={authContext.username} />
             }
-        </div>
+        </div >
     )
 }
