@@ -27,6 +27,7 @@ export default function SignupComponent() {
     async function handleSubmit() {
         // console.debug(email, password, confirmPassword)
         setErrorMessage('')
+        setSuccessMessage('')
         if (password !== confirmPassword) {
             setErrorMessage("Passwords doesn't match");
             return;
@@ -38,12 +39,16 @@ export default function SignupComponent() {
             // console.debug(email_response);
             setSuccessMessage("Sign up is completed. To verify email, please click on the verification link sent to your email")
         } catch (error) {
-            // const errorCode = error.code;
             console.error(error);
-            // todo: don't show firebase error to user
-            let message = error.message;
-            message = message.slice(10);
-            setErrorMessage(message);
+            const errorCode = error.code;
+            if (errorCode === "auth/weak-password") {
+                setErrorMessage("Password should be at least 6 characters")
+            } else {
+                // todo: don't show firebase error to user
+                let message = error.message;
+                message = message.slice(10);
+                setErrorMessage(message);
+            }
         }
     }
 
