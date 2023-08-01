@@ -6,7 +6,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { executeJwtAuthenticationService, startApi } from "../api/AuthApiService";
 import { apiClient } from "../api/ApiClient";
 
-import { auth, provider, signInWithPopup } from '../firebaseConfig';
+import { auth } from '../firebaseConfig';
 
 const AuthContext = createContext();
 
@@ -75,40 +75,6 @@ export default function AuthProvider({ children }) {
         return JSON.parse(jsonPayload);
     }
 
-    // async function login(username, password) {
-
-    //     const baToken = 'Basic ' + window.btoa(username + ":" + password)
-
-    //     try {
-    //         const response = await executeBasicAuthenticationService(baToken)
-
-    //         if (response.status === 200) {
-    //             console.debug('success')
-    //             setAuthenticated(true);
-    //             setUsername(username)
-    //             setToken(baToken)
-
-    //             apiClient.interceptors.request.use(
-    //                 (config) => {
-    //                     // console.debug('intercepting and adding a token')
-    //                     config.headers.Authorization = baToken
-    //                     return config
-    //                 }
-    //             )
-
-    //             return true;
-    //         } else {
-    //             console.debug('bad creds')
-    //             logout();
-    //             return false;
-    //         }
-    //     } catch (error) {
-    //         console.debug('error in api')
-    //         logout();
-    //         return false;
-    //     }
-    // }
-
     async function login(username, password) {
         try {
             // remove interceptors before login to avoid bearer token attached
@@ -150,7 +116,7 @@ export default function AuthProvider({ children }) {
         }
     }
 
-    async function googleSignIn(token) {
+    async function jwtSignIn(token) {
         // console.debug('login success')
         const jwtToken = 'Bearer ' + token;
 
@@ -255,7 +221,7 @@ export default function AuthProvider({ children }) {
         // window.location.reload()
     }
 
-    const valuesToBeShared = { isAuthenticated, login, logout, username, token, googleSignIn }
+    const valuesToBeShared = { isAuthenticated, logout, username, token, jwtSignIn }
 
     return (
         <AuthContext.Provider value={valuesToBeShared}>
