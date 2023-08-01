@@ -184,23 +184,9 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
         }
     }
 
-    // // for testing purpose only
-    // function testingWorkerTimer() {
-    //     const options = {
-    //         vibrate: [500, 110, 500, 110, 450, 110, 200, 110, 170, 40, 450, 110, 200, 110, 170, 40, 500]
-    //     };
-    //     navigator.serviceWorker.ready.then((registration) => {
-    //         registration.active.postMessage({
-    //             timeRemaining: -1,
-    //             task: 'testing web worker',
-    //             status: 'started'
-    //         }, options)
-    //     })
-    // }
-
     return (
         <div className="PomodoroComponent">
-            <div className="container">
+            <div className="">
                 <small><i className="bi bi-folder-plus"> </i>{pomodoro.task.project.name}</small>
                 <h5>{pomodoro.task.description}</h5>
                 {
@@ -210,37 +196,26 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
                     </div>
                 }
 
-                {/* for testing purpose only
-                <button className="btn btn-sm btn-secondary m-2" onClick={testingWorkerTimer}>Test Web Worker</button> */}
-
                 {
-                    status === 'started' && status !== 'completed' &&
+                    status === 'started' &&
                     <div className="btn btn-sm btn-warning m-2" onClick={() => updatePomodoro("paused", timeRemaining)}>Pause</div>
                 }
 
                 {
-                    status === 'paused' && status !== 'completed' &&
-                    <div className="btn btn-sm btn-success m-2" onClick={() => updatePomodoro("started", timeRemaining)}>Start</div>
+                    status === 'paused' &&
+                    <div className="btn btn-sm btn-success m-2" onClick={() => updatePomodoro("started", timeRemaining)}>Continue</div>
                 }
 
                 {
                     status !== 'completed' &&
-                    <div className="btn btn-sm btn-danger m-2" onClick={() => updatePomodoro("completed", timeRemaining)}>Mark Completed</div>
+                    <div className="btn btn-sm btn-danger m-2" onClick={() => updatePomodoro("completed", timeRemaining)}>Finish</div>
                 }
 
                 {
                     status === 'completed' &&
-                    <div className="btn btn-sm btn-outline-success m-2" onClick={() => setPomodoro(null)}>Return</div>
-                }
-
-                {
-                    status === 'completed' &&
-                    <div className="btn btn-sm btn-outline-success m-2" onClick={startAgain}>Start Again</div>
-                }
-
-                {
-                    status === 'completed' &&
-                    <BreakTimerComponent></BreakTimerComponent>
+                    <BreakTimerComponent
+                        startAgain={startAgain}
+                    />
                 }
             </div>
         </div>
