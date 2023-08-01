@@ -94,7 +94,7 @@ export default function ListTasksComponent({ project }) {
                 console.error(error.message)
                 if (error.response && error.response.status === 405) {
                     setMessage('Please complete the already running pomodoro');
-                    getRunningPomodoro();
+                    // getRunningPomodoro();    // atomation is a bit confusing for user
                 }
             })
     }
