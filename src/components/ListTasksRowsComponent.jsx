@@ -14,16 +14,19 @@ export default function ListTasksRowsComponent({ project, tasks, createNewPomodo
                                     task.status === 'added' &&
                                     <i className="bi bi-play-circle" onClick={() => createNewPomodoro(task, project)}></i>
                                 }
-                                <span>
+                                <span className={task.status === 'completed' ? "text-secondary" : ""}>
                                     {' ' + task.description}
                                 </span>
                             </div>
 
                             <div className="col text-secondary text-truncate text-end">
                                 <small>{Math.round(task.pomodorosTimeElapsed / 60)} / {task.pomodoroLength || project.pomodoroLength || 25} </small>
-                                <span className="task-list-button">
-                                    <i className="bi bi-pencil-square" onClick={() => updateTask(task.id)}></i>
-                                </span>
+                                {
+                                    task.status !== 'completed' &&
+                                    <span className="task-list-button">
+                                        <i className="bi bi-pencil-square" onClick={() => updateTask(task.id)}></i>
+                                    </span>
+                                }
                             </div>
                         </div>
                     )

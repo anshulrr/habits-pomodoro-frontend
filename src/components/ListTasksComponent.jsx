@@ -15,8 +15,10 @@ export default function ListTasksComponent({ project }) {
     const [tasks, setTasks] = useState([])
 
     const [completedTasks, setCompletedTasks] = useState([])
-
     const [showCompleted, setShowCompleted] = useState(false)
+
+    const [archivedTasks, setArchivedTasks] = useState([])
+    const [showArchived, setShowArchived] = useState(false)
 
     const [pomodoro, setPomodoro] = useState(null)
 
@@ -28,6 +30,7 @@ export default function ListTasksComponent({ project }) {
         () => {
             // console.log('re-render ListTasksComponents')
             refreshTasks('added', setTasks)
+            refreshTasks('archived', setArchivedTasks)
             refreshTasks('completed', setCompletedTasks)
             if (pomodoro === null) {
                 getRunningPomodoro()
@@ -140,22 +143,44 @@ export default function ListTasksComponent({ project }) {
                     createNewPomodoro={createNewPomodoro}
                     updateTask={updateTask}
                 />
-                <span className="badge text-bg-light mt-3" style={{ cursor: "pointer" }} onClick={() => setShowCompleted(!showCompleted)}>
-                    {!showCompleted && <span>Show Completed Tasks ({completedTasks.length})<i className="bi bi-arrow-down"></i></span>}
-                    {showCompleted && <span>Hide Completed Tasks ({completedTasks.length})<i className="bi bi-arrow-up"></i></span>}
-                </span>
-                <small>
-                    {
-                        showCompleted &&
-                        <ListTasksRowsComponent
-                            key={completedTasks}
-                            tasks={completedTasks}
-                            project={project}
-                            createNewPomodoro={createNewPomodoro}
-                            updateTask={updateTask}
-                        />
-                    }
-                </small>
+
+                <div>
+                    <span className="badge text-bg-light mt-3" style={{ cursor: "pointer" }} onClick={() => setShowArchived(!showArchived)}>
+                        {!showArchived && <span>Show Archived Tasks ({archivedTasks.length})<i className="bi bi-arrow-down"></i></span>}
+                        {showArchived && <span>Hide Archived Tasks ({archivedTasks.length})<i className="bi bi-arrow-up"></i></span>}
+                    </span>
+                    <small>
+                        {
+                            showArchived &&
+                            <ListTasksRowsComponent
+                                key={archivedTasks}
+                                tasks={archivedTasks}
+                                project={project}
+                                createNewPomodoro={createNewPomodoro}
+                                updateTask={updateTask}
+                            />
+                        }
+                    </small>
+                </div>
+
+                <div>
+                    <span className="badge text-bg-light mt-3" style={{ cursor: "pointer" }} onClick={() => setShowCompleted(!showCompleted)}>
+                        {!showCompleted && <span>Show Completed Tasks ({completedTasks.length})<i className="bi bi-arrow-down"></i></span>}
+                        {showCompleted && <span>Hide Completed Tasks ({completedTasks.length})<i className="bi bi-arrow-up"></i></span>}
+                    </span>
+                    <small>
+                        {
+                            showCompleted &&
+                            <ListTasksRowsComponent
+                                key={completedTasks}
+                                tasks={completedTasks}
+                                project={project}
+                                createNewPomodoro={createNewPomodoro}
+                                updateTask={updateTask}
+                            />
+                        }
+                    </small>
+                </div>
             </div >
 
             <div className="row my-3">
