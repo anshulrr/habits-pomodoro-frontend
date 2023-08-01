@@ -6,7 +6,7 @@ export default function ListTasksRowsComponent({ project, tasks, createNewPomodo
         }
         const minutes = Math.floor(total_minutes % 60);
         const hours = Math.floor(total_minutes / 60);
-        // console.log(total, minutes, hours);
+        // console.debug(total, minutes, hours);
 
         let time_string = '';
         time_string += hours + ':';

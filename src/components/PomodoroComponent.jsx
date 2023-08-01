@@ -20,7 +20,7 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
         (minutes > 9 ? minutes : '0' + minutes) + ':' +
         (seconds > 9 ? seconds : '0' + seconds)
     )
-    // console.log(timer);
+    // console.debug(timer);
 
     const [timeRemaining, setTimeRemaining] = useState(initialTimeRemaining)
 
@@ -49,7 +49,7 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
                 (minutes > 9 ? minutes : '0' + minutes) + ':' +
                 (seconds > 9 ? seconds : '0' + seconds)
             )
-            // console.log(timeRemaining, total / 1000)
+            // console.debug(timeRemaining, total / 1000)
             setTimeRemaining(total / 1000);
             // // temp fix to keep service worker alive
             // // (no effect) (works only for few more seconds until page is awake)
@@ -60,7 +60,7 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
             // }
         } else {
             // TODO: find fix for extra seconds elapsed due to inactive tab
-            console.log('from pomodoro timer error:', total / 1000)
+            console.warn('from pomodoro timer error:', total / 1000)
             // todo: find better way to update timeRemaining
             // timeRemaing in this thread has different value
             // hence passing it as method parameter
@@ -74,12 +74,12 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
         // If you try to remove this line the 
         // updating of timer Variable will be
         // after 1000ms or 1sec
-        console.log("interval id:", intervalRef.current);
+        // console.debug("interval id:", intervalRef.current);
         if (intervalRef.current) clearInterval(intervalRef.current);
         const interval_id = setInterval(() => {
-            // console.log(status, timeRemaining, endTime);
+            // console.debug(status, timeRemaining, endTime);
             if (status === 'completed') {
-                console.log('status is updated to completed by user')
+                // console.debug('status is updated to completed by user')
                 clearInterval(interval_id);
             } else if (status === 'started') {
                 updateTimer(endTime);
@@ -111,7 +111,7 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
     // mount only
     useEffect(() => {
         const interval_id = refreshTimer(getEndTime());
-        // console.log('re-render PomodorosComponents', interval_id)
+        // console.debug('re-render PomodorosComponents', interval_id)
         return () => {
             clearInterval(interval_id);  // fix for switching to different component
         };
@@ -119,7 +119,7 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
 
     const updatePomodoro = (local_status, timeRemaining) => {
         setStatus(local_status)
-        console.log("status updated to: ", local_status, timeRemaining)
+        // console.debug("status updated to: ", local_status, timeRemaining)
         const pomodoro_data = {
             timeElapsed: pomodoro.length * 60 - timeRemaining,
             status: local_status  // // setState is not working for this synchronously
@@ -127,7 +127,7 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
 
         updatePomodoroApi(pomodoro.id, pomodoro_data)
             .then(response => {
-                // console.log(response.status)
+                // console.debug(response.status)
                 if (local_status === 'completed') {
                     setTasksMessage('');
                     setPomodoroStatus('completed');
@@ -135,7 +135,7 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
 
                 if ("serviceWorker" in navigator && !navigator.userAgentData.mobile) {
                     navigator.serviceWorker.ready.then((registration) => {
-                        // console.log('using postMessage')
+                        // console.debug('using postMessage')
                         registration.active.postMessage({
                             timeRemaining: timeRemaining,
                             task: pomodoro.task.description,
@@ -163,7 +163,7 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
                 // We need to ask the user for permission
                 Notification.requestPermission().then((permission) => {
                     if (permission === "granted") {
-                        console.log('got the permission for notifications')
+                        console.info('got the permission for notifications')
                     }
                 });
             }
@@ -172,9 +172,9 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
 
     function initializeNotification() {
         if ("serviceWorker" in navigator && !navigator.userAgentData.mobile) {
-            console.log('init notification')
+            // console.debug('init notification')
             navigator.serviceWorker.ready.then((registration) => {
-                // console.log('using postMessage')
+                // console.debug('using postMessage')
                 registration.active.postMessage({
                     timeRemaining: timeRemaining,
                     task: pomodoro.task.description,

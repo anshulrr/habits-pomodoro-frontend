@@ -22,13 +22,14 @@ function registerServiceWorker() {
   if ("serviceWorker" in navigator) {
     // Register a service worker hosted at the root of the
     // site using the default scope.
-    console.log("available")
+    // console.debug("available")
 
     navigator.serviceWorker.register("service_worker.js").then(
       (registration) => {
         // log registration events
         logRegistrationEvent(registration);
-        console.log("Service worker registration succeeded:", registration);
+        // console.debug("Service worker registration succeeded");
+        // console.debug("registration:", registration);
       },
       (error) => {
         console.error(`Service worker registration failed: ${error}`);
@@ -46,19 +47,19 @@ function logRegistrationEvent(registration) {
   let serviceWorker;
   if (registration.installing) {
     serviceWorker = registration.installing;
-    console.log("1. installing");
+    // console.warn("1. installing");
   } else if (registration.waiting) {
     serviceWorker = registration.waiting;
-    console.log("2. waiting");
+    // console.warn("2. waiting");
   } else if (registration.active) {
     serviceWorker = registration.active;
-    console.log("3. active");
+    // console.warn("3. active");
   }
 
   if (serviceWorker) {
-    console.log(serviceWorker.state);
+    // console.warn("current service worker state: ", serviceWorker.state);
     serviceWorker.addEventListener("statechange", (e) => {
-      console.log('service worker state: ', e.target.state);
+      // console.warn('service worker state: ', e.target.state);
     });
   }
 }

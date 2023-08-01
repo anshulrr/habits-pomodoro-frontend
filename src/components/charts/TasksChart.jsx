@@ -10,8 +10,8 @@ import Chart from 'chart.js/auto';
 Chart.register(CategoryScale);
 
 export const TasksChart = ({ includeCategories, buttonsStates, setButtonsStates }) => {
-    // console.log("hi", chartData);
-    // console.log(includeCategories)
+    // console.debug("hi", chartData);
+    // console.debug(includeCategories)
 
     const [chartData, setChartData] = useState({})
 
@@ -24,16 +24,16 @@ export const TasksChart = ({ includeCategories, buttonsStates, setButtonsStates 
     // // not needed
     // // for reload data retrival
     // useEffect(
-    //     () => console.log('reload tasks chart'),
+    //     () => console.debug('reload tasks chart'),
     //     [chartData]
     // )
 
     function retrieveTasksPomodoros(limit, offset) {
-        // console.log(limit, offset)
-        // console.log(includeCategories)
+        // console.debug(limit, offset)
+        // console.debug(includeCategories)
         getTasksPomodorosApi(limit, offset, includeCategories)
             .then(response => {
-                // console.log(response)
+                // console.debug(response)
                 const updated_data = {
                     labels: [],
                     data: [],
@@ -41,14 +41,14 @@ export const TasksChart = ({ includeCategories, buttonsStates, setButtonsStates 
                     label: limit
                 }
                 response.data.forEach(element => {
-                    // console.log(element);
+                    // console.debug(element);
                     updated_data.colors.push(element[2]);
                     updated_data.labels.push(element[1]);
                     updated_data.data.push(element[0]);
                 });
-                // console.log(updated_data);
+                // console.debug(updated_data);
                 setChartData(updated_data)
-                // console.log("retrieved updated data: ", chartData);
+                // console.debug("retrieved updated data: ", chartData);
             })
             .catch(error => console.error(error.message))
     }

@@ -12,7 +12,7 @@ export const Buttons = ({ retrievePomodoros, buttonsStates, setButtonsStates, sh
     // to retrive data after click on bottons
     useEffect(
         () => {
-            // console.log('re-render Buttons')
+            // console.debug('re-render Buttons')
             retrievePomodoros(limit, offset)
             setButtonsStates({
                 limit: limit,
@@ -28,7 +28,7 @@ export const Buttons = ({ retrievePomodoros, buttonsStates, setButtonsStates, sh
     }
 
     function updateLimit(val) {
-        // console.log('updating limit')
+        // console.debug('updating limit')
         showDateString && updateDateString(val, 0)
         setLimit(val);
         setOffset(0);
@@ -36,7 +36,7 @@ export const Buttons = ({ retrievePomodoros, buttonsStates, setButtonsStates, sh
 
     // need to get updated limit and offset (to avoid asynchronous execution)
     function updateDateString(limit, offset) {
-        // console.log('updated limit & offset: ', limit, offset)
+        // console.debug('updated limit & offset: ', limit, offset)
         if (limit === 'daily') {
             setDateString(moment().add(offset, 'd').format('DD MMM'))
         } else if (limit === 'weekly') {

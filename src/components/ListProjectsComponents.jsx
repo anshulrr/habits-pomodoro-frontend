@@ -6,7 +6,7 @@ import ListTasksComponent from './ListTasksComponent'
 // import { useAuth } from "../services/auth/AuthContext";
 import Pagination from "../services/pagination/Pagination"
 
-// console.log(window.innerWidth);
+// console.debug(window.innerWidth);
 const PAGESIZE = window.innerWidth <= 768 ? 5 : 15;
 
 export default function ListProjectsComponent() {
@@ -32,7 +32,7 @@ export default function ListProjectsComponent() {
 
     useEffect(
         () => {
-            // console.log('re-render ListProjectsComponents')
+            // console.debug('re-render ListProjectsComponents')
             refreshProjects()
         }, [currentPage] // eslint-disable-line react-hooks/exhaustive-deps
     )
@@ -40,7 +40,7 @@ export default function ListProjectsComponent() {
     function refreshProjects() {
         retrieveAllProjectsApi(PAGESIZE, (currentPage - 1) * PAGESIZE)
             .then(response => {
-                // console.log(response)
+                // console.debug(response)
                 setProjects(response.data)
                 if (project === null && response.data.length > 0) {
                     setProject(response.data[0])

@@ -26,7 +26,7 @@ export default function StopwatchComponent({ message = 'Break has ended, start a
             (minutes > 9 ? minutes : '0' + minutes) + ':'
             + (seconds > 9 ? seconds : '0' + seconds)
         )
-        // console.log(total / 1000)
+        // console.debug(total / 1000)
     }
 
     const refreshStopwatch = (startTime) => {
@@ -36,7 +36,7 @@ export default function StopwatchComponent({ message = 'Break has ended, start a
         // after 1000ms or 1sec
         if (Ref.current) clearInterval(Ref.current);
         const interval_id = setInterval(() => {
-            // console.log('break ', breakStatus, breakTimeRemaining);
+            // console.debug('break ', breakStatus, breakTimeRemaining);
             updateStopwatch(startTime);
         }, 1000)
         Ref.current = interval_id;
@@ -45,7 +45,7 @@ export default function StopwatchComponent({ message = 'Break has ended, start a
 
     useEffect(() => {
         let intervalId = refreshStopwatch(Date.now())
-        // console.log('re-render StopwatchComponent', intervalId)
+        // console.debug('re-render StopwatchComponent', intervalId)
         return (() => {
             clearInterval(intervalId)
         })

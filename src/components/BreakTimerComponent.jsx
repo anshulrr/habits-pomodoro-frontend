@@ -38,10 +38,10 @@ export default function BreakTimerComponent({ startAgain }) {
                 (minutes > 9 ? minutes : '0' + minutes) + ':'
                 + (seconds > 9 ? seconds : '0' + seconds)
             )
-            // console.log(total / 1000)
+            // console.debug(total / 1000)
             setBreakTimeRemaining(total / 1000);
         } else {
-            console.log('from updateBreakTimer error:', total / 1000)
+            console.warn('from updateBreakTimer error:', total / 1000)
             // todo: find better way to update timeRemaining
             // timeRemaing in this thread has different value
             // hence passing it as method parameter
@@ -56,7 +56,7 @@ export default function BreakTimerComponent({ startAgain }) {
         // after 1000ms or 1sec
         if (Ref.current) clearInterval(Ref.current);
         const interval_id = setInterval(() => {
-            // console.log('break ', breakStatus, breakTimeRemaining);
+            // console.debug('break ', breakStatus, breakTimeRemaining);
             if (breakStatus === 'break_started') {
                 updateBreakTimer(endTime);
             } else if (breakStatus === 'break_finished') {
@@ -73,15 +73,15 @@ export default function BreakTimerComponent({ startAgain }) {
         // This is where you need to adjust if 
         // you entend to add more time
         endTime.setSeconds(endTime.getSeconds() + breakTimeRemaining);
-        // console.log(endTime);
+        // console.debug(endTime);
         return endTime;
     }
 
     const updateBreak = (local_status) => {
-        // console.log(local_status);
+        // console.debug(local_status);
         setBreakStatus(local_status);
         if (local_status === 'break_finished') {
-            // console.log(audio);
+            // console.debug(audio);
             const local_audio = new Audio(process.env.PUBLIC_URL + '/audio/ticking-clock_1-27477.mp3')
             local_audio.setAttribute('loop', true)
             local_audio.play()
@@ -91,11 +91,11 @@ export default function BreakTimerComponent({ startAgain }) {
     }
 
     useEffect(() => {
-        // console.log('re-render BreakTimerComponent')
+        // console.debug('re-render BreakTimerComponent')
         const id = refreshBreakTimer(getBreakEndTime());
-        console.log('break status changed to ' + breakStatus)
+        // console.debug('break status changed to ' + breakStatus)
         return () => {
-            // console.log('fix for switch to different component')
+            // console.debug('fix for switch to different component')
             clearInterval(id);  // fix for switching to different component
             if (breakStatus === 'break_stopwatch') {
                 audio.pause();

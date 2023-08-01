@@ -34,7 +34,7 @@ export default function ListTasksComponent() {
     // for first time load
     useEffect(
         () => {
-            // console.log('re-render StatsComponent')
+            // console.debug('re-render StatsComponent')
             retrieveProjectCategories()
         }, []   // eslint-disable-line react-hooks/exhaustive-deps
     )
@@ -42,7 +42,7 @@ export default function ListTasksComponent() {
     function retrieveProjectCategories() {
         retrieveAllProjectCategoriesApi(10, 0)
             .then(response => {
-                // console.log(response)
+                // console.debug(response)
                 setCategories(response.data)
                 setIncludeCategories(response.data.map(c => c.id))
             })

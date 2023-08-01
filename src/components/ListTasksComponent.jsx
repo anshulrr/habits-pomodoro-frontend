@@ -28,7 +28,7 @@ export default function ListTasksComponent({ project }) {
 
     useEffect(
         () => {
-            // console.log('re-render ListTasksComponents')
+            // console.debug('re-render ListTasksComponents')
             refreshTasks('added', setTasks)
             refreshTasks('archived', setArchivedTasks)
             refreshTasks('completed', setCompletedTasks)
@@ -42,7 +42,7 @@ export default function ListTasksComponent({ project }) {
         // need to rerender tasks list after completion of tasks to update pomodorosTimeElapsed
         () => {
             if (pomodoroStatus === 'completed') {
-                // console.log('re-render ListTasksComponents for completed pomodoro')
+                // console.debug('re-render ListTasksComponents for completed pomodoro')
                 refreshTasks('added', setTasks)
             }
         }, [pomodoroStatus] // eslint-disable-line react-hooks/exhaustive-deps
@@ -51,7 +51,7 @@ export default function ListTasksComponent({ project }) {
     function refreshTasks(status, setContainer) {
         retrieveAllTasks(project.id, status)
             .then(response => {
-                // console.log(response)
+                // console.debug(response)
                 setContainer(response.data)
             })
             .catch(error => console.error(error.message))
@@ -66,7 +66,7 @@ export default function ListTasksComponent({ project }) {
     }
 
     function createNewPomodoro(pomodoro_task, task_project, start_again = false) {
-        // console.log(pomodoro_task.id)
+        // console.debug(pomodoro_task.id)
         if (pomodoro !== null && !start_again && pomodoroStatus != 'completed') {
             setMessage('Please complete the already running pomodoro');
             return;
@@ -81,10 +81,10 @@ export default function ListTasksComponent({ project }) {
 
         createPomodoroApi(pomodoro_data, pomodoro_task.id)
             .then(response => {
-                // console.log(response)
+                // console.debug(response)
                 pomodoro_task.project = task_project
                 response.data.task = pomodoro_task
-                // console.log(response.data)
+                // console.debug(response.data)
                 setPomodoro(response.data)
                 setPomodoroStatus('started')
                 setMessage('')
@@ -104,7 +104,7 @@ export default function ListTasksComponent({ project }) {
         setPomodoro(null);
         getRunningPomodoroApi()
             .then(response => {
-                // console.log(response)
+                // console.debug(response)
                 if (response.status === 204) {
                     setMessage('No running pomodoro');
                     return;

@@ -30,7 +30,7 @@ export default function LoginComponent() {
             // navigate(`/welcome/${username}`);
             navigate(`/projects`);
         } else {
-            // console.log('handle submitt')
+            // console.debug('handle submitt')
             setShowErrorMessage(true)
         }
     }
@@ -38,10 +38,10 @@ export default function LoginComponent() {
     function signInWithGoogle() {
         signInWithPopup(auth, provider)
             .then((response) => {
-                // console.log(response)
+                // console.debug(response)
                 authContext.googleSignIn(response.user.accessToken);
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             });
     }
 

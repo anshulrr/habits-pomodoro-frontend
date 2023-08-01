@@ -11,7 +11,7 @@ export default function ListPomodorosComponent({ includeCategories }) {
 
     useEffect(
         () => {
-            // console.log('re-render ListPomodorosComponent')
+            // console.debug('re-render ListPomodorosComponent')
             if (!includeCategories) {
                 retrieveProjectCategories();
             } else {
@@ -31,12 +31,12 @@ export default function ListPomodorosComponent({ includeCategories }) {
 
     function retrieveTodayPomodoros(includeCategories) {
         if (includeCategories.length === 0) {
-            // console.log('categories length is zero')
+            // console.debug('categories length is zero')
             return;
         }
         getPomodorosApi(includeCategories)
             .then(response => {
-                // console.log(response)
+                // console.debug(response)
                 setPomodoros(response.data)
                 const total = response.data.reduce((acc, curr) => acc + Math.round(curr.timeElapsed / 60), 0);
                 const hours = Math.floor(total / 60);

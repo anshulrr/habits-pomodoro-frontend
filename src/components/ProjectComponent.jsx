@@ -20,7 +20,7 @@ export default function ProjectComponent() {
     useEffect(
         () => {
             (() => {
-                // console.log('re-render ProjectComponents')
+                // console.debug('re-render ProjectComponents')
                 retrieveProjectCategories()
                 retrieveProject()
             })();
@@ -55,8 +55,8 @@ export default function ProjectComponent() {
     }
 
     function onSubmit(values) {
-        // console.log({ name, description, projectCategoryId, color, pomodoroLength })
-        // console.log(values)
+        // console.debug({ name, description, projectCategoryId, color, pomodoroLength })
+        // console.debug(values)
         const project = {
             id,
             name: values.name,
@@ -69,14 +69,14 @@ export default function ProjectComponent() {
         if (parseInt(id) === -1) {
             createProjectApi(project)
                 .then(response => {
-                    // console.log(response)
+                    // console.debug(response)
                     navigate('/projects', { state: { project: response.data } })
                 })
                 .catch(error => console.error(error.message))
         } else {
             updateProjectApi(id, project)
                 .then(response => {
-                    // console.log(response)
+                    // console.debug(response)
                     navigate('/projects', { state: { project: response.data } })
                 })
                 .catch(error => console.error(error.message))
@@ -94,7 +94,7 @@ export default function ProjectComponent() {
         if (values.pomodoroLength === '' || values.pomodoroLength < 0) {
             errors.pomodoroLength = 'Enter zero or positive value'
         }
-        // console.log(values)
+        // console.debug(values)
         return errors
     }
 

@@ -10,7 +10,7 @@ import Chart from 'chart.js/auto';
 Chart.register(CategoryScale);
 
 export const ProjectsDistributionChart = ({ includeCategories, buttonsStates, setButtonsStates }) => {
-    // console.log("hi", chartData);
+    // console.debug("hi", chartData);
 
     const [chartData, setChartData] = useState({})
 
@@ -23,14 +23,14 @@ export const ProjectsDistributionChart = ({ includeCategories, buttonsStates, se
     // // not needed
     // // to reload chart after data retrival
     // useEffect(
-    //     () => console.log('reload projects chart'),
+    //     () => console.debug('reload projects chart'),
     //     [chartData]
     // )
 
     function retrieveProjectsPomodoros(limit, offset) {
         getProjectsPomodorosApi(limit, offset, includeCategories)
             .then(response => {
-                // console.log(response)
+                // console.debug(response)
                 const updated_data = {
                     labels: [],
                     data: [],
@@ -38,14 +38,14 @@ export const ProjectsDistributionChart = ({ includeCategories, buttonsStates, se
                     label: limit
                 }
                 response.data.forEach(element => {
-                    // console.log(element);
+                    // console.debug(element);
                     updated_data.colors.push(element[2]);
                     updated_data.labels.push(element[1]);
                     updated_data.data.push(element[0]);
                 });
-                // console.log(updated_data);
+                // console.debug(updated_data);
                 setChartData(updated_data)
-                // console.log("retrieved updated data: ", chartData);
+                // console.debug("retrieved updated data: ", chartData);
             })
             .catch(error => console.error(error.message))
     }

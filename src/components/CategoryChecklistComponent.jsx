@@ -7,12 +7,12 @@ export default function CategoryChecklistComponent({ categories, setIncludeCateg
     );
 
     const handleOnChange = (position) => {
-        // console.log('handle: ', checkedState)
+        // console.debug('handle: ', checkedState)
         const updatedCheckedState = checkedState.map((item, index) =>
             index === position ? !item : item
         );
 
-        // console.log(updatedCheckedState)
+        // console.debug(updatedCheckedState)
 
         setCheckedState(updatedCheckedState);
 
@@ -27,7 +27,7 @@ export default function CategoryChecklistComponent({ categories, setIncludeCateg
             },
             []
         );
-        // console.log(updatedIncludedCategories)
+        // console.debug(updatedIncludedCategories)
 
         setIncludeCategories(updatedIncludedCategories)
     };

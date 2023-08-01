@@ -37,7 +37,7 @@ export default function TaskComponent() {
     }
 
     function onSubmit(values) {
-        // console.log(values, id)
+        // console.debug(values, id)
         const task = {
             id,
             description: values.description,
@@ -48,14 +48,14 @@ export default function TaskComponent() {
         if (parseInt(id) === -1) {
             createTaskApi(project_id, task)
                 .then(response => {
-                    // console.log(response)
+                    // console.debug(response)
                     navigate(`/projects`, { state: { project: state.project } })
                 })
                 .catch(error => console.error(error.message))
         } else {
             updateTaskApi(project_id, id, task)
                 .then(response => {
-                    // console.log(response)
+                    // console.debug(response)
                     navigate(`/projects`, { state: { project: state.project } })
                 })
                 .catch(error => console.error(error.message))
@@ -70,7 +70,7 @@ export default function TaskComponent() {
         if (values.pomodoroLength === '' || values.pomodoroLength < 0) {
             errors.pomodoroLength = 'Enter zero or positive value'
         }
-        // console.log(values)
+        // console.debug(values)
         return errors
     }
 

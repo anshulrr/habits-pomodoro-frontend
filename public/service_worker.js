@@ -1,16 +1,10 @@
-console.log("from initialized sw")
+// console.debug("from initialized sw")
 
 var timeout = null;
 
 self.onmessage = (event) => {
-    // // (no effect) (works only for few more seconds until page is awake)
-    // console.log(event.data)
-    // if (event.data === 'keep alive') {
-    //     return;
-    // }
-
     if (timeout !== null) {
-        console.log('clearing old timeout: ' + timeout + ', for notification, current status:', event.data.status)
+        // console.debug('clearing old timeout: ' + timeout + ', for notification, current status:', event.data.status)
         clearTimeout(timeout);
         timeout = null;
     }
@@ -21,19 +15,6 @@ self.onmessage = (event) => {
 }
 
 function showNotification(message) {
-    console.log('message for notification: ', message)
+    // console.debug('message for notification: ', message)
     self.registration.showNotification(message)
 }
-
-// // for testing purpose only
-// // (no effect) running it after every 29 seconds, to avoid termination of the service worker after 30sec
-// var count = 0;
-// function testTermination() {
-//     count += 29;
-//     setTimeout(() => {
-//         console.log('from running sw, running for ', Math.floor(count / 60) + "minutes " + count % 60 + "seconds")
-//         testTermination();
-//     }, 1000 * 29)
-// }
-
-// testTermination()

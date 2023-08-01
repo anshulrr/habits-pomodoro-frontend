@@ -26,7 +26,7 @@ export default function SettingsComponent() {
             setShowErrorMessage(false);
             putChangePasswordApi(password)
                 .then(response => {
-                    // console.log(response)
+                    // console.debug(response)
                     setSuccessMessage('Password Changed Successfully')
                 })
                 .catch(error => console.error(error.message))
