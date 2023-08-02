@@ -99,10 +99,10 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
     }
 
     useEffect(() => {
-        if (!navigator.userAgentData.mobile) {
+        if ("serviceWorker" in navigator && !navigator.userAgentData.mobile) {
             notificationSetup()
         }
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     // We can use useEffect so that when the component
     // mount the timer will start as soon as possible
