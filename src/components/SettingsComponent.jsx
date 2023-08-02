@@ -1,7 +1,11 @@
 import { useState } from 'react'
-import { auth, updatePassword } from '../services/firebaseConfig';
+import FirebaseAuthService from '../services/auth/FirebaseAuthService';
 
 export default function SettingsComponent() {
+
+    const [email, setEmail] = useState('');
+    FirebaseAuthService.subscribeToAuthChanges(setEmail);
+
     const [errorMessage, setErrorMessage] = useState('')
     const [successMessage, setSuccessMessage] = useState('')
 
@@ -16,7 +20,9 @@ export default function SettingsComponent() {
         setConfirmPassword(event.target.value);
     }
 
-    async function handleSubmit() {
+    async function handleSubmit(error) {
+        error.preventDefault();
+
         setErrorMessage('')
         setSuccessMessage('')
         // todo: decide and check password rules
@@ -25,10 +31,12 @@ export default function SettingsComponent() {
             return;
         }
         try {
-            await updatePassword(auth.currentUser, password);
+            await FirebaseAuthService.changePassword(password);
+            setPassword('')
+            setConfirmPassword('')
             setSuccessMessage('Password Changed Successfully')
         } catch (error) {
-            console.log(error);
+            console.error(error);
             const errorCode = error.code;
             if (errorCode === "auth/requires-recent-login") {
                 setErrorMessage("Please sign in again to change password")
@@ -40,26 +48,54 @@ export default function SettingsComponent() {
                 message = message.slice(10);
                 setErrorMessage(message);
             }
-
         }
     }
 
     return (
         <div className="ChangePassword">
-            <form className="ChangePasswordForm">
+            <form className="ChangePasswordForm" onSubmit={handleSubmit}>
                 <div className="container">
                     <div className="row">
-                        <div className="col-md-4 offset-md-4 mb-3">
-                            <input type="password" name="password" className="form-control form-control-sm" value={password} onChange={handlePasswordChange} autoComplete="current-password" placeholder='new password' />
+                        <div className="col-md-4 offset-md-4">
+                            <input
+                                type="email"
+                                name="email"
+                                className="form-control form-control-sm mb-3"
+                                value={email}
+                                autoComplete="email"
+                                // style={{ display: "none" }}
+                                disabled    // for password manager
+                            />
+                            <input
+                                type="password"
+                                name="password"
+                                className="form-control form-control-sm mb-3"
+                                value={password}
+                                onChange={handlePasswordChange}
+                                autoComplete="new-password"
+                                placeholder='New password'
+                                required
+                            />
+                            <input
+                                type="password"
+                                name="confirmPassword"
+                                className="form-control form-control-sm mb-3"
+                                value={confirmPassword}
+                                onChange={handleConfirmPasswordChange}
+                                autoComplete="new-password"
+                                placeholder="Confirm password"
+                                required
+                            />
+                            <div className="mb-3 text-danger"><small>{errorMessage}</small></div>
+                            <div className="mb-3">
+                                <button
+                                    type="submit"
+                                    className="btn btn-sm btn-outline-success"
+                                    name="changePassword"
+                                >Change Password</button>
+                            </div>
+                            <div className="mb-3 text-success"><small>{successMessage}</small></div>
                         </div>
-                        <div className="col-md-4 offset-md-4 mb-3">
-                            <input type="password" name="confirmPassword" className="form-control form-control-sm" value={confirmPassword} onChange={handleConfirmPasswordChange} autoComplete="current-password" placeholder="confirm password" />
-                        </div>
-                        {errorMessage && <div className="col-md-4 offset-md-4 mb-3 text-danger"><small>{errorMessage}</small></div>}
-                        <div className="col-md-4 offset-md-4 mb-3">
-                            <button type="button" className="btn btn-sm btn-outline-success" name="changePassword" onClick={handleSubmit}>Change Password</button>
-                        </div>
-                        {successMessage && <div className="col-md-4 offset-md-4 mb-3 text-success"><small>{successMessage}</small></div>}
                     </div>
                 </div>
             </form>
