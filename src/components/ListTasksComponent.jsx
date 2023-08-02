@@ -67,7 +67,7 @@ export default function ListTasksComponent({ project }) {
 
     function createNewPomodoro(pomodoro_task, task_project, start_again = false) {
         // console.debug(pomodoro_task.id)
-        if (pomodoro !== null && !start_again && pomodoroStatus != 'completed') {
+        if (pomodoro !== null && !start_again && pomodoroStatus !== 'completed') {
             setMessage('Please complete the already running pomodoro');
             return;
         }

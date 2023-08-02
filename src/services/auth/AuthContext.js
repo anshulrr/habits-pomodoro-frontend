@@ -7,6 +7,7 @@ import { executeJwtAuthenticationService, startApi } from "../api/AuthApiService
 import { apiClient } from "../api/ApiClient";
 
 import { auth } from '../firebaseConfig';
+import FirebaseAuthService from "./FirebaseAuthService";
 
 const AuthContext = createContext();
 
@@ -27,6 +28,7 @@ export default function AuthProvider({ children }) {
 
     useEffect(
         () => {
+            // todo: use firebaseLocalStorage instead of localStorage
             // to set header on page refresh
             if (isAuthenticated) {
                 // console.debug('adding interceptors after refresh')
@@ -196,29 +198,37 @@ export default function AuthProvider({ children }) {
         setResponseInterceptor(myResponseInterceptor);
     }
 
-    function logout() {
-        // console.debug('logging out ' + username)
-        localStorage.removeItem('token')
+    async function logout() {
+        try {
+            await FirebaseAuthService.signOutUser();
+            console.debug("sign out successfully")
 
-        // console.debug(apiClient.defaults.headers.common["Authorization"])
-        // delete apiClient.defaults.headers.common["Authorization"];
+            // console.debug('logging out ' + username)
+            localStorage.removeItem('token')
 
-        /* one working solution to remove authorization header from app for each call
-         * But it doesn't work with response interceptor internal call 
-         * (will have id's of previous interceptors)
-         * hence user might need to login two times (in case of invalid jwt)
-         */
-        // console.debug(requestInterceptor, responseInterceptor)
-        // apiClient.interceptors.request.eject(requestInterceptor)
-        // apiClient.interceptors.response.eject(responseInterceptor)
-        // console.debug('removed request interceptors after logout')
+            // console.debug(apiClient.defaults.headers.common["Authorization"])
+            // delete apiClient.defaults.headers.common["Authorization"];
 
-        setAuthenticated(false)
-        setUsername(null)
-        setToken(null)
+            /* one working solution to remove authorization header from app for each call
+             * But it doesn't work with response interceptor internal call 
+             * (will have id's of previous interceptors)
+             * hence user might need to login two times (in case of invalid jwt)
+             */
+            // console.debug(requestInterceptor, responseInterceptor)
+            // apiClient.interceptors.request.eject(requestInterceptor)
+            // apiClient.interceptors.response.eject(responseInterceptor)
+            // console.debug('removed request interceptors after logout')
 
-        // second working solution to remove authorization header from app
-        // window.location.reload()
+            setAuthenticated(false)
+            setUsername(null)
+            setToken(null)
+
+            // second working solution to remove authorization header from app
+            // window.location.reload()
+        } catch (error) {
+            console.error(error);
+        }
+
     }
 
     const valuesToBeShared = { isAuthenticated, logout, username, token, jwtSignIn }

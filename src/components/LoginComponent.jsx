@@ -2,8 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../services/auth/AuthContext'
 import WelcomeComponent from './WelcomeComponent'
-
-import { auth, provider, signInWithPopup, signInWithEmailAndPassword } from '../services/firebaseConfig';
+import FirebaseAuthService from '../services/auth/FirebaseAuthService'
 
 export default function LoginComponent() {
 
@@ -16,23 +15,18 @@ export default function LoginComponent() {
 
     const navigate = useNavigate();
 
-    function handleEmailChange(event) {
-        setEmail(event.target.value);
-    }
+    async function handleSubmit(event) {
+        event.preventDefault();
 
-    function handlePasswordChange(event) {
-        setPassword(event.target.value);
-    }
-
-    async function handleSubmit() {
         if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
             setErrorMessage('Invalid email address')
             return
         }
+
         // todo: decide and check password rules
         try {
-            const response = await signInWithEmailAndPassword(auth, email, password)
-            console.debug(response);
+            const response = await FirebaseAuthService.signInUser(email, password)
+            // console.debug(response);
             if (response.user.emailVerified) {
                 await authContext.jwtSignIn(response.user.accessToken);
                 // navigate(`/welcome/${email}`);
@@ -48,7 +42,7 @@ export default function LoginComponent() {
 
     async function signInWithGoogle() {
         try {
-            const response = await signInWithPopup(auth, provider);
+            const response = await FirebaseAuthService.signInWithGoogle();
             await authContext.jwtSignIn(response.user.accessToken);
             navigate(`/projects`);
         } catch (error) {
@@ -62,24 +56,56 @@ export default function LoginComponent() {
             {
                 !authContext.isAuthenticated &&
                 <div className="Login">
-                    <form className="LoginForm">
+                    <form className="LoginForm" onSubmit={handleSubmit}>
                         <div className="container">
                             <div className="row">
                                 <div className="col-md-4 offset-md-4">
                                     <div className="row">
                                         <div className="col-md-12 mb-3">
-                                            <input type="email" name="email" className="form-control form-control-sm" value={email} onChange={handleEmailChange} autoComplete="email" placeholder="email" />
+                                            <input
+                                                type="email"
+                                                name="email"    // for suggestions
+                                                className="form-control form-control-sm"
+                                                value={email}
+                                                onChange={(e) => setEmail(e.target.value)}
+                                                autoComplete="email" // for password managers
+                                                placeholder="Email"
+                                                required
+                                            />
                                         </div>
                                         <div className="col-md-12 mb-3">
-                                            <input type="password" name="password" className="form-control form-control-sm" value={password} onChange={handlePasswordChange} autoComplete="current-password" placeholder='password' />
+                                            <input
+                                                type="password"
+                                                name="password"
+                                                className="form-control form-control-sm"
+                                                value={password}
+                                                onChange={(e) => setPassword(e.target.value)}
+                                                autoComplete="current-password"
+                                                placeholder='Password'
+                                                required
+                                            />
                                         </div>
                                         <div className="col-md-12 mb-3">
-                                            <button type="button" className="btn btn-sm btn-outline-success" name="login" onClick={handleSubmit}>Sign in</button>
+                                            <button
+                                                type="submit"
+                                                className="btn btn-sm btn-outline-success"
+                                                name="login"
+                                            >Sign in</button>
                                         </div>
-                                        <div className="ErrorMessage text-danger"><small>{errorMessage}</small></div>
+                                        <div className="text-danger"><small>{errorMessage}</small></div>
                                         <div className="col-md-12 mb-3 text-center">
-                                            <button type="button" className="btn btn-sm btn-link" name="forgot-password" onClick={() => navigate('/forgot-password')}>Forgot Password?</button>
-                                            <button type="button" className="btn btn-sm btn-link" name="signup" onClick={() => navigate('/signup')}>New user? Register here</button>
+                                            <button
+                                                type="button"
+                                                className="btn btn-sm btn-link"
+                                                name="forgot-password"
+                                                onClick={() => navigate('/forgot-password')}
+                                            >Forgot Password?</button>
+                                            <button
+                                                type="button"
+                                                className="btn btn-sm btn-link"
+                                                name="signup"
+                                                onClick={() => navigate('/signup')}
+                                            >New user? Register here</button>
                                         </div>
                                     </div>
                                 </div>

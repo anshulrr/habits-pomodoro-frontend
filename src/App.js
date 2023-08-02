@@ -15,7 +15,7 @@ function App() {
 function registerServiceWorker() {
 
   // disabled in mobile device
-  if (navigator.userAgentData.mobile) {
+  if ("serviceWorker" in navigator && navigator.userAgentData.mobile) {
     return;
   }
 
