@@ -7,7 +7,9 @@ export default function ForgotPasswordComponent() {
 
     const [email, setEmail] = useState('')
 
-    async function handleSubmit() {
+    async function handleSubmit(error) {
+        error.preventDefault();
+
         setErrorMessage('')
         setSuccessMessage('')
         if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
@@ -17,9 +19,14 @@ export default function ForgotPasswordComponent() {
         try {
             await FirebaseAuthService.initiatePasswordResetEmail(email)
             setSuccessMessage("Email sent successfully")
+            setEmail('')
         } catch (error) {
             console.error(error);
-            setErrorMessage("Something went wrong")
+            if (error.code === "auth/user-not-found") {
+                setErrorMessage("Email is not registered")
+            } else {
+                setErrorMessage("Something went wrong")
+            }
         }
     }
 
