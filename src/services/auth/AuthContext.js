@@ -28,6 +28,7 @@ export default function AuthProvider({ children }) {
 
     useEffect(
         () => {
+            // todo: use firebaseLocalStorage instead of localStorage
             // to set header on page refresh
             if (isAuthenticated) {
                 // console.debug('adding interceptors after refresh')
