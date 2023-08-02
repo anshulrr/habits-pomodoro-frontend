@@ -6,7 +6,8 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { executeJwtAuthenticationService, startApi } from "../api/AuthApiService";
 import { apiClient } from "../api/ApiClient";
 
-import { auth, signOut } from '../firebaseConfig';
+import { auth } from '../firebaseConfig';
+import FirebaseAuthService from "./FirebaseAuthService";
 
 const AuthContext = createContext();
 
@@ -198,7 +199,7 @@ export default function AuthProvider({ children }) {
 
     async function logout() {
         try {
-            await signOut(auth);
+            await FirebaseAuthService.signOutUser();
             console.debug("sign out successfully")
 
             // console.debug('logging out ' + username)

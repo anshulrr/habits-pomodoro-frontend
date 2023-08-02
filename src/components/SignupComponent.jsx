@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { auth, createUserWithEmailAndPassword, sendEmailVerification } from '../services/firebaseConfig';
+import FirebaseAuthService from '../services/auth/FirebaseAuthService';
 
 export default function SignupComponent() {
     const [errorMessage, setErrorMessage] = useState('')
@@ -10,21 +9,9 @@ export default function SignupComponent() {
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
 
-    const navigate = useNavigate();
+    async function handleSubmit(event) {
+        event.preventDefault();
 
-    function handleEmailChange(event) {
-        setEmail(event.target.value);
-    }
-
-    function handlePasswordChange(event) {
-        setPassword(event.target.value);
-    }
-
-    function handleConfirmPasswordChange(event) {
-        setConfirmPassword(event.target.value);
-    }
-
-    async function handleSubmit() {
         // console.debug(email, password, confirmPassword)
         setErrorMessage('')
         setSuccessMessage('')
@@ -38,10 +25,7 @@ export default function SignupComponent() {
             return;
         }
         try {
-            await createUserWithEmailAndPassword(auth, email, password)
-            // console.debug(response);
-            await sendEmailVerification(auth.currentUser);
-            // console.debug(email_response);
+            await FirebaseAuthService.registerUser(email, password);
             setSuccessMessage("Sign up is completed. To verify email, please click on the verification link sent to your email")
         } catch (error) {
             console.error(error);
@@ -61,29 +45,48 @@ export default function SignupComponent() {
 
     return (
         <div className="Signup">
-            <form className="SignupForm">
+            <form className="SignupForm" onSubmit={handleSubmit}>
                 <div className="container">
                     <div className="row">
-                        <div className="col-md-4 offset-md-4 mb-3">
-                            <input type="email" name="email" className="form-control form-control-sm" value={email} onChange={handleEmailChange} autoComplete="email" placeholder="email" />
+                        <div className="col-md-4 offset-md-4">
+                            <input
+                                type="email"
+                                name="email"
+                                className="form-control form-control-sm mb-3"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                autoComplete="email"
+                                placeholder="Email"
+                                required
+                            />
+                            <input
+                                type="password"
+                                name="password"
+                                className="form-control form-control-sm mb-3"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                autoComplete="new-password"
+                                placeholder='New password'
+                                required
+                            />
+                            <input
+                                type="password"
+                                name="confirmPassword"
+                                className="form-control form-control-sm mb-3"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                autoComplete="new-password"
+                                placeholder="Confirm password"
+                                required
+                            />
+                            <div className="mb-3 text-danger"><small>{errorMessage}</small></div>
+                            <button
+                                type="submit"
+                                className="btn btn-sm btn-outline-success mb-3"
+                                name="changePassword"
+                            >Sign up</button>
+                            <div className="mb-3 text-success"><small>{successMessage}</small></div>
                         </div>
-                        <div className="col-md-4 offset-md-4 mb-3">
-                            <input type="password" name="password" className="form-control form-control-sm" value={password} onChange={handlePasswordChange} autoComplete="current-password" placeholder='new password' />
-                        </div>
-                        <div className="col-md-4 offset-md-4 mb-3">
-                            <input type="password" name="confirmPassword" className="form-control form-control-sm" value={confirmPassword} onChange={handleConfirmPasswordChange} autoComplete="current-password" placeholder="confirm password" />
-                        </div>
-                        <div className="col-md-4 offset-md-4 mb-3 text-danger"><small>{errorMessage}</small></div>
-                        <div className="col-md-4 offset-md-4 mb-3">
-                            <button type="button" className="btn btn-sm btn-outline-success" name="changePassword" onClick={handleSubmit}>Sign up</button>
-                        </div>
-                        {
-                            successMessage &&
-                            <div>
-                                <div className="col-md-4 offset-md-4 mb-3 text-success"><small>{successMessage}</small></div>
-                                <button type="button" className="btn btn-sm btn-outline-success" name="signin" onClick={() => navigate('/')}>Sign up</button>
-                            </div>
-                        }
                     </div>
                 </div>
             </form>
