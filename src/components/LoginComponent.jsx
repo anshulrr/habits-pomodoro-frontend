@@ -62,53 +62,54 @@ export default function LoginComponent() {
                         <div className="container">
                             <div className="row">
                                 <div className="col-md-4 offset-md-4">
-                                    <div className="row">
-                                        <div className="col-md-12 mb-3">
-                                            <input
-                                                type="email"
-                                                name="email"    // for suggestions
-                                                className="form-control form-control-sm"
-                                                value={email}
-                                                onChange={(e) => setEmail(e.target.value)}
-                                                autoComplete="email" // for password managers
-                                                placeholder="Email"
-                                                required
-                                            />
-                                        </div>
-                                        <div className="col-md-12 mb-3">
-                                            <input
-                                                type="password"
-                                                name="password"
-                                                className="form-control form-control-sm"
-                                                value={password}
-                                                onChange={(e) => setPassword(e.target.value)}
-                                                autoComplete="current-password"
-                                                placeholder='Password'
-                                                required
-                                            />
-                                        </div>
-                                        <div className="col-md-12 mb-3">
-                                            <button
-                                                type="submit"
-                                                className="btn btn-sm btn-outline-success"
-                                                name="login"
-                                            >Sign in</button>
-                                        </div>
-                                        <div className="text-danger"><small>{errorMessage}</small></div>
-                                        <div className="col-md-12 mb-3 text-center">
-                                            <button
-                                                type="button"
-                                                className="btn btn-sm btn-link"
-                                                name="forgot-password"
-                                                onClick={() => navigate('/forgot-password')}
-                                            >Forgot Password?</button>
-                                            <button
-                                                type="button"
-                                                className="btn btn-sm btn-link"
-                                                name="signup"
-                                                onClick={() => navigate('/signup')}
-                                            >New user? Register here</button>
-                                        </div>
+                                    <div className="mb-3">
+                                        <input
+                                            type="email"
+                                            name="email"    // for suggestions
+                                            className="form-control form-control-sm"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            autoComplete="email" // for password managers
+                                            placeholder="Email"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="mb-3">
+                                        <input
+                                            type="password"
+                                            name="password"
+                                            className="form-control form-control-sm"
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                            autoComplete="current-password"
+                                            placeholder='Password'
+                                            required
+                                        />
+                                    </div>
+                                    <div className="mb-3">
+                                        <button
+                                            type="submit"
+                                            className="btn btn-sm btn-outline-success"
+                                            name="login"
+                                        >Sign in</button>
+                                    </div>
+                                    <div className="text-danger"><small>{errorMessage}</small></div>
+                                    <div className="mb-3 text-center">
+                                        <button
+                                            type="button"
+                                            className="btn btn-sm btn-link"
+                                            name="forgot-password"
+                                            onClick={() => navigate('/forgot-password')}
+                                        >Forgot Password?</button>
+                                        <button
+                                            type="button"
+                                            className="btn btn-sm btn-link"
+                                            name="signup"
+                                            onClick={() => navigate('/signup')}
+                                        >New user? Register here</button>
+                                    </div>
+                                    <div className="text-center mb-3">
+                                        <div class="separator">or</div>
                                     </div>
                                 </div>
                             </div>
@@ -124,7 +125,7 @@ export default function LoginComponent() {
                 // </button>
                 <input
                     type="image"
-                    style={{ height: '60px', imageRendering: '-webkit-optimize-contrast' }}
+                    style={{ height: '50px', imageRendering: '-webkit-optimize-contrast', padding: '0' }}
                     src="btn_google_signin_dark_normal_web@2x.png"
                     onClick={signInWithGoogle}
                 />
