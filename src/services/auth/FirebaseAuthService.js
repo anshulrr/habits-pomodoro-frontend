@@ -1,5 +1,14 @@
 import { auth, provider } from "../firebaseConfig";
-import { signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification, updatePassword, sendPasswordResetEmail, signOut, onAuthStateChanged } from 'firebase/auth';
+import {
+    signInWithPopup,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    sendEmailVerification,
+    updatePassword,
+    sendPasswordResetEmail,
+    signOut,
+    onAuthStateChanged
+} from 'firebase/auth';
 
 const registerUser = async (email, password) => {
     try {
@@ -10,42 +19,50 @@ const registerUser = async (email, password) => {
     }
 };
 
-const signInUser = (email, password) => {
-    return signInWithEmailAndPassword(auth, email, password);
+const signInUser = async (email, password) => {
+    return await signInWithEmailAndPassword(auth, email, password);
 };
 
-const signOutUser = () => {
-    return signOut(auth);
+const signOutUser = async () => {
+    return await signOut(auth);
 };
 
-const changePassword = (password) => {
-    return updatePassword(auth.currentUser, password);
+const changePassword = async (password) => {
+    return await updatePassword(auth.currentUser, password);
 };
 
-const initiatePasswordResetEmail = (email) => {
-    return sendPasswordResetEmail(auth, email);
+const initiatePasswordResetEmail = async (email) => {
+    return await sendPasswordResetEmail(auth, email);
 };
 
-const signInWithGoogle = () => {
-    return signInWithPopup(auth, provider);
+const signInWithGoogle = async () => {
+    return await signInWithPopup(auth, provider);
 };
 
-const getRefreshedToken = () => {
-    return auth.currentUser.getIdToken(/* forceRefresh */ true);
+const getRefreshedToken = async () => {
+    return await auth.currentUser.getIdToken(/* forceRefresh */ true);
 }
 
 const getCurrentUserEmail = () => {
     return auth.currentUser.email;
 }
 
-const subscribeToAuthChanges = ({ setFirebaseAuthLoaded, setAuthenticated, addInterceptors, setUsername }) => {
-    onAuthStateChanged(auth, (user) => {
+const subscribeToAuthChanges = async ({
+    setFirebaseAuthLoaded,
+    setAuthenticated,
+    addInterceptors,
+    setUsername
+}) => {
+    await onAuthStateChanged(auth, (user) => {
         // console.debug('state changed');
         setFirebaseAuthLoaded(true);
         if (user !== null) {
             setAuthenticated(true);
             addInterceptors(user.accessToken);
             setUsername(user.displayName);
+        } else {
+            setAuthenticated(false)
+            setUsername(null)
         }
     });
 };

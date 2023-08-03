@@ -5,12 +5,12 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { startApi } from "../api/AuthApiService";
 import { apiClient } from "../api/ApiClient";
-
 import FirebaseAuthService from "./FirebaseAuthService";
 
 const AuthContext = createContext();
-
 export const useAuth = () => useContext(AuthContext)
+
+const TIME_WINDOW_FOR_REFRESH_JWT = 60;
 
 export default function AuthProvider({ children }) {
 
@@ -45,9 +45,6 @@ export default function AuthProvider({ children }) {
         // add interceptors
         addInterceptors(token)
 
-        setUsername(parseJwt('Bearer ' + token).name)
-        setAuthenticated(true);
-
         // if new user; save it in the backend
         const response = await startApi();
         if (response.status === 200) {
@@ -72,7 +69,7 @@ export default function AuthProvider({ children }) {
                 // console.debug('from added request interceptor. Old interceptors: ', requestInterceptor, responseInterceptor);
                 // Check jwt expiry, get a new token if required
                 // console.debug(parseJwt(jwtToken).exp - (Date.now() / 1000));
-                if (parseJwt(jwtToken).exp - (Date.now() / 1000) <= 3560) {
+                if (parseJwt(jwtToken).exp - (Date.now() / 1000) <= TIME_WINDOW_FOR_REFRESH_JWT) {
                     // todo: handle error response gracefully
                     jwtToken = 'Bearer ' + await FirebaseAuthService.getRefreshedToken();
                 }
@@ -110,10 +107,8 @@ export default function AuthProvider({ children }) {
     async function logout() {
         try {
             await FirebaseAuthService.signOutUser();
-            console.debug("sign out successfully")
+            // console.debug("signed out successfully")
             // console.debug('logging out ' + username)
-            setAuthenticated(false)
-            setUsername(null)
         } catch (error) {
             console.error(error);
         }
