@@ -30,10 +30,15 @@ const signInWithGoogle = () => {
     return signInWithPopup(auth, provider);
 };
 
-const subscribeToAuthChanges = (handleAuthChange) => {
+const subscribeToAuthChanges = ({ setFirebaseAuthLoaded, setAuthenticated, addInterceptors, setUsername }) => {
     onAuthStateChanged(auth, (user) => {
-        // console.debug('state changed')
-        handleAuthChange(user?.email);
+        // console.debug('state changed');
+        setFirebaseAuthLoaded(true);
+        if (user !== null) {
+            setAuthenticated(true);
+            addInterceptors(user.accessToken);
+            setUsername(user.displayName);
+        }
     });
 };
 

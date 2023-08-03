@@ -3,7 +3,7 @@
 // Share the created context with other components
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { executeJwtAuthenticationService, startApi } from "../api/AuthApiService";
+import { startApi } from "../api/AuthApiService";
 import { apiClient } from "../api/ApiClient";
 
 import { auth } from '../firebaseConfig';
@@ -15,55 +15,19 @@ export const useAuth = () => useContext(AuthContext)
 
 export default function AuthProvider({ children }) {
 
-    // Todo: how to set username after page refresh
-    const [username, setUsername] = useState(null)
-
     const [requestInterceptor, setRequestInterceptor] = useState(null)
-
     const [responseInterceptor, setResponseInterceptor] = useState(null)
 
-    const [isAuthenticated, setAuthenticated] = useState(checkAuthenticationLocally());
-
-    const [token, setToken] = useState(null)
+    const [isAuthenticated, setAuthenticated] = useState(false)
+    const [isFirebaseAuthLoaded, setFirebaseAuthLoaded] = useState(false)
+    const [username, setUsername] = useState(null)
 
     useEffect(
         () => {
-            // todo: use firebaseLocalStorage instead of localStorage
-            // to set header on page refresh
-            if (isAuthenticated) {
-                // console.debug('adding interceptors after refresh')
-                // note: it doesn't executes for first API call
-                // so we need to set it seperately, even before useEffect
-                addInterceptors(localStorage.getItem('token'));
-                setUsername(localStorage.getItem('token') ? parseJwt(localStorage.getItem('token')).name : null);
-            }
+            // to set interceptors after page refresh
+            FirebaseAuthService.subscribeToAuthChanges({ setFirebaseAuthLoaded, setAuthenticated, addInterceptors, setUsername });
         }, []   // eslint-disable-line react-hooks/exhaustive-deps
     )
-
-    // to use jwt token on page refresh
-    function checkAuthenticationLocally() {
-        // check if token is present in local storage
-        // parse the token
-        // check if it is expired
-        // if expired: delete from local storage
-        // TODO: make an api call to authenticate using refresh token
-        const jwt = localStorage.getItem('token');
-        if (jwt === null) {
-            return false;
-        }
-
-        const parsedJwt = parseJwt(jwt);
-        // console.debug(parsedJwt)
-        // console.debug(parsedJwt.exp, Date.now() / 1000)
-        const isExpired = parsedJwt.exp < (Date.now() / 1000);
-
-        if (isExpired === true) {
-            localStorage.removeItem('token');
-            return false;
-        }
-
-        return true;
-    }
 
     function parseJwt(token) {
         if (token === null)
@@ -77,64 +41,13 @@ export default function AuthProvider({ children }) {
         return JSON.parse(jsonPayload);
     }
 
-    async function login(username, password) {
-        try {
-            // remove interceptors before login to avoid bearer token attached
-            // console.debug('removing interceptors before login')
-            apiClient.interceptors.request.eject(requestInterceptor)
-            apiClient.interceptors.response.eject(responseInterceptor)
-
-            // we also need to remove header added from local storage
-            // scenario: after refresh if first API call
-            // console.debug(apiClient.defaults)
-            delete apiClient.defaults.headers.common['Authorization'];
-
-            // todo: implement better fix for case sensitive username 
-            const response = await executeJwtAuthenticationService(username.toLowerCase(), password)
-
-            if (response.status === 200) {
-                // console.debug('login success')
-
-                const jwtToken = 'Bearer ' + response.data.token;
-
-                setAuthenticated(true);
-                setUsername(username)
-                setToken(jwtToken)
-
-                // add interceptors
-                // console.debug('adding interceptors after login')
-                addInterceptors(jwtToken)
-
-                return true;
-            } else {
-                console.error('bad creds')
-                logout();
-                return false;
-            }
-        } catch (error) {
-            console.error('error in login api')
-            logout();
-            return false;
-        }
-    }
-
     async function jwtSignIn(token) {
         // console.debug('login success')
-        const jwtToken = 'Bearer ' + token;
-
-        const parsedJwt = parseJwt(jwtToken)
-        // console.debug(parsedJwt)
-
-        setAuthenticated(true);
-        setUsername(parsedJwt.name)
-        setToken(jwtToken)
-
-        // for page reload
-        localStorage.setItem('token', jwtToken)
-
         // add interceptors
-        // console.debug('adding interceptors after login')
-        addInterceptors(jwtToken)
+        addInterceptors(token)
+
+        setUsername(parseJwt('Bearer ' + token).name)
+        setAuthenticated(true);
 
         // if new user; save it in the backend
         const response = await startApi();
@@ -145,7 +58,9 @@ export default function AuthProvider({ children }) {
         return true;
     }
 
-    function addInterceptors(jwtToken) {
+    function addInterceptors(token) {
+        let jwtToken = 'Bearer ' + token;
+
         // console.debug('adding interceptors. Old interceptors: ', requestInterceptor, responseInterceptor);
         // remove old interceptors before adding new one
         apiClient.interceptors.request.eject(requestInterceptor)
@@ -156,19 +71,14 @@ export default function AuthProvider({ children }) {
         const myRequestInterceptor = apiClient.interceptors.request.use(
             async (config) => {
                 // console.debug('from added request interceptor. Old interceptors: ', requestInterceptor, responseInterceptor);
-
                 // Check jwt expiry, get a new token if required
                 // console.debug(parseJwt(jwtToken).exp - (Date.now() / 1000));
-                if (parseJwt(jwtToken).exp - (Date.now() / 1000) <= 60) {
+                if (parseJwt(jwtToken).exp - (Date.now() / 1000) <= 3560) {
                     // todo: handle error response gracefully
                     jwtToken = 'Bearer ' + await auth.currentUser.getIdToken(/* forceRefresh */ true);
-                    // update local storage
-                    localStorage.setItem('token', jwtToken)
-                    // console.debug(parseJwt(jwtToken).exp - (Date.now() / 1000));
                 }
 
                 config.headers.Authorization = jwtToken;
-                // localStorage.setItem('token', jwtToken) don't set it on every api call
                 return config
             }
         )
@@ -202,38 +112,18 @@ export default function AuthProvider({ children }) {
         try {
             await FirebaseAuthService.signOutUser();
             console.debug("sign out successfully")
-
             // console.debug('logging out ' + username)
-            localStorage.removeItem('token')
-
-            // console.debug(apiClient.defaults.headers.common["Authorization"])
-            // delete apiClient.defaults.headers.common["Authorization"];
-
-            /* one working solution to remove authorization header from app for each call
-             * But it doesn't work with response interceptor internal call 
-             * (will have id's of previous interceptors)
-             * hence user might need to login two times (in case of invalid jwt)
-             */
-            // console.debug(requestInterceptor, responseInterceptor)
-            // apiClient.interceptors.request.eject(requestInterceptor)
-            // apiClient.interceptors.response.eject(responseInterceptor)
-            // console.debug('removed request interceptors after logout')
-
             setAuthenticated(false)
             setUsername(null)
-            setToken(null)
-
-            // second working solution to remove authorization header from app
-            // window.location.reload()
         } catch (error) {
             console.error(error);
         }
-
     }
 
-    const valuesToBeShared = { isAuthenticated, logout, username, token, jwtSignIn }
+    const valuesToBeShared = { isAuthenticated, logout, username, jwtSignIn }
 
     return (
+        isFirebaseAuthLoaded &&
         <AuthContext.Provider value={valuesToBeShared}>
             {children}
         </AuthContext.Provider>
