@@ -3,16 +3,12 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { retrieveAllProjectsApi, getProjectsCountApi } from "../services/api/ProjectApiService";
 import ListTasksComponent from './ListTasksComponent'
 
-// import { useAuth } from "../services/auth/AuthContext";
 import Pagination from "../services/pagination/Pagination"
 
 // console.debug(window.innerWidth);
 const PAGESIZE = window.innerWidth <= 768 ? 5 : 15;
 
 export default function ListProjectsComponent() {
-
-    // const authContext = useAuth()
-    // const username = authContext.username
 
     const navigate = useNavigate()
 

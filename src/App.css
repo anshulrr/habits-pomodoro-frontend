@@ -62,23 +62,6 @@
   cursor: default;
 }
 
-/* hover doesn't work correctly on mobile device */
-
-/* @media screen and (min-width: 768px) { */
-
-/* .list:hover {
-  background-color: #dee2e6;
-} */
-
-/* .list-row:hover .list-button {
-  display: block;
-}
-
-.list-row:hover .list-secondary-text {
-  display: none;
-} */
-
-
 /* for tasks list */
 .task-list-row {
   border-bottom: thin solid #dee2e6;
@@ -90,4 +73,28 @@
 
 .task-list-row:hover .task-list-button {
   display: inline;
+}
+
+
+/* sign in page */
+.separator {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #808080
+}
+
+.separator::before,
+.separator::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #808080;
+}
+
+.separator:not(:empty)::before {
+  margin-right: .25em;
+}
+
+.separator:not(:empty)::after {
+  margin-left: .25em;
 }

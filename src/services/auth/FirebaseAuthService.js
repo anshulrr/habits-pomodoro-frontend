@@ -1,51 +1,110 @@
 import { auth, provider } from "../firebaseConfig";
-import { signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification, updatePassword, sendPasswordResetEmail, signOut, onAuthStateChanged } from 'firebase/auth';
+import {
+    signInWithPopup,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    sendEmailVerification,
+    updatePassword,
+    sendPasswordResetEmail,
+    signOut,
+    onAuthStateChanged,
+    AuthErrorCodes
+} from 'firebase/auth';
 
 const registerUser = async (email, password) => {
     try {
         await createUserWithEmailAndPassword(auth, email, password);
         await sendEmailVerification(auth.currentUser);
+        await signOut(auth);
     } catch (error) {
-        throw error;
+        // console.error(error);
+        const errorCode = error.code;
+        if (errorCode === AuthErrorCodes.WEAK_PASSWORD) {
+            throw Error("Password should be at least 6 characters")
+        } else if (errorCode === AuthErrorCodes.EMAIL_EXISTS) {
+            throw Error("Email is already registered")
+        } else {
+            console.debug(error.code, error.message)
+            // todo: don't show firebase error to user
+            // let message = error.message;
+            // message = message.slice(10);
+            throw Error("Something went wrong")
+        }
     }
 };
 
-const signInUser = (email, password) => {
-    return signInWithEmailAndPassword(auth, email, password);
+const signInUser = async (email, password) => {
+    try {
+        return await signInWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+        // console.error(error);
+        console.debug(error.code, error.message)
+        throw Error("Something went wrong")
+    }
 };
 
-const signOutUser = () => {
-    return signOut(auth);
+const signOutUser = async () => {
+    return await signOut(auth);
 };
 
-const changePassword = (password) => {
-    return updatePassword(auth.currentUser, password);
+const changePassword = async (password) => {
+    try {
+        return await updatePassword(auth.currentUser, password);
+    } catch (error) {
+        // console.error(error);
+        const errorCode = error.code;
+        if (errorCode === AuthErrorCodes.CREDENTIAL_TOO_OLD_LOGIN_AGAIN) {
+            throw Error("Please sign in again to change password");
+        } else if (errorCode === AuthErrorCodes.WEAK_PASSWORD) {
+            throw Error("Password should be at least 6 characters");
+        } else {
+            // todo: don't show firebase error to user
+            console.debug(error.code, error.message);
+            // let message = error.message;
+            // message = message.slice(10);
+            throw Error("Something went wrong");
+        }
+    }
 };
 
-const initiatePasswordResetEmail = (email) => {
-    return sendPasswordResetEmail(auth, email);
+const initiatePasswordResetEmail = async (email) => {
+    return await sendPasswordResetEmail(auth, email);
 };
 
-const signInWithGoogle = () => {
-    return signInWithPopup(auth, provider);
+const signInWithGoogle = async () => {
+    try {
+        return await signInWithPopup(auth, provider);
+    } catch (error) {
+        // console.error(error);
+        console.debug(error.code, error.message);
+        throw Error("Something went wrong");
+    }
 };
 
-const getRefreshedToken = () => {
-    return auth.currentUser.getIdToken(/* forceRefresh */ true);
+const getRefreshedToken = async () => {
+    return await auth.currentUser.getIdToken(/* forceRefresh */ true);
 }
 
-const getCurrentUserEmail = () => {
-    return auth.currentUser.email;
-}
-
-const subscribeToAuthChanges = ({ setFirebaseAuthLoaded, setAuthenticated, addInterceptors, setUsername }) => {
-    onAuthStateChanged(auth, (user) => {
-        // console.debug('state changed');
+const subscribeToAuthChanges = async ({
+    setFirebaseAuthLoaded,
+    setAuthenticated,
+    addInterceptors,
+    setUser
+}) => {
+    await onAuthStateChanged(auth, (user) => {
+        // console.debug('state changed', user);
         setFirebaseAuthLoaded(true);
-        if (user !== null) {
+        if (user !== null && user.emailVerified) {
             setAuthenticated(true);
             addInterceptors(user.accessToken);
-            setUsername(user.displayName);
+            setUser({
+                displayName: user.displayName,
+                email: user.email,
+                photoURL: user.photoURL,
+            });
+        } else {
+            setAuthenticated(false)
+            setUser(null)
         }
     });
 };
@@ -58,7 +117,6 @@ const FirebaseAuthService = {
     changePassword,
     signInWithGoogle,
     getRefreshedToken,
-    getCurrentUserEmail,
     subscribeToAuthChanges,
 };
 
