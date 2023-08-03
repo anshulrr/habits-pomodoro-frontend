@@ -35,18 +35,7 @@ export default function SettingsComponent() {
             setConfirmPassword('')
             setSuccessMessage('Password Changed Successfully')
         } catch (error) {
-            console.error(error);
-            const errorCode = error.code;
-            if (errorCode === "auth/requires-recent-login") {
-                setErrorMessage("Please sign in again to change password")
-            } else if (errorCode === "auth/weak-password") {
-                setErrorMessage("Password should be at least 6 characters")
-            } else {
-                // todo: don't show firebase error to user
-                let message = error.message;
-                message = message.slice(10);
-                setErrorMessage(message);
-            }
+            setErrorMessage(error.message);
         }
     }
 

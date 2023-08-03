@@ -31,18 +31,7 @@ export default function SignupComponent() {
             setPassword('')
             setConfirmPassword('')
         } catch (error) {
-            console.error(error);
-            const errorCode = error.code;
-            if (errorCode === "auth/weak-password") {
-                setErrorMessage("Password should be at least 6 characters")
-            } else if (errorCode === "auth/email-already-in-use") {
-                setErrorMessage("Email is already registered")
-            } else {
-                // todo: don't show firebase error to user
-                let message = error.message;
-                message = message.slice(10);
-                setErrorMessage(message);
-            }
+            setErrorMessage(error.message);
         }
     }
 

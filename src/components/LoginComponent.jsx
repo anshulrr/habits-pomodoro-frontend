@@ -36,7 +36,6 @@ export default function LoginComponent() {
                 setErrorMessage("Please click on the verfication link sent to your email")
             }
         } catch (error) {
-            console.error(error);
             setErrorMessage("Authentication Failed. Please check your credentials");
         }
     }
@@ -48,7 +47,6 @@ export default function LoginComponent() {
             await authContext.jwtSignIn(response.user.accessToken);
             navigate(`/projects`);
         } catch (error) {
-            console.error(error);
             setErrorMessage("Authentication Failed. Please check your credentials");
         }
     }
@@ -109,7 +107,7 @@ export default function LoginComponent() {
                                         >New user? Register here</button>
                                     </div>
                                     <div className="text-center mb-3">
-                                        <div class="separator">or</div>
+                                        <div className="separator">or</div>
                                     </div>
                                 </div>
                             </div>
