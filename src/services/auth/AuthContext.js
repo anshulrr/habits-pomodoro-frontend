@@ -19,12 +19,12 @@ export default function AuthProvider({ children }) {
 
     const [isAuthenticated, setAuthenticated] = useState(false)
     const [isFirebaseAuthLoaded, setFirebaseAuthLoaded] = useState(false)
-    const [username, setUsername] = useState(null)
+    const [user, setUser] = useState(null)
 
     useEffect(
         () => {
             // to set interceptors after page refresh
-            FirebaseAuthService.subscribeToAuthChanges({ setFirebaseAuthLoaded, setAuthenticated, addInterceptors, setUsername });
+            FirebaseAuthService.subscribeToAuthChanges({ setFirebaseAuthLoaded, setAuthenticated, addInterceptors, setUser });
         }, []   // eslint-disable-line react-hooks/exhaustive-deps
     )
 
@@ -108,13 +108,13 @@ export default function AuthProvider({ children }) {
         try {
             await FirebaseAuthService.signOutUser();
             // console.debug("signed out successfully")
-            // console.debug('logging out ' + username)
+            // console.debug('logging out ' + user)
         } catch (error) {
             console.error(error);
         }
     }
 
-    const valuesToBeShared = { isAuthenticated, logout, username, jwtSignIn }
+    const valuesToBeShared = { isAuthenticated, logout, user, jwtSignIn }
 
     return (
         isFirebaseAuthLoaded &&

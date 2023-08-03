@@ -85,26 +85,26 @@ const getRefreshedToken = async () => {
     return await auth.currentUser.getIdToken(/* forceRefresh */ true);
 }
 
-const getCurrentUserEmail = () => {
-    return auth.currentUser.email;
-}
-
 const subscribeToAuthChanges = async ({
     setFirebaseAuthLoaded,
     setAuthenticated,
     addInterceptors,
-    setUsername
+    setUser
 }) => {
     await onAuthStateChanged(auth, (user) => {
-        // console.debug('state changed');
+        // console.debug('state changed', user);
         setFirebaseAuthLoaded(true);
         if (user !== null && user.emailVerified) {
             setAuthenticated(true);
             addInterceptors(user.accessToken);
-            setUsername(user.displayName);
+            setUser({
+                displayName: user.displayName,
+                email: user.email,
+                photoURL: user.photoURL,
+            });
         } else {
             setAuthenticated(false)
-            setUsername(null)
+            setUser(null)
         }
     });
 };
@@ -117,7 +117,6 @@ const FirebaseAuthService = {
     changePassword,
     signInWithGoogle,
     getRefreshedToken,
-    getCurrentUserEmail,
     subscribeToAuthChanges,
 };
 

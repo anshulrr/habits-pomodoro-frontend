@@ -4,9 +4,6 @@ import { useAuth } from '../services/auth/AuthContext';
 export default function HeaderComponent() {
 
     const authContext = useAuth()
-
-    // const username = authContext.username
-
     const isAuthenticated = authContext.isAuthenticated
 
     function logout() {

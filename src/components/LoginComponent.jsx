@@ -131,7 +131,7 @@ export default function LoginComponent() {
 
             {
                 authContext.isAuthenticated &&
-                <WelcomeComponent username={authContext.username} />
+                <WelcomeComponent username={authContext.user.displayName} />
             }
         </div >
     )
