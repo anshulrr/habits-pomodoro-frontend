@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import FirebaseAuthService from '../services/auth/FirebaseAuthService';
-import { auth } from '../services/firebaseConfig';
 
 export default function SettingsComponent() {
 
-    const email = auth.currentUser.email;
+    const email = FirebaseAuthService.getCurrentUserEmail();
 
     const [errorMessage, setErrorMessage] = useState('')
     const [successMessage, setSuccessMessage] = useState('')

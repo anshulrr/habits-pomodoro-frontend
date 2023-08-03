@@ -6,7 +6,6 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { startApi } from "../api/AuthApiService";
 import { apiClient } from "../api/ApiClient";
 
-import { auth } from '../firebaseConfig';
 import FirebaseAuthService from "./FirebaseAuthService";
 
 const AuthContext = createContext();
@@ -75,7 +74,7 @@ export default function AuthProvider({ children }) {
                 // console.debug(parseJwt(jwtToken).exp - (Date.now() / 1000));
                 if (parseJwt(jwtToken).exp - (Date.now() / 1000) <= 3560) {
                     // todo: handle error response gracefully
-                    jwtToken = 'Bearer ' + await auth.currentUser.getIdToken(/* forceRefresh */ true);
+                    jwtToken = 'Bearer ' + await FirebaseAuthService.getRefreshedToken();
                 }
 
                 config.headers.Authorization = jwtToken;

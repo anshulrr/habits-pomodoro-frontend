@@ -30,6 +30,14 @@ const signInWithGoogle = () => {
     return signInWithPopup(auth, provider);
 };
 
+const getRefreshedToken = () => {
+    return auth.currentUser.getIdToken(/* forceRefresh */ true);
+}
+
+const getCurrentUserEmail = () => {
+    return auth.currentUser.email;
+}
+
 const subscribeToAuthChanges = ({ setFirebaseAuthLoaded, setAuthenticated, addInterceptors, setUsername }) => {
     onAuthStateChanged(auth, (user) => {
         // console.debug('state changed');
@@ -49,6 +57,8 @@ const FirebaseAuthService = {
     initiatePasswordResetEmail,
     changePassword,
     signInWithGoogle,
+    getRefreshedToken,
+    getCurrentUserEmail,
     subscribeToAuthChanges,
 };
 
