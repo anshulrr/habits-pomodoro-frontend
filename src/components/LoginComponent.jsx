@@ -32,6 +32,7 @@ export default function LoginComponent() {
                 // navigate(`/welcome/${email}`);
                 navigate(`/projects`);
             } else {
+                FirebaseAuthService.signOutUser();
                 setErrorMessage("Please click on the verfication link sent to your email")
             }
         } catch (error) {
@@ -42,6 +43,7 @@ export default function LoginComponent() {
 
     async function signInWithGoogle() {
         try {
+            // console.debug('opening the popup');
             const response = await FirebaseAuthService.signInWithGoogle();
             await authContext.jwtSignIn(response.user.accessToken);
             navigate(`/projects`);

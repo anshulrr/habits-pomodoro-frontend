@@ -26,7 +26,10 @@ export default function SignupComponent() {
         }
         try {
             await FirebaseAuthService.registerUser(email, password);
-            setSuccessMessage("Sign up is completed. To verify email, please click on the verification link sent to your email")
+            setSuccessMessage("Sign up is completed. To Sign in, please click on the verification link sent to your email")
+            setEmail('')
+            setPassword('')
+            setConfirmPassword('')
         } catch (error) {
             console.error(error);
             const errorCode = error.code;

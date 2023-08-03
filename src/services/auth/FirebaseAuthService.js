@@ -14,6 +14,7 @@ const registerUser = async (email, password) => {
     try {
         await createUserWithEmailAndPassword(auth, email, password);
         await sendEmailVerification(auth.currentUser);
+        await signOut(auth);
     } catch (error) {
         throw error;
     }
@@ -56,7 +57,7 @@ const subscribeToAuthChanges = async ({
     await onAuthStateChanged(auth, (user) => {
         // console.debug('state changed');
         setFirebaseAuthLoaded(true);
-        if (user !== null) {
+        if (user !== null && user.emailVerified) {
             setAuthenticated(true);
             addInterceptors(user.accessToken);
             setUsername(user.displayName);
