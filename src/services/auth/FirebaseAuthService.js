@@ -30,10 +30,23 @@ const signInWithGoogle = () => {
     return signInWithPopup(auth, provider);
 };
 
-const subscribeToAuthChanges = (handleAuthChange) => {
+const getRefreshedToken = () => {
+    return auth.currentUser.getIdToken(/* forceRefresh */ true);
+}
+
+const getCurrentUserEmail = () => {
+    return auth.currentUser.email;
+}
+
+const subscribeToAuthChanges = ({ setFirebaseAuthLoaded, setAuthenticated, addInterceptors, setUsername }) => {
     onAuthStateChanged(auth, (user) => {
-        // console.debug('state changed')
-        handleAuthChange(user?.email);
+        // console.debug('state changed');
+        setFirebaseAuthLoaded(true);
+        if (user !== null) {
+            setAuthenticated(true);
+            addInterceptors(user.accessToken);
+            setUsername(user.displayName);
+        }
     });
 };
 
@@ -44,6 +57,8 @@ const FirebaseAuthService = {
     initiatePasswordResetEmail,
     changePassword,
     signInWithGoogle,
+    getRefreshedToken,
+    getCurrentUserEmail,
     subscribeToAuthChanges,
 };
 

@@ -3,8 +3,7 @@ import FirebaseAuthService from '../services/auth/FirebaseAuthService';
 
 export default function SettingsComponent() {
 
-    const [email, setEmail] = useState('');
-    FirebaseAuthService.subscribeToAuthChanges(setEmail);
+    const email = FirebaseAuthService.getCurrentUserEmail();
 
     const [errorMessage, setErrorMessage] = useState('')
     const [successMessage, setSuccessMessage] = useState('')
