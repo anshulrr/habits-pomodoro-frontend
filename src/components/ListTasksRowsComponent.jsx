@@ -39,7 +39,6 @@ export default function ListTasksRowsComponent({ project, tasks, createNewPomodo
                                     <small>{timeToDisplay(task.pomodorosTimeElapsed / 60)} / {timeToDisplay(task.pomodoroLength || project.pomodoroLength || 25)} </small>
                                 </span>
                                 {
-                                    task.status !== 'completed' &&
                                     <span className="task-list-button">
                                         <i className="bi bi-pencil-square" onClick={() => updateTask(task.id)}></i>
                                     </span>
