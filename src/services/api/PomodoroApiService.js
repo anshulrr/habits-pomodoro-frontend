@@ -11,7 +11,7 @@ export const updatePomodoroApi
     = (id, pomodoro) => apiClient.put(`/pomodoros/${id}?timeElapsed=${pomodoro.timeElapsed}&status=${pomodoro.status}`)
 
 export const getPomodorosApi
-    = (include_categories) => apiClient.get(`/pomodoros?include_categories=${include_categories}`)
+    = (offset, include_categories) => apiClient.get(`/pomodoros?offset=${offset}&include_categories=${include_categories}`)
 
 export const getRunningPomodoroApi
     = () => apiClient.get(`/pomodoros/running`)

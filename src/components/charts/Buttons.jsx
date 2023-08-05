@@ -1,7 +1,13 @@
 import { useEffect, useState } from "react"
 import moment from "moment"
 
-export const Buttons = ({ retrievePomodoros, buttonsStates, setButtonsStates, showDateString = true }) => {
+export const Buttons = ({
+    retrievePomodoros,
+    buttonsStates,
+    setButtonsStates,
+    showDateString = true,
+    showLimit = true
+}) => {
 
     const [limit, setLimit] = useState(buttonsStates.limit)
 
@@ -51,9 +57,14 @@ export const Buttons = ({ retrievePomodoros, buttonsStates, setButtonsStates, sh
 
     return (
         <div className="container">
-            <button type="button" className="btn btn-sm btn-light" onClick={() => updateLimit('daily')}>Daily</button>
-            <button type="button" className="btn btn-sm btn-light ml-2" onClick={() => updateLimit('weekly')}>Weekly</button>
-            <button type="button" className="btn btn-sm btn-light" onClick={() => updateLimit('monthly')}>Monthly</button>
+            {
+                showLimit &&
+                <div>
+                    <button type="button" className="btn btn-sm btn-light" onClick={() => updateLimit('daily')}>Daily</button>
+                    <button type="button" className="btn btn-sm btn-light ml-2" onClick={() => updateLimit('weekly')}>Weekly</button>
+                    <button type="button" className="btn btn-sm btn-light" onClick={() => updateLimit('monthly')}>Monthly</button>
+                </div>
+            }
 
             <div className="row">
                 <div className="col-3">

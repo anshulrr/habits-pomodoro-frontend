@@ -3,6 +3,7 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import { createTaskApi, retrieveTaskApi, updateTaskApi } from '../services/api/TaskApiService'
 import { Formik, Form, ErrorMessage, Field } from 'formik'
 
+// export default function TaskComponent({ project, task, setTasks, tasks }) {
 export default function TaskComponent() {
 
     const { project_id, id } = useParams()
