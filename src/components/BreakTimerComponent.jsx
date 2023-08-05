@@ -41,7 +41,7 @@ export default function BreakTimerComponent({ startAgain }) {
             // console.debug(total / 1000)
             setBreakTimeRemaining(total / 1000);
         } else {
-            console.warn('from updateBreakTimer error:', total / 1000)
+            // console.warn('from updateBreakTimer error:', total / 1000)
             // todo: find better way to update timeRemaining
             // timeRemaing in this thread has different value
             // hence passing it as method parameter
