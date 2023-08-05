@@ -31,6 +31,12 @@ export default function ListTasksComponent() {
         dateString: ''
     })
 
+    const [listPomodorosButtonsStates, setListPomodorosButtonsStates] = useState({
+        limit: 'daily',
+        offset: 0,
+        dateString: moment().format('DD MMM')
+    })
+
     // for first time load
     useEffect(
         () => {
@@ -91,10 +97,12 @@ export default function ListTasksComponent() {
                     />
                     <hr />
                 </div>
-                <div className="col-md-4">
+                <div className="col-md-4 overflow-scroll" style={{ maxHeight: "55vh" }}>
                     <ListPomodorosComponent
                         key={includeCategories}
                         includeCategories={includeCategories}
+                        buttonsStates={listPomodorosButtonsStates}
+                        setButtonsStates={setListPomodorosButtonsStates}
                     />
                 </div >
             </div >

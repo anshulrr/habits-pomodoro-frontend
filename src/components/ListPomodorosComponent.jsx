@@ -2,8 +2,9 @@ import { useEffect, useState } from "react"
 import { getPomodorosApi } from "../services/api/PomodoroApiService";
 import moment from "moment"
 import { retrieveAllProjectCategoriesApi } from "../services/api/ProjectCategoryApiService";
+import { Buttons } from "./charts/Buttons";
 
-export default function ListPomodorosComponent({ includeCategories }) {
+export default function ListPomodorosComponent({ includeCategories, buttonsStates, setButtonsStates }) {
 
     const [pomodoros, setPomodoros] = useState([])
 
@@ -15,7 +16,7 @@ export default function ListPomodorosComponent({ includeCategories }) {
             if (!includeCategories) {
                 retrieveProjectCategories();
             } else {
-                retrieveTodayPomodoros(includeCategories)
+                retrieveTodayPomodoros(0, 0)
             }
         }, []   // eslint-disable-line react-hooks/exhaustive-deps
     )
@@ -24,17 +25,13 @@ export default function ListPomodorosComponent({ includeCategories }) {
         // todo: decide default limit
         retrieveAllProjectCategoriesApi(100, 0)
             .then(response => {
-                retrieveTodayPomodoros(response.data.map(c => c.id))
+                retrieveTodayPomodoros(0, 0, response.data.map(c => c.id))
             })
             .catch(error => console.error(error.message))
     }
 
-    function retrieveTodayPomodoros(includeCategories) {
-        if (includeCategories.length === 0) {
-            // console.debug('categories length is zero')
-            return;
-        }
-        getPomodorosApi(includeCategories)
+    function retrieveTodayPomodoros(limit, offset, allCategories) {
+        getPomodorosApi(offset, allCategories || includeCategories, new Date().getTimezoneOffset())
             .then(response => {
                 // console.debug(response)
                 setPomodoros(response.data)
@@ -52,8 +49,17 @@ export default function ListPomodorosComponent({ includeCategories }) {
     return (
         <>
             <h6>
-                Today's pomodoros ({totalTimeElapsed})
+                Pomodoros ({totalTimeElapsed})
             </h6>
+            {
+                includeCategories &&
+                <Buttons
+                    retrievePomodoros={retrieveTodayPomodoros}
+                    buttonsStates={buttonsStates}
+                    setButtonsStates={setButtonsStates}
+                    showLimit={false}
+                />
+            }
             <small>
                 <table className="table table-sm table-striped">
                     <tbody>
