@@ -37,7 +37,7 @@ export const TotalChart = ({ includeCategories, buttonsStates, setButtonsStates 
     //     [datasets]
     // )
 
-    function retrieveTotalPomodoros(limit, offset) {
+    function retrieveTotalPomodoros({ limit, offset }) {
         updateLabels(limit, offset)
         getTotalPomodorosApi(limit, offset, includeCategories)
             .then(response => {

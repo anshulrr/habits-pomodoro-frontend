@@ -30,8 +30,8 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
             .catch(error => console.error(error.message))
     }
 
-    function retrieveTodayPomodoros(limit, offset, allCategories) {
-        getPomodorosApi(offset, allCategories || includeCategories, new Date().getTimezoneOffset())
+    function retrieveTodayPomodoros({ startDate, endDate }, allCategories) {
+        getPomodorosApi(startDate, endDate, allCategories || includeCategories)
             .then(response => {
                 // console.debug(response)
                 setPomodoros(response.data)
