@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import FirebaseAuthService from '../services/auth/FirebaseAuthService';
 import { useAuth } from '../services/auth/AuthContext';
+import ListProjectCategoriesComponent from './ListProjectsCategoriesComponent';
+import ChangePasswordComponent from './ChangePasswordComponent';
 
 export default function SettingsComponent() {
 
@@ -42,53 +44,19 @@ export default function SettingsComponent() {
     }
 
     return (
-        <div className="ChangePassword">
-            <form className="ChangePasswordForm" onSubmit={handleSubmit}>
-                <div className="container">
-                    <div className="row">
-                        <div className="col-md-4 offset-md-4">
-                            <input
-                                type="email"
-                                name="email"
-                                className="form-control form-control-sm mb-3"
-                                value={email}
-                                autoComplete="email"
-                                // style={{ display: "none" }}
-                                disabled    // for password manager
-                            />
-                            <input
-                                type="password"
-                                name="password"
-                                className="form-control form-control-sm mb-3"
-                                value={password}
-                                onChange={handlePasswordChange}
-                                autoComplete="new-password"
-                                placeholder='New password'
-                                required
-                            />
-                            <input
-                                type="password"
-                                name="confirmPassword"
-                                className="form-control form-control-sm mb-3"
-                                value={confirmPassword}
-                                onChange={handleConfirmPasswordChange}
-                                autoComplete="new-password"
-                                placeholder="Confirm password"
-                                required
-                            />
-                            <div className="mb-3 text-danger"><small>{errorMessage}</small></div>
-                            <div className="mb-3">
-                                <button
-                                    type="submit"
-                                    className="btn btn-sm btn-outline-success"
-                                    name="changePassword"
-                                >Change Password</button>
-                            </div>
-                            <div className="mb-3 text-success"><small>{successMessage}</small></div>
-                        </div>
-                    </div>
-                </div>
-            </form>
+        <div className="container">
+            <div className="row">
+                <ListProjectCategoriesComponent>
+                </ListProjectCategoriesComponent>
+                <hr />
+
+                <ChangePasswordComponent>
+                </ChangePasswordComponent>
+                <hr />
+            </div>
+
         </div>
+
+
     )
 }
