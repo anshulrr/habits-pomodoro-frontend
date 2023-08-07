@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import { useNavigate, useLocation } from "react-router-dom";
 import { retrieveAllProjectCategoriesApi, getProjectCategoriesCountApi } from "../services/api/ProjectCategoryApiService";
 
 import Pagination from "../services/pagination/Pagination"

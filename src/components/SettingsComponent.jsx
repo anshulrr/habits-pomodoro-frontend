@@ -9,7 +9,7 @@ export default function SettingsComponent() {
     return (
         <div className="container">
             <div className="row">
-                <div className="col-md-12">
+                <div className="col-md-12 px-4">
                     <h6 className="text-start pb-2">
                         Change Password &nbsp;
                         <i className="bi bi-pencil-square" onClick={() => setShowChangePassword(!showChangePassword)}></i>
@@ -17,6 +17,7 @@ export default function SettingsComponent() {
                     {
                         showChangePassword &&
                         <ChangePasswordComponent />
+
                     }
                     <hr />
                 </div>
@@ -28,7 +29,5 @@ export default function SettingsComponent() {
             </div>
 
         </div >
-
-
     )
 }
