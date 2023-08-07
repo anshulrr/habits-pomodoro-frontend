@@ -27,15 +27,14 @@ export const ProjectsDistributionChart = ({ includeCategories, buttonsStates, se
     //     [chartData]
     // )
 
-    function retrieveProjectsPomodoros(limit, offset) {
-        getProjectsPomodorosApi(limit, offset, includeCategories)
+    function retrieveProjectsPomodoros({ startDate, endDate }) {
+        getProjectsPomodorosApi({ startDate, endDate, includeCategories })
             .then(response => {
                 // console.debug(response)
                 const updated_data = {
                     labels: [],
                     data: [],
-                    colors: [],
-                    label: limit
+                    colors: []
                 }
                 response.data.forEach(element => {
                     // console.debug(element);
@@ -82,7 +81,7 @@ export const ProjectsDistributionChart = ({ includeCategories, buttonsStates, se
                         plugins: {
                             title: {
                                 display: true,
-                                text: `Project's Distribution Time (${chartData.label})`
+                                text: `Project's Distribution Time`
                             },
                             legend: {
                                 display: true,

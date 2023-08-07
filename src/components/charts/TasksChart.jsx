@@ -28,17 +28,16 @@ export const TasksChart = ({ includeCategories, buttonsStates, setButtonsStates 
     //     [chartData]
     // )
 
-    function retrieveTasksPomodoros(limit, offset) {
-        // console.debug(limit, offset)
+    function retrieveTasksPomodoros({ startDate, endDate }) {
+        // console.debug(startDate, endDate)
         // console.debug(includeCategories)
-        getTasksPomodorosApi(limit, offset, includeCategories)
+        getTasksPomodorosApi({ startDate, endDate, includeCategories })
             .then(response => {
                 // console.debug(response)
                 const updated_data = {
                     labels: [],
                     data: [],
-                    colors: [],
-                    label: limit
+                    colors: []
                 }
                 response.data.forEach(element => {
                     // console.debug(element);
@@ -88,7 +87,7 @@ export const TasksChart = ({ includeCategories, buttonsStates, setButtonsStates 
                         plugins: {
                             title: {
                                 display: true,
-                                text: `Task's Distribution Time (${chartData.label})`
+                                text: `Task's Distribution Time`
                             },
                             legend: {
                                 display: false

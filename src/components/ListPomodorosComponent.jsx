@@ -13,25 +13,29 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
     useEffect(
         () => {
             // console.debug('re-render ListPomodorosComponent')
-            if (!includeCategories) {
-                retrieveProjectCategories();
-            } else {
-                retrieveTodayPomodoros(0, 0)
+            async function fetchAPI() {
+                try {
+                    if (!includeCategories) {
+                        // todo: decide limit
+                        const response = await retrieveAllProjectCategoriesApi(100, 0);
+                        const allCategories = response.data.map(c => c.id);
+                        // console.debug('useEffect', { allCategories, includeCategories })
+                        // initial state
+                        const startDate = moment().startOf('day').toISOString();
+                        const endDate = moment().startOf('day').add(1, 'd').toISOString();
+                        retrieveTodayPomodoros({ startDate, endDate, allCategories })
+                    }
+                } catch (error) {
+                    console.error(error.message)
+                }
             }
+            fetchAPI()
         }, []   // eslint-disable-line react-hooks/exhaustive-deps
     )
 
-    function retrieveProjectCategories() {
-        // todo: decide default limit
-        retrieveAllProjectCategoriesApi(100, 0)
-            .then(response => {
-                retrieveTodayPomodoros(0, 0, response.data.map(c => c.id))
-            })
-            .catch(error => console.error(error.message))
-    }
-
-    function retrieveTodayPomodoros(limit, offset, allCategories) {
-        getPomodorosApi(offset, allCategories || includeCategories, new Date().getTimezoneOffset())
+    function retrieveTodayPomodoros({ startDate, endDate, allCategories }) {
+        // console.debug('api call', { allCategories, includeCategories })
+        getPomodorosApi({ startDate, endDate, includeCategories: allCategories || includeCategories })
             .then(response => {
                 // console.debug(response)
                 setPomodoros(response.data)
