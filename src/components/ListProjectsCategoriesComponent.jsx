@@ -46,8 +46,8 @@ export default function ListProjectCategoriesComponent() {
     }
 
     function updateProjectCategory(cat) {
-        console.log(cat)
         setCategory(cat)
+        setNewCategory(false)
         // navigate(`/categories/${id}`)
     }
 
@@ -82,14 +82,17 @@ export default function ListProjectCategoriesComponent() {
                                             {/* todo: decide better solution for maxWidth */}
                                             <div className="col-8 text-truncate text-start">
                                                 {/* <span style={{ color: cat.color }}>&#9632; </span> */}
+                                                <span>
+                                                    <input className="form-check-input" type="checkbox" checked={cat.statsDefault} disabled />
+                                                </span>
                                                 <span>{cat.name}</span>
                                             </div>
                                             <div className="col text-secondary text-truncate text-end">
                                                 <span>
                                                     {cat.level}&nbsp;
                                                 </span>
-                                                <span>
-                                                    <input class="form-check-input" type="checkbox" checked={cat.statsDefault} disabled />
+                                                <span className="list-button">
+                                                    <i className="bi bi-pencil-square"></i>
                                                 </span>
                                             </div>
                                         </div>
@@ -114,6 +117,8 @@ export default function ListProjectCategoriesComponent() {
                             category={category}
                             categories={categories}
                             setCategories={setCategories}
+                            setCategory={setCategory}
+                            setNewCategory={setNewCategory}
                         />
                     }
                 </div>
