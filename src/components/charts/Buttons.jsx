@@ -14,20 +14,19 @@ export const Buttons = ({
 
     const [dateString, setDateString] = useState(buttonsStates.dateString)
 
-    const [startDate, setStartDate] = useState(null)
-    const [endDate, setEndDate] = useState(null)
+    const [startDate, setStartDate] = useState(moment().startOf('day').toISOString())
+    const [endDate, setEndDate] = useState(moment().startOf('day').add(1, 'd').toISOString())
 
     // to retrive data after click on bottons
     useEffect(
         () => {
-            // console.debug('re-render Buttons')
             retrievePomodoros({ startDate, endDate, limit, offset })
             setButtonsStates({
                 limit: limit,
                 offset: offset,
                 dateString: dateString
             })
-        }, [offset, limit] // eslint-disable-line react-hooks/exhaustive-deps
+        }, [startDate, endDate] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
     function updateOffset(val) {
@@ -52,6 +51,7 @@ export const Buttons = ({
             setStartDate(date.toISOString());
             setEndDate(date.add(1, 'd').toISOString())
         } else if (limit === 'weekly') {
+            // substract 1 day first and add it later: to make monday as start of the week
             const date = moment().add(-1, 'd').add(offset, 'w');
             const start = date.clone().startOf('week').add(1, 'd');
             const end = date.clone().endOf('week').add(1, 'd');
