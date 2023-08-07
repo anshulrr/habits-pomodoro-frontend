@@ -108,17 +108,17 @@ export default function ProjectCategoryComponent({
                         ({ errors, handleSubmit }) => (
                             <form onSubmit={handleSubmit}>
                                 <div className="row">
-                                    <div className="col-md-6 mb-1">
+                                    <div className="col-md-6 mb-2">
                                         <Field type="text" className="form-control form-control-sm" name="name" placeholder="Project Category Name" required />
                                         <ErrorMessage name="name" component="div" className="small text-danger" />
                                     </div>
-                                    <div className="col-md-3 mb-1">
+                                    <div className="col-md-3 col-6 mb-2">
                                         <Field type="number" className="form-control form-control-sm" name="level" placeholder="Level" required />
                                         {/* <small>(All categories must have different levels)</small> */}
                                         {errors.level && <div className="text-danger small">{errors.level}</div>}
                                         {<div className="text-danger small">{errorMessage}</div>}
                                     </div>
-                                    <div className="col-md-3 mb-1">
+                                    <div className="col-md-3 col-6 mb-2">
                                         <div className="form-check">
                                             <Field type="checkbox" className="form-check-input" name="statsDefault" id="flexCheck" />
                                             <label className="form-check-label" htmlFor="flexCheck">
@@ -128,7 +128,7 @@ export default function ProjectCategoryComponent({
                                             </label>
                                         </div>
                                     </div>
-                                    <div className="col-md-12 mt-2 mb-3">
+                                    <div className="col-md-12">
                                         {
                                             category &&
                                             <button className="btn btn-sm btn-outline-success" type="submit">Update Project Category</button>

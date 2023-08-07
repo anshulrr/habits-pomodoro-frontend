@@ -6,18 +6,22 @@ export default function CategoryChecklistComponent({ categories, setIncludeCateg
 
     const [level, setLevel] = useState(0);
 
+    const [errorMessage, setErrorMessage] = useState("");
+
+    const message = "Click on Fetch to update stats";
+
     const handleOnChange = (position) => {
         // console.debug('handle: ', checkedState)
         const updatedCheckedState = checkedState.map((item, index) =>
             index === position ? !item : item
         );
-
         // console.debug(updatedCheckedState)
 
         setCheckedState(updatedCheckedState);
+        setErrorMessage(message)
     };
 
-    function updateForFetch() {
+    function fetchSelected() {
         const updatedIncludedCategories = checkedState.reduce(
             (arr, currentState, index) => {
 
@@ -32,22 +36,27 @@ export default function CategoryChecklistComponent({ categories, setIncludeCateg
         // console.debug(updatedIncludedCategories)
 
         setIncludeCategories(updatedIncludedCategories)
+        setErrorMessage("")
     }
 
     function selectAll() {
         setCheckedState(checkedState.map(() => true));
+        setErrorMessage(message)
     }
 
     function selectNone() {
         setCheckedState(checkedState.map(() => false));
+        setErrorMessage(message)
     }
 
     function selectUpto() {
         setCheckedState(categories.map(c => c.level <= level));
+        setErrorMessage(message)
     }
 
     function selectAbove() {
         setCheckedState(categories.map(c => c.level >= level));
+        setErrorMessage(message)
     }
 
     return (
@@ -70,7 +79,7 @@ export default function CategoryChecklistComponent({ categories, setIncludeCateg
                                     <div className="col">
                                         <label className="form-check-label" htmlFor={`custom-checkbox-${index}`}>{name}</label>
                                     </div>
-                                    <div className="col text-end">
+                                    <div className="col text-end text-secondary">
                                         {level}
                                     </div>
                                 </div>
@@ -86,8 +95,9 @@ export default function CategoryChecklistComponent({ categories, setIncludeCateg
                 <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => selectAbove()}>Above</button>
                 <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => selectAll()}>All</button>
                 <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => selectNone()}>None</button>
-                <button className="btn btn-sm btn-outline-success" type="button" onClick={updateForFetch}>Fetch</button>
+                <button className="btn btn-sm btn-outline-success" type="button" onClick={fetchSelected}>Fetch</button>
             </div>
+            <div className="text-danger"><small>{errorMessage}</small></div>
 
         </div>
     )

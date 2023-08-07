@@ -5,10 +5,10 @@ import { useState } from 'react';
 export default function SettingsComponent() {
 
     const [showChangePassword, setShowChangePassword] = useState(false)
+
     return (
         <div className="container">
             <div className="row">
-
                 <div className="col-md-12">
                     <h6 className="text-start pb-2">
                         Change Password &nbsp;
@@ -21,12 +21,13 @@ export default function SettingsComponent() {
                     <hr />
                 </div>
 
-                <ListProjectCategoriesComponent />
-                <hr />
-
+                <div className="col-md-12">
+                    <ListProjectCategoriesComponent />
+                    <hr />
+                </div>
             </div>
 
-        </div>
+        </div >
 
 
     )

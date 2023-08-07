@@ -50,7 +50,7 @@ export default function ChangePasswordComponent() {
                             <input
                                 type="email"
                                 name="email"
-                                className="form-control form-control-sm mb-3"
+                                className="form-control form-control-sm mb-2"
                                 value={email}
                                 autoComplete="email"
                                 // style={{ display: "none" }}
@@ -59,7 +59,7 @@ export default function ChangePasswordComponent() {
                             <input
                                 type="password"
                                 name="password"
-                                className="form-control form-control-sm mb-3"
+                                className="form-control form-control-sm mb-2"
                                 value={password}
                                 onChange={handlePasswordChange}
                                 autoComplete="new-password"
@@ -69,22 +69,22 @@ export default function ChangePasswordComponent() {
                             <input
                                 type="password"
                                 name="confirmPassword"
-                                className="form-control form-control-sm mb-3"
+                                className="form-control form-control-sm mb-2"
                                 value={confirmPassword}
                                 onChange={handleConfirmPasswordChange}
                                 autoComplete="new-password"
                                 placeholder="Confirm password"
                                 required
                             />
-                            <div className="mb-3 text-danger"><small>{errorMessage}</small></div>
-                            <div className="mb-3">
+                            <div className="mb-2 text-danger"><small>{errorMessage}</small></div>
+                            <div className="">
                                 <button
                                     type="submit"
                                     className="btn btn-sm btn-outline-success"
                                     name="changePassword"
                                 >Change Password</button>
                             </div>
-                            <div className="mb-3 text-success"><small>{successMessage}</small></div>
+                            <div className="text-success"><small>{successMessage}</small></div>
                         </div>
                     </div>
                 </div>

@@ -59,11 +59,11 @@ export default function ListProjectCategoriesComponent() {
 
     return (
         <div className="container">
-            <div className="row mb-3">
-                <div className="col-md-4 mb-3">
+            <div className="row">
+                <div className="col-md-4">
                     <div>
                         <div className="row">
-                            <div className="col-10">
+                            <div className="col-10 text-start">
                                 <h6>Project Categories ({categoriesCount})</h6>
                             </div>
                             <div className="col-2 text-end">
@@ -101,7 +101,7 @@ export default function ListProjectCategoriesComponent() {
                             }
                         </small>
                         <Pagination
-                            className="pagination-bar mt-3"
+                            className="pagination-bar mt-2 mb-0"
                             currentPage={currentPage}
                             totalCount={categoriesCount}
                             pageSize={PAGESIZE}
@@ -109,7 +109,7 @@ export default function ListProjectCategoriesComponent() {
                         />
                     </div>
                 </div>
-                <div className="col-md-8">
+                <div className="col-md-8 mt-2">
                     {
                         (category || isNewCategory) &&
                         <ProjectCategoryComponent
