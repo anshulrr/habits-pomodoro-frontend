@@ -4,17 +4,25 @@ export default function CategoryChecklistComponent({ categories, setIncludeCateg
 
     const [checkedState, setCheckedState] = useState(categories.map(c => c.statsDefault));
 
+    const [level, setLevel] = useState(0);
+
+    const [errorMessage, setErrorMessage] = useState("");
+
+    const message = "Click on Fetch to update stats";
+
     const handleOnChange = (position) => {
         // console.debug('handle: ', checkedState)
         const updatedCheckedState = checkedState.map((item, index) =>
             index === position ? !item : item
         );
-
         // console.debug(updatedCheckedState)
 
         setCheckedState(updatedCheckedState);
+        setErrorMessage(message)
+    };
 
-        const updatedIncludedCategories = updatedCheckedState.reduce(
+    function fetchSelected() {
+        const updatedIncludedCategories = checkedState.reduce(
             (arr, currentState, index) => {
 
                 if (currentState === true) {
@@ -28,26 +36,69 @@ export default function CategoryChecklistComponent({ categories, setIncludeCateg
         // console.debug(updatedIncludedCategories)
 
         setIncludeCategories(updatedIncludedCategories)
-    };
+        setErrorMessage("")
+    }
+
+    function selectAll() {
+        setCheckedState(checkedState.map(() => true));
+        setErrorMessage(message)
+    }
+
+    function selectNone() {
+        setCheckedState(checkedState.map(() => false));
+        setErrorMessage(message)
+    }
+
+    function selectUpto() {
+        setCheckedState(categories.map(c => c.level <= level));
+        setErrorMessage(message)
+    }
+
+    function selectAbove() {
+        setCheckedState(categories.map(c => c.level >= level));
+        setErrorMessage(message)
+    }
 
     return (
-        <div className="text-start">
-            {categories.map(({ name }, index) => {
-                return (
-                    <div key={index} className="form-check">
-                        <input
-                            type="checkbox"
-                            className="form-check-input"
-                            id={`custom-checkbox-${index}`}
-                            name={name}
-                            value={name}
-                            checked={checkedState[index]}
-                            onChange={() => handleOnChange(index)}
-                        />
-                        <label className="form-check-label" htmlFor={`custom-checkbox-${index}`}>{name}</label>
-                    </div>
-                );
-            })}
+        <div className="mb-3">
+            <div className="text-start">
+                {categories.map(({ name, level }, index) => {
+                    return (
+                        <div key={index} className="form-check">
+                            <input
+                                type="checkbox"
+                                className="form-check-input"
+                                id={`custom-checkbox-${index}`}
+                                name={name}
+                                value={name}
+                                checked={checkedState[index]}
+                                onChange={() => handleOnChange(index)}
+                            />
+                            <small>
+                                <div className="row">
+                                    <div className="col">
+                                        <label className="form-check-label" htmlFor={`custom-checkbox-${index}`}>{name}</label>
+                                    </div>
+                                    <div className="col text-end text-secondary">
+                                        {level}
+                                    </div>
+                                </div>
+                            </small>
+                        </div>
+                    );
+                })}
+            </div>
+
+            <div className="input-group my-2">
+                <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => selectUpto()}>Upto</button>
+                <input type="number" className="form-control form-control-sm" name="level" value={level} placeholder="Level" onChange={(e) => setLevel(e.target.value)} />
+                <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => selectAbove()}>Above</button>
+                <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => selectAll()}>All</button>
+                <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => selectNone()}>None</button>
+                <button className="btn btn-sm btn-outline-success" type="button" onClick={fetchSelected}>Fetch</button>
+            </div>
+            <div className="text-danger"><small>{errorMessage}</small></div>
+
         </div>
     )
 }
