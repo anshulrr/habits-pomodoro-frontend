@@ -131,11 +131,11 @@ export default function ProjectCategoryComponent({
                                     <div className="col-md-12 mt-2 mb-3">
                                         {
                                             category &&
-                                            <button className="btn btn-sm btn-outline-primary" type="submit">Update Project Category</button>
+                                            <button className="btn btn-sm btn-outline-success" type="submit">Update Project Category</button>
                                         }
                                         {
                                             !category &&
-                                            <button className="btn btn-sm btn-outline-success" type="submit">Create Project Category</button>
+                                            <button className="btn btn-sm btn-success" type="submit">Create Project Category</button>
                                         }
                                     </div>
                                 </div>

@@ -1,58 +1,29 @@
-import { useState } from 'react'
-import FirebaseAuthService from '../services/auth/FirebaseAuthService';
-import { useAuth } from '../services/auth/AuthContext';
 import ListProjectCategoriesComponent from './ListProjectsCategoriesComponent';
 import ChangePasswordComponent from './ChangePasswordComponent';
+import { useState } from 'react';
 
 export default function SettingsComponent() {
 
-    const authContext = useAuth();
-    const email = authContext.user.email;
-
-    const [errorMessage, setErrorMessage] = useState('')
-    const [successMessage, setSuccessMessage] = useState('')
-
-    const [password, setPassword] = useState('')
-    const [confirmPassword, setConfirmPassword] = useState('')
-
-    function handlePasswordChange(event) {
-        setPassword(event.target.value);
-    }
-
-    function handleConfirmPasswordChange(event) {
-        setConfirmPassword(event.target.value);
-    }
-
-    async function handleSubmit(error) {
-        error.preventDefault();
-
-        setErrorMessage('')
-        setSuccessMessage('')
-        // todo: decide and check password rules
-        if (password !== confirmPassword) {
-            setErrorMessage("Password doesn't match");
-            return;
-        }
-        try {
-            await FirebaseAuthService.changePassword(password);
-            setPassword('')
-            setConfirmPassword('')
-            setSuccessMessage('Password Changed Successfully')
-        } catch (error) {
-            setErrorMessage(error.message);
-        }
-    }
-
+    const [showChangePassword, setShowChangePassword] = useState(false)
     return (
         <div className="container">
             <div className="row">
-                <ListProjectCategoriesComponent>
-                </ListProjectCategoriesComponent>
+
+                <div className="col-md-12">
+                    <h6 className="text-start pb-2">
+                        Change Password &nbsp;
+                        <i className="bi bi-pencil-square" onClick={() => setShowChangePassword(!showChangePassword)}></i>
+                    </h6>
+                    {
+                        showChangePassword &&
+                        <ChangePasswordComponent />
+                    }
+                    <hr />
+                </div>
+
+                <ListProjectCategoriesComponent />
                 <hr />
 
-                <ChangePasswordComponent>
-                </ChangePasswordComponent>
-                <hr />
             </div>
 
         </div>

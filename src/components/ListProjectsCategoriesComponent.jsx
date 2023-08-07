@@ -85,7 +85,7 @@ export default function ListProjectCategoriesComponent() {
                                                 <span>
                                                     <input className="form-check-input" type="checkbox" checked={cat.statsDefault} disabled />
                                                 </span>
-                                                <span>{cat.name}</span>
+                                                <span>&nbsp;{cat.name}</span>
                                             </div>
                                             <div className="col text-secondary text-truncate text-end">
                                                 <span>

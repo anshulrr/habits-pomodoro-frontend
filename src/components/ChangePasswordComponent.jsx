@@ -45,9 +45,6 @@ export default function ChangePasswordComponent() {
         <div className="ChangePassword">
             <form className="ChangePasswordForm" onSubmit={handleSubmit}>
                 <div className="container">
-                    <h6 className="text-start pb-2">
-                        Change Password
-                    </h6>
                     <div className="row">
                         <div className="col-md-4">
                             <input
