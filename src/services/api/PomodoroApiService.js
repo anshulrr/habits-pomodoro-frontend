@@ -10,19 +10,19 @@ const to = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 // passing data as params
 export const updatePomodoroApi
-    = (id, pomodoro) => apiClient.put(`/pomodoros/${id}?timeElapsed=${pomodoro.timeElapsed}&status=${pomodoro.status}`)
+    = (id, pomodoro) => apiClient.put(`/pomodoros/${id}`, pomodoro)
 
 export const getPomodorosApi
-    = (startDate, endDate, ic) => apiClient.get(`/pomodoros?startDate=${startDate}&endDate=${endDate}&include_categories=${ic}`)
+    = ({ startDate, endDate, includeCategories }) => apiClient.get(`/pomodoros?startDate=${startDate}&endDate=${endDate}&include_categories=${includeCategories}`)
 
 export const getRunningPomodoroApi
     = () => apiClient.get(`/pomodoros/running`)
 
 export const getTasksPomodorosApi
-    = (startDate, endDate, ic) => apiClient.get(`/stats/tasks-time?startDate=${startDate}&endDate=${endDate}&include_categories=${ic}`)
+    = ({ startDate, endDate, includeCategories }) => apiClient.get(`/stats/tasks-time?startDate=${startDate}&endDate=${endDate}&include_categories=${includeCategories}`)
 
 export const getProjectsPomodorosApi
-    = (startDate, endDate, ic) => apiClient.get(`/stats/projects-time?startDate=${startDate}&endDate=${endDate}&include_categories=${ic}`)
+    = ({ startDate, endDate, includeCategories }) => apiClient.get(`/stats/projects-time?startDate=${startDate}&endDate=${endDate}&include_categories=${includeCategories}`)
 
 export const getTotalPomodorosApi
-    = ({ limit, startDate, endDate, includeCategories: ic }) => apiClient.get(`/stats/total-time?limit=${limit}&startDate=${startDate}&endDate=${endDate}&include_categories=${ic}&timezone=${to}`)
+    = ({ limit, startDate, endDate, includeCategories }) => apiClient.get(`/stats/total-time?limit=${limit}&startDate=${startDate}&endDate=${endDate}&include_categories=${includeCategories}&timezone=${to}`)

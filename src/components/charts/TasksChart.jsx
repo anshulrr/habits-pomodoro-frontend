@@ -31,7 +31,7 @@ export const TasksChart = ({ includeCategories, buttonsStates, setButtonsStates 
     function retrieveTasksPomodoros({ startDate, endDate }) {
         // console.debug(startDate, endDate)
         // console.debug(includeCategories)
-        getTasksPomodorosApi(startDate, endDate, includeCategories)
+        getTasksPomodorosApi({ startDate, endDate, includeCategories })
             .then(response => {
                 // console.debug(response)
                 const updated_data = {

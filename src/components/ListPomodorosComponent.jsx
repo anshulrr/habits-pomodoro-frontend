@@ -35,7 +35,7 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
 
     function retrieveTodayPomodoros({ startDate, endDate, allCategories }) {
         // console.debug('api call', { allCategories, includeCategories })
-        getPomodorosApi(startDate, endDate, allCategories || includeCategories)
+        getPomodorosApi({ startDate, endDate, includeCategories: allCategories || includeCategories })
             .then(response => {
                 // console.debug(response)
                 setPomodoros(response.data)

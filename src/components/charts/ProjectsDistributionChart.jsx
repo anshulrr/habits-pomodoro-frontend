@@ -28,7 +28,7 @@ export const ProjectsDistributionChart = ({ includeCategories, buttonsStates, se
     // )
 
     function retrieveProjectsPomodoros({ startDate, endDate }) {
-        getProjectsPomodorosApi(startDate, endDate, includeCategories)
+        getProjectsPomodorosApi({ startDate, endDate, includeCategories })
             .then(response => {
                 // console.debug(response)
                 const updated_data = {
