@@ -67,44 +67,49 @@ export default function ListTasksComponent() {
                         setIncludeCategories={setIncludeCategories}
                     ></CategoryChecklistComponent>
                 </div>
-                <div className="col-md-4">
-                    <TasksChart
-                        key={includeCategories}
-                        includeCategories={includeCategories}
-                        buttonsStates={tasksChartButtonsStates}
-                        setButtonsStates={setTasksChartBButtonsStates}
-                    />
-                    <hr />
-                </div>
-                <div className="col-md-4">
-                    <ProjectsDistributionChart
-                        key={includeCategories}
-                        includeCategories={includeCategories}
-                        buttonsStates={projectsChartButtonsStates}
-                        setButtonsStates={setProjectsChartBButtonsStates}
-                    />
-                    <hr />
-                </div>
-            </div>
+                {
+                    includeCategories.length !== 0 &&
+                    <div className="col-md-8">
+                        <div className="row">
+                            <div className="col-md-6">
+                                <TasksChart
+                                    key={includeCategories}
+                                    includeCategories={includeCategories}
+                                    buttonsStates={tasksChartButtonsStates}
+                                    setButtonsStates={setTasksChartBButtonsStates}
+                                />
+                                <hr />
+                            </div>
+                            <div className="col-md-6">
+                                <ProjectsDistributionChart
+                                    key={includeCategories}
+                                    includeCategories={includeCategories}
+                                    buttonsStates={projectsChartButtonsStates}
+                                    setButtonsStates={setProjectsChartBButtonsStates}
+                                />
+                                <hr />
+                            </div>
+                            <div className="col-md-6">
+                                <TotalChart
+                                    key={includeCategories}
+                                    includeCategories={includeCategories}
+                                    buttonsStates={totalChartButtonsStates}
+                                    setButtonsStates={setTotalChartBButtonsStates}
+                                />
+                                <hr />
+                            </div>
+                            <div className="col-md-6 overflow-scroll" style={{ maxHeight: "55vh" }}>
+                                <ListPomodorosComponent
+                                    key={includeCategories}
+                                    includeCategories={includeCategories}
+                                    buttonsStates={listPomodorosButtonsStates}
+                                    setButtonsStates={setListPomodorosButtonsStates}
+                                />
+                            </div >
+                        </div>
+                    </div>
+                }
 
-            <div className="row">
-                <div className="col-md-4 offset-md-4">
-                    <TotalChart
-                        key={includeCategories}
-                        includeCategories={includeCategories}
-                        buttonsStates={totalChartButtonsStates}
-                        setButtonsStates={setTotalChartBButtonsStates}
-                    />
-                    <hr />
-                </div>
-                <div className="col-md-4 overflow-scroll" style={{ maxHeight: "55vh" }}>
-                    <ListPomodorosComponent
-                        key={includeCategories}
-                        includeCategories={includeCategories}
-                        buttonsStates={listPomodorosButtonsStates}
-                        setButtonsStates={setListPomodorosButtonsStates}
-                    />
-                </div >
             </div >
         </div >
     )
