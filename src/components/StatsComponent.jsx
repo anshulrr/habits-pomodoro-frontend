@@ -50,7 +50,10 @@ export default function ListTasksComponent() {
             .then(response => {
                 // console.debug(response)
                 setCategories(response.data)
-                setIncludeCategories(response.data.map(c => c.id))
+                setIncludeCategories(response.data
+                    .filter(c => c.statsDefault === true)
+                    .map(c => c.id)
+                )
             })
             .catch(error => console.error(error.message))
     }

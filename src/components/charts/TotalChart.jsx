@@ -23,6 +23,7 @@ export const TotalChart = ({ includeCategories, buttonsStates, setButtonsStates 
 
     function retrieveTotalPomodoros({ limit, offset }) {
         // console.debug({ limit, offset });
+        // console.debug("total", includeCategories)
 
         const localDatasets = [];
         localDatasets.label = limit;
