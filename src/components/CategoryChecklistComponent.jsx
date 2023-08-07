@@ -2,9 +2,7 @@ import { useState } from "react"
 
 export default function CategoryChecklistComponent({ categories, setIncludeCategories }) {
 
-    const [checkedState, setCheckedState] = useState(
-        new Array(categories.length).fill(true)
-    );
+    const [checkedState, setCheckedState] = useState(categories.map(c => c.statsDefault));
 
     const handleOnChange = (position) => {
         // console.debug('handle: ', checkedState)
