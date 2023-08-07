@@ -30,19 +30,19 @@ export const Buttons = ({
     )
 
     function updateOffset(val) {
-        showDateString && updateDateString(limit, offset + val)
+        updateDates(limit, offset + val)
         setOffset(offset + val);
     }
 
     function updateLimit(val) {
         // console.debug('updating limit')
-        showDateString && updateDateString(val, 0)
+        updateDates(val, 0)
         setLimit(val);
         setOffset(0);
     }
 
     // need to get updated limit and offset (to avoid asynchronous execution)
-    function updateDateString(limit, offset) {
+    function updateDates(limit, offset) {
         // console.debug('updated limit & offset: ', limit, offset)
         if (limit === 'daily') {
             const date = moment().startOf('day').add(offset, 'd');

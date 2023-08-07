@@ -21,39 +21,20 @@ export const TotalChart = ({ includeCategories, buttonsStates, setButtonsStates 
 
     const [labels, setLabels] = useState([])
 
-    // // for first time load (not needed)
-    // useEffect(
-    //     () => {
-    //         retrieveTotalPomodoros('daily', 0)
-    //         updateLabels('daily', 0)
-    //     },
-    //     []
-    // )
-
-    // not needed
-    // // for reload data retrival
-    // useEffect(
-    //     () => console.debug('reload total chart'),
-    //     [datasets]
-    // )
-
     function retrieveTotalPomodoros({ limit, offset }) {
-        updateLabels(limit, offset)
-        getTotalPomodorosApi(limit, offset, includeCategories)
+        // console.debug({ limit, offset });
+
+        const localDatasets = [];
+        localDatasets.label = limit;
+
+        updateLabels({ limit, offset })
+        updateGoals({ limit, localDatasets })
+
+        const { startDate, endDate } = calculateDates({ limit, offset });
+
+        getTotalPomodorosApi({ limit, startDate, endDate, includeCategories })
             .then(response => {
                 // console.debug("stacked", response)
-                const temp_datasets = [];
-                temp_datasets.label = limit;
-                if (limit === 'daily') {
-                    temp_datasets.goal = POMODORO_LENGTH * DAILY_GOAL;
-                    temp_datasets.threshold = POMODORO_LENGTH * DAILY_THRESHOLD;
-                } else if (limit === 'weekly') {
-                    temp_datasets.goal = 5 * POMODORO_LENGTH * DAILY_GOAL;
-                    temp_datasets.threshold = 5 * POMODORO_LENGTH * DAILY_THRESHOLD;
-                } else if (limit === 'monthly') {
-                    temp_datasets.goal = 22 * POMODORO_LENGTH * DAILY_GOAL;
-                    temp_datasets.threshold = 22 * POMODORO_LENGTH * DAILY_THRESHOLD;
-                }
 
                 for (const key in response.data) {
                     const dataset = {
@@ -79,16 +60,52 @@ export const TotalChart = ({ includeCategories, buttonsStates, setButtonsStates 
                         }
                     }
                     // console.debug(dataset);
-                    temp_datasets.push(dataset);
+                    localDatasets.push(dataset);
                 }
-                // console.debug(temp_datasets)
-                setDatasets(temp_datasets);
+                // console.debug(localDatasets)
+                setDatasets(localDatasets);
                 // setDatasets(structuredClone(datasets))
             })
             .catch(error => console.error(error.message))
     }
 
-    function updateLabels(limit, offset) {
+    function calculateDates({ limit, offset }) {
+        let startDate, endDate;
+
+        if (limit === 'daily') {
+            const date = moment().startOf('day').add(-14, 'd').add(15 * offset, 'd');
+            startDate = date.toISOString();
+            endDate = date.clone().add(15, 'd').toISOString();
+            // console.debug(startDate, endDate);
+        } else if (limit === 'weekly') {
+            const date = moment().startOf('week').add(1, 'd').add(-14 + 15 * offset, 'w');
+            startDate = date.toISOString();
+            endDate = date.clone().endOf('week').add(14, 'w').add(1, 'd').toISOString();
+            // console.debug(startDate, endDate);
+        } else if (limit === 'monthly') {
+            const date = moment().startOf('month').add(-14 + 15 * offset, 'M');
+            startDate = date.toISOString();
+            endDate = date.clone().endOf('month').add(14, 'M').toISOString();
+            // console.debug(startDate, endDate);
+        }
+
+        return { startDate, endDate }
+    }
+
+    function updateGoals({ limit, localDatasets }) {
+        if (limit === 'daily') {
+            localDatasets.goal = POMODORO_LENGTH * DAILY_GOAL;
+            localDatasets.threshold = POMODORO_LENGTH * DAILY_THRESHOLD;
+        } else if (limit === 'weekly') {
+            localDatasets.goal = 5 * POMODORO_LENGTH * DAILY_GOAL;
+            localDatasets.threshold = 5 * POMODORO_LENGTH * DAILY_THRESHOLD;
+        } else if (limit === 'monthly') {
+            localDatasets.goal = 22 * POMODORO_LENGTH * DAILY_GOAL;
+            localDatasets.threshold = 22 * POMODORO_LENGTH * DAILY_THRESHOLD;
+        }
+    }
+
+    function updateLabels({ limit, offset }) {
         const labels = [];
         if (limit === 'daily') {
             for (let i = 0; i < 15; i++) {
