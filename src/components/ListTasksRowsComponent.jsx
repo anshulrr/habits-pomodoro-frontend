@@ -1,4 +1,8 @@
+import { useAuth } from "../services/auth/AuthContext";
+
 export default function ListTasksRowsComponent({ project, tasks, createNewPomodoro, updateTask }) {
+    const authContext = useAuth()
+    const userSettings = authContext.userSettings
 
     function timeToDisplay(total_minutes) {
         if (total_minutes < 60) {
@@ -36,7 +40,7 @@ export default function ListTasksRowsComponent({ project, tasks, createNewPomodo
 
                             <div className="col text-secondary text-truncate text-end">
                                 <span>
-                                    <small>{timeToDisplay(task.pomodorosTimeElapsed / 60)} / {timeToDisplay(task.pomodoroLength || project.pomodoroLength || 25)} </small>
+                                    <small>{timeToDisplay(task.pomodorosTimeElapsed / 60)} / {timeToDisplay(task.pomodoroLength || project.pomodoroLength || userSettings.pomodoroLength)} </small>
                                 </span>
                             </div>
                             {

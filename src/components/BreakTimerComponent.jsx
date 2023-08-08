@@ -11,10 +11,18 @@ export default function BreakTimerComponent({ startAgain }) {
     // const [breakStatus, setBreakStatus] = useState('idle')
     const [breakStatus, setBreakStatus] = useState('break_started')
 
-    // todo: get it from user settings
-    const [breakTimer, setBreakTimer] = useState('5:00')
+    const initialTimeRemaining = userSettings.breakLength * 60;
+    const seconds = initialTimeRemaining % 60;
+    const minutes = Math.floor(initialTimeRemaining / 60) % 60;
+    const hours = Math.floor(initialTimeRemaining / 60 / 60);
 
-    const [breakTimeRemaining, setBreakTimeRemaining] = useState(5 * 60);
+    const [breakTimer, setBreakTimer] = useState(
+        (hours > 9 ? hours : '0' + hours) + ':' +
+        (minutes > 9 ? minutes : '0' + minutes) + ':' +
+        (seconds > 9 ? seconds : '0' + seconds)
+    )
+
+    const [breakTimeRemaining, setBreakTimeRemaining] = useState(initialTimeRemaining);
 
     // without useState it is not passed to threads
     // const audio = new Audio('http://codeskulptor-demos.commondatastorage.googleapis.com/GalaxyInvaders/pause.wav');

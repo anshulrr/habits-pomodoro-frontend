@@ -14,6 +14,7 @@ export default function UserSettingsComponent() {
     const [enableChartMonthlyAverage, setEnableChartMonthlyAverage] = useState(userSettings.enableChartMonthlyAverage)
     const [chartMonthlyAverage, setChartMonthlyAverage] = useState(userSettings.chartMonthlyAverage)
     const [pomodoroLength, setPomodoroLength] = useState(userSettings.pomodoroLength)
+    const [breakLength, setBreakLength] = useState(userSettings.breakLength)
     const [enableStopwatch, setEnableStopwatch] = useState(userSettings.enableStopwatch)
     const [enableStopwatchAudio, setEnableStopwatchAudio] = useState(userSettings.enableStopwatchAudio)
 
@@ -33,6 +34,7 @@ export default function UserSettingsComponent() {
             enableChartMonthlyAverage,
             chartMonthlyAverage,
             pomodoroLength,
+            breakLength,
             enableStopwatch,
             enableStopwatchAudio
         }
@@ -141,7 +143,9 @@ export default function UserSettingsComponent() {
                             />
                         </div>
                     </div>
+                </div>
 
+                <div className="row">
                     <div className="col-md-4">
                         <div className="input-group input-group-sm mb-3">
                             <div className="input-group-text">
@@ -177,6 +181,9 @@ export default function UserSettingsComponent() {
                             </label>
                         </div>
                     </div>
+                </div>
+
+                <div className="row">
 
                     <div className="col-md-4">
                         <div className="input-group input-group-sm mb-3">
@@ -196,17 +203,36 @@ export default function UserSettingsComponent() {
                         </div>
                     </div>
 
-                    <div className="text-danger small">{errorMessage}</div>
-                    <div className="col-md-12 text-end">
-                        <button className="btn btn-sm btn-success" type="submit">Save</button>
-                        <div className="text-success">
-                            <small>
-                                {successMessage}
-                            </small>
+                    <div className="col-md-4">
+                        <div className="input-group input-group-sm mb-3">
+                            <label className="input-group-text" htmlFor="breakLength">
+                                Break Length
+                            </label>
+                            <input
+                                type="number"
+                                name="breakLength"
+                                className="form-control"
+                                value={breakLength}
+                                placeholder="Default Break Length"
+                                onChange={(e) => setBreakLength(e.target.value)}
+                                required
+                                id="breakLength"
+                            />
                         </div>
                     </div>
+
                 </div>
-            </form>
-        </div>
+
+                <div className="text-danger small">{errorMessage}</div>
+                <div className="col-md-12 text-end">
+                    <button className="btn btn-sm btn-success" type="submit">Save</button>
+                    <div className="text-success">
+                        <small>
+                            {successMessage}
+                        </small>
+                    </div>
+                </div>
+            </form >
+        </div >
     )
 }
