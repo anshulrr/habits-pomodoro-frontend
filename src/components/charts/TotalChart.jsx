@@ -10,6 +10,7 @@ import { Bar } from "react-chartjs-2"
 import { CategoryScale } from 'chart.js'
 import Chart from 'chart.js/auto'
 import annotationPlugin from "chartjs-plugin-annotation";
+import { calculateScaleAndLabel } from "../../services/helpers/chartHelper";
 Chart.register(CategoryScale)
 Chart.register(annotationPlugin);
 
@@ -31,8 +32,11 @@ export const TotalChart = ({ includeCategories, buttonsStates, setButtonsStates 
         // console.debug({ limit, offset });
         // console.debug("total", includeCategories)
 
+        // calculate scale and label according to user settings
+        const { scale, label } = calculateScaleAndLabel({ limit, userSettings });
+
         const localDatasets = [];
-        localDatasets.label = limit;
+        localDatasets.label = label;
 
         updateLabels({ limit, offset })
         updateGoals({ limit, localDatasets })
@@ -54,34 +58,19 @@ export const TotalChart = ({ includeCategories, buttonsStates, setButtonsStates 
                             // console.debug(val[0], moment().add(-val[0] + 1, 'd').format('DD'));
                             // todo: find cleaner solution for mapping data to labels
                             const date_index = 15 - moment().add(-val[0] + 1, 'd').add(15 * offset, 'd').format('DD');
-                            dataset.data[date_index] = val[1];
-                            if (userSettings?.enableChartScale) {
-                                dataset.data[date_index] /= userSettings?.chartScale;
-                            }
+                            dataset.data[date_index] = val[1] / scale;
                         }
                     } else if (limit === 'weekly') {
                         for (const val of response.data[key]) {
                             // console.debug(val, val[1], moment().format('W'));
                             const date_index = 15 - moment().add(-val[0] + 1, 'W').add(15 * offset, 'W').format('W');
-                            dataset.data[date_index] = val[1];
-                            if (userSettings?.enableChartScale) {
-                                dataset.data[date_index] /= userSettings?.chartScale;
-                            }
-                            if (userSettings?.enableChartWeeklyAverage) {
-                                dataset.data[date_index] /= userSettings?.chartWeeklyAverage;
-                            }
+                            dataset.data[date_index] = val[1] / scale;
                         }
                     } else if (limit === 'monthly') {
                         for (const val of response.data[key]) {
                             const date = moment().add(-val[0] + 1, 'M').add(15 * offset, 'M');
                             const date_index = 15 - (date.format('M'));
-                            dataset.data[date_index] = val[1];
-                            if (userSettings?.enableChartScale) {
-                                dataset.data[date_index] /= userSettings?.chartScale;
-                            }
-                            if (userSettings?.enableChartMonthlyAverage) {
-                                dataset.data[date_index] /= userSettings?.chartMonthlyAverage;
-                            }
+                            dataset.data[date_index] = val[1] / scale;
                         }
                     }
                     // console.debug(dataset);

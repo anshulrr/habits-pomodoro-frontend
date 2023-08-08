@@ -2,6 +2,8 @@ import { useState } from "react"
 
 import { getTasksPomodorosApi } from "../../services/api/PomodoroApiService";
 import { Buttons } from "./Buttons";
+import { useAuth } from "../../services/auth/AuthContext";
+import { calculateScaleAndLabel } from "../../services/helpers/chartHelper";
 
 import { Bar } from "react-chartjs-2";
 
@@ -12,6 +14,9 @@ Chart.register(CategoryScale);
 export const TasksChart = ({ includeCategories, buttonsStates, setButtonsStates }) => {
     // console.debug("hi", chartData);
     // console.debug(includeCategories)
+
+    const authContext = useAuth()
+    const userSettings = authContext.userSettings
 
     const [chartData, setChartData] = useState({})
 
@@ -28,22 +33,26 @@ export const TasksChart = ({ includeCategories, buttonsStates, setButtonsStates 
     //     [chartData]
     // )
 
-    function retrieveTasksPomodoros({ startDate, endDate }) {
+    function retrieveTasksPomodoros({ startDate, endDate, limit }) {
         // console.debug(startDate, endDate)
         // console.debug("t", includeCategories)
+
+        const { scale, label } = calculateScaleAndLabel({ limit, userSettings });
+
         getTasksPomodorosApi({ startDate, endDate, includeCategories })
             .then(response => {
                 // console.debug(response)
                 const updated_data = {
                     labels: [],
                     data: [],
-                    colors: []
+                    colors: [],
+                    label: label
                 }
                 response.data.forEach(element => {
                     // console.debug(element);
                     updated_data.colors.push(element[2]);
                     updated_data.labels.push(element[1]);
-                    updated_data.data.push(element[0]);
+                    updated_data.data.push(element[0] / scale);
                 });
                 // console.debug(updated_data);
                 setChartData(updated_data)
@@ -87,7 +96,7 @@ export const TasksChart = ({ includeCategories, buttonsStates, setButtonsStates 
                         plugins: {
                             title: {
                                 display: true,
-                                text: `Task's Distribution Time`
+                                text: `Task's Distribution Time (${chartData.label})`
                             },
                             legend: {
                                 display: false
