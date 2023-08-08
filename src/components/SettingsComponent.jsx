@@ -1,6 +1,7 @@
 import ListProjectCategoriesComponent from './ListProjectsCategoriesComponent';
 import ChangePasswordComponent from './ChangePasswordComponent';
 import { useState } from 'react';
+import UserSettingsComponent from './UserSettingsComponent';
 
 export default function SettingsComponent() {
 
@@ -24,6 +25,11 @@ export default function SettingsComponent() {
 
                 <div className="col-md-12">
                     <ListProjectCategoriesComponent />
+                    <hr />
+                </div>
+
+                <div className="col-md-12 px-4">
+                    <UserSettingsComponent />
                     <hr />
                 </div>
             </div>

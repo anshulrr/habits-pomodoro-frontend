@@ -51,11 +51,15 @@ export default function AuthProvider({ children }) {
         // get user settings
         const response = await getUserSettingsApi();
         if (response.status === 200) {
-            localStorage.setItem('habits_pomodoro', JSON.stringify(response.data));
-            setUserSettings(response.data);
+            updateUserSettings(response.data)
         }
 
         return true;
+    }
+
+    function updateUserSettings(data) {
+        localStorage.setItem('habits_pomodoro', JSON.stringify(data));
+        setUserSettings(data);
     }
 
     function addInterceptors(token) {
@@ -119,7 +123,7 @@ export default function AuthProvider({ children }) {
         }
     }
 
-    const valuesToBeShared = { isAuthenticated, logout, user, jwtSignIn, userSettings }
+    const valuesToBeShared = { isAuthenticated, logout, user, jwtSignIn, userSettings, updateUserSettings }
 
     return (
         isFirebaseAuthLoaded &&
