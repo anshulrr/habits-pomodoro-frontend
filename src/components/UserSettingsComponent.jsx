@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { putUserSettingsApi } from '../services/api/AuthApiService'
-import { Formik, ErrorMessage, Field } from 'formik'
 import { useAuth } from '../services/auth/AuthContext';
 
 export default function UserSettingsComponent() {
@@ -41,10 +40,13 @@ export default function UserSettingsComponent() {
 
         putUserSettingsApi(request_settings)
             .then(response => {
-                console.debug(response);
+                // console.debug(response);
                 // update settings in auth context
                 authContext.updateUserSettings(response.data)
                 setSuccessMessage("Settings saved successfully")
+                setTimeout(() => {
+                    setSuccessMessage('')
+                }, 1000 * 5)
             })
             .catch(error => {
                 console.error(error.message)
@@ -60,14 +62,14 @@ export default function UserSettingsComponent() {
                 <div className="row">
 
                     <div className="col-md-4">
-                        <div class="input-group input-group-sm mb-3">
+                        <div className="input-group input-group-sm mb-3">
                             <div className="input-group-text">
                                 <input
                                     type="checkbox"
                                     name="enableChartScale"
                                     className="form-check-input mt-0"
                                     checked={enableChartScale}
-                                    onClick={(e) => setEnableChartScale(e.target.checked)}
+                                    onChange={(e) => setEnableChartScale(e.target.checked)}
                                     id="eChartScale"
                                 />
                             </div>
@@ -87,14 +89,14 @@ export default function UserSettingsComponent() {
                     </div>
 
                     <div className="col-md-4">
-                        <div class="input-group input-group-sm mb-3">
+                        <div className="input-group input-group-sm mb-3">
                             <div className="input-group-text">
                                 <input
                                     type="checkbox"
                                     name="enableChartWeeklyAverage"
                                     className="form-check-input mt-0"
                                     checked={enableChartWeeklyAverage}
-                                    onClick={(e) => setEnableChartWeeklyAverage(e.target.checked)}
+                                    onChange={(e) => setEnableChartWeeklyAverage(e.target.checked)}
                                     id="eChartWeeklyAverage"
                                 />
                             </div>
@@ -114,14 +116,14 @@ export default function UserSettingsComponent() {
                     </div>
 
                     <div className="col-md-4">
-                        <div class="input-group input-group-sm mb-3">
+                        <div className="input-group input-group-sm mb-3">
                             <div className="input-group-text">
                                 <input
                                     type="checkbox"
                                     name="enableChartMonthlyAverage"
                                     className="form-check-input mt-0"
                                     checked={enableChartMonthlyAverage}
-                                    onClick={(e) => setEnableChartMonthlyAverage(e.target.checked)}
+                                    onChange={(e) => setEnableChartMonthlyAverage(e.target.checked)}
                                     id="eChartMonthlyAverage"
                                 />
                             </div>
@@ -141,14 +143,14 @@ export default function UserSettingsComponent() {
                     </div>
 
                     <div className="col-md-4">
-                        <div class="input-group input-group-sm mb-3">
+                        <div className="input-group input-group-sm mb-3">
                             <div className="input-group-text">
                                 <input
                                     type="checkbox"
                                     name="enableStopwatch"
                                     className="form-check-input mt-0"
                                     checked={enableStopwatch}
-                                    onClick={(e) => setEnableStopwatch(e.target.checked)}
+                                    onChange={(e) => setEnableStopwatch(e.target.checked)}
                                     id="eStopwatch"
                                 />
                             </div>
@@ -159,14 +161,14 @@ export default function UserSettingsComponent() {
                     </div>
 
                     <div className="col-md-4">
-                        <div class="input-group input-group-sm mb-3">
+                        <div className="input-group input-group-sm mb-3">
                             <div className="input-group-text">
                                 <input
                                     type="checkbox"
                                     name="enableStopwatchAudio"
                                     className="form-check-input mt-0"
                                     checked={enableStopwatchAudio}
-                                    onClick={(e) => setEnableStopwatchAudio(e.target.checked)}
+                                    onChange={(e) => setEnableStopwatchAudio(e.target.checked)}
                                     id="eStopwatchAudio"
                                 />
                             </div>
@@ -177,7 +179,7 @@ export default function UserSettingsComponent() {
                     </div>
 
                     <div className="col-md-4">
-                        <div class="input-group input-group-sm mb-3">
+                        <div className="input-group input-group-sm mb-3">
                             <label className="input-group-text" htmlFor="pomodoroLength">
                                 Default Pomodoro Length
                             </label>
