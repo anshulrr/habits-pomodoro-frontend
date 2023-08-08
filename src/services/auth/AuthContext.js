@@ -3,7 +3,7 @@
 // Share the created context with other components
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { startApi } from "../api/AuthApiService";
+import { getUserSettingsApi } from "../api/AuthApiService";
 import { apiClient } from "../api/ApiClient";
 import FirebaseAuthService from "./FirebaseAuthService";
 
@@ -20,11 +20,13 @@ export default function AuthProvider({ children }) {
     const [isAuthenticated, setAuthenticated] = useState(false)
     const [isFirebaseAuthLoaded, setFirebaseAuthLoaded] = useState(false)
     const [user, setUser] = useState(null)
+    const [userSettings, setUserSettings] = useState({})
 
     useEffect(
         () => {
             // to set interceptors after page refresh
             FirebaseAuthService.subscribeToAuthChanges({ setFirebaseAuthLoaded, setAuthenticated, addInterceptors, setUser });
+            setUserSettings(JSON.parse(localStorage.getItem('habits_pomodoro')));
         }, []   // eslint-disable-line react-hooks/exhaustive-deps
     )
 
@@ -46,9 +48,11 @@ export default function AuthProvider({ children }) {
         addInterceptors(token)
 
         // if new user; save it in the backend
-        const response = await startApi();
+        // get user settings
+        const response = await getUserSettingsApi();
         if (response.status === 200) {
-            // console.info("if new user; saved in the backend")
+            localStorage.setItem('habits_pomodoro', JSON.stringify(response.data));
+            setUserSettings(response.data);
         }
 
         return true;
@@ -105,6 +109,7 @@ export default function AuthProvider({ children }) {
     }
 
     async function logout() {
+        localStorage.removeItem('habits_pomodoro')
         try {
             await FirebaseAuthService.signOutUser();
             // console.debug("signed out successfully")
@@ -114,7 +119,7 @@ export default function AuthProvider({ children }) {
         }
     }
 
-    const valuesToBeShared = { isAuthenticated, logout, user, jwtSignIn }
+    const valuesToBeShared = { isAuthenticated, logout, user, jwtSignIn, userSettings }
 
     return (
         isFirebaseAuthLoaded &&

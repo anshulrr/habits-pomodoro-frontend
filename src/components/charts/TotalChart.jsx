@@ -1,6 +1,7 @@
 import { useState } from "react"
 import moment from "moment"
 
+import { useAuth } from "../../services/auth/AuthContext";
 import { getTotalPomodorosApi } from "../../services/api/PomodoroApiService"
 import { Buttons } from "./Buttons";
 
@@ -15,8 +16,13 @@ Chart.register(annotationPlugin);
 const DAILY_GOAL = 16;
 const DAILY_THRESHOLD = 14;
 const POMODORO_LENGTH = 25;
+const WEEKLY_DAYS = 7;
+const MONTHLY_AVG = 22;
 
 export const TotalChart = ({ includeCategories, buttonsStates, setButtonsStates }) => {
+    const authContext = useAuth()
+    const userSettings = authContext.userSettings
+
     const [datasets, setDatasets] = useState([])
 
     const [labels, setLabels] = useState([])
@@ -47,17 +53,35 @@ export const TotalChart = ({ includeCategories, buttonsStates, setButtonsStates 
                         for (const val of response.data[key]) {
                             // console.debug(val[0], moment().add(-val[0] + 1, 'd').format('DD'));
                             // todo: find cleaner solution for mapping data to labels
-                            dataset.data[15 - moment().add(-val[0] + 1, 'd').add(15 * offset, 'd').format('DD')] = val[1];
+                            const date_index = 15 - moment().add(-val[0] + 1, 'd').add(15 * offset, 'd').format('DD');
+                            dataset.data[date_index] = val[1];
+                            if (userSettings?.enableChartScale) {
+                                dataset.data[date_index] /= userSettings?.chartScale;
+                            }
                         }
                     } else if (limit === 'weekly') {
                         for (const val of response.data[key]) {
-                            // console.debug(val[0], val[1], moment().format('W'));
-                            dataset.data[15 - moment().add(-val[0] + 1, 'W').add(15 * offset, 'W').format('W')] = val[1];
+                            // console.debug(val, val[1], moment().format('W'));
+                            const date_index = 15 - moment().add(-val[0] + 1, 'W').add(15 * offset, 'W').format('W');
+                            dataset.data[date_index] = val[1];
+                            if (userSettings?.enableChartScale) {
+                                dataset.data[date_index] /= userSettings?.chartScale;
+                            }
+                            if (userSettings?.enableChartWeeklyAverage) {
+                                dataset.data[date_index] /= userSettings?.chartWeeklyAverage;
+                            }
                         }
                     } else if (limit === 'monthly') {
                         for (const val of response.data[key]) {
-                            // console.debug(val[0], val[1], moment().format('W'));
-                            dataset.data[15 - (moment().add(-val[0] + 1, 'M').add(15 * offset, 'M').format('M'))] = val[1];
+                            const date = moment().add(-val[0] + 1, 'M').add(15 * offset, 'M');
+                            const date_index = 15 - (date.format('M'));
+                            dataset.data[date_index] = val[1];
+                            if (userSettings?.enableChartScale) {
+                                dataset.data[date_index] /= userSettings?.chartScale;
+                            }
+                            if (userSettings?.enableChartMonthlyAverage) {
+                                dataset.data[date_index] /= userSettings?.chartMonthlyAverage;
+                            }
                         }
                     }
                     // console.debug(dataset);
@@ -98,11 +122,11 @@ export const TotalChart = ({ includeCategories, buttonsStates, setButtonsStates 
             localDatasets.goal = POMODORO_LENGTH * DAILY_GOAL;
             localDatasets.threshold = POMODORO_LENGTH * DAILY_THRESHOLD;
         } else if (limit === 'weekly') {
-            localDatasets.goal = 5 * POMODORO_LENGTH * DAILY_GOAL;
-            localDatasets.threshold = 5 * POMODORO_LENGTH * DAILY_THRESHOLD;
+            localDatasets.goal = WEEKLY_DAYS * POMODORO_LENGTH * DAILY_GOAL;
+            localDatasets.threshold = WEEKLY_DAYS * POMODORO_LENGTH * DAILY_THRESHOLD;
         } else if (limit === 'monthly') {
-            localDatasets.goal = 22 * POMODORO_LENGTH * DAILY_GOAL;
-            localDatasets.threshold = 22 * POMODORO_LENGTH * DAILY_THRESHOLD;
+            localDatasets.goal = MONTHLY_AVG * POMODORO_LENGTH * DAILY_GOAL;
+            localDatasets.threshold = MONTHLY_AVG * POMODORO_LENGTH * DAILY_THRESHOLD;
         }
     }
 
