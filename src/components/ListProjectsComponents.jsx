@@ -95,9 +95,9 @@ export default function ListProjectsComponent() {
                                                 <small>{proj.pomodoroLength || 25} </small>
                                                 <small>{proj.category} </small>
                                             </span>
-                                            <span className="list-button">
-                                                <i className="bi bi-pencil-square" onClick={() => updateProject(proj.id)}></i>
-                                            </span>
+                                        </div>
+                                        <div className="col-2 text-secondary text-end list-button">
+                                            <i className="bi bi-pencil-square" onClick={() => updateProject(proj.id)}></i>
                                         </div>
                                     </div>
                                 )

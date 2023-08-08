@@ -86,7 +86,7 @@ export default function ListProjectCategoriesComponent() {
                                                 </span>
                                                 <span>&nbsp;{cat.name}</span>
                                             </div>
-                                            <div className="col text-secondary text-truncate text-end">
+                                            <div className="col-4 text-secondary text-end">
                                                 <span>
                                                     {cat.level}&nbsp;
                                                 </span>
