@@ -1,13 +1,17 @@
 import { useEffect, useRef, useState } from 'react'
 import StopwatchComponent from './StopwatchComponent'
+import { useAuth } from '../services/auth/AuthContext';
 
 export default function BreakTimerComponent({ startAgain }) {
+    const authContext = useAuth()
+    const userSettings = authContext.userSettings
 
     const Ref = useRef(null);
 
     // const [breakStatus, setBreakStatus] = useState('idle')
     const [breakStatus, setBreakStatus] = useState('break_started')
 
+    // todo: get it from user settings
     const [breakTimer, setBreakTimer] = useState('5:00')
 
     const [breakTimeRemaining, setBreakTimeRemaining] = useState(5 * 60);
@@ -82,10 +86,12 @@ export default function BreakTimerComponent({ startAgain }) {
         setBreakStatus(local_status);
         if (local_status === 'break_finished') {
             // console.debug(audio);
-            const local_audio = new Audio(process.env.PUBLIC_URL + '/audio/ticking-clock_1-27477.mp3')
-            local_audio.setAttribute('loop', true)
-            local_audio.play()
-            setAudio(local_audio)
+            if (userSettings.enableStopwatch && userSettings.enableStopwatchAudio) {
+                const local_audio = new Audio(process.env.PUBLIC_URL + '/audio/ticking-clock_1-27477.mp3')
+                local_audio.setAttribute('loop', true)
+                local_audio.play()
+                setAudio(local_audio)
+            }
             setBreakStatus('break_stopwatch');
         }
     }
@@ -97,7 +103,7 @@ export default function BreakTimerComponent({ startAgain }) {
         return () => {
             // console.debug('fix for switch to different component')
             clearInterval(id);  // fix for switching to different component
-            if (breakStatus === 'break_stopwatch') {
+            if (breakStatus === 'break_stopwatch' && userSettings.enableStopwatch && userSettings.enableStopwatchAudio) {
                 audio.pause();
             }
         };
@@ -129,10 +135,10 @@ export default function BreakTimerComponent({ startAgain }) {
             }
 
             {
-                breakStatus === 'break_stopwatch' &&
-                <StopwatchComponent></StopwatchComponent>
+                breakStatus === 'break_stopwatch' && userSettings.enableStopwatch &&
+                < StopwatchComponent ></StopwatchComponent>
             }
 
-        </div>
+        </div >
     )
 }
