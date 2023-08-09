@@ -1,8 +1,9 @@
 import { useState } from "react"
+import moment from "moment";
 
 import { getTasksPomodorosApi } from "../../services/api/PomodoroApiService";
 import { Buttons } from "./Buttons";
-import { calculateScaleAndLabel, truncateString } from "../../services/helpers/chartHelper";
+import { calculateScaleAndLabel, calculateScaleForAdjustedAvg, truncateString } from "../../services/helpers/chartHelper";
 
 import { Bar } from "react-chartjs-2";
 
@@ -28,11 +29,15 @@ export const TasksChart = ({ includeCategories, statsSettings, buttonsStates, se
     //     [chartData]
     // )
 
-    function retrieveTasksPomodoros({ startDate, endDate, limit }) {
+    function retrieveTasksPomodoros({ startDate, endDate, limit, offset }) {
         // console.debug(startDate, endDate)
         // console.debug("t", includeCategories)
 
-        const { scale, label } = calculateScaleAndLabel({ limit, ...statsSettings });
+        let { scale, label } = calculateScaleAndLabel({ limit, ...statsSettings });
+
+        if (offset === 0) {
+            scale = calculateScaleForAdjustedAvg({ limit, scale, ...statsSettings });
+        }
 
         getTasksPomodorosApi({ startDate, endDate, includeCategories })
             .then(response => {

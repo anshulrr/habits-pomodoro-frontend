@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export const calculateScaleAndLabel = ({
     limit,
     enableChartScale,
@@ -24,6 +26,34 @@ export const calculateScaleAndLabel = ({
     }
     // console.debug({ scale, label });
     return { scale, label };
+}
+
+export const calculateScaleForAdjustedAvg = ({
+    limit,
+    scale,
+    enableChartAdjustedWeeklyMonthlyAverage,
+    enableChartMonthlyAverage,
+    chartMonthlyAverage,
+    enableChartWeeklyAverage,
+    chartWeeklyAverage
+}) => {
+    // console.debug({ scale });
+    // assuming starting days of week/month as working day
+    if (enableChartAdjustedWeeklyMonthlyAverage) {
+        if (limit === 'weekly' &&
+            enableChartWeeklyAverage &&
+            chartWeeklyAverage > moment().weekday()
+        ) {
+            scale = scale / chartWeeklyAverage * moment().weekday();
+        } else if (limit === 'monthly' &&
+            enableChartMonthlyAverage &&
+            chartMonthlyAverage > moment().date()
+        ) {
+            scale = scale / chartMonthlyAverage * moment().date();
+        }
+    }
+    // console.debug({ scale });
+    return scale;
 }
 
 export const truncateString = (str, n = 10) => {

@@ -1,8 +1,9 @@
 import { useState } from "react"
+import moment from "moment";
 
 import { getProjectsPomodorosApi } from "../../services/api/PomodoroApiService";
 import { Buttons } from "./Buttons";
-import { calculateScaleAndLabel } from "../../services/helpers/chartHelper";
+import { calculateScaleAndLabel, calculateScaleForAdjustedAvg } from "../../services/helpers/chartHelper";
 
 import { Doughnut } from "react-chartjs-2";
 
@@ -28,9 +29,13 @@ export const ProjectsDistributionChart = ({ includeCategories, statsSettings, bu
     //     [chartData]
     // )
 
-    function retrieveProjectsPomodoros({ startDate, endDate, limit }) {
+    function retrieveProjectsPomodoros({ startDate, endDate, limit, offset }) {
         // calculate scale and label according to user settings
-        const { scale, label } = calculateScaleAndLabel({ limit, ...statsSettings });
+        let { scale, label } = calculateScaleAndLabel({ limit, ...statsSettings });
+
+        if (offset === 0) {
+            scale = calculateScaleForAdjustedAvg({ limit, scale, ...statsSettings });
+        }
 
         // console.debug("p", includeCategories)
         getProjectsPomodorosApi({ startDate, endDate, includeCategories })
