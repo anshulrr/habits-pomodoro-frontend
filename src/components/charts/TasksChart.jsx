@@ -77,7 +77,6 @@ export const TasksChart = ({ includeCategories, statsSettings, buttonsStates, se
                             // datasets is an array of objects where each object represents a set of data to display corresponding to the labels above. for brevity, we'll keep it at one object
                             datasets: [
                                 {
-                                    label: 'time in minutes',
                                     data: chartData.data,
                                     // you can set indiviual colors for each bar
                                     backgroundColor: chartData.colors,
