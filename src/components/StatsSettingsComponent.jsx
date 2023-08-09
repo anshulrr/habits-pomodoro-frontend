@@ -12,6 +12,7 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
     const [chartWeeklyAverage, setChartWeeklyAverage] = useState(userSettings.chartWeeklyAverage)
     const [enableChartMonthlyAverage, setEnableChartMonthlyAverage] = useState(userSettings.enableChartMonthlyAverage)
     const [chartMonthlyAverage, setChartMonthlyAverage] = useState(userSettings.chartMonthlyAverage)
+    const [enableChartAdjustedWeeklyMonthlyAverage, setEnableChartAdjustedWeeklyMonthlyAverage] = useState(userSettings.enableChartAdjustedWeeklyMonthlyAverage)
 
     const [errorMessage, setErrorMessage] = useState('')
 
@@ -34,6 +35,7 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
             chartWeeklyAverage,
             enableChartMonthlyAverage,
             chartMonthlyAverage,
+            enableChartAdjustedWeeklyMonthlyAverage,
         };
         // console.debug(updatedStatsSetting)
         setStatsSettings(updatedStatsSetting)
@@ -149,6 +151,24 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
                         onChange={(e) => handleOnChange(setChartMonthlyAverage, e.target.value)}
                         required
                     />
+                </div>
+            </div>
+
+            <div className="col-md-12">
+                <div className="input-group input-group-sm mb-2">
+                    <div className="input-group-text">
+                        <input
+                            type="checkbox"
+                            name="enableChartAdjustedWeeklyMonthlyAverage"
+                            className="form-check-input mt-0"
+                            checked={enableChartAdjustedWeeklyMonthlyAverage}
+                            onChange={(e) => handleOnChange(setEnableChartAdjustedWeeklyMonthlyAverage, e.target.checked)}
+                            id="eChartAdjustedWeeklyMonthlyAverage"
+                        />
+                    </div>
+                    <label className="input-group-text" htmlFor="eChartAdjustedWeeklyMonthlyAverage">
+                        Enable Adjusted Avg for current W/M
+                    </label>
                 </div>
             </div>
 

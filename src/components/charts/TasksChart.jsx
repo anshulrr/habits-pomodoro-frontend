@@ -1,4 +1,5 @@
 import { useState } from "react"
+import moment from "moment";
 
 import { getTasksPomodorosApi } from "../../services/api/PomodoroApiService";
 import { Buttons } from "./Buttons";
@@ -28,11 +29,25 @@ export const TasksChart = ({ includeCategories, statsSettings, buttonsStates, se
     //     [chartData]
     // )
 
-    function retrieveTasksPomodoros({ startDate, endDate, limit }) {
+    function retrieveTasksPomodoros({ startDate, endDate, limit, offset }) {
         // console.debug(startDate, endDate)
         // console.debug("t", includeCategories)
 
-        const { scale, label } = calculateScaleAndLabel({ limit, ...statsSettings });
+        let { scale, label } = calculateScaleAndLabel({ limit, ...statsSettings });
+
+        // todo: move this to seperate section
+        if (statsSettings.enableChartAdjustedWeeklyMonthlyAverage &&
+            statsSettings.enableChartMonthlyAverage &&
+            offset === 0) {
+            // console.debug(scale);
+            // assuming starting days of week/month as working day
+            if (limit === 'weekly' && statsSettings.chartWeeklyAverage > moment().weekday()) {
+                scale = scale / statsSettings.chartWeeklyAverage * moment().weekday();
+            } else if (limit === 'monthly' && statsSettings.chartMonthlyAverage > moment().date()) {
+                scale = scale / statsSettings.chartMonthlyAverage * moment().date();
+            }
+            // console.debug(scale);
+        }
 
         getTasksPomodorosApi({ startDate, endDate, includeCategories })
             .then(response => {

@@ -43,7 +43,7 @@ export const TotalChart = ({ includeCategories, statsSettings, buttonsStates, se
 
         getTotalPomodorosApi({ limit, startDate, endDate, includeCategories })
             .then(response => {
-                // console.debug("stacked", response)
+                // console.debug("stacked", response.data)
 
                 // set label after chart data is received
                 setChartLabel(`Total Distribution Time (${label})`);
@@ -66,12 +66,36 @@ export const TotalChart = ({ includeCategories, statsSettings, buttonsStates, se
                             // console.debug(val, val[1], moment().format('W'));
                             const date_index = 15 - moment().add(-val[0] + 1, 'W').add(15 * offset, 'W').format('W');
                             dataset.data[date_index] = val[1] / scale;
+
+                            if (statsSettings.enableChartAdjustedWeeklyMonthlyAverage &&
+                                statsSettings.enableChartWeeklyAverage &&
+                                offset === 0 &&
+                                date_index === 14) {
+                                // console.debug('weekly', dataset.data[date_index], dataset.data[date_index] * scale);
+                                // assuming starting days of week as working day
+                                if (statsSettings.chartWeeklyAverage > moment().weekday()) {
+                                    dataset.data[date_index] = dataset.data[date_index] * statsSettings.chartWeeklyAverage / moment().weekday();
+                                }
+                                // console.debug('weekly', dataset.data[date_index]);
+                            }
                         }
                     } else if (limit === 'monthly') {
                         for (const val of response.data[key]) {
                             const date = moment().add(-val[0] + 1, 'M').add(15 * offset, 'M');
                             const date_index = 15 - (date.format('M'));
                             dataset.data[date_index] = val[1] / scale;
+
+                            if (statsSettings.enableChartAdjustedWeeklyMonthlyAverage &&
+                                statsSettings.enableChartMonthlyAverage &&
+                                offset === 0 &&
+                                date_index === 14) {
+                                // console.debug('monthly', dataset.data[date_index], dataset.data[date_index] * scale);
+                                // assuming starting days of month as working day
+                                if (statsSettings.chartMonthlyAverage > moment().date()) {
+                                    dataset.data[date_index] = dataset.data[date_index] * statsSettings.chartMonthlyAverage / moment().date();
+                                }
+                                // console.debug('monthly', dataset.data[date_index]);
+                            }
                         }
                     }
                     // console.debug(dataset);
