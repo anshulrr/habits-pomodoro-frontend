@@ -43,7 +43,7 @@ export const TotalChart = ({ includeCategories, statsSettings, buttonsStates, se
 
         getTotalPomodorosApi({ limit, startDate, endDate, includeCategories })
             .then(response => {
-                console.debug("stacked", response.data)
+                // console.debug("stacked", response.data)
 
                 // set label after chart data is received
                 setChartLabel(`Total Distribution Time (${label})`);
