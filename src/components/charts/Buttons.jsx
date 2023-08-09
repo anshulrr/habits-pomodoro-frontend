@@ -20,7 +20,9 @@ export const Buttons = ({
     // to retrive data after click on bottons
     useEffect(
         () => {
-            retrievePomodoros({ startDate, endDate, limit, offset })
+            // update dates for component re render with updated limit and offset
+            const { start, end } = updateDates(limit, offset)
+            retrievePomodoros({ startDate: start, endDate: end, limit, offset })
             setButtonsStates({
                 limit: limit,
                 offset: offset,
@@ -44,30 +46,34 @@ export const Buttons = ({
     // need to get updated limit and offset (to avoid asynchronous execution)
     function updateDates(limit, offset) {
         // console.debug('updated limit & offset: ', limit, offset)
+        let start;
+        let end;
+        let str;
         if (limit === 'daily') {
             const date = moment().startOf('day').add(offset, 'd');
-            setDateString(date.format('DD MMM'))
-            // console.debug(date.unix())
-            setStartDate(date.toISOString());
-            setEndDate(date.add(1, 'd').toISOString())
+            start = date.clone();
+            end = date.clone().add(1, 'd');
+            str = date.format('DD MMM');
         } else if (limit === 'weekly') {
             // substract 1 day first and add it later: to make monday as start of the week
             const date = moment().add(-1, 'd').add(offset, 'w');
-            const start = date.clone().startOf('week').add(1, 'd');
-            const end = date.clone().endOf('week').add(1, 'd');
-            const str = start.format('DD MMM') + "-" + end.format('DD MMM');
-            setDateString(str)
-            setStartDate(start.toISOString())
-            setEndDate(end.toISOString())
+            start = date.clone().startOf('week').add(1, 'd');
+            end = date.clone().endOf('week').add(1, 'd');
+            str = start.format('DD MMM') + "-" + end.format('DD MMM');
         } else if (limit === 'monthly') {
             const date = moment().add(offset, 'M');
-            const start = date.clone().startOf('month');
-            const end = date.clone().endOf('month');
-            const str = date.format('MMM');
-            setDateString(str)
-            setStartDate(start.toISOString())
-            setEndDate(end.toISOString())
+            start = date.clone().startOf('month');
+            end = date.clone().endOf('month');
+            str = date.format('MMM');
         }
+        start = start.toISOString();
+        end = end.toISOString();
+
+        setDateString(str);
+        setStartDate(start);
+        setEndDate(end);
+
+        return { start, end }
     }
 
     return (
