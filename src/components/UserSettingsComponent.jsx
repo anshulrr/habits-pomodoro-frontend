@@ -21,8 +21,7 @@ export default function UserSettingsComponent() {
     const [errorMessage, setErrorMessage] = useState('')
     const [successMessage, setSuccessMessage] = useState('')
 
-    function handleSubmit(error) {
-        error.preventDefault();
+    function saveSettings() {
         setErrorMessage('')
 
         const request_settings = {
@@ -60,11 +59,11 @@ export default function UserSettingsComponent() {
     return (
         <div>
             <h6 className='text-start'>Settings</h6>
-            <form onSubmit={handleSubmit}>
+            <form>
                 <div className="row">
 
                     <div className="col-md-4">
-                        <div className="input-group input-group-sm mb-3">
+                        <div className="input-group input-group-sm mb-2">
                             <div className="input-group-text">
                                 <input
                                     type="checkbox"
@@ -91,7 +90,7 @@ export default function UserSettingsComponent() {
                     </div>
 
                     <div className="col-md-4">
-                        <div className="input-group input-group-sm mb-3">
+                        <div className="input-group input-group-sm mb-2">
                             <div className="input-group-text">
                                 <input
                                     type="checkbox"
@@ -118,7 +117,7 @@ export default function UserSettingsComponent() {
                     </div>
 
                     <div className="col-md-4">
-                        <div className="input-group input-group-sm mb-3">
+                        <div className="input-group input-group-sm mb-2">
                             <div className="input-group-text">
                                 <input
                                     type="checkbox"
@@ -143,11 +142,12 @@ export default function UserSettingsComponent() {
                             />
                         </div>
                     </div>
+
                 </div>
 
                 <div className="row">
                     <div className="col-md-4">
-                        <div className="input-group input-group-sm mb-3">
+                        <div className="input-group input-group-sm mb-2">
                             <div className="input-group-text">
                                 <input
                                     type="checkbox"
@@ -165,7 +165,7 @@ export default function UserSettingsComponent() {
                     </div>
 
                     <div className="col-md-4">
-                        <div className="input-group input-group-sm mb-3">
+                        <div className="input-group input-group-sm mb-2">
                             <div className="input-group-text">
                                 <input
                                     type="checkbox"
@@ -186,7 +186,7 @@ export default function UserSettingsComponent() {
                 <div className="row">
 
                     <div className="col-md-4">
-                        <div className="input-group input-group-sm mb-3">
+                        <div className="input-group input-group-sm mb-2">
                             <label className="input-group-text" htmlFor="pomodoroLength">
                                 Default Pomodoro Length
                             </label>
@@ -204,7 +204,7 @@ export default function UserSettingsComponent() {
                     </div>
 
                     <div className="col-md-4">
-                        <div className="input-group input-group-sm mb-3">
+                        <div className="input-group input-group-sm mb-2">
                             <label className="input-group-text" htmlFor="breakLength">
                                 Break Length
                             </label>
@@ -225,12 +225,8 @@ export default function UserSettingsComponent() {
 
                 <div className="text-danger small">{errorMessage}</div>
                 <div className="col-md-12 text-end">
-                    <button className="btn btn-sm btn-success" type="submit">Save</button>
-                    <div className="text-success">
-                        <small>
-                            {successMessage}
-                        </small>
-                    </div>
+                    <button className="btn btn-sm btn-success" type="button" onClick={saveSettings}>Save</button>
+                    <div className="text-success"><small>{successMessage}</small></div>
                 </div>
             </form >
         </div >

@@ -2,8 +2,7 @@ import { useState } from "react"
 
 import { getTasksPomodorosApi } from "../../services/api/PomodoroApiService";
 import { Buttons } from "./Buttons";
-import { useAuth } from "../../services/auth/AuthContext";
-import { calculateScaleAndLabel } from "../../services/helpers/chartHelper";
+import { calculateScaleAndLabel, truncateString } from "../../services/helpers/chartHelper";
 
 import { Bar } from "react-chartjs-2";
 
@@ -11,14 +10,10 @@ import { CategoryScale } from 'chart.js';
 import Chart from 'chart.js/auto';
 Chart.register(CategoryScale);
 
-export const TasksChart = ({ includeCategories, buttonsStates, setButtonsStates }) => {
-    // console.debug("hi", chartData);
-    // console.debug(includeCategories)
+export const TasksChart = ({ includeCategories, statsSettings, buttonsStates, setButtonsStates }) => {
+    // console.debug('from TasksChart', includeCategories, statsSettings)
 
-    const authContext = useAuth()
-    const userSettings = authContext.userSettings
-
-    const [chartData, setChartData] = useState({})
+    const [chartData, setChartData] = useState({ label: '' })
 
     // // for first time load (not needed)
     // useEffect(
@@ -37,7 +32,7 @@ export const TasksChart = ({ includeCategories, buttonsStates, setButtonsStates 
         // console.debug(startDate, endDate)
         // console.debug("t", includeCategories)
 
-        const { scale, label } = calculateScaleAndLabel({ limit, userSettings });
+        const { scale, label } = calculateScaleAndLabel({ limit, ...statsSettings });
 
         getTasksPomodorosApi({ startDate, endDate, includeCategories })
             .then(response => {
@@ -46,12 +41,12 @@ export const TasksChart = ({ includeCategories, buttonsStates, setButtonsStates 
                     labels: [],
                     data: [],
                     colors: [],
-                    label: label
+                    label: `Task's Distribution Time (${label})`
                 }
                 response.data.forEach(element => {
                     // console.debug(element);
                     updated_data.colors.push(element[2]);
-                    updated_data.labels.push(element[1]);
+                    updated_data.labels.push(truncateString(element[1], 20));
                     updated_data.data.push(element[0] / scale);
                 });
                 // console.debug(updated_data);
@@ -96,7 +91,7 @@ export const TasksChart = ({ includeCategories, buttonsStates, setButtonsStates 
                         plugins: {
                             title: {
                                 display: true,
-                                text: `Task's Distribution Time (${chartData.label})`
+                                text: chartData.label
                             },
                             legend: {
                                 display: false

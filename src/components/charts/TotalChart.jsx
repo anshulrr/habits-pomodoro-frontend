@@ -1,7 +1,6 @@
 import { useState } from "react"
 import moment from "moment"
 
-import { useAuth } from "../../services/auth/AuthContext";
 import { getTotalPomodorosApi } from "../../services/api/PomodoroApiService"
 import { Buttons } from "./Buttons";
 
@@ -20,11 +19,11 @@ const POMODORO_LENGTH = 25;
 const WEEKLY_DAYS = 7;
 const MONTHLY_AVG = 22;
 
-export const TotalChart = ({ includeCategories, buttonsStates, setButtonsStates }) => {
-    const authContext = useAuth()
-    const userSettings = authContext.userSettings
+export const TotalChart = ({ includeCategories, statsSettings, buttonsStates, setButtonsStates }) => {
 
     const [datasets, setDatasets] = useState([])
+
+    const [chartLabel, setChartLabel] = useState('')
 
     const [labels, setLabels] = useState([])
 
@@ -33,10 +32,9 @@ export const TotalChart = ({ includeCategories, buttonsStates, setButtonsStates 
         // console.debug("total", includeCategories)
 
         // calculate scale and label according to user settings
-        const { scale, label } = calculateScaleAndLabel({ limit, userSettings });
+        const { scale, label } = calculateScaleAndLabel({ limit, ...statsSettings });
 
         const localDatasets = [];
-        localDatasets.label = label;
 
         updateLabels({ limit, offset })
         updateGoals({ limit, localDatasets })
@@ -46,6 +44,9 @@ export const TotalChart = ({ includeCategories, buttonsStates, setButtonsStates 
         getTotalPomodorosApi({ limit, startDate, endDate, includeCategories })
             .then(response => {
                 // console.debug("stacked", response)
+
+                // set label after chart data is received
+                setChartLabel(`Total Distribution Time (${label})`);
 
                 for (const key in response.data) {
                     const dataset = {
@@ -183,7 +184,7 @@ export const TotalChart = ({ includeCategories, buttonsStates, setButtonsStates 
                         plugins: {
                             title: {
                                 display: true,
-                                text: `Total Distribution Time (${datasets.label})`
+                                text: chartLabel
                             },
                             legend: {
                                 display: true,

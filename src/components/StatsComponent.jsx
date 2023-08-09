@@ -6,12 +6,17 @@ import { ProjectsDistributionChart } from "./charts/ProjectsDistributionChart";
 import { TotalChart } from "./charts/TotalChart";
 import CategoryChecklistComponent from "./CategoryChecklistComponent";
 import ListPomodorosComponent from "./ListPomodorosComponent";
+import StatsSettingsComponent from "./StatsSettingsComponent";
 
 export default function ListTasksComponent() {
 
     const [categories, setCategories] = useState([])
 
     const [includeCategories, setIncludeCategories] = useState([])
+
+    const [statsSettings, setStatsSettings] = useState({})
+
+    const [reload, setReload] = useState(0)
 
     const [tasksChartButtonsStates, setTasksChartBButtonsStates] = useState({
         limit: 'daily',
@@ -68,16 +73,27 @@ export default function ListTasksComponent() {
                         key={categories}
                         categories={categories}
                         setIncludeCategories={setIncludeCategories}
-                    ></CategoryChecklistComponent>
+                        reload={reload}
+                        setReload={setReload}
+                    />
+
+                    <h6>Settings</h6>
+                    <StatsSettingsComponent
+                        statsSettings={statsSettings}
+                        setStatsSettings={setStatsSettings}
+                        reload={reload}
+                        setReload={setReload}
+                    />
                 </div>
                 {
-                    includeCategories.length !== 0 &&
+                    includeCategories.length !== 0 && Object.keys(statsSettings).length !== 0 &&
                     <div className="col-md-8">
                         <div className="row">
                             <div className="col-md-6">
                                 <TasksChart
-                                    key={includeCategories}
+                                    key={reload}
                                     includeCategories={includeCategories}
+                                    statsSettings={statsSettings}
                                     buttonsStates={tasksChartButtonsStates}
                                     setButtonsStates={setTasksChartBButtonsStates}
                                 />
@@ -85,8 +101,9 @@ export default function ListTasksComponent() {
                             </div>
                             <div className="col-md-6">
                                 <ProjectsDistributionChart
-                                    key={includeCategories}
+                                    key={reload}
                                     includeCategories={includeCategories}
+                                    statsSettings={statsSettings}
                                     buttonsStates={projectsChartButtonsStates}
                                     setButtonsStates={setProjectsChartBButtonsStates}
                                 />
@@ -94,8 +111,9 @@ export default function ListTasksComponent() {
                             </div>
                             <div className="col-md-6">
                                 <TotalChart
-                                    key={includeCategories}
+                                    key={reload}
                                     includeCategories={includeCategories}
+                                    statsSettings={statsSettings}
                                     buttonsStates={totalChartButtonsStates}
                                     setButtonsStates={setTotalChartBButtonsStates}
                                 />
@@ -103,7 +121,7 @@ export default function ListTasksComponent() {
                             </div>
                             <div className="col-md-6 overflow-scroll" style={{ maxHeight: "55vh" }}>
                                 <ListPomodorosComponent
-                                    key={includeCategories}
+                                    key={reload}
                                     includeCategories={includeCategories}
                                     buttonsStates={listPomodorosButtonsStates}
                                     setButtonsStates={setListPomodorosButtonsStates}

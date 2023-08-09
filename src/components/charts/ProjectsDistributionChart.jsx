@@ -2,7 +2,6 @@ import { useState } from "react"
 
 import { getProjectsPomodorosApi } from "../../services/api/PomodoroApiService";
 import { Buttons } from "./Buttons";
-import { useAuth } from "../../services/auth/AuthContext";
 import { calculateScaleAndLabel } from "../../services/helpers/chartHelper";
 
 import { Doughnut } from "react-chartjs-2";
@@ -11,13 +10,10 @@ import { CategoryScale } from 'chart.js';
 import Chart from 'chart.js/auto';
 Chart.register(CategoryScale);
 
-export const ProjectsDistributionChart = ({ includeCategories, buttonsStates, setButtonsStates }) => {
+export const ProjectsDistributionChart = ({ includeCategories, statsSettings, buttonsStates, setButtonsStates }) => {
     // console.debug("hi", chartData);
 
-    const authContext = useAuth()
-    const userSettings = authContext.userSettings
-
-    const [chartData, setChartData] = useState({})
+    const [chartData, setChartData] = useState({ label: '' })
 
     // // for first time load (not needed)
     // useEffect(
@@ -34,7 +30,7 @@ export const ProjectsDistributionChart = ({ includeCategories, buttonsStates, se
 
     function retrieveProjectsPomodoros({ startDate, endDate, limit }) {
         // calculate scale and label according to user settings
-        const { scale, label } = calculateScaleAndLabel({ limit, userSettings });
+        const { scale, label } = calculateScaleAndLabel({ limit, ...statsSettings });
 
         // console.debug("p", includeCategories)
         getProjectsPomodorosApi({ startDate, endDate, includeCategories })
@@ -44,7 +40,7 @@ export const ProjectsDistributionChart = ({ includeCategories, buttonsStates, se
                     labels: [],
                     data: [],
                     colors: [],
-                    label: label
+                    label: `Project's Distribution Time (${label})`
                 }
                 response.data.forEach(element => {
                     // console.debug(element);
@@ -91,7 +87,7 @@ export const ProjectsDistributionChart = ({ includeCategories, buttonsStates, se
                         plugins: {
                             title: {
                                 display: true,
-                                text: `Project's Distribution Time (${chartData.label})`
+                                text: chartData.label
                             },
                             legend: {
                                 display: true,

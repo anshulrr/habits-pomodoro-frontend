@@ -1,22 +1,31 @@
-import { useAuth } from "../auth/AuthContext";
-
-
-export const calculateScaleAndLabel = ({ limit, userSettings }) => {
+export const calculateScaleAndLabel = ({
+    limit,
+    enableChartScale,
+    chartScale,
+    enableChartMonthlyAverage,
+    chartMonthlyAverage,
+    enableChartWeeklyAverage,
+    chartWeeklyAverage
+}) => {
 
     let scale = 1;
     let label = 'mins';
-    if (userSettings?.enableChartScale) {
+    if (enableChartScale) {
         label = "scaled " + label;
-        scale *= userSettings?.chartScale;
+        scale *= chartScale;
     }
     // console.debug({ scale });
-    if (limit === 'monthly' && userSettings?.enableChartMonthlyAverage) {
+    if (limit === 'monthly' && enableChartMonthlyAverage) {
         label = "avg " + label;
-        scale *= userSettings?.chartMonthlyAverage;
-    } else if (limit === 'weekly' && userSettings?.enableChartWeeklyAverage) {
+        scale *= chartMonthlyAverage;
+    } else if (limit === 'weekly' && enableChartWeeklyAverage) {
         label = "avg " + label;
-        scale *= userSettings?.chartWeeklyAverage;
+        scale *= chartWeeklyAverage;
     }
     // console.debug({ scale, label });
     return { scale, label };
+}
+
+export const truncateString = (str, n = 10) => {
+    return (str.length > n) ? str.slice(0, n - 1) + '...' : str;
 }
