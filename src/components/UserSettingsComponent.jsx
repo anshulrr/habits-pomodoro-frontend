@@ -23,6 +23,12 @@ export default function UserSettingsComponent() {
 
     function saveSettings() {
         setErrorMessage('')
+        setSuccessMessage('')
+
+        // validate input
+        if (!isValidated()) {
+            return;
+        }
 
         const request_settings = {
             id: userSettings.id,
@@ -52,8 +58,37 @@ export default function UserSettingsComponent() {
             .catch(error => {
                 console.error(error.message)
                 setErrorMessage(error.message)
+                setSuccessMessage('')
             })
 
+    }
+
+    function isValidated() {
+        // console.debug(pomodoroLength)
+        if (chartScale === '' || chartScale < 1) {
+            setErrorMessage('Chart Scale must be greater than 0');
+        }
+        else if (chartWeeklyAverage === '' || chartWeeklyAverage < 1) {
+            setErrorMessage('Chart Weekly Average must be greater than 0');
+        }
+        else if (chartMonthlyAverage === '' || chartMonthlyAverage < 1) {
+            setErrorMessage('Chart Monthly Average must be greater than 0');
+        }
+        else if (pomodoroLength === '' || pomodoroLength < 1) {
+            setErrorMessage('Pomodoro Length must be greater than 0');
+        }
+        else if (breakLength === '' || breakLength < 0) {
+            setErrorMessage('Break Length must be greater than or equal to 0');
+        } else {
+            return true;
+        }
+        return false;
+    }
+
+    function handleOnChange(fun, val) {
+        fun(val)
+        setErrorMessage("Click on Save to update settings")
+        setSuccessMessage('')
     }
 
     return (
@@ -70,7 +105,7 @@ export default function UserSettingsComponent() {
                                     name="enableChartScale"
                                     className="form-check-input mt-0"
                                     checked={enableChartScale}
-                                    onChange={(e) => setEnableChartScale(e.target.checked)}
+                                    onChange={(e) => handleOnChange(setEnableChartScale, e.target.checked)}
                                     id="eChartScale"
                                 />
                             </div>
@@ -82,9 +117,9 @@ export default function UserSettingsComponent() {
                                 name="chartScale"
                                 className="form-control"
                                 value={chartScale}
+                                min={1}
                                 placeholder="Chart Scale"
-                                onChange={(e) => setChartScale(e.target.value)}
-                                required
+                                onChange={(e) => handleOnChange(setChartScale, e.target.value)}
                             />
                         </div>
                     </div>
@@ -97,7 +132,7 @@ export default function UserSettingsComponent() {
                                     name="enableChartWeeklyAverage"
                                     className="form-check-input mt-0"
                                     checked={enableChartWeeklyAverage}
-                                    onChange={(e) => setEnableChartWeeklyAverage(e.target.checked)}
+                                    onChange={(e) => handleOnChange(setEnableChartWeeklyAverage, e.target.checked)}
                                     id="eChartWeeklyAverage"
                                 />
                             </div>
@@ -109,9 +144,9 @@ export default function UserSettingsComponent() {
                                 name="chartWeeklyAverage"
                                 className="form-control"
                                 value={chartWeeklyAverage}
+                                min={1}
                                 placeholder="Chart Weekly Average"
-                                onChange={(e) => setChartWeeklyAverage(e.target.value)}
-                                required
+                                onChange={(e) => handleOnChange(setChartWeeklyAverage, e.target.value)}
                             />
                         </div>
                     </div>
@@ -124,7 +159,7 @@ export default function UserSettingsComponent() {
                                     name="enableChartMonthlyAverage"
                                     className="form-check-input mt-0"
                                     checked={enableChartMonthlyAverage}
-                                    onChange={(e) => setEnableChartMonthlyAverage(e.target.checked)}
+                                    onChange={(e) => handleOnChange(setEnableChartMonthlyAverage, e.target.checked)}
                                     id="eChartMonthlyAverage"
                                 />
                             </div>
@@ -136,9 +171,9 @@ export default function UserSettingsComponent() {
                                 name="chartMonthlyAverage"
                                 className="form-control"
                                 value={chartMonthlyAverage}
+                                min={1}
                                 placeholder="Chart Monthly Average"
-                                onChange={(e) => setChartMonthlyAverage(e.target.value)}
-                                required
+                                onChange={(e) => handleOnChange(setChartMonthlyAverage, e.target.value)}
                             />
                         </div>
                     </div>
@@ -154,7 +189,7 @@ export default function UserSettingsComponent() {
                                     name="enableStopwatch"
                                     className="form-check-input mt-0"
                                     checked={enableStopwatch}
-                                    onChange={(e) => setEnableStopwatch(e.target.checked)}
+                                    onChange={(e) => handleOnChange(setEnableStopwatch, e.target.checked)}
                                     id="eStopwatch"
                                 />
                             </div>
@@ -172,7 +207,7 @@ export default function UserSettingsComponent() {
                                     name="enableStopwatchAudio"
                                     className="form-check-input mt-0"
                                     checked={enableStopwatchAudio}
-                                    onChange={(e) => setEnableStopwatchAudio(e.target.checked)}
+                                    onChange={(e) => handleOnChange(setEnableStopwatchAudio, e.target.checked)}
                                     id="eStopwatchAudio"
                                 />
                             </div>
@@ -195,9 +230,9 @@ export default function UserSettingsComponent() {
                                 name="pomodoroLength"
                                 className="form-control"
                                 value={pomodoroLength}
+                                min={1}
                                 placeholder="Default Pomodoro Length"
-                                onChange={(e) => setPomodoroLength(e.target.value)}
-                                required
+                                onChange={(e) => handleOnChange(setPomodoroLength, e.target.value)}
                                 id="pomodoroLength"
                             />
                         </div>
@@ -213,9 +248,9 @@ export default function UserSettingsComponent() {
                                 name="breakLength"
                                 className="form-control"
                                 value={breakLength}
+                                min={0}
                                 placeholder="Default Break Length"
-                                onChange={(e) => setBreakLength(e.target.value)}
-                                required
+                                onChange={(e) => handleOnChange(setBreakLength, e.target.value)}
                                 id="breakLength"
                             />
                         </div>
@@ -223,9 +258,9 @@ export default function UserSettingsComponent() {
 
                 </div>
 
-                <div className="text-danger small">{errorMessage}</div>
                 <div className="col-md-12 text-end">
                     <button className="btn btn-sm btn-success" type="button" onClick={saveSettings}>Save</button>
+                    <div className="text-danger"><small>{errorMessage}</small></div>
                     <div className="text-success"><small>{successMessage}</small></div>
                 </div>
             </form >

@@ -13,7 +13,6 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
     const [enableChartMonthlyAverage, setEnableChartMonthlyAverage] = useState(userSettings.enableChartMonthlyAverage)
     const [chartMonthlyAverage, setChartMonthlyAverage] = useState(userSettings.chartMonthlyAverage)
 
-    const message = "Click on Fetch to update stats";
     const [errorMessage, setErrorMessage] = useState('')
 
     useEffect(
@@ -23,6 +22,11 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
     )
 
     function updateSettings() {
+        // validate input
+        if (!isValidated()) {
+            return;
+        }
+
         const updatedStatsSetting = {
             enableChartScale,
             chartScale,
@@ -40,9 +44,25 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
         setErrorMessage('')
     }
 
-    function updateInput(fun, val) {
+    function handleOnChange(fun, val) {
         fun(val)
-        setErrorMessage(message)
+        setErrorMessage("Click on Fetch to update stats")
+    }
+
+    function isValidated() {
+        // console.debug(pomodoroLength)
+        if (chartScale === '' || chartScale < 1) {
+            setErrorMessage('Chart Scale must be greater than 0');
+        }
+        else if (chartWeeklyAverage === '' || chartWeeklyAverage < 1) {
+            setErrorMessage('Chart Weekly Average must be greater than 0');
+        }
+        else if (chartMonthlyAverage === '' || chartMonthlyAverage < 1) {
+            setErrorMessage('Chart Monthly Average must be greater than 0');
+        } else {
+            return true;
+        }
+        return false;
     }
 
     return (
@@ -56,7 +76,7 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
                             name="enableChartScale"
                             className="form-check-input mt-0"
                             checked={enableChartScale}
-                            onChange={(e) => updateInput(setEnableChartScale, e.target.checked)}
+                            onChange={(e) => handleOnChange(setEnableChartScale, e.target.checked)}
                             id="eChartScale"
                         />
                     </div>
@@ -68,8 +88,9 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
                         name="chartScale"
                         className="form-control"
                         value={chartScale}
+                        min={1}
                         placeholder="Chart Scale"
-                        onChange={(e) => updateInput(setChartScale, e.target.value)}
+                        onChange={(e) => handleOnChange(setChartScale, e.target.value)}
                         required
                     />
                 </div>
@@ -83,7 +104,7 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
                             name="enableChartWeeklyAverage"
                             className="form-check-input mt-0"
                             checked={enableChartWeeklyAverage}
-                            onChange={(e) => updateInput(setEnableChartWeeklyAverage, e.target.checked)}
+                            onChange={(e) => handleOnChange(setEnableChartWeeklyAverage, e.target.checked)}
                             id="eChartWeeklyAverage"
                         />
                     </div>
@@ -95,8 +116,9 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
                         name="chartWeeklyAverage"
                         className="form-control"
                         value={chartWeeklyAverage}
+                        min={1}
                         placeholder="Chart Weekly Average"
-                        onChange={(e) => updateInput(setChartWeeklyAverage, e.target.value)}
+                        onChange={(e) => handleOnChange(setChartWeeklyAverage, e.target.value)}
                         required
                     />
                 </div>
@@ -110,7 +132,7 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
                             name="enableChartMonthlyAverage"
                             className="form-check-input mt-0"
                             checked={enableChartMonthlyAverage}
-                            onChange={(e) => updateInput(setEnableChartMonthlyAverage, e.target.checked)}
+                            onChange={(e) => handleOnChange(setEnableChartMonthlyAverage, e.target.checked)}
                             id="eChartMonthlyAverage"
                         />
                     </div>
@@ -122,8 +144,9 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
                         name="chartMonthlyAverage"
                         className="form-control"
                         value={chartMonthlyAverage}
+                        min={1}
                         placeholder="Chart Monthly Average"
-                        onChange={(e) => updateInput(setChartMonthlyAverage, e.target.value)}
+                        onChange={(e) => handleOnChange(setChartMonthlyAverage, e.target.value)}
                         required
                     />
                 </div>
