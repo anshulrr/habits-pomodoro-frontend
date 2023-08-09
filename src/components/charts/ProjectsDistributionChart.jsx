@@ -3,7 +3,7 @@ import moment from "moment";
 
 import { getProjectsPomodorosApi } from "../../services/api/PomodoroApiService";
 import { Buttons } from "./Buttons";
-import { calculateScaleAndLabel } from "../../services/helpers/chartHelper";
+import { calculateScaleAndLabel, calculateScaleForAdjustedAvg } from "../../services/helpers/chartHelper";
 
 import { Doughnut } from "react-chartjs-2";
 
@@ -33,18 +33,8 @@ export const ProjectsDistributionChart = ({ includeCategories, statsSettings, bu
         // calculate scale and label according to user settings
         let { scale, label } = calculateScaleAndLabel({ limit, ...statsSettings });
 
-        // todo: move this to seperate section
-        if (statsSettings.enableChartAdjustedWeeklyMonthlyAverage &&
-            statsSettings.enableChartMonthlyAverage &&
-            offset === 0) {
-            // console.debug(scale);
-            // assuming starting days of week/month as working day
-            if (limit === 'weekly' && statsSettings.chartWeeklyAverage > moment().weekday()) {
-                scale = scale / statsSettings.chartWeeklyAverage * moment().weekday();
-            } else if (limit === 'monthly' && statsSettings.chartMonthlyAverage > moment().date()) {
-                scale = scale / statsSettings.chartMonthlyAverage * moment().date();
-            }
-            // console.debug(scale);
+        if (offset === 0) {
+            scale = calculateScaleForAdjustedAvg({ limit, scale, ...statsSettings });
         }
 
         // console.debug("p", includeCategories)
