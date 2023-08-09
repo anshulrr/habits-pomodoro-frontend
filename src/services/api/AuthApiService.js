@@ -5,3 +5,9 @@ export const startApi
 
 export const putChangePasswordApi
     = (password) => apiClient.put(`/users/change-password`, { password })
+
+export const getUserSettingsApi
+    = () => apiClient.get(`/user-settings`)
+
+export const putUserSettingsApi
+    = (settings) => apiClient.put(`/user-settings`, settings)

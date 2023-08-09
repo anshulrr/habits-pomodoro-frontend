@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-export default function CategoryChecklistComponent({ categories, setIncludeCategories }) {
+export default function CategoryChecklistComponent({ categories, setIncludeCategories, setReload }) {
 
     const [checkedState, setCheckedState] = useState(categories.map(c => c.statsDefault));
 
@@ -34,9 +34,12 @@ export default function CategoryChecklistComponent({ categories, setIncludeCateg
             []
         );
         // console.debug(updatedIncludedCategories)
-
         setIncludeCategories(updatedIncludedCategories)
-        setErrorMessage("")
+
+        // to reload chart components
+        setReload(prevReload => prevReload + 1)
+
+        setErrorMessage('')
     }
 
     function selectAll() {
@@ -89,6 +92,8 @@ export default function CategoryChecklistComponent({ categories, setIncludeCateg
                 })}
             </div>
 
+            <div className="text-danger"><small>{errorMessage}</small></div>
+
             <div className="input-group my-2">
                 <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => selectUpto()}>Upto</button>
                 <input type="number" className="form-control form-control-sm" name="level" value={level} placeholder="Level" onChange={(e) => setLevel(e.target.value)} />
@@ -97,7 +102,6 @@ export default function CategoryChecklistComponent({ categories, setIncludeCateg
                 <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => selectNone()}>None</button>
                 <button className="btn btn-sm btn-outline-success" type="button" onClick={fetchSelected}>Fetch</button>
             </div>
-            <div className="text-danger"><small>{errorMessage}</small></div>
 
         </div>
     )

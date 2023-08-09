@@ -115,7 +115,6 @@ export default function ProjectCategoryComponent({
                                     <div className="col-md-3 col-6 mb-2">
                                         <Field type="number" className="form-control form-control-sm" name="level" placeholder="Level" required />
                                         {/* <small>(All categories must have different levels)</small> */}
-                                        {errors.level && <div className="text-danger small">{errors.level}</div>}
                                         {<div className="text-danger small">{errorMessage}</div>}
                                     </div>
                                     <div className="col-md-3 col-6 mb-2">
