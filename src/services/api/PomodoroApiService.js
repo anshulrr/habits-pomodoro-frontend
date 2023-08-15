@@ -3,6 +3,9 @@ import { apiClient } from "./ApiClient";
 export const createPomodoroApi
     = (pomodoro, task_id) => apiClient.post(`/pomodoros?task_id=${task_id}`, pomodoro)
 
+export const createPastPomodoroApi
+    = (pomodoro, task_id) => apiClient.post(`/pomodoros/past?task_id=${task_id}`, pomodoro)
+
 // export const updatePomodoroApi
 //     = (id, pomodoro) => apiClient.put(`/pomodoros/${id}`, pomodoro)
 

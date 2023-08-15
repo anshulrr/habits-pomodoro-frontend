@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
-import { createPomodoroApi } from "../services/api/PomodoroApiService";
-import { getRunningPomodoroApi } from '../services/api/PomodoroApiService';
+import { createPomodoroApi, getRunningPomodoroApi } from "../services/api/PomodoroApiService";
 import { retrieveAllTasks } from "../services/api/TaskApiService";
 import ListTasksRowsComponent from "./ListTasksRowsComponent";
 import PomodoroComponent from "./PomodoroComponent";
@@ -24,6 +23,8 @@ export default function ListTasksComponent({ project }) {
 
     const [pomodoroStatus, setPomodoroStatus] = useState(null)
 
+    const [pomdorosListReload, setPomodorosListReload] = useState(0)
+
     const [message, setMessage] = useState('')
 
     useEffect(
@@ -35,6 +36,9 @@ export default function ListTasksComponent({ project }) {
             if (pomodoro === null) {
                 getRunningPomodoro()
             }
+
+            setPomodorosListReload(1000)
+
         }, [project] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
@@ -142,6 +146,7 @@ export default function ListTasksComponent({ project }) {
                     project={project}
                     createNewPomodoro={createNewPomodoro}
                     updateTask={updateTask}
+                    setPomodorosListReload={setPomodorosListReload}
                 />
 
                 <div>
@@ -210,7 +215,7 @@ export default function ListTasksComponent({ project }) {
 
             <div className="overflow-scroll bg-white mt-3 px-3" style={{ maxHeight: "25vh" }}>
                 <ListPomodorosComponent
-                    key={pomodoroStatus}
+                    key={[pomodoroStatus, pomdorosListReload]}
                 />
             </div >
 

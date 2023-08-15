@@ -1,8 +1,19 @@
-import { useAuth } from "../services/auth/AuthContext";
+import { useState } from "react";
 
-export default function ListTasksRowsComponent({ project, tasks, createNewPomodoro, updateTask }) {
+import { useAuth } from "../services/auth/AuthContext";
+import PastPomodoroComponent from "./PastPomodoroComponent";
+
+export default function ListTasksRowsComponent({
+    project,
+    tasks,
+    createNewPomodoro,
+    updateTask,
+    setPomodorosListReload,
+}) {
     const authContext = useAuth()
     const userSettings = authContext.userSettings
+
+    const [showCreatePastPomodoro, setShowCreatePastPomodoro] = useState(-1);
 
     function timeToDisplay(total_minutes) {
         if (total_minutes < 60) {
@@ -44,9 +55,23 @@ export default function ListTasksRowsComponent({ project, tasks, createNewPomodo
                                 </span>
                             </div>
                             {
-                                <div className="col-1 text-secondary text-end task-list-button">
-                                    <i className="bi bi-pencil-square" onClick={() => updateTask(task.id)}></i>
+                                <div className="col-1 px-0 text-secondary text-end task-list-button">
+                                    {
+                                        task.status === 'added' &&
+                                        <i className="bi bi-calendar-plus" onClick={() => setShowCreatePastPomodoro(task.id)}></i>
+                                    }
+                                    &nbsp;<i className="bi bi-pencil-square" onClick={() => updateTask(task.id)}></i>
                                 </div>
+                            }
+                            {
+                                task.status === 'added' &&
+                                <PastPomodoroComponent
+                                    showCreatePastPomodoro={showCreatePastPomodoro}
+                                    setShowCreatePastPomodoro={setShowCreatePastPomodoro}
+                                    task={task}
+                                    project={project}
+                                    setPomodorosListReload={setPomodorosListReload}
+                                />
                             }
                         </div>
                     )
