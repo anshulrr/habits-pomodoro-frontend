@@ -76,7 +76,7 @@ export default function ListProjectsComponent() {
                                 <h5>Projects ({projectsCount})</h5>
                             </div>
                             <div className="col-2 text-end">
-                                <i className="bi bi-plus-square" onClick={addNewProject}></i>
+                                <i className="p-1 bi bi-plus-square" onClick={addNewProject}></i>
                             </div>
                         </div>
                         {
@@ -100,7 +100,7 @@ export default function ListProjectsComponent() {
                                             </span>
                                         </div>
                                         <div className="col-2 text-secondary text-end list-button">
-                                            <i className="bi bi-pencil-square" onClick={() => updateProject(proj.id)}></i>
+                                            <i className="p-1 bi bi-pencil-square" onClick={() => updateProject(proj.id)}></i>
                                         </div>
                                     </div>
                                 )

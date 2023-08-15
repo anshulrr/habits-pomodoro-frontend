@@ -37,12 +37,12 @@ export default function ListTasksRowsComponent({
                     task => (
                         <div
                             key={task.id}
-                            className="row py-2 task-list-row"
+                            className="row py-2"
                         >
-                            <div className="col-9 text-start">
+                            <div className="col-8 text-start">
                                 {
                                     task.status === 'added' &&
-                                    <i className="bi bi-play-circle" onClick={() => createNewPomodoro(task, project)}></i>
+                                    <i className="p-1 bi bi-play-circle" onClick={() => createNewPomodoro(task, project)}></i>
                                 }
                                 <span className={task.status === 'completed' ? "text-secondary" : ""}>
                                     {' ' + task.description}
@@ -55,12 +55,12 @@ export default function ListTasksRowsComponent({
                                 </span>
                             </div>
                             {
-                                <div className="col-1 px-0 text-secondary text-end task-list-button">
+                                <div className="col-2 text-secondary text-end task-list-button">
                                     {
                                         task.status === 'added' &&
-                                        <i className="bi bi-calendar-plus" onClick={() => setShowCreatePastPomodoro(task.id)}></i>
+                                        <i className="p-1 bi bi-calendar-plus" onClick={() => setShowCreatePastPomodoro(task.id)}></i>
                                     }
-                                    &nbsp;<i className="bi bi-pencil-square" onClick={() => updateTask(task.id)}></i>
+                                    &nbsp;<i className="p-1 bi bi-pencil-square" onClick={() => updateTask(task.id)}></i>
                                 </div>
                             }
                             {

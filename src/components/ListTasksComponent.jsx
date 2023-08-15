@@ -128,7 +128,7 @@ export default function ListTasksComponent({ project }) {
                     <h6>{project.name} ({tasks.length})</h6>
                 </div>
                 <div className="col-1 text-end">
-                    <i className="bi bi-plus-circle" onClick={addNewTask}></i>
+                    <i className="p-1 bi bi-plus-circle" onClick={addNewTask}></i>
                 </div>
             </div>
             {/* fix for x scroll: px-3 */}
@@ -190,7 +190,7 @@ export default function ListTasksComponent({ project }) {
                     <small className="text-danger">{message} </small>
                 </div>
                 <div className="col-1 text-end">
-                    <i className="bi bi-arrow-clockwise" onClick={() => getRunningPomodoro()}></i>
+                    <i className="p-1 bi bi-arrow-clockwise" onClick={() => getRunningPomodoro()}></i>
                 </div>
             </div>
 

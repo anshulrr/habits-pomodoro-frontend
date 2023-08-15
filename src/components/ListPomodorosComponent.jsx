@@ -105,7 +105,7 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
                                         < td >
                                             {
                                                 pomodoro.status === 'past' &&
-                                                <i className="bi bi-trash" onClick={() => deleltePastPomodoro(pomodoro.id)} />
+                                                <i className="p-1 bi bi-trash" onClick={() => deleltePastPomodoro(pomodoro.id)} />
                                             }
                                         </td>
                                     </tr>

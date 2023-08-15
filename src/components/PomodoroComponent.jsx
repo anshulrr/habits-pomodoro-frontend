@@ -187,7 +187,7 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
     return (
         <div className="PomodoroComponent">
             <div className="">
-                <small><i className="bi bi-folder-plus"> </i>{pomodoro.task.project.name}</small>
+                <small><span className="bi bi-folder-plus"> </span>{pomodoro.task.project.name}</small>
                 <h5>{pomodoro.task.description}</h5>
                 {
                     status !== 'completed' &&
