@@ -36,9 +36,6 @@ export default function ListTasksComponent({ project }) {
             if (pomodoro === null) {
                 getRunningPomodoro()
             }
-
-            setPomodorosListReload(1000)
-
         }, [project] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
@@ -216,6 +213,7 @@ export default function ListTasksComponent({ project }) {
             <div className="overflow-scroll bg-white mt-3 px-3" style={{ maxHeight: "25vh" }}>
                 <ListPomodorosComponent
                     key={[pomodoroStatus, pomdorosListReload]}
+                    setPomodorosListReload={setPomodorosListReload}
                 />
             </div >
 
