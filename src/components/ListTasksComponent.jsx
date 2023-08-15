@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
-import { createPomodoroApi } from "../services/api/PomodoroApiService";
-import { getRunningPomodoroApi } from '../services/api/PomodoroApiService';
+import { createPomodoroApi, getRunningPomodoroApi } from "../services/api/PomodoroApiService";
 import { retrieveAllTasks } from "../services/api/TaskApiService";
 import ListTasksRowsComponent from "./ListTasksRowsComponent";
 import PomodoroComponent from "./PomodoroComponent";
@@ -23,6 +22,8 @@ export default function ListTasksComponent({ project }) {
     const [pomodoro, setPomodoro] = useState(null)
 
     const [pomodoroStatus, setPomodoroStatus] = useState(null)
+
+    const [pomdorosListReload, setPomodorosListReload] = useState(0)
 
     const [message, setMessage] = useState('')
 
@@ -126,8 +127,8 @@ export default function ListTasksComponent({ project }) {
                 <div className="col-11">
                     <h6>{project.name} ({tasks.length})</h6>
                 </div>
-                <div className="col-1 text-end">
-                    <i className="bi bi-plus-circle" onClick={addNewTask}></i>
+                <div className="col-1 px-0 text-end">
+                    <i className="p-1 bi bi-plus-circle" onClick={addNewTask}></i>
                 </div>
             </div>
             {/* fix for x scroll: px-3 */}
@@ -142,6 +143,7 @@ export default function ListTasksComponent({ project }) {
                     project={project}
                     createNewPomodoro={createNewPomodoro}
                     updateTask={updateTask}
+                    setPomodorosListReload={setPomodorosListReload}
                 />
 
                 <div>
@@ -187,8 +189,8 @@ export default function ListTasksComponent({ project }) {
                 <div className="col-11 text-start">
                     <small className="text-danger">{message} </small>
                 </div>
-                <div className="col-1 text-end">
-                    <i className="bi bi-arrow-clockwise" onClick={() => getRunningPomodoro()}></i>
+                <div className="col-1 px-0 text-end">
+                    <i className="p-1 bi bi-arrow-clockwise" onClick={() => getRunningPomodoro()}></i>
                 </div>
             </div>
 
@@ -210,7 +212,8 @@ export default function ListTasksComponent({ project }) {
 
             <div className="overflow-scroll bg-white mt-3 px-3" style={{ maxHeight: "25vh" }}>
                 <ListPomodorosComponent
-                    key={pomodoroStatus}
+                    key={[pomodoroStatus, pomdorosListReload]}
+                    setPomodorosListReload={setPomodorosListReload}
                 />
             </div >
 

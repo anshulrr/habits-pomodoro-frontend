@@ -89,7 +89,7 @@ export const Buttons = ({
 
             <div className="row">
                 <div className="col-3">
-                    <i className="bi bi-arrow-left-square" onClick={() => updateOffset(-1)}></i>
+                    <i className="p-1 bi bi-arrow-left-square" onClick={() => updateOffset(-1)}></i>
                 </div>
                 <div className="col-6">
                     <small>
@@ -97,7 +97,7 @@ export const Buttons = ({
                     </small>
                 </div>
                 <div className="col-3">
-                    <i className="bi bi-arrow-right-square" onClick={() => updateOffset(1)}></i>
+                    <i className="p-1 bi bi-arrow-right-square" onClick={() => updateOffset(1)}></i>
                 </div>
             </div>
         </div>

@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react"
-import { getPomodorosApi } from "../services/api/PomodoroApiService";
 import moment from "moment"
-import { retrieveAllProjectCategoriesApi } from "../services/api/ProjectCategoryApiService";
-import { Buttons } from "./charts/Buttons";
 
-export default function ListPomodorosComponent({ includeCategories, buttonsStates, setButtonsStates }) {
+import { Buttons } from "./charts/Buttons";
+import { deletePastPomodoroApi, getPomodorosApi } from "../services/api/PomodoroApiService";
+import { retrieveAllProjectCategoriesApi } from "../services/api/ProjectCategoryApiService";
+
+export default function ListPomodorosComponent({ includeCategories, buttonsStates, setButtonsStates, setPomodorosListReload }) {
 
     const [pomodoros, setPomodoros] = useState([])
 
     const [totalTimeElapsed, setTotalTimeElapsed] = useState('00:00');
+
+    const [deleteErrorMessage, setDeleteErrorMessage] = useState('');
+    const [deleteId, setDeleteId] = useState(-1);
 
     useEffect(
         () => {
@@ -50,11 +54,28 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
             .catch(error => console.error(error.message))
     }
 
+    function deleltePastPomodoro(id) {
+        setDeleteErrorMessage('')
+        if (deleteId !== id) {
+            setDeleteId(id)
+            setDeleteErrorMessage('Click again to delete: ' + id)
+            return
+        }
+        deletePastPomodoroApi(id)
+            .then(response => {
+                // console.debug(response)
+                setPomodorosListReload(prevReload => prevReload + 1)
+                setDeleteErrorMessage('')
+            })
+            .catch(error => console.error(error.message))
+    }
+
     return (
         <>
             <h6>
                 Pomodoros ({totalTimeElapsed})
             </h6>
+            <div className="text-danger"><small>{deleteErrorMessage}</small></div>
             {
                 includeCategories &&
                 <Buttons
@@ -80,6 +101,12 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
                                         <td className="text-muted">
                                             {moment.utc(pomodoro.startTime).local().format('H:mm')}-
                                             {moment.utc(pomodoro.endTime).local().format('H:mm')}
+                                        </td>
+                                        < td >
+                                            {
+                                                pomodoro.status === 'past' &&
+                                                <i className="p-1 bi bi-trash" onClick={() => deleltePastPomodoro(pomodoro.id)} />
+                                            }
                                         </td>
                                     </tr>
                                 )

@@ -66,7 +66,7 @@ export default function ListProjectCategoriesComponent() {
                                 <h6>Project Categories ({categoriesCount})</h6>
                             </div>
                             <div className="col-2 text-end">
-                                <i className="bi bi-plus-square" onClick={addNewProjectCategory}></i>
+                                <i className="p-1 bi bi-plus-square" onClick={addNewProjectCategory}></i>
                             </div>
                         </div>
                         <small>
@@ -91,7 +91,7 @@ export default function ListProjectCategoriesComponent() {
                                                     {cat.level}&nbsp;
                                                 </span>
                                                 <span className="list-button">
-                                                    <i className="bi bi-pencil-square"></i>
+                                                    <i className="p-1 bi bi-pencil-square"></i>
                                                 </span>
                                             </div>
                                         </div>

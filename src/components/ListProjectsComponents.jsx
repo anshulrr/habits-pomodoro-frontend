@@ -76,7 +76,7 @@ export default function ListProjectsComponent() {
                                 <h5>Projects ({projectsCount})</h5>
                             </div>
                             <div className="col-2 text-end">
-                                <i className="bi bi-plus-square" onClick={addNewProject}></i>
+                                <i className="p-1 bi bi-plus-square" onClick={addNewProject}></i>
                             </div>
                         </div>
                         {
@@ -93,14 +93,14 @@ export default function ListProjectsComponent() {
                                             <span style={{ color: proj.color }}>&#9632; </span>
                                             <span>{proj.name}</span>
                                         </div>
-                                        <div className="col text-secondary text-truncate text-end">
+                                        <div className="col px-1 text-secondary text-truncate text-end">
                                             <span>
                                                 <small>{proj.pomodoroLength || userSettings.pomodoroLength} </small>
                                                 <small>{proj.category} </small>
                                             </span>
                                         </div>
-                                        <div className="col-2 text-secondary text-end list-button">
-                                            <i className="bi bi-pencil-square" onClick={() => updateProject(proj.id)}></i>
+                                        <div className="col-1 px-0 text-secondary text-end list-button">
+                                            <i className="p-1 bi bi-pencil-square" onClick={() => updateProject(proj.id)}></i>
                                         </div>
                                     </div>
                                 )
