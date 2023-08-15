@@ -37,7 +37,7 @@ export default function ListTasksRowsComponent({
                     task => (
                         <div
                             key={task.id}
-                            className="row py-2"
+                            className="row py-2 task-list-row"
                         >
                             <div className="col-8 text-start">
                                 {
@@ -49,13 +49,13 @@ export default function ListTasksRowsComponent({
                                 </span>
                             </div>
 
-                            <div className="col text-secondary text-truncate text-end">
+                            <div className="col px-0 text-secondary text-truncate text-end">
                                 <span>
                                     <small>{timeToDisplay(task.pomodorosTimeElapsed / 60)} / {timeToDisplay(task.pomodoroLength || project.pomodoroLength || userSettings.pomodoroLength)} </small>
                                 </span>
                             </div>
                             {
-                                <div className="col-2 text-secondary text-end task-list-button">
+                                <div className="col-3 px-0 text-secondary text-end task-list-button">
                                     {
                                         task.status === 'added' &&
                                         <i className="p-1 bi bi-calendar-plus" onClick={() => setShowCreatePastPomodoro(task.id)}></i>

@@ -127,7 +127,7 @@ export default function ListTasksComponent({ project }) {
                 <div className="col-11">
                     <h6>{project.name} ({tasks.length})</h6>
                 </div>
-                <div className="col-1 text-end">
+                <div className="col-1 px-0 text-end">
                     <i className="p-1 bi bi-plus-circle" onClick={addNewTask}></i>
                 </div>
             </div>
@@ -189,7 +189,7 @@ export default function ListTasksComponent({ project }) {
                 <div className="col-11 text-start">
                     <small className="text-danger">{message} </small>
                 </div>
-                <div className="col-1 text-end">
+                <div className="col-1 px-0 text-end">
                     <i className="p-1 bi bi-arrow-clockwise" onClick={() => getRunningPomodoro()}></i>
                 </div>
             </div>
