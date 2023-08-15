@@ -39,30 +39,28 @@ export default function ListTasksRowsComponent({
                             key={task.id}
                             className="row py-2 task-list-row"
                         >
-                            <div className="col-8 text-start">
+                            <div className="col-9 text-start">
                                 {
                                     task.status === 'added' &&
-                                    <i className="p-1 bi bi-play-circle" onClick={() => createNewPomodoro(task, project)}></i>
+                                    <i className="p-1 me-1 bi bi-play-circle" onClick={() => createNewPomodoro(task, project)}></i>
                                 }
                                 <span className={task.status === 'completed' ? "text-secondary" : ""}>
-                                    {' ' + task.description}
+                                    {task.description}
                                 </span>
                             </div>
 
-                            <div className="col px-0 text-secondary text-truncate text-end">
+                            <div className="col-3 px-0 text-secondary text-end small text-truncate task-list-details">
                                 <span>
-                                    <small>{timeToDisplay(task.pomodorosTimeElapsed / 60)} / {timeToDisplay(task.pomodoroLength || project.pomodoroLength || userSettings.pomodoroLength)} </small>
+                                    {timeToDisplay(task.pomodorosTimeElapsed / 60)} / {timeToDisplay(task.pomodoroLength || project.pomodoroLength || userSettings.pomodoroLength)}
                                 </span>
                             </div>
-                            {
-                                <div className="col-3 px-0 text-secondary text-end task-list-button">
-                                    {
-                                        task.status === 'added' &&
-                                        <i className="p-1 bi bi-calendar-plus" onClick={() => setShowCreatePastPomodoro(task.id)}></i>
-                                    }
-                                    &nbsp;<i className="p-1 bi bi-pencil-square" onClick={() => updateTask(task.id)}></i>
-                                </div>
-                            }
+                            <div className="col-3 px-0 text-secondary text-end task-list-buttons">
+                                {
+                                    task.status === 'added' &&
+                                    <i className="p-1 me-1 bi bi-calendar-plus" onClick={() => setShowCreatePastPomodoro(task.id)}></i>
+                                }
+                                <i className="p-1 bi bi-pencil-square" onClick={() => updateTask(task.id)}></i>
+                            </div>
                             {
                                 task.status === 'added' &&
                                 <PastPomodoroComponent

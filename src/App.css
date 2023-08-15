@@ -67,12 +67,16 @@
   border-bottom: thin solid #dee2e6;
 }
 
-.task-list-row .task-list-button {
+.task-list-row .task-list-buttons {
   display: none;
 }
 
-.task-list-row:hover .task-list-button {
+.task-list-row:hover .task-list-buttons {
   display: inline;
+}
+
+.task-list-row:hover .task-list-details {
+  display: none;
 }
 
 
