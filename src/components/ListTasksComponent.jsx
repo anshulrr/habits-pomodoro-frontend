@@ -122,100 +122,108 @@ export default function ListTasksComponent({ project }) {
     }
 
     return (
-        <div className="container">
+        <div className="">
             <div className="row">
-                <div className="col-11">
-                    <h6>{project.name} ({tasks.length})</h6>
-                </div>
-                <div className="col-1 px-0 text-end">
-                    <i className="p-1 bi bi-plus-circle" onClick={addNewTask}></i>
-                </div>
-            </div>
-            {/* fix for x scroll: px-3 */}
-            <div className="overflow-scroll bg-white px-3" style={{ maxHeight: "25vh" }}>
-                {
-                    tasks.length === 0 &&
-                    <div className="alert alert-warning">No task is added to this project</div>
-                }
-                <ListTasksRowsComponent
-                    key={tasks}
-                    tasks={tasks}
-                    project={project}
-                    createNewPomodoro={createNewPomodoro}
-                    updateTask={updateTask}
-                    setPomodorosListReload={setPomodorosListReload}
-                />
 
-                <div>
-                    <span className="badge text-bg-light mt-3" style={{ cursor: "pointer" }} onClick={() => setShowArchived(!showArchived)}>
-                        {!showArchived && <span>Show Archived Tasks ({archivedTasks.length})<i className="bi bi-arrow-down"></i></span>}
-                        {showArchived && <span>Hide Archived Tasks ({archivedTasks.length})<i className="bi bi-arrow-up"></i></span>}
-                    </span>
-                    <small>
+                <div className="col-md-6 mt-3 border-bottom border-2">
+                    <div className="row">
+                        <div className="col-11">
+                            <h6>{project.name} ({tasks.length})</h6>
+                        </div>
+                        <div className="col-1 px-0 text-end">
+                            <i className="p-1 bi bi-plus-circle" onClick={addNewTask}></i>
+                        </div>
+                    </div>
+                    {/* fix for x scroll: px-3 */}
+                    <div className="overflow-scroll bg-white px-3" style={{ maxHeight: "85vh" }}>
                         {
-                            showArchived &&
-                            <ListTasksRowsComponent
-                                key={archivedTasks}
-                                tasks={archivedTasks}
-                                project={project}
-                                createNewPomodoro={createNewPomodoro}
-                                updateTask={updateTask}
-                            />
+                            tasks.length === 0 &&
+                            <div className="alert alert-warning">No task is added to this project</div>
                         }
-                    </small>
+                        <ListTasksRowsComponent
+                            key={tasks}
+                            tasks={tasks}
+                            project={project}
+                            createNewPomodoro={createNewPomodoro}
+                            updateTask={updateTask}
+                            setPomodorosListReload={setPomodorosListReload}
+                        />
+
+                        <div>
+                            <span className="badge text-bg-light mt-3" style={{ cursor: "pointer" }} onClick={() => setShowArchived(!showArchived)}>
+                                {!showArchived && <span>Show Archived Tasks ({archivedTasks.length})<i className="bi bi-arrow-down"></i></span>}
+                                {showArchived && <span>Hide Archived Tasks ({archivedTasks.length})<i className="bi bi-arrow-up"></i></span>}
+                            </span>
+                            <small>
+                                {
+                                    showArchived &&
+                                    <ListTasksRowsComponent
+                                        key={archivedTasks}
+                                        tasks={archivedTasks}
+                                        project={project}
+                                        createNewPomodoro={createNewPomodoro}
+                                        updateTask={updateTask}
+                                    />
+                                }
+                            </small>
+                        </div>
+
+                        <div>
+                            <span className="badge text-bg-light mt-3" style={{ cursor: "pointer" }} onClick={() => setShowCompleted(!showCompleted)}>
+                                {!showCompleted && <span>Show Completed Tasks ({completedTasks.length})<i className="bi bi-arrow-down"></i></span>}
+                                {showCompleted && <span>Hide Completed Tasks ({completedTasks.length})<i className="bi bi-arrow-up"></i></span>}
+                            </span>
+                            <small>
+                                {
+                                    showCompleted &&
+                                    <ListTasksRowsComponent
+                                        key={completedTasks}
+                                        tasks={completedTasks}
+                                        project={project}
+                                        createNewPomodoro={createNewPomodoro}
+                                        updateTask={updateTask}
+                                    />
+                                }
+                            </small>
+                        </div>
+                    </div >
                 </div>
 
-                <div>
-                    <span className="badge text-bg-light mt-3" style={{ cursor: "pointer" }} onClick={() => setShowCompleted(!showCompleted)}>
-                        {!showCompleted && <span>Show Completed Tasks ({completedTasks.length})<i className="bi bi-arrow-down"></i></span>}
-                        {showCompleted && <span>Hide Completed Tasks ({completedTasks.length})<i className="bi bi-arrow-up"></i></span>}
-                    </span>
-                    <small>
-                        {
-                            showCompleted &&
-                            <ListTasksRowsComponent
-                                key={completedTasks}
-                                tasks={completedTasks}
-                                project={project}
-                                createNewPomodoro={createNewPomodoro}
-                                updateTask={updateTask}
-                            />
-                        }
-                    </small>
-                </div>
-            </div >
+                <div className="col-md-6 mt-3 border-bottom border-2">
+                    <div className="row mb-3">
+                        <div className="col-11 text-start">
+                            <small className="text-danger">{message} </small>
+                        </div>
+                        <div className="col-1 px-0 text-end">
+                            <i className="p-1 bi bi-arrow-clockwise" onClick={() => getRunningPomodoro()}></i>
+                        </div>
+                    </div>
 
-            <div className="row my-3">
-                <div className="col-11 text-start">
-                    <small className="text-danger">{message} </small>
+                    {
+                        pomodoro !== null &&
+                        <PomodoroComponent
+                            pomodoro={pomodoro}
+                            setPomodoro={setPomodoro}
+                            setPomodoroStatus={setPomodoroStatus}
+                            createNewPomodoro={createNewPomodoro}
+                            setTasksMessage={setMessage}
+                        ></PomodoroComponent>
+                    }
+
+                    {
+                        pomodoro === null &&
+                        <StopwatchComponent message={'Start a new task'} />
+                    }
+
+                    <div className="border-top border-1 pt-2 overflow-scroll bg-white mt-3 px-3" style={{ maxHeight: "55vh" }}>
+                        <ListPomodorosComponent
+                            key={[pomodoroStatus, pomdorosListReload]}
+                            setPomodorosListReload={setPomodorosListReload}
+                        />
+                    </div >
                 </div>
-                <div className="col-1 px-0 text-end">
-                    <i className="p-1 bi bi-arrow-clockwise" onClick={() => getRunningPomodoro()}></i>
-                </div>
+
             </div>
-
-            {
-                pomodoro !== null &&
-                <PomodoroComponent
-                    pomodoro={pomodoro}
-                    setPomodoro={setPomodoro}
-                    setPomodoroStatus={setPomodoroStatus}
-                    createNewPomodoro={createNewPomodoro}
-                    setTasksMessage={setMessage}
-                ></PomodoroComponent>
-            }
-
-            {
-                pomodoro === null &&
-                <StopwatchComponent message={'Start a new task'} />
-            }
-
-            <div className="overflow-scroll bg-white mt-3 px-3" style={{ maxHeight: "25vh" }}>
-                <ListPomodorosComponent
-                    key={[pomodoroStatus, pomdorosListReload]}
-                    setPomodorosListReload={setPomodorosListReload}
-                />
-            </div >
 
         </div >
     )

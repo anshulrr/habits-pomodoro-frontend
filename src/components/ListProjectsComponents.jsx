@@ -68,7 +68,7 @@ export default function ListProjectsComponent() {
     return (
         <div className="container">
             <div className="row mb-3">
-                <div className="col-md-4 mb-3">
+                <div className="col-md-4 mt-3 border-bottom border-2">
                     {/* {message && <div className="alert alert-warning">{message}</div>} */}
                     <div>
                         <div className="row">
