@@ -98,9 +98,9 @@ export const TotalChart = ({ includeCategories, statsSettings, buttonsStates, se
         let startDate, endDate;
 
         if (limit === 'daily') {
-            const date = moment().startOf('day').add(-14, 'd').add(15 * offset, 'd');
+            const date = moment().startOf('day').add(-14 + 15 * offset, 'd');
             startDate = date.toISOString();
-            endDate = date.clone().add(15, 'd').toISOString();
+            endDate = date.clone().endOf('day').add(14, 'd').toISOString();
             // console.debug(startDate, endDate);
         } else if (limit === 'weekly') {
             const date = moment().startOf('week').add(1, 'd').add(-14 + 15 * offset, 'w');

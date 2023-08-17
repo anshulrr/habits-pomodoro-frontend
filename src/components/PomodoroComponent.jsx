@@ -99,7 +99,7 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
     }
 
     useEffect(() => {
-        if ("serviceWorker" in navigator && !navigator.userAgentData.mobile) {
+        if ("serviceWorker" in navigator && !navigator?.userAgentData?.mobile) {
             notificationSetup()
         }
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -133,7 +133,7 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
                     setPomodoroStatus('completed');
                 }
 
-                if ("serviceWorker" in navigator && !navigator.userAgentData.mobile) {
+                if ("serviceWorker" in navigator && !navigator?.userAgentData?.mobile) {
                     navigator.serviceWorker.ready.then((registration) => {
                         // console.debug('using postMessage')
                         registration.active.postMessage({
@@ -171,7 +171,7 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
     }
 
     function initializeNotification() {
-        if ("serviceWorker" in navigator && !navigator.userAgentData.mobile) {
+        if ("serviceWorker" in navigator && !navigator?.userAgentData?.mobile) {
             // console.debug('init notification')
             navigator.serviceWorker.ready.then((registration) => {
                 // console.debug('using postMessage')
