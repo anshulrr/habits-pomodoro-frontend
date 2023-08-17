@@ -139,8 +139,8 @@ export default function ListTasksComponent({ project }) {
                             setPomodorosListReload={setPomodorosListReload}
                         />
 
-                        <div>
-                            <span className="badge text-bg-light mt-3" style={{ cursor: "pointer" }} onClick={() => setShowArchived(!showArchived)}>
+                        <div className="mt-3">
+                            <span className="badge text-bg-light" style={{ cursor: "pointer" }} onClick={() => setShowArchived(!showArchived)}>
                                 {!showArchived && <span>Show Archived Tasks ({archivedTasksCount})<i className="bi bi-arrow-down"></i></span>}
                                 {showArchived && <span>Hide Archived Tasks ({archivedTasksCount})<i className="bi bi-arrow-up"></i></span>}
                             </span>
@@ -159,8 +159,8 @@ export default function ListTasksComponent({ project }) {
                             </small>
                         </div>
 
-                        <div>
-                            <span className="badge text-bg-light mt-3" style={{ cursor: "pointer" }} onClick={() => setShowCompleted(!showCompleted)}>
+                        <div className="mt-3">
+                            <span className="badge text-bg-light" style={{ cursor: "pointer" }} onClick={() => setShowCompleted(!showCompleted)}>
                                 {!showCompleted && <span>Show Completed Tasks ({completedTasksCount})<i className="bi bi-arrow-down"></i></span>}
                                 {showCompleted && <span>Hide Completed Tasks ({completedTasksCount})<i className="bi bi-arrow-up"></i></span>}
                             </span>

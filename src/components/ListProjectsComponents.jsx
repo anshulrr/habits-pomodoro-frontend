@@ -6,14 +6,13 @@ import ListTasksComponent from './ListTasksComponent'
 import Pagination from "../services/pagination/Pagination"
 import { useAuth } from "../services/auth/AuthContext";
 
-// console.debug(window.innerWidth);
-const PAGESIZE = window.innerWidth <= 768 ? 5 : 15;
-
 export default function ListProjectsComponent() {
     const authContext = useAuth()
     const userSettings = authContext.userSettings
 
     const navigate = useNavigate()
+
+    const PAGESIZE = window.innerWidth <= 768 ? userSettings.pageProjectsCount : 15;
 
     const [projects, setProjects] = useState([])
 

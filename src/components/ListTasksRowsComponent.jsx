@@ -5,8 +5,6 @@ import Pagination from "../services/pagination/Pagination";
 import PastPomodoroComponent from "./PastPomodoroComponent";
 import { retrieveAllTasksApi } from "../services/api/TaskApiService";
 
-const PAGESIZE = window.innerWidth <= 768 ? 5 : 10;
-
 export default function ListTasksRowsComponent({
     project,
     status,
@@ -17,6 +15,8 @@ export default function ListTasksRowsComponent({
 }) {
     const authContext = useAuth()
     const userSettings = authContext.userSettings
+
+    const PAGESIZE = window.innerWidth <= 768 ? userSettings.pageTasksCount : 15;
 
     const [tasks, setTasks] = useState([])
 
