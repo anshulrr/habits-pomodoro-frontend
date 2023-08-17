@@ -13,8 +13,8 @@ export default function HeaderComponent() {
 
     return (
         <header>
-            <div className="container">
-                <nav className="navbar navbar-expand-sm justify-content-between border-bottom border-light border-2 mb-3">
+            <div className="container border-bottom border-2 mb-3">
+                <nav className="navbar navbar-expand-sm justify-content-between">
 
                     {
                         isAuthenticated && user.photoURL &&

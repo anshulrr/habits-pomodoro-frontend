@@ -1,11 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useAuth } from "../services/auth/AuthContext";
+import Pagination from "../services/pagination/Pagination";
 import PastPomodoroComponent from "./PastPomodoroComponent";
+import { retrieveAllTasksApi } from "../services/api/TaskApiService";
+
+const PAGESIZE = window.innerWidth <= 768 ? 5 : 10;
 
 export default function ListTasksRowsComponent({
     project,
-    tasks,
+    status,
+    tasksCount,
     createNewPomodoro,
     updateTask,
     setPomodorosListReload,
@@ -13,7 +18,27 @@ export default function ListTasksRowsComponent({
     const authContext = useAuth()
     const userSettings = authContext.userSettings
 
+    const [tasks, setTasks] = useState([])
+
+    const [currentPage, setCurrentPage] = useState(1)
+
     const [showCreatePastPomodoro, setShowCreatePastPomodoro] = useState(-1);
+
+    useEffect(
+        () => {
+            refreshTasks(status)
+        }, [currentPage]
+    )
+
+    function refreshTasks(status) {
+        console.log(tasks)
+        retrieveAllTasksApi(project.id, status, PAGESIZE, (currentPage - 1) * PAGESIZE)
+            .then(response => {
+                // console.debug(response)
+                setTasks(response.data)
+            })
+            .catch(error => console.error(error.message))
+    }
 
     function timeToDisplay(total_minutes) {
         if (total_minutes < 60) {
@@ -75,6 +100,14 @@ export default function ListTasksRowsComponent({
                     )
                 )
             }
+
+            <Pagination
+                className="pagination-bar mt-3"
+                currentPage={currentPage}
+                totalCount={tasksCount}
+                pageSize={PAGESIZE}
+                onPageChange={page => setCurrentPage(page)}
+            />
         </>
     )
 }
