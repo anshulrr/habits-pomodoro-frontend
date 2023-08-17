@@ -31,7 +31,6 @@ export default function ListTasksRowsComponent({
     )
 
     function refreshTasks(status) {
-        console.log(tasks)
         retrieveAllTasksApi(project.id, status, PAGESIZE, (currentPage - 1) * PAGESIZE)
             .then(response => {
                 // console.debug(response)

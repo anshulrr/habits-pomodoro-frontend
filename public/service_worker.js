@@ -1,5 +1,4 @@
 // console.debug("from initialized sw")
-
 var timeout = null;
 
 self.onmessage = (event) => {
@@ -10,7 +9,7 @@ self.onmessage = (event) => {
     }
 
     if (event.data.status === 'started') {
-        timeout = setTimeout(showNotification, 1000 * event.data.timeRemaining, event.data.task + " has been running for " + event.data.timeRemaining + "s without any change")
+        timeout = setTimeout(showNotification, 1000 * event.data.timeRemaining, event.data.task + " is completed")
     }
 }
 
