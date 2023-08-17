@@ -29,8 +29,8 @@ export default function PastPomodoroComponent({ showCreatePastPomodoro, setShowC
 
     function createPastPomodoro() {
         const pomodoro_data = {
-            startTime: moment().startOf('date').toDate(),
-            endTime: moment().startOf('date').toDate(),
+            startTime: date,
+            endTime: date,
             timeElapsed: minutesElapsed * 60
         }
 
