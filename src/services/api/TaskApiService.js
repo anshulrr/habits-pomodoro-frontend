@@ -1,7 +1,10 @@
 import { apiClient } from "./ApiClient";
 
-export const retrieveAllTasks
-    = (project_id, status) => apiClient.get(`/projects/${project_id}/tasks?status=${status}`)
+export const getTasksCountApi
+    = (project_id, status) => apiClient.get(`/projects/${project_id}/tasks/count?status=${status}`)
+
+export const retrieveAllTasksApi
+    = (project_id, status, limit, offset) => apiClient.get(`/projects/${project_id}/tasks?status=${status}&limit=${limit}&offset=${offset}`)
 
 export const createTaskApi
     = (project_id, task) => apiClient.post(`/projects/${project_id}/tasks`, task)

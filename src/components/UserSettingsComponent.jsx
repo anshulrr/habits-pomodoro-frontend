@@ -18,6 +18,8 @@ export default function UserSettingsComponent() {
     const [breakLength, setBreakLength] = useState(userSettings.breakLength)
     const [enableStopwatch, setEnableStopwatch] = useState(userSettings.enableStopwatch)
     const [enableStopwatchAudio, setEnableStopwatchAudio] = useState(userSettings.enableStopwatchAudio)
+    const [pageProjectsCount, setPageProjectsCount] = useState(userSettings.pageProjectsCount)
+    const [pageTasksCount, setPageTasksCount] = useState(userSettings.pageTasksCount)
 
     const [errorMessage, setErrorMessage] = useState('')
     const [successMessage, setSuccessMessage] = useState('')
@@ -43,7 +45,9 @@ export default function UserSettingsComponent() {
             pomodoroLength,
             breakLength,
             enableStopwatch,
-            enableStopwatchAudio
+            enableStopwatchAudio,
+            pageProjectsCount,
+            pageTasksCount
         }
         // console.debug(request_settings);
 
@@ -81,6 +85,12 @@ export default function UserSettingsComponent() {
         }
         else if (breakLength === '' || breakLength < 0) {
             setErrorMessage('Break Length must be greater than or equal to 0');
+        }
+        else if (pageProjectsCount === '' || pageProjectsCount < 1) {
+            setErrorMessage('Number of Projects in a page must be greater than 0');
+        }
+        else if (pageTasksCount === '' || pageTasksCount < 1) {
+            setErrorMessage('Number of Tasks in a page must be greater than 0');
         } else {
             return true;
         }
@@ -274,6 +284,48 @@ export default function UserSettingsComponent() {
                             placeholder="Default Break Length"
                             onChange={(e) => handleOnChange(setBreakLength, e.target.value)}
                             id="breakLength"
+                        />
+                    </div>
+                </div>
+
+            </div>
+
+            <h6 className='text-start'>Display Settings</h6>
+
+            <div className="row">
+
+                <div className="col-md-4">
+                    <div className="input-group input-group-sm mb-2">
+                        <label className="input-group-text" htmlFor="breakLength">
+                            Number of projects in a page
+                        </label>
+                        <input
+                            type="number"
+                            name="pageProjectsCount"
+                            className="form-control"
+                            value={pageProjectsCount}
+                            min={0}
+                            placeholder="Default Number of Projects"
+                            onChange={(e) => handleOnChange(setPageProjectsCount, e.target.value)}
+                            id="pageProjectsCount"
+                        />
+                    </div>
+                </div>
+
+                <div className="col-md-4">
+                    <div className="input-group input-group-sm mb-2">
+                        <label className="input-group-text" htmlFor="breakLength">
+                            Number of tasks in a page
+                        </label>
+                        <input
+                            type="number"
+                            name="pageTasksCount"
+                            className="form-control"
+                            value={pageTasksCount}
+                            min={0}
+                            placeholder="Default Number of Tasks"
+                            onChange={(e) => handleOnChange(setPageTasksCount, e.target.value)}
+                            id="pageTasksCount"
                         />
                     </div>
                 </div>
