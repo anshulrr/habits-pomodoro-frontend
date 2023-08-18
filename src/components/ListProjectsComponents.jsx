@@ -110,7 +110,7 @@ export default function ListProjectsComponent() {
                                                     {proj.category}
                                                 </small>
                                                 <small>
-                                                    <small className="ms-1 bi bi-hourglass-top" />
+                                                    <small className="ms-1 bi bi-hourglass" />
                                                     {proj.pomodoroLength || userSettings.pomodoroLength}
                                                 </small>
                                             </span>

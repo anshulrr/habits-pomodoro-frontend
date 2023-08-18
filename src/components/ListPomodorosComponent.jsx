@@ -92,7 +92,7 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
                 </span>
                 <span className="ms-1 badge rounded-pill text-bg-secondary">
                     {totalTimeElapsed}
-                    <span className="ms-1 bi bi-clock-fill" />
+                    <span className="ms-1 bi bi-clock" />
                 </span>
             </h6>
             <div className="text-danger"><small>{deleteErrorMessage}</small></div>

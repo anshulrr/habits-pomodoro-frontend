@@ -77,7 +77,7 @@ export default function ListCommentsComponent({ filterBy, id, title }) {
                                             </span>) ||
                                         (filterBy === 'pomodoro' &&
                                             <span className="me-1 badge rounded-pill text-bg-secondary">
-                                                <span className="bi bi-hourglass-bottom" />
+                                                <span className="bi bi-hourglass" />
                                             </span>)
 
                                     }

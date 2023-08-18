@@ -140,24 +140,32 @@ export default function ListTasksComponent({ project }) {
                             tasksCount === 0 &&
                             <div className="alert alert-warning">No task is added to this project</div>
                         }
-                        <ListTasksRowsComponent
-                            key={[project.id, pomodoroStatus]}    // re-render ListTasksComponents for completed pomodoro'
-                            status={'added'}
-                            tasksCount={tasksCount}
-                            project={project}
-                            createNewPomodoro={createNewPomodoro}
-                            updateTask={updateTask}
-                            setPomodorosListReload={setPomodorosListReload}
-                        />
+                        {
+                            tasksCount !== 0 &&
+                            <ListTasksRowsComponent
+                                key={[project.id, pomodoroStatus]}    // re-render ListTasksComponents for completed pomodoro'
+                                status={'added'}
+                                tasksCount={tasksCount}
+                                project={project}
+                                createNewPomodoro={createNewPomodoro}
+                                updateTask={updateTask}
+                                setPomodorosListReload={setPomodorosListReload}
+                            />
+                        }
 
                         <div className="mt-3">
                             <span className="badge text-bg-light" style={{ cursor: "pointer" }} onClick={() => setShowArchived(!showArchived)}>
-                                {!showArchived && <span>Show Archived Tasks ({archivedTasksCount})<i className="bi bi-arrow-down"></i></span>}
-                                {showArchived && <span>Hide Archived Tasks ({archivedTasksCount})<i className="bi bi-arrow-up"></i></span>}
+                                Archived
+                                <span className="ms-1 badge rounded-pill text-bg-secondary">
+                                    {archivedTasksCount}
+                                    <span className="ms-1 bi bi-list-ul" />
+                                </span>
+                                {!showArchived && <i className="bi bi-arrow-down" />}
+                                {showArchived && <i className="bi bi-arrow-up" />}
                             </span>
                             <small>
                                 {
-                                    showArchived &&
+                                    showArchived && archivedTasksCount !== 0 &&
                                     <ListTasksRowsComponent
                                         key={project.id}
                                         status={'archived'}
@@ -172,12 +180,17 @@ export default function ListTasksComponent({ project }) {
 
                         <div className="mt-3">
                             <span className="badge text-bg-light" style={{ cursor: "pointer" }} onClick={() => setShowCompleted(!showCompleted)}>
-                                {!showCompleted && <span>Show Completed Tasks ({completedTasksCount})<i className="bi bi-arrow-down"></i></span>}
-                                {showCompleted && <span>Hide Completed Tasks ({completedTasksCount})<i className="bi bi-arrow-up"></i></span>}
+                                Completed
+                                <span className="ms-1 badge rounded-pill text-bg-secondary">
+                                    {completedTasksCount}
+                                    <span className="ms-1 bi bi-list-ul" />
+                                </span>
+                                {!showCompleted && <i className="bi bi-arrow-down" />}
+                                {showCompleted && <i className="bi bi-arrow-up" />}
                             </span>
                             <small>
                                 {
-                                    showCompleted &&
+                                    showCompleted && completedTasksCount !== 0 &&
                                     <ListTasksRowsComponent
                                         key={project.id}
                                         status={'completed'}
