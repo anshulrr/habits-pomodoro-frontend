@@ -101,7 +101,7 @@ export default function ListCommentsComponent({ filterBy, id, title }) {
                                 comment => (
                                     <div key={comment.id}>
                                         <div className="col-12 text-truncate text-start mb-2">
-                                            <div className="badge rounded-pill text-bg-secondary text-wrap ps-2" style={{ fontSize: '0.7rem' }}>
+                                            <div className="badge rounded-pill text-bg-secondary text-start text-wrap ps-2" style={{ fontSize: '0.7rem' }}>
                                                 <span>{moment(comment.createdAt).fromNow()}</span>
                                                 {
                                                     comment.category &&
@@ -126,7 +126,7 @@ export default function ListCommentsComponent({ filterBy, id, title }) {
                                                     </span>
                                                 }
                                             </div>
-                                            <div className="ps-2">
+                                            <div className="text-wrap ps-2">
                                                 {comment.description}
                                             </div>
                                         </div>

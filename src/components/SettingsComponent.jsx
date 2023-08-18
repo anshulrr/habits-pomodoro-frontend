@@ -43,7 +43,7 @@ export default function SettingsComponent() {
                     </h6>
                     {
                         showComments !== false &&
-                        <div id="popup" className="comments-overlay">
+                        <div className="comments-overlay">
                             <div className="comments-popup">
                                 <div className="text-end p-3">
                                     <i className="bi bi-x-lg" onClick={() => setShowComments(false)}></i>
