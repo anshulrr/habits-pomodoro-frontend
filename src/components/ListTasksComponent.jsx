@@ -126,7 +126,7 @@ export default function ListTasksComponent({ project }) {
                                 </span>
                                 <small className="ms-1 badge rounded-pill text-bg-secondary">
                                     {tasksCount}
-                                    <small class="ms-1 bi bi-list-ul" />
+                                    <small className="ms-1 bi bi-list-ul" />
                                 </small>
                             </h6>
                         </div>

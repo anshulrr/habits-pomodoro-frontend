@@ -195,7 +195,7 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
                 </small>
                 <h5>
                     <span className="me-1 badge rounded-pill text-bg-secondary">
-                        <span class="bi bi-list-ul" />
+                        <span className="bi bi-list-ul" />
                     </span>
                     {pomodoro.task.description}
                 </h5>

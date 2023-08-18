@@ -72,7 +72,7 @@ export default function ListTasksComponent() {
                         Included Project Categories
                         <span className="ms-1 badge rounded-pill text-bg-secondary">
                             {includeCategories.length}
-                            <span class="bi bi-link-45deg" />
+                            <span className="bi bi-link-45deg" />
                         </span>
                     </h6>
                     <CategoryChecklistComponent

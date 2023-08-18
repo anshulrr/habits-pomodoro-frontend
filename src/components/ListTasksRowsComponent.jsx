@@ -26,6 +26,7 @@ export default function ListTasksRowsComponent({
     const [showCreatePastPomodoro, setShowCreatePastPomodoro] = useState(-1);
 
     const [showCommentsId, setShowCommentsId] = useState(-1);
+    const [commentsTitle, setCommentsTitle] = useState('')
 
     useEffect(
         () => {
@@ -57,6 +58,11 @@ export default function ListTasksRowsComponent({
         return time_string;
     }
 
+    function updateCommentsData(task) {
+        setShowCommentsId(task.id)
+        setCommentsTitle(task.description)
+    }
+
     return (
         <>
             {
@@ -78,16 +84,16 @@ export default function ListTasksRowsComponent({
 
                             <div className="col-3 px-0 text-secondary text-end small text-truncate task-list-details">
                                 <span>
-                                    <small class="bi bi-clock-fill" />
+                                    <small className="bi bi-clock-fill" />
                                     {timeToDisplay(task.pomodorosTimeElapsed / 60)}
                                 </span>
                                 <span>
-                                    <small class="ms-1 bi bi-hourglass-top" />
+                                    <small className="ms-1 bi bi-hourglass-top" />
                                     {timeToDisplay(task.pomodoroLength || project.pomodoroLength || userSettings.pomodoroLength)}
                                 </span>
                             </div>
                             <div className="col-4 px-0 text-secondary text-end task-list-buttons">
-                                <i className="p-1 me-1 bi bi-chat-right-text" onClick={() => setShowCommentsId(task.id)} />
+                                <i className="p-1 me-1 bi bi-chat-right-text" onClick={() => updateCommentsData(task)} />
 
                                 {
                                     task.status === 'added' &&
@@ -126,8 +132,9 @@ export default function ListTasksRowsComponent({
                             <i className="bi bi-x-lg" onClick={() => setShowCommentsId(-1)}></i>
                         </div>
                         <ListCommentsComponent
-                            filterBy={'tasks'}
+                            filterBy={'task'}
                             id={showCommentsId}
+                            title={commentsTitle}
                         />
                     </div>
                 </div>

@@ -70,7 +70,7 @@ export default function ListProjectCategoriesComponent() {
                                     Project Categories
                                     <span className="ms-1 badge rounded-pill text-bg-secondary">
                                         {categoriesCount}
-                                        <span class="bi bi-link-45deg" />
+                                        <span className="bi bi-link-45deg" />
                                     </span>
                                 </h6>
                             </div>
@@ -126,8 +126,9 @@ export default function ListProjectCategoriesComponent() {
                                     <i className="bi bi-x-lg" onClick={() => setShowCommentsId(-1)}></i>
                                 </div>
                                 <ListCommentsComponent
-                                    filterBy={'project-categories'}
+                                    filterBy={'category'}
                                     id={showCommentsId}
+                                    title={category.name}
                                 />
                             </div>
                         </div>

@@ -106,11 +106,11 @@ export default function ListProjectsComponent() {
                                         <div className="col px-1 text-secondary text-truncate text-end">
                                             <span>
                                                 <small>
-                                                    <small class="bi bi-link-45deg" />
+                                                    <small className="bi bi-link-45deg" />
                                                     {proj.category}
                                                 </small>
                                                 <small>
-                                                    <small class="ms-1 bi bi-hourglass-top" />
+                                                    <small className="ms-1 bi bi-hourglass-top" />
                                                     {proj.pomodoroLength || userSettings.pomodoroLength}
                                                 </small>
                                             </span>
@@ -142,8 +142,9 @@ export default function ListProjectsComponent() {
                                 <i className="bi bi-x-lg" onClick={() => setShowCommentsId(-1)}></i>
                             </div>
                             <ListCommentsComponent
-                                filterBy={'projects'}
+                                filterBy={'project'}
                                 id={showCommentsId}
+                                title={project.name}
                             />
                         </div>
                     </div>

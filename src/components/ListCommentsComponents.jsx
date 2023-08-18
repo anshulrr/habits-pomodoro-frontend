@@ -5,8 +5,9 @@ import { retrieveAllCommentsApi, getCommentsCountApi } from "../services/api/Com
 import Pagination from "../services/pagination/Pagination"
 
 import moment from "moment";
+import CommentComponent from "./CommentComponent";
 
-export default function ListCommentsComponent({ filterBy, id }) {
+export default function ListCommentsComponent({ filterBy, id, title }) {
     const navigate = useNavigate()
 
     const PAGESIZE = 10;
@@ -51,21 +52,48 @@ export default function ListCommentsComponent({ filterBy, id }) {
 
     return (
         <div className="container">
+            <div className="row">
+                <CommentComponent
+                    setComments={setComments}
+                    filterBy={filterBy}
+                    id={id}
+                    title={title}
+                />
+            </div>
+
+            <hr />
+
             <div className="row mb-3">
                 <div className="col-md-12">
                     <div>
                         <div className="row">
-                            <div className="col-10">
-                                <h5>
-                                    Comments
+                            <div className="col-12">
+                                <h6>
+                                    {
+                                        filterBy === 'category' &&
+                                        <span className="me-1 badge rounded-pill text-bg-secondary">
+                                            <span className="bi bi-link-45deg" />
+                                        </span> ||
+                                        filterBy === 'project' &&
+                                        <span className="me-1 badge rounded-pill text-bg-secondary">
+                                            <span className="bi bi-folder-plus" />
+                                        </span> ||
+                                        filterBy === 'task' &&
+                                        <span className="me-1 badge rounded-pill text-bg-secondary">
+                                            <span className="bi bi-list-ul" />
+                                        </span> ||
+                                        filterBy === 'pomodoro' &&
+                                        <span className="me-1 badge rounded-pill text-bg-secondary">
+                                            <span className="bi bi-hourglass-bottom" />
+                                        </span>
+
+                                    }
+                                    {title}
                                     <span className="ms-1 badge rounded-pill text-bg-secondary">
                                         {commentsCount}
                                         <span className="ms-1 bi bi-chat-right-text" />
                                     </span>
-                                </h5>
-                            </div>
-                            <div className="col-2 text-end">
-                                <i className="p-1 bi bi-plus-square" onClick={addNewComment}></i>
+                                </h6>
                             </div>
                         </div>
                         {
@@ -73,7 +101,7 @@ export default function ListCommentsComponent({ filterBy, id }) {
                                 comment => (
                                     <div key={comment.id}>
                                         <div className="col-12 mt-2 text-truncate text-start">
-                                            <div className="text-start text-secondary ps-1" style={{ fontSize: '0.7rem' }}>
+                                            <div className="text-start text-wrap text-secondary ps-1" style={{ fontSize: '0.7rem' }}>
                                                 <span>{moment(comment.createdAt).fromNow()}</span>
                                                 {
                                                     comment.category &&
@@ -118,6 +146,6 @@ export default function ListCommentsComponent({ filterBy, id }) {
                 </div>
             </div>
 
-        </div>
+        </div >
     )
 }
