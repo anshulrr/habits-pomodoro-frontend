@@ -75,7 +75,15 @@ export default function ListProjectsComponent() {
                     <div>
                         <div className="row">
                             <div className="col-10">
-                                <h5>Projects ({projectsCount})</h5>
+                                <h5>
+                                    <span>
+                                        Projects
+                                    </span>
+                                    <span className="ms-1 badge rounded-pill text-bg-secondary">
+                                        {projectsCount}
+                                        <span className="ms-1 bi bi-folder-plus" />
+                                    </span>
+                                </h5>
                             </div>
                             <div className="col-2 text-end">
                                 <i className="p-1 bi bi-plus-square" onClick={addNewProject}></i>
@@ -97,8 +105,14 @@ export default function ListProjectsComponent() {
                                         </div>
                                         <div className="col px-1 text-secondary text-truncate text-end">
                                             <span>
-                                                <small>{proj.pomodoroLength || userSettings.pomodoroLength} </small>
-                                                <small>{proj.category} </small>
+                                                <small>
+                                                    <small class="bi bi-link-45deg" />
+                                                    {proj.category}
+                                                </small>
+                                                <small>
+                                                    <small class="ms-1 bi bi-hourglass-top" />
+                                                    {proj.pomodoroLength || userSettings.pomodoroLength}
+                                                </small>
                                             </span>
                                         </div>
                                         <div className="col-2 px-0 text-secondary text-end list-button">

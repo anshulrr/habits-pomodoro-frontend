@@ -56,7 +56,13 @@ export default function ListCommentsComponent({ filterBy, id }) {
                     <div>
                         <div className="row">
                             <div className="col-10">
-                                <h5>Comments ({commentsCount})</h5>
+                                <h5>
+                                    Comments
+                                    <span className="ms-1 badge rounded-pill text-bg-secondary">
+                                        {commentsCount}
+                                        <span className="ms-1 bi bi-chat-right-text" />
+                                    </span>
+                                </h5>
                             </div>
                             <div className="col-2 text-end">
                                 <i className="p-1 bi bi-plus-square" onClick={addNewComment}></i>
@@ -66,12 +72,31 @@ export default function ListCommentsComponent({ filterBy, id }) {
                             comments.map(
                                 comment => (
                                     <div key={comment.id}>
-                                        <div className="col-12 text-truncate text-start">
-                                            <div className="text-start text-secondary ps-1" style={{ fontSize: '0.6rem' }}>
+                                        <div className="col-12 mt-2 text-truncate text-start">
+                                            <div className="text-start text-secondary ps-1" style={{ fontSize: '0.7rem' }}>
                                                 <span>{moment(comment.createdAt).fromNow()}</span>
-                                                {comment.category && <span>, {comment.category}</span>}
-                                                {comment.project && <span>, {comment.project}</span>}
-                                                {comment.task && <span>, {comment.task}</span>}
+                                                {
+                                                    comment.category &&
+                                                    <span>
+                                                        <span className="ms-2 bi bi-link-45deg" />
+                                                        {comment.category}
+                                                    </span>
+                                                }
+
+                                                {
+                                                    comment.project &&
+                                                    <span>
+                                                        <span className="ms-2 me-1 bi bi-folder-plus" />
+                                                        {comment.project}
+                                                    </span>
+                                                }
+                                                {
+                                                    comment.task &&
+                                                    <span>
+                                                        <span className="ms-2 me-1 bi bi-list-ul" />
+                                                        {comment.task}
+                                                    </span>
+                                                }
                                             </div>
                                             <div className="border rounded p-1">
                                                 {comment.description}

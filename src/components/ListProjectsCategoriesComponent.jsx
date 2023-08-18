@@ -66,7 +66,13 @@ export default function ListProjectCategoriesComponent() {
                     <div>
                         <div className="row">
                             <div className="col-10 text-start">
-                                <h6>Project Categories ({categoriesCount})</h6>
+                                <h6>
+                                    Project Categories
+                                    <span className="ms-1 badge rounded-pill text-bg-secondary">
+                                        {categoriesCount}
+                                        <span class="bi bi-link-45deg" />
+                                    </span>
+                                </h6>
                             </div>
                             <div className="col-2 text-end">
                                 <i className="p-1 bi bi-plus-square" onClick={addNewProjectCategory}></i>

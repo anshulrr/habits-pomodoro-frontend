@@ -117,7 +117,18 @@ export default function ListTasksComponent({ project }) {
                 <div className="col-md-6 mt-3 border-bottom border-2">
                     <div className="row">
                         <div className="col-11">
-                            <h6>{project.name} ({tasksCount})</h6>
+                            <h6>
+                                <span className="me-1 badge rounded-pill text-bg-secondary">
+                                    <span className="bi bi-folder-plus" />
+                                </span>
+                                <span>
+                                    {project.name}
+                                </span>
+                                <small className="ms-1 badge rounded-pill text-bg-secondary">
+                                    {tasksCount}
+                                    <small class="ms-1 bi bi-list-ul" />
+                                </small>
+                            </h6>
                         </div>
                         <div className="col-1 px-0 text-end">
                             <i className="p-1 bi bi-plus-circle" onClick={addNewTask}></i>

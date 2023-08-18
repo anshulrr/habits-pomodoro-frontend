@@ -76,7 +76,17 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
     return (
         <>
             <h6>
-                Pomodoros ({totalTimeElapsed})
+                <span>
+                    Pomodoros
+                </span>
+                <span className="ms-1 badge rounded-pill text-bg-secondary">
+                    {pomodoros.length}
+                    <small class="bi bi-hourglass-bottom" />
+                </span>
+                <span className="ms-1 badge rounded-pill text-bg-secondary">
+                    {totalTimeElapsed}
+                    <small class="ms-1 bi bi-clock-fill" />
+                </span>
             </h6>
             <div className="text-danger"><small>{deleteErrorMessage}</small></div>
             {
@@ -101,16 +111,16 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
                                         <td>
                                             {Math.round(pomodoro.timeElapsed / 60)}
                                         </td>
-                                        <td className="text-muted">
+                                        <td className="text-secondary">
                                             {moment.utc(pomodoro.startTime).local().format('H:mm')}-
                                             {moment.utc(pomodoro.endTime).local().format('H:mm')}
                                         </td>
-                                        <td className="text-end">
-                                            <i className="bi bi-chat-right-text" onClick={() => setShowCommentsId(pomodoro.id)} />
+                                        <td className="text-end text-secondary">
                                             {
                                                 pomodoro.status === 'past' &&
                                                 <i className="p-1 bi bi-trash" onClick={() => deleltePastPomodoro(pomodoro.id)} />
                                             }
+                                            <i className="bi bi-chat-right-text" onClick={() => setShowCommentsId(pomodoro.id)} />
                                         </td>
                                     </tr>
                                 )

@@ -187,8 +187,18 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
     return (
         <div className="PomodoroComponent">
             <div className="">
-                <small><span className="bi bi-folder-plus"> </span>{pomodoro.task.project.name}</small>
-                <h5>{pomodoro.task.description}</h5>
+                <small>
+                    <span className="me-1 badge rounded-pill text-bg-secondary">
+                        <span className="bi bi-folder-plus" />
+                    </span>
+                    {pomodoro.task.project.name}
+                </small>
+                <h5>
+                    <span className="me-1 badge rounded-pill text-bg-secondary">
+                        <span class="bi bi-list-ul" />
+                    </span>
+                    {pomodoro.task.description}
+                </h5>
                 {
                     status !== 'completed' &&
                     <div className="fs-1 p-3 text-white" style={{ backgroundColor: pomodoro.task.project.color, fontVariantNumeric: "tabular-nums" }}>

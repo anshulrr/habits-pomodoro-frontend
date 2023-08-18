@@ -78,7 +78,12 @@ export default function ListTasksRowsComponent({
 
                             <div className="col-3 px-0 text-secondary text-end small text-truncate task-list-details">
                                 <span>
-                                    {timeToDisplay(task.pomodorosTimeElapsed / 60)} / {timeToDisplay(task.pomodoroLength || project.pomodoroLength || userSettings.pomodoroLength)}
+                                    <small class="bi bi-clock-fill" />
+                                    {timeToDisplay(task.pomodorosTimeElapsed / 60)}
+                                </span>
+                                <span>
+                                    <small class="ms-1 bi bi-hourglass-top" />
+                                    {timeToDisplay(task.pomodoroLength || project.pomodoroLength || userSettings.pomodoroLength)}
                                 </span>
                             </div>
                             <div className="col-4 px-0 text-secondary text-end task-list-buttons">
