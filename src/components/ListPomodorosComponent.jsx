@@ -4,6 +4,7 @@ import moment from "moment"
 import { Buttons } from "./charts/Buttons";
 import { deletePastPomodoroApi, getPomodorosApi } from "../services/api/PomodoroApiService";
 import { retrieveAllProjectCategoriesApi } from "../services/api/ProjectCategoryApiService";
+import ListCommentsComponent from "./ListCommentsComponents";
 
 export default function ListPomodorosComponent({ includeCategories, buttonsStates, setButtonsStates, setPomodorosListReload }) {
 
@@ -13,6 +14,8 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
 
     const [deleteErrorMessage, setDeleteErrorMessage] = useState('');
     const [deleteId, setDeleteId] = useState(-1);
+
+    const [showCommentsId, setShowCommentsId] = useState(-1);
 
     useEffect(
         () => {
@@ -102,7 +105,8 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
                                             {moment.utc(pomodoro.startTime).local().format('H:mm')}-
                                             {moment.utc(pomodoro.endTime).local().format('H:mm')}
                                         </td>
-                                        < td >
+                                        <td className="text-end">
+                                            <i className="bi bi-chat-right-text" onClick={() => setShowCommentsId(pomodoro.id)} />
                                             {
                                                 pomodoro.status === 'past' &&
                                                 <i className="p-1 bi bi-trash" onClick={() => deleltePastPomodoro(pomodoro.id)} />
@@ -115,6 +119,20 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
                     </tbody>
                 </table>
             </small>
-        </ >
+            {
+                showCommentsId !== -1 &&
+                <div id="popup" className="comments-overlay">
+                    <div className="comments-popup">
+                        <div className="text-end p-3">
+                            <i className="bi bi-x-lg" onClick={() => setShowCommentsId(-1)}></i>
+                        </div>
+                        <ListCommentsComponent
+                            filterBy={'pomodoros'}
+                            id={showCommentsId}
+                        />
+                    </div>
+                </div>
+            }
+        </>
     )
 }

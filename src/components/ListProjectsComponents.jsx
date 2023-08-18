@@ -5,6 +5,7 @@ import ListTasksComponent from './ListTasksComponent'
 
 import Pagination from "../services/pagination/Pagination"
 import { useAuth } from "../services/auth/AuthContext";
+import ListCommentsComponent from "./ListCommentsComponents";
 
 export default function ListProjectsComponent() {
     const authContext = useAuth()
@@ -22,6 +23,8 @@ export default function ListProjectsComponent() {
 
     const { state } = useLocation();
     const [project, setProject] = useState(state ? state.project : null)
+
+    const [showCommentsId, setShowCommentsId] = useState(-1);
 
     useEffect(
         () => getProjectsCount(),
@@ -98,7 +101,8 @@ export default function ListProjectsComponent() {
                                                 <small>{proj.category} </small>
                                             </span>
                                         </div>
-                                        <div className="col-1 px-0 text-secondary text-end list-button">
+                                        <div className="col-2 px-0 text-secondary text-end list-button">
+                                            <i className="p-1 me-1 bi bi-chat-right-text" onClick={() => setShowCommentsId(proj.id)} />
                                             <i className="p-1 bi bi-pencil-square" onClick={() => updateProject(proj.id)}></i>
                                         </div>
                                     </div>
@@ -115,6 +119,22 @@ export default function ListProjectsComponent() {
                         />
                     </div>
                 </div>
+
+                {
+                    showCommentsId !== -1 &&
+                    <div id="popup" className="comments-overlay">
+                        <div className="comments-popup">
+                            <div className="text-end p-3">
+                                <i className="bi bi-x-lg" onClick={() => setShowCommentsId(-1)}></i>
+                            </div>
+                            <ListCommentsComponent
+                                filterBy={'projects'}
+                                id={showCommentsId}
+                            />
+                        </div>
+                    </div>
+                }
+
                 <div className="col-md-8">
                     {
                         project &&

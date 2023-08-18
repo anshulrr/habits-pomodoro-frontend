@@ -102,3 +102,23 @@
 .separator:not(:empty)::after {
   margin-left: .25em;
 }
+
+/* comments popup */
+.comments-overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 9
+}
+
+.comments-popup {
+  top: 8vh;
+  bottom: 8vh;
+  height: 84vh;
+  border-radius: 10px;
+  box-shadow: 0px 0px 0px 9999px rgba(0, 0, 0, 0.5);
+  background-color: #ffffff;
+  position: relative;
+}

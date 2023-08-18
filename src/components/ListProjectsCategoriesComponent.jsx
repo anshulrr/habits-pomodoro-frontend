@@ -3,6 +3,7 @@ import { retrieveAllProjectCategoriesApi, getProjectCategoriesCountApi } from ".
 
 import Pagination from "../services/pagination/Pagination"
 import ProjectCategoryComponent from "./ProjectCategoryComponent";
+import ListCommentsComponent from "./ListCommentsComponents";
 
 const PAGESIZE = 5;
 
@@ -15,6 +16,8 @@ export default function ListProjectCategoriesComponent() {
     const [category, setCategory] = useState(null)
 
     const [isNewCategory, setNewCategory] = useState(false)
+
+    const [showCommentsId, setShowCommentsId] = useState(-1);
 
     useEffect(
         () => getProjectCategoriesCount(),
@@ -91,6 +94,7 @@ export default function ListProjectCategoriesComponent() {
                                                     {cat.level}&nbsp;
                                                 </span>
                                                 <span className="list-button">
+                                                    <i className="p-1 me-1 bi bi-chat-right-text" onClick={() => setShowCommentsId(cat.id)} />
                                                     <i className="p-1 bi bi-pencil-square"></i>
                                                 </span>
                                             </div>
@@ -107,6 +111,21 @@ export default function ListProjectCategoriesComponent() {
                             onPageChange={page => setCurrentPage(page)}
                         />
                     </div>
+
+                    {
+                        showCommentsId !== -1 &&
+                        <div id="popup" className="comments-overlay">
+                            <div className="comments-popup">
+                                <div className="text-end p-3">
+                                    <i className="bi bi-x-lg" onClick={() => setShowCommentsId(-1)}></i>
+                                </div>
+                                <ListCommentsComponent
+                                    filterBy={'project-categories'}
+                                    id={showCommentsId}
+                                />
+                            </div>
+                        </div>
+                    }
                 </div>
                 <div className="col-md-8 mt-2">
                     {
