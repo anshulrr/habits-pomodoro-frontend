@@ -116,11 +116,9 @@ export default function ListTasksComponent({ project }) {
 
                 <div className="col-md-6 mt-3 border-bottom border-2">
                     <div className="row">
-                        <div className="col-11">
+                        <div className="col-10">
                             <h6>
-                                <span className="me-1 badge rounded-pill text-bg-secondary">
-                                    <span className="bi bi-folder-plus" />
-                                </span>
+                                <span className="me-1 bi bi-folder-plus" />
                                 <span>
                                     {project.name}
                                 </span>
@@ -130,7 +128,7 @@ export default function ListTasksComponent({ project }) {
                                 </small>
                             </h6>
                         </div>
-                        <div className="col-1 px-0 text-end">
+                        <div className="col-2 text-end">
                             <i className="p-1 bi bi-plus-circle" onClick={addNewTask}></i>
                         </div>
                     </div>
@@ -207,10 +205,10 @@ export default function ListTasksComponent({ project }) {
 
                 <div className="col-md-6 mt-3 border-bottom border-2">
                     <div className="row mb-3">
-                        <div className="col-11 text-start">
+                        <div className="col-10 text-start">
                             <small className="text-danger">{message} </small>
                         </div>
-                        <div className="col-1 px-0 text-end">
+                        <div className="col-2 text-end">
                             <i className="p-1 bi bi-arrow-clockwise" onClick={() => getRunningPomodoro()}></i>
                         </div>
                     </div>
@@ -231,7 +229,7 @@ export default function ListTasksComponent({ project }) {
                         <StopwatchComponent message={'Start a new task'} />
                     }
 
-                    <div className="border-top border-1 pt-2 overflow-scroll bg-white mt-3 px-3" style={{ maxHeight: "55vh" }}>
+                    <div className="border-top border-1 pt-2 overflow-scroll bg-white mt-3" style={{ maxHeight: "55vh" }}>
                         <ListPomodorosComponent
                             key={[pomodoroStatus, pomdorosListReload]}
                             setPomodorosListReload={setPomodorosListReload}

@@ -106,7 +106,7 @@ export default function ListProjectsComponent() {
                                         <div className="col px-1 text-secondary text-truncate text-end">
                                             <span>
                                                 <small>
-                                                    <small className="bi bi-link-45deg" />
+                                                    <small className="ms-1 bi bi-link-45deg" style={{ paddingRight: '0.1rem' }} />
                                                     {proj.category}
                                                 </small>
                                                 <small>

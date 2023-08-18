@@ -64,21 +64,17 @@ export default function ListCommentsComponent({ filterBy, id, title }) {
                                 <h6>
                                     {
                                         (filterBy === 'category' &&
-                                            <span className="me-1 badge rounded-pill text-bg-secondary">
-                                                <span className="bi bi-link-45deg" />
-                                            </span>) ||
+                                            <span className="me-1 bi bi-link-45deg" />
+                                        ) ||
                                         (filterBy === 'project' &&
-                                            <span className="me-1 badge rounded-pill text-bg-secondary">
-                                                <span className="bi bi-folder-plus" />
-                                            </span>) ||
+                                            <span className="me-1 bi bi-folder-plus" />
+                                        ) ||
                                         (filterBy === 'task' &&
-                                            <span className="me-1 badge rounded-pill text-bg-secondary">
-                                                <span className="bi bi-list-ul" />
-                                            </span>) ||
+                                            <span className="me-1 bi bi-list-ul" />
+                                        ) ||
                                         (filterBy === 'pomodoro' &&
-                                            <span className="me-1 badge rounded-pill text-bg-secondary">
-                                                <span className="bi bi-hourglass" />
-                                            </span>)
+                                            <span className="me-1 bi bi-hourglass" />
+                                        )
 
                                     }
                                     {title}
@@ -99,7 +95,7 @@ export default function ListCommentsComponent({ filterBy, id, title }) {
                                                 {
                                                     comment.category &&
                                                     <span>
-                                                        <span className="ms-2 bi bi-link-45deg" />
+                                                        <span className="ms-2 me-1 bi bi-link-45deg" />
                                                         {comment.category}
                                                     </span>
                                                 }

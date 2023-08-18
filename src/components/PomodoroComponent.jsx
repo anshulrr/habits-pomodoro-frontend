@@ -188,15 +188,11 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
         <div className="PomodoroComponent">
             <div className="">
                 <small>
-                    <span className="me-1 badge rounded-pill text-bg-secondary">
-                        <span className="bi bi-folder-plus" />
-                    </span>
+                    <span className="me-1 bi bi-folder-plus" />
                     {pomodoro.task.project.name}
                 </small>
                 <h5>
-                    <span className="me-1 badge rounded-pill text-bg-secondary">
-                        <span className="bi bi-list-ul" />
-                    </span>
+                    <span className="me-1 bi bi-list-ul" />
                     {pomodoro.task.description}
                 </h5>
                 {
