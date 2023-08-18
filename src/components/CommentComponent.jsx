@@ -1,4 +1,5 @@
 import { useState } from 'react'
+
 import { createCommentApi } from '../services/api/CommentApiService'
 
 export default function CommentComponent({ setComments, filterBy, id, title }) {
@@ -32,10 +33,10 @@ export default function CommentComponent({ setComments, filterBy, id, title }) {
                 <form onSubmit={handleSubmit}>
                     <div className="row">
                         <div className="col-md-12 mb-3">
-                            <input
-                                type="text"
+                            <textarea
                                 className="form-control form-control-sm"
                                 name="description"
+                                rows='5'
                                 value={description}
                                 placeholder="Description"
                                 onChange={(e) => setDescription(e.target.value)}
@@ -50,7 +51,7 @@ export default function CommentComponent({ setComments, filterBy, id, title }) {
                         </div>
                     </div>
                 </form>
-            </div>
-        </div>
+            </div >
+        </div >
     )
 }
