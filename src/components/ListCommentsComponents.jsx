@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
 
+import ReactMarkdown from 'react-markdown'
+
 import { retrieveAllCommentsApi, getCommentsCountApi } from "../services/api/CommentApiService";
 import Pagination from "../services/pagination/Pagination"
 
@@ -100,7 +102,7 @@ export default function ListCommentsComponent({ filterBy, id, title }) {
                             comments.map(
                                 comment => (
                                     <div key={comment.id}>
-                                        <div className="col-12 text-truncate text-start mb-2">
+                                        <div className="col-12 text-truncate text-start">
                                             <div className="badge rounded-pill text-bg-secondary text-wrap ps-2" style={{ fontSize: '0.7rem' }}>
                                                 <span>{moment(comment.createdAt).fromNow()}</span>
                                                 {
@@ -127,7 +129,9 @@ export default function ListCommentsComponent({ filterBy, id, title }) {
                                                 }
                                             </div>
                                             <div className="ps-2">
-                                                {comment.description}
+                                                <ReactMarkdown
+                                                    children={comment.description}
+                                                />
                                             </div>
                                         </div>
                                     </div>
