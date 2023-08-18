@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
 
+import ReactMarkdown from 'react-markdown'
+
 import { retrieveAllCommentsApi, getCommentsCountApi } from "../services/api/CommentApiService";
 import Pagination from "../services/pagination/Pagination"
 
@@ -127,7 +129,9 @@ export default function ListCommentsComponent({ filterBy, id, title }) {
                                                 }
                                             </div>
                                             <div className="text-wrap ps-2">
-                                                {comment.description}
+                                                <ReactMarkdown
+                                                    children={comment.description}
+                                                />
                                             </div>
                                         </div>
                                     </div>
