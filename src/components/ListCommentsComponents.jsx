@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom";
 
 import { retrieveAllCommentsApi, getCommentsCountApi } from "../services/api/CommentApiService";
 import Pagination from "../services/pagination/Pagination"
@@ -8,8 +7,6 @@ import moment from "moment";
 import CommentComponent from "./CommentComponent";
 
 export default function ListCommentsComponent({ filterBy, id, title }) {
-    const navigate = useNavigate()
-
     const PAGESIZE = 10;
 
     const [currentPage, setCurrentPage] = useState(1)
@@ -19,7 +16,7 @@ export default function ListCommentsComponent({ filterBy, id, title }) {
 
     useEffect(
         () => getCommentsCount(),
-        []
+        [] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
     useEffect(
@@ -46,10 +43,6 @@ export default function ListCommentsComponent({ filterBy, id, title }) {
             .catch(error => console.error(error.message))
     }
 
-    function addNewComment() {
-        navigate(`/comments/-1`)
-    }
-
     return (
         <div className="container">
             <div className="row">
@@ -70,22 +63,22 @@ export default function ListCommentsComponent({ filterBy, id, title }) {
                             <div className="col-12">
                                 <h6>
                                     {
-                                        filterBy === 'category' &&
-                                        <span className="me-1 badge rounded-pill text-bg-secondary">
-                                            <span className="bi bi-link-45deg" />
-                                        </span> ||
-                                        filterBy === 'project' &&
-                                        <span className="me-1 badge rounded-pill text-bg-secondary">
-                                            <span className="bi bi-folder-plus" />
-                                        </span> ||
-                                        filterBy === 'task' &&
-                                        <span className="me-1 badge rounded-pill text-bg-secondary">
-                                            <span className="bi bi-list-ul" />
-                                        </span> ||
-                                        filterBy === 'pomodoro' &&
-                                        <span className="me-1 badge rounded-pill text-bg-secondary">
-                                            <span className="bi bi-hourglass-bottom" />
-                                        </span>
+                                        (filterBy === 'category' &&
+                                            <span className="me-1 badge rounded-pill text-bg-secondary">
+                                                <span className="bi bi-link-45deg" />
+                                            </span>) ||
+                                        (filterBy === 'project' &&
+                                            <span className="me-1 badge rounded-pill text-bg-secondary">
+                                                <span className="bi bi-folder-plus" />
+                                            </span>) ||
+                                        (filterBy === 'task' &&
+                                            <span className="me-1 badge rounded-pill text-bg-secondary">
+                                                <span className="bi bi-list-ul" />
+                                            </span>) ||
+                                        (filterBy === 'pomodoro' &&
+                                            <span className="me-1 badge rounded-pill text-bg-secondary">
+                                                <span className="bi bi-hourglass-bottom" />
+                                            </span>)
 
                                     }
                                     {title}

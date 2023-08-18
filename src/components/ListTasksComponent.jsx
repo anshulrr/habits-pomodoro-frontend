@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import { createPomodoroApi, getRunningPomodoroApi } from "../services/api/PomodoroApiService";
-import { getTasksCountApi, retrieveAllTasks } from "../services/api/TaskApiService";
+import { getTasksCountApi } from "../services/api/TaskApiService";
 import ListTasksRowsComponent from "./ListTasksRowsComponent";
 import PomodoroComponent from "./PomodoroComponent";
 import StopwatchComponent from "./StopwatchComponent";

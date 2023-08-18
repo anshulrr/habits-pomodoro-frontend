@@ -31,7 +31,7 @@ export default function ListTasksRowsComponent({
     useEffect(
         () => {
             refreshTasks(status)
-        }, [currentPage]
+        }, [currentPage] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
     function refreshTasks(status) {

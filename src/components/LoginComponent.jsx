@@ -125,6 +125,7 @@ export default function LoginComponent() {
                     type="image"
                     style={{ height: '50px', imageRendering: '-webkit-optimize-contrast', padding: '0' }}
                     src="btn_google_signin_dark_normal_web@2x.png"
+                    alt="User profile picture"
                     onClick={signInWithGoogle}
                 />
             }
