@@ -5,6 +5,7 @@ import ListTasksComponent from './ListTasksComponent'
 
 import Pagination from "../services/pagination/Pagination"
 import { useAuth } from "../services/auth/AuthContext";
+import ListCommentsComponent from "./ListCommentsComponents";
 
 export default function ListProjectsComponent() {
     const authContext = useAuth()
@@ -22,6 +23,8 @@ export default function ListProjectsComponent() {
 
     const { state } = useLocation();
     const [project, setProject] = useState(state ? state.project : null)
+
+    const [showCommentsId, setShowCommentsId] = useState(-1);
 
     useEffect(
         () => getProjectsCount(),
@@ -72,7 +75,15 @@ export default function ListProjectsComponent() {
                     <div>
                         <div className="row">
                             <div className="col-10">
-                                <h5>Projects ({projectsCount})</h5>
+                                <h5>
+                                    <span>
+                                        Projects
+                                    </span>
+                                    <span className="ms-1 badge rounded-pill text-bg-secondary">
+                                        {projectsCount}
+                                        <span className="ms-1 bi bi-folder-plus" />
+                                    </span>
+                                </h5>
                             </div>
                             <div className="col-2 text-end">
                                 <i className="p-1 bi bi-plus-square" onClick={addNewProject}></i>
@@ -94,11 +105,18 @@ export default function ListProjectsComponent() {
                                         </div>
                                         <div className="col px-1 text-secondary text-truncate text-end">
                                             <span>
-                                                <small>{proj.pomodoroLength || userSettings.pomodoroLength} </small>
-                                                <small>{proj.category} </small>
+                                                <small>
+                                                    <small className="bi bi-link-45deg" />
+                                                    {proj.category}
+                                                </small>
+                                                <small>
+                                                    <small className="ms-1 bi bi-hourglass-top" />
+                                                    {proj.pomodoroLength || userSettings.pomodoroLength}
+                                                </small>
                                             </span>
                                         </div>
-                                        <div className="col-1 px-0 text-secondary text-end list-button">
+                                        <div className="col-2 px-0 text-secondary text-end list-button">
+                                            <i className="p-1 me-1 bi bi-chat-right-text" onClick={() => setShowCommentsId(proj.id)} />
                                             <i className="p-1 bi bi-pencil-square" onClick={() => updateProject(proj.id)}></i>
                                         </div>
                                     </div>
@@ -115,6 +133,23 @@ export default function ListProjectsComponent() {
                         />
                     </div>
                 </div>
+
+                {
+                    showCommentsId !== -1 &&
+                    <div id="popup" className="comments-overlay">
+                        <div className="comments-popup">
+                            <div className="text-end p-3">
+                                <i className="bi bi-x-lg" onClick={() => setShowCommentsId(-1)}></i>
+                            </div>
+                            <ListCommentsComponent
+                                filterBy={'project'}
+                                id={showCommentsId}
+                                title={project.name}
+                            />
+                        </div>
+                    </div>
+                }
+
                 <div className="col-md-8">
                     {
                         project &&

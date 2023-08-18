@@ -68,7 +68,13 @@ export default function ListTasksComponent() {
 
             <div className="row">
                 <div className="col-md-4">
-                    <h6>Included Project Categories ({includeCategories.length})</h6>
+                    <h6>
+                        Included Project Categories
+                        <span className="ms-1 badge rounded-pill text-bg-secondary">
+                            {includeCategories.length}
+                            <span className="bi bi-link-45deg" />
+                        </span>
+                    </h6>
                     <CategoryChecklistComponent
                         key={categories}
                         categories={categories}

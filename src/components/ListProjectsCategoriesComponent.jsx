@@ -3,6 +3,7 @@ import { retrieveAllProjectCategoriesApi, getProjectCategoriesCountApi } from ".
 
 import Pagination from "../services/pagination/Pagination"
 import ProjectCategoryComponent from "./ProjectCategoryComponent";
+import ListCommentsComponent from "./ListCommentsComponents";
 
 const PAGESIZE = 5;
 
@@ -15,6 +16,8 @@ export default function ListProjectCategoriesComponent() {
     const [category, setCategory] = useState(null)
 
     const [isNewCategory, setNewCategory] = useState(false)
+
+    const [showCommentsId, setShowCommentsId] = useState(-1);
 
     useEffect(
         () => getProjectCategoriesCount(),
@@ -63,7 +66,13 @@ export default function ListProjectCategoriesComponent() {
                     <div>
                         <div className="row">
                             <div className="col-10 text-start">
-                                <h6>Project Categories ({categoriesCount})</h6>
+                                <h6>
+                                    Project Categories
+                                    <span className="ms-1 badge rounded-pill text-bg-secondary">
+                                        {categoriesCount}
+                                        <span className="bi bi-link-45deg" />
+                                    </span>
+                                </h6>
                             </div>
                             <div className="col-2 text-end">
                                 <i className="p-1 bi bi-plus-square" onClick={addNewProjectCategory}></i>
@@ -91,6 +100,7 @@ export default function ListProjectCategoriesComponent() {
                                                     {cat.level}&nbsp;
                                                 </span>
                                                 <span className="list-button">
+                                                    <i className="p-1 me-1 bi bi-chat-right-text" onClick={() => setShowCommentsId(cat.id)} />
                                                     <i className="p-1 bi bi-pencil-square"></i>
                                                 </span>
                                             </div>
@@ -107,6 +117,22 @@ export default function ListProjectCategoriesComponent() {
                             onPageChange={page => setCurrentPage(page)}
                         />
                     </div>
+
+                    {
+                        showCommentsId !== -1 &&
+                        <div id="popup" className="comments-overlay">
+                            <div className="comments-popup">
+                                <div className="text-end p-3">
+                                    <i className="bi bi-x-lg" onClick={() => setShowCommentsId(-1)}></i>
+                                </div>
+                                <ListCommentsComponent
+                                    filterBy={'category'}
+                                    id={showCommentsId}
+                                    title={category.name}
+                                />
+                            </div>
+                        </div>
+                    }
                 </div>
                 <div className="col-md-8 mt-2">
                     {

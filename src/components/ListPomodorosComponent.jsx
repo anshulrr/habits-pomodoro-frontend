@@ -4,6 +4,7 @@ import moment from "moment"
 import { Buttons } from "./charts/Buttons";
 import { deletePastPomodoroApi, getPomodorosApi } from "../services/api/PomodoroApiService";
 import { retrieveAllProjectCategoriesApi } from "../services/api/ProjectCategoryApiService";
+import ListCommentsComponent from "./ListCommentsComponents";
 
 export default function ListPomodorosComponent({ includeCategories, buttonsStates, setButtonsStates, setPomodorosListReload }) {
 
@@ -13,6 +14,9 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
 
     const [deleteErrorMessage, setDeleteErrorMessage] = useState('');
     const [deleteId, setDeleteId] = useState(-1);
+
+    const [showCommentsId, setShowCommentsId] = useState(-1);
+    const [commentsTitle, setCommentsTitle] = useState('')
 
     useEffect(
         () => {
@@ -70,10 +74,26 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
             .catch(error => console.error(error.message))
     }
 
+    function updateCommentsData(pomodoro) {
+        setShowCommentsId(pomodoro.id)
+
+        setCommentsTitle(
+            moment.utc(pomodoro.endTime).local().format('YYYY MMM Do') + ' ' +
+            moment.utc(pomodoro.startTime).local().format('H:mm') + '-' +
+            moment.utc(pomodoro.endTime).local().format('H:mm')
+        )
+    }
+
     return (
         <>
             <h6>
-                Pomodoros ({totalTimeElapsed})
+                <span>
+                    Pomodoros
+                </span>
+                <span className="ms-1 badge rounded-pill text-bg-secondary">
+                    {totalTimeElapsed}
+                    <span className="ms-1 bi bi-clock-fill" />
+                </span>
             </h6>
             <div className="text-danger"><small>{deleteErrorMessage}</small></div>
             {
@@ -98,15 +118,16 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
                                         <td>
                                             {Math.round(pomodoro.timeElapsed / 60)}
                                         </td>
-                                        <td className="text-muted">
+                                        <td className="text-secondary">
                                             {moment.utc(pomodoro.startTime).local().format('H:mm')}-
                                             {moment.utc(pomodoro.endTime).local().format('H:mm')}
                                         </td>
-                                        < td >
+                                        <td className="text-end text-secondary">
                                             {
                                                 pomodoro.status === 'past' &&
                                                 <i className="p-1 bi bi-trash" onClick={() => deleltePastPomodoro(pomodoro.id)} />
                                             }
+                                            <i className="bi bi-chat-right-text" onClick={() => updateCommentsData(pomodoro)} />
                                         </td>
                                     </tr>
                                 )
@@ -115,6 +136,21 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
                     </tbody>
                 </table>
             </small>
-        </ >
+            {
+                showCommentsId !== -1 &&
+                <div id="popup" className="comments-overlay">
+                    <div className="comments-popup">
+                        <div className="text-end p-3">
+                            <i className="bi bi-x-lg" onClick={() => setShowCommentsId(-1)}></i>
+                        </div>
+                        <ListCommentsComponent
+                            filterBy={'pomodoro'}
+                            id={showCommentsId}
+                            title={commentsTitle}
+                        />
+                    </div>
+                </div>
+            }
+        </>
     )
 }
