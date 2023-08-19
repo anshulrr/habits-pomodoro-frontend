@@ -111,23 +111,32 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
                         {
                             pomodoros.map(
                                 pomodoro => (
-                                    <tr key={pomodoro.id}>
+                                    <tr key={pomodoro.id} className="task-list-row">
                                         <td className="text-start">
                                             {pomodoro.task}
                                         </td>
-                                        <td>
-                                            {Math.round(pomodoro.timeElapsed / 60)}
-                                        </td>
-                                        <td className="text-secondary">
-                                            {moment.utc(pomodoro.startTime).local().format('H:mm')}-
-                                            {moment.utc(pomodoro.endTime).local().format('H:mm')}
-                                        </td>
-                                        <td className="text-end text-secondary">
-                                            {
-                                                pomodoro.status === 'past' &&
-                                                <i className="p-1 bi bi-trash" onClick={() => deleltePastPomodoro(pomodoro.id)} />
-                                            }
-                                            <i className="bi bi-chat-right-text" onClick={() => updateCommentsData(pomodoro)} />
+                                        <td width="50%" className="text-end">
+                                            <span className="task-list-details">
+                                                <span className="text-secondary ms-1">
+                                                    {moment.utc(pomodoro.startTime).local().format('H:mm')}-
+                                                    {moment.utc(pomodoro.endTime).local().format('H:mm')}
+                                                </span>
+                                                <span className="ms-1 badge rounded-pill text-bg-secondary">
+                                                    {Math.round(pomodoro.timeElapsed / 60)}
+                                                    <small className="ps-1 bi bi-clock" />
+                                                </span>
+                                            </span>
+
+                                            <span className="task-list-update">
+                                                <span className="text-secondary task-list-buttons">
+                                                    {
+                                                        pomodoro.status === 'past' &&
+                                                        <i className="p-1 me-1 bi bi-trash" onClick={() => deleltePastPomodoro(pomodoro.id)} />
+                                                    }
+                                                    <i className="p-1 me-1 bi bi-chat-right-text" onClick={() => updateCommentsData(pomodoro)} />
+                                                </span>
+                                                <i className="p-1 bi bi-three-dots-vertical"></i>
+                                            </span>
                                         </td>
                                     </tr>
                                 )

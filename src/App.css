@@ -67,11 +67,11 @@
   border-bottom: thin solid #dee2e6;
 }
 
-.task-list-row .task-list-buttons {
+.task-list-update {
   display: none;
 }
 
-.task-list-row:hover .task-list-buttons {
+.task-list-row:hover .task-list-update {
   display: inline;
 }
 
@@ -79,6 +79,14 @@
   display: none;
 }
 
+.task-list-row .task-list-buttons {
+  position: relative;
+  display: none;
+}
+
+.task-list-update:hover .task-list-buttons {
+  display: inline;
+}
 
 /* sign in page */
 .separator {

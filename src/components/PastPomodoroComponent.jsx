@@ -48,11 +48,11 @@ export default function PastPomodoroComponent({ showCreatePastPomodoro, setShowC
     return (
         showCreatePastPomodoro === task.id &&
         <div className="row m-0 p-0">
-            <div className="col-sm-2 offset-sm-6 col-4 px-0 text-end">
+            <div className="col-4 px-0 text-end">
                 <DatePicker className="form-control form-control-sm" selected={date} onChange={(date) => setDate(date)} />
             </div>
 
-            <div className="col-sm-4 col-8 px-0 text-end">
+            <div className="col-8 px-0 text-end">
                 <div className="input-group text-end">
                     <input
                         type="number"

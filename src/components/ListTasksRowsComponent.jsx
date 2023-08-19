@@ -75,32 +75,38 @@ export default function ListTasksRowsComponent({
                             <div className="col-8 text-start ps-0">
                                 {
                                     task.status === 'added' &&
-                                    <i className="p-1 me-1 bi bi-play-circle" onClick={() => createNewPomodoro(task, project)}></i>
+                                    <i className="p-1 bi bi-play-circle" onClick={() => createNewPomodoro(task, project)}></i>
                                 }
                                 <span className={task.status === 'completed' ? "text-secondary" : ""}>
                                     {task.description}
                                 </span>
                             </div>
 
-                            <div className="col-4 px-0 text-secondary text-end small text-truncate task-list-details">
-                                <span className="ms-1 badge rounded-pill text-bg-secondary">
-                                    {timeToDisplay(task.pomodorosTimeElapsed / 60)}
-                                    <small className="ps-1 bi bi-clock" />
+                            <div className="col-4 px-0 text-secondary text-end small text-truncate">
+                                <span className="task-list-details">
+                                    <span className="ms-1 badge rounded-pill text-bg-secondary">
+                                        {timeToDisplay(task.pomodorosTimeElapsed / 60)}
+                                        <small className="ps-1 bi bi-clock" />
+                                    </span>
+                                    <span>
+                                        <small className="ms-1 bi bi-hourglass" />
+                                        {timeToDisplay(task.pomodoroLength || project.pomodoroLength || userSettings.pomodoroLength)}
+                                    </span>
                                 </span>
-                                <span>
-                                    <small className="ms-1 bi bi-hourglass" />
-                                    {timeToDisplay(task.pomodoroLength || project.pomodoroLength || userSettings.pomodoroLength)}
-                                </span>
-                            </div>
-                            <div className="col-4 px-0 text-secondary text-end task-list-buttons">
-                                <i className="p-1 me-1 bi bi-chat-right-text" onClick={() => updateCommentsData(task)} />
 
-                                {
-                                    task.status === 'added' &&
-                                    <i className="p-1 me-1 bi bi-calendar-plus" onClick={() => setShowCreatePastPomodoro(task.id)}></i>
-                                }
-                                <i className="p-1 bi bi-pencil-square" onClick={() => updateTask(task.id)}></i>
+                                <span className="task-list-update">
+                                    <div className="text-secondary text-end task-list-buttons">
+                                        <i className="p-1 me-1 bi bi-chat-right-text" onClick={() => updateCommentsData(task)} />
+                                        {
+                                            task.status === 'added' &&
+                                            <i className="p-1 me-1 bi bi-calendar-plus" onClick={() => setShowCreatePastPomodoro(task.id)}></i>
+                                        }
+                                        <i className="p-1 me-1 bi bi-pencil-square" onClick={() => updateTask(task.id)}></i>
+                                    </div>
+                                    <i className="p-1 bi bi-three-dots-vertical"></i>
+                                </span>
                             </div>
+
                             {
                                 task.status === 'added' &&
                                 <PastPomodoroComponent
