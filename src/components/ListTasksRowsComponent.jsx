@@ -132,18 +132,12 @@ export default function ListTasksRowsComponent({
 
             {
                 showCommentsId !== -1 &&
-                <div className="comments-overlay">
-                    <div className="comments-popup">
-                        <div className="text-end p-3">
-                            <i className="bi bi-x-lg" onClick={() => setShowCommentsId(-1)}></i>
-                        </div>
-                        <ListCommentsComponent
-                            filterBy={'task'}
-                            id={showCommentsId}
-                            title={commentsTitle}
-                        />
-                    </div>
-                </div>
+                <ListCommentsComponent
+                    filterBy={'task'}
+                    id={showCommentsId}
+                    title={commentsTitle}
+                    setShowCommentsId={setShowCommentsId}
+                />
             }
         </>
     )

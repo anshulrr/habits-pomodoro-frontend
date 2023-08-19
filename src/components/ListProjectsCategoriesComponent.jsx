@@ -120,18 +120,12 @@ export default function ListProjectCategoriesComponent() {
 
                     {
                         showCommentsId !== -1 &&
-                        <div className="comments-overlay">
-                            <div className="comments-popup">
-                                <div className="text-end p-3">
-                                    <i className="bi bi-x-lg" onClick={() => setShowCommentsId(-1)}></i>
-                                </div>
-                                <ListCommentsComponent
-                                    filterBy={'category'}
-                                    id={showCommentsId}
-                                    title={category.name}
-                                />
-                            </div>
-                        </div>
+                        <ListCommentsComponent
+                            filterBy={'category'}
+                            id={showCommentsId}
+                            title={category.name}
+                            setShowCommentsId={setShowCommentsId}
+                        />
                     }
                 </div>
                 <div className="col-md-8 mt-2">

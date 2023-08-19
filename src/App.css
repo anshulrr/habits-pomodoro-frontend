@@ -122,6 +122,7 @@
 }
 
 .comments-popup {
+  position: relative;
   top: 8vh;
   bottom: 8vh;
   height: 84vh;
@@ -129,5 +130,14 @@
   border-radius: 10px;
   box-shadow: 0px 0px 0px 9999px rgba(0, 0, 0, 0.5);
   background-color: #ffffff;
-  position: relative;
+}
+
+.close-popup {
+  position: fixed;
+  right: 0.5vw;
+}
+
+/* needed for markup p elements */
+.comments-popup p {
+  margin-bottom: 0;
 }

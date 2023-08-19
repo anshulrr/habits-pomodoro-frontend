@@ -20,6 +20,7 @@ export default function UserSettingsComponent() {
     const [enableStopwatchAudio, setEnableStopwatchAudio] = useState(userSettings.enableStopwatchAudio)
     const [pageProjectsCount, setPageProjectsCount] = useState(userSettings.pageProjectsCount)
     const [pageTasksCount, setPageTasksCount] = useState(userSettings.pageTasksCount)
+    const [pageCommentsCount, setPageCommentsCount] = useState(userSettings.pageCommentsCount)
 
     const [errorMessage, setErrorMessage] = useState('')
     const [successMessage, setSuccessMessage] = useState('')
@@ -47,7 +48,8 @@ export default function UserSettingsComponent() {
             enableStopwatch,
             enableStopwatchAudio,
             pageProjectsCount,
-            pageTasksCount
+            pageTasksCount,
+            pageCommentsCount
         }
         // console.debug(request_settings);
 
@@ -90,6 +92,9 @@ export default function UserSettingsComponent() {
             setErrorMessage('Number of Projects in a page must be greater than 0');
         }
         else if (pageTasksCount === '' || pageTasksCount < 1) {
+            setErrorMessage('Number of Tasks in a page must be greater than 0');
+        }
+        else if (pageCommentsCount === '' || pageCommentsCount < 1) {
             setErrorMessage('Number of Tasks in a page must be greater than 0');
         } else {
             return true;
@@ -297,7 +302,7 @@ export default function UserSettingsComponent() {
                 <div className="col-md-4">
                     <div className="input-group input-group-sm mb-2">
                         <label className="input-group-text" htmlFor="breakLength">
-                            Number of projects in a page
+                            Number of projects in a page (mobile device)
                         </label>
                         <input
                             type="number"
@@ -315,7 +320,7 @@ export default function UserSettingsComponent() {
                 <div className="col-md-4">
                     <div className="input-group input-group-sm mb-2">
                         <label className="input-group-text" htmlFor="breakLength">
-                            Number of tasks in a page
+                            Number of tasks in a page (mobile device)
                         </label>
                         <input
                             type="number"
@@ -326,6 +331,24 @@ export default function UserSettingsComponent() {
                             placeholder="Default Number of Tasks"
                             onChange={(e) => handleOnChange(setPageTasksCount, e.target.value)}
                             id="pageTasksCount"
+                        />
+                    </div>
+                </div>
+
+                <div className="col-md-4">
+                    <div className="input-group input-group-sm mb-2">
+                        <label className="input-group-text" htmlFor="breakLength">
+                            Number of comments in a page
+                        </label>
+                        <input
+                            type="number"
+                            name="pageCommentsCount"
+                            className="form-control"
+                            value={pageCommentsCount}
+                            min={0}
+                            placeholder="Default Number of Comments"
+                            onChange={(e) => handleOnChange(setPageCommentsCount, e.target.value)}
+                            id="pageCommentsCount"
                         />
                     </div>
                 </div>

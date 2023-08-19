@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom'
+
 import { useAuth } from '../services/auth/AuthContext';
+import UserCommentsComponent from './UserCommentsComponent';
 
 export default function HeaderComponent() {
 
@@ -80,6 +82,9 @@ export default function HeaderComponent() {
                     </ul>
                 </nav>
             </div>
+
+            <UserCommentsComponent />
+
         </header>
     )
 }
