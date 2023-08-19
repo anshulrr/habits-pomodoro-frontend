@@ -72,7 +72,7 @@ export default function ListTasksRowsComponent({
                             key={task.id}
                             className="row py-2 task-list-row"
                         >
-                            <div className="col-8 text-start">
+                            <div className="col-8 text-start ps-0">
                                 {
                                     task.status === 'added' &&
                                     <i className="p-1 me-1 bi bi-play-circle" onClick={() => createNewPomodoro(task, project)}></i>

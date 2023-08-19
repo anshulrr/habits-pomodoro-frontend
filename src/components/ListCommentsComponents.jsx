@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react"
 
+import ReactMarkdown from 'react-markdown'
+
 import { retrieveAllCommentsApi, getCommentsCountApi } from "../services/api/CommentApiService";
 import Pagination from "../services/pagination/Pagination"
 
@@ -13,6 +15,8 @@ export default function ListCommentsComponent({ filterBy, id, title }) {
 
     const [commentsCount, setCommentsCount] = useState(0)
     const [comments, setComments] = useState([])
+
+    const [showCreateComment, setShowCreateComment] = useState(false)
 
     useEffect(
         () => getCommentsCount(),
@@ -45,22 +49,24 @@ export default function ListCommentsComponent({ filterBy, id, title }) {
 
     return (
         <div className="container">
-            <div className="row">
-                <CommentComponent
-                    setComments={setComments}
-                    filterBy={filterBy}
-                    id={id}
-                    title={title}
-                />
-            </div>
-
-            <hr />
+            {
+                showCreateComment &&
+                <div className="row">
+                    <CommentComponent
+                        setComments={setComments}
+                        filterBy={filterBy}
+                        id={id}
+                        title={title}
+                        setShowCreateComment={setShowCreateComment}
+                    />
+                </div>
+            }
 
             <div className="row mb-3">
                 <div className="col-md-12">
                     <div>
                         <div className="row">
-                            <div className="col-12">
+                            <div className="col-10">
                                 <h6>
                                     {
                                         (filterBy === 'category' &&
@@ -83,6 +89,12 @@ export default function ListCommentsComponent({ filterBy, id, title }) {
                                         <span className="ms-1 bi bi-chat-right-text" />
                                     </span>
                                 </h6>
+                            </div>
+                            <div className="col-2 text-end">
+                                {
+                                    !showCreateComment &&
+                                    <i className="p-1 bi bi-plus-square" onClick={() => setShowCreateComment(true)}></i>
+                                }
                             </div>
                         </div>
                         {
@@ -116,7 +128,9 @@ export default function ListCommentsComponent({ filterBy, id, title }) {
                                                 }
                                             </div>
                                             <div className="text-wrap ps-2">
-                                                {comment.description}
+                                                <ReactMarkdown
+                                                    children={comment.description}
+                                                />
                                             </div>
                                         </div>
                                     </div>
