@@ -122,10 +122,10 @@ export default function ListTasksComponent({ project }) {
                                 <span>
                                     {project.name}
                                 </span>
-                                <small className="ms-1 badge rounded-pill text-bg-secondary">
+                                <span className="ms-1 badge rounded-pill text-bg-secondary">
                                     {tasksCount}
-                                    <small className="ms-1 bi bi-list-ul" />
-                                </small>
+                                    <span className="ms-1 bi bi-list-ul" />
+                                </span>
                             </h6>
                         </div>
                         <div className="col-2 text-end">
@@ -154,12 +154,12 @@ export default function ListTasksComponent({ project }) {
                         <div className="mt-3">
                             <span className="badge text-bg-light" style={{ cursor: "pointer" }} onClick={() => setShowArchived(!showArchived)}>
                                 Archived
-                                <span className="ms-1 badge rounded-pill text-bg-secondary">
-                                    {archivedTasksCount}
-                                    <span className="ms-1 bi bi-list-ul" />
-                                </span>
                                 {!showArchived && <i className="bi bi-arrow-down" />}
                                 {showArchived && <i className="bi bi-arrow-up" />}
+                            </span>
+                            <span className="badge rounded-pill text-bg-secondary">
+                                {archivedTasksCount}
+                                <span className="ms-1 bi bi-list-ul" />
                             </span>
                             <small>
                                 {
@@ -179,12 +179,12 @@ export default function ListTasksComponent({ project }) {
                         <div className="mt-3">
                             <span className="badge text-bg-light" style={{ cursor: "pointer" }} onClick={() => setShowCompleted(!showCompleted)}>
                                 Completed
-                                <span className="ms-1 badge rounded-pill text-bg-secondary">
-                                    {completedTasksCount}
-                                    <span className="ms-1 bi bi-list-ul" />
-                                </span>
                                 {!showCompleted && <i className="bi bi-arrow-down" />}
                                 {showCompleted && <i className="bi bi-arrow-up" />}
+                            </span>
+                            <span className="badge rounded-pill text-bg-secondary">
+                                {completedTasksCount}
+                                <span className="ms-1 bi bi-list-ul" />
                             </span>
                             <small>
                                 {
