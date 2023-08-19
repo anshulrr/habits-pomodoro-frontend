@@ -16,6 +16,8 @@ export default function ListCommentsComponent({ filterBy, id, title }) {
     const [commentsCount, setCommentsCount] = useState(0)
     const [comments, setComments] = useState([])
 
+    const [showCreateComment, setShowCreateComment] = useState(false)
+
     useEffect(
         () => getCommentsCount(),
         [] // eslint-disable-line react-hooks/exhaustive-deps
@@ -47,22 +49,24 @@ export default function ListCommentsComponent({ filterBy, id, title }) {
 
     return (
         <div className="container">
-            <div className="row">
-                <CommentComponent
-                    setComments={setComments}
-                    filterBy={filterBy}
-                    id={id}
-                    title={title}
-                />
-            </div>
-
-            <hr />
+            {
+                showCreateComment &&
+                <div className="row">
+                    <CommentComponent
+                        setComments={setComments}
+                        filterBy={filterBy}
+                        id={id}
+                        title={title}
+                        setShowCreateComment={setShowCreateComment}
+                    />
+                </div>
+            }
 
             <div className="row mb-3">
                 <div className="col-md-12">
                     <div>
                         <div className="row">
-                            <div className="col-12">
+                            <div className="col-10">
                                 <h6>
                                     {
                                         (filterBy === 'category' &&
@@ -85,6 +89,12 @@ export default function ListCommentsComponent({ filterBy, id, title }) {
                                         <span className="ms-1 bi bi-chat-right-text" />
                                     </span>
                                 </h6>
+                            </div>
+                            <div className="col-2 text-end">
+                                {
+                                    !showCreateComment &&
+                                    <i className="p-1 bi bi-plus-square" onClick={() => setShowCreateComment(true)}></i>
+                                }
                             </div>
                         </div>
                         {
