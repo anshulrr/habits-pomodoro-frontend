@@ -28,7 +28,7 @@ export default function LoginComponent() {
             const response = await FirebaseAuthService.signInUser(email, password)
             // console.debug(response);
             if (response.user.emailVerified) {
-                await authContext.jwtSignIn(response.user.accessToken);
+                await authContext.getUserSettings();
                 // navigate(`/welcome/${email}`);
                 navigate(`/projects`);
             } else {
@@ -44,7 +44,7 @@ export default function LoginComponent() {
         try {
             // console.debug('opening the popup');
             const response = await FirebaseAuthService.signInWithGoogle();
-            await authContext.jwtSignIn(response.user.accessToken);
+            await authContext.getUserSettings();
             navigate(`/projects`);
         } catch (error) {
             setErrorMessage("Authentication Failed. Please check your credentials");
