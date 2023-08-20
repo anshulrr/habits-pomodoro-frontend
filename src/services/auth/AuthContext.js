@@ -42,11 +42,7 @@ export default function AuthProvider({ children }) {
         return JSON.parse(jsonPayload);
     }
 
-    async function jwtSignIn(token) {
-        // console.debug('login success')
-        // add interceptors
-        addInterceptors(token)
-
+    async function getUserSettings() {
         // if new user; save it in the backend
         // get user settings
         const response = await getUserSettingsApi();
@@ -113,7 +109,14 @@ export default function AuthProvider({ children }) {
     }
 
     async function logout() {
+        // remove old interceptors, otherwise app will be able to make calls until page refresh
+        apiClient.interceptors.request.eject(requestInterceptor)
+        apiClient.interceptors.response.eject(responseInterceptor)
+
+        // remove user settings from local storage
         localStorage.removeItem('habits_pomodoro')
+
+        // sign out from firebase: removes data from firebaseLocalStorageDb
         try {
             await FirebaseAuthService.signOutUser();
             // console.debug("signed out successfully")
@@ -123,7 +126,7 @@ export default function AuthProvider({ children }) {
         }
     }
 
-    const valuesToBeShared = { isAuthenticated, logout, user, jwtSignIn, userSettings, updateUserSettings }
+    const valuesToBeShared = { isAuthenticated, logout, user, getUserSettings, userSettings, updateUserSettings }
 
     return (
         isFirebaseAuthLoaded &&
