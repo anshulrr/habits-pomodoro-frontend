@@ -8,7 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useAuth } from '../services/auth/AuthContext';
 import { createPastPomodoroApi } from "../services/api/PomodoroApiService";
 
-export default function PastPomodoroComponent({ showCreatePastPomodoro, setShowCreatePastPomodoro, task, project, setPomodorosListReload }) {
+export default function PastPomodoroComponent({ showCreatePastPomodoro, setShowCreatePastPomodoro, task, project, setPomodorosListReload, setTasksReload }) {
     const authContext = useAuth()
     const userSettings = authContext.userSettings
 
@@ -39,6 +39,7 @@ export default function PastPomodoroComponent({ showCreatePastPomodoro, setShowC
                 // console.debug(response)
                 setShowCreatePastPomodoro(-1)
                 setPomodorosListReload(prevReload => prevReload + 1)
+                setTasksReload(prevReload => prevReload + 1)
             })
             .catch(error => {
                 console.error(error.message)
@@ -63,8 +64,12 @@ export default function PastPomodoroComponent({ showCreatePastPomodoro, setShowC
                         placeholder="Minutes"
                         onChange={(e) => handleOnChange(setMinutesElapsed, e.target.value)}
                     />
-                    <button className="btn btn-sm btn-outline-success" type="button" onClick={() => createPastPomodoro()}>Save</button>
-                    <button className="btn btn-sm btn-outline-success" type="button" onClick={() => setShowCreatePastPomodoro(-1)}>Cancel</button>
+                    <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowCreatePastPomodoro(-1)}>
+                        <i className="bi bi-x-lg" />
+                    </button>
+                    <button className="btn btn-sm btn-outline-success" type="button" onClick={() => createPastPomodoro()}>
+                        Save
+                    </button>
                 </div>
             </div>
             <div className="text-danger"><small>{errorMessage}</small></div>
