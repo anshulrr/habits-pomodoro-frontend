@@ -141,3 +141,12 @@
 .comments-popup p {
   margin-bottom: 0;
 }
+
+/* user comments fixed icon */
+.user-comments-icon {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 100;
+  font-size: 1.5rem;
+}

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 import { useAuth } from '../services/auth/AuthContext';
 import UserCommentsComponent from './UserCommentsComponent';
@@ -8,6 +8,8 @@ export default function HeaderComponent() {
     const authContext = useAuth()
     const isAuthenticated = authContext.isAuthenticated
     const user = authContext.user;
+
+    const url = useLocation().pathname;
 
     function logout() {
         authContext.logout()
@@ -42,20 +44,28 @@ export default function HeaderComponent() {
                     <ul className="navbar-nav">
                         {
                             isAuthenticated &&
-                            <li className="nav-item"><Link className="nav-link" to="/projects">Projects</Link></li>
-                        }
-                    </ul>
-                    <ul className="navbar-nav">
-                        {
-                            isAuthenticated &&
-                            <li className="nav-item"><Link className="nav-link" to="/stats">Stats</Link></li>
+                            <li className="nav-item">
+                                <Link className={"nav-link" + (url.includes("projects") ? " active" : "")} to="/projects">
+                                    Projects
+                                </Link>
+                            </li>
                         }
                     </ul>
                     <ul className="navbar-nav">
                         {
                             isAuthenticated &&
                             <li className="nav-item">
-                                <Link className="nav-link" to="/settings">
+                                <Link className={"nav-link" + (url.includes("stats") ? " active" : "")} to="/stats">
+                                    Stats
+                                </Link>
+                            </li>
+                        }
+                    </ul>
+                    <ul className="navbar-nav">
+                        {
+                            isAuthenticated &&
+                            <li className="nav-item">
+                                <Link className={"nav-link" + (url.includes("settings") ? " active" : "")} to="/settings">
                                     Settings
                                 </Link>
                             </li>

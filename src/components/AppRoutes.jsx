@@ -28,7 +28,7 @@ function AuthenticatedRoute({ children }) {
 
 export default function AppRoutes() {
     return (
-        <div className="AppRoutes">
+        <div className="AppRoutes mb-5">
             <AuthProvider>
                 <BrowserRouter>
                     <HeaderComponent />
