@@ -163,7 +163,7 @@ export default function ListTasksComponent({ project }) {
                         }
 
                         <div className="mt-3">
-                            <span className="badge text-bg-light" style={{ cursor: "pointer" }} onClick={() => setShowArchived(!showArchived)}>
+                            <span className="badge me-1 text-bg-light" style={{ cursor: "pointer" }} onClick={() => setShowArchived(!showArchived)}>
                                 Archived
                                 {!showArchived && <i className="bi bi-arrow-down" />}
                                 {showArchived && <i className="bi bi-arrow-up" />}
@@ -188,7 +188,7 @@ export default function ListTasksComponent({ project }) {
                         </div>
 
                         <div className="mt-3">
-                            <span className="badge text-bg-light" style={{ cursor: "pointer" }} onClick={() => setShowCompleted(!showCompleted)}>
+                            <span className="badge me-1 text-bg-light" style={{ cursor: "pointer" }} onClick={() => setShowCompleted(!showCompleted)}>
                                 Completed
                                 {!showCompleted && <i className="bi bi-arrow-down" />}
                                 {showCompleted && <i className="bi bi-arrow-up" />}
