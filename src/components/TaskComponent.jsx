@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams, useLocation } from 'react-router-dom'
-import { createTaskApi, retrieveTaskApi, updateTaskApi } from '../services/api/TaskApiService'
+import { retrieveTaskApi, updateTaskApi } from '../services/api/TaskApiService'
 import { Formik, Form, ErrorMessage, Field } from 'formik'
 
 // export default function TaskComponent({ project, task, setTasks, tasks }) {
@@ -24,10 +24,6 @@ export default function TaskComponent() {
     )
 
     function retrieveTask() {
-        if (parseInt(id) === -1) {
-            return;
-        }
-
         retrieveTaskApi(project_id, id)
             .then(response => {
                 setDescription(response.data.description)
@@ -46,21 +42,12 @@ export default function TaskComponent() {
             status: values.status
         }
 
-        if (parseInt(id) === -1) {
-            createTaskApi(project_id, task)
-                .then(response => {
-                    // console.debug(response)
-                    navigate(`/projects`, { state: { project: state.project } })
-                })
-                .catch(error => console.error(error.message))
-        } else {
-            updateTaskApi(project_id, id, task)
-                .then(response => {
-                    // console.debug(response)
-                    navigate(`/projects`, { state: { project: state.project } })
-                })
-                .catch(error => console.error(error.message))
-        }
+        updateTaskApi(project_id, id, task)
+            .then(response => {
+                // console.debug(response)
+                navigate(`/projects`, { state: { project: state.project } })
+            })
+            .catch(error => console.error(error.message))
     }
 
     function validate(values) {

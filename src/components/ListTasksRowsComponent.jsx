@@ -13,6 +13,7 @@ export default function ListTasksRowsComponent({
     createNewPomodoro,
     updateTask,
     setPomodorosListReload,
+    setTasksReload
 }) {
     const authContext = useAuth()
     const userSettings = authContext.userSettings
@@ -115,6 +116,7 @@ export default function ListTasksRowsComponent({
                                     task={task}
                                     project={project}
                                     setPomodorosListReload={setPomodorosListReload}
+                                    setTasksReload={setTasksReload}
                                 />
                             }
                         </div>
