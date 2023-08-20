@@ -6,6 +6,7 @@ import ListTasksRowsComponent from "./ListTasksRowsComponent";
 import PomodoroComponent from "./PomodoroComponent";
 import StopwatchComponent from "./StopwatchComponent";
 import ListPomodorosComponent from "./ListPomodorosComponent";
+import CreateTaskComponent from "./CreateTaskComponent";
 
 export default function ListTasksComponent({ project }) {
 
@@ -25,7 +26,11 @@ export default function ListTasksComponent({ project }) {
 
     const [pomdorosListReload, setPomodorosListReload] = useState(0)
 
+    const [taskReload, setTasksReload] = useState(0)
+
     const [message, setMessage] = useState('')
+
+    const [showCreateTask, setShowCreateTask] = useState(false)
 
     useEffect(
         () => {
@@ -51,9 +56,9 @@ export default function ListTasksComponent({ project }) {
         navigate(`/projects/${project.id}/tasks/${id}`, { state: { project } })
     }
 
-    function addNewTask() {
-        navigate(`/projects/${project.id}/tasks/-1`, { state: { project } })
-    }
+    // function addNewTask() {
+    //     navigate(`/projects/${project.id}/tasks/-1`, { state: { project } })
+    // }
 
     function createNewPomodoro(pomodoro_task, task_project, start_again = false) {
         // console.debug(pomodoro_task.id)
@@ -129,9 +134,19 @@ export default function ListTasksComponent({ project }) {
                             </h6>
                         </div>
                         <div className="col-2 text-end">
-                            <i className="p-1 bi bi-plus-circle" onClick={addNewTask}></i>
+                            <i className="p-1 bi bi-plus-circle" onClick={() => setShowCreateTask(!showCreateTask)}></i>
                         </div>
                     </div>
+
+                    {
+                        showCreateTask &&
+                        <CreateTaskComponent
+                            setShowCreateTask={setShowCreateTask}
+                            project={project}
+                            setTasksReload={setTasksReload}
+                        ></CreateTaskComponent>
+                    }
+
                     {/* fix for x scroll: px-3 */}
                     <div className="overflow-scroll bg-white px-3" style={{ maxHeight: "85vh" }}>
                         {
@@ -141,13 +156,14 @@ export default function ListTasksComponent({ project }) {
                         {
                             tasksCount !== 0 &&
                             <ListTasksRowsComponent
-                                key={[project.id, pomodoroStatus]}    // re-render ListTasksComponents for completed pomodoro'
+                                key={[project.id, pomodoroStatus, taskReload]}    // re-render ListTasksComponents for completed pomodoro'
                                 status={'added'}
                                 tasksCount={tasksCount}
                                 project={project}
                                 createNewPomodoro={createNewPomodoro}
                                 updateTask={updateTask}
                                 setPomodorosListReload={setPomodorosListReload}
+                                setTasksReload={setTasksReload}
                             />
                         }
 
