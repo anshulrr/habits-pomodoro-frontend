@@ -55,10 +55,6 @@ export default function ListTasksComponent({ project }) {
         navigate(`/projects/${project.id}/tasks/${id}`, { state: { project } })
     }
 
-    // function addNewTask() {
-    //     navigate(`/projects/${project.id}/tasks/-1`, { state: { project } })
-    // }
-
     function createNewPomodoro(pomodoro_task, task_project, start_again = false) {
         // console.debug(pomodoro_task.id)
         if (pomodoro !== null && !start_again && pomodoroStatus !== 'completed') {
