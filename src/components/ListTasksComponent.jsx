@@ -25,7 +25,6 @@ export default function ListTasksComponent({ project }) {
     const [pomodoroStatus, setPomodoroStatus] = useState(null)
 
     const [pomdorosListReload, setPomodorosListReload] = useState(0)
-
     const [taskReload, setTasksReload] = useState(0)
 
     const [message, setMessage] = useState('')
