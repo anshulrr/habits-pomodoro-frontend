@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import LogoutComponent from './LogoutComponent'
 import HeaderComponent from './HeaderComponent'
 import ErrorComponent from './ErrorComponent'
 import WelcomeComponent from './WelcomeComponent'
@@ -10,9 +9,7 @@ import './AppRoutes.css'
 import AuthProvider, { useAuth } from '../services/auth/AuthContext'
 import ListProjectsComponent from './ListProjectsComponents'
 import ProjectComponent from './ProjectComponent'
-import ListTasksComponent from './ListTasksComponent'
 import TaskComponent from './TaskComponent'
-import PomodoroComponent from './PomodoroComponent'
 import SettingsComponent from './SettingsComponent'
 import SignupComponent from './SignupComponent'
 import ForgotPasswordComponent from './ForgotPasswordComponent'
@@ -56,33 +53,15 @@ export default function AppRoutes() {
                             </AuthenticatedRoute>
                         } />
 
-                        <Route path='/projects/:project_id/tasks' element={
-                            <AuthenticatedRoute>
-                                <ListTasksComponent />
-                            </AuthenticatedRoute>
-                        } />
-
                         <Route path='/projects/:project_id/tasks/:id' element={
                             <AuthenticatedRoute>
                                 <TaskComponent />
                             </AuthenticatedRoute>
                         } />
 
-                        <Route path='/tasks/:task_id/pomodoros/:id/:length' element={
-                            <AuthenticatedRoute>
-                                <PomodoroComponent />
-                            </AuthenticatedRoute>
-                        } />
-
                         <Route path='/stats' element={
                             <AuthenticatedRoute>
                                 <StatsComponent />
-                            </AuthenticatedRoute>
-                        } />
-
-                        <Route path='/logout' element={
-                            <AuthenticatedRoute>
-                                <LogoutComponent />
                             </AuthenticatedRoute>
                         } />
 

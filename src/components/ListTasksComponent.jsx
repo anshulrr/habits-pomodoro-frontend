@@ -78,7 +78,6 @@ export default function ListTasksComponent({ project }) {
                 setPomodoro(response.data)
                 setPomodoroStatus('started')
                 setMessage('')
-                // navigate(`/tasks/${task.id}/pomodoros/${response.data.id}/${response.data.length}`, { state: { project: project, task } })
             })
             .catch(error => {
                 console.error(error.message)
