@@ -119,7 +119,9 @@ export default function ListTasksComponent({ project }) {
                     <div className="row">
                         <div className="col-10">
                             <h6>
-                                <span className="me-1 bi bi-folder-plus" />
+                                <span className="badge rounded-pill text-bg-light">
+                                    <span className="bi bi-folder-plus" />
+                                </span>
                                 <span>
                                     {project.name}
                                 </span>

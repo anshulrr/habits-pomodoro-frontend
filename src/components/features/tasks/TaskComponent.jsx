@@ -64,7 +64,12 @@ export default function TaskComponent() {
 
     return (
         <div className="container">
-            <h4>{state.project.name}</h4>
+            <h4>
+                <span className="badge rounded-pill text-bg-light">
+                    <span className="bi bi-folder-plus" />
+                </span>
+                {state.project.name}
+            </h4>
             <div>
                 <Formik initialValues={{ description, pomodoroLength, status }}
                     enableReinitialize={true}
