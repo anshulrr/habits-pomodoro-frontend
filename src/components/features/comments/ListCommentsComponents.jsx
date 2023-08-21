@@ -116,11 +116,13 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                                         <div key={comment.id} className="row">
                                             <div className="col-12 text-truncate text-start mb-2">
                                                 <div className="badge text-bg-secondary text-start text-wrap ps-2" style={{ fontSize: '0.7rem' }}>
-                                                    <span>{moment(comment.createdAt).fromNow()}</span>
+                                                    <span>{
+                                                        moment(comment.createdAt).fromNow(true)
+                                                    }</span>
                                                     {
                                                         comment.category &&
                                                         <span>
-                                                            <span className="ms-2 me-1 bi bi-link-45deg" />
+                                                            <span className="ms-2 bi bi-link-45deg" />
                                                             {comment.category}
                                                         </span>
                                                     }
