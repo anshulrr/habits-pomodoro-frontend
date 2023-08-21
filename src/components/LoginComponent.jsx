@@ -43,7 +43,7 @@ export default function LoginComponent() {
     async function signInWithGoogle() {
         try {
             // console.debug('opening the popup');
-            const response = await FirebaseAuthService.signInWithGoogle();
+            await FirebaseAuthService.signInWithGoogle();
             await authContext.getUserSettings();
             navigate(`/projects`);
         } catch (error) {

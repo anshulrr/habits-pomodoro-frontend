@@ -144,6 +144,7 @@ export default function ProjectComponent() {
                                         {/* <ErrorMessage name="project_category_id" component="div" className="text-danger small" /> */}
                                     </div>
                                     <div className="col-md-12 mb-3">
+                                        <button className="me-2 btn btn-sm btn-outline-secondary" type="button" onClick={() => navigate('/projects')}>Cancel</button>
                                         <button className="btn btn-sm btn-success" type="submit">Save Project</button>
                                     </div>
                                 </div>

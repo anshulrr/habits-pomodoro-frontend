@@ -60,7 +60,7 @@ export default function ProjectCategoryComponent({
                 .catch(error => {
                     console.error(error.message)
                     if (error.response.status === 409) {
-                        setErrorMessage("Level must be unique")
+                        setErrorMessage("Priority must be unique")
                     }
                 })
         } else {
@@ -79,7 +79,7 @@ export default function ProjectCategoryComponent({
                 .catch(error => {
                     console.error(error.message)
                     if (error.response.status === 409) {
-                        setErrorMessage("Level must be unique")
+                        setErrorMessage("Priority must be unique")
                     }
                 })
         }
@@ -113,7 +113,7 @@ export default function ProjectCategoryComponent({
                                         <ErrorMessage name="name" component="div" className="small text-danger" />
                                     </div>
                                     <div className="col-md-3 col-6 mb-2">
-                                        <Field type="number" className="form-control form-control-sm" name="level" placeholder="Level" required />
+                                        <Field type="number" className="form-control form-control-sm" name="level" placeholder="Priority Level" required />
                                         {/* <small>(All categories must have different levels)</small> */}
                                         {<div className="text-danger small">{errorMessage}</div>}
                                     </div>
@@ -130,11 +130,17 @@ export default function ProjectCategoryComponent({
                                     <div className="col-md-12">
                                         {
                                             category &&
-                                            <button className="btn btn-sm btn-outline-success" type="submit">Update Project Category</button>
+                                            <span>
+                                                <button className="me-2 btn btn-sm btn-outline-secondary" type="button" onClick={() => setCategory(null)}>Cancel</button>
+                                                <button className="btn btn-sm btn-outline-success" type="submit">Update Project Category</button>
+                                            </span>
                                         }
                                         {
                                             !category &&
-                                            <button className="btn btn-sm btn-success" type="submit">Create Project Category</button>
+                                            <span>
+                                                <button className="me-2 btn btn-sm btn-outline-secondary" type="button" onClick={() => setNewCategory(false)}>Cancel</button>
+                                                <button className="btn btn-sm btn-success" type="submit">Create Project Category</button>
+                                            </span>
                                         }
                                     </div>
                                 </div>

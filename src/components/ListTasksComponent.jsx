@@ -139,6 +139,7 @@ export default function ListTasksComponent({ project }) {
                             setShowCreateTask={setShowCreateTask}
                             project={project}
                             setTasksReload={setTasksReload}
+                            setTasksCount={setTasksCount}
                         ></CreateTaskComponent>
                     }
 

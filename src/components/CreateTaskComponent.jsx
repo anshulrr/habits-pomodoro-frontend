@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { createTaskApi } from '../services/api/TaskApiService';
 
-export default function CreateTaskComponent({ setShowCreateTask, project, setTasksReload }) {
+export default function CreateTaskComponent({ setShowCreateTask, project, setTasksReload, setTasksCount }) {
 
     const [description, setDescription] = useState('')
 
@@ -17,15 +17,16 @@ export default function CreateTaskComponent({ setShowCreateTask, project, setTas
 
         createTaskApi(project.id, task)
             .then(response => {
-                console.debug(response)
+                // console.debug(response)
                 setTasksReload(prev => prev + 1);
                 setShowCreateTask(false)
+                setTasksCount(prev => prev + 1)
             })
             .catch(error => console.error(error.message))
     }
 
     return (
-        <div className="createTask">
+        <div className="createTask mb-1">
             <form onSubmit={handleSubmit}>
                 <div className="contianer">
                     <div className="row">

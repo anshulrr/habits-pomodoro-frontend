@@ -96,7 +96,7 @@ export default function CategoryChecklistComponent({ categories, setIncludeCateg
 
             <div className="input-group my-2">
                 <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => selectUpto()}>Upto</button>
-                <input type="number" className="form-control form-control-sm" name="level" value={level} placeholder="Level" onChange={(e) => setLevel(e.target.value)} />
+                <input type="number" className="form-control form-control-sm" name="level" value={level} placeholder="Priority Level" onChange={(e) => setLevel(e.target.value)} />
                 <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => selectAbove()}>Above</button>
                 <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => selectAll()}>All</button>
                 <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => selectNone()}>None</button>
