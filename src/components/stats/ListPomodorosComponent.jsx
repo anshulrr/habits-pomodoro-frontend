@@ -117,13 +117,13 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
                                         <td className="text-start">
                                             {pomodoro.task}
                                         </td>
-                                        <td width="50%" className="text-end">
+                                        <td width="45%" className="text-end">
                                             <span className="task-list-details">
-                                                <span className="text-secondary ms-1">
+                                                <span className="small text-secondary me-1">
                                                     {moment.utc(pomodoro.startTime).local().format('H:mm')}-
                                                     {moment.utc(pomodoro.endTime).local().format('H:mm')}
                                                 </span>
-                                                <span className="ms-1 badge rounded-pill text-bg-secondary">
+                                                <span className="badge rounded-pill text-bg-secondary fw-normal">
                                                     {Math.round(pomodoro.timeElapsed / 60)}
                                                     <small className="ps-1 bi bi-clock" />
                                                 </span>
@@ -133,9 +133,9 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
                                                 <span className="text-secondary task-list-buttons">
                                                     {
                                                         pomodoro.status === 'past' &&
-                                                        <i className="p-1 me-1 bi bi-trash" onClick={() => deleltePastPomodoro(pomodoro.id)} />
+                                                        <i className="p-1 bi bi-trash" onClick={() => deleltePastPomodoro(pomodoro.id)} />
                                                     }
-                                                    <i className="p-1 me-1 bi bi-chat-right-text" onClick={() => updateCommentsData(pomodoro)} />
+                                                    <i className="p-1 bi bi-chat-right-text" onClick={() => updateCommentsData(pomodoro)} />
                                                 </span>
                                                 <i className="p-1 bi bi-three-dots-vertical"></i>
                                             </span>

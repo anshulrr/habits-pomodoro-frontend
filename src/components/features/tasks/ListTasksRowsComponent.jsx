@@ -74,7 +74,7 @@ export default function ListTasksRowsComponent({
                             key={task.id}
                             className="row py-2 task-list-row"
                         >
-                            <div className="col-8 text-start ps-0">
+                            <div className="col-9 text-start px-0">
                                 {
                                     task.status === 'added' &&
                                     <i className="p-1 bi bi-play-circle" onClick={() => createNewPomodoro(task, project)}></i>
@@ -84,26 +84,26 @@ export default function ListTasksRowsComponent({
                                 </span>
                             </div>
 
-                            <div className="col-4 px-0 text-secondary text-end small text-truncate">
-                                <span className="task-list-details">
-                                    <span className="ms-1 badge rounded-pill text-bg-secondary">
+                            <div className="col-3 px-0 text-secondary text-end text-truncate">
+                                <span className="small task-list-details">
+                                    <span className="badge rounded-pill text-bg-secondary fw-normal">
                                         {timeToDisplay(task.pomodorosTimeElapsed / 60)}
                                         <small className="ps-1 bi bi-clock" />
                                     </span>
-                                    <span>
-                                        <small className="ms-1 bi bi-hourglass" />
+                                    <span className="badge rounded-pill text-bg-light fw-normal">
+                                        <small className="bi bi-hourglass" />
                                         {timeToDisplay(task.pomodoroLength || project.pomodoroLength || userSettings.pomodoroLength)}
                                     </span>
                                 </span>
 
                                 <span className="task-list-update">
                                     <div className="text-secondary text-end task-list-buttons">
-                                        <i className="p-1 me-1 bi bi-chat-right-text" onClick={() => updateCommentsData(task)} />
+                                        <i className="p-1 bi bi-chat-right-text" onClick={() => updateCommentsData(task)} />
                                         {
                                             task.status === 'added' &&
-                                            <i className="p-1 me-1 bi bi-calendar-plus" onClick={() => setShowCreatePastPomodoro(task.id)}></i>
+                                            <i className="p-1 bi bi-calendar-plus" onClick={() => setShowCreatePastPomodoro(task.id)}></i>
                                         }
-                                        <i className="p-1 me-1 bi bi-pencil-square" onClick={() => updateTask(task.id)}></i>
+                                        <i className="p-1 bi bi-pencil-square" onClick={() => updateTask(task.id)}></i>
                                     </div>
                                     <i className="p-1 bi bi-three-dots-vertical"></i>
                                 </span>

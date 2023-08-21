@@ -62,6 +62,10 @@
   cursor: default;
 }
 
+.list-selected .list-details {
+  display: none
+}
+
 /* for tasks list */
 .task-list-row {
   border-bottom: thin solid #dee2e6;
