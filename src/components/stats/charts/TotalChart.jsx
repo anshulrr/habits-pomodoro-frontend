@@ -40,6 +40,7 @@ export const TotalChart = ({ includeCategories, statsSettings, buttonsStates, se
         updateGoals({ limit, localDatasets })
 
         const { startDate, endDate } = calculateDates({ limit, offset });
+        console.log({ limit, offset, startDate, endDate })
 
         getTotalPomodorosApi({ limit, startDate, endDate, includeCategories })
             .then(response => {
@@ -110,7 +111,8 @@ export const TotalChart = ({ includeCategories, statsSettings, buttonsStates, se
         } else if (limit === 'monthly') {
             const date = moment().startOf('month').add(-14 + 15 * offset, 'M');
             startDate = date.toISOString();
-            endDate = date.clone().endOf('month').add(14, 'M').toISOString();
+            endDate = date.clone().add(14, 'M').endOf('month').toISOString();
+            // note: end of the month should be calculated in the end: as it changes every month
             // console.debug(startDate, endDate);
         }
 
@@ -165,6 +167,7 @@ export const TotalChart = ({ includeCategories, statsSettings, buttonsStates, se
             }
         }
 
+        console.log(labels)
         setLabels(labels);
     }
 
