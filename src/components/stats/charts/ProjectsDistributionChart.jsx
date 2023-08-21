@@ -1,56 +1,55 @@
 import { useState } from "react"
 
-import { getTasksPomodorosApi } from "../../services/api/PomodoroApiService";
-import { Buttons } from "./Buttons";
-import { calculateScaleAndLabel, calculateScaleForAdjustedAvg, truncateString } from "../../services/helpers/chartHelper";
+import { getProjectsPomodorosApi } from "services/api/PomodoroApiService";
+import { calculateScaleAndLabel, calculateScaleForAdjustedAvg } from "services/helpers/chartHelper";
 
-import { Bar } from "react-chartjs-2";
+import { Buttons } from "components/stats/charts/Buttons";
 
+import { Doughnut } from "react-chartjs-2";
 import { CategoryScale } from 'chart.js';
 import Chart from 'chart.js/auto';
 Chart.register(CategoryScale);
 
-export const TasksChart = ({ includeCategories, statsSettings, buttonsStates, setButtonsStates }) => {
-    // console.debug('from TasksChart', includeCategories, statsSettings)
+export const ProjectsDistributionChart = ({ includeCategories, statsSettings, buttonsStates, setButtonsStates }) => {
+    // console.debug("hi", chartData);
 
     const [chartData, setChartData] = useState({ label: '' })
 
     // // for first time load (not needed)
     // useEffect(
-    //     () => retrieveTasksPomodoros('daily', 0),
+    //     () => retrieveProjectsPomodoros('daily', 0),
     //     []
     // )
 
     // // not needed
-    // // for reload data retrival
+    // // to reload chart after data retrival
     // useEffect(
-    //     () => console.debug('reload tasks chart'),
+    //     () => console.debug('reload projects chart'),
     //     [chartData]
     // )
 
-    function retrieveTasksPomodoros({ startDate, endDate, limit, offset }) {
-        // console.debug(startDate, endDate)
-        // console.debug("t", includeCategories)
-
+    function retrieveProjectsPomodoros({ startDate, endDate, limit, offset }) {
+        // calculate scale and label according to user settings
         let { scale, label } = calculateScaleAndLabel({ limit, ...statsSettings });
 
         if (offset === 0) {
             scale = calculateScaleForAdjustedAvg({ limit, scale, ...statsSettings });
         }
 
-        getTasksPomodorosApi({ startDate, endDate, includeCategories })
+        // console.debug("p", includeCategories)
+        getProjectsPomodorosApi({ startDate, endDate, includeCategories })
             .then(response => {
                 // console.debug(response)
                 const updated_data = {
                     labels: [],
                     data: [],
                     colors: [],
-                    label: `Task's Distribution Time (${label})`
+                    label: `Project's Distribution Time (${label})`
                 }
                 response.data.forEach(element => {
                     // console.debug(element);
                     updated_data.colors.push(element[2]);
-                    updated_data.labels.push(truncateString(element[1], 20));
+                    updated_data.labels.push(element[1]);
                     updated_data.data.push(element[0] / scale);
                 });
                 // console.debug(updated_data);
@@ -63,13 +62,12 @@ export const TasksChart = ({ includeCategories, statsSettings, buttonsStates, se
     return (
         <div>
             <Buttons
-                retrievePomodoros={retrieveTasksPomodoros}
+                retrievePomodoros={retrieveProjectsPomodoros}
                 buttonsStates={buttonsStates}
                 setButtonsStates={setButtonsStates}
             />
-
             <div className="chart-container">
-                <Bar
+                <Doughnut
                     data={
                         {
                             labels: chartData.labels,
@@ -79,9 +77,9 @@ export const TasksChart = ({ includeCategories, statsSettings, buttonsStates, se
                                     data: chartData.data,
                                     // you can set indiviual colors for each bar
                                     backgroundColor: chartData.colors,
-                                    borderWidth: 1,
-                                    barThickness: 6,  // number (pixels) or 'flex'
-                                    maxBarThickness: 8 // number (pixels)
+                                    // borderWidth: 1,
+                                    // barThickness: 6,  // number (pixels) or 'flex'
+                                    // maxBarThickness: 8 // number (pixels)
                                 }
                             ]
                         }
@@ -89,15 +87,17 @@ export const TasksChart = ({ includeCategories, statsSettings, buttonsStates, se
                     }
                     options={{
                         responsive: true,
-                        maintainAspectRatio: true,
-                        aspectRatio: 1,
                         plugins: {
                             title: {
                                 display: true,
                                 text: chartData.label
                             },
                             legend: {
-                                display: false
+                                display: true,
+                                position: 'right',
+                                labels: {
+                                    boxWidth: 10
+                                }
                             }
                         }
                     }}

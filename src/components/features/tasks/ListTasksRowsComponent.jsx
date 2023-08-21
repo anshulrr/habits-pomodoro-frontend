@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 
-import { useAuth } from "../services/auth/AuthContext";
-import Pagination from "../services/pagination/Pagination";
-import PastPomodoroComponent from "./PastPomodoroComponent";
-import { retrieveAllTasksApi } from "../services/api/TaskApiService";
-import ListCommentsComponent from "./ListCommentsComponents";
+import { useAuth } from "services/auth/AuthContext";
+import Pagination from "services/pagination/Pagination";
+import { retrieveAllTasksApi } from "services/api/TaskApiService";
+
+import PastPomodoroComponent from "components/features/tasks/PastPomodoroComponent";
+import ListCommentsComponent from "components/features/comments/ListCommentsComponents";
 
 export default function ListTasksRowsComponent({
     project,

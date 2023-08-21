@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../services/auth/AuthContext'
+import { useAuth } from 'services/auth/AuthContext'
 import WelcomeComponent from './WelcomeComponent'
-import FirebaseAuthService from '../services/auth/FirebaseAuthService'
+import FirebaseAuthService from 'services/auth/FirebaseAuthService'
 
 export default function LoginComponent() {
 

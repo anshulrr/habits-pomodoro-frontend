@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { useAuth } from '../services/auth/AuthContext';
+
+import { useAuth } from 'services/auth/AuthContext';
 
 export default function StatsSettingsComponent({ setStatsSettings, setReload }) {
 

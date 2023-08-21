@@ -1,7 +1,8 @@
-import ListProjectCategoriesComponent from './ListProjectsCategoriesComponent';
-import ChangePasswordComponent from './ChangePasswordComponent';
 import { useState } from 'react';
-import UserSettingsComponent from './UserSettingsComponent';
+
+import ListProjectCategoriesComponent from 'components/user-settings/ListProjectsCategoriesComponent';
+import ChangePasswordComponent from 'components/user-settings/ChangePasswordComponent';
+import UserSettingsComponent from 'components/user-settings/UserSettingsComponent';
 
 export default function SettingsComponent() {
 

@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import StopwatchComponent from './StopwatchComponent'
-import { useAuth } from '../services/auth/AuthContext';
+
+import { useAuth } from 'services/auth/AuthContext';
+
+import StopwatchComponent from 'components/features/pomodoros/StopwatchComponent'
 
 export default function BreakTimerComponent({ startAgain }) {
     const authContext = useAuth()
