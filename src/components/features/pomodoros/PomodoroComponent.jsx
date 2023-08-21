@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 // import { useParams, useLocation, Link } from 'react-router-dom';
 
+import moment from 'moment';
+
 import { updatePomodoroApi } from 'services/api/PomodoroApiService';
 
 import BreakTimerComponent from 'components/features/pomodoros/BreakTimerComponent';
+import ListCommentsComponent from 'components/features/comments/ListCommentsComponents';
 
 export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroStatus, createNewPomodoro, setTasksMessage }) {
 
@@ -11,6 +14,9 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
     // with JS setInterval to keep track of it and
     // stop it when needed
     const intervalRef = useRef(null);
+
+    const [showCommentsId, setShowCommentsId] = useState(-1);
+    const [commentsTitle, setCommentsTitle] = useState('')
 
     const initialTimeRemaining = pomodoro.length * 60 - pomodoro.timeElapsed;
     const seconds = initialTimeRemaining % 60;
@@ -186,6 +192,15 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
         }
     }
 
+    function updateCommentsData(pomodoro) {
+        setShowCommentsId(pomodoro.id)
+
+        setCommentsTitle(
+            pomodoro.task.description + ": " +
+            moment.utc(pomodoro.startTime).local().format('YYYY MMM Do (H:mm)')
+        )
+    }
+
     return (
         <div className="PomodoroComponent">
             <div className="">
@@ -196,6 +211,9 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
                 <h5>
                     <span className="me-1 bi bi-list-ul" />
                     {pomodoro.task.description}
+                    <small>
+                        <i className="p-1 ms-1 bi bi-chat-right-text" onClick={() => updateCommentsData(pomodoro)} />
+                    </small>
                 </h5>
                 {
                     status !== 'completed' &&
@@ -226,6 +244,16 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
                     />
                 }
             </div>
+
+            {
+                showCommentsId !== -1 &&
+                <ListCommentsComponent
+                    filterBy={'pomodoro'}
+                    id={showCommentsId}
+                    title={commentsTitle}
+                    setShowCommentsId={setShowCommentsId}
+                />
+            }
         </div>
     )
 }

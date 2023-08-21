@@ -79,9 +79,10 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
         setShowCommentsId(pomodoro.id)
 
         setCommentsTitle(
-            moment.utc(pomodoro.endTime).local().format('YYYY MMM Do') + ' ' +
+            pomodoro.task + ": " +
+            moment.utc(pomodoro.endTime).local().format('YYYY MMM Do') + ' (' +
             moment.utc(pomodoro.startTime).local().format('H:mm') + '-' +
-            moment.utc(pomodoro.endTime).local().format('H:mm')
+            moment.utc(pomodoro.endTime).local().format('H:mm') + ')'
         )
     }
 
