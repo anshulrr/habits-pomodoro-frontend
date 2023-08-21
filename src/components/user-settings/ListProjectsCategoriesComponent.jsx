@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react"
-import { retrieveAllProjectCategoriesApi, getProjectCategoriesCountApi } from "../services/api/ProjectCategoryApiService";
 
-import Pagination from "../services/pagination/Pagination"
-import ProjectCategoryComponent from "./ProjectCategoryComponent";
-import ListCommentsComponent from "./ListCommentsComponents";
+import { retrieveAllProjectCategoriesApi, getProjectCategoriesCountApi } from "services/api/ProjectCategoryApiService";
+import Pagination from "services/pagination/Pagination"
+
+import ProjectCategoryComponent from "components/user-settings/ProjectCategoryComponent";
+import ListCommentsComponent from "components/features/comments/ListCommentsComponents";
 
 const PAGESIZE = 5;
 
@@ -50,7 +51,6 @@ export default function ListProjectCategoriesComponent() {
     function updateProjectCategory(cat) {
         setCategory(cat)
         setNewCategory(false)
-        // navigate(`/categories/${id}`)
     }
 
     function addNewProjectCategory() {

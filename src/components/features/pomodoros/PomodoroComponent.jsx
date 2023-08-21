@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 // import { useParams, useLocation, Link } from 'react-router-dom';
-import { updatePomodoroApi } from '../services/api/PomodoroApiService';
-import BreakTimerComponent from './BreakTimerComponent';
+
+import { updatePomodoroApi } from 'services/api/PomodoroApiService';
+
+import BreakTimerComponent from 'components/features/pomodoros/BreakTimerComponent';
 
 export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroStatus, createNewPomodoro, setTasksMessage }) {
 

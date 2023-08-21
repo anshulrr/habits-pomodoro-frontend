@@ -1,15 +1,15 @@
 import { useState } from "react"
 import moment from "moment"
 
-import { getTotalPomodorosApi } from "../../services/api/PomodoroApiService"
-import { Buttons } from "./Buttons";
+import { getTotalPomodorosApi } from "services/api/PomodoroApiService"
+
+import { Buttons } from "components/stats/charts/Buttons";
 
 import { Bar } from "react-chartjs-2"
-
 import { CategoryScale } from 'chart.js'
 import Chart from 'chart.js/auto'
 import annotationPlugin from "chartjs-plugin-annotation";
-import { calculateScaleAndLabel, calculateScaleForAdjustedAvg } from "../../services/helpers/chartHelper";
+import { calculateScaleAndLabel, calculateScaleForAdjustedAvg } from "services/helpers/chartHelper";
 Chart.register(CategoryScale)
 Chart.register(annotationPlugin);
 

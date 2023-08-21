@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
-import { createPomodoroApi, getRunningPomodoroApi } from "../services/api/PomodoroApiService";
-import { getTasksCountApi } from "../services/api/TaskApiService";
-import ListTasksRowsComponent from "./ListTasksRowsComponent";
-import PomodoroComponent from "./PomodoroComponent";
-import StopwatchComponent from "./StopwatchComponent";
-import ListPomodorosComponent from "./ListPomodorosComponent";
-import CreateTaskComponent from "./CreateTaskComponent";
+
+import { createPomodoroApi, getRunningPomodoroApi } from "services/api/PomodoroApiService";
+import { getTasksCountApi } from "services/api/TaskApiService";
+
+import ListTasksRowsComponent from "components/features/tasks/ListTasksRowsComponent";
+import CreateTaskComponent from "components/features/tasks/CreateTaskComponent";
+import PomodoroComponent from "components/features/pomodoros/PomodoroComponent";
+import StopwatchComponent from "components/features/pomodoros/StopwatchComponent";
+import ListPomodorosComponent from "components/stats/ListPomodorosComponent";
 
 export default function ListTasksComponent({ project }) {
 
@@ -78,7 +80,6 @@ export default function ListTasksComponent({ project }) {
                 setPomodoro(response.data)
                 setPomodoroStatus('started')
                 setMessage('')
-                // navigate(`/tasks/${task.id}/pomodoros/${response.data.id}/${response.data.length}`, { state: { project: project, task } })
             })
             .catch(error => {
                 console.error(error.message)

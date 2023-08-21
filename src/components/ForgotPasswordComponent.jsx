@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import FirebaseAuthService from '../services/auth/FirebaseAuthService';
+
+import FirebaseAuthService from 'services/auth/FirebaseAuthService';
 
 export default function ForgotPasswordComponent() {
     const [errorMessage, setErrorMessage] = useState('')

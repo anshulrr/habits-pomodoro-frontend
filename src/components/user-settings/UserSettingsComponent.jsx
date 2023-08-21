@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { putUserSettingsApi } from '../services/api/AuthApiService'
-import { useAuth } from '../services/auth/AuthContext';
+
+import { putUserSettingsApi } from 'services/api/AuthApiService'
+import { useAuth } from 'services/auth/AuthContext';
 
 export default function UserSettingsComponent() {
 

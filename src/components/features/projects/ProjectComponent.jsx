@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { createProjectApi, retrieveProjectApi, updateProjectApi } from '../services/api/ProjectApiService'
-import { retrieveAllProjectCategoriesApi } from "../services/api/ProjectCategoryApiService";
+
+import { createProjectApi, retrieveProjectApi, updateProjectApi } from 'services/api/ProjectApiService'
+import { retrieveAllProjectCategoriesApi } from "services/api/ProjectCategoryApiService";
+
 import { Formik, ErrorMessage, Field } from 'formik'
 
 export default function ProjectComponent() {

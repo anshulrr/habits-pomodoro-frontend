@@ -2,9 +2,9 @@ import { useEffect, useState } from "react"
 
 import ReactMarkdown from 'react-markdown'
 
-import { useAuth } from "../services/auth/AuthContext";
-import { retrieveAllCommentsApi, getCommentsCountApi } from "../services/api/CommentApiService";
-import Pagination from "../services/pagination/Pagination"
+import { useAuth } from "services/auth/AuthContext";
+import { retrieveAllCommentsApi, getCommentsCountApi } from "services/api/CommentApiService";
+import Pagination from "services/pagination/Pagination"
 
 import moment from "moment";
 import CommentComponent from "./CommentComponent";

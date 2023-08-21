@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { createTaskApi } from '../services/api/TaskApiService';
+import { createTaskApi } from 'services/api/TaskApiService';
 
 export default function CreateTaskComponent({ setShowCreateTask, project, setTasksReload, setTasksCount }) {
 

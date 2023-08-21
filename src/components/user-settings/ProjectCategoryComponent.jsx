@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
-import { createProjectCategoryApi, retrieveProjectCategoryApi, updateProjectCategoryApi } from '../services/api/ProjectCategoryApiService'
+
 import { Formik, ErrorMessage, Field } from 'formik'
+
+import { createProjectCategoryApi, retrieveProjectCategoryApi, updateProjectCategoryApi } from 'services/api/ProjectCategoryApiService'
 
 export default function ProjectCategoryComponent({
     category,

@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react"
 import moment from "moment"
 
-import { Buttons } from "./charts/Buttons";
-import { deletePastPomodoroApi, getPomodorosApi } from "../services/api/PomodoroApiService";
-import { retrieveAllProjectCategoriesApi } from "../services/api/ProjectCategoryApiService";
-import ListCommentsComponent from "./ListCommentsComponents";
+import { deletePastPomodoroApi, getPomodorosApi } from "services/api/PomodoroApiService";
+import { retrieveAllProjectCategoriesApi } from "services/api/ProjectCategoryApiService";
+
+import { Buttons } from "components/stats/charts/Buttons";
+import ListCommentsComponent from "components/features/comments/ListCommentsComponents";
 
 export default function ListPomodorosComponent({ includeCategories, buttonsStates, setButtonsStates, setPomodorosListReload }) {
 

@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useLocation } from "react-router-dom";
-import { retrieveAllProjectsApi, getProjectsCountApi } from "../services/api/ProjectApiService";
-import ListTasksComponent from './ListTasksComponent'
 
-import Pagination from "../services/pagination/Pagination"
-import { useAuth } from "../services/auth/AuthContext";
-import ListCommentsComponent from "./ListCommentsComponents";
+import { retrieveAllProjectsApi, getProjectsCountApi } from "services/api/ProjectApiService";
+import Pagination from "services/pagination/Pagination"
+import { useAuth } from "services/auth/AuthContext";
+
+import ListTasksComponent from 'components/features/tasks/ListTasksComponent'
+import ListCommentsComponent from "components/features/comments/ListCommentsComponents";
 
 export default function ListProjectsComponent() {
     const authContext = useAuth()

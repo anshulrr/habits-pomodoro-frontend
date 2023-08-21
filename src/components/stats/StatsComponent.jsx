@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react"
-import { retrieveAllProjectCategoriesApi } from "../services/api/ProjectCategoryApiService";
+
 import moment from "moment"
-import { TasksChart } from "./charts/TasksChart";
-import { ProjectsDistributionChart } from "./charts/ProjectsDistributionChart";
-import { TotalChart } from "./charts/TotalChart";
-import CategoryChecklistComponent from "./CategoryChecklistComponent";
-import ListPomodorosComponent from "./ListPomodorosComponent";
-import StatsSettingsComponent from "./StatsSettingsComponent";
+
+import { retrieveAllProjectCategoriesApi } from "services/api/ProjectCategoryApiService";
+
+import { TasksChart } from "components/stats/charts/TasksChart";
+import { ProjectsDistributionChart } from "components/stats/charts/ProjectsDistributionChart";
+import { TotalChart } from "components/stats/charts/TotalChart";
+import CategoryChecklistComponent from "components/stats/CategoryChecklistComponent";
+
+import ListPomodorosComponent from "components/stats/ListPomodorosComponent";
+import StatsSettingsComponent from "components/user-settings/StatsSettingsComponent";
 
 export default function ListTasksComponent() {
 

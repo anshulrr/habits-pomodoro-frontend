@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import FirebaseAuthService from '../services/auth/FirebaseAuthService';
-import { useAuth } from '../services/auth/AuthContext';
+
+import FirebaseAuthService from 'services/auth/FirebaseAuthService';
+import { useAuth } from 'services/auth/AuthContext';
 
 export default function ChangePasswordComponent() {
 

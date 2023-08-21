@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import ReactMarkdown from 'react-markdown'
 
-import { createCommentApi } from '../services/api/CommentApiService'
+import { createCommentApi } from 'services/api/CommentApiService'
 
 export default function CommentComponent({ setComments, filterBy, id, title, setShowCreateComment }) {
 

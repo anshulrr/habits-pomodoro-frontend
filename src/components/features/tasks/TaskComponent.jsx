@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams, useLocation } from 'react-router-dom'
-import { retrieveTaskApi, updateTaskApi } from '../services/api/TaskApiService'
+import { retrieveTaskApi, updateTaskApi } from 'services/api/TaskApiService'
 import { Formik, Form, ErrorMessage, Field } from 'formik'
 
 // export default function TaskComponent({ project, task, setTasks, tasks }) {
