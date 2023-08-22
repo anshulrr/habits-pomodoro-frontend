@@ -177,7 +177,7 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
                 </div>
             </div>
 
-            <div className="col-md-12 mb-2">
+            <div className="col-md-12">
                 <div className="input-group input-group-sm mb-2">
                     <label className="input-group-text" htmlFor="tasksChartType">
                         Tasks Chart Type
@@ -197,7 +197,7 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
                 </div>
             </div>
 
-            <div className="col-md-12 mb-2">
+            <div className="col-md-12">
                 <div className="input-group input-group-sm mb-2">
                     <label className="input-group-text" htmlFor="projectsChartType">
                         Projects Chart Type
