@@ -125,7 +125,7 @@ export default function ListTasksRowsComponent({
                                                 <i className="bi bi-calendar-plus" />
                                             </button>
                                         }
-                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateTask(task.id)}>
+                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => updateTask(task.id)}>
                                             <i className="bi bi-pencil-square" />
                                         </button>
                                     </div>

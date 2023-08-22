@@ -14,6 +14,8 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
     const [enableChartMonthlyAverage, setEnableChartMonthlyAverage] = useState(userSettings.enableChartMonthlyAverage)
     const [chartMonthlyAverage, setChartMonthlyAverage] = useState(userSettings.chartMonthlyAverage)
     const [enableChartAdjustedWeeklyMonthlyAverage, setEnableChartAdjustedWeeklyMonthlyAverage] = useState(userSettings.enableChartAdjustedWeeklyMonthlyAverage)
+    const [tasksChartType, setTasksChartType] = useState('doughnut')
+    const [projectsChartType, setProjectsChartType] = useState('bar')
 
     const [errorMessage, setErrorMessage] = useState('')
 
@@ -37,6 +39,8 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
             enableChartMonthlyAverage,
             chartMonthlyAverage,
             enableChartAdjustedWeeklyMonthlyAverage,
+            tasksChartType,
+            projectsChartType
         };
         // console.debug(updatedStatsSetting)
         setStatsSettings(updatedStatsSetting)
@@ -171,6 +175,32 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
                         Enable Adjusted Avg for current W/M
                     </label>
                 </div>
+            </div>
+
+            <div className="col-md-12 mb-2">
+                <select
+                    className="form-select form-select-sm"
+                    name="tasks-chart-type"
+                    onChange={(e) => handleOnChange(setTasksChartType, e.target.value)}
+                    defaultValue={tasksChartType}
+                >
+                    <option value="0" disabled selected>Tasks Chart Type</option>
+                    <option value="bar">Bar</option>
+                    <option value="doughnut">Doughnut</option>
+                </select>
+            </div>
+
+            <div className="col-md-12 mb-2">
+                <select
+                    className="form-select form-select-sm"
+                    name="projects-chart-type"
+                    onChange={(e) => handleOnChange(setProjectsChartType, e.target.value)}
+                    defaultValue={projectsChartType}
+                >
+                    <option value="0" disabled>Projects Chart Type</option>
+                    <option value="bar">Bar</option>
+                    <option value="doughnut">Doughnut</option>
+                </select>
             </div>
 
             <div className="text-danger"><small>{errorMessage}</small></div>
