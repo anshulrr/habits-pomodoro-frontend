@@ -75,8 +75,8 @@ export default function ListProjectCategoriesComponent() {
                                 </h6>
                             </div>
                             <div className="col-2 text-end">
-                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-1">
-                                    <i className="bi bi-plus-circle" onClick={addNewProjectCategory}></i>
+                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-1" onClick={addNewProjectCategory}>
+                                    <i className="bi bi-plus-circle" />
                                 </button>
                             </div>
                         </div>
@@ -97,14 +97,17 @@ export default function ListProjectCategoriesComponent() {
                                                 </span>
                                                 <span>&nbsp;{cat.name}</span>
                                             </div>
-                                            <div className="col-4 text-secondary text-end">
+                                            <div className="col-4 text-secondary text-end list-details">
                                                 <span>
                                                     {cat.level}&nbsp;
                                                 </span>
-                                                <span className="list-button">
-                                                    <i className="p-1 me-1 bi bi-chat-right-text" onClick={() => setShowCommentsId(cat.id)} />
-                                                    <i className="p-1 bi bi-pencil-square"></i>
-                                                </span>
+                                            </div>
+                                            <div className="col-4 text-secondary text-end list-button">
+                                                <div className="input-group justify-content-end">
+                                                    <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowCommentsId(cat.id)}>
+                                                        <i className="bi bi-chat-right-text" onClick={() => setShowCommentsId(cat.id)} />
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     )

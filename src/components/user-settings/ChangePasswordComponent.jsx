@@ -3,7 +3,7 @@ import { useState } from 'react'
 import FirebaseAuthService from 'services/auth/FirebaseAuthService';
 import { useAuth } from 'services/auth/AuthContext';
 
-export default function ChangePasswordComponent() {
+export default function ChangePasswordComponent({ setShowChangePassword }) {
 
     const authContext = useAuth();
     const email = authContext.user.email;
@@ -78,7 +78,9 @@ export default function ChangePasswordComponent() {
                                 required
                             />
                             <div className="mb-2 text-danger"><small>{errorMessage}</small></div>
+
                             <div className="">
+                                <button className="me-2 btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowChangePassword(false)}>Cancel</button>
                                 <button
                                     type="submit"
                                     className="btn btn-sm btn-outline-success"

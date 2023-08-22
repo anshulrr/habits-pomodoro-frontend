@@ -135,25 +135,25 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
                                         {
                                             showPomodoroUpdateId !== pomodoro.id &&
                                             <span className="task-list-update">
-                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-0">
-                                                    <i className="bi bi-three-dots-vertical" onClick={() => setShowPomodoroUpdateId(pomodoro.id)} />
+                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-0" onClick={() => setShowPomodoroUpdateId(pomodoro.id)} >
+                                                    <i className="bi bi-three-dots-vertical" />
                                                 </button>
                                             </span>
                                         }
                                         {
                                             showPomodoroUpdateId === pomodoro.id &&
                                             <div className="input-group justify-content-end">
-                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1">
-                                                    <i className="align-middle bi bi-x-lg" onClick={() => setShowPomodoroUpdateId(-1)}></i>
+                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowPomodoroUpdateId(-1)}>
+                                                    <i className="align-middle bi bi-x-lg" />
                                                 </button>
                                                 {
                                                     pomodoro.status === 'past' &&
-                                                    <button type="button" className="btn btn-sm btn-outline-danger py-0 px-1">
-                                                        <i className="align-middle bi bi-trash" onClick={() => deleltePastPomodoro(pomodoro.id)} />
+                                                    <button type="button" className="btn btn-sm btn-outline-danger py-0 px-1" onClick={() => deleltePastPomodoro(pomodoro.id)}>
+                                                        <i className="align-middle bi bi-trash" />
                                                     </button>
                                                 }
-                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1">
-                                                    <i className="align-middle bi bi-chat-right-text" onClick={() => updateCommentsData(pomodoro)} />
+                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => updateCommentsData(pomodoro)}>
+                                                    <i className="align-middle bi bi-chat-right-text" />
                                                 </button>
                                             </div>
                                         }

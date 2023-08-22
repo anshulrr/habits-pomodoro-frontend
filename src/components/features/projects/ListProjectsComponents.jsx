@@ -85,8 +85,8 @@ export default function ListProjectsComponent() {
                                     <span className="ms-1 bi bi-folder-plus" />
                                 </span>
                             </h5>
-                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2">
-                                <i className="bi bi-plus-circle" onClick={addNewProject}></i>
+                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={addNewProject}>
+                                <i className="bi bi-plus-circle" ></i>
                             </button>
                         </div>
 
@@ -116,11 +116,11 @@ export default function ListProjectsComponent() {
                                         </div>
                                         <div className="col-4 ps-0 text-secondary text-end list-button">
                                             <div className="input-group justify-content-end">
-                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1">
-                                                    <i className="bi bi-chat-right-text" onClick={() => setShowCommentsId(proj.id)} />
+                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowCommentsId(proj.id)}>
+                                                    <i className="bi bi-chat-right-text" />
                                                 </button>
-                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1">
-                                                    <i className="bi bi-pencil-square" onClick={() => updateProject(proj.id)}></i>
+                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => updateProject(proj.id)}>
+                                                    <i className="bi bi-pencil-square"></i>
                                                 </button>
                                             </div>
                                         </div>

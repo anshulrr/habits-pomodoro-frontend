@@ -130,8 +130,8 @@ export default function ListTasksComponent({ project }) {
                                 <span className="ms-1 bi bi-list-ul" />
                             </span>
                         </h6>
-                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-1">
-                            <i className="bi bi-plus-circle" onClick={() => setShowCreateTask(!showCreateTask)}></i>
+                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-1" onClick={() => setShowCreateTask(!showCreateTask)}>
+                            <i className="bi bi-plus-circle" />
                         </button>
                     </div>
 
@@ -225,8 +225,8 @@ export default function ListTasksComponent({ project }) {
                 <div className="col-md-6 mt-3 border-bottom border-2">
                     <div className="d-flex justify-content-between mb-3">
                         <small className="text-danger">{message} </small>
-                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-1">
-                            <i className="bi bi-arrow-clockwise" onClick={() => getRunningPomodoro()}></i>
+                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-1" onClick={() => getRunningPomodoro()}>
+                            <i className="bi bi-arrow-clockwise" />
                         </button>
                     </div>
 

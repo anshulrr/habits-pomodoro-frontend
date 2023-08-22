@@ -215,8 +215,8 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
                         <span className="bi bi-list-ul" />
                     </span>
                     {pomodoro.task.description}
-                    <button type="button" className="btn btn-sm btn-outline-secondary ms-1 py-0 px-1">
-                        <i className="bi bi-chat-right-text" onClick={() => updateCommentsData(pomodoro)} />
+                    <button type="button" className="btn btn-sm btn-outline-secondary ms-1 py-0 px-1" onClick={() => updateCommentsData(pomodoro)}>
+                        <i className="bi bi-chat-right-text" />
                     </button>
                 </h5>
                 {
