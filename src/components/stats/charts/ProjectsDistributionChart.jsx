@@ -8,7 +8,7 @@ import { DoughnutChart } from "components/stats/charts/DoughnutChart";
 
 export const ProjectsDistributionChart = ({ includeCategories, statsSettings, buttonsStates, setButtonsStates }) => {
     // console.debug("hi", chartData);
-    console.log(statsSettings)
+    // console.debug(statsSettings)
 
     const [chartData, setChartData] = useState({ label: '' })
 

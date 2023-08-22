@@ -178,29 +178,43 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
             </div>
 
             <div className="col-md-12 mb-2">
-                <select
-                    className="form-select form-select-sm"
-                    name="tasks-chart-type"
-                    onChange={(e) => handleOnChange(setTasksChartType, e.target.value)}
-                    defaultValue={tasksChartType}
-                >
-                    <option value="0" disabled selected>Tasks Chart Type</option>
-                    <option value="bar">Bar</option>
-                    <option value="doughnut">Doughnut</option>
-                </select>
+                <div className="input-group input-group-sm mb-2">
+                    <label className="input-group-text" htmlFor="tasksChartType">
+                        Tasks Chart Type
+                    </label>
+                    <div className="input-group-text p-0">
+                        <select
+                            className="form-select form-select-sm"
+                            name="tasks-chart-type"
+                            onChange={(e) => handleOnChange(setTasksChartType, e.target.value)}
+                            defaultValue={tasksChartType}
+                            id="tasksChartType"
+                        >
+                            <option value="bar">Bar</option>
+                            <option value="doughnut">Doughnut</option>
+                        </select>
+                    </div>
+                </div>
             </div>
 
             <div className="col-md-12 mb-2">
-                <select
-                    className="form-select form-select-sm"
-                    name="projects-chart-type"
-                    onChange={(e) => handleOnChange(setProjectsChartType, e.target.value)}
-                    defaultValue={projectsChartType}
-                >
-                    <option value="0" disabled>Projects Chart Type</option>
-                    <option value="bar">Bar</option>
-                    <option value="doughnut">Doughnut</option>
-                </select>
+                <div className="input-group input-group-sm mb-2">
+                    <label className="input-group-text" htmlFor="projectsChartType">
+                        Projects Chart Type
+                    </label>
+                    <div className="input-group-text p-0">
+                        <select
+                            className="form-select form-select-sm"
+                            name="projects-chart-type"
+                            onChange={(e) => handleOnChange(setProjectsChartType, e.target.value)}
+                            defaultValue={projectsChartType}
+                            id="projectsChartType"
+                        >
+                            <option value="bar">Bar</option>
+                            <option value="doughnut">Doughnut</option>
+                        </select>
+                    </div>
+                </div>
             </div>
 
             <div className="text-danger"><small>{errorMessage}</small></div>
@@ -209,6 +223,6 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
                 <button className="btn btn-sm btn-outline-success" type="button" onClick={updateSettings}>Fetch</button>
             </div>
 
-        </div>
+        </div >
     )
 }
