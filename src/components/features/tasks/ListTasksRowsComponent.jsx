@@ -30,6 +30,8 @@ export default function ListTasksRowsComponent({
     const [showCommentsId, setShowCommentsId] = useState(-1);
     const [commentsTitle, setCommentsTitle] = useState('')
 
+    const [showTaskUpdateId, setShowTaskUpdateId] = useState(-1);
+
     useEffect(
         () => {
             refreshTasks(status)
@@ -74,39 +76,60 @@ export default function ListTasksRowsComponent({
                             key={task.id}
                             className="row py-2 task-list-row"
                         >
-                            <div className="col-8 text-start ps-0">
+                            <div className="col-8 text-start px-0">
                                 {
                                     task.status === 'added' &&
-                                    <i className="p-1 bi bi-play-circle" onClick={() => createNewPomodoro(task, project)}></i>
+                                    <button type="button" className="btn btn-sm btn-outline-success py-0 px-1 me-1" onClick={() => createNewPomodoro(task, project)}>
+                                        <i className="bi bi-play-circle"></i>
+                                    </button>
                                 }
-                                <span className={task.status === 'completed' ? "text-secondary" : ""}>
+                                <span className={task.status === 'archived' ? "text-secondary" : ""}>
                                     {task.description}
                                 </span>
                             </div>
 
-                            <div className="col-4 px-0 text-secondary text-end small text-truncate">
-                                <span className="task-list-details">
-                                    <span className="ms-1 badge rounded-pill text-bg-secondary">
-                                        {timeToDisplay(task.pomodorosTimeElapsed / 60)}
-                                        <small className="ps-1 bi bi-clock" />
+                            <div className="col-4 px-0 text-secondary text-end text-truncate">
+                                {
+                                    showTaskUpdateId !== task.id &&
+                                    <span className="small task-list-details">
+                                        <span className="badge rounded-pill text-bg-secondary fw-normal">
+                                            {timeToDisplay(task.pomodorosTimeElapsed / 60)}
+                                            <small className="ps-1 bi bi-clock" />
+                                        </span>
+                                        <span className="badge rounded-pill text-bg-light fw-normal">
+                                            <small className="bi bi-hourglass" />
+                                            {timeToDisplay(task.pomodoroLength || project.pomodoroLength || userSettings.pomodoroLength)}
+                                        </span>
                                     </span>
-                                    <span>
-                                        <small className="ms-1 bi bi-hourglass" />
-                                        {timeToDisplay(task.pomodoroLength || project.pomodoroLength || userSettings.pomodoroLength)}
+                                }
+                                {
+                                    showTaskUpdateId !== task.id &&
+                                    <span className="task-list-update">
+                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-0" onClick={() => setShowTaskUpdateId(task.id)}>
+                                            <i className="bi bi-three-dots-vertical" />
+                                        </button>
                                     </span>
-                                </span>
-
-                                <span className="task-list-update">
-                                    <div className="text-secondary text-end task-list-buttons">
-                                        <i className="p-1 me-1 bi bi-chat-right-text" onClick={() => updateCommentsData(task)} />
+                                }
+                                {
+                                    showTaskUpdateId === task.id &&
+                                    <div className="input-group justify-content-end">
+                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowTaskUpdateId(-1)}>
+                                            <i className="bi bi-x-lg" ></i>
+                                        </button>
+                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateCommentsData(task)}>
+                                            <i className="bi bi-chat-right-text" />
+                                        </button>
                                         {
                                             task.status === 'added' &&
-                                            <i className="p-1 me-1 bi bi-calendar-plus" onClick={() => setShowCreatePastPomodoro(task.id)}></i>
+                                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowCreatePastPomodoro(task.id)}>
+                                                <i className="bi bi-calendar-plus" />
+                                            </button>
                                         }
-                                        <i className="p-1 me-1 bi bi-pencil-square" onClick={() => updateTask(task.id)}></i>
+                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateTask(task.id)}>
+                                            <i className="bi bi-pencil-square" />
+                                        </button>
                                     </div>
-                                    <i className="p-1 bi bi-three-dots-vertical"></i>
-                                </span>
+                                }
                             </div>
 
                             {

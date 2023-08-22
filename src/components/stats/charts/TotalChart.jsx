@@ -40,7 +40,7 @@ export const TotalChart = ({ includeCategories, statsSettings, buttonsStates, se
         updateGoals({ limit, localDatasets })
 
         const { startDate, endDate } = calculateDates({ limit, offset });
-        console.log({ limit, offset, startDate, endDate })
+        // console.debug({ limit, offset, startDate, endDate })
 
         getTotalPomodorosApi({ limit, startDate, endDate, includeCategories })
             .then(response => {
@@ -167,7 +167,7 @@ export const TotalChart = ({ includeCategories, statsSettings, buttonsStates, se
             }
         }
 
-        console.log(labels)
+        // console.debug(labels)
         setLabels(labels);
     }
 

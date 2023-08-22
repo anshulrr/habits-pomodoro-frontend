@@ -19,6 +19,8 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
     const [showCommentsId, setShowCommentsId] = useState(-1);
     const [commentsTitle, setCommentsTitle] = useState('')
 
+    const [showPomodoroUpdateId, setShowPomodoroUpdateId] = useState(-1);
+
     useEffect(
         () => {
             // console.debug('re-render ListPomodorosComponent')
@@ -107,46 +109,61 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
                     showLimit={false}
                 />
             }
-            <small>
-                <table className="table table-sm table-striped">
-                    <tbody>
-                        {
-                            pomodoros.map(
-                                pomodoro => (
-                                    <tr key={pomodoro.id} className="task-list-row">
-                                        <td className="text-start">
-                                            {pomodoro.task}
-                                        </td>
-                                        <td width="50%" className="text-end">
+            <table className="table table-sm table-striped small">
+                <tbody>
+                    {
+                        pomodoros.map(
+                            pomodoro => (
+                                <tr key={pomodoro.id} className="task-list-row">
+                                    <td className="text-start" style={{ paddingTop: "0.4rem", paddingBottom: "0.4rem" }}>
+                                        {pomodoro.task}
+                                    </td>
+                                    <td width="45%" className="align-middle text-end">
+                                        {
+                                            showPomodoroUpdateId !== pomodoro.id &&
                                             <span className="task-list-details">
-                                                <span className="text-secondary ms-1">
+                                                <span className="small text-secondary me-1">
                                                     {moment.utc(pomodoro.startTime).local().format('H:mm')}-
                                                     {moment.utc(pomodoro.endTime).local().format('H:mm')}
                                                 </span>
-                                                <span className="ms-1 badge rounded-pill text-bg-secondary">
+                                                <span className="badge rounded-pill text-bg-secondary fw-normal">
                                                     {Math.round(pomodoro.timeElapsed / 60)}
                                                     <small className="ps-1 bi bi-clock" />
                                                 </span>
                                             </span>
-
+                                        }
+                                        {
+                                            showPomodoroUpdateId !== pomodoro.id &&
                                             <span className="task-list-update">
-                                                <span className="text-secondary task-list-buttons">
-                                                    {
-                                                        pomodoro.status === 'past' &&
-                                                        <i className="p-1 me-1 bi bi-trash" onClick={() => deleltePastPomodoro(pomodoro.id)} />
-                                                    }
-                                                    <i className="p-1 me-1 bi bi-chat-right-text" onClick={() => updateCommentsData(pomodoro)} />
-                                                </span>
-                                                <i className="p-1 bi bi-three-dots-vertical"></i>
+                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-0" onClick={() => setShowPomodoroUpdateId(pomodoro.id)} >
+                                                    <i className="bi bi-three-dots-vertical" />
+                                                </button>
                                             </span>
-                                        </td>
-                                    </tr>
-                                )
+                                        }
+                                        {
+                                            showPomodoroUpdateId === pomodoro.id &&
+                                            <div className="input-group justify-content-end">
+                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowPomodoroUpdateId(-1)}>
+                                                    <i className="align-middle bi bi-x-lg" />
+                                                </button>
+                                                {
+                                                    pomodoro.status === 'past' &&
+                                                    <button type="button" className="btn btn-sm btn-outline-danger py-0 px-2" onClick={() => deleltePastPomodoro(pomodoro.id)}>
+                                                        <i className="align-middle bi bi-trash" />
+                                                    </button>
+                                                }
+                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateCommentsData(pomodoro)}>
+                                                    <i className="align-middle bi bi-chat-right-text" />
+                                                </button>
+                                            </div>
+                                        }
+                                    </td>
+                                </tr>
                             )
-                        }
-                    </tbody>
-                </table>
-            </small>
+                        )
+                    }
+                </tbody>
+            </table>
             {
                 showCommentsId !== -1 &&
                 <ListCommentsComponent

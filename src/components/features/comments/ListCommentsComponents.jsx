@@ -85,10 +85,12 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                                                 <span className="me-1 bi bi-link-45deg" />
                                             ) ||
                                             (filterBy === 'project' &&
-                                                <span className="me-1 bi bi-folder-plus" />
+                                                <span className="me-1 bi bi-folder2" />
                                             ) ||
                                             (filterBy === 'task' &&
-                                                <span className="me-1 bi bi-list-ul" />
+                                                <span className="badge rounded-pill text-bg-light">
+                                                    <span className="bi bi-list-ul" />
+                                                </span>
                                             ) ||
                                             (filterBy === 'pomodoro' &&
                                                 <span className="me-1 bi bi-hourglass" />
@@ -105,7 +107,9 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                                 <div className="col-2 text-end">
                                     {
                                         !showCreateComment &&
-                                        <i className="p-1 bi bi-plus-square" onClick={() => setShowCreateComment(true)}></i>
+                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowCreateComment(true)}>
+                                            <i className="bi bi-plus-circle"></i>
+                                        </button>
                                     }
                                 </div>
                             </div>
@@ -114,8 +118,8 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                                 comments.map(
                                     comment => (
                                         <div key={comment.id} className="row">
-                                            <div className="col-12 text-truncate text-start mb-2">
-                                                <div className="badge text-bg-secondary text-start text-wrap ps-2" style={{ fontSize: '0.7rem' }}>
+                                            <div className="col-12 text-truncate text-start mb-3">
+                                                <div className="badge text-bg-secondary fw-normal text-start text-wrap" style={{ fontSize: '0.7rem' }}>
                                                     <span>{
                                                         moment(comment.createdAt).fromNow(true)
                                                     }</span>
@@ -130,7 +134,7 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                                                     {
                                                         comment.project &&
                                                         <span>
-                                                            <span className="ms-2 me-1 bi bi-folder-plus" />
+                                                            <span className="ms-2 me-1 bi bi-folder2" />
                                                             {comment.project}
                                                         </span>
                                                     }

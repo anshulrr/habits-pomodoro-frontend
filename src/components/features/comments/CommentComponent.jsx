@@ -71,7 +71,7 @@ export default function CommentComponent({ setComments, filterBy, id, title, set
                             >Cancel</button>
                             <button
                                 type="submit"
-                                className="btn btn-sm btn-success"
+                                className="btn btn-sm btn-outline-success"
                             >Save Comment</button>
                         </div>
                     </div>

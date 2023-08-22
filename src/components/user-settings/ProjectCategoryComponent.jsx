@@ -141,7 +141,7 @@ export default function ProjectCategoryComponent({
                                             !category &&
                                             <span>
                                                 <button className="me-2 btn btn-sm btn-outline-secondary" type="button" onClick={() => setNewCategory(false)}>Cancel</button>
-                                                <button className="btn btn-sm btn-success" type="submit">Create Project Category</button>
+                                                <button className="btn btn-sm btn-outline-success" type="submit">Create Project Category</button>
                                             </span>
                                         }
                                     </div>

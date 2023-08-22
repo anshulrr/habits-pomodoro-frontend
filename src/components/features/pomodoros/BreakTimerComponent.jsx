@@ -137,7 +137,7 @@ export default function BreakTimerComponent({ startAgain }) {
 
             {
                 breakStatus === 'break_started' &&
-                <div className="btn btn-sm btn-outline-success m-2" onClick={() => updateBreak('break_finished')}>Finish Break</div>
+                <div className="btn btn-sm btn-secondary m-2" onClick={() => updateBreak('break_finished')}>Finish Break</div>
             }
 
             {

@@ -74,22 +74,22 @@ export default function ListProjectsComponent() {
                 <div className="col-md-4 mt-3 border-bottom border-2">
                     {/* {message && <div className="alert alert-warning">{message}</div>} */}
                     <div>
-                        <div className="row">
-                            <div className="col-10">
-                                <h5>
-                                    <span>
-                                        Projects
-                                    </span>
-                                    <span className="ms-1 badge rounded-pill text-bg-secondary">
-                                        {projectsCount}
-                                        <span className="ms-1 bi bi-folder-plus" />
-                                    </span>
-                                </h5>
-                            </div>
-                            <div className="col-2 text-end">
-                                <i className="p-1 bi bi-plus-square" onClick={addNewProject}></i>
-                            </div>
+
+                        <div className="d-flex justify-content-between">
+                            <h5>
+                                <span>
+                                    Projects
+                                </span>
+                                <span className="ms-1 badge rounded-pill text-bg-secondary">
+                                    {projectsCount}
+                                    <span className="ms-1 bi bi-folder2" />
+                                </span>
+                            </h5>
+                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={addNewProject}>
+                                <i className="bi bi-plus-circle" ></i>
+                            </button>
                         </div>
+
                         {
                             projects.map(
                                 proj => (
@@ -104,21 +104,25 @@ export default function ListProjectsComponent() {
                                             <span style={{ color: proj.color }}>&#9632; </span>
                                             <span>{proj.name}</span>
                                         </div>
-                                        <div className="col px-1 text-secondary text-truncate text-end">
-                                            <span>
-                                                <small>
-                                                    <small className="ms-1 bi bi-link-45deg" style={{ paddingRight: '0.1rem' }} />
-                                                    {proj.category}
-                                                </small>
-                                                <small>
-                                                    <small className="ms-1 bi bi-hourglass" />
-                                                    {proj.pomodoroLength || userSettings.pomodoroLength}
-                                                </small>
+                                        <div className="col-4 ps-0 text-secondary text-truncate text-end list-details">
+                                            <span className="badge rounded-pill text-bg-light fw-normal">
+                                                <small className="bi bi-link-45deg" style={{ paddingRight: '0.1rem' }} />
+                                                {proj.category}
+                                            </span>
+                                            <span className="badge rounded-pill text-bg-light fw-normal">
+                                                <small className="bi bi-hourglass" />
+                                                {proj.pomodoroLength || userSettings.pomodoroLength}
                                             </span>
                                         </div>
-                                        <div className="col-2 px-0 text-secondary text-end list-button">
-                                            <i className="p-1 me-1 bi bi-chat-right-text" onClick={() => setShowCommentsId(proj.id)} />
-                                            <i className="p-1 bi bi-pencil-square" onClick={() => updateProject(proj.id)}></i>
+                                        <div className="col-4 ps-0 text-secondary text-end list-button">
+                                            <div className="input-group justify-content-end">
+                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowCommentsId(proj.id)}>
+                                                    <i className="bi bi-chat-right-text" />
+                                                </button>
+                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateProject(proj.id)}>
+                                                    <i className="bi bi-pencil-square"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 )

@@ -64,7 +64,12 @@ export default function TaskComponent() {
 
     return (
         <div className="container">
-            <h4>{state.project.name}</h4>
+            <h4>
+                <span className="badge rounded-pill text-bg-light">
+                    <span className="bi bi-folder2" />
+                </span>
+                {state.project.name}
+            </h4>
             <div>
                 <Formik initialValues={{ description, pomodoroLength, status }}
                     enableReinitialize={true}
@@ -96,7 +101,7 @@ export default function TaskComponent() {
                                     </div>
                                     <div className="col-md-12 mb-3">
                                         <button className="me-2 btn btn-sm btn-outline-secondary" type="button" onClick={() => navigate('/projects', { state })}>Cancel</button>
-                                        <button className="btn btn-sm btn-success" type="submit">Save Task</button>
+                                        <button className="btn btn-sm btn-outline-success" type="submit">Save Task</button>
                                     </div>
                                 </div>
                             </Form>

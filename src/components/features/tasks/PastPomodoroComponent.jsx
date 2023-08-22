@@ -21,7 +21,7 @@ export default function PastPomodoroComponent({ showCreatePastPomodoro, setShowC
     function handleOnChange(fun, val) {
         setErrorMessage('')
         if (val === '' || val <= 0 || val > (task.pomodoroLength || project.pomodoroLength || userSettings.pomodoroLength)) {
-            setErrorMessage("mintues for past pomodoro must be less than task length")
+            setErrorMessage("mintues for past pomodoro must be less than task settings")
         }
 
         fun(val)
@@ -48,7 +48,7 @@ export default function PastPomodoroComponent({ showCreatePastPomodoro, setShowC
 
     return (
         showCreatePastPomodoro === task.id &&
-        <div className="row m-0 p-0">
+        <div className="row m-0 px-0 pt-1">
             <div className="col-4 px-0 text-end">
                 <DatePicker
                     className="form-control form-control-sm"
@@ -66,7 +66,7 @@ export default function PastPomodoroComponent({ showCreatePastPomodoro, setShowC
                         className="form-control form-control-sm"
                         value={minutesElapsed}
                         min={1}
-                        placeholder="Minutes"
+                        placeholder="Past Pomodoro Minutes"
                         onChange={(e) => handleOnChange(setMinutesElapsed, e.target.value)}
                     />
                     <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowCreatePastPomodoro(-1)}>
