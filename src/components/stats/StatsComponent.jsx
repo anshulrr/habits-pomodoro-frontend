@@ -20,6 +20,9 @@ export default function ListTasksComponent() {
 
     const [statsSettings, setStatsSettings] = useState({})
 
+    const [showIncludeCategories, setShowIncludeCategories] = useState(false)
+    const [showStatsSettings, setShowStatsSettings] = useState(false)
+
     const [reload, setReload] = useState(0)
 
     const [tasksChartButtonsStates, setTasksChartBButtonsStates] = useState({
@@ -72,29 +75,44 @@ export default function ListTasksComponent() {
 
             <div className="row">
                 <div className="col-md-4">
-                    <h6>
-                        Included Project Categories
-                        <span className="ms-1 badge rounded-pill text-bg-secondary">
-                            {includeCategories.length}
-                            <span className="ms-1 bi bi-link-45deg" />
-                        </span>
-                    </h6>
-                    <CategoryChecklistComponent
-                        key={categories}
-                        categories={categories}
-                        setIncludeCategories={setIncludeCategories}
-                        reload={reload}
-                        setReload={setReload}
-                    />
+                    <div className="d-flex justify-content-between">
+                        <h6>
+                            Included Project Categories
+                            <span className="ms-1 badge rounded-pill text-bg-secondary">
+                                {includeCategories.length}
+                                <span className="ms-1 bi bi-link-45deg" />
+                            </span>
+                        </h6>
+                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={() => setShowIncludeCategories(!showIncludeCategories)}>
+                            <i className="bi bi-pencil-square" />
+                        </button>
+                    </div>
+                    <div style={{ display: showIncludeCategories ? "block" : "none" }} >
+                        <CategoryChecklistComponent
+                            key={categories}
+                            categories={categories}
+                            setIncludeCategories={setIncludeCategories}
+                            reload={reload}
+                            setReload={setReload}
+                        />
+                    </div>
 
-                    <h6>Settings</h6>
-                    <StatsSettingsComponent
-                        statsSettings={statsSettings}
-                        setStatsSettings={setStatsSettings}
-                        reload={reload}
-                        setReload={setReload}
-                    />
+                    <div className="d-flex justify-content-between">
+                        <h6>Settings</h6>
+                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={() => setShowStatsSettings(!showStatsSettings)}>
+                            <i className="bi bi-pencil-square" />
+                        </button>
+                    </div>
+                    <div style={{ display: showStatsSettings ? "block" : "none" }} >
+                        <StatsSettingsComponent
+                            statsSettings={statsSettings}
+                            setStatsSettings={setStatsSettings}
+                            reload={reload}
+                            setReload={setReload}
+                        />
+                    </div>
                 </div>
+
                 {
                     includeCategories.length !== 0 && Object.keys(statsSettings).length !== 0 &&
                     <div className="col-md-8">
