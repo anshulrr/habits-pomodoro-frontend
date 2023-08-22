@@ -74,7 +74,7 @@ export default function SignupComponent() {
                             <div className="mb-3 text-danger"><small>{errorMessage}</small></div>
                             <button
                                 type="submit"
-                                className="btn btn-sm btn-outline-secondary mb-3"
+                                className="btn btn-sm btn-outline-success mb-3"
                                 name="changePassword"
                             >Sign up</button>
                             <div className="mb-3 text-success"><small>{successMessage}</small></div>
