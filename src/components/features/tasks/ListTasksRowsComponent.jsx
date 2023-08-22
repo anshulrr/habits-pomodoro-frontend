@@ -79,7 +79,7 @@ export default function ListTasksRowsComponent({
                             <div className="col-9 text-start px-0">
                                 {
                                     task.status === 'added' &&
-                                    <button type="button" className="btn btn-sm btn-success py-0 px-1 me-1">
+                                    <button type="button" className="btn btn-sm btn-outline-success py-0 px-1 me-1">
                                         <i className="bi bi-play-circle" onClick={() => createNewPomodoro(task, project)}></i>
                                     </button>
                                 }
@@ -105,7 +105,7 @@ export default function ListTasksRowsComponent({
                                 {
                                     showTaskUpdateId !== task.id &&
                                     <span className="task-list-update">
-                                        <button type="button" className="btn btn-sm btn-outline-success py-0 px-0">
+                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-0">
                                             <i className="bi bi-three-dots-vertical" onClick={() => setShowTaskUpdateId(task.id)} />
                                         </button>
                                     </span>
@@ -116,16 +116,16 @@ export default function ListTasksRowsComponent({
                                         <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1">
                                             <i className="bi bi-x-lg" onClick={() => setShowTaskUpdateId(-1)}></i>
                                         </button>
-                                        <button type="button" className="btn btn-sm btn-outline-success py-0 px-1">
+                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1">
                                             <i className="bi bi-chat-right-text" onClick={() => updateCommentsData(task)} />
                                         </button>
                                         {
                                             task.status === 'added' &&
-                                            <button type="button" className="btn btn-sm btn-outline-success py-0 px-1">
+                                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1">
                                                 <i className="bi bi-calendar-plus" onClick={() => setShowCreatePastPomodoro(task.id)}></i>
                                             </button>
                                         }
-                                        <button type="button" className="btn btn-sm btn-outline-success py-0 px-1">
+                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1">
                                             <i className="bi bi-pencil-square" onClick={() => updateTask(task.id)}></i>
                                         </button>
                                     </div>

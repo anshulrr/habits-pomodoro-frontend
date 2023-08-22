@@ -100,7 +100,7 @@ export default function CategoryChecklistComponent({ categories, setIncludeCateg
                 <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => selectAbove()}>Above</button>
                 <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => selectAll()}>All</button>
                 <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => selectNone()}>None</button>
-                <button className="btn btn-sm btn-outline-success" type="button" onClick={fetchSelected}>Fetch</button>
+                <button className="btn btn-sm btn-outline-secondary" type="button" onClick={fetchSelected}>Fetch</button>
             </div>
 
         </div>

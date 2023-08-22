@@ -105,7 +105,7 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                                 <div className="col-2 text-end">
                                     {
                                         !showCreateComment &&
-                                        <button type="button" className="btn btn-sm btn-outline-success py-0 px-1">
+                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1">
                                             <i className="bi bi-plus-circle" onClick={() => setShowCreateComment(true)}></i>
                                         </button>
                                     }

@@ -357,7 +357,7 @@ export default function UserSettingsComponent() {
             </div>
 
             <div className="col-md-12 text-end">
-                <button className="btn btn-sm btn-success" type="button" onClick={saveSettings}>Save</button>
+                <button className="btn btn-sm btn-outline-success" type="button" onClick={saveSettings}>Save</button>
                 <div className="text-danger"><small>{errorMessage}</small></div>
                 <div className="text-success"><small>{successMessage}</small></div>
             </div>

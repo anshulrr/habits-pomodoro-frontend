@@ -15,7 +15,7 @@ export default function SettingsComponent() {
                 <div className="col-md-12 px-4">
                     <h6 className="text-start pb-2">
                         Change Password &nbsp;
-                        <button type="button" className="btn btn-sm btn-outline-success py-0 px-1">
+                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1">
                             <i className="bi bi-pencil-square" onClick={() => setShowChangePassword(!showChangePassword)}></i>
                         </button>
                     </h6>

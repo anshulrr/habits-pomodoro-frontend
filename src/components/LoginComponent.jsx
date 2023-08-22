@@ -87,7 +87,7 @@ export default function LoginComponent() {
                                     <div className="mb-3">
                                         <button
                                             type="submit"
-                                            className="btn btn-sm btn-outline-success"
+                                            className="btn btn-sm btn-outline-secondary"
                                             name="login"
                                         >Sign in</button>
                                     </div>

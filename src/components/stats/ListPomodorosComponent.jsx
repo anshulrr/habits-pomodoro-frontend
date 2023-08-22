@@ -135,7 +135,7 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
                                         {
                                             showPomodoroUpdateId !== pomodoro.id &&
                                             <span className="task-list-update">
-                                                <button type="button" className="btn btn-sm btn-outline-success py-0 px-0">
+                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-0">
                                                     <i className="bi bi-three-dots-vertical" onClick={() => setShowPomodoroUpdateId(pomodoro.id)} />
                                                 </button>
                                             </span>
@@ -152,7 +152,7 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
                                                         <i className="align-middle bi bi-trash" onClick={() => deleltePastPomodoro(pomodoro.id)} />
                                                     </button>
                                                 }
-                                                <button type="button" className="btn btn-sm btn-outline-success py-0 px-1">
+                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1">
                                                     <i className="align-middle bi bi-chat-right-text" onClick={() => updateCommentsData(pomodoro)} />
                                                 </button>
                                             </div>

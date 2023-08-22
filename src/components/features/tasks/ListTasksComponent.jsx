@@ -130,7 +130,7 @@ export default function ListTasksComponent({ project }) {
                                 <span className="ms-1 bi bi-list-ul" />
                             </span>
                         </h6>
-                        <button type="button" className="btn btn-sm btn-outline-success py-0 px-1 mb-1">
+                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-1">
                             <i className="bi bi-plus-circle" onClick={() => setShowCreateTask(!showCreateTask)}></i>
                         </button>
                     </div>
@@ -149,7 +149,7 @@ export default function ListTasksComponent({ project }) {
                     <div className="overflow-scroll bg-white px-3" style={{ maxHeight: "85vh" }}>
                         {
                             tasksCount === 0 &&
-                            <div className="alert alert-warning">No task is added to this project</div>
+                            <div className="alert alert-warning py-1">No task is added to this project</div>
                         }
                         {
                             tasksCount !== 0 &&
@@ -174,7 +174,7 @@ export default function ListTasksComponent({ project }) {
                                     {completedTasksCount}
                                     <span className="ms-1 bi bi-list-ul" />
                                 </span>
-                                <button type="button" className="ms-1 btn btn-sm btn-outline-success py-0 px-1" onClick={() => setShowCompleted(!showCompleted)}>
+                                <button type="button" className="ms-1 btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowCompleted(!showCompleted)}>
                                     {!showCompleted && <i className="bi bi-arrow-down" />}
                                     {showCompleted && <i className="bi bi-arrow-up" />}
                                 </button>
@@ -201,7 +201,7 @@ export default function ListTasksComponent({ project }) {
                                     {archivedTasksCount}
                                     <span className="ms-1 bi bi-list-ul" />
                                 </span>
-                                <button type="button" className="ms-1 btn btn-sm btn-outline-success py-0 px-1" onClick={() => setShowArchived(!showArchived)}>
+                                <button type="button" className="ms-1 btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowArchived(!showArchived)}>
                                     {!showArchived && <i className="bi bi-arrow-down" />}
                                     {showArchived && <i className="bi bi-arrow-up" />}
                                 </button>
@@ -225,7 +225,7 @@ export default function ListTasksComponent({ project }) {
                 <div className="col-md-6 mt-3 border-bottom border-2">
                     <div className="d-flex justify-content-between mb-3">
                         <small className="text-danger">{message} </small>
-                        <button type="button" className="btn btn-sm btn-outline-success py-0 px-1 mb-1">
+                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-1">
                             <i className="bi bi-arrow-clockwise" onClick={() => getRunningPomodoro()}></i>
                         </button>
                     </div>

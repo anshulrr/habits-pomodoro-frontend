@@ -53,7 +53,7 @@ export default function ForgotPasswordComponent() {
                             <div className="mb-3">
                                 <button
                                     type="submit"
-                                    className="btn btn-sm btn-outline-success"
+                                    className="btn btn-sm btn-outline-secondary"
                                     name="forgot-password"
                                 >Get an email to reset password</button>
                             </div>
