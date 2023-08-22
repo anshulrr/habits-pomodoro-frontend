@@ -116,10 +116,10 @@ export default function ListProjectsComponent() {
                                         </div>
                                         <div className="col-4 ps-0 text-secondary text-end list-button">
                                             <div className="input-group justify-content-end">
-                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowCommentsId(proj.id)}>
+                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowCommentsId(proj.id)}>
                                                     <i className="bi bi-chat-right-text" />
                                                 </button>
-                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => updateProject(proj.id)}>
+                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateProject(proj.id)}>
                                                     <i className="bi bi-pencil-square"></i>
                                                 </button>
                                             </div>

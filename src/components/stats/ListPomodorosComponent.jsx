@@ -148,11 +148,11 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
                                                 </button>
                                                 {
                                                     pomodoro.status === 'past' &&
-                                                    <button type="button" className="btn btn-sm btn-outline-danger py-0 px-1" onClick={() => deleltePastPomodoro(pomodoro.id)}>
+                                                    <button type="button" className="btn btn-sm btn-outline-danger py-0 px-2" onClick={() => deleltePastPomodoro(pomodoro.id)}>
                                                         <i className="align-middle bi bi-trash" />
                                                     </button>
                                                 }
-                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => updateCommentsData(pomodoro)}>
+                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateCommentsData(pomodoro)}>
                                                     <i className="align-middle bi bi-chat-right-text" />
                                                 </button>
                                             </div>

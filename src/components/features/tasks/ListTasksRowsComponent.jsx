@@ -116,16 +116,16 @@ export default function ListTasksRowsComponent({
                                         <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowTaskUpdateId(-1)}>
                                             <i className="bi bi-x-lg" ></i>
                                         </button>
-                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => updateCommentsData(task)}>
+                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateCommentsData(task)}>
                                             <i className="bi bi-chat-right-text" />
                                         </button>
                                         {
                                             task.status === 'added' &&
-                                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowCreatePastPomodoro(task.id)}>
+                                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowCreatePastPomodoro(task.id)}>
                                                 <i className="bi bi-calendar-plus" />
                                             </button>
                                         }
-                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => updateTask(task.id)}>
+                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateTask(task.id)}>
                                             <i className="bi bi-pencil-square" />
                                         </button>
                                     </div>
