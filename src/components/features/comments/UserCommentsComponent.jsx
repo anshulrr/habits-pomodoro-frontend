@@ -8,7 +8,10 @@ export default function UserCommentsComponent() {
     return (
         <div>
             <span className="user-comments-icon">
-                <i className="bi bi-chat-right-text" onClick={() => setShowComments(-showComments)} />
+                <button type="button" className="btn btn-sm btn-outline-success py-0 px-1">
+
+                    <i className="bi bi-chat-right-text" onClick={() => setShowComments(-showComments)} />
+                </button>
             </span>
             {
                 showComments === 1 &&

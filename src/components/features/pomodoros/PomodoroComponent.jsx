@@ -215,9 +215,9 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
                         <span className="bi bi-list-ul" />
                     </span>
                     {pomodoro.task.description}
-                    <small>
-                        <i className="p-1 ms-1 bi bi-chat-right-text" onClick={() => updateCommentsData(pomodoro)} />
-                    </small>
+                    <button type="button" className="btn btn-sm btn-outline-success ms-1 py-0 px-1">
+                        <i className="bi bi-chat-right-text" onClick={() => updateCommentsData(pomodoro)} />
+                    </button>
                 </h5>
                 {
                     status !== 'completed' &&

@@ -75,7 +75,9 @@ export default function ListProjectCategoriesComponent() {
                                 </h6>
                             </div>
                             <div className="col-2 text-end">
-                                <i className="p-1 bi bi-plus-square" onClick={addNewProjectCategory}></i>
+                                <button type="button" className="btn btn-sm btn-outline-success py-0 px-1 mb-1">
+                                    <i className="bi bi-plus-circle" onClick={addNewProjectCategory}></i>
+                                </button>
                             </div>
                         </div>
                         <small>

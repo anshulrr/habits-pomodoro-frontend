@@ -85,7 +85,7 @@ export default function ListProjectsComponent() {
                                     <span className="ms-1 bi bi-folder-plus" />
                                 </span>
                             </h5>
-                            <button type="button" className="btn btn-sm btn-outline-success py-0 mb-2">
+                            <button type="button" className="btn btn-sm btn-outline-success py-0 px-1 mb-2">
                                 <i className="bi bi-plus-circle" onClick={addNewProject}></i>
                             </button>
                         </div>
