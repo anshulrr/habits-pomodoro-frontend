@@ -72,7 +72,7 @@ export default function PastPomodoroComponent({ showCreatePastPomodoro, setShowC
                     <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowCreatePastPomodoro(-1)}>
                         <i className="bi bi-x-lg" />
                     </button>
-                    <button className="btn btn-sm btn-outline-success" type="button" onClick={() => createPastPomodoro()}>
+                    <button className="btn btn-sm btn-success" type="button" onClick={() => createPastPomodoro()}>
                         Save
                     </button>
                 </div>

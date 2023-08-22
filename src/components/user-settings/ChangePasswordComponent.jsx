@@ -81,7 +81,7 @@ export default function ChangePasswordComponent() {
                             <div className="">
                                 <button
                                     type="submit"
-                                    className="btn btn-sm btn-outline-success"
+                                    className="btn btn-sm btn-success"
                                     name="changePassword"
                                 >Change Password</button>
                             </div>

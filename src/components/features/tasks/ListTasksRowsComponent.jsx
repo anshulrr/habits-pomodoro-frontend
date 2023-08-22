@@ -79,9 +79,11 @@ export default function ListTasksRowsComponent({
                             <div className="col-9 text-start px-0">
                                 {
                                     task.status === 'added' &&
-                                    <i className="p-1 bi bi-play-circle" onClick={() => createNewPomodoro(task, project)}></i>
+                                    <button type="button" className="btn btn-sm btn-success py-0 px-1 me-1">
+                                        <i className="bi bi-play-circle" onClick={() => createNewPomodoro(task, project)}></i>
+                                    </button>
                                 }
-                                <span className={task.status === 'completed' ? "text-secondary" : ""}>
+                                <span className={task.status === 'archived' ? "text-secondary" : ""}>
                                     {task.description}
                                 </span>
                             </div>

@@ -168,6 +168,33 @@ export default function ListTasksComponent({ project }) {
                         <div className="mt-3">
                             <div className="d-flex justify-content-center">
                                 <span className="badge me-1 text-bg-light">
+                                    Completed
+                                </span>
+                                <span className="badge rounded-pill text-bg-secondary">
+                                    {completedTasksCount}
+                                    <span className="ms-1 bi bi-list-ul" />
+                                </span>
+                                <button type="button" className="ms-1 btn btn-sm btn-outline-success py-0 px-1" onClick={() => setShowCompleted(!showCompleted)}>
+                                    {!showCompleted && <i className="bi bi-arrow-down" />}
+                                    {showCompleted && <i className="bi bi-arrow-up" />}
+                                </button>
+                            </div>
+                            {
+                                showCompleted && completedTasksCount !== 0 &&
+                                <ListTasksRowsComponent
+                                    key={project.id}
+                                    status={'completed'}
+                                    tasksCount={completedTasksCount}
+                                    project={project}
+                                    createNewPomodoro={createNewPomodoro}
+                                    updateTask={updateTask}
+                                />
+                            }
+                        </div>
+
+                        <div className="mt-3">
+                            <div className="d-flex justify-content-center">
+                                <span className="badge me-1 text-bg-light">
                                     Archived
                                 </span>
                                 <span className="badge rounded-pill text-bg-secondary">
@@ -186,33 +213,6 @@ export default function ListTasksComponent({ project }) {
                                     key={project.id}
                                     status={'archived'}
                                     tasksCount={archivedTasksCount}
-                                    project={project}
-                                    createNewPomodoro={createNewPomodoro}
-                                    updateTask={updateTask}
-                                />
-                            }
-                        </div>
-
-                        <div className="mt-3">
-                            <div className="d-flex justify-content-center">
-                                <span className="badge me-1 text-bg-light">
-                                    Completed
-                                </span>
-                                <span className="badge rounded-pill text-bg-secondary">
-                                    {completedTasksCount}
-                                    <span className="ms-1 bi bi-list-ul" />
-                                </span>
-                                <button type="button" className="ms-1 btn btn-sm btn-outline-success py-0 px-1" onClick={() => setShowCompleted(!showCompleted)}>
-                                    {!showCompleted && <i className="bi bi-arrow-down" />}
-                                    {showCompleted && <i className="bi bi-arrow-up" />}
-                                </button>
-                            </div>
-                            {
-                                showCompleted && completedTasksCount !== 0 &&
-                                <ListTasksRowsComponent
-                                    key={project.id}
-                                    status={'completed'}
-                                    tasksCount={completedTasksCount}
                                     project={project}
                                     createNewPomodoro={createNewPomodoro}
                                     updateTask={updateTask}
