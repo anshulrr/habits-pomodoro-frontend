@@ -115,25 +115,24 @@ export default function ListTasksComponent({ project }) {
         <div className="">
             <div className="row">
 
-                <div className="col-md-6 mt-3 border-bottom border-2">
-                    <div className="row">
-                        <div className="col-10">
-                            <h6>
-                                <span className="badge rounded-pill text-bg-light">
-                                    <span className="bi bi-folder-plus" />
-                                </span>
-                                <span>
-                                    {project.name}
-                                </span>
-                                <span className="ms-1 badge rounded-pill text-bg-secondary">
-                                    {tasksCount}
-                                    <span className="ms-1 bi bi-list-ul" />
-                                </span>
-                            </h6>
-                        </div>
-                        <div className="col-2 text-end">
-                            <i className="p-1 bi bi-plus-circle" onClick={() => setShowCreateTask(!showCreateTask)}></i>
-                        </div>
+                <div className="col-md-6 px-0 mt-3 border-bottom border-2">
+
+                    <div className="d-flex justify-content-between px-2">
+                        <h6>
+                            <span className="badge rounded-pill text-bg-light">
+                                <span className="bi bi-folder-plus" />
+                            </span>
+                            <span>
+                                {project.name}
+                            </span>
+                            <span className="ms-1 badge rounded-pill text-bg-secondary">
+                                {tasksCount}
+                                <span className="ms-1 bi bi-list-ul" />
+                            </span>
+                        </h6>
+                        <button type="button" className="btn btn-sm btn-outline-success py-0 mb-1">
+                            <i className="bi bi-plus-circle" onClick={() => setShowCreateTask(!showCreateTask)}></i>
+                        </button>
                     </div>
 
                     {
@@ -167,15 +166,20 @@ export default function ListTasksComponent({ project }) {
                         }
 
                         <div className="mt-3">
-                            <span className="badge me-1 text-bg-light" style={{ cursor: "pointer" }} onClick={() => setShowArchived(!showArchived)}>
-                                Archived
-                                {!showArchived && <i className="bi bi-arrow-down" />}
-                                {showArchived && <i className="bi bi-arrow-up" />}
-                            </span>
-                            <span className="badge rounded-pill text-bg-secondary">
-                                {archivedTasksCount}
-                                <span className="ms-1 bi bi-list-ul" />
-                            </span>
+                            <div className="d-flex justify-content-center">
+                                <span className="badge me-1 text-bg-light">
+                                    Archived
+                                </span>
+                                <span className="badge rounded-pill text-bg-secondary">
+                                    {archivedTasksCount}
+                                    <span className="ms-1 bi bi-list-ul" />
+                                </span>
+                                <button type="button" className="ms-1 btn btn-sm btn-outline-success py-0" onClick={() => setShowArchived(!showArchived)}>
+                                    {!showArchived && <i className="bi bi-arrow-down" />}
+                                    {showArchived && <i className="bi bi-arrow-up" />}
+                                </button>
+                            </div>
+
                             <small>
                                 {
                                     showArchived && archivedTasksCount !== 0 &&
@@ -192,15 +196,19 @@ export default function ListTasksComponent({ project }) {
                         </div>
 
                         <div className="mt-3">
-                            <span className="badge me-1 text-bg-light" style={{ cursor: "pointer" }} onClick={() => setShowCompleted(!showCompleted)}>
-                                Completed
-                                {!showCompleted && <i className="bi bi-arrow-down" />}
-                                {showCompleted && <i className="bi bi-arrow-up" />}
-                            </span>
-                            <span className="badge rounded-pill text-bg-secondary">
-                                {completedTasksCount}
-                                <span className="ms-1 bi bi-list-ul" />
-                            </span>
+                            <div className="d-flex justify-content-center">
+                                <span className="badge me-1 text-bg-light">
+                                    Completed
+                                </span>
+                                <span className="badge rounded-pill text-bg-secondary">
+                                    {completedTasksCount}
+                                    <span className="ms-1 bi bi-list-ul" />
+                                </span>
+                                <button type="button" className="ms-1 btn btn-sm btn-outline-success py-0" onClick={() => setShowCompleted(!showCompleted)}>
+                                    {!showCompleted && <i className="bi bi-arrow-down" />}
+                                    {showCompleted && <i className="bi bi-arrow-up" />}
+                                </button>
+                            </div>
                             <small>
                                 {
                                     showCompleted && completedTasksCount !== 0 &&
@@ -219,13 +227,11 @@ export default function ListTasksComponent({ project }) {
                 </div>
 
                 <div className="col-md-6 mt-3 border-bottom border-2">
-                    <div className="row mb-3">
-                        <div className="col-10 text-start">
-                            <small className="text-danger">{message} </small>
-                        </div>
-                        <div className="col-2 text-end">
-                            <i className="p-1 bi bi-arrow-clockwise" onClick={() => getRunningPomodoro()}></i>
-                        </div>
+                    <div className="d-flex justify-content-between mb-3">
+                        <small className="text-danger">{message} </small>
+                        <button type="button" className="btn btn-sm btn-outline-success py-0 mb-1">
+                            <i className="bi bi-arrow-clockwise" onClick={() => getRunningPomodoro()}></i>
+                        </button>
                     </div>
 
                     {

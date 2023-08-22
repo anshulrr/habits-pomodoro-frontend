@@ -43,10 +43,10 @@ export default function CreateTaskComponent({ setShowCreateTask, project, setTas
                                     required
                                 />
                                 <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowCreateTask(false)}>
-                                    <i className="bi bi-x-lg" />
+                                    <i className="align-middle bi bi-x-lg" />
                                 </button>
                                 <button className="btn btn-sm btn-outline-success" type="submit">
-                                    <i className="bi bi-plus-circle" />
+                                    <i className="align-middle bi bi-plus-circle" />
                                 </button>
                             </div>
                         </div>
