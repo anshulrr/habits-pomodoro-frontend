@@ -48,7 +48,7 @@ export default function PastPomodoroComponent({ showCreatePastPomodoro, setShowC
 
     return (
         showCreatePastPomodoro === task.id &&
-        <div className="row m-0 p-0">
+        <div className="row m-0 px-0 pt-1">
             <div className="col-4 px-0 text-end">
                 <DatePicker
                     className="form-control form-control-sm"

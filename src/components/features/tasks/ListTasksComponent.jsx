@@ -180,19 +180,17 @@ export default function ListTasksComponent({ project }) {
                                 </button>
                             </div>
 
-                            <small>
-                                {
-                                    showArchived && archivedTasksCount !== 0 &&
-                                    <ListTasksRowsComponent
-                                        key={project.id}
-                                        status={'archived'}
-                                        tasksCount={archivedTasksCount}
-                                        project={project}
-                                        createNewPomodoro={createNewPomodoro}
-                                        updateTask={updateTask}
-                                    />
-                                }
-                            </small>
+                            {
+                                showArchived && archivedTasksCount !== 0 &&
+                                <ListTasksRowsComponent
+                                    key={project.id}
+                                    status={'archived'}
+                                    tasksCount={archivedTasksCount}
+                                    project={project}
+                                    createNewPomodoro={createNewPomodoro}
+                                    updateTask={updateTask}
+                                />
+                            }
                         </div>
 
                         <div className="mt-3">
@@ -209,19 +207,17 @@ export default function ListTasksComponent({ project }) {
                                     {showCompleted && <i className="bi bi-arrow-up" />}
                                 </button>
                             </div>
-                            <small>
-                                {
-                                    showCompleted && completedTasksCount !== 0 &&
-                                    <ListTasksRowsComponent
-                                        key={project.id}
-                                        status={'completed'}
-                                        tasksCount={completedTasksCount}
-                                        project={project}
-                                        createNewPomodoro={createNewPomodoro}
-                                        updateTask={updateTask}
-                                    />
-                                }
-                            </small>
+                            {
+                                showCompleted && completedTasksCount !== 0 &&
+                                <ListTasksRowsComponent
+                                    key={project.id}
+                                    status={'completed'}
+                                    tasksCount={completedTasksCount}
+                                    project={project}
+                                    createNewPomodoro={createNewPomodoro}
+                                    updateTask={updateTask}
+                                />
+                            }
                         </div>
                     </div >
                 </div>

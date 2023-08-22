@@ -30,6 +30,8 @@ export default function ListTasksRowsComponent({
     const [showCommentsId, setShowCommentsId] = useState(-1);
     const [commentsTitle, setCommentsTitle] = useState('')
 
+    const [showTaskUpdateId, setShowTaskUpdateId] = useState(-1);
+
     useEffect(
         () => {
             refreshTasks(status)
@@ -85,28 +87,47 @@ export default function ListTasksRowsComponent({
                             </div>
 
                             <div className="col-3 px-0 text-secondary text-end text-truncate">
-                                <span className="small task-list-details">
-                                    <span className="badge rounded-pill text-bg-secondary fw-normal">
-                                        {timeToDisplay(task.pomodorosTimeElapsed / 60)}
-                                        <small className="ps-1 bi bi-clock" />
+                                {
+                                    showTaskUpdateId !== task.id &&
+                                    <span className="small task-list-details">
+                                        <span className="badge rounded-pill text-bg-secondary fw-normal">
+                                            {timeToDisplay(task.pomodorosTimeElapsed / 60)}
+                                            <small className="ps-1 bi bi-clock" />
+                                        </span>
+                                        <span className="badge rounded-pill text-bg-light fw-normal">
+                                            <small className="bi bi-hourglass" />
+                                            {timeToDisplay(task.pomodoroLength || project.pomodoroLength || userSettings.pomodoroLength)}
+                                        </span>
                                     </span>
-                                    <span className="badge rounded-pill text-bg-light fw-normal">
-                                        <small className="bi bi-hourglass" />
-                                        {timeToDisplay(task.pomodoroLength || project.pomodoroLength || userSettings.pomodoroLength)}
+                                }
+                                {
+                                    showTaskUpdateId !== task.id &&
+                                    <span className="task-list-update">
+                                        <button type="button" className="btn btn-sm btn-outline-success py-0 px-0">
+                                            <i className="bi bi-three-dots-vertical" onClick={() => setShowTaskUpdateId(task.id)} />
+                                        </button>
                                     </span>
-                                </span>
-
-                                <span className="task-list-update">
-                                    <div className="text-secondary text-end task-list-buttons">
-                                        <i className="p-1 bi bi-chat-right-text" onClick={() => updateCommentsData(task)} />
+                                }
+                                {
+                                    showTaskUpdateId === task.id &&
+                                    <div className="input-group justify-content-end">
+                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1">
+                                            <i className="bi bi-x-lg" onClick={() => setShowTaskUpdateId(-1)}></i>
+                                        </button>
+                                        <button type="button" className="btn btn-sm btn-outline-success py-0 px-1">
+                                            <i className="bi bi-chat-right-text" onClick={() => updateCommentsData(task)} />
+                                        </button>
                                         {
                                             task.status === 'added' &&
-                                            <i className="p-1 bi bi-calendar-plus" onClick={() => setShowCreatePastPomodoro(task.id)}></i>
+                                            <button type="button" className="btn btn-sm btn-outline-success py-0 px-1">
+                                                <i className="bi bi-calendar-plus" onClick={() => setShowCreatePastPomodoro(task.id)}></i>
+                                            </button>
                                         }
-                                        <i className="p-1 bi bi-pencil-square" onClick={() => updateTask(task.id)}></i>
+                                        <button type="button" className="btn btn-sm btn-outline-success py-0 px-1">
+                                            <i className="bi bi-pencil-square" onClick={() => updateTask(task.id)}></i>
+                                        </button>
                                     </div>
-                                    <i className="p-1 bi bi-three-dots-vertical"></i>
-                                </span>
+                                }
                             </div>
 
                             {

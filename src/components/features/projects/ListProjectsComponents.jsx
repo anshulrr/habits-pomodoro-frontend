@@ -104,7 +104,7 @@ export default function ListProjectsComponent() {
                                             <span style={{ color: proj.color }}>&#9632; </span>
                                             <span>{proj.name}</span>
                                         </div>
-                                        <div className="col-4 px-0 text-secondary text-truncate text-end list-details">
+                                        <div className="col-4 ps-0 text-secondary text-truncate text-end list-details">
                                             <span className="badge rounded-pill text-bg-light fw-normal">
                                                 <small className="bi bi-link-45deg" style={{ paddingRight: '0.1rem' }} />
                                                 {proj.category}
@@ -114,9 +114,15 @@ export default function ListProjectsComponent() {
                                                 {proj.pomodoroLength || userSettings.pomodoroLength}
                                             </span>
                                         </div>
-                                        <div className="col-4 px-0 text-secondary text-end list-button">
-                                            <i className="p-1 me-1 bi bi-chat-right-text" onClick={() => setShowCommentsId(proj.id)} />
-                                            <i className="p-1 bi bi-pencil-square" onClick={() => updateProject(proj.id)}></i>
+                                        <div className="col-4 ps-0 text-secondary text-end list-button">
+                                            <div className="input-group justify-content-end">
+                                                <button type="button" className="btn btn-sm btn-outline-success py-0 px-1">
+                                                    <i className="bi bi-chat-right-text" onClick={() => setShowCommentsId(proj.id)} />
+                                                </button>
+                                                <button type="button" className="btn btn-sm btn-outline-success py-0 px-1">
+                                                    <i className="bi bi-pencil-square" onClick={() => updateProject(proj.id)}></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 )
