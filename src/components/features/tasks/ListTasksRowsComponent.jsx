@@ -76,7 +76,7 @@ export default function ListTasksRowsComponent({
                             key={task.id}
                             className="row py-2 task-list-row"
                         >
-                            <div className="col-9 text-start px-0">
+                            <div className="col-8 text-start px-0">
                                 {
                                     task.status === 'added' &&
                                     <button type="button" className="btn btn-sm btn-outline-success py-0 px-1 me-1" onClick={() => createNewPomodoro(task, project)}>
@@ -88,7 +88,7 @@ export default function ListTasksRowsComponent({
                                 </span>
                             </div>
 
-                            <div className="col-3 px-0 text-secondary text-end text-truncate">
+                            <div className="col-4 px-0 text-secondary text-end text-truncate">
                                 {
                                     showTaskUpdateId !== task.id &&
                                     <span className="small task-list-details">

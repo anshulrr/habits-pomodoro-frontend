@@ -5,7 +5,7 @@ import { calculateScaleAndLabel, calculateScaleForAdjustedAvg, truncateString } 
 
 import { Buttons } from "components/stats/charts/Buttons";
 
-import { Doughnut } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 import { CategoryScale } from 'chart.js';
 import Chart from 'chart.js/auto';
 Chart.register(CategoryScale);
@@ -50,7 +50,7 @@ export const TasksChart = ({ includeCategories, statsSettings, buttonsStates, se
                 response.data.forEach(element => {
                     // console.debug(element);
                     updated_data.colors.push(element[2]);
-                    updated_data.labels.push(truncateString(element[1], 30));
+                    updated_data.labels.push(truncateString(element[1], 20));
                     updated_data.data.push(element[0] / scale);
                 });
                 // console.debug(updated_data);
@@ -69,7 +69,7 @@ export const TasksChart = ({ includeCategories, statsSettings, buttonsStates, se
             />
 
             <div className="chart-container">
-                <Doughnut
+                <Bar
                     data={
                         {
                             labels: chartData.labels,
@@ -79,9 +79,9 @@ export const TasksChart = ({ includeCategories, statsSettings, buttonsStates, se
                                     data: chartData.data,
                                     // you can set indiviual colors for each bar
                                     backgroundColor: chartData.colors,
-                                    // borderWidth: 1,
-                                    // barThickness: 6,  // number (pixels) or 'flex'
-                                    // maxBarThickness: 8 // number (pixels)
+                                    borderWidth: 1,
+                                    barThickness: 6,  // number (pixels) or 'flex'
+                                    maxBarThickness: 8 // number (pixels)
                                 }
                             ]
                         }
@@ -89,18 +89,15 @@ export const TasksChart = ({ includeCategories, statsSettings, buttonsStates, se
                     }
                     options={{
                         responsive: true,
+                        maintainAspectRatio: true,
+                        aspectRatio: 1,
                         plugins: {
                             title: {
                                 display: true,
                                 text: chartData.label
                             },
                             legend: {
-
-                                display: true,
-                                position: 'right',
-                                labels: {
-                                    boxWidth: 10
-                                }
+                                display: false
                             }
                         }
                     }}

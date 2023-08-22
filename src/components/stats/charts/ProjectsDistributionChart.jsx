@@ -5,7 +5,7 @@ import { calculateScaleAndLabel, calculateScaleForAdjustedAvg } from "services/h
 
 import { Buttons } from "components/stats/charts/Buttons";
 
-import { Bar } from "react-chartjs-2";
+import { Doughnut } from "react-chartjs-2";
 import { CategoryScale } from 'chart.js';
 import Chart from 'chart.js/auto';
 Chart.register(CategoryScale);
@@ -67,7 +67,7 @@ export const ProjectsDistributionChart = ({ includeCategories, statsSettings, bu
                 setButtonsStates={setButtonsStates}
             />
             <div className="chart-container">
-                <Bar
+                <Doughnut
                     data={
                         {
                             labels: chartData.labels,
@@ -77,24 +77,27 @@ export const ProjectsDistributionChart = ({ includeCategories, statsSettings, bu
                                     data: chartData.data,
                                     // you can set indiviual colors for each bar
                                     backgroundColor: chartData.colors,
-                                    borderWidth: 1,
-                                    barThickness: 6,  // number (pixels) or 'flex'
-                                    maxBarThickness: 8 // number (pixels)
+                                    // borderWidth: 1,
+                                    // barThickness: 6,  // number (pixels) or 'flex'
+                                    // maxBarThickness: 8 // number (pixels)
                                 }
                             ]
                         }
 
                     }
                     options={{
-                        maintainAspectRatio: true,
-                        aspectRatio: 1,
+                        responsive: true,
                         plugins: {
                             title: {
                                 display: true,
                                 text: chartData.label
                             },
                             legend: {
-                                display: false,
+                                display: true,
+                                position: 'right',
+                                labels: {
+                                    boxWidth: 10
+                                }
                             }
                         }
                     }}
