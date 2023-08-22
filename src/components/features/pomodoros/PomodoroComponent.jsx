@@ -204,8 +204,8 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
     return (
         <div className="PomodoroComponent">
             <div className="">
-                <span className="badge rounded-pill text-bg-light">
-                    <span className="bi bi-folder-plus" />
+                <span className="text-secondary px-1">
+                    <span className="bi bi-folder2" />
                 </span>
                 <small>
                     {pomodoro.task.project.name}

@@ -85,10 +85,12 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                                                 <span className="me-1 bi bi-link-45deg" />
                                             ) ||
                                             (filterBy === 'project' &&
-                                                <span className="me-1 bi bi-folder-plus" />
+                                                <span className="me-1 bi bi-folder2" />
                                             ) ||
                                             (filterBy === 'task' &&
-                                                <span className="me-1 bi bi-list-ul" />
+                                                <span className="badge rounded-pill text-bg-light">
+                                                    <span className="bi bi-list-ul" />
+                                                </span>
                                             ) ||
                                             (filterBy === 'pomodoro' &&
                                                 <span className="me-1 bi bi-hourglass" />
@@ -132,7 +134,7 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                                                     {
                                                         comment.project &&
                                                         <span>
-                                                            <span className="ms-2 me-1 bi bi-folder-plus" />
+                                                            <span className="ms-2 me-1 bi bi-folder2" />
                                                             {comment.project}
                                                         </span>
                                                     }

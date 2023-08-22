@@ -66,7 +66,7 @@ export default function TaskComponent() {
         <div className="container">
             <h4>
                 <span className="badge rounded-pill text-bg-light">
-                    <span className="bi bi-folder-plus" />
+                    <span className="bi bi-folder2" />
                 </span>
                 {state.project.name}
             </h4>

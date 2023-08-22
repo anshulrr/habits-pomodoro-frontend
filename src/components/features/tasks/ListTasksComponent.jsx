@@ -119,8 +119,8 @@ export default function ListTasksComponent({ project }) {
 
                     <div className="d-flex justify-content-between">
                         <h6>
-                            <span className="badge rounded-pill text-bg-light">
-                                <span className="bi bi-folder-plus" />
+                            <span className="text-secondary mx-1">
+                                <span className="bi bi-folder2" />
                             </span>
                             <span>
                                 {project.name}

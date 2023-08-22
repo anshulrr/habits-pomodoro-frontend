@@ -82,7 +82,7 @@ export default function ListProjectsComponent() {
                                 </span>
                                 <span className="ms-1 badge rounded-pill text-bg-secondary">
                                     {projectsCount}
-                                    <span className="ms-1 bi bi-folder-plus" />
+                                    <span className="ms-1 bi bi-folder2" />
                                 </span>
                             </h5>
                             <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={addNewProject}>
