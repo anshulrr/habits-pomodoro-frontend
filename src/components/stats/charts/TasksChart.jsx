@@ -2,31 +2,13 @@ import { useState } from "react"
 
 import { getTasksPomodorosApi } from "services/api/PomodoroApiService";
 import { calculateScaleAndLabel, calculateScaleForAdjustedAvg, truncateString } from "services/helpers/chartHelper";
-
-import { Buttons } from "components/stats/charts/Buttons";
-
-import { Bar } from "react-chartjs-2";
-import { CategoryScale } from 'chart.js';
-import Chart from 'chart.js/auto';
-Chart.register(CategoryScale);
+import { BarChart } from "components/stats/charts/BarChart";
+import { DoughnutChart } from "components/stats/charts/DoughnutChart";
 
 export const TasksChart = ({ includeCategories, statsSettings, buttonsStates, setButtonsStates }) => {
     // console.debug('from TasksChart', includeCategories, statsSettings)
 
     const [chartData, setChartData] = useState({ label: '' })
-
-    // // for first time load (not needed)
-    // useEffect(
-    //     () => retrieveTasksPomodoros('daily', 0),
-    //     []
-    // )
-
-    // // not needed
-    // // for reload data retrival
-    // useEffect(
-    //     () => console.debug('reload tasks chart'),
-    //     [chartData]
-    // )
 
     function retrieveTasksPomodoros({ startDate, endDate, limit, offset }) {
         // console.debug(startDate, endDate)
@@ -61,48 +43,26 @@ export const TasksChart = ({ includeCategories, statsSettings, buttonsStates, se
     }
 
     return (
-        <div>
-            <Buttons
-                retrievePomodoros={retrieveTasksPomodoros}
-                buttonsStates={buttonsStates}
-                setButtonsStates={setButtonsStates}
-            />
-
-            <div className="chart-container">
-                <Bar
-                    data={
-                        {
-                            labels: chartData.labels,
-                            // datasets is an array of objects where each object represents a set of data to display corresponding to the labels above. for brevity, we'll keep it at one object
-                            datasets: [
-                                {
-                                    data: chartData.data,
-                                    // you can set indiviual colors for each bar
-                                    backgroundColor: chartData.colors,
-                                    borderWidth: 1,
-                                    barThickness: 6,  // number (pixels) or 'flex'
-                                    maxBarThickness: 8 // number (pixels)
-                                }
-                            ]
-                        }
-
-                    }
-                    options={{
-                        responsive: true,
-                        maintainAspectRatio: true,
-                        aspectRatio: 1,
-                        plugins: {
-                            title: {
-                                display: true,
-                                text: chartData.label
-                            },
-                            legend: {
-                                display: false
-                            }
-                        }
-                    }}
+        <>
+            {
+                statsSettings.tasksChartType === 'bar' &&
+                <BarChart
+                    chartData={chartData}
+                    retrievePomodoros={retrieveTasksPomodoros}
+                    setButtonsStates={setButtonsStates}
+                    buttonsStates={buttonsStates}
                 />
-            </div>
-        </div>
+            }
+
+            {
+                statsSettings.tasksChartType === 'doughnut' &&
+                <DoughnutChart
+                    chartData={chartData}
+                    retrievePomodoros={retrieveTasksPomodoros}
+                    setButtonsStates={setButtonsStates}
+                    buttonsStates={buttonsStates}
+                />
+            }
+        </>
     );
 };

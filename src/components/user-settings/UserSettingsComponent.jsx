@@ -22,6 +22,8 @@ export default function UserSettingsComponent() {
     const [pageProjectsCount, setPageProjectsCount] = useState(userSettings.pageProjectsCount)
     const [pageTasksCount, setPageTasksCount] = useState(userSettings.pageTasksCount)
     const [pageCommentsCount, setPageCommentsCount] = useState(userSettings.pageCommentsCount)
+    const [tasksChartType, setTasksChartType] = useState(userSettings.tasksChartType || "doughnut")
+    const [projectsChartType, setProjectsChartType] = useState(userSettings.projectsChartType || "bar")
 
     const [errorMessage, setErrorMessage] = useState('')
     const [successMessage, setSuccessMessage] = useState('')
@@ -50,7 +52,9 @@ export default function UserSettingsComponent() {
             enableStopwatchAudio,
             pageProjectsCount,
             pageTasksCount,
-            pageCommentsCount
+            pageCommentsCount,
+            tasksChartType,
+            projectsChartType
         }
         // console.debug(request_settings);
 
@@ -354,6 +358,45 @@ export default function UserSettingsComponent() {
                     </div>
                 </div>
 
+                <div className="col-md-4">
+                    <div className="input-group input-group-sm mb-2">
+                        <label className="input-group-text" htmlFor="tasksChartType">
+                            Tasks Chart Type
+                        </label>
+                        <div className="input-group-text p-0">
+                            <select
+                                className="form-select form-select-sm"
+                                name="tasks-chart-type"
+                                onChange={(e) => handleOnChange(setTasksChartType, e.target.value)}
+                                defaultValue={tasksChartType}
+                                id="tasksChartType"
+                            >
+                                <option value="bar">Bar</option>
+                                <option value="doughnut">Doughnut</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="col-md-4">
+                    <div className="input-group input-group-sm mb-2">
+                        <label className="input-group-text" htmlFor="projectsChartType">
+                            Projects Chart Type
+                        </label>
+                        <div className="input-group-text p-0">
+                            <select
+                                className="form-select form-select-sm"
+                                name="projects-chart-type"
+                                onChange={(e) => handleOnChange(setProjectsChartType, e.target.value)}
+                                defaultValue={projectsChartType}
+                                id="projectsChartType"
+                            >
+                                <option value="bar">Bar</option>
+                                <option value="doughnut">Doughnut</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div className="col-md-12 text-end">

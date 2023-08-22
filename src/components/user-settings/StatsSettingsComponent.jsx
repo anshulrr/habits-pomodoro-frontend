@@ -14,6 +14,8 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
     const [enableChartMonthlyAverage, setEnableChartMonthlyAverage] = useState(userSettings.enableChartMonthlyAverage)
     const [chartMonthlyAverage, setChartMonthlyAverage] = useState(userSettings.chartMonthlyAverage)
     const [enableChartAdjustedWeeklyMonthlyAverage, setEnableChartAdjustedWeeklyMonthlyAverage] = useState(userSettings.enableChartAdjustedWeeklyMonthlyAverage)
+    const [tasksChartType, setTasksChartType] = useState(userSettings.tasksChartType || "doughnut")
+    const [projectsChartType, setProjectsChartType] = useState(userSettings.projectsChartType || "bar")
 
     const [errorMessage, setErrorMessage] = useState('')
 
@@ -37,6 +39,8 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
             enableChartMonthlyAverage,
             chartMonthlyAverage,
             enableChartAdjustedWeeklyMonthlyAverage,
+            tasksChartType,
+            projectsChartType
         };
         // console.debug(updatedStatsSetting)
         setStatsSettings(updatedStatsSetting)
@@ -173,12 +177,52 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
                 </div>
             </div>
 
+            <div className="col-md-12 mb-2">
+                <div className="input-group input-group-sm mb-2">
+                    <label className="input-group-text" htmlFor="tasksChartType">
+                        Tasks Chart Type
+                    </label>
+                    <div className="input-group-text p-0">
+                        <select
+                            className="form-select form-select-sm"
+                            name="tasks-chart-type"
+                            onChange={(e) => handleOnChange(setTasksChartType, e.target.value)}
+                            defaultValue={tasksChartType}
+                            id="tasksChartType"
+                        >
+                            <option value="bar">Bar</option>
+                            <option value="doughnut">Doughnut</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div className="col-md-12 mb-2">
+                <div className="input-group input-group-sm mb-2">
+                    <label className="input-group-text" htmlFor="projectsChartType">
+                        Projects Chart Type
+                    </label>
+                    <div className="input-group-text p-0">
+                        <select
+                            className="form-select form-select-sm"
+                            name="projects-chart-type"
+                            onChange={(e) => handleOnChange(setProjectsChartType, e.target.value)}
+                            defaultValue={projectsChartType}
+                            id="projectsChartType"
+                        >
+                            <option value="bar">Bar</option>
+                            <option value="doughnut">Doughnut</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
             <div className="text-danger"><small>{errorMessage}</small></div>
 
             <div className="col-md-12 text-end">
                 <button className="btn btn-sm btn-outline-success" type="button" onClick={updateSettings}>Fetch</button>
             </div>
 
-        </div>
+        </div >
     )
 }
