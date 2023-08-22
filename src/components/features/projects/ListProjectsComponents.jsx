@@ -71,11 +71,11 @@ export default function ListProjectsComponent() {
     return (
         <div className="container">
             <div className="row mb-3">
-                <div className="col-md-4 px-0 mt-3 border-bottom border-2">
+                <div className="col-md-4 mt-3 border-bottom border-2">
                     {/* {message && <div className="alert alert-warning">{message}</div>} */}
                     <div>
 
-                        <div className="d-flex justify-content-between px-2">
+                        <div className="d-flex justify-content-between">
                             <h5>
                                 <span>
                                     Projects
@@ -95,34 +95,28 @@ export default function ListProjectsComponent() {
                                 proj => (
                                     <div
                                         key={proj.id}
-                                        className={(project && proj.id === project.id ? "list-selected " : "") + "d-flex justify-content-between p-2 list-row"}
+                                        className={(project && proj.id === project.id ? "list-selected " : "") + "row py-2 list-row"}
                                         onClick={() => setProject(proj)}
                                     >
                                         {/* todo: decide better solution for maxWidth */}
-                                        <div className="text-truncate text-start">
+                                        <div className="col-8 text-truncate text-start">
                                             {/* <Link to={"/projects/" + proj.id + "/tasks"} state={{ proj }}>{proj.name}</Link> */}
                                             <span style={{ color: proj.color }}>&#9632; </span>
                                             <span>{proj.name}</span>
                                         </div>
-                                        <div className="px-0 text-secondary text-truncate text-end list-details">
+                                        <div className="col-4 px-0 text-secondary text-truncate text-end list-details">
                                             <span className="badge rounded-pill text-bg-light fw-normal">
-                                                <span className="bi bi-link-45deg" style={{ paddingRight: '0.1rem' }} />
+                                                <small className="bi bi-link-45deg" style={{ paddingRight: '0.1rem' }} />
                                                 {proj.category}
                                             </span>
                                             <span className="badge rounded-pill text-bg-light fw-normal">
-                                                <span className="bi bi-hourglass" />
+                                                <small className="bi bi-hourglass" />
                                                 {proj.pomodoroLength || userSettings.pomodoroLength}
                                             </span>
                                         </div>
-                                        <div className="text-secondary list-button">
-                                            <div className="input-group justify-content-end">
-                                                <button type="button" className="btn btn-sm btn-outline-success py-0" onClick={() => setShowCommentsId(proj.id)}>
-                                                    <i className="align-middle bi bi-chat-right-text" />
-                                                </button>
-                                                <button type="button" className="btn btn-sm btn-outline-success py-0" onClick={() => updateProject(proj.id)}>
-                                                    <i className="align-middle bi bi-pencil-square" />
-                                                </button>
-                                            </div>
+                                        <div className="col-4 px-0 text-secondary text-end list-button">
+                                            <i className="p-1 me-1 bi bi-chat-right-text" onClick={() => setShowCommentsId(proj.id)} />
+                                            <i className="p-1 bi bi-pencil-square" onClick={() => updateProject(proj.id)}></i>
                                         </div>
                                     </div>
                                 )
