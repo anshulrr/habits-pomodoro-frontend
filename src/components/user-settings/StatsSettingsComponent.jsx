@@ -14,8 +14,8 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
     const [enableChartMonthlyAverage, setEnableChartMonthlyAverage] = useState(userSettings.enableChartMonthlyAverage)
     const [chartMonthlyAverage, setChartMonthlyAverage] = useState(userSettings.chartMonthlyAverage)
     const [enableChartAdjustedWeeklyMonthlyAverage, setEnableChartAdjustedWeeklyMonthlyAverage] = useState(userSettings.enableChartAdjustedWeeklyMonthlyAverage)
-    const [tasksChartType, setTasksChartType] = useState(userSettings.tasksChartType)
-    const [projectsChartType, setProjectsChartType] = useState(userSettings.projectsChartType)
+    const [tasksChartType, setTasksChartType] = useState(userSettings.tasksChartType || "doughnut")
+    const [projectsChartType, setProjectsChartType] = useState(userSettings.projectsChartType || "bar")
 
     const [errorMessage, setErrorMessage] = useState('')
 
