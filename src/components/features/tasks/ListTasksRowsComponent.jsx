@@ -114,7 +114,7 @@ export default function ListTasksRowsComponent({
                                     showTaskUpdateId === task.id &&
                                     <div className="input-group justify-content-end">
                                         <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowTaskUpdateId(-1)}>
-                                            <i className="bi bi-x-lg" ></i>
+                                            <i className="bi bi-x-lg" />
                                         </button>
                                         <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateCommentsData(task)}>
                                             <i className="bi bi-chat-right-text" />

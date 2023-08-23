@@ -94,6 +94,7 @@ export default function ListTasksComponent() {
                             setIncludeCategories={setIncludeCategories}
                             reload={reload}
                             setReload={setReload}
+                            setShowIncludeCategories={setShowIncludeCategories}
                         />
                     </div>
 
@@ -111,6 +112,7 @@ export default function ListTasksComponent() {
                             setStatsSettings={setStatsSettings}
                             reload={reload}
                             setReload={setReload}
+                            setShowStatsSettings={setShowStatsSettings}
                         />
                     </div>
                     <hr />
