@@ -119,12 +119,18 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
                                         {pomodoro.task}
                                     </td>
                                     <td width="45%" className="align-middle text-end">
-                                        {
-                                            showPomodoroUpdateId !== pomodoro.id &&
+                                        {showPomodoroUpdateId !== pomodoro.id &&
                                             <span className="task-list-details">
                                                 <span className="small text-secondary me-1">
-                                                    {moment.utc(pomodoro.startTime).local().format('H:mm')}-
-                                                    {moment.utc(pomodoro.endTime).local().format('H:mm')}
+                                                    {
+                                                        pomodoro.status !== 'past' &&
+                                                        <span>
+                                                            {moment.utc(pomodoro.startTime).local().format('H:mm')}-
+                                                        </span>
+                                                    }
+                                                    <span>
+                                                        {moment.utc(pomodoro.endTime).local().format('H:mm')}
+                                                    </span>
                                                 </span>
                                                 <span className="badge rounded-pill text-bg-secondary fw-normal">
                                                     {Math.round(pomodoro.timeElapsed / 60)}
