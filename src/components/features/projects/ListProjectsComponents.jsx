@@ -82,7 +82,7 @@ export default function ListProjectsComponent() {
                                 </span>
                                 <span className="ms-1 badge rounded-pill text-bg-secondary">
                                     {projectsCount}
-                                    <span className="ms-1 bi bi-folder2" />
+                                    <i className="ms-1 bi bi-folder2" />
                                 </span>
                             </h5>
                             <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={addNewProject}>
@@ -106,11 +106,11 @@ export default function ListProjectsComponent() {
                                         </div>
                                         <div className="col-4 ps-0 text-secondary text-truncate text-end list-details">
                                             <span className="badge rounded-pill text-bg-light fw-normal">
-                                                <small className="bi bi-link-45deg" style={{ paddingRight: '0.1rem' }} />
+                                                <i className="bi bi-link-45deg" style={{ paddingRight: '0.1rem' }} />
                                                 {proj.category}
                                             </span>
                                             <span className="badge rounded-pill text-bg-light fw-normal">
-                                                <small className="bi bi-hourglass" />
+                                                <i className="bi bi-hourglass" />
                                                 {proj.pomodoroLength || userSettings.pomodoroLength}
                                             </span>
                                         </div>

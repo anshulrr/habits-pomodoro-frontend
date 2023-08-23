@@ -85,25 +85,25 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                                     <h6>
                                         {
                                             (filterBy === 'category' &&
-                                                <span className="me-1 bi bi-link-45deg" />
+                                                <i className="me-1 bi bi-link-45deg" />
                                             ) ||
                                             (filterBy === 'project' &&
-                                                <span className="me-1 bi bi-folder2" />
+                                                <i className="me-1 bi bi-folder2" />
                                             ) ||
                                             (filterBy === 'task' &&
                                                 <span className="badge rounded-pill text-bg-light">
-                                                    <span className="bi bi-list-ul" />
+                                                    <i className="bi bi-list-ul" />
                                                 </span>
                                             ) ||
                                             (filterBy === 'pomodoro' &&
-                                                <span className="me-1 bi bi-hourglass" />
+                                                <i className="me-1 bi bi-hourglass" />
                                             )
 
                                         }
                                         {title}
                                         <span className="ms-1 badge rounded-pill text-bg-secondary">
                                             {commentsCount}
-                                            <span className="ms-1 bi bi-chat-right-text" />
+                                            <i className="ms-1 bi bi-chat-right-text" />
                                         </span>
                                     </h6>
                                 </div>
@@ -129,7 +129,7 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                                                     {
                                                         comment.category &&
                                                         <span>
-                                                            <span className="ms-2 bi bi-link-45deg" />
+                                                            <i className="ms-2 bi bi-link-45deg" />
                                                             {comment.category}
                                                         </span>
                                                     }
@@ -137,14 +137,14 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                                                     {
                                                         comment.project &&
                                                         <span>
-                                                            <span className="ms-2 me-1 bi bi-folder2" />
+                                                            <i className="ms-2 me-1 bi bi-folder2" />
                                                             {comment.project}
                                                         </span>
                                                     }
                                                     {
                                                         comment.task &&
                                                         <span>
-                                                            <span className="ms-2 me-1 bi bi-list-ul" />
+                                                            <i className="ms-2 me-1 bi bi-list-ul" />
                                                             {comment.task}
                                                         </span>
                                                     }

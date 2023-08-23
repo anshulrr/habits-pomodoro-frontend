@@ -70,7 +70,7 @@ export default function ListProjectCategoriesComponent() {
                                     Project Categories
                                     <span className="ms-1 badge rounded-pill text-bg-secondary">
                                         {categoriesCount}
-                                        <span className="ms-1 bi bi-link-45deg" />
+                                        <i className="ms-1 bi bi-link-45deg" />
                                     </span>
                                 </h6>
                             </div>

@@ -80,7 +80,7 @@ export default function ListTasksComponent() {
                             Included Project Categories
                             <span className="ms-1 badge rounded-pill text-bg-secondary">
                                 {includeCategories.length}
-                                <span className="ms-1 bi bi-link-45deg" />
+                                <i className="ms-1 bi bi-link-45deg" />
                             </span>
                         </h6>
                         <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={() => setShowIncludeCategories(!showIncludeCategories)}>

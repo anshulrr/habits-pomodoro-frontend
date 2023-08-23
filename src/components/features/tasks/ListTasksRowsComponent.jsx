@@ -94,10 +94,10 @@ export default function ListTasksRowsComponent({
                                     <span className="small task-list-details">
                                         <span className="badge rounded-pill text-bg-secondary fw-normal">
                                             {timeToDisplay(task.pomodorosTimeElapsed / 60)}
-                                            <small className="ps-1 bi bi-clock" />
+                                            <i className="ps-1 bi bi-clock" />
                                         </span>
                                         <span className="badge rounded-pill text-bg-light fw-normal">
-                                            <small className="bi bi-hourglass" />
+                                            <i className="bi bi-hourglass" />
                                             {timeToDisplay(task.pomodoroLength || project.pomodoroLength || userSettings.pomodoroLength)}
                                         </span>
                                     </span>

@@ -120,14 +120,14 @@ export default function ListTasksComponent({ project }) {
                     <div className="d-flex justify-content-between">
                         <h6>
                             <span className="text-secondary mx-1">
-                                <span className="bi bi-folder2" />
+                                <i className="bi bi-folder2" />
                             </span>
                             <span>
                                 {project.name}
                             </span>
                             <span className="ms-1 badge rounded-pill text-bg-secondary">
                                 {tasksCount}
-                                <span className="ms-1 bi bi-list-ul" />
+                                <i className="ms-1 bi bi-list-ul" />
                             </span>
                         </h6>
                         <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-1" onClick={() => setShowCreateTask(!showCreateTask)}>
@@ -172,7 +172,7 @@ export default function ListTasksComponent({ project }) {
                                 </span>
                                 <span className="badge rounded-pill text-bg-secondary">
                                     {completedTasksCount}
-                                    <span className="ms-1 bi bi-list-ul" />
+                                    <i className="ms-1 bi bi-list-ul" />
                                 </span>
                                 <button type="button" className="ms-1 btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowCompleted(!showCompleted)}>
                                     {!showCompleted && <i className="bi bi-arrow-down" />}
@@ -199,7 +199,7 @@ export default function ListTasksComponent({ project }) {
                                 </span>
                                 <span className="badge rounded-pill text-bg-secondary">
                                     {archivedTasksCount}
-                                    <span className="ms-1 bi bi-list-ul" />
+                                    <i className="ms-1 bi bi-list-ul" />
                                 </span>
                                 <button type="button" className="ms-1 btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowArchived(!showArchived)}>
                                     {!showArchived && <i className="bi bi-arrow-down" />}
