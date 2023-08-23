@@ -50,3 +50,9 @@ export const createCommentApi
         else if (filterBy === 'pomodoro')
             return apiClient.post(`pomodoros/${id}/comments`, comment)
     }
+
+export const retrieveCommentApi
+    = ({ id }) => apiClient.get(`/comments/${id}`)
+
+export const updateCommentApi
+    = ({ id, comment }) => apiClient.put(`comments/${id}`, comment)

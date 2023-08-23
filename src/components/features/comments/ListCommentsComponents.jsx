@@ -8,6 +8,7 @@ import Pagination from "services/pagination/Pagination"
 
 import moment from "moment";
 import CommentComponent from "./CommentComponent";
+import UpdateCommentComponent from "./UpdateCommentComponent";
 
 export default function ListCommentsComponent({ filterBy, id, title, setShowCommentsId }) {
 
@@ -22,6 +23,7 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
     const [comments, setComments] = useState([])
 
     const [showCreateComment, setShowCreateComment] = useState(false)
+    const [showUpdateComment, setShowUpdateComment] = useState(false)
 
     useEffect(
         () => getCommentsCount(),
@@ -117,8 +119,8 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                             {
                                 comments.map(
                                     comment => (
-                                        <div key={comment.id} className="row">
-                                            <div className="col-12 text-truncate text-start mb-3">
+                                        <div key={comment.id} className="row task-list-row">
+                                            <div className="col-10 text-truncate text-start">
                                                 <div className="badge text-bg-secondary fw-normal text-start text-wrap" style={{ fontSize: '0.7rem' }}>
                                                     <span>{
                                                         moment(comment.createdAt).fromNow(true)
@@ -146,12 +148,39 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                                                         </span>
                                                     }
                                                 </div>
-                                                <div className="border rounded text-wrap ps-2 pb-1">
-                                                    <ReactMarkdown
-                                                        children={comment.description}
+
+                                            </div>
+                                            {
+                                                showUpdateComment !== comment.id &&
+                                                <div className="col-2 ps-0 text-end task-list-update">
+                                                    <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 lh-sm" onClick={() => setShowUpdateComment(comment.id)}>
+                                                        <i className="bi bi-pencil-square"></i>
+                                                    </button>
+                                                </div>
+                                            }
+
+                                            {
+                                                showUpdateComment !== comment.id &&
+                                                <div className="col-12 text-truncate text-start mb-3">
+                                                    <div className="border rounded text-wrap ps-2 py-1">
+                                                        <ReactMarkdown
+                                                            children={comment.description}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            }
+
+                                            {
+                                                showUpdateComment === comment.id &&
+                                                <div className="col-12 text-truncate text-start mb-3">
+                                                    <UpdateCommentComponent
+                                                        setComments={setComments}
+                                                        id={comment.id}
+                                                        setShowUpdateComment={setShowUpdateComment}
                                                     />
                                                 </div>
-                                            </div>
+                                            }
+
                                         </div>
                                     )
                                 )

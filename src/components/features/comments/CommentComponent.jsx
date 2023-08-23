@@ -20,7 +20,7 @@ export default function CommentComponent({ setComments, filterBy, id, title, set
 
         createCommentApi({ comment, filterBy, id })
             .then(response => {
-                console.debug(response)
+                // console.debug(response)
                 setDescription('')
                 const data = response.data
                 data[filterBy] = title
@@ -37,7 +37,7 @@ export default function CommentComponent({ setComments, filterBy, id, title, set
             <div>
                 <form onSubmit={handleSubmit}>
                     <div className="row">
-                        <div className="col-md-12 mb-3">
+                        <div className="col-md-12 mb-2">
                             <div className="input-group">
                                 <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => setShowInput(true)}>Write</button>
                                 <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => setShowInput(false)}>Preview</button>
