@@ -14,10 +14,12 @@ export default function UserCommentsComponent() {
             </span>
             {
                 showComments === 1 &&
-                <ListCommentsComponent
-                    filterBy={'user'}
-                    setShowCommentsId={setShowComments}
-                />
+                <span className="user-comments-overlay">
+                    <ListCommentsComponent
+                        filterBy={'user'}
+                        setShowCommentsId={setShowComments}
+                    />
+                </span>
             }
         </div>
     )

@@ -2,11 +2,12 @@ import { useEffect, useState } from "react"
 
 import ReactMarkdown from 'react-markdown'
 
+import moment from "moment";
+
 import { useAuth } from "services/auth/AuthContext";
 import { retrieveAllCommentsApi, getCommentsCountApi } from "services/api/CommentApiService";
 import Pagination from "services/pagination/Pagination"
 
-import moment from "moment";
 import CommentComponent from "./CommentComponent";
 import UpdateCommentComponent from "./UpdateCommentComponent";
 
@@ -55,7 +56,7 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
     }
 
     return (
-        <div className="comments-overlay">
+        <div className="">
             <div className="comments-popup">
                 <div className="close-popup m-2">
                     <i className="p-2 bi bi-x-lg" onClick={() => setShowCommentsId(-1)}></i>
@@ -119,7 +120,7 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                             {
                                 comments.map(
                                     comment => (
-                                        <div key={comment.id} className="row task-list-row">
+                                        <div key={comment.id} className="row comments-list-row">
                                             <div className="col-10 text-truncate text-start">
                                                 <div className="badge text-bg-secondary fw-normal text-start text-wrap" style={{ fontSize: '0.7rem' }}>
                                                     <span>{
@@ -152,7 +153,7 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                                             </div>
                                             {
                                                 showUpdateComment !== comment.id &&
-                                                <div className="col-2 ps-0 text-end task-list-update">
+                                                <div className="col-2 ps-0 text-end comments-list-update">
                                                     <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 lh-sm" onClick={() => setShowUpdateComment(comment.id)}>
                                                         <i className="bi bi-pencil-square"></i>
                                                     </button>
@@ -162,7 +163,7 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                                             {
                                                 showUpdateComment !== comment.id &&
                                                 <div className="col-12 text-truncate text-start mb-3">
-                                                    <div className="border rounded text-wrap ps-2 py-1">
+                                                    <div className="border rounded text-wrap ps-2 py-1 small">
                                                         <ReactMarkdown
                                                             children={comment.description}
                                                         />

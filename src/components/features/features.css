@@ -1,0 +1,53 @@
+/* css for projects list */
+
+.list-row {
+    cursor: pointer;
+    border-bottom: thin solid #dee2e6;
+}
+
+.list-row .list-button {
+    display: none;
+}
+
+/* change color if list row is selected */
+.list-selected {
+    background-color: #0dcaf0;
+    pointer-events: none;
+}
+
+/* display the button if list row is selected */
+.list-selected .list-button {
+    display: inline;
+    pointer-events: all;
+    cursor: default;
+}
+
+.list-selected .list-details {
+    display: none
+}
+
+/* for tasks list */
+.task-list-row {
+    border-bottom: thin solid #dee2e6;
+}
+
+.task-list-update {
+    display: none;
+}
+
+.task-list-row:hover .task-list-update {
+    display: inline;
+}
+
+.task-list-row:hover .task-list-details {
+    display: none;
+}
+
+.task-list-row .task-list-buttons {
+    position: relative;
+    display: none;
+}
+
+.task-list-update:hover .task-list-buttons {
+    display: inline;
+}
