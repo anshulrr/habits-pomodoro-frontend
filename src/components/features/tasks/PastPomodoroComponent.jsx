@@ -46,19 +46,31 @@ export default function PastPomodoroComponent({ showCreatePastPomodoro, setShowC
             })
     }
 
+    const filterFutureTime = (time) => {
+        const currentDate = new Date();
+        const selectedDate = new Date(time);
+
+        return currentDate.getTime() > selectedDate.getTime();
+    };
+
     return (
         showCreatePastPomodoro === task.id &&
         <div className="row m-0 px-0 pt-1">
-            <div className="col-4 px-0 text-end">
+            <div className="col-6 px-0 text-end">
                 <DatePicker
                     className="form-control form-control-sm"
                     selected={date}
-                    dateFormat="dd/MM/yyyy"
+                    dateFormat="dd/MM/yyyy HH:mm"
+                    maxDate={new Date()}
+                    showTimeSelect
+                    timeFormat="HH:mm"
+                    filterTime={filterFutureTime}
+                    shouldCloseOnSelect={false}
                     onChange={(date) => setDate(date)}
                 />
             </div>
 
-            <div className="col-8 px-0 text-end">
+            <div className="col-6 px-0 text-end">
                 <div className="input-group text-end">
                     <input
                         type="number"
