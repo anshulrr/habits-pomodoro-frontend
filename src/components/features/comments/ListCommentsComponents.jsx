@@ -146,7 +146,7 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                                                         </span>
                                                     }
                                                 </div>
-                                                <div className="border rounded text-wrap ps-2">
+                                                <div className="border rounded text-wrap ps-2 pb-1">
                                                     <ReactMarkdown
                                                         children={comment.description}
                                                     />
