@@ -81,15 +81,15 @@ export const Buttons = ({
             {
                 showLimit &&
                 <div>
-                    <button type="button" className={"btn btn-sm btn-light " + (limit === "daily" ? "active" : "")} onClick={() => updateLimit('daily')}>Daily</button>
-                    <button type="button" className={"btn btn-sm btn-light " + (limit === "weekly" ? "active" : "")} onClick={() => updateLimit('weekly')}>Weekly</button>
-                    <button type="button" className={"btn btn-sm btn-light " + (limit === "monthly" ? "active" : "")} onClick={() => updateLimit('monthly')}>Monthly</button>
+                    <button type="button" className={"btn btn-sm btn-outline-secondary " + (limit === "daily" ? "active" : "")} onClick={() => updateLimit('daily')}>Daily</button>
+                    <button type="button" className={"btn btn-sm btn-outline-secondary " + (limit === "weekly" ? "active" : "")} onClick={() => updateLimit('weekly')}>Weekly</button>
+                    <button type="button" className={"btn btn-sm btn-outline-secondary " + (limit === "monthly" ? "active" : "")} onClick={() => updateLimit('monthly')}>Monthly</button>
                 </div>
             }
 
             <div className="row">
                 <div className="col-3">
-                    <i className="p-1 bi bi-arrow-left-square" onClick={() => updateOffset(-1)}></i>
+                    <i className="btn btn-sm btn-outline-secondary py-0 px-1 lh-sm bi bi-arrow-left" onClick={() => updateOffset(-1)}></i>
                 </div>
                 <div className="col-6">
                     <small>
@@ -97,7 +97,7 @@ export const Buttons = ({
                     </small>
                 </div>
                 <div className="col-3">
-                    <i className="p-1 bi bi-arrow-right-square" onClick={() => updateOffset(1)}></i>
+                    <i className="btn btn-sm btn-outline-secondary py-0 px-1 lh-sm bi bi-arrow-right" onClick={() => updateOffset(1)}></i>
                 </div>
             </div>
         </div>
