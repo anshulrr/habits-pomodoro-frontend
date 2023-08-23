@@ -94,9 +94,9 @@ export default function TaskComponent() {
                                     <div className="col-md-4 mb-3">
                                         <Field as="select" className="form-select form-select-sm" name="status">
                                             {/* disabled option with value 0 for dropdown to avoid confusion of initial selection */}
-                                            <option value="added">added</option>
-                                            <option value="archived">archived</option>
+                                            <option value="added">current</option>
                                             <option value="completed">completed</option>
+                                            <option value="archived">archived</option>
                                         </Field>
                                     </div>
                                     <div className="col-md-12 mb-3">
