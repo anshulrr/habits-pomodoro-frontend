@@ -119,7 +119,7 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                             {
                                 comments.map(
                                     comment => (
-                                        <div key={comment.id} className="row">
+                                        <div key={comment.id} className="row task-list-row">
                                             <div className="col-10 text-truncate text-start">
                                                 <div className="badge text-bg-secondary fw-normal text-start text-wrap" style={{ fontSize: '0.7rem' }}>
                                                     <span>{
@@ -152,7 +152,7 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                                             </div>
                                             {
                                                 showUpdateComment !== comment.id &&
-                                                <div className="col-2 ps-0 text-end">
+                                                <div className="col-2 ps-0 text-end task-list-update">
                                                     <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 lh-sm" onClick={() => setShowUpdateComment(comment.id)}>
                                                         <i className="bi bi-pencil-square"></i>
                                                     </button>
@@ -162,7 +162,7 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                                             {
                                                 showUpdateComment !== comment.id &&
                                                 <div className="col-12 text-truncate text-start mb-3">
-                                                    <div className="border rounded text-wrap ps-2 pb-1">
+                                                    <div className="border rounded text-wrap ps-2 py-1">
                                                         <ReactMarkdown
                                                             children={comment.description}
                                                         />
