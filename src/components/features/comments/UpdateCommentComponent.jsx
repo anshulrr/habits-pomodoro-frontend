@@ -6,8 +6,6 @@ import { retrieveCommentApi, updateCommentApi } from 'services/api/CommentApiSer
 
 export default function UpdateCommentComponent({ setComments, id, setShowUpdateComment }) {
 
-    console.log(id)
-
     const [description, setDescription] = useState('')
 
     const [showInput, setShowInput] = useState(true)

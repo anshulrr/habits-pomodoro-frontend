@@ -5,7 +5,10 @@ import WelcomeComponent from 'components/WelcomeComponent'
 import LoginComponent from 'components/LoginComponent'
 import StatsComponent from 'components/stats/StatsComponent'
 
-import 'components/AppRoutes.css'
+import 'components/components.css'
+import 'components/features/features.css'
+import "components/features/comments/comments.css"
+
 import AuthProvider, { useAuth } from 'services/auth/AuthContext'
 import ListProjectsComponent from 'components/features/projects/ListProjectsComponents'
 import ProjectComponent from 'components/features/projects/ProjectComponent'

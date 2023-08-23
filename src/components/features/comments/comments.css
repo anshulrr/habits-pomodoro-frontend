@@ -1,0 +1,48 @@
+/* comments popup */
+.comments-popup {
+    position: fixed;
+    top: 8vh;
+    bottom: 8vh;
+    left: 0;
+    right: 0;
+    height: 84vh;
+    z-index: 9;
+    overflow: scroll;
+    border-radius: 10px;
+    box-shadow: 0px 0px 0px 9999px rgba(0, 0, 0, 0.5);
+    background-color: #ffffff;
+}
+
+.close-popup {
+    position: fixed;
+    right: 0.5vw;
+    cursor: pointer;
+}
+
+/* needed for markup p elements */
+.comments-popup p {
+    margin-bottom: 0;
+}
+
+/* user comments fixed icon */
+.user-comments-icon {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 100;
+}
+
+/* needed for popup over popup */
+.user-comments-overlay {
+    position: fixed;
+    z-index: 99;
+}
+
+/* for comments list */
+.comments-list-update {
+    display: none;
+}
+
+.comments-list-row:hover .comments-list-update {
+    display: inline;
+}

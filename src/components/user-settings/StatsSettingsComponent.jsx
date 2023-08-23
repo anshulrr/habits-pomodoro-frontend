@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 import { useAuth } from 'services/auth/AuthContext';
 
-export default function StatsSettingsComponent({ setStatsSettings, setReload }) {
+export default function StatsSettingsComponent({ setStatsSettings, setReload, setShowStatsSettings }) {
 
     const authContext = useAuth();
     const userSettings = authContext.userSettings;
@@ -219,8 +219,13 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
 
             <div className="text-danger"><small>{errorMessage}</small></div>
 
-            <div className="col-md-12 text-end">
-                <button className="btn btn-sm btn-outline-success" type="button" onClick={updateSettings}>Fetch</button>
+            <div className="col-md-12">
+                <div className="input-group my-2 justify-content-end">
+                    <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowStatsSettings(false)}>
+                        <i className="bi bi-x-lg align-middle lh-sm" />
+                    </button>
+                    <button className="btn btn-sm btn-outline-success" type="button" onClick={updateSettings}>Fetch</button>
+                </div>
             </div>
 
         </div >

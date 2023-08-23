@@ -205,14 +205,14 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
         <div className="PomodoroComponent">
             <div className="">
                 <span className="text-secondary px-1">
-                    <span className="bi bi-folder2" />
+                    <i className="bi bi-folder2" />
                 </span>
                 <small>
                     {pomodoro.task.project.name}
                 </small>
                 <h5>
                     <span className="badge rounded-pill text-bg-light">
-                        <span className="bi bi-list-ul" />
+                        <i className="bi bi-list-ul" />
                     </span>
                     {pomodoro.task.description}
                     <button type="button" className="btn btn-sm btn-outline-secondary ms-1 py-0 px-1" onClick={() => updateCommentsData(pomodoro)}>

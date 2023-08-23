@@ -94,10 +94,10 @@ export default function ListTasksRowsComponent({
                                     <span className="small task-list-details">
                                         <span className="badge rounded-pill text-bg-secondary fw-normal">
                                             {timeToDisplay(task.pomodorosTimeElapsed / 60)}
-                                            <small className="ps-1 bi bi-clock" />
+                                            <i className="ps-1 bi bi-clock" />
                                         </span>
                                         <span className="badge rounded-pill text-bg-light fw-normal">
-                                            <small className="bi bi-hourglass" />
+                                            <i className="bi bi-hourglass" />
                                             {timeToDisplay(task.pomodoroLength || project.pomodoroLength || userSettings.pomodoroLength)}
                                         </span>
                                     </span>
@@ -114,7 +114,7 @@ export default function ListTasksRowsComponent({
                                     showTaskUpdateId === task.id &&
                                     <div className="input-group justify-content-end">
                                         <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowTaskUpdateId(-1)}>
-                                            <i className="bi bi-x-lg" ></i>
+                                            <i className="bi bi-x-lg" />
                                         </button>
                                         <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateCommentsData(task)}>
                                             <i className="bi bi-chat-right-text" />
