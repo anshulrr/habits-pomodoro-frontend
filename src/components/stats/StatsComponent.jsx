@@ -75,15 +75,15 @@ export default function ListTasksComponent() {
 
             <div className="row">
                 <div className="col-md-4">
-                    <div className="d-flex justify-content-between">
-                        <h6>
+                    <div className="d-flex justify-content-between mb-2">
+                        <h6 className="mb-0">
                             Included Project Categories
                             <span className="ms-1 badge rounded-pill text-bg-secondary">
                                 {includeCategories.length}
                                 <i className="ms-1 bi bi-link-45deg" />
                             </span>
                         </h6>
-                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={() => setShowIncludeCategories(!showIncludeCategories)}>
+                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowIncludeCategories(!showIncludeCategories)}>
                             <i className="bi bi-pencil-square" />
                         </button>
                     </div>
@@ -97,9 +97,11 @@ export default function ListTasksComponent() {
                         />
                     </div>
 
-                    <div className="d-flex justify-content-between">
-                        <h6>Settings</h6>
-                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={() => setShowStatsSettings(!showStatsSettings)}>
+                    <div className="d-flex justify-content-between mb-2">
+                        <h6 className="mb-0">
+                            Settings
+                        </h6>
+                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowStatsSettings(!showStatsSettings)}>
                             <i className="bi bi-pencil-square" />
                         </button>
                     </div>
@@ -111,6 +113,7 @@ export default function ListTasksComponent() {
                             setReload={setReload}
                         />
                     </div>
+                    <hr />
                 </div>
 
                 {
