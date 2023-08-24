@@ -51,3 +51,41 @@
 .task-list-update:hover .task-list-buttons {
     display: inline;
 }
+
+/* update popup */
+.update-list-row {
+    border-bottom: thin solid #ffffff;
+}
+
+.update-popup-button {
+    visibility: hidden;
+}
+
+.update-list-row:hover .update-popup-button {
+    visibility: visible;
+}
+
+.update-popup-container {
+    position: relative;
+    display: inline-block;
+}
+
+.update-popup {
+    display: none;
+    position: absolute;
+    right: 0;
+    z-index: 1;
+    min-width: 180px;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background-color: #ffffff;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+}
+
+.update-popup-container:hover .update-popup {
+    display: block;
+}
+
+.update-popup button {
+    display: inline-block
+}
