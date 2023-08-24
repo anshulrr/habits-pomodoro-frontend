@@ -4,7 +4,7 @@ import ReactMarkdown from 'react-markdown'
 
 import { createCommentApi } from 'services/api/CommentApiService'
 
-export default function CommentComponent({ setComments, filterBy, id, title, setShowCreateComment }) {
+export default function CommentComponent({ setComments, filterBy, id, title, setShowCreateComment, setCommentsCount }) {
 
     const [description, setDescription] = useState('')
 
@@ -25,6 +25,7 @@ export default function CommentComponent({ setComments, filterBy, id, title, set
                 const data = response.data
                 data[filterBy] = title
                 setComments(prevComment => [data, ...prevComment])
+                setCommentsCount(count => count + 1)
                 setShowInput(true)
                 setShowCreateComment(false)
             })

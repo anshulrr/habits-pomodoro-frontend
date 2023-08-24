@@ -73,6 +73,7 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                                 id={id}
                                 title={title}
                                 setShowCreateComment={setShowCreateComment}
+                                setCommentsCount={setCommentsCount}
                             />
                         </div>
                     }

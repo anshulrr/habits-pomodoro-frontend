@@ -19,8 +19,11 @@
     cursor: pointer;
 }
 
-/* needed for markup p elements */
-.comments-popup p {
+/* needed for elements inside markup data */
+.comments-popup p,
+.comments-popup ul,
+.comments-popup ol,
+.comments-popup pre {
     margin-bottom: 0;
 }
 

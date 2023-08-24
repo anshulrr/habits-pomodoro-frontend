@@ -7,10 +7,10 @@ import { retrieveAllProjectCategoriesApi } from "services/api/ProjectCategoryApi
 import { TasksChart } from "components/stats/charts/TasksChart";
 import { ProjectsDistributionChart } from "components/stats/charts/ProjectsDistributionChart";
 import { TotalChart } from "components/stats/charts/TotalChart";
-import CategoryChecklistComponent from "components/stats/CategoryChecklistComponent";
-
 import ListPomodorosComponent from "components/stats/ListPomodorosComponent";
-import StatsSettingsComponent from "components/user-settings/StatsSettingsComponent";
+
+import CategoryChecklistComponent from "components/stats/CategoryChecklistComponent";
+import StatsSettingsComponent from "components/stats/StatsSettingsComponent";
 
 export default function ListTasksComponent() {
 
