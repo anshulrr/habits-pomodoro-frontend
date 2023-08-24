@@ -74,8 +74,8 @@
     display: none;
     position: absolute;
     right: 0;
-    z-index: 1;
-    min-width: 180px;
+    z-index: 8;
+    min-width: 12rem;
     padding: 0.5rem;
     border-radius: 0.5rem;
     background-color: #ffffff;
@@ -87,5 +87,6 @@
 }
 
 .update-popup button {
-    display: inline-block
+    display: inline-block;
+    margin: 0.2rem;
 }
