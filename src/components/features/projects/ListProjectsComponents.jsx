@@ -22,7 +22,7 @@ export default function ListProjectsComponent() {
 
     // state might not be preset (eg. opening url in a new tab)
     const [project, setProject] = useState(state && state.project)
-    const [currentPage, setCurrentPage] = useState(state && state.currentProjectsPage || 1)
+    const [currentPage, setCurrentPage] = useState((state && state.currentProjectsPage) || 1)
 
     const [showCommentsId, setShowCommentsId] = useState(-1);
 
@@ -35,7 +35,7 @@ export default function ListProjectsComponent() {
             }
             getProjectsCount()
         },
-        []
+        [] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
     useEffect(
@@ -106,10 +106,12 @@ export default function ListProjectsComponent() {
                                                 return;
                                             }
                                             setProject(proj);
+                                            // udpate state: to be passed with further navigations
                                             state.project = proj;
                                             state.currentTasksPage = 1;
                                             state.currentCompletedTasksPage = 1;
                                             state.currentArchivedTasksPage = 1;
+                                            // for page refresh: set it right away
                                             navigate(`/projects`, { state, replace: true });
                                         }}
                                     >
