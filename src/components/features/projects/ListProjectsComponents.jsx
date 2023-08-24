@@ -13,23 +13,29 @@ export default function ListProjectsComponent() {
     const userSettings = authContext.userSettings
 
     const navigate = useNavigate()
+    const { state } = useLocation();
 
-    const PAGESIZE = window.innerWidth <= 768 ? userSettings.pageProjectsCount : 15;
-
-    const [projects, setProjects] = useState([])
-
-    const [currentPage, setCurrentPage] = useState(1)
+    const PAGESIZE = userSettings.pageProjectsCount;
 
     const [projectsCount, setProjectsCount] = useState(0)
+    const [projects, setProjects] = useState([])
 
-    const { state } = useLocation();
-    const [project, setProject] = useState(state ? state.project : null)
+    // state might not be preset (eg. opening url in a new tab)
+    const [project, setProject] = useState(state && state.project)
+    const [currentPage, setCurrentPage] = useState((state && state.currentProjectsPage) || 1)
 
     const [showCommentsId, setShowCommentsId] = useState(-1);
 
     useEffect(
-        () => getProjectsCount(),
-        []
+        () => {
+            // console.debug({ state });
+            // fix for directly opening url in a new tab
+            if (!state) {
+                navigate(`/projects`, { state: {}, replace: true });
+            }
+            getProjectsCount()
+        },
+        [] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
     useEffect(
@@ -44,7 +50,7 @@ export default function ListProjectsComponent() {
             .then(response => {
                 // console.debug(response)
                 setProjects(response.data)
-                if (project === null && response.data.length > 0) {
+                if (!project && response.data.length > 0) {
                     setProject(response.data[0])
                 }
             })
@@ -60,13 +66,12 @@ export default function ListProjectsComponent() {
     }
 
     function updateProject(id) {
-        navigate(`/projects/${id}`)
+        navigate(`/projects/${id}`, { state, replace: true })
     }
 
     function addNewProject() {
-        navigate(`/projects/-1`)
+        navigate(`/projects/-1`, { state, replace: true })
     }
-
 
     return (
         <div className="container">
@@ -96,13 +101,25 @@ export default function ListProjectsComponent() {
                                     <div
                                         key={proj.id}
                                         className={(project && proj.id === project.id ? "list-selected " : "") + "row py-2 list-row"}
-                                        onClick={() => setProject(proj)}
+                                        onClick={() => {
+                                            if (project && project.id === proj.id) {
+                                                return;
+                                            }
+                                            setProject(proj);
+                                            // udpate state: to be passed with further navigations
+                                            state.project = proj;
+                                            state.currentTasksPage = 1;
+                                            state.currentCompletedTasksPage = 1;
+                                            state.currentArchivedTasksPage = 1;
+                                            // for page refresh: set it right away
+                                            navigate(`/projects`, { state, replace: true });
+                                        }}
                                     >
                                         {/* todo: decide better solution for maxWidth */}
                                         <div className="col-8 text-truncate text-start">
                                             {/* <Link to={"/projects/" + proj.id + "/tasks"} state={{ proj }}>{proj.name}</Link> */}
                                             <span style={{ color: proj.color }}>&#9632; </span>
-                                            <span>{proj.name}</span>
+                                            {proj.name}
                                         </div>
                                         <div className="col-4 ps-0 text-secondary text-truncate text-end list-details">
                                             <span className="badge rounded-pill text-bg-light fw-normal">
@@ -134,7 +151,11 @@ export default function ListProjectsComponent() {
                             currentPage={currentPage}
                             totalCount={projectsCount}
                             pageSize={PAGESIZE}
-                            onPageChange={page => setCurrentPage(page)}
+                            onPageChange={page => {
+                                setCurrentPage(page);
+                                state.currentProjectsPage = page;
+                                navigate(`/projects`, { state, replace: true });
+                            }}
                         />
                     </div>
                 </div>
