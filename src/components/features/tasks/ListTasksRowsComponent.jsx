@@ -147,7 +147,7 @@ export default function ListTasksRowsComponent({
             }
 
             <Pagination
-                className="pagination-bar mt-3"
+                className="pagination-bar mt-3 ps-0"
                 currentPage={currentPage}
                 totalCount={tasksCount}
                 pageSize={PAGESIZE}
