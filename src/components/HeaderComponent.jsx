@@ -5,11 +5,11 @@ import UserCommentsComponent from 'components/features/comments/UserCommentsComp
 
 export default function HeaderComponent() {
 
+    const { state, pathname: url } = useLocation();
+
     const authContext = useAuth()
     const isAuthenticated = authContext.isAuthenticated
     const user = authContext.user;
-
-    const url = useLocation().pathname;
 
     function logout() {
         authContext.logout()
@@ -24,7 +24,7 @@ export default function HeaderComponent() {
                         isAuthenticated && user.photoURL &&
                         <ul className="navbar-nav">
                             <li className="nav-item">
-                                <Link className="nav-link py-0" to="/">
+                                <Link className="nav-link py-0" to="/" state={state}>
                                     <div className="text-center">
                                         <img
                                             src={user.photoURL}
@@ -45,7 +45,7 @@ export default function HeaderComponent() {
                         {
                             isAuthenticated &&
                             <li className="nav-item">
-                                <Link className={"nav-link" + (url.includes("projects") ? " active" : "")} to="/projects">
+                                <Link className={"nav-link" + (url.includes("projects") ? " active" : "")} to="/projects" state={state}>
                                     Projects
                                 </Link>
                             </li>
@@ -55,7 +55,7 @@ export default function HeaderComponent() {
                         {
                             isAuthenticated &&
                             <li className="nav-item">
-                                <Link className={"nav-link" + (url.includes("stats") ? " active" : "")} to="/stats">
+                                <Link className={"nav-link" + (url.includes("stats") ? " active" : "")} to="/stats" state={state}>
                                     Stats
                                 </Link>
                             </li>
@@ -65,7 +65,7 @@ export default function HeaderComponent() {
                         {
                             isAuthenticated &&
                             <li className="nav-item">
-                                <Link className={"nav-link" + (url.includes("settings") ? " active" : "")} to="/settings">
+                                <Link className={"nav-link" + (url.includes("settings") ? " active" : "")} to="/settings" state={state}>
                                     Settings
                                 </Link>
                             </li>
@@ -76,7 +76,7 @@ export default function HeaderComponent() {
                         {
                             isAuthenticated &&
                             <li className="nav-item">
-                                <Link className="nav-link" onClick={logout}>
+                                <Link className="nav-link" onClick={logout} state={state}>
                                     Logout
                                 </Link>
                             </li>
@@ -84,7 +84,7 @@ export default function HeaderComponent() {
                         {
                             !isAuthenticated &&
                             <li className="nav-item">
-                                <Link className="nav-link" to="/login">
+                                <Link className="nav-link" to="/login" state={state}>
                                     Login
                                 </Link>
                             </li>

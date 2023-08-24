@@ -20,6 +20,7 @@ export default function ListProjectsComponent() {
     const [projectsCount, setProjectsCount] = useState(0)
     const [projects, setProjects] = useState([])
 
+    // state might not be preset (eg. opening url in a new tab)
     const [project, setProject] = useState(state && state.project)
     const [currentPage, setCurrentPage] = useState(state && state.currentProjectsPage || 1)
 
@@ -27,7 +28,11 @@ export default function ListProjectsComponent() {
 
     useEffect(
         () => {
-            navigate(`/projects`, { state: state || {} });
+            // console.debug({ state });
+            // fix for directly opening url in a new tab
+            if (!state) {
+                navigate(`/projects`, { state: {}, replace: true });
+            }
             getProjectsCount()
         },
         []
@@ -45,7 +50,7 @@ export default function ListProjectsComponent() {
             .then(response => {
                 // console.debug(response)
                 setProjects(response.data)
-                if (project === null && response.data.length > 0) {
+                if (!project && response.data.length > 0) {
                     setProject(response.data[0])
                 }
             })
@@ -53,7 +58,6 @@ export default function ListProjectsComponent() {
     }
 
     function getProjectsCount() {
-        console.log({ state });
         getProjectsCountApi()
             .then(response => {
                 setProjectsCount(response.data)
@@ -98,11 +102,10 @@ export default function ListProjectsComponent() {
                                         key={proj.id}
                                         className={(project && proj.id === project.id ? "list-selected " : "") + "row py-2 list-row"}
                                         onClick={() => {
-                                            if (project.id === proj.id) {
+                                            if (project && project.id === proj.id) {
                                                 return;
                                             }
                                             setProject(proj)
-                                            console.log(state)
                                             state.project = proj
                                             state.currentTasksPage = 1
                                             navigate(`/projects`, { state, replace: true })
