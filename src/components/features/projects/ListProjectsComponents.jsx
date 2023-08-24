@@ -111,6 +111,8 @@ export default function ListProjectsComponent() {
                                             state.currentTasksPage = 1;
                                             state.currentCompletedTasksPage = 1;
                                             state.currentArchivedTasksPage = 1;
+                                            state.showCompletedTasks = false;
+                                            state.showArchivedTasks = false;
                                             // for page refresh: set it right away
                                             navigate(`/projects`, { state, replace: true });
                                         }}
