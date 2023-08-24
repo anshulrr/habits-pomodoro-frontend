@@ -149,7 +149,7 @@ export default function ListProjectsComponent() {
                         }
 
                         <Pagination
-                            className="pagination-bar mt-3"
+                            className="pagination-bar mt-3 px-4"
                             currentPage={currentPage}
                             totalCount={projectsCount}
                             pageSize={PAGESIZE}
