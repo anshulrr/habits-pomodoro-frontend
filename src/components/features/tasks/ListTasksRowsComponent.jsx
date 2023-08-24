@@ -27,7 +27,12 @@ export default function ListTasksRowsComponent({
 
     const [tasks, setTasks] = useState([])
 
-    const [currentPage, setCurrentPage] = useState(state && state.currentTasksPage || 1)
+    const [currentPage, setCurrentPage] = useState(
+        (status === 'added' && state.currentTasksPage) ||
+        (status === 'completed' && state.currentCompletedTasksPage) ||
+        (status === 'archived' && state.currentArchivedTasksPage) ||
+        1
+    )
 
     const [showCreatePastPomodoro, setShowCreatePastPomodoro] = useState(-1);
 
@@ -159,7 +164,9 @@ export default function ListTasksRowsComponent({
                 pageSize={PAGESIZE}
                 onPageChange={page => {
                     setCurrentPage(page)
-                    state.currentTasksPage = page
+                    status === 'added' && (state.currentTasksPage = page);
+                    status === 'completed' && (state.currentCompletedTasksPage = page);
+                    status === 'archived' && (state.currentArchivedTasksPage = page);
                     navigate(`/projects`, { state, replace: true })
                 }}
             />

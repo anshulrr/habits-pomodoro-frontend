@@ -105,10 +105,12 @@ export default function ListProjectsComponent() {
                                             if (project && project.id === proj.id) {
                                                 return;
                                             }
-                                            setProject(proj)
-                                            state.project = proj
-                                            state.currentTasksPage = 1
-                                            navigate(`/projects`, { state, replace: true })
+                                            setProject(proj);
+                                            state.project = proj;
+                                            state.currentTasksPage = 1;
+                                            state.currentCompletedTasksPage = 1;
+                                            state.currentArchivedTasksPage = 1;
+                                            navigate(`/projects`, { state, replace: true });
                                         }}
                                     >
                                         {/* todo: decide better solution for maxWidth */}
@@ -148,9 +150,9 @@ export default function ListProjectsComponent() {
                             totalCount={projectsCount}
                             pageSize={PAGESIZE}
                             onPageChange={page => {
-                                setCurrentPage(page)
-                                state.currentProjectsPage = page
-                                navigate(`/projects`, { state, replace: true })
+                                setCurrentPage(page);
+                                state.currentProjectsPage = page;
+                                navigate(`/projects`, { state, replace: true });
                             }}
                         />
                     </div>
