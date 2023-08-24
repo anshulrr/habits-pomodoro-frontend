@@ -84,6 +84,7 @@ export default function ListTasksRowsComponent({
                         <div
                             key={task.id}
                             className="row py-2 task-list-row"
+                            style={{ borderColor: "#ffffff" }}
                         >
                             <div className="col-8 text-start px-0">
                                 {

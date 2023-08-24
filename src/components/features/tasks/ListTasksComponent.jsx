@@ -123,7 +123,7 @@ export default function ListTasksComponent({ project }) {
         <div className="">
             <div className="row">
 
-                <div className="col-md-6 mt-3 border-bottom border-2">
+                <div className="col-md-6 pt-3 border-bottom border-2" style={{ backgroundColor: "#e9ecef" }}>
 
                     <div className="d-flex justify-content-between">
                         <h6>
@@ -154,7 +154,7 @@ export default function ListTasksComponent({ project }) {
                     }
 
                     {/* fix for x scroll: px-3 */}
-                    <div className="overflow-scroll bg-white px-3" style={{ maxHeight: "85vh" }}>
+                    <div className="px-3">
                         {
                             tasksCount === 0 &&
                             <div className="alert alert-warning py-1">No task is added to this project</div>
