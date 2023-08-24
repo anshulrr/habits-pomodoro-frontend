@@ -19,10 +19,10 @@ export default function ListTasksComponent({ project }) {
     const [tasksCount, setTasksCount] = useState(0)
 
     const [completedTasksCount, setCompletedTasksCount] = useState(0)
-    const [showCompleted, setShowCompleted] = useState(state.showCompletedTasks || false)
+    const [showCompleted, setShowCompleted] = useState(false)
 
     const [archivedTasksCount, setArchivedTasksCount] = useState(0)
-    const [showArchived, setShowArchived] = useState(state.showArchivedTasks || false)
+    const [showArchived, setShowArchived] = useState(false)
 
     const [pomodoro, setPomodoro] = useState(null)
 
@@ -37,6 +37,12 @@ export default function ListTasksComponent({ project }) {
 
     useEffect(
         () => {
+            // need to set it in useEffect, instead of top level, 
+            // complete component won't reload
+            // as project is not a key during component call
+            setShowCompleted(state.showCompletedTasks || false)
+            setShowArchived(state.showArchivedTasks || false)
+
             // console.debug('re-render ListTasksComponents')
             getTasksCount('added', setTasksCount)
             getTasksCount('archived', setArchivedTasksCount)
