@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { createPomodoroApi, getRunningPomodoroApi } from "services/api/PomodoroApiService";
 import { getTasksCountApi } from "services/api/TaskApiService";
@@ -13,6 +13,8 @@ import ListPomodorosComponent from "components/stats/ListPomodorosComponent";
 export default function ListTasksComponent({ project }) {
 
     const navigate = useNavigate()
+
+    const { state } = useLocation();
 
     const [tasksCount, setTasksCount] = useState(0)
 
@@ -54,7 +56,7 @@ export default function ListTasksComponent({ project }) {
     }
 
     function updateTask(id) {
-        navigate(`/projects/${project.id}/tasks/${id}`, { state: { project } })
+        navigate(`/projects/${project.id}/tasks/${id}`, { state, replace: true })
     }
 
     function createNewPomodoro(pomodoro_task, task_project, start_again = false) {

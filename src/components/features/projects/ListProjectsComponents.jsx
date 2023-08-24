@@ -13,22 +13,23 @@ export default function ListProjectsComponent() {
     const userSettings = authContext.userSettings
 
     const navigate = useNavigate()
+    const { state } = useLocation();
 
-    const PAGESIZE = window.innerWidth <= 768 ? userSettings.pageProjectsCount : 15;
-
-    const [projects, setProjects] = useState([])
-
-    const [currentPage, setCurrentPage] = useState(1)
+    const PAGESIZE = userSettings.pageProjectsCount;
 
     const [projectsCount, setProjectsCount] = useState(0)
+    const [projects, setProjects] = useState([])
 
-    const { state } = useLocation();
-    const [project, setProject] = useState(state ? state.project : null)
+    const [project, setProject] = useState(state && state.project)
+    const [currentPage, setCurrentPage] = useState(state && state.currentProjectsPage || 1)
 
     const [showCommentsId, setShowCommentsId] = useState(-1);
 
     useEffect(
-        () => getProjectsCount(),
+        () => {
+            navigate(`/projects`, { state: state || {} });
+            getProjectsCount()
+        },
         []
     )
 
@@ -52,6 +53,7 @@ export default function ListProjectsComponent() {
     }
 
     function getProjectsCount() {
+        console.log({ state });
         getProjectsCountApi()
             .then(response => {
                 setProjectsCount(response.data)
@@ -60,13 +62,12 @@ export default function ListProjectsComponent() {
     }
 
     function updateProject(id) {
-        navigate(`/projects/${id}`)
+        navigate(`/projects/${id}`, { state, replace: true })
     }
 
     function addNewProject() {
-        navigate(`/projects/-1`)
+        navigate(`/projects/-1`, { state, replace: true })
     }
-
 
     return (
         <div className="container">
@@ -96,13 +97,22 @@ export default function ListProjectsComponent() {
                                     <div
                                         key={proj.id}
                                         className={(project && proj.id === project.id ? "list-selected " : "") + "row py-2 list-row"}
-                                        onClick={() => setProject(proj)}
+                                        onClick={() => {
+                                            if (project.id === proj.id) {
+                                                return;
+                                            }
+                                            setProject(proj)
+                                            console.log(state)
+                                            state.project = proj
+                                            state.currentTasksPage = 1
+                                            navigate(`/projects`, { state, replace: true })
+                                        }}
                                     >
                                         {/* todo: decide better solution for maxWidth */}
                                         <div className="col-8 text-truncate text-start">
                                             {/* <Link to={"/projects/" + proj.id + "/tasks"} state={{ proj }}>{proj.name}</Link> */}
                                             <span style={{ color: proj.color }}>&#9632; </span>
-                                            <span>{proj.name}</span>
+                                            {proj.name}
                                         </div>
                                         <div className="col-4 ps-0 text-secondary text-truncate text-end list-details">
                                             <span className="badge rounded-pill text-bg-light fw-normal">
@@ -134,7 +144,11 @@ export default function ListProjectsComponent() {
                             currentPage={currentPage}
                             totalCount={projectsCount}
                             pageSize={PAGESIZE}
-                            onPageChange={page => setCurrentPage(page)}
+                            onPageChange={page => {
+                                setCurrentPage(page)
+                                state.currentProjectsPage = page
+                                navigate(`/projects`, { state, replace: true })
+                            }}
                         />
                     </div>
                 </div>

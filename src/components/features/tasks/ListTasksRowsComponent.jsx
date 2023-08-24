@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { useAuth } from "services/auth/AuthContext";
 import Pagination from "services/pagination/Pagination";
@@ -16,14 +17,17 @@ export default function ListTasksRowsComponent({
     setPomodorosListReload,
     setTasksReload
 }) {
+    const navigate = useNavigate()
+    const { state } = useLocation();
+
     const authContext = useAuth()
     const userSettings = authContext.userSettings
 
-    const PAGESIZE = window.innerWidth <= 768 ? userSettings.pageTasksCount : 15;
+    const PAGESIZE = userSettings.pageTasksCount;
 
     const [tasks, setTasks] = useState([])
 
-    const [currentPage, setCurrentPage] = useState(1)
+    const [currentPage, setCurrentPage] = useState(state && state.currentTasksPage || 1)
 
     const [showCreatePastPomodoro, setShowCreatePastPomodoro] = useState(-1);
 
@@ -153,7 +157,11 @@ export default function ListTasksRowsComponent({
                 currentPage={currentPage}
                 totalCount={tasksCount}
                 pageSize={PAGESIZE}
-                onPageChange={page => setCurrentPage(page)}
+                onPageChange={page => {
+                    setCurrentPage(page)
+                    state.currentTasksPage = page
+                    navigate(`/projects`, { state, replace: true })
+                }}
             />
 
             {

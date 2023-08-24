@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { createProjectApi, retrieveProjectApi, updateProjectApi } from 'services/api/ProjectApiService'
 import { retrieveAllProjectCategoriesApi } from "services/api/ProjectCategoryApiService";
@@ -18,6 +18,7 @@ export default function ProjectComponent() {
     const [projectCategories, setProjectCategories] = useState([])
 
     const navigate = useNavigate()
+    const { state } = useLocation();
 
     useEffect(
         () => {
@@ -72,14 +73,15 @@ export default function ProjectComponent() {
             createProjectApi(project)
                 .then(response => {
                     // console.debug(response)
-                    navigate('/projects', { state: { project: response.data } })
+                    state.project = response.data;
+                    navigate('/projects', { state, replace: true })
                 })
                 .catch(error => console.error(error.message))
         } else {
             updateProjectApi(id, project)
                 .then(response => {
                     // console.debug(response)
-                    navigate('/projects', { state: { project: response.data } })
+                    navigate('/projects', { state: { project: response.data }, replace: true })
                 })
                 .catch(error => console.error(error.message))
         }
@@ -146,7 +148,7 @@ export default function ProjectComponent() {
                                         {/* <ErrorMessage name="project_category_id" component="div" className="text-danger small" /> */}
                                     </div>
                                     <div className="col-md-12 mb-3">
-                                        <button className="me-2 btn btn-sm btn-outline-secondary" type="button" onClick={() => navigate('/projects')}>Cancel</button>
+                                        <button className="me-2 btn btn-sm btn-outline-secondary" type="button" onClick={() => navigate('/projects', { state, replace: true })}>Cancel</button>
                                         <button className="btn btn-sm btn-outline-success" type="submit">Save Project</button>
                                     </div>
                                 </div>
