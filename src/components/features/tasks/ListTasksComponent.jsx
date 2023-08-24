@@ -19,10 +19,10 @@ export default function ListTasksComponent({ project }) {
     const [tasksCount, setTasksCount] = useState(0)
 
     const [completedTasksCount, setCompletedTasksCount] = useState(0)
-    const [showCompleted, setShowCompleted] = useState(false)
+    const [showCompleted, setShowCompleted] = useState(state.showCompletedTasks || false)
 
     const [archivedTasksCount, setArchivedTasksCount] = useState(0)
-    const [showArchived, setShowArchived] = useState(false)
+    const [showArchived, setShowArchived] = useState(state.showArchivedTasks || false)
 
     const [pomodoro, setPomodoro] = useState(null)
 
@@ -176,7 +176,11 @@ export default function ListTasksComponent({ project }) {
                                     {completedTasksCount}
                                     <i className="ms-1 bi bi-list-ul" />
                                 </span>
-                                <button type="button" className="ms-1 btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowCompleted(!showCompleted)}>
+                                <button type="button" className="ms-1 btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => {
+                                    state.showCompletedTasks = !showCompleted;
+                                    setShowCompleted(!showCompleted);
+                                    navigate(`/projects`, { state, replace: true })
+                                }}>
                                     {!showCompleted && <i className="bi bi-arrow-down" />}
                                     {showCompleted && <i className="bi bi-arrow-up" />}
                                 </button>
@@ -203,7 +207,11 @@ export default function ListTasksComponent({ project }) {
                                     {archivedTasksCount}
                                     <i className="ms-1 bi bi-list-ul" />
                                 </span>
-                                <button type="button" className="ms-1 btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowArchived(!showArchived)}>
+                                <button type="button" className="ms-1 btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => {
+                                    state.showArchivedTasks = !showArchived;
+                                    setShowArchived(!showArchived);
+                                    navigate(`/projects`, { state, replace: true })
+                                }}>
                                     {!showArchived && <i className="bi bi-arrow-down" />}
                                     {showArchived && <i className="bi bi-arrow-up" />}
                                 </button>
