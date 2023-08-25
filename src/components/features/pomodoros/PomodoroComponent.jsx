@@ -213,7 +213,7 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
         <div className="PomodoroComponent" onClick={(e) => handleDobuleClick(e)}>
             {
                 status !== 'completed' && !openPomodoroPopup &&
-                <div className="pomodoro-display-top pomodoro-display-top-deco" style={{ backgroundColor: pomodoro.task.project.color, fontVariantNumeric: "tabular-nums" }}>
+                <div className="pomodoro-display-top pomodoro-display-top-deco" style={{ backgroundColor: pomodoro.task.project.color }}>
                     {timer}
                     <i className="bi bi-fullscreen-exit" onClick={() => setOpenCommentsPopup(!openPomodoroPopup)} />
                 </div>
