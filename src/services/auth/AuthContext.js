@@ -26,7 +26,14 @@ export default function AuthProvider({ children }) {
         () => {
             // to set interceptors after page refresh
             FirebaseAuthService.subscribeToAuthChanges({ setFirebaseAuthLoaded, setAuthenticated, addInterceptors, setUser });
-            setUserSettings(JSON.parse(localStorage.getItem('habits_pomodoro')));
+
+            const storageSettings = JSON.parse(localStorage.getItem('habits_pomodoro'));
+            if (storageSettings) {
+                setUserSettings(storageSettings);
+            } else {
+                // logout user if settings are deleted
+                logout();
+            }
         }, []   // eslint-disable-line react-hooks/exhaustive-deps
     )
 
@@ -50,7 +57,7 @@ export default function AuthProvider({ children }) {
             updateUserSettings(response.data)
         }
 
-        return true;
+        return response.data;
     }
 
     function updateUserSettings(data) {

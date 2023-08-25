@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { putUserSettingsApi } from 'services/api/AuthApiService'
 import { useAuth } from 'services/auth/AuthContext';
@@ -6,27 +6,53 @@ import { useAuth } from 'services/auth/AuthContext';
 export default function UserSettingsComponent() {
 
     const authContext = useAuth();
-    const userSettings = authContext.userSettings;
 
-    const [enableChartScale, setEnableChartScale] = useState(userSettings.enableChartScale)
-    const [chartScale, setChartScale] = useState(userSettings.chartScale)
-    const [enableChartWeeklyAverage, setEnableChartWeeklyAverage] = useState(userSettings.enableChartWeeklyAverage)
-    const [chartWeeklyAverage, setChartWeeklyAverage] = useState(userSettings.chartWeeklyAverage)
-    const [enableChartMonthlyAverage, setEnableChartMonthlyAverage] = useState(userSettings.enableChartMonthlyAverage)
-    const [chartMonthlyAverage, setChartMonthlyAverage] = useState(userSettings.chartMonthlyAverage)
-    const [enableChartAdjustedWeeklyMonthlyAverage, setEnableChartAdjustedWeeklyMonthlyAverage] = useState(userSettings.enableChartAdjustedWeeklyMonthlyAverage)
-    const [pomodoroLength, setPomodoroLength] = useState(userSettings.pomodoroLength)
-    const [breakLength, setBreakLength] = useState(userSettings.breakLength)
-    const [enableStopwatch, setEnableStopwatch] = useState(userSettings.enableStopwatch)
-    const [enableStopwatchAudio, setEnableStopwatchAudio] = useState(userSettings.enableStopwatchAudio)
-    const [pageProjectsCount, setPageProjectsCount] = useState(userSettings.pageProjectsCount)
-    const [pageTasksCount, setPageTasksCount] = useState(userSettings.pageTasksCount)
-    const [pageCommentsCount, setPageCommentsCount] = useState(userSettings.pageCommentsCount)
-    const [tasksChartType, setTasksChartType] = useState(userSettings.tasksChartType || "doughnut")
-    const [projectsChartType, setProjectsChartType] = useState(userSettings.projectsChartType || "bar")
+    const [enableChartScale, setEnableChartScale] = useState('')
+    const [chartScale, setChartScale] = useState('')
+    const [enableChartWeeklyAverage, setEnableChartWeeklyAverage] = useState('')
+    const [chartWeeklyAverage, setChartWeeklyAverage] = useState('')
+    const [enableChartMonthlyAverage, setEnableChartMonthlyAverage] = useState('')
+    const [chartMonthlyAverage, setChartMonthlyAverage] = useState('')
+    const [enableChartAdjustedWeeklyMonthlyAverage, setEnableChartAdjustedWeeklyMonthlyAverage] = useState('')
+    const [pomodoroLength, setPomodoroLength] = useState('')
+    const [breakLength, setBreakLength] = useState('')
+    const [enableStopwatch, setEnableStopwatch] = useState('')
+    const [enableStopwatchAudio, setEnableStopwatchAudio] = useState('')
+    const [pageProjectsCount, setPageProjectsCount] = useState('')
+    const [pageTasksCount, setPageTasksCount] = useState('')
+    const [pageCommentsCount, setPageCommentsCount] = useState('')
+    const [tasksChartType, setTasksChartType] = useState('')
+    const [projectsChartType, setProjectsChartType] = useState('')
 
     const [errorMessage, setErrorMessage] = useState('')
     const [successMessage, setSuccessMessage] = useState('')
+
+    useEffect(() => {
+        const fetchAndSetSettings = async () => {
+            // get updated userSettings
+            const userSettings = await authContext.getUserSettings();
+
+            setEnableChartScale(userSettings.enableChartScale)
+            setChartScale(userSettings.chartScale)
+            setEnableChartWeeklyAverage(userSettings.enableChartWeeklyAverage)
+            setChartWeeklyAverage(userSettings.chartWeeklyAverage)
+            setEnableChartMonthlyAverage(userSettings.enableChartMonthlyAverage)
+            setChartMonthlyAverage(userSettings.chartMonthlyAverage)
+            setEnableChartAdjustedWeeklyMonthlyAverage(userSettings.enableChartAdjustedWeeklyMonthlyAverage)
+            setPomodoroLength(userSettings.pomodoroLength)
+            setBreakLength(userSettings.breakLength)
+            setEnableStopwatch(userSettings.enableStopwatch)
+            setEnableStopwatchAudio(userSettings.enableStopwatchAudio)
+            setPageProjectsCount(userSettings.pageProjectsCount)
+            setPageTasksCount(userSettings.pageTasksCount)
+            setPageCommentsCount(userSettings.pageCommentsCount)
+            setTasksChartType(userSettings.tasksChartType || "doughnut")
+            setProjectsChartType(userSettings.projectsChartType || "bar")
+        }
+
+        fetchAndSetSettings();
+
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     function saveSettings() {
         setErrorMessage('')
@@ -38,7 +64,6 @@ export default function UserSettingsComponent() {
         }
 
         const request_settings = {
-            id: userSettings.id,
             enableChartScale,
             chartScale,
             enableChartWeeklyAverage,
