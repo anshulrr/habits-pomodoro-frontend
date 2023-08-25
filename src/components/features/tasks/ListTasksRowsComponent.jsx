@@ -76,7 +76,8 @@ export default function ListTasksRowsComponent({
     }
 
     function updateTaskStatus(task, status) {
-        if (!window.confirm("Press OK to change status.")) {
+        let statusString = status === 'added' ? 'current' : status;
+        if (!window.confirm(`Press OK to mark task as ${statusString}.`)) {
             return;
         }
         task.status = status;
@@ -124,7 +125,7 @@ export default function ListTasksRowsComponent({
                                         <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-0 update-popup-button">
                                             <i className="bi bi-three-dots-vertical" />
                                         </button>
-                                        <div className="update-popup text-end">
+                                        <div className="update-popup">
                                             <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateCommentsPopupData(task)}>
                                                 Comments <i className="bi bi-chat-right-text" />
                                             </button>
