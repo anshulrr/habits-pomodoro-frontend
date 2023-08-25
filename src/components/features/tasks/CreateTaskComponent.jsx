@@ -41,6 +41,7 @@ export default function CreateTaskComponent({ setShowCreateTask, project, setTas
                                     placeholder="Task Description"
                                     onChange={(e) => setDescription(e.target.value)}
                                     required
+                                    autoFocus
                                 />
                                 <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowCreateTask(false)}>
                                     <i className="align-middle bi bi-x-lg" />

@@ -139,9 +139,12 @@ export default function ListTasksComponent({ project }) {
                                 <i className="ms-1 bi bi-list-ul" />
                             </span>
                         </h6>
-                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-1" onClick={() => setShowCreateTask(!showCreateTask)}>
-                            <i className="bi bi-plus-circle" />
-                        </button>
+                        {
+                            !showCreateTask &&
+                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-1" onClick={() => setShowCreateTask(!showCreateTask)}>
+                                <i className="bi bi-plus-circle" />
+                            </button>
+                        }
                     </div>
 
                     {

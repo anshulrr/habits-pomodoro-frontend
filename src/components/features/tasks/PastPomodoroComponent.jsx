@@ -68,6 +68,7 @@ export default function PastPomodoroComponent({ showCreatePastPomodoro, setShowC
                     shouldCloseOnSelect={false}
                     onFocus={e => e.target.blur()}      // fix for keyboard open on focus on mobile devide
                     onChange={(date) => setDate(date)}
+                    autoFocus
                 />
             </div>
 
