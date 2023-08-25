@@ -89,4 +89,10 @@
 .update-popup button {
     display: inline-block;
     margin: 0.2rem;
+    width: 100%;
+    text-align: right;
+}
+
+.update-popup button i {
+    vertical-align: middle !important;
 }

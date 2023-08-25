@@ -56,7 +56,7 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
     }
 
     return (
-        <div className="">
+        <div className="comments-overlay">
             <div className="comments-popup">
                 <div className="close-popup m-2">
                     <i className="p-2 bi bi-x-lg" onClick={() => setShowCommentsId(-1)}></i>
