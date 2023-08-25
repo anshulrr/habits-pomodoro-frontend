@@ -173,7 +173,7 @@ export default function ListTasksComponent({ project }) {
                             />
                         }
 
-                        <div className="mt-3">
+                        <div className="my-1">
                             <div className="d-flex justify-content-center">
                                 <span className="badge me-1 text-bg-light">
                                     Completed
@@ -193,18 +193,20 @@ export default function ListTasksComponent({ project }) {
                             </div>
                             {
                                 showCompleted && completedTasksCount !== 0 &&
-                                <ListTasksRowsComponent
-                                    key={project.id}
-                                    status={'completed'}
-                                    tasksCount={completedTasksCount}
-                                    project={project}
-                                    createNewPomodoro={createNewPomodoro}
-                                    updateTask={updateTask}
-                                />
+                                <div className="mt-2 mb-3">
+                                    <ListTasksRowsComponent
+                                        key={project.id}
+                                        status={'completed'}
+                                        tasksCount={completedTasksCount}
+                                        project={project}
+                                        createNewPomodoro={createNewPomodoro}
+                                        updateTask={updateTask}
+                                    />
+                                </div>
                             }
                         </div>
 
-                        <div className="mt-3">
+                        <div className="my-1">
                             <div className="d-flex justify-content-center">
                                 <span className="badge me-1 text-bg-light">
                                     Archived
@@ -225,14 +227,16 @@ export default function ListTasksComponent({ project }) {
 
                             {
                                 showArchived && archivedTasksCount !== 0 &&
-                                <ListTasksRowsComponent
-                                    key={project.id}
-                                    status={'archived'}
-                                    tasksCount={archivedTasksCount}
-                                    project={project}
-                                    createNewPomodoro={createNewPomodoro}
-                                    updateTask={updateTask}
-                                />
+                                <div className="mt-2 mb-3">
+                                    <ListTasksRowsComponent
+                                        key={project.id}
+                                        status={'archived'}
+                                        tasksCount={archivedTasksCount}
+                                        project={project}
+                                        createNewPomodoro={createNewPomodoro}
+                                        updateTask={updateTask}
+                                    />
+                                </div>
                             }
                         </div>
                     </div >
