@@ -39,7 +39,6 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
             // add '0' at the beginning of the variable
             let updatedTimer = generateTimer({ hours, minutes, seconds });
             setTimer(updatedTimer)
-            document.title = `Habits Pomodoro (${updatedTimer})`;
 
             // console.debug(timeRemaining, total / 1000)
             setTimeRemaining(total / 1000);
@@ -93,9 +92,6 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
     useEffect(() => {
         if ("serviceWorker" in navigator && !navigator?.userAgentData?.mobile) {
             notificationSetup()
-        }
-        return () => {
-            document.title = `Habits Pomodoro`;
         }
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
