@@ -1,5 +1,4 @@
 /* css for projects list */
-
 .list-row {
     cursor: pointer;
     border-bottom: thin solid #dee2e6;
@@ -52,7 +51,7 @@
     display: inline;
 }
 
-/* update popup */
+/* for update popup */
 .update-list-row {
     border-bottom: thin solid #ffffff;
 }
@@ -95,4 +94,24 @@
 
 .update-popup button i {
     vertical-align: middle !important;
+}
+
+/* for pomodoro display */
+.pomodoro-display-top {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.pomodoro-display-top-deco {
+    color: #ffffff;
+    font-size: 1rem;
+    padding: 0.3rem;
+    border-radius: 0.5rem;
+}
+
+.pomodoro-display-top-deco i {
+    margin-left: 0.2rem;
+    cursor: pointer;
 }
