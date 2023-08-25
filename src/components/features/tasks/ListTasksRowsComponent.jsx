@@ -81,8 +81,8 @@ export default function ListTasksRowsComponent({
             {
                 tasks.map(
                     task => (
-                        <div key={task.id} className="row update-list-row decorated-row">
-                            <div className="col-8 text-start px-0">
+                        <div key={task.id} className="update-list-row decorated-row">
+                            <div className="row-content">
                                 {
                                     task.status === 'added' &&
                                     <button type="button" className="btn btn-sm btn-outline-success py-0 px-1 me-1 play-button" onClick={() => createNewPomodoro(task, project)}>
@@ -94,9 +94,9 @@ export default function ListTasksRowsComponent({
                                 </span>
                             </div>
 
-                            <div className="col-4 px-0 text-secondary text-end">
+                            <div className="text-secondary d-flex">
                                 {
-                                    <span className="small">
+                                    <span className="small update-list-details">
                                         <span className="badge rounded-pill text-bg-secondary fw-normal">
                                             {timeToDisplay(task.pomodorosTimeElapsed / 60)}
                                             <i className="ps-1 bi bi-clock" />
