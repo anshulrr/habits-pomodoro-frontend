@@ -29,7 +29,8 @@ export default function ListTasksComponent({ project }) {
     const [pomodoroStatus, setPomodoroStatus] = useState(null)
 
     const [pomdorosListReload, setPomodorosListReload] = useState(0)
-    const [taskReload, setTasksReload] = useState(0)
+    const [tasksReload, setTasksReload] = useState(0)
+    const [allTasksReload, setAllTasksReload] = useState(0)
 
     const [message, setMessage] = useState('')
 
@@ -50,7 +51,7 @@ export default function ListTasksComponent({ project }) {
             if (pomodoro === null) {
                 getRunningPomodoro()
             }
-        }, [project] // eslint-disable-line react-hooks/exhaustive-deps
+        }, [project, allTasksReload] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
     function getTasksCount(status, setContainer) {
@@ -162,7 +163,7 @@ export default function ListTasksComponent({ project }) {
                         {
                             tasksCount !== 0 &&
                             <ListTasksRowsComponent
-                                key={[project.id, pomodoroStatus, taskReload]}    // re-render ListTasksComponents for completed pomodoro'
+                                key={[project.id, pomodoroStatus, tasksReload]}    // re-render ListTasksComponents for completed pomodoro'
                                 status={'added'}
                                 tasksCount={tasksCount}
                                 project={project}
@@ -170,6 +171,7 @@ export default function ListTasksComponent({ project }) {
                                 updateTask={updateTask}
                                 setPomodorosListReload={setPomodorosListReload}
                                 setTasksReload={setTasksReload}
+                                setAllTasksReload={setAllTasksReload}
                             />
                         }
 
@@ -195,12 +197,14 @@ export default function ListTasksComponent({ project }) {
                                 showCompleted && completedTasksCount !== 0 &&
                                 <div className="mt-2 mb-3">
                                     <ListTasksRowsComponent
-                                        key={project.id}
+                                        key={[project.id, completedTasksCount]}
                                         status={'completed'}
                                         tasksCount={completedTasksCount}
                                         project={project}
                                         createNewPomodoro={createNewPomodoro}
                                         updateTask={updateTask}
+                                        setTasksReload={setTasksReload}
+                                        setAllTasksReload={setAllTasksReload}
                                     />
                                 </div>
                             }
@@ -229,12 +233,14 @@ export default function ListTasksComponent({ project }) {
                                 showArchived && archivedTasksCount !== 0 &&
                                 <div className="mt-2 mb-3">
                                     <ListTasksRowsComponent
-                                        key={project.id}
+                                        key={[project.id, archivedTasksCount]}
                                         status={'archived'}
                                         tasksCount={archivedTasksCount}
                                         project={project}
                                         createNewPomodoro={createNewPomodoro}
                                         updateTask={updateTask}
+                                        setTasksReload={setTasksReload}
+                                        setAllTasksReload={setAllTasksReload}
                                     />
                                 </div>
                             }

@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import { useAuth } from "services/auth/AuthContext";
 import Pagination from "services/pagination/Pagination";
-import { retrieveAllTasksApi } from "services/api/TaskApiService";
+import { retrieveAllTasksApi, updateTaskApi } from "services/api/TaskApiService";
 
 import PastPomodoroComponent from "components/features/tasks/PastPomodoroComponent";
 import ListCommentsComponent from "components/features/comments/ListCommentsComponents";
@@ -15,7 +15,8 @@ export default function ListTasksRowsComponent({
     createNewPomodoro,
     updateTask,
     setPomodorosListReload,
-    setTasksReload
+    setTasksReload,
+    setAllTasksReload
 }) {
     const navigate = useNavigate()
     const { state } = useLocation();
@@ -38,8 +39,6 @@ export default function ListTasksRowsComponent({
 
     const [showCommentsId, setShowCommentsId] = useState(-1);
     const [commentsTitle, setCommentsTitle] = useState('')
-
-    const [showTaskUpdateId, setShowTaskUpdateId] = useState(-1);
 
     useEffect(
         () => {
@@ -71,9 +70,19 @@ export default function ListTasksRowsComponent({
         return time_string;
     }
 
-    function updateCommentsData(task) {
+    function updateCommentsPopupData(task) {
         setShowCommentsId(task.id)
         setCommentsTitle(task.description)
+    }
+
+    function updateTaskStatus(task, status) {
+        task.status = status;
+
+        updateTaskApi(project.id, task.id, task)
+            .then(() => {
+                setAllTasksReload(prevReload => prevReload + 1)
+            })
+            .catch(error => console.error(error.message))
     }
 
     return (
@@ -113,7 +122,7 @@ export default function ListTasksRowsComponent({
                                             <i className="bi bi-three-dots-vertical" />
                                         </button>
                                         <div className="update-popup text-end">
-                                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateCommentsData(task)}>
+                                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateCommentsPopupData(task)}>
                                                 comments <i className="bi bi-chat-right-text" />
                                             </button>
                                             {
@@ -125,6 +134,25 @@ export default function ListTasksRowsComponent({
                                             <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateTask(task.id)}>
                                                 Update Task <i className="bi bi-pencil-square" />
                                             </button>
+
+                                            {
+                                                task.status !== 'added' &&
+                                                < button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateTaskStatus(task, 'added')}>
+                                                    Mark Current <i className="bi bi-check2-circle" />
+                                                </button>
+                                            }
+                                            {
+                                                task.status !== 'completed' &&
+                                                < button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateTaskStatus(task, 'completed')}>
+                                                    Mark Completed <i className="bi bi-check2-circle" />
+                                                </button>
+                                            }
+                                            {
+                                                task.status !== 'archived' &&
+                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateTaskStatus(task, 'archived')}>
+                                                    Mark Archived <i className="bi bi-archive" />
+                                                </button>
+                                            }
                                         </div>
                                     </span>
                                 }
@@ -141,7 +169,7 @@ export default function ListTasksRowsComponent({
                                     setTasksReload={setTasksReload}
                                 />
                             }
-                        </div>
+                        </div >
                     )
                 )
             }
