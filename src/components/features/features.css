@@ -92,3 +92,7 @@
     width: 100%;
     text-align: right;
 }
+
+.update-popup button i {
+    vertical-align: middle !important;
+}
