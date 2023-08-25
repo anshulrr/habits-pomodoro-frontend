@@ -94,7 +94,7 @@
 }
 
 /* box-shadow might have performance issues */
-.decorated-row {
+/* .decorated-row {
     border: thin solid #ffffff;
     padding-left: 4px;
     padding-top: 6px;
@@ -106,4 +106,4 @@
 
 .play-button {
     box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.2);
-}
+} */
