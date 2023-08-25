@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import moment from 'moment';
 
 import { updatePomodoroApi } from 'services/api/PomodoroApiService';
+import { generateInitialTimer, calculateTimeRemaining, generateTimer } from 'services/helpers/timerHelper';
 
 import BreakTimerComponent from 'components/features/pomodoros/BreakTimerComponent';
 import ListCommentsComponent from 'components/features/comments/ListCommentsComponents';
@@ -20,31 +21,13 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
     const [showCommentsId, setShowCommentsId] = useState(-1);
     const [commentsTitle, setCommentsTitle] = useState('')
 
-    const initialTimeRemaining = pomodoro.length * 60 - pomodoro.timeElapsed;
-    const seconds = initialTimeRemaining % 60;
-    const minutes = Math.floor(initialTimeRemaining / 60) % 60;
-    const hours = Math.floor(initialTimeRemaining / 60 / 60);
-
-    const [timer, setTimer] = useState(
-        (hours > 9 ? hours : '0' + hours) + ':' +
-        (minutes > 9 ? minutes : '0' + minutes) + ':' +
-        (seconds > 9 ? seconds : '0' + seconds)
-    )
-    // console.debug(timer);
-
-    const [timeRemaining, setTimeRemaining] = useState(initialTimeRemaining)
-
     const [status, setStatus] = useState(pomodoro.status)
 
-    const calculateTimeRemaining = (endTime) => {
-        const total = Date.parse(endTime) - Date.parse(new Date());
-        const seconds = Math.floor(total / 1000) % 60;
-        const minutes = Math.floor(total / 1000 / 60) % 60;
-        const hours = Math.floor(total / 1000 / 60 / 60);    // use % 24: if showing day separately
-        return {
-            total, hours, minutes, seconds
-        };
-    }
+    const initialTimeRemaining = pomodoro.length * 60 - pomodoro.timeElapsed;
+
+    const [timer, setTimer] = useState(generateInitialTimer(initialTimeRemaining))
+
+    const [timeRemaining, setTimeRemaining] = useState(initialTimeRemaining)
 
     const updateTimer = (endTime) => {
         let { total, hours, minutes, seconds }
@@ -54,11 +37,11 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
             // update the timer
             // check if less than 10 then we need to 
             // add '0' at the beginning of the variable
-            setTimer(
-                (hours > 9 ? hours : '0' + hours) + ':' +
-                (minutes > 9 ? minutes : '0' + minutes) + ':' +
-                (seconds > 9 ? seconds : '0' + seconds)
-            )
+            let updatedTimer = generateTimer({ hours, minutes, seconds });
+
+            setTimer(updatedTimer)
+            // document.title = `Habits Pomodoro (${updatedTimer})`;
+
             // console.debug(timeRemaining, total / 1000)
             setTimeRemaining(total / 1000);
             // // temp fix to keep service worker alive
@@ -75,6 +58,7 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
             // timeRemaing in this thread has different value
             // hence passing it as method parameter
             updatePomodoro('completed', 0);
+            // document.title = `Habits Pomodoro`;
             const audio = new Audio(process.env.PUBLIC_URL + '/audio/success-1-6297.mp3')
             audio.play();
         }
