@@ -163,7 +163,7 @@ export default function ListTasksComponent({ project }) {
                         {
                             tasksCount !== 0 &&
                             <ListTasksRowsComponent
-                                key={[project.id, pomodoroStatus, tasksReload]}    // re-render ListTasksComponents for completed pomodoro'
+                                key={[project.id, pomodoroStatus, tasksReload, allTasksReload]}    // re-render ListTasksComponents for completed pomodoro'
                                 status={'added'}
                                 tasksCount={tasksCount}
                                 project={project}

@@ -13,9 +13,6 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
 
     const [totalTimeElapsed, setTotalTimeElapsed] = useState('00:00');
 
-    const [deleteErrorMessage, setDeleteErrorMessage] = useState('');
-    const [deleteId, setDeleteId] = useState(-1);
-
     const [showCommentsId, setShowCommentsId] = useState(-1);
     const [commentsTitle, setCommentsTitle] = useState('')
 
@@ -62,17 +59,13 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
     }
 
     function deleltePastPomodoro(id) {
-        setDeleteErrorMessage('')
-        if (deleteId !== id) {
-            setDeleteId(id)
-            setDeleteErrorMessage('Click again to delete: ' + id)
-            return
+        if (!window.confirm("Are you sure? Press OK to delete.")) {
+            return;
         }
         deletePastPomodoroApi(id)
             .then(response => {
                 // console.debug(response)
                 setPomodorosListReload(prevReload => prevReload + 1)
-                setDeleteErrorMessage('')
             })
             .catch(error => console.error(error.message))
     }
@@ -99,7 +92,6 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
                     <i className="ms-1 bi bi-clock" />
                 </span>
             </h6>
-            <div className="text-danger"><small>{deleteErrorMessage}</small></div>
             {
                 includeCategories &&
                 <Buttons

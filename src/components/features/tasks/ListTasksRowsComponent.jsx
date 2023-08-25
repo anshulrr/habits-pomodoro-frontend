@@ -76,6 +76,9 @@ export default function ListTasksRowsComponent({
     }
 
     function updateTaskStatus(task, status) {
+        if (!window.confirm("Press OK to change status.")) {
+            return;
+        }
         task.status = status;
 
         updateTaskApi(project.id, task.id, task)
@@ -123,12 +126,12 @@ export default function ListTasksRowsComponent({
                                         </button>
                                         <div className="update-popup text-end">
                                             <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateCommentsPopupData(task)}>
-                                                comments <i className="bi bi-chat-right-text" />
+                                                Comments <i className="bi bi-chat-right-text" />
                                             </button>
                                             {
                                                 task.status === 'added' &&
                                                 <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowCreatePastPomodoro(task.id)}>
-                                                    Add Past Pomodoro <i className="bi bi-calendar-plus" />
+                                                    Add past Pomodoro <i className="bi bi-calendar-plus" />
                                                 </button>
                                             }
                                             <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateTask(task.id)}>
@@ -138,19 +141,19 @@ export default function ListTasksRowsComponent({
                                             {
                                                 task.status !== 'added' &&
                                                 < button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateTaskStatus(task, 'added')}>
-                                                    Mark Current <i className="bi bi-check2-circle" />
+                                                    Mark as current <i className="bi bi-check2-circle" />
                                                 </button>
                                             }
                                             {
                                                 task.status !== 'completed' &&
                                                 < button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateTaskStatus(task, 'completed')}>
-                                                    Mark Completed <i className="bi bi-check2-circle" />
+                                                    Mark as completed <i className="bi bi-check2-circle" />
                                                 </button>
                                             }
                                             {
                                                 task.status !== 'archived' &&
                                                 <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateTaskStatus(task, 'archived')}>
-                                                    Mark Archived <i className="bi bi-archive" />
+                                                    Mark as archived <i className="bi bi-archive" />
                                                 </button>
                                             }
                                         </div>
