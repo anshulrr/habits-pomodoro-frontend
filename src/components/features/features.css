@@ -26,7 +26,7 @@
     display: none
 }
 
-/* for tasks list */
+/* css for tasks list */
 .task-list-row {
     border-bottom: thin solid #dee2e6;
 }
@@ -52,9 +52,11 @@
     display: inline;
 }
 
-/* update popup */
+/* css for row with update popup */
 .update-list-row {
     border-bottom: thin solid #ffffff;
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
 
 .update-popup-button {
@@ -89,4 +91,19 @@
 .update-popup button {
     display: inline-block;
     margin: 0.2rem;
+}
+
+/* box-shadow might have performance issues */
+.decorated-row {
+    border: thin solid #ffffff;
+    padding-left: 4px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    border-radius: 0.3rem;
+    box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.2);
+    margin-top: 2px !important;
+}
+
+.play-button {
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.2);
 }

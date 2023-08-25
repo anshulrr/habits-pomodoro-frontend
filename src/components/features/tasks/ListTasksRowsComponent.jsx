@@ -81,11 +81,11 @@ export default function ListTasksRowsComponent({
             {
                 tasks.map(
                     task => (
-                        <div key={task.id} className="row py-2 update-list-row">
+                        <div key={task.id} className="row update-list-row decorated-row">
                             <div className="col-8 text-start px-0">
                                 {
                                     task.status === 'added' &&
-                                    <button type="button" className="btn btn-sm btn-outline-success py-0 px-1 me-1" onClick={() => createNewPomodoro(task, project)}>
+                                    <button type="button" className="btn btn-sm btn-outline-success py-0 px-1 me-1 play-button" onClick={() => createNewPomodoro(task, project)}>
                                         <i className="bi bi-play-circle"></i>
                                     </button>
                                 }
