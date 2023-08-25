@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import moment from 'moment';
 
 import { updatePomodoroApi } from 'services/api/PomodoroApiService';
+import { generateInitialTimer, calculateTimeRemaining, generateTimer } from 'services/helpers/timerHelper';
 
 import BreakTimerComponent from 'components/features/pomodoros/BreakTimerComponent';
 import ListCommentsComponent from 'components/features/comments/ListCommentsComponents';
@@ -15,34 +16,18 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
     // stop it when needed
     const intervalRef = useRef(null);
 
+    const [openPomodoroPopup, setOpenCommentsPopup] = useState(false)
+
     const [showCommentsId, setShowCommentsId] = useState(-1);
     const [commentsTitle, setCommentsTitle] = useState('')
 
-    const initialTimeRemaining = pomodoro.length * 60 - pomodoro.timeElapsed;
-    const seconds = initialTimeRemaining % 60;
-    const minutes = Math.floor(initialTimeRemaining / 60) % 60;
-    const hours = Math.floor(initialTimeRemaining / 60 / 60);
-
-    const [timer, setTimer] = useState(
-        (hours > 9 ? hours : '0' + hours) + ':' +
-        (minutes > 9 ? minutes : '0' + minutes) + ':' +
-        (seconds > 9 ? seconds : '0' + seconds)
-    )
-    // console.debug(timer);
-
-    const [timeRemaining, setTimeRemaining] = useState(initialTimeRemaining)
-
     const [status, setStatus] = useState(pomodoro.status)
 
-    const calculateTimeRemaining = (endTime) => {
-        const total = Date.parse(endTime) - Date.parse(new Date());
-        const seconds = Math.floor(total / 1000) % 60;
-        const minutes = Math.floor(total / 1000 / 60) % 60;
-        const hours = Math.floor(total / 1000 / 60 / 60);    // use % 24: if showing day separately
-        return {
-            total, hours, minutes, seconds
-        };
-    }
+    const initialTimeRemaining = pomodoro.length * 60 - pomodoro.timeElapsed;
+
+    const [timer, setTimer] = useState(generateInitialTimer(initialTimeRemaining))
+
+    const [timeRemaining, setTimeRemaining] = useState(initialTimeRemaining)
 
     const updateTimer = (endTime) => {
         let { total, hours, minutes, seconds }
@@ -52,11 +37,9 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
             // update the timer
             // check if less than 10 then we need to 
             // add '0' at the beginning of the variable
-            setTimer(
-                (hours > 9 ? hours : '0' + hours) + ':' +
-                (minutes > 9 ? minutes : '0' + minutes) + ':' +
-                (seconds > 9 ? seconds : '0' + seconds)
-            )
+            let updatedTimer = generateTimer({ hours, minutes, seconds });
+            setTimer(updatedTimer)
+
             // console.debug(timeRemaining, total / 1000)
             setTimeRemaining(total / 1000);
             // // temp fix to keep service worker alive
@@ -201,53 +184,75 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
         )
     }
 
+    function handleDobuleClick(e) {
+        if (e.detail === 2) {
+            setOpenCommentsPopup(!openPomodoroPopup)
+        }
+    }
+
     return (
-        <div className="PomodoroComponent">
-            <div className="">
-                <span className="text-secondary px-1">
-                    <i className="bi bi-folder2" />
-                </span>
-                <small>
-                    {pomodoro.task.project.name}
-                </small>
-                <h5>
-                    <span className="badge rounded-pill text-bg-light">
-                        <i className="bi bi-list-ul" />
+        <div className="PomodoroComponent" onClick={(e) => handleDobuleClick(e)}>
+            {
+                status !== 'completed' && !openPomodoroPopup &&
+                <div className="pomodoro-display-top pomodoro-display-top-deco" style={{ backgroundColor: pomodoro.task.project.color }}>
+                    {timer}
+                    <i className="bi bi-fullscreen-exit" onClick={() => setOpenCommentsPopup(!openPomodoroPopup)} />
+                </div>
+            }
+            {
+                (status === 'completed' || openPomodoroPopup) &&
+                <div className="">
+                    <span className="text-secondary px-1">
+                        <i className="bi bi-folder2" />
                     </span>
-                    {pomodoro.task.description}
-                    <button type="button" className="btn btn-sm btn-outline-secondary ms-1 py-0 px-1" onClick={() => updateCommentsData(pomodoro)}>
-                        <i className="bi bi-chat-right-text" />
-                    </button>
-                </h5>
-                {
-                    status !== 'completed' &&
-                    <div className="fs-1 p-3 text-white" style={{ backgroundColor: pomodoro.task.project.color, fontVariantNumeric: "tabular-nums" }}>
-                        {timer}
-                    </div>
-                }
+                    <small>
+                        {pomodoro.task.project.name}
+                    </small>
+                    <h5>
+                        <span className="badge rounded-pill text-bg-light">
+                            <i className="bi bi-list-ul" />
+                        </span>
+                        {pomodoro.task.description}
+                        <button type="button" className="btn btn-sm btn-outline-secondary ms-1 py-0 px-1" onClick={() => updateCommentsData(pomodoro)}>
+                            <i className="bi bi-chat-right-text" />
+                        </button>
+                        {
+                            status !== 'completed' &&
+                            < button type="button" className="btn btn-sm btn-outline-secondary ms-1 py-0 px-1" onClick={() => setOpenCommentsPopup(!openPomodoroPopup)}>
+                                <i className="bi bi-fullscreen" />
+                            </button>
+                        }
+                    </h5>
+                    {
+                        status !== 'completed' &&
+                        <div className="fs-1 p-3 text-white" style={{ backgroundColor: pomodoro.task.project.color, fontVariantNumeric: "tabular-nums" }}>
+                            {timer}
+                        </div>
+                    }
 
-                {
-                    status === 'started' &&
-                    <div className="btn btn-sm btn-warning m-2" onClick={() => updatePomodoro("paused", timeRemaining)}>Pause</div>
-                }
+                    {
+                        status === 'started' &&
+                        <div className="btn btn-sm btn-warning m-2" onClick={() => updatePomodoro("paused", timeRemaining)}>Pause</div>
+                    }
 
-                {
-                    status === 'paused' &&
-                    <div className="btn btn-sm btn-success m-2" onClick={() => updatePomodoro("started", timeRemaining)}>Continue</div>
-                }
+                    {
+                        status === 'paused' &&
+                        <div className="btn btn-sm btn-success m-2" onClick={() => updatePomodoro("started", timeRemaining)}>Continue</div>
+                    }
 
-                {
-                    status !== 'completed' &&
-                    <div className="btn btn-sm btn-danger m-2" onClick={() => updatePomodoro("completed", timeRemaining)}>Finish</div>
-                }
+                    {
+                        status !== 'completed' &&
+                        <div className="btn btn-sm btn-danger m-2" onClick={() => updatePomodoro("completed", timeRemaining)}>Finish</div>
+                    }
 
-                {
-                    status === 'completed' &&
-                    <BreakTimerComponent
-                        startAgain={startAgain}
-                    />
-                }
-            </div>
+                    {
+                        status === 'completed' &&
+                        <BreakTimerComponent
+                            startAgain={startAgain}
+                        />
+                    }
+                </div>
+            }
 
             {
                 showCommentsId !== -1 &&
@@ -258,6 +263,6 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
                     setShowCommentsId={setShowCommentsId}
                 />
             }
-        </div>
+        </div >
     )
 }

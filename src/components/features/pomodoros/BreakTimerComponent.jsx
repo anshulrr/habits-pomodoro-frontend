@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { useAuth } from 'services/auth/AuthContext';
+import { generateInitialTimer, calculateTimeRemaining, generateTimer } from 'services/helpers/timerHelper';
 
 import StopwatchComponent from 'components/features/pomodoros/StopwatchComponent'
 
@@ -13,15 +14,8 @@ export default function BreakTimerComponent({ startAgain }) {
     const [breakStatus, setBreakStatus] = useState('idle')
 
     const initialTimeRemaining = userSettings.breakLength * 60;
-    const seconds = initialTimeRemaining % 60;
-    const minutes = Math.floor(initialTimeRemaining / 60) % 60;
-    const hours = Math.floor(initialTimeRemaining / 60 / 60);
 
-    const [breakTimer, setBreakTimer] = useState(
-        (hours > 9 ? hours : '0' + hours) + ':' +
-        (minutes > 9 ? minutes : '0' + minutes) + ':' +
-        (seconds > 9 ? seconds : '0' + seconds)
-    )
+    const [breakTimer, setBreakTimer] = useState(generateInitialTimer(initialTimeRemaining));
 
     const [breakTimeRemaining, setBreakTimeRemaining] = useState(initialTimeRemaining);
 
@@ -30,27 +24,15 @@ export default function BreakTimerComponent({ startAgain }) {
     // Todo: check why audio network call happened many times with useState
     const [audio, setAudio] = useState(null)
 
-    const calculateTimeRemaining = (endTime) => {
-        const total = Date.parse(endTime) - Date.parse(new Date());
-        const seconds = Math.floor((total / 1000) % 60);
-        const minutes = Math.floor((total / 1000 / 60) % 60);
-        return {
-            total, minutes, seconds
-        };
-    }
-
     const updateBreakTimer = (endTime) => {
-        let { total, minutes, seconds }
+        let { total, hours, minutes, seconds }
             = calculateTimeRemaining(endTime);
         if (total > 0) {
 
             // update the timer
             // check if less than 10 then we need to 
             // add '0' at the beginning of the variable
-            setBreakTimer(
-                (minutes > 9 ? minutes : '0' + minutes) + ':'
-                + (seconds > 9 ? seconds : '0' + seconds)
-            )
+            setBreakTimer(generateTimer({ hours, minutes, seconds }))
             // console.debug(total / 1000)
             setBreakTimeRemaining(total / 1000);
         } else {
@@ -140,7 +122,7 @@ export default function BreakTimerComponent({ startAgain }) {
             }
 
             {
-                <div className="btn btn-sm btn-success m-2" onClick={startAgain}>Start Again</div>
+                <div className="btn btn-sm btn-outline-success m-2" onClick={startAgain}>Start Again</div>
             }
 
             {

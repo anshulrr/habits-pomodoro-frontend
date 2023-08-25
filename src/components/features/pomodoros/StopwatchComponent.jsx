@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { generateTimer } from 'services/helpers/timerHelper';
 
 export default function StopwatchComponent({ message }) {
 
@@ -21,11 +22,7 @@ export default function StopwatchComponent({ message }) {
         // update the timer
         // check if less than 10 then we need to 
         // add '0' at the beginning of the variable
-        setStopwatch(
-            (hours > 9 ? hours : '0' + hours) + ':' +
-            (minutes > 9 ? minutes : '0' + minutes) + ':'
-            + (seconds > 9 ? seconds : '0' + seconds)
-        )
+        setStopwatch(generateTimer({ hours, minutes, seconds }))
         // console.debug(total / 1000)
     }
 
