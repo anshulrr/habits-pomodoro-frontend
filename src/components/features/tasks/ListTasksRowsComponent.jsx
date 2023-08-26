@@ -109,7 +109,7 @@ export default function ListTasksRowsComponent({
                     <div className="loader"></div>
                 </div>
             }
-            <div id="tasks-list" ref={tasksListElement} onChange={() => console.log("hi")}>
+            <div id="tasks-list" ref={tasksListElement}>
                 {
                     tasks.map(
                         task => (

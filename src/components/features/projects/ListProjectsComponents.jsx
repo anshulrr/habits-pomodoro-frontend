@@ -43,7 +43,6 @@ export default function ListProjectsComponent() {
     useEffect(
         () => {
             // console.debug('re-render ListProjectsComponents')
-            // console.log(projectsListElement.current.offsetHeight)
             refreshProjects()
         }, [currentPage] // eslint-disable-line react-hooks/exhaustive-deps
     )
@@ -53,7 +52,6 @@ export default function ListProjectsComponent() {
         retrieveAllProjectsApi(PAGESIZE, (currentPage - 1) * PAGESIZE)
             .then(response => {
                 // console.debug(response)
-                // console.log(projectsListElement.current.offsetHeight)
                 setProjects(response.data)
                 if (!project && response.data.length > 0) {
                     setProject(response.data[0])
