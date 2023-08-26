@@ -101,7 +101,7 @@ export default function ListProjectsComponent() {
                         </div>
                         {
                             projects.length === 0 &&
-                            <div className="loader-container" style={{ height: projectListElement.current.offsetHeight }}>
+                            <div className="loader-container" style={{ height: projectListElement.current ? projectListElement.current.offsetHeight : 0 }}>
                                 <div className="loader"></div>
                             </div>
                         }
