@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useNavigate, useLocation } from "react-router-dom";
 
 import { retrieveAllProjectsApi, getProjectsCountApi } from "services/api/ProjectApiService";
@@ -14,6 +14,8 @@ export default function ListProjectsComponent() {
 
     const navigate = useNavigate()
     const { state } = useLocation();
+
+    const projectListElement = useRef(null);
 
     const PAGESIZE = userSettings.pageProjectsCount;
 
@@ -41,14 +43,17 @@ export default function ListProjectsComponent() {
     useEffect(
         () => {
             // console.debug('re-render ListProjectsComponents')
+            // console.log(projectListElement.current.offsetHeight)
             refreshProjects()
         }, [currentPage] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
     function refreshProjects() {
+        setProjects([]);
         retrieveAllProjectsApi(PAGESIZE, (currentPage - 1) * PAGESIZE)
             .then(response => {
                 // console.debug(response)
+                // console.log(projectListElement.current.offsetHeight)
                 setProjects(response.data)
                 if (!project && response.data.length > 0) {
                     setProject(response.data[0])
@@ -94,59 +99,66 @@ export default function ListProjectsComponent() {
                                 <i className="bi bi-plus-circle" ></i>
                             </button>
                         </div>
-
                         {
-                            projects.map(
-                                proj => (
-                                    <div
-                                        key={proj.id}
-                                        className={(project && proj.id === project.id ? "list-selected " : "") + "row py-2 list-row"}
-                                        onClick={() => {
-                                            if (project && project.id === proj.id) {
-                                                return;
-                                            }
-                                            setProject(proj);
-                                            // udpate state: to be passed with further navigations
-                                            state.project = proj;
-                                            state.currentTasksPage = 1;
-                                            state.currentCompletedTasksPage = 1;
-                                            state.currentArchivedTasksPage = 1;
-                                            state.showCompletedTasks = false;
-                                            state.showArchivedTasks = false;
-                                            // for page refresh: set it right away
-                                            navigate(`/projects`, { state, replace: true });
-                                        }}
-                                    >
-                                        {/* todo: decide better solution for maxWidth */}
-                                        <div className="col-8 text-truncate text-start">
-                                            {/* <Link to={"/projects/" + proj.id + "/tasks"} state={{ proj }}>{proj.name}</Link> */}
-                                            <span style={{ color: proj.color }}>&#9632; </span>
-                                            {proj.name}
-                                        </div>
-                                        <div className="col-4 ps-0 text-secondary text-truncate text-end list-details">
-                                            <span className="badge rounded-pill text-bg-light fw-normal">
-                                                <i className="bi bi-link-45deg" style={{ paddingRight: '0.1rem' }} />
-                                                {proj.category}
-                                            </span>
-                                            <span className="badge rounded-pill text-bg-light fw-normal">
-                                                <i className="bi bi-hourglass" />
-                                                {proj.pomodoroLength || userSettings.pomodoroLength}
-                                            </span>
-                                        </div>
-                                        <div className="col-4 ps-0 text-secondary text-end list-button">
-                                            <div className="input-group justify-content-end">
-                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowCommentsId(proj.id)}>
-                                                    <i className="bi bi-chat-right-text" />
-                                                </button>
-                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateProject(proj.id)}>
-                                                    <i className="bi bi-pencil-square"></i>
-                                                </button>
+                            projects.length === 0 &&
+                            <div className="loader-container" style={{ height: projectListElement.current.offsetHeight }}>
+                                <div className="loader"></div>
+                            </div>
+                        }
+                        <div id="projects-list" ref={projectListElement}>
+                            {
+                                projects.map(
+                                    proj => (
+                                        <div
+                                            key={proj.id}
+                                            className={(project && proj.id === project.id ? "list-selected " : "") + "row py-2 list-row"}
+                                            onClick={() => {
+                                                if (project && project.id === proj.id) {
+                                                    return;
+                                                }
+                                                setProject(proj);
+                                                // udpate state: to be passed with further navigations
+                                                state.project = proj;
+                                                state.currentTasksPage = 1;
+                                                state.currentCompletedTasksPage = 1;
+                                                state.currentArchivedTasksPage = 1;
+                                                state.showCompletedTasks = false;
+                                                state.showArchivedTasks = false;
+                                                // for page refresh: set it right away
+                                                navigate(`/projects`, { state, replace: true });
+                                            }}
+                                        >
+                                            {/* todo: decide better solution for maxWidth */}
+                                            <div className="col-8 text-truncate text-start">
+                                                {/* <Link to={"/projects/" + proj.id + "/tasks"} state={{ proj }}>{proj.name}</Link> */}
+                                                <span style={{ color: proj.color }}>&#9632; </span>
+                                                {proj.name}
+                                            </div>
+                                            <div className="col-4 ps-0 text-secondary text-truncate text-end list-details">
+                                                <span className="badge rounded-pill text-bg-light fw-normal">
+                                                    <i className="bi bi-link-45deg" style={{ paddingRight: '0.1rem' }} />
+                                                    {proj.category}
+                                                </span>
+                                                <span className="badge rounded-pill text-bg-light fw-normal">
+                                                    <i className="bi bi-hourglass" />
+                                                    {proj.pomodoroLength || userSettings.pomodoroLength}
+                                                </span>
+                                            </div>
+                                            <div className="col-4 ps-0 text-secondary text-end list-button">
+                                                <div className="input-group justify-content-end">
+                                                    <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowCommentsId(proj.id)}>
+                                                        <i className="bi bi-chat-right-text" />
+                                                    </button>
+                                                    <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateProject(proj.id)}>
+                                                        <i className="bi bi-pencil-square"></i>
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    )
                                 )
-                            )
-                        }
+                            }
+                        </div>
 
                         <Pagination
                             className="pagination-bar mt-3"
