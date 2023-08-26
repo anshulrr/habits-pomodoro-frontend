@@ -17,7 +17,9 @@ export default function ListTasksRowsComponent({
     updateTask,
     setPomodorosListReload,
     setTasksReload,
-    setAllTasksReload
+    setAllTasksReload,
+    elementHeight,
+    setElementHeight,
 }) {
     const navigate = useNavigate()
     const { state } = useLocation();
@@ -64,7 +66,9 @@ export default function ListTasksRowsComponent({
         setCommentsTitle(task.description)
     }
 
-    function updateTaskStatus(task, status) {
+    function onUpdateTaskStatus(task, status) {
+        setElementHeight(tasksListElement.current.offsetHeight)
+
         let statusString = status === 'added' ? 'current' : status;
         if (!window.confirm(`Press OK to mark task as ${statusString}.`)) {
             return;
@@ -78,15 +82,34 @@ export default function ListTasksRowsComponent({
             .catch(error => console.error(error.message))
     }
 
+    function onCreatePastPomodoro(task) {
+        setElementHeight(tasksListElement.current.offsetHeight)
+        setShowCreatePastPomodoro(task.id)
+    }
+
+    function updateOnPageChange(page) {
+        setElementHeight(tasksListElement.current.offsetHeight)
+        setCurrentPage(page)
+        status === 'added' && (state.currentTasksPage = page);
+        status === 'completed' && (state.currentCompletedTasksPage = page);
+        status === 'archived' && (state.currentArchivedTasksPage = page);
+        navigate(`/projects`, { state, replace: true })
+    }
+
+    function onCreateNewPomodoro(task) {
+        setElementHeight(tasksListElement.current.offsetHeight)
+        createNewPomodoro(task, project)
+    }
+
     return (
         <>
             {
                 tasks.length === 0 &&
-                <div className="loader-container" style={{ height: tasksListElement.current ? tasksListElement.current.offsetHeight : 0 }}>
+                <div className="loader-container" style={{ height: elementHeight }}>
                     <div className="loader"></div>
                 </div>
             }
-            <div id="tasks-list" ref={tasksListElement}>
+            <div id="tasks-list" ref={tasksListElement} onChange={() => console.log("hi")}>
                 {
                     tasks.map(
                         task => (
@@ -94,7 +117,7 @@ export default function ListTasksRowsComponent({
                                 <div className="col-8 text-start px-0">
                                     {
                                         task.status === 'added' &&
-                                        <button type="button" className="btn btn-sm btn-outline-success py-0 px-1 me-1" onClick={() => createNewPomodoro(task, project)}>
+                                        <button type="button" className="btn btn-sm btn-outline-success py-0 px-1 me-1" onClick={() => onCreateNewPomodoro(task)}>
                                             <i className="bi bi-play-circle"></i>
                                         </button>
                                     }
@@ -127,7 +150,7 @@ export default function ListTasksRowsComponent({
                                                 </button>
                                                 {
                                                     task.status === 'added' &&
-                                                    <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowCreatePastPomodoro(task.id)}>
+                                                    <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onCreatePastPomodoro(task)}>
                                                         Add past Pomodoro <i className="bi bi-calendar-plus" />
                                                     </button>
                                                 }
@@ -137,19 +160,19 @@ export default function ListTasksRowsComponent({
 
                                                 {
                                                     task.status !== 'added' &&
-                                                    < button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateTaskStatus(task, 'added')}>
+                                                    < button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateTaskStatus(task, 'added')}>
                                                         Mark as current <i className="bi bi-check2-circle" />
                                                     </button>
                                                 }
                                                 {
                                                     task.status !== 'completed' &&
-                                                    < button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateTaskStatus(task, 'completed')}>
+                                                    < button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateTaskStatus(task, 'completed')}>
                                                         Mark as completed <i className="bi bi-check2-circle" />
                                                     </button>
                                                 }
                                                 {
                                                     task.status !== 'archived' &&
-                                                    <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateTaskStatus(task, 'archived')}>
+                                                    <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateTaskStatus(task, 'archived')}>
                                                         Mark as archived <i className="bi bi-archive" />
                                                     </button>
                                                 }
@@ -180,13 +203,7 @@ export default function ListTasksRowsComponent({
                 currentPage={currentPage}
                 totalCount={tasksCount}
                 pageSize={PAGESIZE}
-                onPageChange={page => {
-                    setCurrentPage(page)
-                    status === 'added' && (state.currentTasksPage = page);
-                    status === 'completed' && (state.currentCompletedTasksPage = page);
-                    status === 'archived' && (state.currentArchivedTasksPage = page);
-                    navigate(`/projects`, { state, replace: true })
-                }}
+                onPageChange={page => updateOnPageChange(page)}
             />
 
             {
