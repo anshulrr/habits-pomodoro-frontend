@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "services/auth/AuthContext";
 import Pagination from "services/pagination/Pagination";
 import { retrieveAllTasksApi, updateTaskApi } from "services/api/TaskApiService";
+import { timeToDisplay } from "services/helpers/listsHelper";
 
 import PastPomodoroComponent from "components/features/tasks/PastPomodoroComponent";
 import ListCommentsComponent from "components/features/comments/ListCommentsComponents";
@@ -53,21 +54,6 @@ export default function ListTasksRowsComponent({
                 setTasks(response.data)
             })
             .catch(error => console.error(error.message))
-    }
-
-    function timeToDisplay(total_minutes) {
-        if (total_minutes < 60) {
-            return Math.floor(total_minutes);
-        }
-        const minutes = Math.floor(total_minutes % 60);
-        const hours = Math.floor(total_minutes / 60);
-        // console.debug(total, minutes, hours);
-
-        let time_string = '';
-        time_string += hours + ':';
-        time_string += minutes > 9 ? minutes : '0' + minutes;
-
-        return time_string;
     }
 
     function updateCommentsPopupData(task) {

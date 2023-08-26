@@ -8,7 +8,14 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useAuth } from 'services/auth/AuthContext';
 import { createPastPomodoroApi } from "services/api/PomodoroApiService";
 
-export default function PastPomodoroComponent({ showCreatePastPomodoro, setShowCreatePastPomodoro, task, project, setPomodorosListReload, setTasksReload }) {
+export default function PastPomodoroComponent({
+    showCreatePastPomodoro,
+    setShowCreatePastPomodoro,
+    task,
+    project,
+    setPomodorosListReload,
+    setTasksReload
+}) {
     const authContext = useAuth()
     const userSettings = authContext.userSettings
 

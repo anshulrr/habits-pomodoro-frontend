@@ -3,6 +3,7 @@ import moment from "moment"
 
 import { deletePastPomodoroApi, getPomodorosApi } from "services/api/PomodoroApiService";
 import { retrieveAllProjectCategoriesApi } from "services/api/ProjectCategoryApiService";
+import { timeToDisplay } from "services/helpers/listsHelper";
 
 import { Buttons } from "components/stats/charts/Buttons";
 import ListCommentsComponent from "components/features/comments/ListCommentsComponents";
@@ -48,12 +49,7 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
                 // console.debug(response)
                 setPomodoros(response.data)
                 const total = response.data.reduce((acc, curr) => acc + Math.round(curr.timeElapsed / 60), 0);
-                const hours = Math.floor(total / 60);
-                const minutes = total % 60;
-                setTotalTimeElapsed(
-                    (hours > 9 ? hours : '0' + hours) + ':' +
-                    (minutes > 9 ? minutes : '0' + minutes)
-                )
+                setTotalTimeElapsed(timeToDisplay(total));
             })
             .catch(error => console.error(error.message))
     }
@@ -125,7 +121,7 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
                                                     </span>
                                                 </span>
                                                 <span className="badge rounded-pill text-bg-secondary fw-normal">
-                                                    {Math.round(pomodoro.timeElapsed / 60)}
+                                                    {timeToDisplay(Math.round(pomodoro.timeElapsed / 60))}
                                                     <i className="ps-1 bi bi-clock" />
                                                 </span>
                                             </span>
