@@ -18,6 +18,10 @@ export default function ListTasksComponent({ project }) {
 
     const [tasksCount, setTasksCount] = useState(0)
 
+    const [currentTasksHeight, setCurrentTasksHeight] = useState(0);
+    const [completedTasksHeight, setCompletedTasksHeight] = useState(0);
+    const [archivedTasksHeight, setArchivedTasksHeight] = useState(0);
+
     const [completedTasksCount, setCompletedTasksCount] = useState(0)
     const [showCompleted, setShowCompleted] = useState(false)
 
@@ -175,6 +179,8 @@ export default function ListTasksComponent({ project }) {
                                 setPomodorosListReload={setPomodorosListReload}
                                 setTasksReload={setTasksReload}
                                 setAllTasksReload={setAllTasksReload}
+                                elementHeight={currentTasksHeight}
+                                setElementHeight={setCurrentTasksHeight}
                             />
                         }
 
@@ -208,6 +214,8 @@ export default function ListTasksComponent({ project }) {
                                         updateTask={updateTask}
                                         setTasksReload={setTasksReload}
                                         setAllTasksReload={setAllTasksReload}
+                                        elementHeight={completedTasksHeight}
+                                        setElementHeight={setCompletedTasksHeight}
                                     />
                                 </div>
                             }
@@ -244,6 +252,8 @@ export default function ListTasksComponent({ project }) {
                                         updateTask={updateTask}
                                         setTasksReload={setTasksReload}
                                         setAllTasksReload={setAllTasksReload}
+                                        elementHeight={archivedTasksHeight}
+                                        setElementHeight={setArchivedTasksHeight}
                                     />
                                 </div>
                             }
