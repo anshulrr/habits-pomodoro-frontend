@@ -78,6 +78,26 @@ export default function ListProjectsComponent() {
         navigate(`/projects/-1`, { state, replace: true })
     }
 
+    function onUpdateProject(proj) {
+        if (project && project.id === proj.id) {
+            return;
+        }
+        setProject(proj);
+        // udpate state: to be passed with further navigations
+        updateAppStates(proj)
+    }
+
+    function updateAppStates(proj) {
+        state.project = proj;
+        state.currentTasksPage = 1;
+        state.currentCompletedTasksPage = 1;
+        state.currentArchivedTasksPage = 1;
+        state.showCompletedTasks = false;
+        state.showArchivedTasks = false;
+        // for page refresh: set it right away
+        navigate(`/projects`, { state, replace: true });
+    }
+
     return (
         <div className="container">
             <div className="row mb-3">
@@ -112,21 +132,7 @@ export default function ListProjectsComponent() {
                                         <div
                                             key={proj.id}
                                             className={(project && proj.id === project.id ? "list-selected " : "") + "row py-2 list-row"}
-                                            onClick={() => {
-                                                if (project && project.id === proj.id) {
-                                                    return;
-                                                }
-                                                setProject(proj);
-                                                // udpate state: to be passed with further navigations
-                                                state.project = proj;
-                                                state.currentTasksPage = 1;
-                                                state.currentCompletedTasksPage = 1;
-                                                state.currentArchivedTasksPage = 1;
-                                                state.showCompletedTasks = false;
-                                                state.showArchivedTasks = false;
-                                                // for page refresh: set it right away
-                                                navigate(`/projects`, { state, replace: true });
-                                            }}
+                                            onClick={() => onUpdateProject(proj)}
                                         >
                                             {/* todo: decide better solution for maxWidth */}
                                             <div className="col-8 text-truncate text-start">
