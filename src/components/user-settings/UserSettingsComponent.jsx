@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { putUserSettingsApi } from 'services/api/AuthApiService'
 import { useAuth } from 'services/auth/AuthContext';
 
 export default function UserSettingsComponent() {
+
+    const navigate = useNavigate()
+    const { state } = useLocation();
 
     const authContext = useAuth();
 
@@ -92,6 +96,7 @@ export default function UserSettingsComponent() {
                 setTimeout(() => {
                     setSuccessMessage('')
                 }, 1000 * 5)
+                updateAppStates()
             })
             .catch(error => {
                 console.error(error.message)
@@ -99,6 +104,18 @@ export default function UserSettingsComponent() {
                 setSuccessMessage('')
             })
 
+    }
+
+    function updateAppStates() {
+        if (!state) {
+            return;
+        }
+        state.currentProjectsPage = 1
+        state.currentTasksPage = 1;
+        state.currentCompletedTasksPage = 1;
+        state.currentArchivedTasksPage = 1;
+        // for page refresh: set it right away
+        navigate(`/settings`, { state, replace: true });
     }
 
     function isValidated() {
