@@ -54,7 +54,8 @@ export default function ListProjectsComponent() {
                 // console.debug(response)
                 setProjects(response.data)
                 if (!project && response.data.length > 0) {
-                    setProject(response.data[0])
+                    setProject(response.data[0]);
+                    updateAppStates(response.data[0]);
                 }
             })
             .catch(error => console.error(error.message))
