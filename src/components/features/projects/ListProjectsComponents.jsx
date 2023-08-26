@@ -15,7 +15,7 @@ export default function ListProjectsComponent() {
     const navigate = useNavigate()
     const { state } = useLocation();
 
-    const projectListElement = useRef(null);
+    const projectsListElement = useRef(null);
 
     const PAGESIZE = userSettings.pageProjectsCount;
 
@@ -43,7 +43,7 @@ export default function ListProjectsComponent() {
     useEffect(
         () => {
             // console.debug('re-render ListProjectsComponents')
-            // console.log(projectListElement.current.offsetHeight)
+            // console.log(projectsListElement.current.offsetHeight)
             refreshProjects()
         }, [currentPage] // eslint-disable-line react-hooks/exhaustive-deps
     )
@@ -53,7 +53,7 @@ export default function ListProjectsComponent() {
         retrieveAllProjectsApi(PAGESIZE, (currentPage - 1) * PAGESIZE)
             .then(response => {
                 // console.debug(response)
-                // console.log(projectListElement.current.offsetHeight)
+                // console.log(projectsListElement.current.offsetHeight)
                 setProjects(response.data)
                 if (!project && response.data.length > 0) {
                     setProject(response.data[0])
@@ -101,11 +101,11 @@ export default function ListProjectsComponent() {
                         </div>
                         {
                             projects.length === 0 &&
-                            <div className="loader-container" style={{ height: projectListElement.current ? projectListElement.current.offsetHeight : 0 }}>
+                            <div className="loader-container" style={{ height: projectsListElement.current ? projectsListElement.current.offsetHeight : 0 }}>
                                 <div className="loader"></div>
                             </div>
                         }
-                        <div id="projects-list" ref={projectListElement}>
+                        <div id="projects-list" ref={projectsListElement}>
                             {
                                 projects.map(
                                     proj => (
