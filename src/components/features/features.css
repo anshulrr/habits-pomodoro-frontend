@@ -1,7 +1,7 @@
 /* css for projects list */
 .list-row {
     cursor: pointer;
-    border-bottom: thin solid #dee2e6;
+    border-top: thin solid #dee2e6;
 }
 
 .list-row .list-button {
