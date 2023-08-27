@@ -124,7 +124,7 @@ export default function ListTasksRowsComponent({
                                 }
                                 <div className="px-0 col text-start">
 
-                                    <div className={(task.status === 'archived' ? "text-secondary" : "") + " lh-sm"}>
+                                    <div className={(task.status === 'archived' ? "text-secondary" : "") + " description"}>
                                         {task.description}
                                     </div>
                                     <div className="subscript text-secondary">
