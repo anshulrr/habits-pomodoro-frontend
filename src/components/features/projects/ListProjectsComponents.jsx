@@ -30,11 +30,6 @@ export default function ListProjectsComponent() {
 
     useEffect(
         () => {
-            // console.debug({ state });
-            // fix for directly opening url in a new tab
-            if (!state) {
-                navigate(`/projects`, { state: {}, replace: true });
-            }
             getProjectsCount()
         },
         [] // eslint-disable-line react-hooks/exhaustive-deps
@@ -55,6 +50,7 @@ export default function ListProjectsComponent() {
                 setProjects(response.data)
                 if (!project && response.data.length > 0) {
                     setProject(response.data[0]);
+                    // udpate state for first time load
                     updateAppStates(response.data[0]);
                 }
             })
@@ -87,14 +83,19 @@ export default function ListProjectsComponent() {
     }
 
     function updateAppStates(proj) {
-        state.project = proj;
-        state.currentTasksPage = 1;
-        state.currentCompletedTasksPage = 1;
-        state.currentArchivedTasksPage = 1;
-        state.showCompletedTasks = false;
-        state.showArchivedTasks = false;
+        // fix for directly opening url in a new tab
+        let local_state = {};
+        if (state) {
+            local_state = { ...state };
+        }
+        local_state.project = proj;
+        local_state.currentTasksPage = 1;
+        local_state.currentCompletedTasksPage = 1;
+        local_state.currentArchivedTasksPage = 1;
+        local_state.showCompletedTasks = false;
+        local_state.showArchivedTasks = false;
         // for page refresh: set it right away
-        navigate(`/projects`, { state, replace: true });
+        navigate(`/projects`, { state: local_state, replace: true });
     }
 
     return (
