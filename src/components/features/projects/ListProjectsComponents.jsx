@@ -141,11 +141,11 @@ export default function ListProjectsComponent() {
                                                 {proj.name}
                                             </div>
                                             <div className="col-4 ps-0 text-secondary text-truncate text-end list-details">
-                                                <span className="badge rounded-pill text-bg-light fw-normal">
+                                                <span className="badge rounded-pill text-bg-light fw-light">
                                                     <i className="bi bi-link-45deg" style={{ paddingRight: '0.1rem' }} />
                                                     {proj.category}
                                                 </span>
-                                                <span className="badge rounded-pill text-bg-light fw-normal">
+                                                <span className="badge rounded-pill text-bg-light fw-light">
                                                     <i className="bi bi-hourglass" />
                                                     {proj.pomodoroLength || userSettings.pomodoroLength}
                                                 </span>

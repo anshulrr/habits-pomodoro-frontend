@@ -149,3 +149,7 @@
         transform: rotate(360deg);
     }
 }
+
+.subscript {
+    font-size: xx-small;
+}

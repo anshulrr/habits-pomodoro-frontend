@@ -114,31 +114,32 @@ export default function ListTasksRowsComponent({
                     tasks.map(
                         task => (
                             <div key={task.id} className="row py-2 update-list-row">
-                                <div className="col-8 text-start px-0">
-                                    {
-                                        task.status === 'added' &&
-                                        <button type="button" className="btn btn-sm btn-outline-success py-0 px-1 me-1" onClick={() => onCreateNewPomodoro(task)}>
+                                {
+                                    task.status === 'added' &&
+                                    <div className="px-0 col-1 text-start">
+                                        <button type="button" className="btn btn-sm btn-outline-success py-0 px-1" onClick={() => onCreateNewPomodoro(task)}>
                                             <i className="bi bi-play-circle"></i>
                                         </button>
-                                    }
-                                    <span className={task.status === 'archived' ? "text-secondary" : ""}>
+                                    </div>
+                                }
+                                <div className="px-0 col text-start">
+
+                                    <div className={(task.status === 'archived' ? "text-secondary" : "") + " lh-sm"}>
                                         {task.description}
-                                    </span>
+                                    </div>
+                                    <div className="subscript text-secondary">
+                                        <span>
+                                            <i className="bi bi-hourglass" />
+                                            {timeToDisplay(task.pomodoroLength || project.pomodoroLength || userSettings.pomodoroLength)}
+                                        </span>
+                                        <span>
+                                            <i className="ps-1 bi bi-clock" style={{ paddingRight: "0.1rem" }} />
+                                            {timeToDisplay(task.pomodorosTimeElapsed / 60)}
+                                        </span>
+                                    </div>
                                 </div>
 
-                                <div className="col-4 px-0 text-secondary text-end">
-                                    {
-                                        <span className="small">
-                                            <span className="badge rounded-pill text-bg-secondary fw-normal">
-                                                {timeToDisplay(task.pomodorosTimeElapsed / 60)}
-                                                <i className="ps-1 bi bi-clock" />
-                                            </span>
-                                            <span className="badge rounded-pill text-bg-light fw-normal">
-                                                <i className="bi bi-hourglass" />
-                                                {timeToDisplay(task.pomodoroLength || project.pomodoroLength || userSettings.pomodoroLength)}
-                                            </span>
-                                        </span>
-                                    }
+                                <div className="px-0 col-1 text-secondary text-end">
                                     {
                                         <span className="update-popup-container">
                                             <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-0 update-popup-button">
