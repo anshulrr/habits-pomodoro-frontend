@@ -130,7 +130,7 @@ export default function ListTasksComponent({ project }) {
 
                 <div className="col-md-6 pt-3 border-bottom border-2" style={{ backgroundColor: "#e9ecef" }}>
 
-                    <div className="d-flex justify-content-between update-list-row">
+                    <div className="d-flex justify-content-between">
                         <h6>
                             <span className="text-secondary mx-1">
                                 <i className="bi bi-folder2" />

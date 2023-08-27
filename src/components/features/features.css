@@ -53,7 +53,7 @@
 
 /* for update popup */
 .update-list-row {
-    border-bottom: thin solid #ffffff;
+    border-top: thin solid #ffffff;
 }
 
 .update-popup-button {
@@ -150,6 +150,7 @@
     }
 }
 
+/* for lists row */
 .project-name {
     font-size: 0.875rem;
     line-height: 1.3;

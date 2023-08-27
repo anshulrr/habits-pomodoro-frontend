@@ -103,7 +103,7 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
                         pomodoros.map(
                             pomodoro => (
                                 <tr key={pomodoro.id} className="task-list-row">
-                                    <td className="text-start" style={{ paddingTop: "0.4rem", paddingBottom: "0.4rem" }}>
+                                    <td className="text-start text-secondary description" style={{ paddingTop: "0.4rem", paddingBottom: "0.4rem" }}>
                                         {pomodoro.task}
                                     </td>
                                     <td width="45%" className="align-middle text-end">
