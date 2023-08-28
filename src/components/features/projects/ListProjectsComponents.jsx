@@ -148,6 +148,10 @@ export default function ListProjectsComponent() {
                                                     {proj.category}
                                                 </span>
                                                 <span className="badge rounded-pill text-bg-light fw-light">
+                                                    <i className="bi bi-arrow-up" />
+                                                    {proj.priority}
+                                                </span>
+                                                <span className="badge rounded-pill text-bg-light fw-light">
                                                     <i className="bi bi-hourglass" />
                                                     {proj.pomodoroLength || userSettings.pomodoroLength}
                                                 </span>

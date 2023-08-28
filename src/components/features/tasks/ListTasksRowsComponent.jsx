@@ -129,7 +129,11 @@ export default function ListTasksRowsComponent({
                                     </div>
                                     <div className="subscript text-secondary">
                                         <span>
-                                            <i className="bi bi-hourglass" />
+                                            <i className="bi bi-arrow-up" />
+                                            {task.priority}
+                                        </span>
+                                        <span>
+                                            <i className="ps-1 bi bi-hourglass" />
                                             {timeToDisplay(task.pomodoroLength || project.pomodoroLength || userSettings.pomodoroLength)}
                                         </span>
                                         <span>
