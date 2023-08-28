@@ -47,7 +47,7 @@ export const TotalChart = ({ includeCategories, statsSettings, buttonsStates, se
                 // console.debug("stacked", response.data)
 
                 // set label after chart data is received
-                setChartLabel(`Total Distribution Time (${label})`);
+                setChartLabel(`Total (${label})`);
 
                 for (const key in response.data) {
                     const dataset = {
@@ -173,6 +173,10 @@ export const TotalChart = ({ includeCategories, statsSettings, buttonsStates, se
 
     return (
         <div>
+            <h6>
+                {chartLabel}<wbr />
+            </h6>
+
             <Buttons
                 retrievePomodoros={retrieveTotalPomodoros}
                 buttonsStates={buttonsStates}
@@ -195,10 +199,6 @@ export const TotalChart = ({ includeCategories, statsSettings, buttonsStates, se
                         maintainAspectRatio: true,
                         aspectRatio: 0.75,
                         plugins: {
-                            title: {
-                                display: true,
-                                text: chartLabel
-                            },
                             legend: {
                                 display: true,
                                 position: 'top',

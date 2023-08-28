@@ -130,7 +130,6 @@ export default function ListTasksComponent() {
                                     buttonsStates={tasksChartButtonsStates}
                                     setButtonsStates={setTasksChartBButtonsStates}
                                 />
-                                <hr />
                             </div>
                             <div className="col-md-6">
                                 <ProjectsDistributionChart
@@ -140,9 +139,8 @@ export default function ListTasksComponent() {
                                     buttonsStates={projectsChartButtonsStates}
                                     setButtonsStates={setProjectsChartBButtonsStates}
                                 />
-                                <hr />
                             </div>
-                            <div className="col-md-6">
+                            <div className="col-md-6 mt-2">
                                 <TotalChart
                                     key={reload}
                                     includeCategories={includeCategories}
@@ -150,9 +148,8 @@ export default function ListTasksComponent() {
                                     buttonsStates={totalChartButtonsStates}
                                     setButtonsStates={setTotalChartBButtonsStates}
                                 />
-                                <hr />
                             </div>
-                            <div className="col-md-6 overflow-scroll" style={{ maxHeight: "55vh" }}>
+                            <div className="col-md-6 mt-2 overflow-scroll" style={{ maxHeight: "55vh" }}>
                                 <ListPomodorosComponent
                                     key={reload}
                                     includeCategories={includeCategories}

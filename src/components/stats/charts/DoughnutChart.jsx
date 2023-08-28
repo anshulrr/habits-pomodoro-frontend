@@ -14,6 +14,10 @@ export const DoughnutChart = ({
 
     return (
         <div>
+            <h6>
+                {chartData.label}<wbr />
+            </h6>
+
             <Buttons
                 retrievePomodoros={retrievePomodoros}
                 buttonsStates={buttonsStates}
@@ -39,10 +43,6 @@ export const DoughnutChart = ({
                     options={{
                         responsive: true,
                         plugins: {
-                            title: {
-                                display: true,
-                                text: chartData.label
-                            },
                             legend: {
                                 display: true,
                                 position: 'right',

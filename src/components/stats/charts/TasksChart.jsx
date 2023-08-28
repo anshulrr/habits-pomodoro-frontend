@@ -8,7 +8,7 @@ import { DoughnutChart } from "components/stats/charts/DoughnutChart";
 export const TasksChart = ({ includeCategories, statsSettings, buttonsStates, setButtonsStates }) => {
     // console.debug('from TasksChart', includeCategories, statsSettings)
 
-    const [chartData, setChartData] = useState({ label: '' })
+    const [chartData, setChartData] = useState({ label: '', labels: [], data: [], colors: [] })
 
     function retrieveTasksPomodoros({ startDate, endDate, limit, offset }) {
         // console.debug(startDate, endDate)
@@ -27,7 +27,7 @@ export const TasksChart = ({ includeCategories, statsSettings, buttonsStates, se
                     labels: [],
                     data: [],
                     colors: [],
-                    label: `Task's Distribution Time (${label})`
+                    label: `Tasks (${label})`
                 }
                 response.data.forEach(element => {
                     // console.debug(element);
