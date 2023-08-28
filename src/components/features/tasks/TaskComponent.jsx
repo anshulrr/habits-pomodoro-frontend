@@ -71,12 +71,12 @@ export default function TaskComponent() {
 
     return (
         <div className="container">
-            <h4>
+            <h6>
                 <span className="badge rounded-pill text-bg-light">
                     <span className="bi bi-folder2" />
                 </span>
                 {state.project.name}
-            </h4>
+            </h6>
             <div>
                 <Formik initialValues={{ description, pomodoroLength, priority, status }}
                     enableReinitialize={true}
@@ -88,21 +88,25 @@ export default function TaskComponent() {
                     {
                         (props) => (
                             <Form>
-                                <div className="row">
+                                <div className="row small text-start text-secondary">
                                     <div className="col-md-12 mb-3">
+                                        <label htmlFor="description">Description</label>
                                         <Field type="text" className="form-control form-control-sm" name="description" placeholder="Description" />
                                         <ErrorMessage name="description" component="small" className="text-danger small" />
                                     </div>
                                     <div className="col-md-4 mb-3">
+                                        <label htmlFor="pomodoroLength">Default Pomodoro Length <i className="bi bi-hourglass" /></label>
                                         <Field type="number" className="form-control form-control-sm" min="0" name="pomodoroLength" placeholder="Default Pomodoro Length" />
                                         <small>(To use project's settings, set length to zero)</small>
                                         {props.errors.pomodoroLength && <div className="text-danger small">{props.errors.pomodoroLength}</div>}
                                     </div>
                                     <div className="col-md-4 mb-3">
+                                        <label htmlFor="priority">Priority <i className="bi bi-arrow-up" /></label>
                                         <Field type="number" className="form-control form-control-sm" min="0" name="priority" placeholder="Priority" />
                                         {props.errors.priority && <div className="text-danger small">{props.errors.priority}</div>}
                                     </div>
                                     <div className="col-md-4 mb-3">
+                                        <label htmlFor="status">Status</label>
                                         <Field as="select" className="form-select form-select-sm" name="status">
                                             {/* disabled option with value 0 for dropdown to avoid confusion of initial selection */}
                                             <option value="added">current</option>
@@ -110,7 +114,7 @@ export default function TaskComponent() {
                                             <option value="archived">archived</option>
                                         </Field>
                                     </div>
-                                    <div className="col-md-12 mb-3">
+                                    <div className="col-md-12 mb-3 text-end">
                                         <button className="me-2 btn btn-sm btn-outline-secondary" type="button" onClick={() => navigate('/projects', { state })}>Cancel</button>
                                         <button className="btn btn-sm btn-outline-success" type="submit">Save Task</button>
                                     </div>
