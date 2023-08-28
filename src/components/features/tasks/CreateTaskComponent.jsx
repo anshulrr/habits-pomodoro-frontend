@@ -12,7 +12,8 @@ export default function CreateTaskComponent({ setShowCreateTask, project, setTas
         const task = {
             description,
             pomodoroLength: 0,
-            status: 'added'
+            status: 'added',
+            priority: 1
         }
 
         createTaskApi(project.id, task)

@@ -14,6 +14,8 @@ export default function TaskComponent() {
 
     const [pomodoroLength, setPomodoroLength] = useState(0)    // todo: get this from user settings
 
+    const [priority, setPriority] = useState(1)
+
     const [status, setStatus] = useState('added')
 
     const navigate = useNavigate()
@@ -28,6 +30,7 @@ export default function TaskComponent() {
             .then(response => {
                 setDescription(response.data.description)
                 setPomodoroLength(response.data.pomodoroLength)
+                setPriority(response.data.priority)
                 setStatus(response.data.status)
             })
             .catch(error => console.error(error.message))
@@ -39,6 +42,7 @@ export default function TaskComponent() {
             id,
             description: values.description,
             pomodoroLength: values.pomodoroLength,
+            priority: values.priority,
             status: values.status
         }
 
@@ -58,20 +62,21 @@ export default function TaskComponent() {
         if (values.pomodoroLength === '' || values.pomodoroLength < 0) {
             errors.pomodoroLength = 'Enter zero or positive value'
         }
+        if (values.priority === '' || values.priority < 1) {
+            errors.priority = 'Enter positive value'
+        }
         // console.debug(values)
         return errors
     }
 
     return (
         <div className="container">
-            <h4>
-                <span className="badge rounded-pill text-bg-light">
-                    <span className="bi bi-folder2" />
-                </span>
+            <h6>
+                <span className="me-1 bi bi-folder2 text-secondary" />
                 {state.project.name}
-            </h4>
+            </h6>
             <div>
-                <Formik initialValues={{ description, pomodoroLength, status }}
+                <Formik initialValues={{ description, pomodoroLength, priority, status }}
                     enableReinitialize={true}
                     onSubmit={onSubmit}
                     validate={validate}
@@ -81,25 +86,33 @@ export default function TaskComponent() {
                     {
                         (props) => (
                             <Form>
-                                <div className="row">
-                                    <div className="col-md-6 mb-3">
-                                        <Field type="text" className="form-control form-control-sm" name="description" placeholder="Description" />
+                                <div className="row small text-start text-secondary">
+                                    <div className="col-md-12 mb-3">
+                                        <label htmlFor="description">Description</label>
+                                        <Field type="text" className="form-control form-control-sm" id="description" name="description" placeholder="Description" />
                                         <ErrorMessage name="description" component="small" className="text-danger small" />
                                     </div>
-                                    <div className="col-md-6 mb-3">
-                                        <Field type="number" className="form-control form-control-sm" name="pomodoroLength" placeholder="Default Pomodoro Length" />
+                                    <div className="col-md-4 mb-3">
+                                        <label htmlFor="pomodoroLength">Default Pomodoro Length <i className="bi bi-hourglass" /></label>
+                                        <Field type="number" className="form-control form-control-sm" min="0" id="pomodoroLength" name="pomodoroLength" placeholder="Default Pomodoro Length" />
                                         <small>(To use project's settings, set length to zero)</small>
                                         {props.errors.pomodoroLength && <div className="text-danger small">{props.errors.pomodoroLength}</div>}
                                     </div>
                                     <div className="col-md-4 mb-3">
-                                        <Field as="select" className="form-select form-select-sm" name="status">
+                                        <label htmlFor="priority">Priority <i className="bi bi-arrow-up" /></label>
+                                        <Field type="number" className="form-control form-control-sm" min="0" id="priority" name="priority" placeholder="Priority" />
+                                        {props.errors.priority && <div className="text-danger small">{props.errors.priority}</div>}
+                                    </div>
+                                    <div className="col-md-4 mb-3">
+                                        <label htmlFor="status">Status</label>
+                                        <Field as="select" className="form-select form-select-sm" id="status" name="status">
                                             {/* disabled option with value 0 for dropdown to avoid confusion of initial selection */}
                                             <option value="added">current</option>
                                             <option value="completed">completed</option>
                                             <option value="archived">archived</option>
                                         </Field>
                                     </div>
-                                    <div className="col-md-12 mb-3">
+                                    <div className="col-md-12 mb-3 text-end">
                                         <button className="me-2 btn btn-sm btn-outline-secondary" type="button" onClick={() => navigate('/projects', { state })}>Cancel</button>
                                         <button className="btn btn-sm btn-outline-success" type="submit">Save Task</button>
                                     </div>
