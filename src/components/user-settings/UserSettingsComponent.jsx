@@ -349,7 +349,7 @@ export default function UserSettingsComponent() {
                 <div className="col-md-4">
                     <div className="input-group input-group-sm mb-2">
                         <label className="input-group-text" htmlFor="breakLength">
-                            Number of projects in a page (mobile device)
+                            Number of projects in a page
                         </label>
                         <input
                             type="number"
@@ -367,7 +367,7 @@ export default function UserSettingsComponent() {
                 <div className="col-md-4">
                     <div className="input-group input-group-sm mb-2">
                         <label className="input-group-text" htmlFor="breakLength">
-                            Number of tasks in a page (mobile device)
+                            Number of tasks in a page
                         </label>
                         <input
                             type="number"

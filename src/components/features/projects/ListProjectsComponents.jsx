@@ -106,7 +106,7 @@ export default function ListProjectsComponent() {
                     <div>
 
                         <div className="d-flex justify-content-between">
-                            <h5>
+                            <h6>
                                 <span>
                                     Projects
                                 </span>
@@ -114,7 +114,7 @@ export default function ListProjectsComponent() {
                                     {projectsCount}
                                     <i className="ms-1 bi bi-folder2" />
                                 </span>
-                            </h5>
+                            </h6>
                             <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={addNewProject}>
                                 <i className="bi bi-plus-circle" ></i>
                             </button>
@@ -138,14 +138,16 @@ export default function ListProjectsComponent() {
                                             <div className="col-8 text-truncate text-start">
                                                 {/* <Link to={"/projects/" + proj.id + "/tasks"} state={{ proj }}>{proj.name}</Link> */}
                                                 <span style={{ color: proj.color }}>&#9632; </span>
-                                                {proj.name}
+                                                <span className="project-name">
+                                                    {proj.name}
+                                                </span>
                                             </div>
                                             <div className="col-4 ps-0 text-secondary text-truncate text-end list-details">
-                                                <span className="badge rounded-pill text-bg-light fw-normal">
+                                                <span className="badge rounded-pill text-bg-light fw-light">
                                                     <i className="bi bi-link-45deg" style={{ paddingRight: '0.1rem' }} />
                                                     {proj.category}
                                                 </span>
-                                                <span className="badge rounded-pill text-bg-light fw-normal">
+                                                <span className="badge rounded-pill text-bg-light fw-light">
                                                     <i className="bi bi-hourglass" />
                                                     {proj.pomodoroLength || userSettings.pomodoroLength}
                                                 </span>

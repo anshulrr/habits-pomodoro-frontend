@@ -1,7 +1,7 @@
 /* css for projects list */
 .list-row {
     cursor: pointer;
-    border-bottom: thin solid #dee2e6;
+    border-top: thin solid #dee2e6;
 }
 
 .list-row .list-button {
@@ -53,7 +53,7 @@
 
 /* for update popup */
 .update-list-row {
-    border-bottom: thin solid #ffffff;
+    border-top: thin solid #ffffff;
 }
 
 .update-popup-button {
@@ -148,4 +148,20 @@
     100% {
         transform: rotate(360deg);
     }
+}
+
+/* for lists row */
+.project-name {
+    font-size: 0.875rem;
+    line-height: 1.3;
+}
+
+.description {
+    font-size: 0.875rem;
+    line-height: 1.3;
+}
+
+.subscript {
+    font-size: 0.575rem;
+    padding-top: 0.2rem;
 }
