@@ -125,31 +125,31 @@ export default function ProjectComponent() {
                                 <div className="row small text-start text-secondary">
                                     <div className="col-md-4 mb-3">
                                         <label htmlFor="name">Project Name</label>
-                                        <Field type="text" className="form-control form-control-sm" name="name" placeholder="Project Name" />
+                                        <Field type="text" className="form-control form-control-sm" id="name" name="name" placeholder="Project Name" />
                                         <ErrorMessage name="name" component="div" className="small text-danger" />
                                     </div>
                                     <div className="col-md-8 mb-3">
                                         <label htmlFor="description">Description</label>
-                                        <Field type="text" className="form-control form-control-sm" name="description" placeholder="Description" />
+                                        <Field type="text" className="form-control form-control-sm" id="description" name="description" placeholder="Description" />
                                     </div>
                                     <div className="col-md-4 mb-3">
                                         <label htmlFor="color">Project Color</label>
-                                        <Field type="color" className="form-control form-control-sm" name="color" placeholder="color" />
+                                        <Field type="color" className="form-control form-control-sm" id="color" name="color" placeholder="color" />
                                     </div>
                                     <div className="col-md-4 mb-3">
                                         <label htmlFor="pomodoroLength">Default Pomodoro Length <i className="bi bi-hourglass" /></label>
-                                        <Field type="number" className="form-control form-control-sm" min="0" name="pomodoroLength" placeholder="Default Pomodoro Length" />
+                                        <Field type="number" className="form-control form-control-sm" min="0" id="pomodoroLength" name="pomodoroLength" placeholder="Default Pomodoro Length" />
                                         <small>(To use general settings, set length to zero)</small>
                                         {errors.pomodoroLength && <div className="text-danger small">{errors.pomodoroLength}</div>}
                                     </div>
                                     <div className="col-md-4 mb-3">
                                         <label htmlFor="priority">Priority <i className="bi bi-arrow-up" /></label>
-                                        <Field type="number" className="form-control form-control-sm" min="1" name="priority" placeholder="Priority" />
+                                        <Field type="number" className="form-control form-control-sm" min="1" id="priority" name="priority" placeholder="Priority" />
                                         {errors.priority && <div className="text-danger small">{errors.priority}</div>}
                                     </div>
                                     <div className="col-md-4 mb-3">
                                         <label htmlFor="project_category_id">Project Category <i className="bi bi-link-45deg" /></label>
-                                        <Field as="select" className="form-select form-select-sm" name="project_category_id">
+                                        <Field as="select" className="form-select form-select-sm" id="project_category_id" name="project_category_id">
                                             {/* disabled option with value 0 for dropdown to avoid confusion of initial selection */}
                                             <option value="0" disabled>Select a Category</option>
                                             {

@@ -72,9 +72,7 @@ export default function TaskComponent() {
     return (
         <div className="container">
             <h6>
-                <span className="badge rounded-pill text-bg-light">
-                    <span className="bi bi-folder2" />
-                </span>
+                <span className="me-1 bi bi-folder2 text-secondary" />
                 {state.project.name}
             </h6>
             <div>
@@ -91,23 +89,23 @@ export default function TaskComponent() {
                                 <div className="row small text-start text-secondary">
                                     <div className="col-md-12 mb-3">
                                         <label htmlFor="description">Description</label>
-                                        <Field type="text" className="form-control form-control-sm" name="description" placeholder="Description" />
+                                        <Field type="text" className="form-control form-control-sm" id="description" name="description" placeholder="Description" />
                                         <ErrorMessage name="description" component="small" className="text-danger small" />
                                     </div>
                                     <div className="col-md-4 mb-3">
                                         <label htmlFor="pomodoroLength">Default Pomodoro Length <i className="bi bi-hourglass" /></label>
-                                        <Field type="number" className="form-control form-control-sm" min="0" name="pomodoroLength" placeholder="Default Pomodoro Length" />
+                                        <Field type="number" className="form-control form-control-sm" min="0" id="pomodoroLength" name="pomodoroLength" placeholder="Default Pomodoro Length" />
                                         <small>(To use project's settings, set length to zero)</small>
                                         {props.errors.pomodoroLength && <div className="text-danger small">{props.errors.pomodoroLength}</div>}
                                     </div>
                                     <div className="col-md-4 mb-3">
                                         <label htmlFor="priority">Priority <i className="bi bi-arrow-up" /></label>
-                                        <Field type="number" className="form-control form-control-sm" min="0" name="priority" placeholder="Priority" />
+                                        <Field type="number" className="form-control form-control-sm" min="0" id="priority" name="priority" placeholder="Priority" />
                                         {props.errors.priority && <div className="text-danger small">{props.errors.priority}</div>}
                                     </div>
                                     <div className="col-md-4 mb-3">
                                         <label htmlFor="status">Status</label>
-                                        <Field as="select" className="form-select form-select-sm" name="status">
+                                        <Field as="select" className="form-select form-select-sm" id="status" name="status">
                                             {/* disabled option with value 0 for dropdown to avoid confusion of initial selection */}
                                             <option value="added">current</option>
                                             <option value="completed">completed</option>
