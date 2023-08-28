@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { retrieveAllProjectsApi, getProjectsCountApi } from "services/api/ProjectApiService";
 import Pagination from "services/pagination/Pagination"
 import { useAuth } from "services/auth/AuthContext";
+import { truncateString } from "services/helpers/listsHelper";
 
 import ListTasksComponent from 'components/features/tasks/ListTasksComponent'
 import ListCommentsComponent from "components/features/comments/ListCommentsComponents";
@@ -142,17 +143,17 @@ export default function ListProjectsComponent() {
                                                     {proj.name}
                                                 </span>
                                             </div>
-                                            <div className="col-4 ps-0 text-secondary text-truncate text-end list-details">
-                                                <span className="badge rounded-pill text-bg-light fw-light">
+                                            <div className="col-4 ps-0 subscript text-secondary text-truncate text-end list-details">
+                                                <span className="">
                                                     <i className="bi bi-link-45deg" style={{ paddingRight: '0.1rem' }} />
-                                                    {proj.category}
+                                                    {truncateString(proj.category, 8)}
                                                 </span>
-                                                <span className="badge rounded-pill text-bg-light fw-light">
-                                                    <i className="bi bi-arrow-up" />
+                                                <span className="">
+                                                    <i className="ps-1 bi bi-arrow-up" />
                                                     {proj.priority}
                                                 </span>
-                                                <span className="badge rounded-pill text-bg-light fw-light">
-                                                    <i className="bi bi-hourglass" />
+                                                <span className="">
+                                                    <i className="ps-1 bi bi-hourglass" />
                                                     {proj.pomodoroLength || userSettings.pomodoroLength}
                                                 </span>
                                             </div>
