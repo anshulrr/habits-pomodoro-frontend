@@ -100,11 +100,11 @@ export default function ListProjectsComponent() {
 
     return (
         <div className="container">
-            <div className="row mb-3">
-                <div className="col-md-4 mt-3 border-bottom border-2">
+            <div className="row mb-3 border-bottom border-2">
+                <div className="col-md-4 mt-3 mb-3">
                     {/* {message && <div className="alert alert-warning">{message}</div>} */}
-                    <div>
 
+                    <div>
                         <div className="d-flex justify-content-between">
                             <h6>
                                 <span>
@@ -169,7 +169,7 @@ export default function ListProjectsComponent() {
                         </div>
 
                         <Pagination
-                            className="pagination-bar mt-3"
+                            className="pagination-bar mb-0 ps-0"
                             currentPage={currentPage}
                             totalCount={projectsCount}
                             pageSize={PAGESIZE}

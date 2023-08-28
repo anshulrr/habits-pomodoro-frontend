@@ -189,7 +189,7 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                             }
 
                             <Pagination
-                                className="pagination-bar mt-3"
+                                className="pagination-bar ps-0"
                                 currentPage={currentPage}
                                 totalCount={commentsCount}
                                 pageSize={PAGESIZE}

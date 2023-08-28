@@ -115,7 +115,7 @@ export default function ListProjectCategoriesComponent() {
                             }
                         </small>
                         <Pagination
-                            className="pagination-bar mt-2 mb-0"
+                            className="pagination-bar mb-0 ps-0"
                             currentPage={currentPage}
                             totalCount={categoriesCount}
                             pageSize={PAGESIZE}

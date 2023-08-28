@@ -149,7 +149,7 @@ export default function ListTasksComponent() {
                                     setButtonsStates={setTotalChartBButtonsStates}
                                 />
                             </div>
-                            <div className="col-md-6 mt-2 overflow-scroll" style={{ maxHeight: "55vh" }}>
+                            <div className="col-md-6 mt-2">
                                 <ListPomodorosComponent
                                     key={reload}
                                     includeCategories={includeCategories}
