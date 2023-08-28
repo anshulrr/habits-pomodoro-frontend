@@ -15,6 +15,7 @@ export default function ProjectComponent() {
     const [projectCategoryId, setProjectCategoryId] = useState(0)   // value for disabled option in dropdown
     const [color, setColor] = useState('#228B22')
     const [pomodoroLength, setPomodoroLength] = useState(0)
+    const [priority, setPriority] = useState(1)
     const [projectCategories, setProjectCategories] = useState([])
 
     const navigate = useNavigate()
@@ -51,6 +52,7 @@ export default function ProjectComponent() {
                 setName(response.data.name)
                 setColor(response.data.color)
                 setPomodoroLength(response.data.pomodoroLength)
+                setPriority(response.data.priority)
                 // todo: set project projectCategory id: done
                 setProjectCategoryId(response.data.projectCategoryId)
             })
@@ -66,6 +68,7 @@ export default function ProjectComponent() {
             description: values.description,
             color: values.color,
             pomodoroLength: values.pomodoroLength,
+            priority: values.priority,
             projectCategoryId: values.project_category_id
         }
 
@@ -98,6 +101,9 @@ export default function ProjectComponent() {
         if (values.pomodoroLength === '' || values.pomodoroLength < 0) {
             errors.pomodoroLength = 'Enter zero or positive value'
         }
+        if (values.priority === '' || values.priority < 1) {
+            errors.priority = 'Enter positive value'
+        }
         // console.debug(values)
         return errors
     }
@@ -106,7 +112,7 @@ export default function ProjectComponent() {
         <div className="container">
             <h4>Enter Project Details </h4>
             <div>
-                <Formik initialValues={{ name, description, color, pomodoroLength, project_category_id: projectCategoryId }}
+                <Formik initialValues={{ name, description, color, pomodoroLength, priority, project_category_id: projectCategoryId }}
                     enableReinitialize={true}
                     onSubmit={onSubmit}
                     validate={validate}
@@ -128,9 +134,13 @@ export default function ProjectComponent() {
                                         <Field type="color" className="form-control form-control-sm" name="color" placeholder="color" />
                                     </div>
                                     <div className="col-md-4 mb-3">
-                                        <Field type="number" className="form-control form-control-sm" name="pomodoroLength" placeholder="Default Pomodoro Length" />
+                                        <Field type="number" className="form-control form-control-sm" min="0" name="pomodoroLength" placeholder="Default Pomodoro Length" />
                                         <small>(To use general settings, set length to zero)</small>
                                         {errors.pomodoroLength && <div className="text-danger small">{errors.pomodoroLength}</div>}
+                                    </div>
+                                    <div className="col-md-4 mb-3">
+                                        <Field type="number" className="form-control form-control-sm" min="1" name="priority" placeholder="Priority" />
+                                        {errors.priority && <div className="text-danger small">{errors.priority}</div>}
                                     </div>
                                     <div className="col-md-4 mb-3">
                                         <Field as="select" className="form-select form-select-sm" name="project_category_id">
