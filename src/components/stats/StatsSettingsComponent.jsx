@@ -186,7 +186,7 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload, se
                         className="form-select form-select-sm"
                         name="tasks-chart-type"
                         onChange={(e) => handleOnChange(setTasksChartType, e.target.value)}
-                        defaultValue={tasksChartType}
+                        value={tasksChartType}
                         id="tasksChartType"
                     >
                         <option value="bar">Bar</option>
@@ -204,7 +204,7 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload, se
                         className="form-select form-select-sm"
                         name="projects-chart-type"
                         onChange={(e) => handleOnChange(setProjectsChartType, e.target.value)}
-                        defaultValue={projectsChartType}
+                        value={projectsChartType}
                         id="projectsChartType"
                     >
                         <option value="bar">Bar</option>
