@@ -12,7 +12,7 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
 
     const [pomodoros, setPomodoros] = useState([])
 
-    const [totalTimeElapsed, setTotalTimeElapsed] = useState('00:00');
+    const [totalTimeElapsed, setTotalTimeElapsed] = useState('0');
 
     const [showCommentsId, setShowCommentsId] = useState(-1);
     const [commentsTitle, setCommentsTitle] = useState('')
@@ -97,7 +97,16 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
                     showLimit={false}
                 />
             }
-            <table className="table table-sm table-striped small">
+
+            {
+                pomodoros.length === 0 &&
+                <div className="alert alert-light small text-center">
+                    <i className="pe-1 bi bi-clipboard-data" />
+                    Nothing to display
+                </div>
+            }
+
+            <table className="table table-sm table-striped small mt-2">
                 <tbody>
                     {
                         pomodoros.map(

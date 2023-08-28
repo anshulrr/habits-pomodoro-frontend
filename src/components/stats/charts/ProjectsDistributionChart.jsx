@@ -10,7 +10,7 @@ export const ProjectsDistributionChart = ({ includeCategories, statsSettings, bu
     // console.debug("hi", chartData);
     // console.debug(statsSettings)
 
-    const [chartData, setChartData] = useState({ label: '' })
+    const [chartData, setChartData] = useState({ label: '', labels: [], data: [], colors: [] })
 
     function retrieveProjectsPomodoros({ startDate, endDate, limit, offset }) {
         // calculate scale and label according to user settings
@@ -28,7 +28,7 @@ export const ProjectsDistributionChart = ({ includeCategories, statsSettings, bu
                     labels: [],
                     data: [],
                     colors: [],
-                    label: `Project's Distribution Time (${label})`
+                    label: `Projects (${label})`
                 }
                 response.data.forEach(element => {
                     // console.debug(element);

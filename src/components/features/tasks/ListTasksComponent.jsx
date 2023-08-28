@@ -165,8 +165,12 @@ export default function ListTasksComponent({ project }) {
                     <div className="px-3">
                         {
                             tasksCount === 0 &&
-                            <div className="alert alert-warning py-1">No task is added to this project</div>
+                            <div className="alert alert-light py-1 mt-1 small">
+                                <i className="pe-1 bi bi-clipboard-data" />
+                                Nothing to display
+                            </div>
                         }
+
                         {
                             tasksCount !== 0 &&
                             <ListTasksRowsComponent
@@ -285,7 +289,7 @@ export default function ListTasksComponent({ project }) {
                         <StopwatchComponent message={'Start a new task'} />
                     }
 
-                    <div className="border-top border-1 pt-2 overflow-scroll bg-white mt-3" style={{ maxHeight: "55vh" }}>
+                    <div className="border-top border-1 pt-2 overflow-scroll bg-white mt-3 text-start" style={{ maxHeight: "55vh" }}>
                         <ListPomodorosComponent
                             key={[pomodoroStatus, pomdorosListReload]}
                             setPomodorosListReload={setPomodorosListReload}

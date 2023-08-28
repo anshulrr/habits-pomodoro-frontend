@@ -14,6 +14,10 @@ export const BarChart = ({
 
     return (
         <div>
+            <h6>
+                {chartData.label}<wbr />
+            </h6>
+
             <Buttons
                 retrievePomodoros={retrievePomodoros}
                 buttonsStates={buttonsStates}
@@ -44,10 +48,6 @@ export const BarChart = ({
                         maintainAspectRatio: true,
                         aspectRatio: 1,
                         plugins: {
-                            title: {
-                                display: true,
-                                text: chartData.label
-                            },
                             legend: {
                                 display: false
                             }
