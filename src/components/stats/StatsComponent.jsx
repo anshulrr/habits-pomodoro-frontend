@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 import moment from "moment"
-
-import { retrieveAllProjectCategoriesApi } from "services/api/ProjectCategoryApiService";
 
 import { TasksChart } from "components/stats/charts/TasksChart";
 import { ProjectsDistributionChart } from "components/stats/charts/ProjectsDistributionChart";
@@ -12,9 +10,7 @@ import ListPomodorosComponent from "components/stats/ListPomodorosComponent";
 import CategoryChecklistComponent from "components/stats/CategoryChecklistComponent";
 import StatsSettingsComponent from "components/stats/StatsSettingsComponent";
 
-export default function ListTasksComponent() {
-
-    const [categories, setCategories] = useState([])
+export default function StatsComponent() {
 
     const [includeCategories, setIncludeCategories] = useState([])
 
@@ -49,27 +45,6 @@ export default function ListTasksComponent() {
         dateString: moment().format('DD MMM')
     })
 
-    // for first time load
-    useEffect(
-        () => {
-            // console.debug('re-render StatsComponent')
-            retrieveProjectCategories()
-        }, []   // eslint-disable-line react-hooks/exhaustive-deps
-    )
-
-    function retrieveProjectCategories() {
-        retrieveAllProjectCategoriesApi(10, 0)
-            .then(response => {
-                // console.debug(response)
-                setCategories(response.data)
-                setIncludeCategories(response.data
-                    .filter(c => c.statsDefault === true)
-                    .map(c => c.id)
-                )
-            })
-            .catch(error => console.error(error.message))
-    }
-
     return (
         <div className="container">
 
@@ -89,8 +64,6 @@ export default function ListTasksComponent() {
                     </div>
                     <div style={{ display: showIncludeCategories ? "block" : "none" }} >
                         <CategoryChecklistComponent
-                            key={categories}
-                            categories={categories}
                             setIncludeCategories={setIncludeCategories}
                             reload={reload}
                             setReload={setReload}
@@ -155,6 +128,7 @@ export default function ListTasksComponent() {
                                     includeCategories={includeCategories}
                                     buttonsStates={listPomodorosButtonsStates}
                                     setButtonsStates={setListPomodorosButtonsStates}
+                                    showButtons={true}
                                 />
                             </div >
                         </div>

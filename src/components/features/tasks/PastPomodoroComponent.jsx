@@ -57,7 +57,7 @@ export default function PastPomodoroComponent({
         const currentDate = new Date();
         const selectedDate = new Date(time);
 
-        return currentDate.getTime() > selectedDate.getTime();
+        return new Date(currentDate.getTime() + 30 * 60 * 1000) > selectedDate.getTime();
     };
 
     return (

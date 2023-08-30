@@ -2,13 +2,17 @@ import { useEffect, useState } from "react"
 import moment from "moment"
 
 import { deletePastPomodoroApi, getPomodorosApi } from "services/api/PomodoroApiService";
-import { retrieveAllProjectCategoriesApi } from "services/api/ProjectCategoryApiService";
 import { timeToDisplay } from "services/helpers/listsHelper";
 
 import { Buttons } from "components/stats/charts/Buttons";
 import ListCommentsComponent from "components/features/comments/ListCommentsComponents";
 
-export default function ListPomodorosComponent({ includeCategories, buttonsStates, setButtonsStates, setPomodorosListReload }) {
+export default function ListPomodorosComponent({
+    includeCategories,
+    buttonsStates,
+    setButtonsStates,
+    showButtons
+}) {
 
     const [pomodoros, setPomodoros] = useState([])
 
@@ -21,30 +25,17 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
 
     useEffect(
         () => {
-            // console.debug('re-render ListPomodorosComponent')
-            async function fetchAPI() {
-                try {
-                    if (!includeCategories) {
-                        // todo: decide limit
-                        const response = await retrieveAllProjectCategoriesApi(100, 0);
-                        const allCategories = response.data.map(c => c.id);
-                        // console.debug('useEffect', { allCategories, includeCategories })
-                        // initial state
-                        const startDate = moment().startOf('day').toISOString();
-                        const endDate = moment().startOf('day').add(1, 'd').toISOString();
-                        retrieveTodayPomodoros({ startDate, endDate, allCategories })
-                    }
-                } catch (error) {
-                    console.error(error.message)
-                }
+            if (!showButtons) {
+                const startDate = moment().startOf('day').toISOString();
+                const endDate = moment().startOf('day').add(1, 'd').toISOString();
+                retrieveTodayPomodoros({ startDate, endDate })
             }
-            fetchAPI()
         }, []   // eslint-disable-line react-hooks/exhaustive-deps
     )
 
-    function retrieveTodayPomodoros({ startDate, endDate, allCategories }) {
+    function retrieveTodayPomodoros({ startDate, endDate }) {
         // console.debug('api call', { allCategories, includeCategories })
-        getPomodorosApi({ startDate, endDate, includeCategories: allCategories || includeCategories })
+        getPomodorosApi({ startDate, endDate, includeCategories })
             .then(response => {
                 // console.debug(response)
                 setPomodoros(response.data)
@@ -54,14 +45,15 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
             .catch(error => console.error(error.message))
     }
 
-    function deleltePastPomodoro(id) {
+    function deleltePastPomodoro(pomodoro) {
         if (!window.confirm("Are you sure? Press OK to delete.")) {
             return;
         }
-        deletePastPomodoroApi(id)
+        deletePastPomodoroApi(pomodoro.id)
             .then(response => {
                 // console.debug(response)
-                setPomodorosListReload(prevReload => prevReload + 1)
+                setPomodoros(pomodoros.filter(p => p.id !== pomodoro.id))
+                setTotalTimeElapsed(totalTimeElapsed - pomodoro.timeElapsed / 60);
             })
             .catch(error => console.error(error.message))
     }
@@ -89,7 +81,7 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
                 </span>
             </h6>
             {
-                includeCategories &&
+                showButtons &&
                 <Buttons
                     retrievePomodoros={retrieveTodayPomodoros}
                     buttonsStates={buttonsStates}
@@ -151,7 +143,7 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
                                                 </button>
                                                 {
                                                     pomodoro.status === 'past' &&
-                                                    <button type="button" className="btn btn-sm btn-outline-danger py-0 px-2" onClick={() => deleltePastPomodoro(pomodoro.id)}>
+                                                    <button type="button" className="btn btn-sm btn-outline-danger py-0 px-2" onClick={() => deleltePastPomodoro(pomodoro)}>
                                                         <i className="align-middle bi bi-trash" />
                                                     </button>
                                                 }

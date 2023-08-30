@@ -1,14 +1,40 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
-export default function CategoryChecklistComponent({ categories, setIncludeCategories, setReload, setShowIncludeCategories }) {
+import { retrieveAllProjectCategoriesApi } from "services/api/ProjectCategoryApiService";
 
-    const [checkedState, setCheckedState] = useState(categories.map(c => c.statsDefault));
+export default function CategoryChecklistComponent({ setIncludeCategories, setReload, setShowIncludeCategories }) {
+
+    const [categories, setCategories] = useState([])
+
+    const [checkedState, setCheckedState] = useState([]);
 
     const [level, setLevel] = useState(0);
 
     const [errorMessage, setErrorMessage] = useState("");
 
     const message = "Click on Fetch to update stats";
+
+    // for first time load
+    useEffect(
+        () => {
+            // console.debug('re-render StatsComponent')
+            retrieveProjectCategories()
+        }, []   // eslint-disable-line react-hooks/exhaustive-deps
+    )
+
+    function retrieveProjectCategories() {
+        retrieveAllProjectCategoriesApi(10, 0)
+            .then(response => {
+                // console.debug(response)
+                setCategories(response.data)
+                setIncludeCategories(response.data
+                    .filter(c => c.statsDefault === true)
+                    .map(c => c.id)
+                )
+                setCheckedState(response.data.map(c => c.statsDefault))
+            })
+            .catch(error => console.error(error.message))
+    }
 
     const handleOnChange = (position) => {
         // console.debug('handle: ', checkedState)

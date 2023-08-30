@@ -9,6 +9,7 @@ import CreateTaskComponent from "components/features/tasks/CreateTaskComponent";
 import PomodoroComponent from "components/features/pomodoros/PomodoroComponent";
 import StopwatchComponent from "components/features/pomodoros/StopwatchComponent";
 import ListPomodorosComponent from "components/stats/ListPomodorosComponent";
+import DailyStatsComponent from "components/stats/DailyStatsComponent";
 
 export default function ListTasksComponent({ project }) {
 
@@ -290,9 +291,9 @@ export default function ListTasksComponent({ project }) {
                     }
 
                     <div className="border-top border-1 pt-2 bg-white mt-3 text-start">
-                        <ListPomodorosComponent
-                            key={[pomodoroStatus, pomdorosListReload]}
-                            setPomodorosListReload={setPomodorosListReload}
+                        <DailyStatsComponent
+                            pomodoroStatus={pomodoroStatus}
+                            pomdorosListReload={pomdorosListReload}
                         />
                     </div >
                 </div>
