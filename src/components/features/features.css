@@ -165,3 +165,23 @@
     font-size: 0.575rem;
     padding-top: 0.2rem;
 }
+
+
+/* popup for daily stats */
+.update-popup-2-container {
+    position: relative;
+    display: inline-block;
+    min-width: 100%;
+}
+
+.update-popup-2 {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    z-index: 7;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background-color: #ffffff;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
