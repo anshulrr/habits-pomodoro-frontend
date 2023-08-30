@@ -39,7 +39,7 @@ export default function DailyStatsComponent({ pomodoroStatus, pomdorosListReload
                 </div>
 
                 <div className="update-popup-2-container">
-                    <div className="update-popup-2" style={{ display: showIncludeCategories ? "block" : "none" }} >
+                    <div className="update-popup-2 overflow-scroll" style={{ display: showIncludeCategories ? "block" : "none", height: "20rem" }} >
                         <span className="ms-1 align-middle">
                             <i className="bi bi-x-lg" onClick={() => setShowIncludeCategories(!showIncludeCategories)} />
                         </span>
