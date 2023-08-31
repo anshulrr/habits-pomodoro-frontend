@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import moment from "moment"
 
 import { deletePastPomodoroApi, getPomodorosApi } from "services/api/PomodoroApiService";
@@ -10,8 +10,6 @@ import ListCommentsComponent from "components/features/comments/ListCommentsComp
 import OutsideAlerter from "services/hooks/OutsideAlerter";
 
 export default function ListPomodorosComponent({ includeCategories, buttonsStates, setButtonsStates, setPomodorosListReload }) {
-
-    const ref = useRef(null);
 
     const [pomodoros, setPomodoros] = useState([])
 
@@ -84,7 +82,7 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
         <div>
             <h6>
                 <span>
-                    Total Time
+                    Pomdoros (mins)
                 </span>
                 <span className="ms-1 badge rounded-pill text-bg-secondary">
                     {totalTimeElapsed}
