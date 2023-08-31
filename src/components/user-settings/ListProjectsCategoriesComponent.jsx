@@ -64,8 +64,8 @@ export default function ListProjectCategoriesComponent() {
             <div className="row">
                 <div className="col-md-4">
                     <div>
-                        <div className="row">
-                            <div className="col-10 text-start">
+                        <div className="row px-0">
+                            <div className="col-10 text-start px-0">
                                 <h6>
                                     Project Categories
                                     <span className="ms-1 badge rounded-pill text-bg-secondary">
@@ -98,9 +98,10 @@ export default function ListProjectCategoriesComponent() {
                                                 <span>&nbsp;{cat.name}</span>
                                             </div>
                                             <div className="col-4 text-secondary text-end list-details">
-                                                <span>
-                                                    {cat.level}&nbsp;
-                                                </span>
+                                                <small>
+                                                    <i className="bi bi-arrow-up" />
+                                                </small>
+                                                {cat.level}&nbsp;
                                             </div>
                                             <div className="col-4 text-secondary text-end list-button">
                                                 <div className="input-group justify-content-end">

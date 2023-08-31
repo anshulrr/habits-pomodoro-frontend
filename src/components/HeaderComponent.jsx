@@ -16,9 +16,9 @@ export default function HeaderComponent() {
     }
 
     return (
-        <header>
-            <div className="container border-bottom border-2 mb-3">
-                <nav className="navbar navbar-expand-sm justify-content-between">
+        <header className="pt-5 mt-2">
+            <nav className="navbar navbar-expand-sm fixed-top justify-content-between bg-light border-bottom border-2">
+                <div className="container">
 
                     {
                         isAuthenticated && user.photoURL &&
@@ -90,8 +90,8 @@ export default function HeaderComponent() {
                             </li>
                         }
                     </ul>
-                </nav>
-            </div>
+                </div>
+            </nav>
 
             {
                 isAuthenticated &&
