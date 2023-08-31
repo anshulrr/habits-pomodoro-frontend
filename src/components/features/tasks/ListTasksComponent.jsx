@@ -292,7 +292,6 @@ export default function ListTasksComponent({ project }) {
                     <div className="border-top border-1 pt-2 bg-white mt-3 text-start text-secondary">
                         <ListPomodorosComponent
                             key={[pomodoroStatus, pomdorosListReload]}
-                            setPomodorosListReload={setPomodorosListReload}
                         />
                     </div >
                 </div>

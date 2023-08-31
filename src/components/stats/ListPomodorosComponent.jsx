@@ -9,7 +9,7 @@ import { Buttons } from "components/stats/charts/Buttons";
 import ListCommentsComponent from "components/features/comments/ListCommentsComponents";
 import OutsideAlerter from "services/hooks/OutsideAlerter";
 
-export default function ListPomodorosComponent({ includeCategories, buttonsStates, setButtonsStates, setPomodorosListReload }) {
+export default function ListPomodorosComponent({ includeCategories, buttonsStates, setButtonsStates }) {
 
     const [pomodoros, setPomodoros] = useState([])
 
@@ -55,14 +55,16 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
             .catch(error => console.error(error.message))
     }
 
-    function deleltePastPomodoro(id) {
+    function deleltePastPomodoro(pomodoro) {
         if (!window.confirm("Are you sure? Press OK to delete.")) {
             return;
         }
-        deletePastPomodoroApi(id)
+        deletePastPomodoroApi(pomodoro.id)
             .then(response => {
                 // console.debug(response)
-                setPomodorosListReload(prevReload => prevReload + 1)
+                const total = pomodoros.reduce((acc, curr) => acc + Math.round(curr.timeElapsed / 60), 0);
+                setTotalTimeElapsed(timeToDisplay(total - pomodoro.timeElapsed / 60));
+                setPomodoros(pomodoros.filter(p => p.id !== pomodoro.id))
             })
             .catch(error => console.error(error.message))
     }
@@ -142,7 +144,7 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
                                                 <div className="input-group justify-content-end">
                                                     {
                                                         pomodoro.status === 'past' &&
-                                                        <button type="button" className="btn btn-sm btn-outline-danger py-0 px-2 lh-sm" onClick={() => deleltePastPomodoro(pomodoro.id)}>
+                                                        <button type="button" className="btn btn-sm btn-outline-danger py-0 px-2 lh-sm" onClick={() => deleltePastPomodoro(pomodoro)}>
                                                             <i className="align-middle bi bi-trash" />
                                                         </button>
                                                     }
