@@ -52,6 +52,11 @@
     border-top: thin solid #ffffff;
 }
 
+.update-list-row-selected {
+    border-right: thin solid #ffffff;
+    border-radius: 0.5rem;
+}
+
 .update-popup-button {
     visibility: hidden;
 }
@@ -68,7 +73,7 @@
 .update-popup {
     display: block;
     position: absolute;
-    top: 0;
+    /* top: 0; */
     right: 0;
     z-index: 8;
     width: 12rem;

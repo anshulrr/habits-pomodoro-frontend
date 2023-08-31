@@ -116,7 +116,7 @@ export default function ListTasksRowsComponent({
                 {
                     tasks.map(
                         task => (
-                            <div key={task.id} className="row py-0 update-list-row">
+                            <div key={task.id} className={"row py-0 update-list-row" + (showUpdatePopupId === task.id ? " update-list-row-selected" : "")}>
                                 {
                                     task.status === 'added' &&
                                     <div className="px-0 py-2 col-1 text-start">
