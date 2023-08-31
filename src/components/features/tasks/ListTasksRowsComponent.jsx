@@ -125,26 +125,27 @@ export default function ListTasksRowsComponent({
                                         </button>
                                     </div>
                                 }
-                                <div className="px-0 py-2 col-11 text-start update-popup-container" onClick={() => setShowUpdatePopupId(task.id)}>
+                                <div className="px-0 col text-start update-popup-container">
 
-                                    <div className={(task.status === 'archived' ? "text-secondary" : "") + " description"}>
-                                        {task.description}
+                                    <div className="py-2" onClick={() => setShowUpdatePopupId(task.id)}>
+                                        <div className={(task.status === 'archived' ? "text-secondary" : "") + " description"}>
+                                            {task.description}
+                                        </div>
+                                        <div className="subscript text-secondary">
+                                            <span>
+                                                <i className="bi bi-arrow-up" />
+                                                {task.priority}
+                                            </span>
+                                            <span>
+                                                <i className="ps-1 bi bi-hourglass" />
+                                                {timeToDisplay(task.pomodoroLength || project.pomodoroLength || userSettings.pomodoroLength)}
+                                            </span>
+                                            <span>
+                                                <i className="ps-1 bi bi-clock" style={{ paddingRight: "0.1rem" }} />
+                                                {timeToDisplay(task.pomodorosTimeElapsed / 60)}
+                                            </span>
+                                        </div>
                                     </div>
-                                    <div className="subscript text-secondary">
-                                        <span>
-                                            <i className="bi bi-arrow-up" />
-                                            {task.priority}
-                                        </span>
-                                        <span>
-                                            <i className="ps-1 bi bi-hourglass" />
-                                            {timeToDisplay(task.pomodoroLength || project.pomodoroLength || userSettings.pomodoroLength)}
-                                        </span>
-                                        <span>
-                                            <i className="ps-1 bi bi-clock" style={{ paddingRight: "0.1rem" }} />
-                                            {timeToDisplay(task.pomodorosTimeElapsed / 60)}
-                                        </span>
-                                    </div>
-
                                     {
                                         showUpdatePopupId === task.id &&
                                         <OutsideAlerter handle={() => setShowUpdatePopupId(-1)}>
@@ -182,6 +183,11 @@ export default function ListTasksRowsComponent({
                                                         task.status !== 'archived' &&
                                                         <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateTaskStatus(task, 'archived')}>
                                                             Mark as archived <i className="bi bi-archive" />
+                                                        </button>
+                                                    }
+                                                    {
+                                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowUpdatePopupId(-1)}>
+                                                            Cancel <i className="bi bi-x-lg" />
                                                         </button>
                                                     }
                                                 </div>
