@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import moment from "moment"
 
 import { deletePastPomodoroApi, getPomodorosApi } from "services/api/PomodoroApiService";
@@ -7,8 +7,11 @@ import { timeToDisplay } from "services/helpers/listsHelper";
 
 import { Buttons } from "components/stats/charts/Buttons";
 import ListCommentsComponent from "components/features/comments/ListCommentsComponents";
+import OutsideAlerter from "services/hooks/OutsideAlerter";
 
 export default function ListPomodorosComponent({ includeCategories, buttonsStates, setButtonsStates, setPomodorosListReload }) {
+
+    const ref = useRef(null);
 
     const [pomodoros, setPomodoros] = useState([])
 
@@ -78,7 +81,7 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
     }
 
     return (
-        <>
+        <div>
             <h6>
                 <span>
                     Total Time
@@ -111,7 +114,7 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
                     {
                         pomodoros.map(
                             pomodoro => (
-                                <tr key={pomodoro.id} className="task-list-row">
+                                <tr key={pomodoro.id} className="task-list-row" onClick={() => setShowPomodoroUpdateId(pomodoro.id)} >
                                     <td className="text-start text-secondary description" style={{ paddingTop: "0.4rem", paddingBottom: "0.4rem" }}>
                                         {pomodoro.task}
                                     </td>
@@ -136,29 +139,21 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
                                             </span>
                                         }
                                         {
-                                            showPomodoroUpdateId !== pomodoro.id &&
-                                            <span className="task-list-update">
-                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-0" onClick={() => setShowPomodoroUpdateId(pomodoro.id)} >
-                                                    <i className="bi bi-three-dots-vertical" />
-                                                </button>
-                                            </span>
-                                        }
-                                        {
                                             showPomodoroUpdateId === pomodoro.id &&
-                                            <div className="input-group justify-content-end">
-                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowPomodoroUpdateId(-1)}>
-                                                    <i className="align-middle bi bi-x-lg" />
-                                                </button>
-                                                {
-                                                    pomodoro.status === 'past' &&
-                                                    <button type="button" className="btn btn-sm btn-outline-danger py-0 px-2" onClick={() => deleltePastPomodoro(pomodoro.id)}>
-                                                        <i className="align-middle bi bi-trash" />
+                                            <OutsideAlerter handle={() => setShowPomodoroUpdateId(-1)}>
+                                                <div className="input-group justify-content-end">
+                                                    {
+                                                        pomodoro.status === 'past' &&
+                                                        <button type="button" className="btn btn-sm btn-outline-danger py-0 px-2" onClick={() => deleltePastPomodoro(pomodoro.id)}>
+                                                            <i className="align-middle bi bi-trash" />
+                                                        </button>
+                                                    }
+                                                    <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateCommentsData(pomodoro)}>
+                                                        <i className="align-middle bi bi-chat-right-text" />
                                                     </button>
-                                                }
-                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateCommentsData(pomodoro)}>
-                                                    <i className="align-middle bi bi-chat-right-text" />
-                                                </button>
-                                            </div>
+
+                                                </div>
+                                            </OutsideAlerter>
                                         }
                                     </td>
                                 </tr>
@@ -176,6 +171,6 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
                     setShowCommentsId={setShowCommentsId}
                 />
             }
-        </>
+        </div>
     )
 }
