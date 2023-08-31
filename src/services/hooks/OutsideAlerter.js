@@ -9,9 +9,10 @@ function useOutsideAlerter(ref, handle) {
          * Alert if clicked on outside of element
          */
         function handleClickOutside(event) {
-            if (ref.current && !ref.current.contains(event.target)) {
+            // don't handle if clicked on direct parent (which is responsible to create this element)
+            if (ref.current && !ref.current.parentElement.contains(event.target)) {
                 // alert("You clicked outside of me!");
-                handle()
+                handle();
             }
         }
         // Bind the event listener
