@@ -115,7 +115,7 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
                         pomodoros.map(
                             pomodoro => (
                                 <tr key={pomodoro.id} className="task-list-row" onClick={() => setShowPomodoroUpdateId(pomodoro.id)} >
-                                    <td className="text-start text-secondary description" style={{ paddingTop: "0.4rem", paddingBottom: "0.4rem" }}>
+                                    <td className="text-start text-secondary" style={{ paddingTop: "0.4rem", paddingBottom: "0.4rem", lineHeight: 1.3 }}>
                                         {pomodoro.task}
                                     </td>
                                     <td width="45%" className="align-middle text-end">
