@@ -7,6 +7,7 @@ import { timeToDisplay } from "services/helpers/listsHelper";
 
 import { Buttons } from "components/stats/charts/Buttons";
 import ListCommentsComponent from "components/features/comments/ListCommentsComponents";
+import OutsideAlerter from "services/hooks/OutsideAlerter";
 
 export default function ListPomodorosComponent({ includeCategories, buttonsStates, setButtonsStates, setPomodorosListReload }) {
 
@@ -78,10 +79,10 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
     }
 
     return (
-        <>
+        <div>
             <h6>
                 <span>
-                    Total Time
+                    Pomdoros (mins)
                 </span>
                 <span className="ms-1 badge rounded-pill text-bg-secondary">
                     {totalTimeElapsed}
@@ -111,11 +112,11 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
                     {
                         pomodoros.map(
                             pomodoro => (
-                                <tr key={pomodoro.id} className="task-list-row">
-                                    <td className="text-start text-secondary description" style={{ paddingTop: "0.4rem", paddingBottom: "0.4rem" }}>
+                                <tr key={pomodoro.id} className="task-list-row small" onClick={() => setShowPomodoroUpdateId(pomodoro.id)} >
+                                    <td className="text-start text-secondary" style={{ paddingTop: "0.4rem", paddingBottom: "0.4rem", lineHeight: 1.3 }}>
                                         {pomodoro.task}
                                     </td>
-                                    <td width="45%" className="align-middle text-end">
+                                    <td width="35%" className="align-middle text-end">
                                         {showPomodoroUpdateId !== pomodoro.id &&
                                             <span className="task-list-details">
                                                 <span className="small text-secondary me-1">
@@ -136,29 +137,21 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
                                             </span>
                                         }
                                         {
-                                            showPomodoroUpdateId !== pomodoro.id &&
-                                            <span className="task-list-update">
-                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-0" onClick={() => setShowPomodoroUpdateId(pomodoro.id)} >
-                                                    <i className="bi bi-three-dots-vertical" />
-                                                </button>
-                                            </span>
-                                        }
-                                        {
                                             showPomodoroUpdateId === pomodoro.id &&
-                                            <div className="input-group justify-content-end">
-                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowPomodoroUpdateId(-1)}>
-                                                    <i className="align-middle bi bi-x-lg" />
-                                                </button>
-                                                {
-                                                    pomodoro.status === 'past' &&
-                                                    <button type="button" className="btn btn-sm btn-outline-danger py-0 px-2" onClick={() => deleltePastPomodoro(pomodoro.id)}>
-                                                        <i className="align-middle bi bi-trash" />
+                                            <OutsideAlerter handle={() => setShowPomodoroUpdateId(-1)}>
+                                                <div className="input-group justify-content-end">
+                                                    {
+                                                        pomodoro.status === 'past' &&
+                                                        <button type="button" className="btn btn-sm btn-outline-danger py-0 px-2 lh-sm" onClick={() => deleltePastPomodoro(pomodoro.id)}>
+                                                            <i className="align-middle bi bi-trash" />
+                                                        </button>
+                                                    }
+                                                    <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2 lh-sm" onClick={() => updateCommentsData(pomodoro)}>
+                                                        <i className="align-middle bi bi-chat-right-text" />
                                                     </button>
-                                                }
-                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateCommentsData(pomodoro)}>
-                                                    <i className="align-middle bi bi-chat-right-text" />
-                                                </button>
-                                            </div>
+
+                                                </div>
+                                            </OutsideAlerter>
                                         }
                                     </td>
                                 </tr>
@@ -176,6 +169,6 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
                     setShowCommentsId={setShowCommentsId}
                 />
             }
-        </>
+        </div>
     )
 }
