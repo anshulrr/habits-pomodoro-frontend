@@ -107,14 +107,14 @@ export default function ListTasksRowsComponent({
     }
 
     function generateDueDateClass(task) {
-        if (moment().diff(moment(task.dueDate)) > 0) {
-            if (task.status === 'added') {
+        if (task.status === 'added') {
+            if (moment().diff(moment(task.dueDate)) > 0) {
                 return "text-danger";
             } else {
-                return "text-success";
+                return "text-secondary";
             }
         } else {
-            return "text-secondary";
+            return "text-success";
         }
     }
 
