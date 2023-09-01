@@ -21,7 +21,7 @@ export default function PastPomodoroComponent({
 
     const [errorMessage, setErrorMessage] = useState('')
 
-    const [date, setDate] = useState(moment().startOf('date').toDate())
+    const [date, setDate] = useState(moment().toDate())
 
     const [minutesElapsed, setMinutesElapsed] = useState(task.pomodoroLength || project.pomodoroLength || userSettings.pomodoroLength)
 

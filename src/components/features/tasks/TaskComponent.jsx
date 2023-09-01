@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams, useLocation } from 'react-router-dom'
-import { retrieveTaskApi, updateTaskApi } from 'services/api/TaskApiService'
+
 import { Formik, Form, ErrorMessage, Field } from 'formik'
+import ReactDatePicker from 'react-datepicker'
+
+import moment from 'moment'
+
+import { retrieveTaskApi, updateTaskApi } from 'services/api/TaskApiService'
 
 // export default function TaskComponent({ project, task, setTasks, tasks }) {
 export default function TaskComponent() {
@@ -15,6 +20,8 @@ export default function TaskComponent() {
     const [pomodoroLength, setPomodoroLength] = useState(0)    // todo: get this from user settings
 
     const [priority, setPriority] = useState(1)
+
+    const [dueDate, setDueDate] = useState(null)
 
     const [status, setStatus] = useState('added')
 
@@ -32,6 +39,9 @@ export default function TaskComponent() {
                 setPomodoroLength(response.data.pomodoroLength)
                 setPriority(response.data.priority)
                 setStatus(response.data.status)
+                if (response.data.dueDate) {
+                    setDueDate(moment(response.data.dueDate).toDate())
+                }
             })
             .catch(error => console.error(error.message))
     }
@@ -43,7 +53,8 @@ export default function TaskComponent() {
             description: values.description,
             pomodoroLength: values.pomodoroLength,
             priority: values.priority,
-            status: values.status
+            status: values.status,
+            dueDate: moment(dueDate).endOf('date').toDate(),
         }
 
         updateTaskApi(project_id, id, task)
@@ -76,7 +87,7 @@ export default function TaskComponent() {
                 {state.project.name}
             </h6>
             <div>
-                <Formik initialValues={{ description, pomodoroLength, priority, status }}
+                <Formik initialValues={{ description, pomodoroLength, priority, status, dueDate }}
                     enableReinitialize={true}
                     onSubmit={onSubmit}
                     validate={validate}
@@ -102,6 +113,20 @@ export default function TaskComponent() {
                                         <label htmlFor="priority">Priority <i className="bi bi-arrow-up" /></label>
                                         <Field type="number" className="form-control form-control-sm" min="0" id="priority" name="priority" placeholder="Priority" />
                                         {props.errors.priority && <div className="text-danger small">{props.errors.priority}</div>}
+                                    </div>
+                                    <div className="col-md-4 mb-3">
+                                        <div>
+                                            <label htmlFor="dueDate">Due Date <i className="bi bi-calendar-check" /></label>
+                                        </div>
+                                        <ReactDatePicker
+                                            className="form-control form-control-sm"
+                                            id="dueDate"
+                                            selected={dueDate}
+                                            dateFormat="dd/MM/yyyy"
+                                            minDate={new Date()}
+                                            onFocus={e => e.target.blur()}      // fix for keyboard open on focus on mobile devide
+                                            onChange={(date) => setDueDate(date)}
+                                        />
                                     </div>
                                     <div className="col-md-4 mb-3">
                                         <label htmlFor="status">Status</label>

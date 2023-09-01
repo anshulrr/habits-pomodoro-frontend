@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
+import moment from "moment";
+
 import { useAuth } from "services/auth/AuthContext";
 import Pagination from "services/pagination/Pagination";
 import { retrieveAllTasksApi, updateTaskApi } from "services/api/TaskApiService";
@@ -104,6 +106,18 @@ export default function ListTasksRowsComponent({
         createNewPomodoro(task, project)
     }
 
+    function generateDueDateClass(task) {
+        if (moment().diff(moment(task.dueDate)) > 0) {
+            if (task.status === 'added') {
+                return "text-danger";
+            } else {
+                return "text-success";
+            }
+        } else {
+            return "text-secondary";
+        }
+    }
+
     return (
         <>
             {
@@ -140,6 +154,13 @@ export default function ListTasksRowsComponent({
                                                 <i className="ps-1 bi bi-hourglass" />
                                                 {timeToDisplay(task.pomodoroLength || project.pomodoroLength || userSettings.pomodoroLength)}
                                             </span>
+                                            {
+                                                task.dueDate &&
+                                                <span className={generateDueDateClass(task)}>
+                                                    <i className="px-1 bi bi-calendar-check" />
+                                                    {moment(task.dueDate).format("DD/MM/yyyy")}
+                                                </span>
+                                            }
                                             <span>
                                                 <i className="ps-1 bi bi-clock" style={{ paddingRight: "0.1rem" }} />
                                                 {timeToDisplay(task.pomodorosTimeElapsed / 60)}
