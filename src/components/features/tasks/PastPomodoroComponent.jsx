@@ -21,7 +21,7 @@ export default function PastPomodoroComponent({
 
     const [errorMessage, setErrorMessage] = useState('')
 
-    const [date, setDate] = useState(moment().startOf('date').toDate())
+    const [date, setDate] = useState(moment().toDate())
 
     const [minutesElapsed, setMinutesElapsed] = useState(task.pomodoroLength || project.pomodoroLength || userSettings.pomodoroLength)
 
@@ -72,7 +72,6 @@ export default function PastPomodoroComponent({
                     showTimeSelect
                     timeFormat="HH:mm"
                     filterTime={filterFutureTime}
-                    shouldCloseOnSelect={false}
                     onFocus={e => e.target.blur()}      // fix for keyboard open on focus on mobile devide
                     onChange={(date) => setDate(date)}
                     autoFocus

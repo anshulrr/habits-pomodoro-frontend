@@ -84,7 +84,7 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
         <div>
             <h6>
                 <span>
-                    Pomdoros (mins)
+                    Pomodoros (mins)
                 </span>
                 <span className="ms-1 badge rounded-pill text-bg-secondary">
                     {totalTimeElapsed}
