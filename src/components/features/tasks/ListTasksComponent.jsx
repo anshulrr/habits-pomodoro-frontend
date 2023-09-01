@@ -32,7 +32,7 @@ export default function ListTasksComponent({ project }) {
 
     const [pomodoroStatus, setPomodoroStatus] = useState(null)
 
-    const [pomdorosListReload, setPomodorosListReload] = useState(0)
+    const [pomodorosListReload, setPomodorosListReload] = useState(0)
     const [tasksReload, setTasksReload] = useState(0)
     const [allTasksReload, setAllTasksReload] = useState(0)
 
@@ -189,23 +189,27 @@ export default function ListTasksComponent({ project }) {
                         }
 
                         <div className="my-1">
-                            <div className="d-flex justify-content-center">
-                                <span className="badge me-1 text-bg-light">
-                                    Completed
-                                </span>
-                                <span className="badge rounded-pill text-bg-secondary">
-                                    {completedTasksCount}
-                                    <i className="ms-1 bi bi-list-ul" />
-                                </span>
-                                <button type="button" className="ms-1 btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => {
-                                    state.showCompletedTasks = !showCompleted;
-                                    setShowCompleted(!showCompleted);
-                                    navigate(`/projects`, { state, replace: true })
-                                }}>
-                                    {!showCompleted && <i className="bi bi-arrow-down" />}
-                                    {showCompleted && <i className="bi bi-arrow-up" />}
-                                </button>
-                            </div>
+                            {
+                                completedTasksCount !== 0 &&
+                                <div className="d-flex justify-content-center">
+                                    <span className="badge me-1 text-bg-light">
+                                        Completed
+                                    </span>
+                                    <span className="badge rounded-pill text-bg-secondary">
+                                        {completedTasksCount}
+                                        <i className="ms-1 bi bi-list-ul" />
+                                    </span>
+                                    <button type="button" className="ms-1 btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => {
+                                        state.showCompletedTasks = !showCompleted;
+                                        setShowCompleted(!showCompleted);
+                                        navigate(`/projects`, { state, replace: true })
+                                    }}>
+                                        {!showCompleted && <i className="bi bi-arrow-down" />}
+                                        {showCompleted && <i className="bi bi-arrow-up" />}
+                                    </button>
+                                </div>
+                            }
+
                             {
                                 showCompleted && completedTasksCount !== 0 &&
                                 <div className="mt-2 mb-3">
@@ -226,23 +230,26 @@ export default function ListTasksComponent({ project }) {
                         </div>
 
                         <div className="my-1">
-                            <div className="d-flex justify-content-center">
-                                <span className="badge me-1 text-bg-light">
-                                    Archived
-                                </span>
-                                <span className="badge rounded-pill text-bg-secondary">
-                                    {archivedTasksCount}
-                                    <i className="ms-1 bi bi-list-ul" />
-                                </span>
-                                <button type="button" className="ms-1 btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => {
-                                    state.showArchivedTasks = !showArchived;
-                                    setShowArchived(!showArchived);
-                                    navigate(`/projects`, { state, replace: true })
-                                }}>
-                                    {!showArchived && <i className="bi bi-arrow-down" />}
-                                    {showArchived && <i className="bi bi-arrow-up" />}
-                                </button>
-                            </div>
+                            {
+                                archivedTasksCount !== 0 &&
+                                <div className="d-flex justify-content-center">
+                                    <span className="badge me-1 text-bg-light">
+                                        Archived
+                                    </span>
+                                    <span className="badge rounded-pill text-bg-secondary">
+                                        {archivedTasksCount}
+                                        <i className="ms-1 bi bi-list-ul" />
+                                    </span>
+                                    <button type="button" className="ms-1 btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => {
+                                        state.showArchivedTasks = !showArchived;
+                                        setShowArchived(!showArchived);
+                                        navigate(`/projects`, { state, replace: true })
+                                    }}>
+                                        {!showArchived && <i className="bi bi-arrow-down" />}
+                                        {showArchived && <i className="bi bi-arrow-up" />}
+                                    </button>
+                                </div>
+                            }
 
                             {
                                 showArchived && archivedTasksCount !== 0 &&
@@ -291,7 +298,7 @@ export default function ListTasksComponent({ project }) {
 
                     <div className="border-top border-1 pt-2 bg-white mt-3 text-start text-secondary">
                         <ListPomodorosComponent
-                            key={[pomodoroStatus, pomdorosListReload]}
+                            key={[pomodoroStatus, pomodorosListReload]}
                         />
                     </div >
                 </div>
