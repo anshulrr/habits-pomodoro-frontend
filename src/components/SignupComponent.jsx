@@ -36,7 +36,7 @@ export default function SignupComponent() {
     }
 
     return (
-        <div className="Signup">
+        <div className="Signup mt-3">
             <form className="SignupForm" onSubmit={handleSubmit}>
                 <div className="container">
                     <div className="row">

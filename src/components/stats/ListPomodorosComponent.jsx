@@ -136,7 +136,7 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
                                                     {timeToDisplay(Math.round(pomodoro.timeElapsed / 60))}
                                                     <i className="ps-1 bi bi-clock" />
                                                 </span>
-                                                <span className="ms-1" style={{ color: pomodoro.color }}>&#9679;</span>
+                                                <span className="ms-1" style={{ color: pomodoro.color }}>&#9632;</span>
                                             </span>
                                         }
                                         {

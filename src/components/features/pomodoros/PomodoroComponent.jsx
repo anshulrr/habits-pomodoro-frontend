@@ -202,7 +202,7 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
             {
                 (status === 'completed' || openPomodoroPopup) &&
                 <div className="">
-                    <span className="pe-1" style={{ color: pomodoro.task.project.color }}>&#9679;</span>
+                    <span className="pe-1" style={{ color: pomodoro.task.project.color }}>&#9632;</span>
                     <small>
                         {pomodoro.task.project.name}
                     </small>
