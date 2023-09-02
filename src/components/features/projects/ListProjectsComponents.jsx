@@ -113,7 +113,7 @@ export default function ListProjectsComponent() {
                                 </span>
                                 <span className="ms-1 badge rounded-pill text-bg-secondary">
                                     {projectsCount}
-                                    <i className="ms-1 bi bi-folder2" />
+                                    <span className="ms-1">&#9679;</span>
                                 </span>
                             </h6>
                             <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={addNewProject}>
@@ -138,7 +138,7 @@ export default function ListProjectsComponent() {
                                             {/* todo: decide better solution for maxWidth */}
                                             <div className="col-8 text-truncate text-start">
                                                 {/* <Link to={"/projects/" + proj.id + "/tasks"} state={{ proj }}>{proj.name}</Link> */}
-                                                <span style={{ color: proj.color }}>&#9632; </span>
+                                                <span style={{ color: proj.color }}>&#9679; </span>
                                                 <span className="project-name">
                                                     {proj.name}
                                                 </span>
