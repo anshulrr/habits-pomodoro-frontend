@@ -109,7 +109,7 @@ export default function ProjectComponent() {
     }
 
     return (
-        <div className="container">
+        <div className="container mt-3">
             <h6>Enter Project Details </h6>
             <div>
                 <Formik initialValues={{ name, description, color, pomodoroLength, priority, project_category_id: projectCategoryId }}

@@ -32,8 +32,8 @@ export default function ForgotPasswordComponent() {
     }
 
     return (
-        <div className="Signup">
-            <form className="SignupForm" onSubmit={handleSubmit}>
+        <div className="Forgot mt-3">
+            <form className="ForgotForm" onSubmit={handleSubmit}>
                 <div className="container">
                     <div className="row">
                         <div className="col-md-4 offset-md-4">

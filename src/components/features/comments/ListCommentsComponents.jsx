@@ -89,7 +89,7 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                                                 <i className="me-1 bi bi-link-45deg" />
                                             ) ||
                                             (filterBy === 'project' &&
-                                                <i className="me-1 bi bi-folder2" />
+                                                <span className="me-1">&#9632;</span>
                                             ) ||
                                             (filterBy === 'task' &&
                                                 <span className="badge rounded-pill text-bg-light">
@@ -138,7 +138,7 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                                                     {
                                                         comment.project &&
                                                         <span>
-                                                            <i className="ms-2 me-1 bi bi-folder2" />
+                                                            <span className="ms-2 me-1" style={{ color: comment.color }}>&#9632;</span>
                                                             {comment.project}
                                                         </span>
                                                     }

@@ -118,7 +118,7 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
                                     <td className="text-start text-secondary" style={{ paddingTop: "0.4rem", paddingBottom: "0.4rem", lineHeight: 1.3 }}>
                                         {pomodoro.task}
                                     </td>
-                                    <td width="35%" className="align-middle text-end">
+                                    <td width="40%" className="align-middle text-end">
                                         {showPomodoroUpdateId !== pomodoro.id &&
                                             <span className="task-list-details">
                                                 <span className="small text-secondary me-1">
@@ -136,6 +136,7 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
                                                     {timeToDisplay(Math.round(pomodoro.timeElapsed / 60))}
                                                     <i className="ps-1 bi bi-clock" />
                                                 </span>
+                                                <span className="ms-1" style={{ color: pomodoro.color }}>&#9632;</span>
                                             </span>
                                         }
                                         {

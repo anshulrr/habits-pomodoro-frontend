@@ -52,7 +52,7 @@ export default function LoginComponent() {
     }
 
     return (
-        <div>
+        <div className="mt-3">
             {
                 !authContext.isAuthenticated &&
                 <div className="Login">

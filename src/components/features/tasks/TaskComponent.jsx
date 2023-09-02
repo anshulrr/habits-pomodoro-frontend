@@ -81,9 +81,9 @@ export default function TaskComponent() {
     }
 
     return (
-        <div className="container">
+        <div className="container mt-3">
             <h6>
-                <span className="me-1 bi bi-folder2 text-secondary" />
+                <span className="me-1" style={{ color: state.project.color }}>&#9632;</span>
                 {state.project.name}
             </h6>
             <div>

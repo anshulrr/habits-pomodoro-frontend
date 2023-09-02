@@ -132,9 +132,7 @@ export default function ListTasksComponent({ project }) {
 
                     <div className="d-flex justify-content-between">
                         <h6>
-                            <span className="text-secondary mx-1">
-                                <i className="bi bi-folder2" />
-                            </span>
+                            <span className="me-1" style={{ color: project.color }}>&#9632;</span>
                             <span>
                                 {project.name}
                             </span>
