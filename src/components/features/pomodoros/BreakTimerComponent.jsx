@@ -11,7 +11,7 @@ export default function BreakTimerComponent({ startAgain }) {
 
     const Ref = useRef(null);
 
-    const [breakStatus, setBreakStatus] = useState('idle')
+    const [breakStatus, setBreakStatus] = useState(userSettings.enableAutoStartBreak ? 'break_started' : 'idle')
 
     const initialTimeRemaining = userSettings.breakLength * 60;
 

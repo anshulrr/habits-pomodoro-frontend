@@ -22,6 +22,8 @@ export default function UserSettingsComponent() {
     const [breakLength, setBreakLength] = useState('')
     const [enableStopwatch, setEnableStopwatch] = useState('')
     const [enableStopwatchAudio, setEnableStopwatchAudio] = useState('')
+    const [enableAutoStartBreak, setEnableAutoStartBreak] = useState('')
+    const [enableAutoTimerFullscreen, setEnableAutoTimerFullscreen] = useState('')
     const [pageProjectsCount, setPageProjectsCount] = useState('')
     const [pageTasksCount, setPageTasksCount] = useState('')
     const [pageCommentsCount, setPageCommentsCount] = useState('')
@@ -47,6 +49,8 @@ export default function UserSettingsComponent() {
             setBreakLength(userSettings.breakLength)
             setEnableStopwatch(userSettings.enableStopwatch)
             setEnableStopwatchAudio(userSettings.enableStopwatchAudio)
+            setEnableAutoStartBreak(userSettings.enableAutoStartBreak)
+            setEnableAutoTimerFullscreen(userSettings.enableAutoTimerFullscreen)
             setPageProjectsCount(userSettings.pageProjectsCount)
             setPageTasksCount(userSettings.pageTasksCount)
             setPageCommentsCount(userSettings.pageCommentsCount)
@@ -79,6 +83,8 @@ export default function UserSettingsComponent() {
             breakLength,
             enableStopwatch,
             enableStopwatchAudio,
+            enableAutoStartBreak,
+            enableAutoTimerFullscreen,
             pageProjectsCount,
             pageTasksCount,
             pageCommentsCount,
@@ -263,6 +269,44 @@ export default function UserSettingsComponent() {
             </div>
 
             <h6 className='text-start'>General Settings</h6>
+
+            <div className="row">
+                <div className="col-md-4">
+                    <div className="input-group input-group-sm mb-2">
+                        <div className="input-group-text">
+                            <input
+                                type="checkbox"
+                                name="enableAutoStartBreak"
+                                className="form-check-input mt-0"
+                                checked={enableAutoStartBreak}
+                                onChange={(e) => handleOnChange(setEnableAutoStartBreak, e.target.checked)}
+                                id="eAutoStartBreak"
+                            />
+                        </div>
+                        <label className="input-group-text" htmlFor="eAutoStartBreak">
+                            Auto Start Break
+                        </label>
+                    </div>
+                </div>
+
+                <div className="col-md-4">
+                    <div className="input-group input-group-sm mb-2">
+                        <div className="input-group-text">
+                            <input
+                                type="checkbox"
+                                name="enableAutoTimerFullscreen"
+                                className="form-check-input mt-0"
+                                checked={enableAutoTimerFullscreen}
+                                onChange={(e) => handleOnChange(setEnableAutoTimerFullscreen, e.target.checked)}
+                                id="eAutoTimerFullscreen"
+                            />
+                        </div>
+                        <label className="input-group-text" htmlFor="eAutoTimerFullscreen">
+                            Auto Fullscreen Timer
+                        </label>
+                    </div>
+                </div>
+            </div>
 
             <div className="row">
                 <div className="col-md-4">

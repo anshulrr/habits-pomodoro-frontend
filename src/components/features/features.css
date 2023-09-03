@@ -87,6 +87,29 @@
     vertical-align: middle !important;
 }
 
+/* for pomodoro timer popups */
+.timer-overlay {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9
+}
+
+.timer-popup {
+    position: fixed;
+    top: 50%;
+    transform: translate(0, -50%);
+    left: 0;
+    right: 0;
+    /* height: 84vh; */
+    overflow: scroll;
+    border-radius: 10px;
+    box-shadow: 0px 0px 0px 9999px rgba(0, 0, 0, 0.5);
+    background-color: #ffffff;
+}
+
 /* for pomodoro display */
 .pomodoro-display-top {
     position: fixed;

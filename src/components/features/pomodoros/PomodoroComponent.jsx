@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import moment from 'moment';
 
+import { useAuth } from 'services/auth/AuthContext';
 import { updatePomodoroApi } from 'services/api/PomodoroApiService';
 import { generateInitialTimer, calculateTimeRemaining, generateTimer } from 'services/helpers/timerHelper';
 
@@ -10,13 +11,15 @@ import BreakTimerComponent from 'components/features/pomodoros/BreakTimerCompone
 import ListCommentsComponent from 'components/features/comments/ListCommentsComponents';
 
 export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroStatus, createNewPomodoro, setTasksMessage }) {
+    const authContext = useAuth()
+    const userSettings = authContext.userSettings
 
     // We need ref in this, because we are dealing
     // with JS setInterval to keep track of it and
     // stop it when needed
     const intervalRef = useRef(null);
 
-    const [openPomodoroPopup, setOpenCommentsPopup] = useState(false)
+    const [openPomodoroPopup, setOpenPomodorosPopup] = useState(userSettings.enableAutoTimerFullscreen ? true : false)
 
     const [showCommentsId, setShowCommentsId] = useState(-1);
     const [commentsTitle, setCommentsTitle] = useState('')
@@ -186,22 +189,14 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
 
     function handleDobuleClick(e) {
         if (e.detail === 2) {
-            setOpenCommentsPopup(!openPomodoroPopup)
+            setOpenPomodorosPopup(!openPomodoroPopup)
         }
     }
 
     return (
         <div className="PomodoroComponent" onClick={(e) => handleDobuleClick(e)}>
-            {
-                status !== 'completed' && !openPomodoroPopup &&
-                <div className="pomodoro-display-top pomodoro-display-top-deco" style={{ backgroundColor: pomodoro.task.project.color }}>
-                    {timer}
-                    <i className="bi bi-fullscreen-exit" onClick={() => setOpenCommentsPopup(!openPomodoroPopup)} />
-                </div>
-            }
-            {
-                (status === 'completed' || openPomodoroPopup) &&
-                <div className="">
+            <div className={openPomodoroPopup ? "timer-overlay" : ""}>
+                <div className={openPomodoroPopup ? "timer-popup py-2" : ""}>
                     <span className="pe-1" style={{ color: pomodoro.task.project.color }}>&#9632;</span>
                     <small>
                         {pomodoro.task.project.name}
@@ -215,9 +210,8 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
                             <i className="bi bi-chat-right-text" />
                         </button>
                         {
-                            status !== 'completed' &&
-                            < button type="button" className="btn btn-sm btn-outline-secondary ms-1 py-0 px-1" onClick={() => setOpenCommentsPopup(!openPomodoroPopup)}>
-                                <i className="bi bi-fullscreen" />
+                            < button type="button" className="btn btn-sm btn-outline-secondary ms-1 py-0 px-1" onClick={() => setOpenPomodorosPopup(!openPomodoroPopup)}>
+                                <i className={openPomodoroPopup ? "bi bi-fullscreen-exit" : "bi bi-fullscreen"} />
                             </button>
                         }
                     </h5>
@@ -250,7 +244,7 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
                         />
                     }
                 </div>
-            }
+            </div>
 
             {
                 showCommentsId !== -1 &&
