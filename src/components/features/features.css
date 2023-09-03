@@ -93,22 +93,32 @@
     bottom: 0;
     left: 50%;
     transform: translate(-50%, -50%);
+    width: 100%;
+    z-index: 1;
 }
 
 .pomodoro-display-top-deco {
     color: #ffffff;
     font-size: 1rem;
-    padding-top: 0.3rem;
-    padding-bottom: 0.3rem;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
     border-radius: 0.5rem;
     font-variant-numeric: tabular-nums;
+    animation-name: pomodoro-display-animation;
+    animation-duration: 0.5s;
 }
 
 .pomodoro-display-top-deco i {
     margin-left: 0.2rem;
     cursor: pointer;
+}
+
+@keyframes pomodoro-display-animation {
+    from {
+        bottom: 50vh;
+    }
+
+    to {
+        bottom: 0;
+    }
 }
 
 /* for loader of lists */
