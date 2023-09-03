@@ -5,7 +5,7 @@ export default function StopwatchComponent({ message }) {
 
     const Ref = useRef(null);
 
-    const [stopwatch, setStopwatch] = useState('00:00:00')
+    const [stopwatch, setStopwatch] = useState('0')
 
     const calculateStopwatchTime = (startTime) => {
         let total = Date.now() - startTime;
