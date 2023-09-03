@@ -132,7 +132,7 @@ export default function ListTasksComponent({ project }) {
 
                     <div className="d-flex justify-content-between">
                         <h6>
-                            <span className="me-1" style={{ color: project.color }}>&#9632;</span>
+                            <span className="me-1" style={{ color: project.color }}>&#9673;</span>
                             <span>
                                 {project.name}
                             </span>
