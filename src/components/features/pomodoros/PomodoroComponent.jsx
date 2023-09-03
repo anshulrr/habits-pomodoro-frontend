@@ -16,7 +16,7 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
     // stop it when needed
     const intervalRef = useRef(null);
 
-    const [openPomodoroPopup, setOpenPomodorosPopup] = useState(false)
+    const [openPomodoroPopup, setOpenPomodorosPopup] = useState(true)
 
     const [showCommentsId, setShowCommentsId] = useState(-1);
     const [commentsTitle, setCommentsTitle] = useState('')
@@ -192,66 +192,56 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
 
     return (
         <div className="PomodoroComponent" onClick={(e) => handleDobuleClick(e)}>
-            {
-                !openPomodoroPopup &&
-                <div className="pomodoro-display-top pomodoro-display-top-deco" style={{ backgroundColor: pomodoro.task.project.color }}>
-                    {timer}
-                    <i className="bi bi-fullscreen-exit" onClick={() => setOpenPomodorosPopup(!openPomodoroPopup)} />
-                </div>
-            }
-            {
-                openPomodoroPopup &&
-                <div className="timer-overlay">
-                    <div className="timer-popup py-2">
-                        <span className="pe-1" style={{ color: pomodoro.task.project.color }}>&#9632;</span>
-                        <small>
-                            {pomodoro.task.project.name}
-                        </small>
-                        <h5>
-                            <span className="badge rounded-pill text-bg-light">
-                                <i className="bi bi-list-ul" />
-                            </span>
-                            {pomodoro.task.description}
-                            <button type="button" className="btn btn-sm btn-outline-secondary ms-1 py-0 px-1" onClick={() => updateCommentsData(pomodoro)}>
-                                <i className="bi bi-chat-right-text" />
+            <div className={openPomodoroPopup ? "timer-overlay" : ""}>
+                <div className={openPomodoroPopup ? "timer-popup py-2" : ""}>
+                    <span className="pe-1" style={{ color: pomodoro.task.project.color }}>&#9632;</span>
+                    <small>
+                        {pomodoro.task.project.name}
+                    </small>
+                    <h5>
+                        <span className="badge rounded-pill text-bg-light">
+                            <i className="bi bi-list-ul" />
+                        </span>
+                        {pomodoro.task.description}
+                        <button type="button" className="btn btn-sm btn-outline-secondary ms-1 py-0 px-1" onClick={() => updateCommentsData(pomodoro)}>
+                            <i className="bi bi-chat-right-text" />
+                        </button>
+                        {
+                            < button type="button" className="btn btn-sm btn-outline-secondary ms-1 py-0 px-1" onClick={() => setOpenPomodorosPopup(!openPomodoroPopup)}>
+                                <i className="bi bi-fullscreen" />
                             </button>
-                            {
-                                < button type="button" className="btn btn-sm btn-outline-secondary ms-1 py-0 px-1" onClick={() => setOpenPomodorosPopup(!openPomodoroPopup)}>
-                                    <i className="bi bi-fullscreen" />
-                                </button>
-                            }
-                        </h5>
-                        {
-                            status !== 'completed' &&
-                            <div className="fs-1 p-3 text-white" style={{ backgroundColor: pomodoro.task.project.color, fontVariantNumeric: "tabular-nums" }}>
-                                {timer}
-                            </div>
                         }
+                    </h5>
+                    {
+                        status !== 'completed' &&
+                        <div className="fs-1 p-3 text-white" style={{ backgroundColor: pomodoro.task.project.color, fontVariantNumeric: "tabular-nums" }}>
+                            {timer}
+                        </div>
+                    }
 
-                        {
-                            status === 'started' &&
-                            <div className="btn btn-sm btn-warning m-2" onClick={() => updatePomodoro("paused", timeRemaining)}>Pause</div>
-                        }
+                    {
+                        status === 'started' &&
+                        <div className="btn btn-sm btn-warning m-2" onClick={() => updatePomodoro("paused", timeRemaining)}>Pause</div>
+                    }
 
-                        {
-                            status === 'paused' &&
-                            <div className="btn btn-sm btn-success m-2" onClick={() => updatePomodoro("started", timeRemaining)}>Continue</div>
-                        }
+                    {
+                        status === 'paused' &&
+                        <div className="btn btn-sm btn-success m-2" onClick={() => updatePomodoro("started", timeRemaining)}>Continue</div>
+                    }
 
-                        {
-                            status !== 'completed' &&
-                            <div className="btn btn-sm btn-danger m-2" onClick={() => updatePomodoro("completed", timeRemaining)}>Finish</div>
-                        }
+                    {
+                        status !== 'completed' &&
+                        <div className="btn btn-sm btn-danger m-2" onClick={() => updatePomodoro("completed", timeRemaining)}>Finish</div>
+                    }
 
-                        {
-                            status === 'completed' &&
-                            <BreakTimerComponent
-                                startAgain={startAgain}
-                            />
-                        }
-                    </div>
+                    {
+                        status === 'completed' &&
+                        <BreakTimerComponent
+                            startAgain={startAgain}
+                        />
+                    }
                 </div>
-            }
+            </div>
 
             {
                 showCommentsId !== -1 &&
