@@ -64,7 +64,7 @@ export default function StopwatchComponent({ message }) {
             }
             {
                 !message &&
-                <span className="text-danger timer" style={{ fontVariantNumeric: "tabular-nums", fontSize: "14px", paddingLeft: "0.5rem" }}>
+                <span className="text-danger timer noselect" style={{ fontVariantNumeric: "tabular-nums", fontSize: "14px", paddingLeft: "0.5rem" }}>
                     ({stopwatch})
                 </span>
             }

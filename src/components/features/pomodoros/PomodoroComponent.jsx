@@ -215,7 +215,7 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
                     </div>
                     {
                         status !== 'completed' &&
-                        <div className="text-white timer" style={{ backgroundColor: pomodoro.task.project.color, fontVariantNumeric: "tabular-nums" }}>
+                        <div className="text-white timer noselect" style={{ backgroundColor: pomodoro.task.project.color, fontVariantNumeric: "tabular-nums" }}>
                             {timer}
                         </div>
                     }
