@@ -115,28 +115,51 @@
     background-color: #ffffff;
 }
 
-/* for pomodoro display */
-.pomodoro-display-top {
+.timer-popup .timer {
+    padding: 1rem;
+    font-size: 2.4rem;
+}
+
+.fullscreen-button {
+    position: fixed;
+    top: 0.5rem;
+    right: 0.5rem;
+}
+
+.fullscreen-button i {
+    cursor: pointer;
+}
+
+/* for pomodoro display at bottom */
+.timer-bottom {
     position: fixed;
     bottom: 0;
     left: 50%;
     transform: translate(-50%, -50%);
 }
 
-.pomodoro-display-top-deco {
-    color: #ffffff;
+.timer-bottom .timer {
     font-size: 1rem;
     padding-top: 0.3rem;
     padding-bottom: 0.3rem;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
     border-radius: 0.5rem;
+    background-color: #ffffff;
     font-variant-numeric: tabular-nums;
 }
 
-.pomodoro-display-top-deco i {
-    margin-left: 0.2rem;
-    cursor: pointer;
+.timer-bottom .fullscreen-button {
+    right: -1.5rem;
+    top: 50%;
+    transform: translate(0, -45%);
+}
+
+.timer-bottom *:not(.fullscreen-button, .fullscreen-button i,
+    .timer,
+    .break-component,
+    .stopwatch-component) {
+    display: none;
 }
 
 /* for loader of lists */

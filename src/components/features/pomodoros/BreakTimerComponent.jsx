@@ -102,11 +102,11 @@ export default function BreakTimerComponent({ startAgain }) {
 
 
     return (
-        <div className="BreakComponent">
+        <div className="break-component">
 
             {
                 breakStatus !== 'break_finished' && breakStatus !== 'break_stopwatch' &&
-                <div className="fs-1 p-3 text-secondary" style={{ fontVariantNumeric: "tabular-nums" }}>
+                <div className="text-secondary timer" style={{ fontVariantNumeric: "tabular-nums" }}>
                     {breakTimer}
                 </div>
             }

@@ -196,7 +196,7 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
     return (
         <div className="PomodoroComponent" onClick={(e) => handleDobuleClick(e)}>
             <div className={openPomodoroPopup ? "timer-overlay" : ""}>
-                <div className={openPomodoroPopup ? "timer-popup py-2" : ""}>
+                <div className={openPomodoroPopup ? "timer-popup py-2" : "timer-bottom"}>
                     <span className="pe-1" style={{ color: pomodoro.task.project.color }}>&#9632;</span>
                     <small>
                         {pomodoro.task.project.name}
@@ -209,15 +209,13 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
                         <button type="button" className="btn btn-sm btn-outline-secondary ms-1 py-0 px-1" onClick={() => updateCommentsData(pomodoro)}>
                             <i className="bi bi-chat-right-text" />
                         </button>
-                        {
-                            < button type="button" className="btn btn-sm btn-outline-secondary ms-1 py-0 px-1" onClick={() => setOpenPomodorosPopup(!openPomodoroPopup)}>
-                                <i className={openPomodoroPopup ? "bi bi-fullscreen-exit" : "bi bi-fullscreen"} />
-                            </button>
-                        }
                     </h5>
+                    <div className="fullscreen-button">
+                        <i className={openPomodoroPopup ? "bi bi-fullscreen-exit" : "bi bi-fullscreen"} onClick={() => setOpenPomodorosPopup(!openPomodoroPopup)} />
+                    </div>
                     {
                         status !== 'completed' &&
-                        <div className="fs-1 p-3 text-white" style={{ backgroundColor: pomodoro.task.project.color, fontVariantNumeric: "tabular-nums" }}>
+                        <div className="text-white timer" style={{ backgroundColor: pomodoro.task.project.color, fontVariantNumeric: "tabular-nums" }}>
                             {timer}
                         </div>
                     }
