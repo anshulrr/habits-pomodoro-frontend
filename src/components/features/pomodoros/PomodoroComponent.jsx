@@ -211,7 +211,7 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
                         </button>
                     </h5>
                     <div className="fullscreen-button">
-                        <i className={openPomodoroPopup ? "bi bi-fullscreen-exit" : "bi bi-fullscreen"} onClick={() => setOpenPomodorosPopup(!openPomodoroPopup)} />
+                        <i className={"btn btn-sm btn-outline-secondary py-0 px-1 " + (openPomodoroPopup ? "bi bi-fullscreen-exit" : "bi bi-fullscreen")} onClick={() => setOpenPomodorosPopup(!openPomodoroPopup)} />
                     </div>
                     {
                         status !== 'completed' &&

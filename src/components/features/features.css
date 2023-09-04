@@ -150,9 +150,9 @@
 }
 
 .timer-bottom .fullscreen-button {
-    right: -1.5rem;
+    right: -2rem;
     top: 50%;
-    transform: translate(0, -45%);
+    transform: translate(0, -50%);
 }
 
 .timer-bottom *:not(.fullscreen-button, .fullscreen-button i,
