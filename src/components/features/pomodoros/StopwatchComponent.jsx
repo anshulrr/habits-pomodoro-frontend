@@ -49,22 +49,24 @@ export default function StopwatchComponent({ message }) {
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
-        <div className="BreakComponent">
+        <div className="stopwatch-component text-end">
             {
                 message &&
-                <div className="text-secondary text-end" style={{ fontVariantNumeric: "tabular-nums" }}>
-                    <small>
-                        {message} ({stopwatch})
-                    </small>
+                <div className="small text-secondary text-end" style={{ fontVariantNumeric: "tabular-nums" }}>
+                    {message} ({stopwatch})
                 </div>
             }
             {
                 !message &&
-                <div className="text-danger text-end" style={{ fontVariantNumeric: "tabular-nums" }}>
-                    <small>
-                        {'Break has ended, start again?'} ({stopwatch})
-                    </small>
-                </div>
+                <span className="small text-danger">
+                    {'Break ended, start again?'}
+                </span>
+            }
+            {
+                !message &&
+                <span className="text-danger timer noselect" style={{ fontVariantNumeric: "tabular-nums", fontSize: "14px", paddingLeft: "0.5rem" }}>
+                    ({stopwatch})
+                </span>
             }
         </div >
     )
