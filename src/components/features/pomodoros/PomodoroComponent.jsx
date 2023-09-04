@@ -196,7 +196,7 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
     return (
         <div className="PomodoroComponent" onClick={(e) => handleDobuleClick(e)}>
             <div className={openPomodoroPopup ? "timer-overlay" : ""}>
-                <div className={openPomodoroPopup ? "timer-popup py-2" : "timer-bottom"}>
+                <div className={openPomodoroPopup ? "timer-popup py-2 px-0 container" : "timer-bottom"}>
                     <span className="pe-1" style={{ color: pomodoro.task.project.color }}>&#9632;</span>
                     <small>
                         {pomodoro.task.project.name}
