@@ -48,7 +48,7 @@ export default function UpdateCommentComponent({ setComments, id, setShowUpdateC
         <div className="text-start">
             <form onSubmit={handleSubmit}>
                 <div className="row">
-                    <div className="col-md-12 mb-2">
+                    <div className="col-lg-12 mb-2">
                         <div className="input-group">
                             <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => setShowInput(true)}>Write</button>
                             <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => setShowInput(false)}>Preview</button>
@@ -74,7 +74,7 @@ export default function UpdateCommentComponent({ setComments, id, setShowUpdateC
                             </div>
                         }
                     </div>
-                    <div className="col-md-12 text-end">
+                    <div className="col-lg-12 text-end">
                         <button
                             type="button"
                             className="btn btn-sm btn-outline-secondary me-2"

@@ -59,7 +59,7 @@ export default function LoginComponent() {
                     <form className="LoginForm" onSubmit={handleSubmit}>
                         <div className="container">
                             <div className="row">
-                                <div className="col-md-4 offset-md-4">
+                                <div className="col-lg-4 offset-lg-4">
                                     <div className="mb-3">
                                         <input
                                             type="email"

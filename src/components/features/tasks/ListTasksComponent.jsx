@@ -128,7 +128,7 @@ export default function ListTasksComponent({ project }) {
         <div className="">
             <div className="row">
 
-                <div className="col-md-6 pt-3" style={{ backgroundColor: "#e9ecef" }}>
+                <div className="col-lg-6 pt-3" style={{ backgroundColor: "#e9ecef" }}>
 
                     <div className="d-flex justify-content-between">
                         <h6>
@@ -270,7 +270,7 @@ export default function ListTasksComponent({ project }) {
                     </div >
                 </div>
 
-                <div className="col-md-6 mt-3">
+                <div className="col-lg-6 mt-3">
                     <div className="d-flex justify-content-between mb-3">
                         <small className="text-danger">{message} </small>
                         <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-1" onClick={() => getRunningPomodoro()}>

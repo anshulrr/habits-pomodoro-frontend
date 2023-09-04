@@ -102,7 +102,7 @@ export default function ListProjectsComponent() {
     return (
         <div className="container">
             <div className="row mb-3 border-bottom border-2">
-                <div className="col-md-4 mt-3 mb-3">
+                <div className="col-lg-4 mt-3 mb-3">
                     {/* {message && <div className="alert alert-warning">{message}</div>} */}
 
                     <div>
@@ -197,7 +197,7 @@ export default function ListProjectsComponent() {
                     />
                 }
 
-                <div className="col-md-8">
+                <div className="col-lg-8">
                     {
                         project &&
                         <ListTasksComponent project={project} />

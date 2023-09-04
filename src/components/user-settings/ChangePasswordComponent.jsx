@@ -47,7 +47,7 @@ export default function ChangePasswordComponent({ setShowChangePassword }) {
             <form className="ChangePasswordForm" onSubmit={handleSubmit}>
                 <div className="container">
                     <div className="row">
-                        <div className="col-md-4">
+                        <div className="col-lg-4">
                             <input
                                 type="email"
                                 name="email"

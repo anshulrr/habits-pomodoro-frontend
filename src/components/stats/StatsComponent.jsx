@@ -74,7 +74,7 @@ export default function ListTasksComponent() {
         <div className="container mt-3">
 
             <div className="row">
-                <div className="col-md-4">
+                <div className="col-lg-4">
                     <div className="d-flex justify-content-between mb-2">
                         <h6 className="mb-0">
                             Included Project Categories
@@ -120,9 +120,9 @@ export default function ListTasksComponent() {
 
                 {
                     includeCategories.length !== 0 && Object.keys(statsSettings).length !== 0 &&
-                    <div className="col-md-8">
+                    <div className="col-lg-8">
                         <div className="row">
-                            <div className="col-md-6">
+                            <div className="col-lg-6">
                                 <TasksChart
                                     key={reload}
                                     includeCategories={includeCategories}
@@ -131,7 +131,7 @@ export default function ListTasksComponent() {
                                     setButtonsStates={setTasksChartBButtonsStates}
                                 />
                             </div>
-                            <div className="col-md-6">
+                            <div className="col-lg-6">
                                 <ProjectsDistributionChart
                                     key={reload}
                                     includeCategories={includeCategories}
@@ -140,7 +140,7 @@ export default function ListTasksComponent() {
                                     setButtonsStates={setProjectsChartBButtonsStates}
                                 />
                             </div>
-                            <div className="col-md-6 mt-2">
+                            <div className="col-lg-6 mt-2">
                                 <TotalChart
                                     key={reload}
                                     includeCategories={includeCategories}
@@ -149,7 +149,7 @@ export default function ListTasksComponent() {
                                     setButtonsStates={setTotalChartBButtonsStates}
                                 />
                             </div>
-                            <div className="col-md-6 mt-2">
+                            <div className="col-lg-6 mt-2">
                                 <ListPomodorosComponent
                                     key={reload}
                                     includeCategories={includeCategories}

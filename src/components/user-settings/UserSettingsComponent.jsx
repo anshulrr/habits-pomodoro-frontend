@@ -167,7 +167,7 @@ export default function UserSettingsComponent() {
 
             <div className="row">
 
-                <div className="col-md-4">
+                <div className="col-lg-4">
                     <div className="input-group input-group-sm mb-2">
                         <div className="input-group-text">
                             <input
@@ -194,7 +194,7 @@ export default function UserSettingsComponent() {
                     </div>
                 </div>
 
-                <div className="col-md-4">
+                <div className="col-lg-4">
                     <div className="input-group input-group-sm mb-2">
                         <div className="input-group-text">
                             <input
@@ -221,7 +221,7 @@ export default function UserSettingsComponent() {
                     </div>
                 </div>
 
-                <div className="col-md-4">
+                <div className="col-lg-4">
                     <div className="input-group input-group-sm mb-2">
                         <div className="input-group-text">
                             <input
@@ -248,7 +248,7 @@ export default function UserSettingsComponent() {
                     </div>
                 </div>
 
-                <div className="col-md-12">
+                <div className="col-lg-12">
                     <div className="input-group input-group-sm mb-2">
                         <div className="input-group-text">
                             <input
@@ -271,7 +271,7 @@ export default function UserSettingsComponent() {
             <h6 className='text-start'>General Settings</h6>
 
             <div className="row">
-                <div className="col-md-4">
+                <div className="col-lg-4">
                     <div className="input-group input-group-sm mb-2">
                         <div className="input-group-text">
                             <input
@@ -289,7 +289,7 @@ export default function UserSettingsComponent() {
                     </div>
                 </div>
 
-                <div className="col-md-4">
+                <div className="col-lg-4">
                     <div className="input-group input-group-sm mb-2">
                         <div className="input-group-text">
                             <input
@@ -309,7 +309,7 @@ export default function UserSettingsComponent() {
             </div>
 
             <div className="row">
-                <div className="col-md-4">
+                <div className="col-lg-4">
                     <div className="input-group input-group-sm mb-2">
                         <div className="input-group-text">
                             <input
@@ -327,7 +327,7 @@ export default function UserSettingsComponent() {
                     </div>
                 </div>
 
-                <div className="col-md-4">
+                <div className="col-lg-4">
                     <div className="input-group input-group-sm mb-2">
                         <div className="input-group-text">
                             <input
@@ -348,7 +348,7 @@ export default function UserSettingsComponent() {
 
             <div className="row">
 
-                <div className="col-md-4">
+                <div className="col-lg-4">
                     <div className="input-group input-group-sm mb-2">
                         <label className="input-group-text" htmlFor="pomodoroLength">
                             Default Pomodoro Length
@@ -366,7 +366,7 @@ export default function UserSettingsComponent() {
                     </div>
                 </div>
 
-                <div className="col-md-4">
+                <div className="col-lg-4">
                     <div className="input-group input-group-sm mb-2">
                         <label className="input-group-text" htmlFor="breakLength">
                             Break Length
@@ -390,7 +390,7 @@ export default function UserSettingsComponent() {
 
             <div className="row">
 
-                <div className="col-md-4">
+                <div className="col-lg-4">
                     <div className="input-group input-group-sm mb-2">
                         <label className="input-group-text" htmlFor="breakLength">
                             Number of projects in a page
@@ -408,7 +408,7 @@ export default function UserSettingsComponent() {
                     </div>
                 </div>
 
-                <div className="col-md-4">
+                <div className="col-lg-4">
                     <div className="input-group input-group-sm mb-2">
                         <label className="input-group-text" htmlFor="breakLength">
                             Number of tasks in a page
@@ -426,7 +426,7 @@ export default function UserSettingsComponent() {
                     </div>
                 </div>
 
-                <div className="col-md-4">
+                <div className="col-lg-4">
                     <div className="input-group input-group-sm mb-2">
                         <label className="input-group-text" htmlFor="breakLength">
                             Number of comments in a page
@@ -444,7 +444,7 @@ export default function UserSettingsComponent() {
                     </div>
                 </div>
 
-                <div className="col-md-4">
+                <div className="col-lg-4">
                     <div className="input-group input-group-sm mb-2">
                         <label className="input-group-text" htmlFor="tasksChartType">
                             Tasks Chart Type
@@ -462,7 +462,7 @@ export default function UserSettingsComponent() {
                     </div>
                 </div>
 
-                <div className="col-md-4">
+                <div className="col-lg-4">
                     <div className="input-group input-group-sm mb-2">
                         <label className="input-group-text" htmlFor="projectsChartType">
                             Projects Chart Type
@@ -481,7 +481,7 @@ export default function UserSettingsComponent() {
                 </div>
             </div>
 
-            <div className="col-md-12 text-end">
+            <div className="col-lg-12 text-end">
                 <button className="btn btn-sm btn-outline-success" type="button" onClick={saveSettings}>Save</button>
                 <div className="text-danger"><small>{errorMessage}</small></div>
                 <div className="text-success"><small>{successMessage}</small></div>

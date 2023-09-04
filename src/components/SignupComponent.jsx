@@ -40,7 +40,7 @@ export default function SignupComponent() {
             <form className="SignupForm" onSubmit={handleSubmit}>
                 <div className="container">
                     <div className="row">
-                        <div className="col-md-4 offset-md-4">
+                        <div className="col-lg-4 offset-lg-4">
                             <input
                                 type="email"
                                 name="email"

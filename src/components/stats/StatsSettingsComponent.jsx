@@ -75,7 +75,7 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload, se
     return (
         <div className="row mb-3">
 
-            <div className="col-md-12">
+            <div className="col-lg-12">
                 <div className="input-group input-group-sm mb-2">
                     <div className="input-group-text">
                         <input
@@ -103,7 +103,7 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload, se
                 </div>
             </div>
 
-            <div className="col-md-12">
+            <div className="col-lg-12">
                 <div className="input-group input-group-sm mb-2">
                     <div className="input-group-text">
                         <input
@@ -131,7 +131,7 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload, se
                 </div>
             </div>
 
-            <div className="col-md-12">
+            <div className="col-lg-12">
                 <div className="input-group input-group-sm mb-2">
                     <div className="input-group-text">
                         <input
@@ -159,7 +159,7 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload, se
                 </div>
             </div>
 
-            <div className="col-md-12">
+            <div className="col-lg-12">
                 <div className="input-group input-group-sm mb-2">
                     <div className="input-group-text">
                         <input
@@ -177,7 +177,7 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload, se
                 </div>
             </div>
 
-            <div className="col-md-12">
+            <div className="col-lg-12">
                 <div className="input-group input-group-sm mb-2">
                     <label className="input-group-text" htmlFor="tasksChartType">
                         Tasks Chart Type
@@ -195,7 +195,7 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload, se
                 </div>
             </div>
 
-            <div className="col-md-12">
+            <div className="col-lg-12">
                 <div className="input-group input-group-sm mb-2">
                     <label className="input-group-text" htmlFor="projectsChartType">
                         Projects Chart Type
@@ -215,7 +215,7 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload, se
 
             <div className="text-danger"><small>{errorMessage}</small></div>
 
-            <div className="col-md-12">
+            <div className="col-lg-12">
                 <div className="input-group my-2 justify-content-end">
                     <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowStatsSettings(false)}>
                         <i className="bi bi-x-lg align-middle lh-sm" />

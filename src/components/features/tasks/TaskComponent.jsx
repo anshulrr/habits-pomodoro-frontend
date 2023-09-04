@@ -98,23 +98,23 @@ export default function TaskComponent() {
                         (props) => (
                             <Form>
                                 <div className="row small text-start text-secondary">
-                                    <div className="col-md-12 mb-3">
+                                    <div className="col-lg-12 mb-3">
                                         <label htmlFor="description">Description</label>
                                         <Field type="text" className="form-control form-control-sm" id="description" name="description" placeholder="Description" />
                                         <ErrorMessage name="description" component="small" className="text-danger small" />
                                     </div>
-                                    <div className="col-md-4 mb-3">
+                                    <div className="col-lg-4 mb-3">
                                         <label htmlFor="pomodoroLength">Default Pomodoro Length <i className="bi bi-hourglass" /></label>
                                         <Field type="number" className="form-control form-control-sm" min="0" id="pomodoroLength" name="pomodoroLength" placeholder="Default Pomodoro Length" />
                                         <small>(To use project's settings, set length to zero)</small>
                                         {props.errors.pomodoroLength && <div className="text-danger small">{props.errors.pomodoroLength}</div>}
                                     </div>
-                                    <div className="col-md-4 mb-3">
+                                    <div className="col-lg-4 mb-3">
                                         <label htmlFor="priority">Priority <i className="bi bi-arrow-up" /></label>
                                         <Field type="number" className="form-control form-control-sm" min="0" id="priority" name="priority" placeholder="Priority" />
                                         {props.errors.priority && <div className="text-danger small">{props.errors.priority}</div>}
                                     </div>
-                                    <div className="col-md-4 mb-3">
+                                    <div className="col-lg-4 mb-3">
                                         <div>
                                             <label htmlFor="dueDate">Due Date <i className="bi bi-calendar-check" /></label>
                                         </div>
@@ -128,7 +128,7 @@ export default function TaskComponent() {
                                             onChange={(date) => setDueDate(date)}
                                         />
                                     </div>
-                                    <div className="col-md-4 mb-3">
+                                    <div className="col-lg-4 mb-3">
                                         <label htmlFor="status">Status</label>
                                         <Field as="select" className="form-select form-select-sm" id="status" name="status">
                                             {/* disabled option with value 0 for dropdown to avoid confusion of initial selection */}
@@ -137,7 +137,7 @@ export default function TaskComponent() {
                                             <option value="archived">archived</option>
                                         </Field>
                                     </div>
-                                    <div className="col-md-12 mb-3 text-end">
+                                    <div className="col-lg-12 mb-3 text-end">
                                         <button className="me-2 btn btn-sm btn-outline-secondary" type="button" onClick={() => navigate('/projects', { state })}>Cancel</button>
                                         <button className="btn btn-sm btn-outline-success" type="submit">Save Task</button>
                                     </div>

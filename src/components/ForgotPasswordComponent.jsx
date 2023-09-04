@@ -36,7 +36,7 @@ export default function ForgotPasswordComponent() {
             <form className="ForgotForm" onSubmit={handleSubmit}>
                 <div className="container">
                     <div className="row">
-                        <div className="col-md-4 offset-md-4">
+                        <div className="col-lg-4 offset-lg-4">
                             <div className="mb-3">
                                 <input
                                     type="email"

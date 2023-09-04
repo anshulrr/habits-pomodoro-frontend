@@ -62,7 +62,7 @@ export default function ListProjectCategoriesComponent() {
     return (
         <div className="container">
             <div className="row">
-                <div className="col-md-4">
+                <div className="col-lg-4">
                     <div>
                         <div className="row px-0">
                             <div className="col-10 text-start px-0">
@@ -134,7 +134,7 @@ export default function ListProjectCategoriesComponent() {
                         />
                     }
                 </div>
-                <div className="col-md-8 mt-2">
+                <div className="col-lg-8 mt-2">
                     {
                         (category || isNewCategory) &&
                         <ProjectCategoryComponent

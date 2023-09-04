@@ -79,7 +79,7 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                     }
 
                     <div className="row mb-3">
-                        <div className="col-md-12">
+                        <div className="col-lg-12">
 
                             <div className="row">
                                 <div className="col-10">

@@ -12,7 +12,7 @@ export default function SettingsComponent() {
         <div className="container mt-3">
             <div className="row">
 
-                <div className="col-md-12">
+                <div className="col-lg-12">
                     <h6 className="text-start pb-2">
                         Change Password &nbsp;
                         <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowChangePassword(!showChangePassword)}>
@@ -29,12 +29,12 @@ export default function SettingsComponent() {
                     <hr />
                 </div>
 
-                <div className="col-md-12">
+                <div className="col-lg-12">
                     <ListProjectCategoriesComponent />
                     <hr />
                 </div>
 
-                <div className="col-md-12">
+                <div className="col-lg-12">
                     <UserSettingsComponent />
                     <hr />
                 </div>
