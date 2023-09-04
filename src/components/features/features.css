@@ -60,6 +60,11 @@
 .update-popup-container {
     position: relative;
     display: inline-block;
+    cursor: pointer;
+}
+
+.update-list-row-selected .update-popup-container {
+    cursor: default;
 }
 
 .update-popup {
