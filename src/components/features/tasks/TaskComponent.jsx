@@ -60,7 +60,7 @@ export default function TaskComponent() {
         updateTaskApi(project_id, id, task)
             .then(response => {
                 // console.debug(response)
-                navigate(`/projects`, { state, replace: true })
+                navigate(-1, { state })
             })
             .catch(error => console.error(error.message))
     }
@@ -138,7 +138,7 @@ export default function TaskComponent() {
                                         </Field>
                                     </div>
                                     <div className="col-lg-12 mb-3 text-end">
-                                        <button className="me-2 btn btn-sm btn-outline-secondary" type="button" onClick={() => navigate('/projects', { state })}>Cancel</button>
+                                        <button className="me-2 btn btn-sm btn-outline-secondary" type="button" onClick={() => navigate(-1, { state })}>Cancel</button>
                                         <button className="btn btn-sm btn-outline-success" type="submit">Save Task</button>
                                     </div>
                                 </div>

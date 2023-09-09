@@ -67,7 +67,7 @@ export default function ListTasksComponent({ project }) {
     }
 
     function updateTask(id) {
-        navigate(`/projects/${project.id}/tasks/${id}`, { state, replace: true })
+        navigate(`/projects/${project.id}/tasks/${id}`, { state })
     }
 
     function createNewPomodoro(pomodoro_task, task_project, start_again = false) {
