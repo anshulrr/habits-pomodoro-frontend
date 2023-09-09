@@ -242,7 +242,7 @@ export default function ListTasksComponent({
                                 showCompleted && completedTasksCount !== 0 &&
                                 <div className="mt-2 mb-3">
                                     <ListTasksRowsComponent
-                                        key={[completedTasksCount]}
+                                        key={[completedTasksCount, allTasksReload]}
                                         status={'completed'}
                                         tasksCount={completedTasksCount}
                                         project={project}
@@ -286,7 +286,7 @@ export default function ListTasksComponent({
                                 showArchived && archivedTasksCount !== 0 &&
                                 <div className="mt-2 mb-3">
                                     <ListTasksRowsComponent
-                                        key={[archivedTasksCount]}
+                                        key={[archivedTasksCount, allTasksReload]}
                                         status={'archived'}
                                         tasksCount={archivedTasksCount}
                                         project={project}

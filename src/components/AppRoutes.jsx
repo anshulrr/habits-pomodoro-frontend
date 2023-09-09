@@ -11,7 +11,6 @@ import "components/features/comments/comments.css"
 
 import AuthProvider, { useAuth } from 'services/auth/AuthContext'
 import ProjectComponent from 'components/features/projects/ProjectComponent'
-import TaskComponent from 'components/features/tasks/TaskComponent'
 import SettingsComponent from 'components/user-settings/SettingsComponent'
 import SignupComponent from 'components/SignupComponent'
 import ForgotPasswordComponent from 'components/ForgotPasswordComponent'
@@ -46,12 +45,6 @@ export default function AppRoutes() {
                         <Route path='/projects/:id' element={
                             <AuthenticatedRoute>
                                 <ProjectComponent />
-                            </AuthenticatedRoute>
-                        } />
-
-                        <Route path='/tasks/:id' element={
-                            <AuthenticatedRoute>
-                                <TaskComponent />
                             </AuthenticatedRoute>
                         } />
 

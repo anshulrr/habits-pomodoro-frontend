@@ -9,7 +9,6 @@ import { useAuth } from 'services/auth/AuthContext';
 import { createPastPomodoroApi } from "services/api/PomodoroApiService";
 
 export default function PastPomodoroComponent({
-    showCreatePastPomodoro,
     setShowCreatePastPomodoro,
     task,
     setPomodorosListReload,
@@ -60,7 +59,6 @@ export default function PastPomodoroComponent({
     };
 
     return (
-        showCreatePastPomodoro === task.id &&
         <div className="row m-0 px-0 pt-1">
             <div className="col-6 px-0 text-end">
                 <DatePicker

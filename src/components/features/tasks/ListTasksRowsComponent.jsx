@@ -11,6 +11,7 @@ import { timeToDisplay } from "services/helpers/listsHelper";
 import PastPomodoroComponent from "components/features/tasks/PastPomodoroComponent";
 import ListCommentsComponent from "components/features/comments/ListCommentsComponents";
 import OutsideAlerter from "services/hooks/OutsideAlerter";
+import UpdateTaskComponent from "components/features/tasks/UpdateTaskComponent";
 
 export default function ListTasksRowsComponent({
     project,
@@ -49,6 +50,8 @@ export default function ListTasksRowsComponent({
     )
 
     const [showCreatePastPomodoro, setShowCreatePastPomodoro] = useState(-1);
+
+    const [showUpdateTaskId, setShowUpdateTaskId] = useState(-1)
 
     const [showCommentsId, setShowCommentsId] = useState(-1);
     const [commentsTitle, setCommentsTitle] = useState('')
@@ -211,12 +214,10 @@ export default function ListTasksRowsComponent({
                                                         </button>
                                                     }
                                                     {
-                                                        project &&
-                                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateTask(task.id)}>
+                                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowUpdateTaskId(task.id)}>
                                                             Update Task <i className="bi bi-pencil-square" />
                                                         </button>
                                                     }
-
                                                     {
                                                         task.status !== 'added' &&
                                                         < button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateTaskStatus(task, 'added')}>
@@ -247,13 +248,21 @@ export default function ListTasksRowsComponent({
                                 </div>
 
                                 {
-                                    task.status === 'added' &&
+                                    task.status === 'added' && showCreatePastPomodoro === task.id &&
                                     <PastPomodoroComponent
-                                        showCreatePastPomodoro={showCreatePastPomodoro}
                                         setShowCreatePastPomodoro={setShowCreatePastPomodoro}
                                         task={task}
                                         setPomodorosListReload={setPomodorosListReload}
                                         setTasksReload={setTasksReload}
+                                    />
+                                }
+
+                                {
+                                    showUpdateTaskId === task.id &&
+                                    <UpdateTaskComponent
+                                        task={task}
+                                        setShowUpdateTaskId={setShowUpdateTaskId}
+                                        setAllTasksReload={setAllTasksReload}
                                     />
                                 }
                             </div >
