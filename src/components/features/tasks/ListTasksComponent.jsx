@@ -14,7 +14,8 @@ export default function ListTasksComponent({
     project,
     startDate,
     endDate,
-    isReversed
+    isReversed,
+    title
 }) {
 
     const navigate = useNavigate()
@@ -147,13 +148,19 @@ export default function ListTasksComponent({
                     <div className="d-flex justify-content-between">
                         <h6>
                             {
-
                                 project &&
                                 <span>
                                     <span className="me-1" style={{ color: project.color }}>&#9632;</span>
                                     <span>
                                         {project.name}
                                     </span>
+                                </span>
+                            }
+                            {
+                                !project &&
+                                <span>
+                                    <i className={(title === "Overdue" ? "text-danger " : "") + "px-1 bi bi-calendar-check"} />
+                                    {title} Tasks
                                 </span>
                             }
                             <span className="ms-1 badge rounded-pill text-bg-secondary">

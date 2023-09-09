@@ -12,12 +12,15 @@ export default function WelcomeComponent() {
 
     const [project, setProject] = useState(state && state.project)
 
+    const [tasksTitle, setTasksTitle] = useState('');
+
 
     const [startDate, setStartDate] = useState(moment().startOf('day').toISOString())
     const [endDate, setEndDate] = useState(moment().endOf('day').toISOString())
     const [isReversed, setReversed] = useState(false);
 
     function fetchUpcomingTasks() {
+        setTasksTitle('Upcoming')
         setProject(null);
         setReversed(true);
         setStartDate(moment().toISOString());
@@ -25,6 +28,7 @@ export default function WelcomeComponent() {
     }
 
     function fetchOverdueTasks() {
+        setTasksTitle('Overdue')
         setProject(null);
         setReversed(false);
         setStartDate(moment().add(-10, 'y').toISOString());
@@ -39,13 +43,19 @@ export default function WelcomeComponent() {
                         project={project}
                         setProject={setProject}
                     />
-                    <div className="py-1 small list-row" onClick={fetchUpcomingTasks}>
-                        <i className="px-1 bi bi-calendar-check" />
-                        Upcomping
-                    </div>
-                    <div className="py-1 small list-row" onClick={fetchOverdueTasks}>
-                        <i className="px-1 bi bi-calendar-check text-danger" />
-                        Overdue
+
+                    <div className="border-bottom">
+                        <h6 className="px-2">
+                            Task Filters
+                        </h6>
+                        <div className={(!project && tasksTitle === "Upcoming" ? "list-selected " : "") + "px-2 py-1 small list-row"} onClick={fetchUpcomingTasks}>
+                            <i className="px-1 bi bi-calendar-check" />
+                            Upcoming
+                        </div>
+                        <div className={(!project && tasksTitle === "Overdue" ? "list-selected " : "") + "px-2 py-1 small list-row"} onClick={fetchOverdueTasks}>
+                            <i className="px-1 bi bi-calendar-check text-danger" />
+                            Overdue
+                        </div>
                     </div>
                 </div>
                 <div className="col-lg-8">
@@ -63,6 +73,7 @@ export default function WelcomeComponent() {
                             startDate={startDate}
                             endDate={endDate}
                             isReversed={isReversed}
+                            title={tasksTitle}
                         />
                     }
                 </div>
