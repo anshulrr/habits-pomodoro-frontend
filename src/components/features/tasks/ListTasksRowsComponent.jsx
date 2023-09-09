@@ -23,6 +23,9 @@ export default function ListTasksRowsComponent({
     setAllTasksReload,
     elementHeight,
     setElementHeight,
+    startDate,
+    endDate,
+    isReversed
 }) {
     const navigate = useNavigate()
     const { state } = useLocation();
@@ -58,10 +61,26 @@ export default function ListTasksRowsComponent({
 
     function refreshTasks(status) {
         setTasks([]);
-        retrieveAllTasksApi({ projectId: project.id, status, limit: PAGESIZE, offset: (currentPage - 1) * PAGESIZE })
+        const taskData = {
+            status,
+            limit: PAGESIZE,
+            offset: (currentPage - 1) * PAGESIZE
+        }
+        if (project) {
+            taskData.projectId = project.id;
+        } else {
+            taskData.startDate = startDate;
+            taskData.endDate = endDate;
+            taskData.projectId = -1;
+        }
+        retrieveAllTasksApi(taskData)
             .then(response => {
                 // console.debug(response)
-                setTasks(response.data)
+                if (isReversed) {
+                    setTasks(response.data.toReversed())
+                } else {
+                    setTasks(response.data)
+                }
             })
             .catch(error => console.error(error.message))
     }
@@ -98,7 +117,7 @@ export default function ListTasksRowsComponent({
         status === 'added' && (state.currentTasksPage = page);
         status === 'completed' && (state.currentCompletedTasksPage = page);
         status === 'archived' && (state.currentArchivedTasksPage = page);
-        navigate(`/projects`, { state, replace: true })
+        navigate(`/`, { state, replace: true })
     }
 
     function onCreateNewPomodoro(task) {
@@ -152,7 +171,7 @@ export default function ListTasksRowsComponent({
                                             </span>
                                             <span>
                                                 <i className="ps-1 bi bi-hourglass" />
-                                                {timeToDisplay(task.pomodoroLength || project.pomodoroLength || userSettings.pomodoroLength)}
+                                                {timeToDisplay(task.pomodoroLength || task.projectPomodoroLength || userSettings.pomodoroLength)}
                                             </span>
                                             {
                                                 task.dueDate &&
@@ -184,9 +203,12 @@ export default function ListTasksRowsComponent({
                                                             Add past Pomodoro <i className="bi bi-calendar-plus" />
                                                         </button>
                                                     }
-                                                    <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateTask(task.id)}>
-                                                        Update Task <i className="bi bi-pencil-square" />
-                                                    </button>
+                                                    {
+                                                        project &&
+                                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateTask(task.id)}>
+                                                            Update Task <i className="bi bi-pencil-square" />
+                                                        </button>
+                                                    }
 
                                                     {
                                                         task.status !== 'added' &&

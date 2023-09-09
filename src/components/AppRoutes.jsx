@@ -56,7 +56,7 @@ export default function AppRoutes() {
                             </AuthenticatedRoute>
                         } />
 
-                        <Route path='/projects/:project_id/tasks/:id' element={
+                        <Route path='/tasks/:id' element={
                             <AuthenticatedRoute>
                                 <TaskComponent />
                             </AuthenticatedRoute>
