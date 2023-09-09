@@ -16,7 +16,7 @@ export default function CreateTaskComponent({ setShowCreateTask, project, setTas
             priority: 1
         }
 
-        createTaskApi(project.id, task)
+        createTaskApi({ projectId: project.id, task })
             .then(response => {
                 // console.debug(response)
                 setTasksReload(prev => prev + 1);

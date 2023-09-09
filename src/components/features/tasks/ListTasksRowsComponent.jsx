@@ -58,7 +58,7 @@ export default function ListTasksRowsComponent({
 
     function refreshTasks(status) {
         setTasks([]);
-        retrieveAllTasksApi(project.id, status, PAGESIZE, (currentPage - 1) * PAGESIZE)
+        retrieveAllTasksApi({ projectId: project.id, status, limit: PAGESIZE, offset: (currentPage - 1) * PAGESIZE })
             .then(response => {
                 // console.debug(response)
                 setTasks(response.data)
@@ -80,7 +80,7 @@ export default function ListTasksRowsComponent({
         }
         task.status = status;
 
-        updateTaskApi(project.id, task.id, task)
+        updateTaskApi({ id: task.id, task })
             .then(() => {
                 setAllTasksReload(prevReload => prevReload + 1)
             })

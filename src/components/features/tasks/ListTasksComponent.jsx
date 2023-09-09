@@ -59,7 +59,7 @@ export default function ListTasksComponent({ project }) {
     )
 
     function getTasksCount(status, setContainer) {
-        getTasksCountApi(project.id, status)
+        getTasksCountApi({ projectId: project.id, status })
             .then(response => {
                 setContainer(response.data)
             })

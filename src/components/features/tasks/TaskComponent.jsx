@@ -33,7 +33,7 @@ export default function TaskComponent() {
     )
 
     function retrieveTask() {
-        retrieveTaskApi(project_id, id)
+        retrieveTaskApi({ id })
             .then(response => {
                 setDescription(response.data.description)
                 setPomodoroLength(response.data.pomodoroLength)
@@ -57,7 +57,7 @@ export default function TaskComponent() {
             dueDate: moment(dueDate).endOf('date').toDate(),
         }
 
-        updateTaskApi(project_id, id, task)
+        updateTaskApi({ id, task })
             .then(response => {
                 // console.debug(response)
                 navigate(-1, { state })
