@@ -14,3 +14,9 @@ export const retrieveTaskApi
 
 export const updateTaskApi
     = (project_id, id, task) => apiClient.put(`projects/${project_id}/tasks/${id}`, task)
+
+export const getFilterdTasksCountApi
+    = (status, startDate, endDate) => apiClient.get(`/tasks/count?status=${status}&startDate=${startDate}&endDate=${endDate}`)
+
+export const retrieveFilteredTasksApi
+    = (status, startDate, endDate, limit, offset) => apiClient.get(`/tasks?status=${status}&startDate=${startDate}&endDate=${endDate}&limit=${limit}&offset=${offset}`)

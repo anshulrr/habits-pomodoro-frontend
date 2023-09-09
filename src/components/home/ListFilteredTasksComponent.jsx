@@ -2,15 +2,14 @@ import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { createPomodoroApi, getRunningPomodoroApi } from "services/api/PomodoroApiService";
-import { getTasksCountApi } from "services/api/TaskApiService";
+import { getFilterdTasksCountApi } from "services/api/TaskApiService";
 
-import ListTasksRowsComponent from "components/features/tasks/ListTasksRowsComponent";
-import CreateTaskComponent from "components/features/tasks/CreateTaskComponent";
+import ListFilteredTasksRowsComponent from "components/home/ListFilteredTasksRowsComponent";
 import PomodoroComponent from "components/features/pomodoros/PomodoroComponent";
 import StopwatchComponent from "components/features/pomodoros/StopwatchComponent";
 import ListPomodorosComponent from "components/stats/ListPomodorosComponent";
 
-export default function ListTasksComponent({ project }) {
+export default function ListFilteredTasksComponent({ startDate, endDate, isReversed }) {
 
     const navigate = useNavigate()
 
@@ -38,16 +37,8 @@ export default function ListTasksComponent({ project }) {
 
     const [message, setMessage] = useState('')
 
-    const [showCreateTask, setShowCreateTask] = useState(false)
-
     useEffect(
         () => {
-            // need to set it in useEffect, instead of top level, 
-            // complete component won't reload
-            // as project is not a key during component call
-            setShowCompleted(state.showCompletedTasks || false)
-            setShowArchived(state.showArchivedTasks || false)
-
             // console.debug('re-render ListTasksComponents')
             getTasksCount('added', setTasksCount)
             getTasksCount('archived', setArchivedTasksCount)
@@ -55,19 +46,19 @@ export default function ListTasksComponent({ project }) {
             if (pomodoro === null) {
                 getRunningPomodoro()
             }
-        }, [project, allTasksReload] // eslint-disable-line react-hooks/exhaustive-deps
+        }, [allTasksReload] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
     function getTasksCount(status, setContainer) {
-        getTasksCountApi(project.id, status)
+        getFilterdTasksCountApi(status, startDate, endDate)
             .then(response => {
                 setContainer(response.data)
             })
             .catch(error => console.error(error.message))
     }
 
-    function updateTask(id) {
-        navigate(`/projects/${project.id}/tasks/${id}`, { state })
+    function updateTask(task) {
+        navigate(`/projects/${task.projectId}/tasks/${task.id}`, { state })
     }
 
     function createNewPomodoro(pomodoro_task, task_project, start_again = false) {
@@ -132,32 +123,12 @@ export default function ListTasksComponent({ project }) {
 
                     <div className="d-flex justify-content-between">
                         <h6>
-                            <span className="me-1" style={{ color: project.color }}>&#9632;</span>
-                            <span>
-                                {project.name}
-                            </span>
                             <span className="ms-1 badge rounded-pill text-bg-secondary">
                                 {tasksCount}
                                 <i className="ms-1 bi bi-list-ul" />
                             </span>
                         </h6>
-                        {
-                            !showCreateTask &&
-                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-1" onClick={() => setShowCreateTask(!showCreateTask)}>
-                                <i className="bi bi-plus-circle" />
-                            </button>
-                        }
                     </div>
-
-                    {
-                        showCreateTask &&
-                        <CreateTaskComponent
-                            setShowCreateTask={setShowCreateTask}
-                            project={project}
-                            setTasksReload={setTasksReload}
-                            setTasksCount={setTasksCount}
-                        ></CreateTaskComponent>
-                    }
 
                     {/* fix for x scroll: px-3 */}
                     <div className="px-3">
@@ -171,11 +142,10 @@ export default function ListTasksComponent({ project }) {
 
                         {
                             tasksCount !== 0 &&
-                            <ListTasksRowsComponent
-                                key={[project.id, pomodoroStatus, tasksReload, allTasksReload]}    // re-render ListTasksComponents for completed pomodoro'
+                            <ListFilteredTasksRowsComponent
+                                key={[pomodoroStatus, tasksReload, allTasksReload]}    // re-render ListTasksComponents for completed pomodoro'
                                 status={'added'}
                                 tasksCount={tasksCount}
-                                project={project}
                                 createNewPomodoro={createNewPomodoro}
                                 updateTask={updateTask}
                                 setPomodorosListReload={setPomodorosListReload}
@@ -183,6 +153,9 @@ export default function ListTasksComponent({ project }) {
                                 setAllTasksReload={setAllTasksReload}
                                 elementHeight={currentTasksHeight}
                                 setElementHeight={setCurrentTasksHeight}
+                                startDate={startDate}
+                                endDate={endDate}
+                                isReversed={isReversed}
                             />
                         }
 
@@ -200,7 +173,7 @@ export default function ListTasksComponent({ project }) {
                                     <button type="button" className="ms-1 btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => {
                                         state.showCompletedTasks = !showCompleted;
                                         setShowCompleted(!showCompleted);
-                                        navigate(`/projects`, { state, replace: true })
+                                        navigate(`/`, { state, replace: true })
                                     }}>
                                         {!showCompleted && <i className="bi bi-arrow-down" />}
                                         {showCompleted && <i className="bi bi-arrow-up" />}
@@ -211,17 +184,19 @@ export default function ListTasksComponent({ project }) {
                             {
                                 showCompleted && completedTasksCount !== 0 &&
                                 <div className="mt-2 mb-3">
-                                    <ListTasksRowsComponent
-                                        key={[project.id, completedTasksCount]}
+                                    <ListFilteredTasksRowsComponent
+                                        key={[completedTasksCount]}
                                         status={'completed'}
                                         tasksCount={completedTasksCount}
-                                        project={project}
                                         createNewPomodoro={createNewPomodoro}
                                         updateTask={updateTask}
                                         setTasksReload={setTasksReload}
                                         setAllTasksReload={setAllTasksReload}
                                         elementHeight={completedTasksHeight}
                                         setElementHeight={setCompletedTasksHeight}
+                                        startDate={startDate}
+                                        endDate={endDate}
+                                        isReversed={isReversed}
                                     />
                                 </div>
                             }
@@ -241,7 +216,7 @@ export default function ListTasksComponent({ project }) {
                                     <button type="button" className="ms-1 btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => {
                                         state.showArchivedTasks = !showArchived;
                                         setShowArchived(!showArchived);
-                                        navigate(`/projects`, { state, replace: true })
+                                        navigate(`/`, { state, replace: true })
                                     }}>
                                         {!showArchived && <i className="bi bi-arrow-down" />}
                                         {showArchived && <i className="bi bi-arrow-up" />}
@@ -252,22 +227,24 @@ export default function ListTasksComponent({ project }) {
                             {
                                 showArchived && archivedTasksCount !== 0 &&
                                 <div className="mt-2 mb-3">
-                                    <ListTasksRowsComponent
-                                        key={[project.id, archivedTasksCount]}
+                                    <ListFilteredTasksRowsComponent
+                                        key={[archivedTasksCount]}
                                         status={'archived'}
                                         tasksCount={archivedTasksCount}
-                                        project={project}
                                         createNewPomodoro={createNewPomodoro}
                                         updateTask={updateTask}
                                         setTasksReload={setTasksReload}
                                         setAllTasksReload={setAllTasksReload}
                                         elementHeight={archivedTasksHeight}
                                         setElementHeight={setArchivedTasksHeight}
+                                        startDate={startDate}
+                                        endDate={endDate}
+                                        isReversed={isReversed}
                                     />
                                 </div>
                             }
                         </div>
-                    </div >
+                    </div>
                 </div>
 
                 <div className="col-lg-6 mt-3">

@@ -60,7 +60,7 @@ export default function TaskComponent() {
         updateTaskApi(project_id, id, task)
             .then(response => {
                 // console.debug(response)
-                navigate(`/projects`, { state, replace: true })
+                navigate(-1, { state, replace: true })
             })
             .catch(error => console.error(error.message))
     }

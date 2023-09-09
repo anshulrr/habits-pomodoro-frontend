@@ -1,0 +1,268 @@
+import { useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+
+import moment from "moment";
+
+import { useAuth } from "services/auth/AuthContext";
+import Pagination from "services/pagination/Pagination";
+import { retrieveAllTasksApi, retrieveFilteredTasksApi, updateTaskApi } from "services/api/TaskApiService";
+import { timeToDisplay } from "services/helpers/listsHelper";
+
+import PastPomodoroComponent from "components/features/tasks/PastPomodoroComponent";
+import ListCommentsComponent from "components/features/comments/ListCommentsComponents";
+import OutsideAlerter from "services/hooks/OutsideAlerter";
+
+export default function ListFilteredTasksRowsComponent({
+    project,
+    status,
+    tasksCount,
+    createNewPomodoro,
+    updateTask,
+    setPomodorosListReload,
+    setTasksReload,
+    setAllTasksReload,
+    elementHeight,
+    setElementHeight,
+    startDate,
+    endDate,
+    isReversed
+}) {
+    const navigate = useNavigate()
+    const { state } = useLocation();
+
+    const authContext = useAuth()
+    const userSettings = authContext.userSettings
+
+    const [showUpdatePopupId, setShowUpdatePopupId] = useState(-1);
+
+    const tasksListElement = useRef(null);
+
+    const PAGESIZE = userSettings.pageTasksCount;
+
+    const [tasks, setTasks] = useState([])
+
+    const [currentPage, setCurrentPage] = useState(
+        (status === 'added' && state.currentTasksPage) ||
+        (status === 'completed' && state.currentCompletedTasksPage) ||
+        (status === 'archived' && state.currentArchivedTasksPage) ||
+        1
+    )
+
+    const [showCreatePastPomodoro, setShowCreatePastPomodoro] = useState(-1);
+
+    const [showCommentsId, setShowCommentsId] = useState(-1);
+    const [commentsTitle, setCommentsTitle] = useState('')
+
+    useEffect(
+        () => {
+            refreshTasks(status)
+        }, [currentPage] // eslint-disable-line react-hooks/exhaustive-deps
+    )
+
+    function refreshTasks(status) {
+        setTasks([]);
+        retrieveFilteredTasksApi(status, startDate, endDate, PAGESIZE, (currentPage - 1) * PAGESIZE)
+            .then(response => {
+                console.debug(response.data, response.data.toReversed(), isReversed)
+                if (isReversed) {
+                    setTasks(response.data.toReversed())
+                } else {
+                    setTasks(response.data)
+                }
+            })
+            .catch(error => console.error(error.message))
+    }
+
+    function updateCommentsPopupData(task) {
+        setShowCommentsId(task.id)
+        setCommentsTitle(task.description)
+    }
+
+    function onUpdateTaskStatus(task, status) {
+        setElementHeight(tasksListElement.current.offsetHeight)
+
+        let statusString = status === 'added' ? 'current' : status;
+        if (!window.confirm(`Press OK to mark task as ${statusString}.`)) {
+            return;
+        }
+        task.status = status;
+
+        updateTaskApi(task.project_id, task.id, task)
+            .then(() => {
+                setAllTasksReload(prevReload => prevReload + 1)
+            })
+            .catch(error => console.error(error.message))
+    }
+
+    function onCreatePastPomodoro(task) {
+        setElementHeight(tasksListElement.current.offsetHeight)
+        setShowCreatePastPomodoro(task.id)
+    }
+
+    function updateOnPageChange(page) {
+        setElementHeight(tasksListElement.current.offsetHeight)
+        setCurrentPage(page)
+        status === 'added' && (state.currentTasksPage = page);
+        status === 'completed' && (state.currentCompletedTasksPage = page);
+        status === 'archived' && (state.currentArchivedTasksPage = page);
+        navigate(`/`, { state, replace: true })
+    }
+
+    function onCreateNewPomodoro(task) {
+        setElementHeight(tasksListElement.current.offsetHeight)
+        createNewPomodoro(task, project)
+    }
+
+    function generateDueDateClass(task) {
+        if (task.status === 'added') {
+            if (moment().diff(moment(task.dueDate)) > 0) {
+                return "text-danger";
+            } else {
+                return "text-secondary";
+            }
+        } else {
+            return "text-success";
+        }
+    }
+
+    return (
+        <>
+            {
+                tasks.length === 0 &&
+                <div className="loader-container" style={{ height: elementHeight }}>
+                    <div className="loader"></div>
+                </div>
+            }
+            <div id="tasks-list" ref={tasksListElement}>
+                {
+                    tasks.map(
+                        task => (
+                            <div key={task.id} className={"row py-0 update-list-row" + (showUpdatePopupId === task.id ? " update-list-row-selected" : "")}>
+                                {
+                                    task.status === 'added' &&
+                                    <div className="px-0 py-2 col-1 text-start">
+                                        <button type="button" className="btn btn-sm btn-outline-success px-1 py-0 align-middle" onClick={() => onCreateNewPomodoro(task)}>
+                                            <i className="bi bi-play-circle"></i>
+                                        </button>
+                                    </div>
+                                }
+                                <div className="px-0 col text-start update-popup-container">
+
+                                    <div className="py-2" onClick={() => setShowUpdatePopupId(task.id)}>
+                                        <div className={(task.status === 'archived' ? "text-secondary" : "") + " description"}>
+                                            {task.description}
+                                        </div>
+                                        <div className="subscript text-secondary">
+                                            <span>
+                                                <i className="bi bi-arrow-up" />
+                                                {task.priority}
+                                            </span>
+                                            <span>
+                                                <i className="ps-1 bi bi-hourglass" />
+                                                {timeToDisplay(task.pomodoroLength || userSettings.pomodoroLength)}
+                                            </span>
+                                            {
+                                                task.dueDate &&
+                                                <span className={generateDueDateClass(task)}>
+                                                    <i className="px-1 bi bi-calendar-check" />
+                                                    {moment(task.dueDate).format("DD/MM/yyyy")}
+                                                </span>
+                                            }
+                                            <span>
+                                                <i className="ps-1 bi bi-clock" style={{ paddingRight: "0.1rem" }} />
+                                                {timeToDisplay(task.pomodorosTimeElapsed / 60)}
+                                            </span>
+
+                                            <span>
+                                                <span className="ms-1" style={{ color: task.color, paddingRight: "0.1rem" }}>&#9632;</span>
+                                                {task.project}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    {
+                                        showUpdatePopupId === task.id &&
+                                        <OutsideAlerter handle={() => setShowUpdatePopupId(-1)}>
+                                            <span className="">
+                                                <div className="update-popup">
+                                                    <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateCommentsPopupData(task)}>
+                                                        Comments <i className="bi bi-chat-right-text" />
+                                                    </button>
+                                                    {
+                                                        task.status === 'added' &&
+                                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => {
+                                                            onCreatePastPomodoro(task);
+                                                            setShowUpdatePopupId(-1);
+                                                        }}>
+                                                            Add past Pomodoro <i className="bi bi-calendar-plus" />
+                                                        </button>
+                                                    }
+                                                    <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateTask(task)}>
+                                                        Update Task <i className="bi bi-pencil-square" />
+                                                    </button>
+
+                                                    {
+                                                        task.status !== 'added' &&
+                                                        < button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateTaskStatus(task, 'added')}>
+                                                            Mark as current <i className="bi bi-check2-circle" />
+                                                        </button>
+                                                    }
+                                                    {
+                                                        task.status !== 'completed' &&
+                                                        < button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateTaskStatus(task, 'completed')}>
+                                                            Mark as completed <i className="bi bi-check2-circle" />
+                                                        </button>
+                                                    }
+                                                    {
+                                                        task.status !== 'archived' &&
+                                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateTaskStatus(task, 'archived')}>
+                                                            Mark as archived <i className="bi bi-archive" />
+                                                        </button>
+                                                    }
+                                                    {
+                                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowUpdatePopupId(-1)}>
+                                                            Cancel <i className="bi bi-x-lg" />
+                                                        </button>
+                                                    }
+                                                </div>
+                                            </span>
+                                        </OutsideAlerter>
+                                    }
+                                </div>
+
+                                {
+                                    task.status === 'added' &&
+                                    <PastPomodoroComponent
+                                        showCreatePastPomodoro={showCreatePastPomodoro}
+                                        setShowCreatePastPomodoro={setShowCreatePastPomodoro}
+                                        task={task}
+                                        project={{}}
+                                        setPomodorosListReload={setPomodorosListReload}
+                                        setTasksReload={setTasksReload}
+                                    />
+                                }
+                            </div >
+                        )
+                    )
+                }
+            </div>
+
+            <Pagination
+                className="pagination-bar ps-0"
+                currentPage={currentPage}
+                totalCount={tasksCount}
+                pageSize={PAGESIZE}
+                onPageChange={page => updateOnPageChange(page)}
+            />
+
+            {
+                showCommentsId !== -1 &&
+                <ListCommentsComponent
+                    filterBy={'task'}
+                    id={showCommentsId}
+                    title={commentsTitle}
+                    setShowCommentsId={setShowCommentsId}
+                />
+            }
+        </>
+    )
+}
