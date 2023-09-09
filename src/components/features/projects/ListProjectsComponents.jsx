@@ -67,11 +67,11 @@ export default function ListProjectsComponent() {
     }
 
     function updateProject(id) {
-        navigate(`/projects/${id}`, { state, replace: true })
+        navigate(`/projects/${id}`, { state })
     }
 
     function addNewProject() {
-        navigate(`/projects/-1`, { state, replace: true })
+        navigate(`/projects/-1`, { state })
     }
 
     function onUpdateProject(proj) {
