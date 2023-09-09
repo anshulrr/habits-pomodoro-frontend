@@ -15,8 +15,8 @@ export default function WelcomeComponent() {
     const [tasksTitle, setTasksTitle] = useState('');
     const [showTasksFilters, setShowTasksFilters] = useState(false);
 
-    const [startDate, setStartDate] = useState(moment().startOf('day').toISOString());
-    const [endDate, setEndDate] = useState(moment().endOf('day').toISOString());
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
     const [isReversed, setReversed] = useState(false);
 
     function fetchUpcomingTasks() {
@@ -78,7 +78,7 @@ export default function WelcomeComponent() {
                         />
                     }
                     {
-                        !project &&
+                        !project && startDate &&
                         <ListTasksComponent
                             key={[startDate, endDate]}
                             startDate={startDate}

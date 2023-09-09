@@ -17,7 +17,8 @@ export default function ListProjectsComponent({ project, setProject }) {
 
     const projectsListElement = useRef(null);
 
-    const PAGESIZE = userSettings.pageProjectsCount;
+    // for first time login default value is needed
+    const PAGESIZE = userSettings.pageProjectsCount || 5;
 
     const [projectsCount, setProjectsCount] = useState(0)
     const [projects, setProjects] = useState([])
