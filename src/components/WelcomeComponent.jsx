@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import moment from 'moment';
 
@@ -9,6 +9,8 @@ import ListTasksComponent from './features/tasks/ListTasksComponent';
 export default function WelcomeComponent() {
 
     const { state } = useLocation();
+
+    const navigate = useNavigate()
 
     const [project, setProject] = useState(state && state.project);
 
@@ -25,6 +27,7 @@ export default function WelcomeComponent() {
         setReversed(true);
         setStartDate(moment().toISOString());
         setEndDate(moment().add(10, 'y').toISOString());
+        updateAppStates();
     }
 
     function fetchOverdueTasks() {
@@ -33,6 +36,19 @@ export default function WelcomeComponent() {
         setReversed(false);
         setStartDate(moment().add(-10, 'y').toISOString());
         setEndDate(moment().toISOString());
+        updateAppStates();
+    }
+
+    function updateAppStates() {
+        let local_state = { ...state };
+        local_state.project = null;
+        local_state.currentTasksPage = 1;
+        local_state.currentCompletedTasksPage = 1;
+        local_state.currentArchivedTasksPage = 1;
+        local_state.showCompletedTasks = false;
+        local_state.showArchivedTasks = false;
+        // for page refresh: set it right away
+        navigate('/', { state: local_state, replace: true });
     }
 
     return (
