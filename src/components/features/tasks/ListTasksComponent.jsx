@@ -69,12 +69,9 @@ export default function ListTasksComponent({
         }
         if (project) {
             taskData.projectId = project.id;
-            taskData.startDate = '';
-            taskData.endDate = '';
         } else {
             taskData.startDate = startDate;
             taskData.endDate = endDate;
-            taskData.projectId = -1;
         }
         getTasksCountApi(taskData)
             .then(response => {

@@ -6,7 +6,7 @@ import moment from 'moment';
 import ListProjectsComponent from './features/projects/ListProjectsComponents';
 import ListTasksComponent from './features/tasks/ListTasksComponent';
 
-export default function WelcomeComponent({ username }) {
+export default function WelcomeComponent() {
 
     const { state } = useLocation();
 
@@ -52,6 +52,7 @@ export default function WelcomeComponent({ username }) {
                     {
                         project &&
                         <ListTasksComponent
+                            key={project.id}
                             project={project}
                         />
                     }

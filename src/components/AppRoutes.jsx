@@ -10,7 +10,6 @@ import 'components/features/features.css'
 import "components/features/comments/comments.css"
 
 import AuthProvider, { useAuth } from 'services/auth/AuthContext'
-import ListProjectsComponent from 'components/features/projects/ListProjectsComponents'
 import ProjectComponent from 'components/features/projects/ProjectComponent'
 import TaskComponent from 'components/features/tasks/TaskComponent'
 import SettingsComponent from 'components/user-settings/SettingsComponent'

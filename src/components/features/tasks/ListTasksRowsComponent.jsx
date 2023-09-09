@@ -71,7 +71,6 @@ export default function ListTasksRowsComponent({
         } else {
             taskData.startDate = startDate;
             taskData.endDate = endDate;
-            taskData.projectId = -1;
         }
         retrieveAllTasksApi(taskData)
             .then(response => {
