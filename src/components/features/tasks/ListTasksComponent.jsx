@@ -39,7 +39,7 @@ export default function ListTasksComponent({
     const [pomodoroStatus, setPomodoroStatus] = useState(null)
 
     const [pomodorosListReload, setPomodorosListReload] = useState(0)
-    const [tasksReload, setTasksReload] = useState(0)
+    const [currentTasksReload, setCurrentTasksReload] = useState(0)
     const [allTasksReload, setAllTasksReload] = useState(0)
 
     const [message, setMessage] = useState('')
@@ -79,10 +79,6 @@ export default function ListTasksComponent({
                 setContainer(response.data)
             })
             .catch(error => console.error(error.message))
-    }
-
-    function updateTask(id) {
-        navigate(`/tasks/${id}`, { state })
     }
 
     function createNewPomodoro(pomodoro_task, task_project, start_again = false) {
@@ -181,7 +177,7 @@ export default function ListTasksComponent({
                         <CreateTaskComponent
                             setShowCreateTask={setShowCreateTask}
                             project={project}
-                            setTasksReload={setTasksReload}
+                            setCurrentTasksReload={setCurrentTasksReload}
                             setTasksCount={setTasksCount}
                         ></CreateTaskComponent>
                     }
@@ -199,14 +195,13 @@ export default function ListTasksComponent({
                         {
                             tasksCount !== 0 &&
                             <ListTasksRowsComponent
-                                key={[pomodoroStatus, tasksReload, allTasksReload]}    // re-render ListTasksComponents for completed pomodoro'
+                                key={[pomodoroStatus, currentTasksReload, allTasksReload]}    // re-render ListTasksComponents for completed pomodoro'
                                 status={'added'}
                                 tasksCount={tasksCount}
                                 project={project}
                                 createNewPomodoro={createNewPomodoro}
-                                updateTask={updateTask}
                                 setPomodorosListReload={setPomodorosListReload}
-                                setTasksReload={setTasksReload}
+                                setCurrentTasksReload={setCurrentTasksReload}
                                 setAllTasksReload={setAllTasksReload}
                                 elementHeight={currentTasksHeight}
                                 setElementHeight={setCurrentTasksHeight}
@@ -247,8 +242,6 @@ export default function ListTasksComponent({
                                         tasksCount={completedTasksCount}
                                         project={project}
                                         createNewPomodoro={createNewPomodoro}
-                                        updateTask={updateTask}
-                                        setTasksReload={setTasksReload}
                                         setAllTasksReload={setAllTasksReload}
                                         elementHeight={completedTasksHeight}
                                         setElementHeight={setCompletedTasksHeight}
@@ -291,8 +284,6 @@ export default function ListTasksComponent({
                                         tasksCount={archivedTasksCount}
                                         project={project}
                                         createNewPomodoro={createNewPomodoro}
-                                        updateTask={updateTask}
-                                        setTasksReload={setTasksReload}
                                         setAllTasksReload={setAllTasksReload}
                                         elementHeight={archivedTasksHeight}
                                         setElementHeight={setArchivedTasksHeight}

@@ -18,9 +18,8 @@ export default function ListTasksRowsComponent({
     status,
     tasksCount,
     createNewPomodoro,
-    updateTask,
     setPomodorosListReload,
-    setTasksReload,
+    setCurrentTasksReload,
     setAllTasksReload,
     elementHeight,
     setElementHeight,
@@ -253,7 +252,7 @@ export default function ListTasksRowsComponent({
                                         setShowCreatePastPomodoro={setShowCreatePastPomodoro}
                                         task={task}
                                         setPomodorosListReload={setPomodorosListReload}
-                                        setTasksReload={setTasksReload}
+                                        setCurrentTasksReload={setCurrentTasksReload}
                                     />
                                 }
 
