@@ -11,7 +11,7 @@ import { retrieveTaskApi, updateTaskApi } from 'services/api/TaskApiService'
 // export default function TaskComponent({ project, task, setTasks, tasks }) {
 export default function TaskComponent() {
 
-    const { project_id, id } = useParams()
+    const { id } = useParams()
 
     const { state } = useLocation();
 

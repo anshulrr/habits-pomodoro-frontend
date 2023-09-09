@@ -44,12 +44,6 @@ export default function AppRoutes() {
                             </AuthenticatedRoute>
                         } />
 
-                        <Route path='/projects' element={
-                            <AuthenticatedRoute>
-                                <ListProjectsComponent />
-                            </AuthenticatedRoute>
-                        } />
-
                         <Route path='/projects/:id' element={
                             <AuthenticatedRoute>
                                 <ProjectComponent />

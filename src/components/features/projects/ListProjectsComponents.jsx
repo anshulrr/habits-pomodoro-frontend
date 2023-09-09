@@ -6,7 +6,6 @@ import Pagination from "services/pagination/Pagination"
 import { useAuth } from "services/auth/AuthContext";
 import { truncateString } from "services/helpers/listsHelper";
 
-import ListTasksComponent from 'components/features/tasks/ListTasksComponent'
 import ListCommentsComponent from "components/features/comments/ListCommentsComponents";
 
 export default function ListProjectsComponent({ project, setProject }) {
@@ -181,7 +180,7 @@ export default function ListProjectsComponent({ project, setProject }) {
                             onPageChange={page => {
                                 setCurrentPage(page);
                                 state.currentProjectsPage = page;
-                                navigate(`/projects`, { state, replace: true });
+                                navigate(`/`, { state, replace: true });
                             }}
                         />
                     </div>

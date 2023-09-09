@@ -45,16 +45,6 @@ export default function HeaderComponent() {
                         {
                             isAuthenticated &&
                             <li className="nav-item">
-                                <Link className={"nav-link" + (url.includes("projects") ? " active" : "")} to="/projects" state={state}>
-                                    Projects
-                                </Link>
-                            </li>
-                        }
-                    </ul>
-                    <ul className="navbar-nav">
-                        {
-                            isAuthenticated &&
-                            <li className="nav-item">
                                 <Link className={"nav-link" + (url.includes("stats") ? " active" : "")} to="/stats" state={state}>
                                     Stats
                                 </Link>

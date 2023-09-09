@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
 import moment from 'moment';
 
@@ -54,7 +54,9 @@ export default function WelcomeComponent({ username }) {
                         <ListTasksComponent
                             project={project}
                         />
-                        ||
+                    }
+                    {
+                        !project &&
                         <ListTasksComponent
                             key={[startDate, endDate]}
                             startDate={startDate}
