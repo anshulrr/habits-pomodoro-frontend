@@ -21,22 +21,31 @@ export default function HeaderComponent() {
                 <div className="container">
 
                     {
-                        isAuthenticated && user.photoURL &&
+                        isAuthenticated &&
                         <ul className="navbar-nav">
                             <li className="nav-item">
-                                <Link className="nav-link py-0" to="/" state={state}>
-                                    <div className="text-center">
-                                        <img
-                                            src={user.photoURL}
-                                            style={{ borderRadius: "50%" }}
-                                            width="35rem"
-                                            height="35rem"
-                                            className="float-start"
-                                            alt={user.displayName}
-                                        // referrerPolicy='no-referrer'
-                                        />
-                                    </div>
-                                </Link>
+                                {
+                                    user.photoURL &&
+                                    <Link className="nav-link py-0" to="/" state={state}>
+                                        <div className="text-center">
+                                            <img
+                                                src={user.photoURL}
+                                                style={{ borderRadius: "50%" }}
+                                                width="35rem"
+                                                height="35rem"
+                                                className="float-start"
+                                                alt={user.displayName}
+                                            // referrerPolicy='no-referrer'
+                                            />
+                                        </div>
+                                    </Link>
+                                }
+                                {
+                                    !user.photoURL &&
+                                    <Link className={"nav-link" + (url === "/" ? " active" : "")} to="/" state={state}>
+                                        Projects
+                                    </Link>
+                                }
                             </li>
                         </ul>
                     }
