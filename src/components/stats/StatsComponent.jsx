@@ -12,7 +12,7 @@ import ListPomodorosComponent from "components/stats/ListPomodorosComponent";
 import CategoryChecklistComponent from "components/stats/CategoryChecklistComponent";
 import StatsSettingsComponent from "components/stats/StatsSettingsComponent";
 
-export default function ListTasksComponent() {
+export default function ListStatsComponent() {
 
     const [categories, setCategories] = useState([])
 

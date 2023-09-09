@@ -30,7 +30,7 @@ export default function LoginComponent() {
             if (response.user.emailVerified) {
                 await authContext.getUserSettings();
                 // navigate(`/welcome/${email}`);
-                navigate(`/projects`, { state: {} });
+                navigate(`/`, { state: {} });
             } else {
                 FirebaseAuthService.signOutUser();
                 setErrorMessage("Please click on the verfication link sent to your email")
@@ -45,7 +45,7 @@ export default function LoginComponent() {
             // console.debug('opening the popup');
             await FirebaseAuthService.signInWithGoogle();
             await authContext.getUserSettings();
-            navigate(`/projects`, { state: {} });
+            navigate(`/`, { state: {} });
         } catch (error) {
             setErrorMessage("Authentication Failed. Please check your credentials");
         }

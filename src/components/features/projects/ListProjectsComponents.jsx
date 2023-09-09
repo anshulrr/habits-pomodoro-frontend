@@ -9,7 +9,7 @@ import { truncateString } from "services/helpers/listsHelper";
 import ListTasksComponent from 'components/features/tasks/ListTasksComponent'
 import ListCommentsComponent from "components/features/comments/ListCommentsComponents";
 
-export default function ListProjectsComponent() {
+export default function ListProjectsComponent({ project, setProject }) {
     const authContext = useAuth()
     const userSettings = authContext.userSettings
 
@@ -24,7 +24,7 @@ export default function ListProjectsComponent() {
     const [projects, setProjects] = useState([])
 
     // state might not be preset (eg. opening url in a new tab)
-    const [project, setProject] = useState(state && state.project)
+    // const [project, setProject] = useState(state && state.project)
     const [currentPage, setCurrentPage] = useState((state && state.currentProjectsPage) || 1)
 
     const [showCommentsId, setShowCommentsId] = useState(-1);
@@ -96,13 +96,13 @@ export default function ListProjectsComponent() {
         local_state.showCompletedTasks = false;
         local_state.showArchivedTasks = false;
         // for page refresh: set it right away
-        navigate(`/projects`, { state: local_state, replace: true });
+        navigate('/', { state: local_state, replace: true });
     }
 
     return (
         <div className="container">
             <div className="row mb-3 border-bottom border-2">
-                <div className="col-lg-4 mt-3 mb-3">
+                <div className="mt-3 mb-3">
                     {/* {message && <div className="alert alert-warning">{message}</div>} */}
 
                     <div>
@@ -196,13 +196,6 @@ export default function ListProjectsComponent() {
                         setShowCommentsId={setShowCommentsId}
                     />
                 }
-
-                <div className="col-lg-8">
-                    {
-                        project &&
-                        <ListTasksComponent project={project} />
-                    }
-                </div>
             </div>
 
         </div>
