@@ -41,7 +41,7 @@ export default function WelcomeComponent() {
 
     function updateAppStates() {
         let local_state = { ...state };
-        local_state.project = null;
+        // local_state.project = null;
         local_state.currentTasksPage = 1;
         local_state.currentCompletedTasksPage = 1;
         local_state.currentArchivedTasksPage = 1;

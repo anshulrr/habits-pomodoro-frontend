@@ -121,7 +121,7 @@ export default function ListTasksRowsComponent({
 
     function onCreateNewPomodoro(task) {
         setElementHeight(tasksListElement.current.offsetHeight)
-        createNewPomodoro(task, project)
+        createNewPomodoro(task, task.project)
     }
 
     function generateDueDateClass(task) {
