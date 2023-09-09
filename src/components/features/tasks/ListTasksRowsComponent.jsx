@@ -171,7 +171,7 @@ export default function ListTasksRowsComponent({
                                             </span>
                                             <span>
                                                 <i className="ps-1 bi bi-hourglass" />
-                                                {timeToDisplay(task.pomodoroLength || task.projectPomodoroLength || userSettings.pomodoroLength)}
+                                                {timeToDisplay(task.pomodoroLength || task.project.pomodoroLength || userSettings.pomodoroLength)}
                                             </span>
                                             {
                                                 task.dueDate &&
@@ -184,6 +184,14 @@ export default function ListTasksRowsComponent({
                                                 <i className="ps-1 bi bi-clock" style={{ paddingRight: "0.1rem" }} />
                                                 {timeToDisplay(task.pomodorosTimeElapsed / 60)}
                                             </span>
+
+                                            {
+                                                !project &&
+                                                <span>
+                                                    <span className="ms-1" style={{ color: task.project.color, paddingRight: "0.1rem" }}>&#9632;</span>
+                                                    {task.project.name}
+                                                </span>
+                                            }
                                         </div>
                                     </div>
                                     {
@@ -245,7 +253,6 @@ export default function ListTasksRowsComponent({
                                         showCreatePastPomodoro={showCreatePastPomodoro}
                                         setShowCreatePastPomodoro={setShowCreatePastPomodoro}
                                         task={task}
-                                        project={project}
                                         setPomodorosListReload={setPomodorosListReload}
                                         setTasksReload={setTasksReload}
                                     />

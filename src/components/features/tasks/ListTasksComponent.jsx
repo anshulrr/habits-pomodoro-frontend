@@ -175,7 +175,7 @@ export default function ListTasksComponent({
                     </div>
 
                     {
-                        showCreateTask &&
+                        showCreateTask && project &&
                         <CreateTaskComponent
                             setShowCreateTask={setShowCreateTask}
                             project={project}

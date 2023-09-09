@@ -12,7 +12,6 @@ export default function PastPomodoroComponent({
     showCreatePastPomodoro,
     setShowCreatePastPomodoro,
     task,
-    project,
     setPomodorosListReload,
     setTasksReload
 }) {
@@ -23,11 +22,11 @@ export default function PastPomodoroComponent({
 
     const [date, setDate] = useState(moment().toDate())
 
-    const [minutesElapsed, setMinutesElapsed] = useState(task.pomodoroLength || task.projectPomodoroLength || userSettings.pomodoroLength)
+    const [minutesElapsed, setMinutesElapsed] = useState(task.pomodoroLength || task.project.pomodoroLength || userSettings.pomodoroLength)
 
     function handleOnChange(fun, val) {
         setErrorMessage('')
-        if (val === '' || val <= 0 || val > (task.pomodoroLength || task.projectPomodoroLength || userSettings.pomodoroLength)) {
+        if (val === '' || val <= 0 || val > (task.pomodoroLength || task.project.pomodoroLength || userSettings.pomodoroLength)) {
             setErrorMessage("mintues for past pomodoro must be less than task settings")
         }
 
