@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from 'services/auth/AuthContext'
-import WelcomeComponent from './WelcomeComponent'
+import HomeComponent from 'components/features/HomeComponent'
 import FirebaseAuthService from 'services/auth/FirebaseAuthService'
 
 export default function LoginComponent() {
@@ -52,10 +52,10 @@ export default function LoginComponent() {
     }
 
     return (
-        <div className="mt-3">
+        <div>
             {
                 !authContext.isAuthenticated &&
-                <div className="Login">
+                <div className="Login mt-3">
                     <form className="LoginForm" onSubmit={handleSubmit}>
                         <div className="container">
                             <div className="row">
@@ -132,7 +132,7 @@ export default function LoginComponent() {
 
             {
                 authContext.isAuthenticated &&
-                <WelcomeComponent username={authContext.user.displayName} />
+                <HomeComponent />
             }
         </div >
     )

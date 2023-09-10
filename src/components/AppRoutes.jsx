@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import HeaderComponent from 'components/HeaderComponent'
 import ErrorComponent from 'components/ErrorComponent'
-import WelcomeComponent from 'components/WelcomeComponent'
+import HomeComponent from 'components/features/HomeComponent'
 import LoginComponent from 'components/LoginComponent'
 import StatsComponent from 'components/stats/StatsComponent'
 
@@ -38,7 +38,7 @@ export default function AppRoutes() {
 
                         <Route path='/welcome/:username' element={
                             <AuthenticatedRoute>
-                                <WelcomeComponent />
+                                <HomeComponent />
                             </AuthenticatedRoute>
                         } />
 
