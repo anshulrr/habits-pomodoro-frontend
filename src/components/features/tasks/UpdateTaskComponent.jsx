@@ -7,7 +7,7 @@ import moment from 'moment'
 
 import { retrieveTaskApi, updateTaskApi } from 'services/api/TaskApiService'
 
-export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setAllTasksReload }) {
+export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setTasksReload }) {
 
     const [description, setDescription] = useState('')
 
@@ -39,7 +39,7 @@ export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setAllT
     }
 
     function onSubmit(values) {
-        console.debug(values)
+        // console.debug(values)
         const updated_task = {
             id: task.id,
             description: values.description,
@@ -54,7 +54,7 @@ export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setAllT
                 // console.debug(response)
                 // navigate(-1, { state })
                 setShowUpdateTaskId(-1)
-                setAllTasksReload(prevReload => prevReload + 1)
+                setTasksReload(prevReload => prevReload + 1)
             })
             .catch(error => console.error(error.message))
     }

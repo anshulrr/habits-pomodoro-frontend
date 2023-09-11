@@ -12,7 +12,7 @@ export default function PastPomodoroComponent({
     setShowCreatePastPomodoro,
     task,
     setPomodorosListReload,
-    setCurrentTasksReload
+    setTasksReload
 }) {
     const authContext = useAuth()
     const userSettings = authContext.userSettings
@@ -44,7 +44,7 @@ export default function PastPomodoroComponent({
                 // console.debug(response)
                 setShowCreatePastPomodoro(-1)
                 setPomodorosListReload(prevReload => prevReload + 1)
-                setCurrentTasksReload(prevReload => prevReload + 1)
+                setTasksReload(prevReload => prevReload + 1)
             })
             .catch(error => {
                 console.error(error.message)
