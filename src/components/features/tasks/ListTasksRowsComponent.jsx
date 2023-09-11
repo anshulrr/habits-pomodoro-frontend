@@ -159,7 +159,7 @@ export default function ListTasksRowsComponent({
                                         </button>
                                     </div>
                                 }
-                                <div className="mx-2 flex-fill text-start update-popup-container">
+                                <div className="ms-2 flex-fill text-start update-popup-container">
 
                                     <div className="py-2" onClick={() => setShowUpdatePopupId(task.id)}>
                                         <div className={(task.status === 'archived' ? "text-secondary" : "") + " description"}>
@@ -177,7 +177,7 @@ export default function ListTasksRowsComponent({
                                             {
                                                 task.dueDate &&
                                                 <span className={generateDueDateClass(task)}>
-                                                    <i className="px-1 bi bi-calendar-check" />
+                                                    <i className="ps-1 bi bi-calendar-check" style={{ paddingRight: "0.1rem" }} />
                                                     {moment(task.dueDate).format("DD/MM/yyyy")}
                                                 </span>
                                             }
@@ -189,7 +189,7 @@ export default function ListTasksRowsComponent({
                                             {
                                                 !project &&
                                                 <span>
-                                                    <span className="ms-1" style={{ color: task.project.color, paddingRight: "0.1rem" }}>&#9632;</span>
+                                                    <span className="ps-1" style={{ color: task.project.color, paddingRight: "0.1rem" }}>&#9632;</span>
                                                     {task.project.name}
                                                 </span>
                                             }
