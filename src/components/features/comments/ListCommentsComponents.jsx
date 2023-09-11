@@ -39,6 +39,7 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
     )
 
     function refreshComments() {
+        setComments([]);
         retrieveAllCommentsApi({ limit: PAGESIZE, offset: (currentPage - 1) * PAGESIZE, filterBy, id })
             .then(response => {
                 // console.debug(response)
@@ -82,7 +83,7 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                         <div className="col-lg-12">
 
                             <div className="row">
-                                <div className="col-10">
+                                <div className="col-10 text-start">
                                     <h6>
                                         {
                                             (filterBy === 'category' &&
@@ -117,6 +118,21 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                                     }
                                 </div>
                             </div>
+
+                            {
+                                commentsCount === 0 &&
+                                <div className="alert alert-light py-1 mt-1 small">
+                                    <i className="pe-1 bi bi-clipboard-data" />
+                                    Nothing to display
+                                </div>
+                            }
+
+                            {
+                                commentsCount !== 0 && comments.length === 0 &&
+                                <div className="loader-container">
+                                    <div className="loader"></div>
+                                </div>
+                            }
 
                             {
                                 comments.map(
