@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import HeaderComponent from 'components/HeaderComponent'
 import ErrorComponent from 'components/ErrorComponent'
-import WelcomeComponent from 'components/WelcomeComponent'
+import HomeComponent from 'components/features/HomeComponent'
 import LoginComponent from 'components/LoginComponent'
 import StatsComponent from 'components/stats/StatsComponent'
 
@@ -10,9 +10,7 @@ import 'components/features/features.css'
 import "components/features/comments/comments.css"
 
 import AuthProvider, { useAuth } from 'services/auth/AuthContext'
-import ListProjectsComponent from 'components/features/projects/ListProjectsComponents'
 import ProjectComponent from 'components/features/projects/ProjectComponent'
-import TaskComponent from 'components/features/tasks/TaskComponent'
 import SettingsComponent from 'components/user-settings/SettingsComponent'
 import SignupComponent from 'components/SignupComponent'
 import ForgotPasswordComponent from 'components/ForgotPasswordComponent'
@@ -40,25 +38,13 @@ export default function AppRoutes() {
 
                         <Route path='/welcome/:username' element={
                             <AuthenticatedRoute>
-                                <WelcomeComponent />
-                            </AuthenticatedRoute>
-                        } />
-
-                        <Route path='/projects' element={
-                            <AuthenticatedRoute>
-                                <ListProjectsComponent />
+                                <HomeComponent />
                             </AuthenticatedRoute>
                         } />
 
                         <Route path='/projects/:id' element={
                             <AuthenticatedRoute>
                                 <ProjectComponent />
-                            </AuthenticatedRoute>
-                        } />
-
-                        <Route path='/projects/:project_id/tasks/:id' element={
-                            <AuthenticatedRoute>
-                                <TaskComponent />
                             </AuthenticatedRoute>
                         } />
 

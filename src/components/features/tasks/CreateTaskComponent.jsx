@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { createTaskApi } from 'services/api/TaskApiService';
 
-export default function CreateTaskComponent({ setShowCreateTask, project, setTasksReload, setTasksCount }) {
+export default function CreateTaskComponent({ setShowCreateTask, project, setCurrentTasksReload, setTasksCount }) {
 
     const [description, setDescription] = useState('')
 
@@ -16,10 +16,10 @@ export default function CreateTaskComponent({ setShowCreateTask, project, setTas
             priority: 1
         }
 
-        createTaskApi(project.id, task)
+        createTaskApi({ projectId: project.id, task })
             .then(response => {
                 // console.debug(response)
-                setTasksReload(prev => prev + 1);
+                setCurrentTasksReload(prev => prev + 1);
                 setShowCreateTask(false)
                 setTasksCount(prev => prev + 1)
             })

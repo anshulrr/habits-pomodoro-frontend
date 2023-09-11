@@ -9,12 +9,10 @@ import { useAuth } from 'services/auth/AuthContext';
 import { createPastPomodoroApi } from "services/api/PomodoroApiService";
 
 export default function PastPomodoroComponent({
-    showCreatePastPomodoro,
     setShowCreatePastPomodoro,
     task,
-    project,
     setPomodorosListReload,
-    setTasksReload
+    setCurrentTasksReload
 }) {
     const authContext = useAuth()
     const userSettings = authContext.userSettings
@@ -23,11 +21,11 @@ export default function PastPomodoroComponent({
 
     const [date, setDate] = useState(moment().toDate())
 
-    const [minutesElapsed, setMinutesElapsed] = useState(task.pomodoroLength || project.pomodoroLength || userSettings.pomodoroLength)
+    const [minutesElapsed, setMinutesElapsed] = useState(task.pomodoroLength || task.project.pomodoroLength || userSettings.pomodoroLength)
 
     function handleOnChange(fun, val) {
         setErrorMessage('')
-        if (val === '' || val <= 0 || val > (task.pomodoroLength || project.pomodoroLength || userSettings.pomodoroLength)) {
+        if (val === '' || val <= 0 || val > (task.pomodoroLength || task.project.pomodoroLength || userSettings.pomodoroLength)) {
             setErrorMessage("mintues for past pomodoro must be less than task settings")
         }
 
@@ -46,7 +44,7 @@ export default function PastPomodoroComponent({
                 // console.debug(response)
                 setShowCreatePastPomodoro(-1)
                 setPomodorosListReload(prevReload => prevReload + 1)
-                setTasksReload(prevReload => prevReload + 1)
+                setCurrentTasksReload(prevReload => prevReload + 1)
             })
             .catch(error => {
                 console.error(error.message)
@@ -61,7 +59,6 @@ export default function PastPomodoroComponent({
     };
 
     return (
-        showCreatePastPomodoro === task.id &&
         <div className="row m-0 px-0 pt-1">
             <div className="col-6 px-0 text-end">
                 <DatePicker

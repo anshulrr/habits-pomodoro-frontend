@@ -11,18 +11,21 @@ import { timeToDisplay } from "services/helpers/listsHelper";
 import PastPomodoroComponent from "components/features/tasks/PastPomodoroComponent";
 import ListCommentsComponent from "components/features/comments/ListCommentsComponents";
 import OutsideAlerter from "services/hooks/OutsideAlerter";
+import UpdateTaskComponent from "components/features/tasks/UpdateTaskComponent";
 
 export default function ListTasksRowsComponent({
     project,
     status,
     tasksCount,
     createNewPomodoro,
-    updateTask,
     setPomodorosListReload,
-    setTasksReload,
+    setCurrentTasksReload,
     setAllTasksReload,
     elementHeight,
     setElementHeight,
+    startDate,
+    endDate,
+    isReversed
 }) {
     const navigate = useNavigate()
     const { state } = useLocation();
@@ -47,6 +50,8 @@ export default function ListTasksRowsComponent({
 
     const [showCreatePastPomodoro, setShowCreatePastPomodoro] = useState(-1);
 
+    const [showUpdateTaskId, setShowUpdateTaskId] = useState(-1)
+
     const [showCommentsId, setShowCommentsId] = useState(-1);
     const [commentsTitle, setCommentsTitle] = useState('')
 
@@ -58,10 +63,25 @@ export default function ListTasksRowsComponent({
 
     function refreshTasks(status) {
         setTasks([]);
-        retrieveAllTasksApi(project.id, status, PAGESIZE, (currentPage - 1) * PAGESIZE)
+        const taskData = {
+            status,
+            limit: PAGESIZE,
+            offset: (currentPage - 1) * PAGESIZE
+        }
+        if (project) {
+            taskData.projectId = project.id;
+        } else {
+            taskData.startDate = startDate;
+            taskData.endDate = endDate;
+        }
+        retrieveAllTasksApi(taskData)
             .then(response => {
                 // console.debug(response)
-                setTasks(response.data)
+                if (isReversed) {
+                    setTasks(response.data.toReversed())
+                } else {
+                    setTasks(response.data)
+                }
             })
             .catch(error => console.error(error.message))
     }
@@ -80,7 +100,7 @@ export default function ListTasksRowsComponent({
         }
         task.status = status;
 
-        updateTaskApi(project.id, task.id, task)
+        updateTaskApi({ id: task.id, task })
             .then(() => {
                 setAllTasksReload(prevReload => prevReload + 1)
             })
@@ -98,12 +118,12 @@ export default function ListTasksRowsComponent({
         status === 'added' && (state.currentTasksPage = page);
         status === 'completed' && (state.currentCompletedTasksPage = page);
         status === 'archived' && (state.currentArchivedTasksPage = page);
-        navigate(`/projects`, { state, replace: true })
+        navigate(`/`, { state, replace: true })
     }
 
     function onCreateNewPomodoro(task) {
         setElementHeight(tasksListElement.current.offsetHeight)
-        createNewPomodoro(task, project)
+        createNewPomodoro(task, task.project)
     }
 
     function generateDueDateClass(task) {
@@ -152,7 +172,7 @@ export default function ListTasksRowsComponent({
                                             </span>
                                             <span>
                                                 <i className="ps-1 bi bi-hourglass" />
-                                                {timeToDisplay(task.pomodoroLength || project.pomodoroLength || userSettings.pomodoroLength)}
+                                                {timeToDisplay(task.pomodoroLength || task.project.pomodoroLength || userSettings.pomodoroLength)}
                                             </span>
                                             {
                                                 task.dueDate &&
@@ -165,6 +185,14 @@ export default function ListTasksRowsComponent({
                                                 <i className="ps-1 bi bi-clock" style={{ paddingRight: "0.1rem" }} />
                                                 {timeToDisplay(task.pomodorosTimeElapsed / 60)}
                                             </span>
+
+                                            {
+                                                !project &&
+                                                <span>
+                                                    <span className="ms-1" style={{ color: task.project.color, paddingRight: "0.1rem" }}>&#9632;</span>
+                                                    {task.project.name}
+                                                </span>
+                                            }
                                         </div>
                                     </div>
                                     {
@@ -184,10 +212,11 @@ export default function ListTasksRowsComponent({
                                                             Add past Pomodoro <i className="bi bi-calendar-plus" />
                                                         </button>
                                                     }
-                                                    <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateTask(task.id)}>
-                                                        Update Task <i className="bi bi-pencil-square" />
-                                                    </button>
-
+                                                    {
+                                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowUpdateTaskId(task.id)}>
+                                                            Update Task <i className="bi bi-pencil-square" />
+                                                        </button>
+                                                    }
                                                     {
                                                         task.status !== 'added' &&
                                                         < button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateTaskStatus(task, 'added')}>
@@ -218,14 +247,21 @@ export default function ListTasksRowsComponent({
                                 </div>
 
                                 {
-                                    task.status === 'added' &&
+                                    task.status === 'added' && showCreatePastPomodoro === task.id &&
                                     <PastPomodoroComponent
-                                        showCreatePastPomodoro={showCreatePastPomodoro}
                                         setShowCreatePastPomodoro={setShowCreatePastPomodoro}
                                         task={task}
-                                        project={project}
                                         setPomodorosListReload={setPomodorosListReload}
-                                        setTasksReload={setTasksReload}
+                                        setCurrentTasksReload={setCurrentTasksReload}
+                                    />
+                                }
+
+                                {
+                                    showUpdateTaskId === task.id &&
+                                    <UpdateTaskComponent
+                                        task={task}
+                                        setShowUpdateTaskId={setShowUpdateTaskId}
+                                        setAllTasksReload={setAllTasksReload}
                                     />
                                 }
                             </div >
