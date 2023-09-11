@@ -59,7 +59,7 @@ export default function PastPomodoroComponent({
     };
 
     return (
-        <div className="row m-0 px-0 pt-1">
+        <div className="row m-0 px-1 py-1">
             <div className="col-6 px-0 text-end">
                 <DatePicker
                     className="form-control form-control-sm"

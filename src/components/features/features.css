@@ -49,12 +49,16 @@
 
 /* for update popup */
 .update-list-row {
-    border-top: thin solid #ffffff;
+    border: thin solid #ffffff;
+    background-color: #ffffff;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    border-radius: 8px;
 }
 
 .update-list-row-selected {
-    border-right: thin solid #ffffff;
-    border-radius: 0.5rem;
+    border: thin solid #000000;
+    border-radius: 8px;
 }
 
 .update-popup-container {

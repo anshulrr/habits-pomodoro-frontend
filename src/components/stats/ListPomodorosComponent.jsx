@@ -9,7 +9,12 @@ import { Buttons } from "components/stats/charts/Buttons";
 import ListCommentsComponent from "components/features/comments/ListCommentsComponents";
 import OutsideAlerter from "services/hooks/OutsideAlerter";
 
-export default function ListPomodorosComponent({ includeCategories, buttonsStates, setButtonsStates }) {
+export default function ListPomodorosComponent({
+    includeCategories,
+    buttonsStates,
+    setButtonsStates,
+    title = "Pomodoros"
+}) {
 
     const [pomodoros, setPomodoros] = useState([])
 
@@ -84,7 +89,7 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
         <div>
             <h6>
                 <span>
-                    Pomodoros
+                    {title}
                 </span>
                 <span className="ms-1 badge rounded-pill text-bg-secondary">
                     {totalTimeElapsed}
@@ -165,12 +170,14 @@ export default function ListPomodorosComponent({ includeCategories, buttonsState
             </table>
             {
                 showCommentsId !== -1 &&
-                <ListCommentsComponent
-                    filterBy={'pomodoro'}
-                    id={showCommentsId}
-                    title={commentsTitle}
-                    setShowCommentsId={setShowCommentsId}
-                />
+                <div class="text-body">
+                    <ListCommentsComponent
+                        filterBy={'pomodoro'}
+                        id={showCommentsId}
+                        title={commentsTitle}
+                        setShowCommentsId={setShowCommentsId}
+                    />
+                </div>
             }
         </div>
     )

@@ -84,7 +84,7 @@ export default function ListTasksComponent({
     function createNewPomodoro(pomodoro_task, task_project, start_again = false) {
         // console.debug(pomodoro_task.id)
         if (pomodoro !== null && !start_again && pomodoroStatus !== 'completed') {
-            setMessage('Please complete the already running pomodoro');
+            setMessage('Please finish the already running pomodoro');
             return;
         }
         // if break is running, first remove the component
@@ -108,7 +108,7 @@ export default function ListTasksComponent({
             .catch(error => {
                 console.error(error.message)
                 if (error.response && error.response.status === 405) {
-                    setMessage('Please complete the already running pomodoro');
+                    setMessage('Please finish the already running pomodoro');
                     // getRunningPomodoro();    // atomation is a bit confusing for user
                 }
             })
@@ -139,7 +139,7 @@ export default function ListTasksComponent({
         <div className="">
             <div className="row">
 
-                <div className="col-lg-6 pt-3" style={{ backgroundColor: "#e9ecef" }}>
+                <div className="col-lg-6 py-3" style={{ backgroundColor: "#e9ecef" }}>
 
                     <div className="d-flex justify-content-between">
                         <h6>
@@ -182,8 +182,7 @@ export default function ListTasksComponent({
                         ></CreateTaskComponent>
                     }
 
-                    {/* fix for x scroll: px-3 */}
-                    <div className="px-3">
+                    <div className="">
                         {
                             tasksCount === 0 &&
                             <div className="alert alert-light py-1 mt-1 small">
@@ -235,7 +234,7 @@ export default function ListTasksComponent({
 
                             {
                                 showCompleted && completedTasksCount !== 0 &&
-                                <div className="mt-2 mb-3">
+                                <div className="mt-1">
                                     <ListTasksRowsComponent
                                         key={[completedTasksCount, allTasksReload]}
                                         status={'completed'}
@@ -277,7 +276,7 @@ export default function ListTasksComponent({
 
                             {
                                 showArchived && archivedTasksCount !== 0 &&
-                                <div className="mt-2 mb-3">
+                                <div className="mt-1">
                                     <ListTasksRowsComponent
                                         key={[archivedTasksCount, allTasksReload]}
                                         status={'archived'}
@@ -298,9 +297,17 @@ export default function ListTasksComponent({
                 </div>
 
                 <div className="col-lg-6 mt-3">
-                    <div className="d-flex justify-content-between mb-3">
-                        <small className="text-danger">{message} </small>
-                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-1" onClick={() => getRunningPomodoro()}>
+                    <div className="d-flex justify-content-between">
+                        {
+                            pomodoro !== null &&
+                            <small className="text-danger">{message} </small>
+                        }
+
+                        {
+                            pomodoro === null &&
+                            <StopwatchComponent message={'Start a new pomodoro?'} />
+                        }
+                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => getRunningPomodoro()}>
                             <i className="bi bi-arrow-clockwise" />
                         </button>
                     </div>
@@ -316,14 +323,10 @@ export default function ListTasksComponent({
                         ></PomodoroComponent>
                     }
 
-                    {
-                        pomodoro === null &&
-                        <StopwatchComponent message={'Start a new task'} />
-                    }
-
-                    <div className="border-top border-1 pt-2 bg-white mt-3 text-start text-secondary">
+                    <div className="mt-3 bg-white text-start text-secondary">
                         <ListPomodorosComponent
                             key={[pomodoroStatus, pomodorosListReload]}
+                            title={"Today's Pomodoros"}
                         />
                     </div >
                 </div>
