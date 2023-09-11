@@ -326,6 +326,7 @@ export default function ListTasksComponent({
                     <div className="mt-3 bg-white text-start text-secondary">
                         <ListPomodorosComponent
                             key={[pomodoroStatus, pomodorosListReload]}
+                            title={"Today's Pomodoros"}
                         />
                     </div >
                 </div>
