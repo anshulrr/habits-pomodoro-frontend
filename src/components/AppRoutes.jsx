@@ -8,6 +8,7 @@ import StatsComponent from 'components/stats/StatsComponent'
 import 'components/components.css'
 import 'components/features/features.css'
 import "components/features/comments/comments.css"
+import "components/stats/stats.css"
 
 import AuthProvider, { useAuth } from 'services/auth/AuthContext'
 import ProjectComponent from 'components/features/projects/ProjectComponent'

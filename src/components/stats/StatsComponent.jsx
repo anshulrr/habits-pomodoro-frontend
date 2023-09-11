@@ -122,40 +122,48 @@ export default function ListStatsComponent() {
                     includeCategories.length !== 0 && Object.keys(statsSettings).length !== 0 &&
                     <div className="col-lg-8">
                         <div className="row">
-                            <div className="col-lg-6">
-                                <TasksChart
-                                    key={reload}
-                                    includeCategories={includeCategories}
-                                    statsSettings={statsSettings}
-                                    buttonsStates={tasksChartButtonsStates}
-                                    setButtonsStates={setTasksChartBButtonsStates}
-                                />
+                            <div className="col-lg-6 px-0">
+                                <div className="p-1 chart-card">
+                                    <TasksChart
+                                        key={reload}
+                                        includeCategories={includeCategories}
+                                        statsSettings={statsSettings}
+                                        buttonsStates={tasksChartButtonsStates}
+                                        setButtonsStates={setTasksChartBButtonsStates}
+                                    />
+                                </div>
                             </div>
-                            <div className="col-lg-6">
-                                <ProjectsDistributionChart
-                                    key={reload}
-                                    includeCategories={includeCategories}
-                                    statsSettings={statsSettings}
-                                    buttonsStates={projectsChartButtonsStates}
-                                    setButtonsStates={setProjectsChartBButtonsStates}
-                                />
+                            <div className="col-lg-6 px-0">
+                                <div className="p-1 chart-card">
+                                    <ProjectsDistributionChart
+                                        key={reload}
+                                        includeCategories={includeCategories}
+                                        statsSettings={statsSettings}
+                                        buttonsStates={projectsChartButtonsStates}
+                                        setButtonsStates={setProjectsChartBButtonsStates}
+                                    />
+                                </div>
                             </div>
-                            <div className="col-lg-6 mt-2">
-                                <TotalChart
-                                    key={reload}
-                                    includeCategories={includeCategories}
-                                    statsSettings={statsSettings}
-                                    buttonsStates={totalChartButtonsStates}
-                                    setButtonsStates={setTotalChartBButtonsStates}
-                                />
+                            <div className="col-lg-6 px-0">
+                                <div className="p-1 chart-card">
+                                    <TotalChart
+                                        key={reload}
+                                        includeCategories={includeCategories}
+                                        statsSettings={statsSettings}
+                                        buttonsStates={totalChartButtonsStates}
+                                        setButtonsStates={setTotalChartBButtonsStates}
+                                    />
+                                </div>
                             </div>
-                            <div className="col-lg-6 mt-2">
-                                <ListPomodorosComponent
-                                    key={reload}
-                                    includeCategories={includeCategories}
-                                    buttonsStates={listPomodorosButtonsStates}
-                                    setButtonsStates={setListPomodorosButtonsStates}
-                                />
+                            <div className="col-lg-6 px-0">
+                                <div className="pt-1 chart-card">
+                                    <ListPomodorosComponent
+                                        key={reload}
+                                        includeCategories={includeCategories}
+                                        buttonsStates={listPomodorosButtonsStates}
+                                        setButtonsStates={setListPomodorosButtonsStates}
+                                    />
+                                </div>
                             </div >
                         </div>
                     </div>

@@ -12,6 +12,7 @@ import PastPomodoroComponent from "components/features/tasks/PastPomodoroCompone
 import ListCommentsComponent from "components/features/comments/ListCommentsComponents";
 import OutsideAlerter from "services/hooks/OutsideAlerter";
 import UpdateTaskComponent from "components/features/tasks/UpdateTaskComponent";
+import TaskDueDateComponent from "./TaskDueDateComponent";
 
 export default function ListTasksRowsComponent({
     project,
@@ -49,6 +50,7 @@ export default function ListTasksRowsComponent({
     )
 
     const [showCreatePastPomodoro, setShowCreatePastPomodoro] = useState(-1);
+    const [showUpdateDueDate, setShowUpdateDueDate] = useState(-1);
 
     const [showUpdateTaskId, setShowUpdateTaskId] = useState(-1)
 
@@ -108,8 +110,17 @@ export default function ListTasksRowsComponent({
     }
 
     function onCreatePastPomodoro(task) {
-        setElementHeight(tasksListElement.current.offsetHeight)
-        setShowCreatePastPomodoro(task.id)
+        setShowUpdateDueDate(-1)
+        setShowUpdatePopupId(-1);
+        setElementHeight(tasksListElement.current.offsetHeight);
+        setShowCreatePastPomodoro(task.id);
+    }
+
+    function onUpdateDueDate(task) {
+        setShowCreatePastPomodoro(-1)
+        setShowUpdatePopupId(-1);
+        setElementHeight(tasksListElement.current.offsetHeight);
+        setShowUpdateDueDate(task.id);
     }
 
     function updateOnPageChange(page) {
@@ -206,10 +217,7 @@ export default function ListTasksRowsComponent({
                                                         </button>
                                                         {
                                                             task.status === 'added' &&
-                                                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => {
-                                                                onCreatePastPomodoro(task);
-                                                                setShowUpdatePopupId(-1);
-                                                            }}>
+                                                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onCreatePastPomodoro(task)}>
                                                                 Add past Pomodoro <i className="bi bi-calendar-plus" />
                                                             </button>
                                                         }
@@ -237,8 +245,9 @@ export default function ListTasksRowsComponent({
                                                             </button>
                                                         }
                                                         {
-                                                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowUpdatePopupId(-1)}>
-                                                                Cancel <i className="bi bi-x-lg" />
+                                                            task.status === 'added' &&
+                                                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateDueDate(task)}>
+                                                                Set Due Date <i className="ps-1 bi bi-calendar-check" />
                                                             </button>
                                                         }
                                                     </div>
@@ -253,7 +262,16 @@ export default function ListTasksRowsComponent({
                                         setShowCreatePastPomodoro={setShowCreatePastPomodoro}
                                         task={task}
                                         setPomodorosListReload={setPomodorosListReload}
-                                        setCurrentTasksReload={setCurrentTasksReload}
+                                        setTasksReload={setCurrentTasksReload}
+                                    />
+                                }
+
+                                {
+                                    showUpdateDueDate === task.id &&
+                                    <TaskDueDateComponent
+                                        setShowUpdateDueDate={setShowUpdateDueDate}
+                                        task={task}
+                                        setTasksReload={setCurrentTasksReload}
                                     />
                                 }
 
@@ -262,7 +280,7 @@ export default function ListTasksRowsComponent({
                                     <UpdateTaskComponent
                                         task={task}
                                         setShowUpdateTaskId={setShowUpdateTaskId}
-                                        setAllTasksReload={setAllTasksReload}
+                                        setTasksReload={setAllTasksReload}
                                     />
                                 }
                             </div >

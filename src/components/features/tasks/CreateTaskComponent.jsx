@@ -1,8 +1,12 @@
 import { useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { createTaskApi } from 'services/api/TaskApiService';
 
 export default function CreateTaskComponent({ setShowCreateTask, project, setCurrentTasksReload, setTasksCount }) {
+
+    const navigate = useNavigate()
+    const { state } = useLocation()
 
     const [description, setDescription] = useState('')
 
@@ -22,8 +26,14 @@ export default function CreateTaskComponent({ setShowCreateTask, project, setCur
                 setCurrentTasksReload(prev => prev + 1);
                 setShowCreateTask(false)
                 setTasksCount(prev => prev + 1)
+                updateAppState()
             })
             .catch(error => console.error(error.message))
+    }
+
+    function updateAppState() {
+        state.currentTasksPage = 1;
+        navigate(`/`, { state, replace: true })
     }
 
     return (
