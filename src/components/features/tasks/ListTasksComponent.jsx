@@ -139,7 +139,7 @@ export default function ListTasksComponent({
         <div className="">
             <div className="row">
 
-                <div className="col-lg-6 pt-3" style={{ backgroundColor: "#e9ecef" }}>
+                <div className="col-lg-6 py-3" style={{ backgroundColor: "#e9ecef" }}>
 
                     <div className="d-flex justify-content-between">
                         <h6>
@@ -182,8 +182,7 @@ export default function ListTasksComponent({
                         ></CreateTaskComponent>
                     }
 
-                    {/* fix for x scroll: px-3 */}
-                    <div className="px-3">
+                    <div className="">
                         {
                             tasksCount === 0 &&
                             <div className="alert alert-light py-1 mt-1 small">
@@ -235,7 +234,7 @@ export default function ListTasksComponent({
 
                             {
                                 showCompleted && completedTasksCount !== 0 &&
-                                <div className="mt-2 mb-3">
+                                <div className="mt-1">
                                     <ListTasksRowsComponent
                                         key={[completedTasksCount, allTasksReload]}
                                         status={'completed'}
@@ -277,7 +276,7 @@ export default function ListTasksComponent({
 
                             {
                                 showArchived && archivedTasksCount !== 0 &&
-                                <div className="mt-2 mb-3">
+                                <div className="mt-1">
                                     <ListTasksRowsComponent
                                         key={[archivedTasksCount, allTasksReload]}
                                         status={'archived'}

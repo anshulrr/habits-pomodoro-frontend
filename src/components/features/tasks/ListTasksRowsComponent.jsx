@@ -150,16 +150,16 @@ export default function ListTasksRowsComponent({
                 {
                     tasks.map(
                         task => (
-                            <div key={task.id} className={"row py-0 update-list-row" + (showUpdatePopupId === task.id ? " update-list-row-selected" : "")}>
+                            <div key={task.id} className={"d-flex justify-content-start update-list-row" + (showUpdatePopupId === task.id ? " update-list-row-selected" : "")}>
                                 {
                                     task.status === 'added' &&
-                                    <div className="px-0 py-2 col-1 text-start">
+                                    <div className="my-auto ms-2 text-start">
                                         <button type="button" className="btn btn-sm btn-outline-success px-1 py-0 align-middle" onClick={() => onCreateNewPomodoro(task)}>
                                             <i className="bi bi-play-circle"></i>
                                         </button>
                                     </div>
                                 }
-                                <div className="px-0 col text-start update-popup-container">
+                                <div className="mx-2 flex-fill text-start update-popup-container">
 
                                     <div className="py-2" onClick={() => setShowUpdatePopupId(task.id)}>
                                         <div className={(task.status === 'archived' ? "text-secondary" : "") + " description"}>
