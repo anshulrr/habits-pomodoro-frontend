@@ -114,7 +114,7 @@ export default function ListPomodorosComponent({
                 </div>
             }
 
-            <table className="table table-sm table-striped small mt-2">
+            <table className="table table-sm table-striped small mt-2 mb-0">
                 <tbody>
                     {
                         pomodoros.map(
