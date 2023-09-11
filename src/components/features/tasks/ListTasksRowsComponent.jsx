@@ -160,7 +160,7 @@ export default function ListTasksRowsComponent({
                                             </button>
                                         </div>
                                     }
-                                    <div className="ms-2 flex-grow-1 text-start update-popup-container">
+                                    <div className="mx-2 flex-grow-1 text-start update-popup-container">
 
                                         <div className="py-2" onClick={() => setShowUpdatePopupId(task.id)}>
                                             <div className={(task.status === 'archived' ? "text-secondary" : "") + " description"}>
