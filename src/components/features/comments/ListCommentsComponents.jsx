@@ -121,7 +121,7 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
 
                             {
                                 commentsCount === 0 &&
-                                <div className="alert alert-light py-1 mt-1 small">
+                                <div className="alert alert-light text-center py-1 mt-1 small">
                                     <i className="pe-1 bi bi-clipboard-data" />
                                     Nothing to display
                                 </div>

@@ -170,7 +170,7 @@ export default function ListPomodorosComponent({
             </table>
             {
                 showCommentsId !== -1 &&
-                <div class="text-body">
+                <div className="text-body">
                     <ListCommentsComponent
                         filterBy={'pomodoro'}
                         id={showCommentsId}
