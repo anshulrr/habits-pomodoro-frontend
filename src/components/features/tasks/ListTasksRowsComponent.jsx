@@ -150,102 +150,103 @@ export default function ListTasksRowsComponent({
                 {
                     tasks.map(
                         task => (
-                            <div key={task.id} className={"d-flex justify-content-start update-list-row" + (showUpdatePopupId === task.id ? " update-list-row-selected" : "")}>
-                                {
-                                    task.status === 'added' &&
-                                    <div className="my-auto ms-2 text-start">
-                                        <button type="button" className="btn btn-sm btn-outline-success px-1 py-0 align-middle" onClick={() => onCreateNewPomodoro(task)}>
-                                            <i className="bi bi-play-circle"></i>
-                                        </button>
-                                    </div>
-                                }
-                                <div className="ms-2 flex-fill text-start update-popup-container">
-
-                                    <div className="py-2" onClick={() => setShowUpdatePopupId(task.id)}>
-                                        <div className={(task.status === 'archived' ? "text-secondary" : "") + " description"}>
-                                            {task.description}
-                                        </div>
-                                        <div className="subscript text-secondary">
-                                            <span>
-                                                <i className="bi bi-arrow-up" />
-                                                {task.priority}
-                                            </span>
-                                            <span>
-                                                <i className="ps-1 bi bi-hourglass" />
-                                                {timeToDisplay(task.pomodoroLength || task.project.pomodoroLength || userSettings.pomodoroLength)}
-                                            </span>
-                                            {
-                                                task.dueDate &&
-                                                <span className={generateDueDateClass(task)}>
-                                                    <i className="ps-1 bi bi-calendar-check" style={{ paddingRight: "0.1rem" }} />
-                                                    {moment(task.dueDate).format("DD/MM/yyyy")}
-                                                </span>
-                                            }
-                                            <span>
-                                                <i className="ps-1 bi bi-clock" style={{ paddingRight: "0.1rem" }} />
-                                                {timeToDisplay(task.pomodorosTimeElapsed / 60)}
-                                            </span>
-
-                                            {
-                                                !project &&
-                                                <span>
-                                                    <span className="ps-1" style={{ color: task.project.color, paddingRight: "0.1rem" }}>&#9632;</span>
-                                                    {task.project.name}
-                                                </span>
-                                            }
-                                        </div>
-                                    </div>
+                            <div key={task.id} className={"update-list-row" + (showUpdatePopupId === task.id ? " update-list-row-selected" : "")}>
+                                <div className="d-flex justify-content-start">
                                     {
-                                        showUpdatePopupId === task.id &&
-                                        <OutsideAlerter handle={() => setShowUpdatePopupId(-1)}>
-                                            <span className="">
-                                                <div className="update-popup">
-                                                    <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateCommentsPopupData(task)}>
-                                                        Comments <i className="bi bi-chat-right-text" />
-                                                    </button>
-                                                    {
-                                                        task.status === 'added' &&
-                                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => {
-                                                            onCreatePastPomodoro(task);
-                                                            setShowUpdatePopupId(-1);
-                                                        }}>
-                                                            Add past Pomodoro <i className="bi bi-calendar-plus" />
-                                                        </button>
-                                                    }
-                                                    {
-                                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowUpdateTaskId(task.id)}>
-                                                            Update Task <i className="bi bi-pencil-square" />
-                                                        </button>
-                                                    }
-                                                    {
-                                                        task.status !== 'added' &&
-                                                        < button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateTaskStatus(task, 'added')}>
-                                                            Mark as current <i className="bi bi-check2-circle" />
-                                                        </button>
-                                                    }
-                                                    {
-                                                        task.status !== 'completed' &&
-                                                        < button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateTaskStatus(task, 'completed')}>
-                                                            Mark as completed <i className="bi bi-check2-circle" />
-                                                        </button>
-                                                    }
-                                                    {
-                                                        task.status !== 'archived' &&
-                                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateTaskStatus(task, 'archived')}>
-                                                            Mark as archived <i className="bi bi-archive" />
-                                                        </button>
-                                                    }
-                                                    {
-                                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowUpdatePopupId(-1)}>
-                                                            Cancel <i className="bi bi-x-lg" />
-                                                        </button>
-                                                    }
-                                                </div>
-                                            </span>
-                                        </OutsideAlerter>
+                                        task.status === 'added' &&
+                                        <div className="my-auto ms-2 text-start">
+                                            <button type="button" className="btn btn-sm btn-outline-success px-1 py-0 align-middle" onClick={() => onCreateNewPomodoro(task)}>
+                                                <i className="bi bi-play-circle"></i>
+                                            </button>
+                                        </div>
                                     }
-                                </div>
+                                    <div className="ms-2 flex-grow-1 text-start update-popup-container">
 
+                                        <div className="py-2" onClick={() => setShowUpdatePopupId(task.id)}>
+                                            <div className={(task.status === 'archived' ? "text-secondary" : "") + " description"}>
+                                                {task.description}
+                                            </div>
+                                            <div className="subscript text-secondary">
+                                                <span>
+                                                    <i className="bi bi-arrow-up" />
+                                                    {task.priority}
+                                                </span>
+                                                <span>
+                                                    <i className="ps-1 bi bi-hourglass" />
+                                                    {timeToDisplay(task.pomodoroLength || task.project.pomodoroLength || userSettings.pomodoroLength)}
+                                                </span>
+                                                {
+                                                    task.dueDate &&
+                                                    <span className={generateDueDateClass(task)}>
+                                                        <i className="ps-1 bi bi-calendar-check" style={{ paddingRight: "0.1rem" }} />
+                                                        {moment(task.dueDate).format("DD/MM/yyyy")}
+                                                    </span>
+                                                }
+                                                <span>
+                                                    <i className="ps-1 bi bi-clock" style={{ paddingRight: "0.1rem" }} />
+                                                    {timeToDisplay(task.pomodorosTimeElapsed / 60)}
+                                                </span>
+
+                                                {
+                                                    !project &&
+                                                    <span>
+                                                        <span className="ps-1" style={{ color: task.project.color, paddingRight: "0.1rem" }}>&#9632;</span>
+                                                        {task.project.name}
+                                                    </span>
+                                                }
+                                            </div>
+                                        </div>
+                                        {
+                                            showUpdatePopupId === task.id &&
+                                            <OutsideAlerter handle={() => setShowUpdatePopupId(-1)}>
+                                                <span className="">
+                                                    <div className="update-popup">
+                                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateCommentsPopupData(task)}>
+                                                            Comments <i className="bi bi-chat-right-text" />
+                                                        </button>
+                                                        {
+                                                            task.status === 'added' &&
+                                                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => {
+                                                                onCreatePastPomodoro(task);
+                                                                setShowUpdatePopupId(-1);
+                                                            }}>
+                                                                Add past Pomodoro <i className="bi bi-calendar-plus" />
+                                                            </button>
+                                                        }
+                                                        {
+                                                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowUpdateTaskId(task.id)}>
+                                                                Update Task <i className="bi bi-pencil-square" />
+                                                            </button>
+                                                        }
+                                                        {
+                                                            task.status !== 'added' &&
+                                                            < button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateTaskStatus(task, 'added')}>
+                                                                Mark as current <i className="bi bi-check2-circle" />
+                                                            </button>
+                                                        }
+                                                        {
+                                                            task.status !== 'completed' &&
+                                                            < button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateTaskStatus(task, 'completed')}>
+                                                                Mark as completed <i className="bi bi-check2-circle" />
+                                                            </button>
+                                                        }
+                                                        {
+                                                            task.status !== 'archived' &&
+                                                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateTaskStatus(task, 'archived')}>
+                                                                Mark as archived <i className="bi bi-archive" />
+                                                            </button>
+                                                        }
+                                                        {
+                                                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowUpdatePopupId(-1)}>
+                                                                Cancel <i className="bi bi-x-lg" />
+                                                            </button>
+                                                        }
+                                                    </div>
+                                                </span>
+                                            </OutsideAlerter>
+                                        }
+                                    </div>
+                                </div>
                                 {
                                     task.status === 'added' && showCreatePastPomodoro === task.id &&
                                     <PastPomodoroComponent
