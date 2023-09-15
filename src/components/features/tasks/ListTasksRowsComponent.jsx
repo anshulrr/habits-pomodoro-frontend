@@ -36,7 +36,7 @@ export default function ListTasksRowsComponent({
 
     const [showUpdatePopupId, setShowUpdatePopupId] = useState(-1);
 
-    const tasksListElement = useRef(null);
+    const listElement = useRef(null);
 
     const PAGESIZE = userSettings.pageTasksCount;
 
@@ -59,9 +59,23 @@ export default function ListTasksRowsComponent({
 
     useEffect(
         () => {
-            refreshTasks(status)
+            refreshTasks(status);
+
+            const observer = new ResizeObserver(handleResize);
+            observer.observe(listElement.current);
+            return () => {
+                // Cleanup the observer by unobserving all elements
+                observer.disconnect();
+            };
         }, [currentPage] // eslint-disable-line react-hooks/exhaustive-deps
     )
+
+    const handleResize = () => {
+        if (listElement.current !== null && listElement.current.offsetHeight !== 0) {
+            // console.debug(currentPage, listElement.current.offsetHeight);
+            setElementHeight(listElement.current.offsetHeight);
+        }
+    };
 
     function refreshTasks(status) {
         setTasks([]);
@@ -94,7 +108,7 @@ export default function ListTasksRowsComponent({
     }
 
     function onUpdateTaskStatus(task, status) {
-        setElementHeight(tasksListElement.current.offsetHeight)
+        // setElementHeight(listElement.current.offsetHeight)
 
         let statusString = status === 'added' ? 'current' : status;
         if (!window.confirm(`Press OK to mark task as ${statusString}.`)) {
@@ -112,19 +126,19 @@ export default function ListTasksRowsComponent({
     function onCreatePastPomodoro(task) {
         setShowUpdateDueDate(-1)
         setShowUpdatePopupId(-1);
-        setElementHeight(tasksListElement.current.offsetHeight);
+        // setElementHeight(listElement.current.offsetHeight);
         setShowCreatePastPomodoro(task.id);
     }
 
     function onUpdateDueDate(task) {
         setShowCreatePastPomodoro(-1)
         setShowUpdatePopupId(-1);
-        setElementHeight(tasksListElement.current.offsetHeight);
+        // setElementHeight(listElement.current.offsetHeight);
         setShowUpdateDueDate(task.id);
     }
 
     function updateOnPageChange(page) {
-        setElementHeight(tasksListElement.current.offsetHeight)
+        // setElementHeight(listElement.current.offsetHeight)
         setCurrentPage(page)
         status === 'added' && (state.currentTasksPage = page);
         status === 'completed' && (state.currentCompletedTasksPage = page);
@@ -133,7 +147,7 @@ export default function ListTasksRowsComponent({
     }
 
     function onCreateNewPomodoro(task) {
-        setElementHeight(tasksListElement.current.offsetHeight)
+        // setElementHeight(listElement.current.offsetHeight)
         createNewPomodoro(task, task.project)
     }
 
@@ -153,11 +167,11 @@ export default function ListTasksRowsComponent({
         <>
             {
                 tasks.length === 0 &&
-                <div className="loader-container" style={{ height: elementHeight }}>
+                <div className="loader-container my-1" style={{ height: elementHeight }}>
                     <div className="loader"></div>
                 </div>
             }
-            <div id="tasks-list" ref={tasksListElement}>
+            <div id="tasks-list" ref={listElement}>
                 {
                     tasks.map(
                         task => (

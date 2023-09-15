@@ -25,6 +25,8 @@ export default function ListStatsComponent() {
 
     const [reload, setReload] = useState(0)
 
+    const [pomodorosHeight, setPomodorosHeight] = useState(0);
+
     const [tasksChartButtonsStates, setTasksChartBButtonsStates] = useState({
         limit: 'daily',
         offset: 0,
@@ -161,6 +163,8 @@ export default function ListStatsComponent() {
                                         includeCategories={includeCategories}
                                         buttonsStates={listPomodorosButtonsStates}
                                         setButtonsStates={setListPomodorosButtonsStates}
+                                        elementHeight={pomodorosHeight}
+                                        setElementHeight={setPomodorosHeight}
                                     />
                                 </div>
                             </div >

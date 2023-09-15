@@ -21,6 +21,8 @@ export default function HomeComponent() {
     const [endDate, setEndDate] = useState(null);
     const [isReversed, setReversed] = useState(false);
 
+    const [pomodorosHeight, setPomodorosHeight] = useState(0);
+
     function fetchUpcomingTasks() {
         setTasksTitle('Upcoming')
         setProject(null);
@@ -95,6 +97,8 @@ export default function HomeComponent() {
                         <ListTasksComponent
                             key={project.id}
                             project={project}
+                            pomodorosHeight={pomodorosHeight}
+                            setPomodorosHeight={setPomodorosHeight}
                         />
                     }
                     {
@@ -105,6 +109,8 @@ export default function HomeComponent() {
                             endDate={endDate}
                             isReversed={isReversed}
                             title={tasksTitle}
+                            pomodorosHeight={pomodorosHeight}
+                            setPomodorosHeight={setPomodorosHeight}
                         />
                     }
                 </div>

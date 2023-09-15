@@ -15,7 +15,9 @@ export default function ListTasksComponent({
     startDate,
     endDate,
     isReversed,
-    title
+    title,
+    pomodorosHeight,
+    setPomodorosHeight
 }) {
 
     const navigate = useNavigate()
@@ -333,6 +335,8 @@ export default function ListTasksComponent({
                         <ListPomodorosComponent
                             key={[pomodoroStatus, pomodorosListReload]}
                             title={"Today's Pomodoros"}
+                            elementHeight={pomodorosHeight}
+                            setElementHeight={setPomodorosHeight}
                         />
                     </div >
                 </div>
