@@ -24,7 +24,7 @@ export default function ListTasksComponent({
 
     const { state } = useLocation();
 
-    const [tasksCount, setTasksCount] = useState(0)
+    const [tasksCount, setTasksCount] = useState(-1)
 
     const [currentTasksHeight, setCurrentTasksHeight] = useState(0);
     const [completedTasksHeight, setCompletedTasksHeight] = useState(0);
@@ -167,10 +167,13 @@ export default function ListTasksComponent({
                                     {title} Tasks
                                 </span>
                             }
-                            <span className="ms-1 badge rounded-pill text-bg-secondary">
-                                {tasksCount}
-                                <i className="ms-1 bi bi-list-ul" />
-                            </span>
+                            {
+                                tasksCount !== -1 &&
+                                <span className="ms-1 badge rounded-pill text-bg-secondary">
+                                    {tasksCount}
+                                    <i className="ms-1 bi bi-list-ul" />
+                                </span>
+                            }
                         </h6>
                         {
                             !showCreateTask && project &&
@@ -200,7 +203,7 @@ export default function ListTasksComponent({
                         }
 
                         {
-                            tasksCount !== 0 &&
+                            tasksCount > 0 &&
                             <ListTasksRowsComponent
                                 key={[pomodoroStatus, currentTasksReload, allTasksReload]}    // re-render ListTasksComponents for completed pomodoro'
                                 status={'added'}

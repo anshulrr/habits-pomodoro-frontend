@@ -20,7 +20,7 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
 
     const [currentPage, setCurrentPage] = useState(1)
 
-    const [commentsCount, setCommentsCount] = useState(0)
+    const [commentsCount, setCommentsCount] = useState(-1)
     const [comments, setComments] = useState([])
 
     const [showCreateComment, setShowCreateComment] = useState(false)
@@ -121,10 +121,13 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
 
                                         }
                                         {title}
-                                        <span className="ms-1 badge rounded-pill text-bg-secondary">
-                                            {commentsCount}
-                                            <i className="ms-1 bi bi-chat-right-text" />
-                                        </span>
+                                        {
+                                            commentsCount !== -1 &&
+                                            <span className="ms-1 badge rounded-pill text-bg-secondary">
+                                                {commentsCount}
+                                                <i className="ms-1 bi bi-chat-right-text" />
+                                            </span>
+                                        }
                                     </h6>
                                 </div>
                                 <div className="col-2 text-end">
