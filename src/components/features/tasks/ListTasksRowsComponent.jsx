@@ -59,14 +59,18 @@ export default function ListTasksRowsComponent({
 
     useEffect(
         () => {
-            refreshTasks(status);
-
             const observer = new ResizeObserver(handleResize);
             observer.observe(listElement.current);
             return () => {
                 // Cleanup the observer by unobserving all elements
                 observer.disconnect();
             };
+        }, [] // eslint-disable-line react-hooks/exhaustive-deps
+    )
+
+    useEffect(
+        () => {
+            refreshTasks(status);
         }, [currentPage] // eslint-disable-line react-hooks/exhaustive-deps
     )
 

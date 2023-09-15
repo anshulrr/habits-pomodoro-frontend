@@ -51,7 +51,7 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
 
     const handleResize = () => {
         if (listElement.current !== null && listElement.current.offsetHeight !== 0) {
-            // console.debug(listElement.current.offsetHeight);
+            // console.debug(currentPage, listElement.current.offsetHeight);
             setElementHeight(listElement.current.offsetHeight);
         }
     };
