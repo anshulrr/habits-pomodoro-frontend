@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import moment from "moment"
 
 import { deletePastPomodoroApi, getPomodorosApi } from "services/api/PomodoroApiService";
@@ -13,10 +13,15 @@ export default function ListPomodorosComponent({
     includeCategories,
     buttonsStates,
     setButtonsStates,
-    title = "Pomodoros"
+    title = "Pomodoros",
+    elementHeight,
+    setElementHeight,
 }) {
 
+    const listElement = useRef(null);
+
     const [pomodoros, setPomodoros] = useState([])
+    const [pomodorosCount, setPomodorosCount] = useState(-1);
 
     const [totalTimeElapsed, setTotalTimeElapsed] = useState('0');
 
@@ -45,15 +50,32 @@ export default function ListPomodorosComponent({
                 }
             }
             fetchAPI()
+
+            const observer = new ResizeObserver(handleResize);
+            observer.observe(listElement.current);
+            return () => {
+                // Cleanup the observer by unobserving all elements
+                observer.disconnect();
+            };
         }, []   // eslint-disable-line react-hooks/exhaustive-deps
     )
 
+    const handleResize = () => {
+        if (listElement.current !== null && listElement.current.offsetHeight !== 0) {
+            // console.debug(listElement.current.offsetHeight);
+            setElementHeight(listElement.current.offsetHeight);
+        }
+    }
+
     function retrieveTodayPomodoros({ startDate, endDate, allCategories }) {
         // console.debug('api call', { allCategories, includeCategories })
+        setPomodoros([]);
+        setPomodorosCount(-1);
         getPomodorosApi({ startDate, endDate, includeCategories: allCategories || includeCategories })
             .then(response => {
                 // console.debug(response)
                 setPomodoros(response.data)
+                setPomodorosCount(response.data.length);
                 const total = response.data.reduce((acc, curr) => acc + Math.round(curr.timeElapsed / 60), 0);
                 setTotalTimeElapsed(timeToDisplay(total));
             })
@@ -98,23 +120,32 @@ export default function ListPomodorosComponent({
             </h6>
             {
                 includeCategories &&
-                <Buttons
-                    retrievePomodoros={retrieveTodayPomodoros}
-                    buttonsStates={buttonsStates}
-                    setButtonsStates={setButtonsStates}
-                    showLimit={false}
-                />
+                <div className="mb-2">
+                    <Buttons
+                        retrievePomodoros={retrieveTodayPomodoros}
+                        buttonsStates={buttonsStates}
+                        setButtonsStates={setButtonsStates}
+                        showLimit={false}
+                    />
+                </div>
             }
 
             {
-                pomodoros.length === 0 &&
-                <div className="alert alert-light small text-center">
-                    <i className="pe-1 bi bi-clipboard-data" />
+                pomodorosCount === 0 &&
+                <div className="alert alert-light small text-center mb-0">
+                    <i className="pe-1 bi bi-clipboard-data" style={{ height: elementHeight }} />
                     Nothing to display
                 </div>
             }
 
-            <table className="table table-sm table-striped small mt-2 mb-0">
+            {
+                pomodorosCount === -1 &&
+                <div className="loader-container" style={{ height: elementHeight }}>
+                    <div className="loader"></div>
+                </div>
+            }
+
+            <table id="pomodoros-list" ref={listElement} className="table table-sm table-striped small mb-0">
                 <tbody>
                     {
                         pomodoros.map(

@@ -8,21 +8,21 @@ import ListTasksRowsComponent from "components/features/tasks/ListTasksRowsCompo
 import CreateTaskComponent from "components/features/tasks/CreateTaskComponent";
 import PomodoroComponent from "components/features/pomodoros/PomodoroComponent";
 import StopwatchComponent from "components/features/pomodoros/StopwatchComponent";
-import ListPomodorosComponent from "components/stats/ListPomodorosComponent";
 
 export default function ListTasksComponent({
     project,
     startDate,
     endDate,
     isReversed,
-    title
+    title,
+    setPomodorosListReload
 }) {
 
     const navigate = useNavigate()
 
     const { state } = useLocation();
 
-    const [tasksCount, setTasksCount] = useState(0)
+    const [tasksCount, setTasksCount] = useState(-1)
 
     const [currentTasksHeight, setCurrentTasksHeight] = useState(0);
     const [completedTasksHeight, setCompletedTasksHeight] = useState(0);
@@ -38,7 +38,6 @@ export default function ListTasksComponent({
 
     const [pomodoroStatus, setPomodoroStatus] = useState(null)
 
-    const [pomodorosListReload, setPomodorosListReload] = useState(0)
     const [currentTasksReload, setCurrentTasksReload] = useState(0)
     const [allTasksReload, setAllTasksReload] = useState(0)
 
@@ -145,7 +144,7 @@ export default function ListTasksComponent({
         <div className="">
             <div className="row">
 
-                <div className="col-lg-6 py-3" style={{ backgroundColor: "#e9ecef" }}>
+                <div className="col-lg-12 py-3" style={{ backgroundColor: "#e9ecef" }}>
 
                     <div className="d-flex justify-content-between">
                         <h6>
@@ -165,10 +164,13 @@ export default function ListTasksComponent({
                                     {title} Tasks
                                 </span>
                             }
-                            <span className="ms-1 badge rounded-pill text-bg-secondary">
-                                {tasksCount}
-                                <i className="ms-1 bi bi-list-ul" />
-                            </span>
+                            {
+                                tasksCount !== -1 &&
+                                <span className="ms-1 badge rounded-pill text-bg-secondary">
+                                    {tasksCount}
+                                    <i className="ms-1 bi bi-list-ul" />
+                                </span>
+                            }
                         </h6>
                         {
                             !showCreateTask && project &&
@@ -198,7 +200,7 @@ export default function ListTasksComponent({
                         }
 
                         {
-                            tasksCount !== 0 &&
+                            tasksCount > 0 &&
                             <ListTasksRowsComponent
                                 key={[pomodoroStatus, currentTasksReload, allTasksReload]}    // re-render ListTasksComponents for completed pomodoro'
                                 status={'added'}
@@ -300,10 +302,8 @@ export default function ListTasksComponent({
                             }
                         </div>
                     </div >
-                </div>
 
-                <div className="col-lg-6 mt-3">
-                    <div className="d-flex justify-content-between">
+                    <div className="d-flex justify-content-between mt-3">
                         {
                             pomodoro !== null &&
                             <small className="text-danger">{message} </small>
@@ -326,15 +326,9 @@ export default function ListTasksComponent({
                             setPomodoroStatus={setPomodoroStatus}
                             createNewPomodoro={createNewPomodoro}
                             setTasksMessage={setMessage}
+                            setPomodorosListReload={setPomodorosListReload}
                         ></PomodoroComponent>
                     }
-
-                    <div className="mt-3 bg-white text-start text-secondary">
-                        <ListPomodorosComponent
-                            key={[pomodoroStatus, pomodorosListReload]}
-                            title={"Today's Pomodoros"}
-                        />
-                    </div >
                 </div>
 
             </div>
