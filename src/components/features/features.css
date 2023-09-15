@@ -185,7 +185,6 @@
 /* for loader of lists */
 .loader-container {
     margin: auto;
-    padding: 2rem;
     display: flex;
     justify-content: center;
     align-items: center;
