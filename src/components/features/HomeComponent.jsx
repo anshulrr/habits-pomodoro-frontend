@@ -24,7 +24,7 @@ export default function HomeComponent() {
     function fetchUpcomingTasks() {
         setTasksTitle('Upcoming')
         setProject(null);
-        setReversed(true);
+        setReversed(false); // temporary fix: might need better api response
         setStartDate(moment().toISOString());
         setEndDate(moment().add(10, 'y').toISOString());
         updateAppStates();

@@ -115,7 +115,6 @@ export default function ListStatsComponent() {
                             setShowStatsSettings={setShowStatsSettings}
                         />
                     </div>
-                    <hr />
                 </div>
 
                 {
