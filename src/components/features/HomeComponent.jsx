@@ -100,8 +100,6 @@ export default function HomeComponent() {
                         <ListTasksComponent
                             key={project.id}
                             project={project}
-                            pomodorosHeight={pomodorosHeight}
-                            setPomodorosHeight={setPomodorosHeight}
                             setPomodorosListReload={setPomodorosListReload}
                         />
                     }
@@ -113,8 +111,6 @@ export default function HomeComponent() {
                             endDate={endDate}
                             isReversed={isReversed}
                             title={tasksTitle}
-                            pomodorosHeight={pomodorosHeight}
-                            setPomodorosHeight={setPomodorosHeight}
                             setPomodorosListReload={setPomodorosListReload}
                         />
                     }
