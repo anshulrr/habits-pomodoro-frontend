@@ -5,6 +5,7 @@ import moment from 'moment';
 
 import ListProjectsComponent from './projects/ListProjectsComponents';
 import ListTasksComponent from './tasks/ListTasksComponent';
+import ListPomodorosComponent from 'components/stats/ListPomodorosComponent';
 
 export default function HomeComponent() {
 
@@ -22,6 +23,7 @@ export default function HomeComponent() {
     const [isReversed, setReversed] = useState(false);
 
     const [pomodorosHeight, setPomodorosHeight] = useState(0);
+    const [pomodorosListReload, setPomodorosListReload] = useState(0)
 
     function fetchUpcomingTasks() {
         setTasksTitle('Upcoming')
@@ -91,7 +93,8 @@ export default function HomeComponent() {
                     </div>
 
                 </div>
-                <div className="col-lg-8">
+
+                <div className="col-lg-4">
                     {
                         project &&
                         <ListTasksComponent
@@ -99,6 +102,7 @@ export default function HomeComponent() {
                             project={project}
                             pomodorosHeight={pomodorosHeight}
                             setPomodorosHeight={setPomodorosHeight}
+                            setPomodorosListReload={setPomodorosListReload}
                         />
                     }
                     {
@@ -111,11 +115,23 @@ export default function HomeComponent() {
                             title={tasksTitle}
                             pomodorosHeight={pomodorosHeight}
                             setPomodorosHeight={setPomodorosHeight}
+                            setPomodorosListReload={setPomodorosListReload}
                         />
                     }
                 </div>
-            </div>
 
+                <div className="col-lg-4">
+                    <div className="mt-3 bg-white text-start text-secondary">
+                        <ListPomodorosComponent
+                            key={[pomodorosListReload]}
+                            title={"Today's Pomodoros"}
+                            elementHeight={pomodorosHeight}
+                            setElementHeight={setPomodorosHeight}
+                            setPomodorosListReload={setPomodorosListReload}
+                        />
+                    </div >
+                </div >
+            </div>
 
         </div>
     )

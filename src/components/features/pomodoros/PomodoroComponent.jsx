@@ -10,7 +10,14 @@ import { generateInitialTimer, calculateTimeRemaining, generateTimer } from 'ser
 import BreakTimerComponent from 'components/features/pomodoros/BreakTimerComponent';
 import ListCommentsComponent from 'components/features/comments/ListCommentsComponents';
 
-export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroStatus, createNewPomodoro, setTasksMessage }) {
+export default function PomodoroComponent({
+    pomodoro,
+    setPomodoro,
+    setPomodoroStatus,
+    createNewPomodoro,
+    setTasksMessage,
+    setPomodorosListReload
+}) {
     const authContext = useAuth()
     const userSettings = authContext.userSettings
 
@@ -125,6 +132,7 @@ export default function PomodoroComponent({ pomodoro, setPomodoro, setPomodoroSt
                 if (local_status === 'completed') {
                     setTasksMessage('');
                     setPomodoroStatus('completed');
+                    setPomodorosListReload(prevReload => prevReload + 1)
                 }
 
                 if ("serviceWorker" in navigator && !navigator?.userAgentData?.mobile) {

@@ -8,7 +8,6 @@ import ListTasksRowsComponent from "components/features/tasks/ListTasksRowsCompo
 import CreateTaskComponent from "components/features/tasks/CreateTaskComponent";
 import PomodoroComponent from "components/features/pomodoros/PomodoroComponent";
 import StopwatchComponent from "components/features/pomodoros/StopwatchComponent";
-import ListPomodorosComponent from "components/stats/ListPomodorosComponent";
 
 export default function ListTasksComponent({
     project,
@@ -16,8 +15,7 @@ export default function ListTasksComponent({
     endDate,
     isReversed,
     title,
-    pomodorosHeight,
-    setPomodorosHeight
+    setPomodorosListReload
 }) {
 
     const navigate = useNavigate()
@@ -40,7 +38,6 @@ export default function ListTasksComponent({
 
     const [pomodoroStatus, setPomodoroStatus] = useState(null)
 
-    const [pomodorosListReload, setPomodorosListReload] = useState(0)
     const [currentTasksReload, setCurrentTasksReload] = useState(0)
     const [allTasksReload, setAllTasksReload] = useState(0)
 
@@ -147,7 +144,7 @@ export default function ListTasksComponent({
         <div className="">
             <div className="row">
 
-                <div className="col-lg-6 py-3" style={{ backgroundColor: "#e9ecef" }}>
+                <div className="col-lg-12 py-3" style={{ backgroundColor: "#e9ecef" }}>
 
                     <div className="d-flex justify-content-between">
                         <h6>
@@ -305,10 +302,8 @@ export default function ListTasksComponent({
                             }
                         </div>
                     </div >
-                </div>
 
-                <div className="col-lg-6 mt-3">
-                    <div className="d-flex justify-content-between">
+                    <div className="d-flex justify-content-between mt-3">
                         {
                             pomodoro !== null &&
                             <small className="text-danger">{message} </small>
@@ -331,17 +326,9 @@ export default function ListTasksComponent({
                             setPomodoroStatus={setPomodoroStatus}
                             createNewPomodoro={createNewPomodoro}
                             setTasksMessage={setMessage}
+                            setPomodorosListReload={setPomodorosListReload}
                         ></PomodoroComponent>
                     }
-
-                    <div className="mt-3 bg-white text-start text-secondary">
-                        <ListPomodorosComponent
-                            key={[pomodoroStatus, pomodorosListReload]}
-                            title={"Today's Pomodoros"}
-                            elementHeight={pomodorosHeight}
-                            setElementHeight={setPomodorosHeight}
-                        />
-                    </div >
                 </div>
 
             </div>
