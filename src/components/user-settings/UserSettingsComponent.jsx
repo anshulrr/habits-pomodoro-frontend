@@ -400,7 +400,7 @@ export default function UserSettingsComponent() {
                             name="pageProjectsCount"
                             className="form-control"
                             value={pageProjectsCount}
-                            min={0}
+                            min={1}
                             placeholder="Default Number of Projects"
                             onChange={(e) => handleOnChange(setPageProjectsCount, e.target.value)}
                             id="pageProjectsCount"
@@ -418,7 +418,7 @@ export default function UserSettingsComponent() {
                             name="pageTasksCount"
                             className="form-control"
                             value={pageTasksCount}
-                            min={0}
+                            min={1}
                             placeholder="Default Number of Tasks"
                             onChange={(e) => handleOnChange(setPageTasksCount, e.target.value)}
                             id="pageTasksCount"
@@ -436,7 +436,7 @@ export default function UserSettingsComponent() {
                             name="pageCommentsCount"
                             className="form-control"
                             value={pageCommentsCount}
-                            min={0}
+                            min={1}
                             placeholder="Default Number of Comments"
                             onChange={(e) => handleOnChange(setPageCommentsCount, e.target.value)}
                             id="pageCommentsCount"

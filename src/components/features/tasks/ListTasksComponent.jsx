@@ -135,6 +135,12 @@ export default function ListTasksComponent({
             })
     }
 
+    const refreshAllTaskAndPomodoros = () => {
+        setAllTasksReload(prevReload => prevReload + 1)
+        setPomodorosListReload(prevReload => prevReload + 1)
+        getRunningPomodoro()
+    }
+
     return (
         <div className="">
             <div className="row">
@@ -307,7 +313,7 @@ export default function ListTasksComponent({
                             pomodoro === null &&
                             <StopwatchComponent message={'Start a new pomodoro?'} />
                         }
-                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => getRunningPomodoro()}>
+                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => refreshAllTaskAndPomodoros()}>
                             <i className="bi bi-arrow-clockwise" />
                         </button>
                     </div>
