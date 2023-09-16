@@ -168,7 +168,7 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                                     comments.map(
                                         comment => (
                                             <div key={comment.id} className="row comments-list-row">
-                                                <div className="col-10 text-truncate text-start">
+                                                <div className="col-10 text-start">
                                                     <div className="badge text-bg-secondary fw-normal text-start text-wrap" style={{ fontSize: '0.7rem' }}>
                                                         <span>{
                                                             moment(comment.createdAt).fromNow(true)
