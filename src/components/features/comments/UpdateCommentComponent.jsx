@@ -9,10 +9,9 @@ import { retrieveCommentApi, updateCommentApi } from 'services/api/CommentApiSer
 export default function UpdateCommentComponent({ setComments, id, setShowUpdateComment }) {
 
     const [description, setDescription] = useState('')
+    const [reviseDate, setReviseDate] = useState(null)
 
     const [showInput, setShowInput] = useState(true)
-
-    const [reviseDate, setReviseDate] = useState(null);
 
     useEffect(
         () => retrieveComment()
