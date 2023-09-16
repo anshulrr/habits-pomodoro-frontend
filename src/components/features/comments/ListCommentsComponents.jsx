@@ -74,6 +74,14 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
             .catch(error => console.error(error.message))
     }
 
+    function generateDateColor(comment) {
+        if (moment().diff(moment(comment.reviseDate)) > 0) {
+            return "text-danger";
+        } else {
+            return "text-secondary";
+        }
+    }
+
     return (
         <div className="comments-overlay">
             <div className="comments-popup">
@@ -187,10 +195,12 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                                                                 {comment.task}
                                                             </span>
                                                         }
+                                                    </div>
+                                                    <div className="badge text-bg-light fw-normal text-wrap" style={{ fontSize: '0.7rem' }}>
                                                         {
                                                             comment.reviseDate &&
-                                                            <span>
-                                                                <i className="ms-2 me-1 bi bi-calendar3-event" />
+                                                            <span className={generateDateColor(comment)}>
+                                                                <i className="me-1 bi bi-calendar3-event" />
                                                                 {moment(comment.reviseDate).format("DD/MM/yyyy")}
                                                             </span>
                                                         }

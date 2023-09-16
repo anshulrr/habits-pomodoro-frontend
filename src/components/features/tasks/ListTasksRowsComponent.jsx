@@ -155,7 +155,7 @@ export default function ListTasksRowsComponent({
         createNewPomodoro(task, task.project)
     }
 
-    function generateDueDateClass(task) {
+    function generateDateColor(task) {
         if (task.status === 'added') {
             if (moment().diff(moment(task.dueDate)) > 0) {
                 return "text-danger";
@@ -206,7 +206,7 @@ export default function ListTasksRowsComponent({
                                                 </span>
                                                 {
                                                     task.dueDate &&
-                                                    <span className={generateDueDateClass(task)}>
+                                                    <span className={generateDateColor(task)}>
                                                         <i className="ps-1 bi bi-calendar-check" style={{ paddingRight: "0.1rem" }} />
                                                         {moment(task.dueDate).format("DD/MM/yyyy")}
                                                     </span>

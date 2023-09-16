@@ -70,7 +70,7 @@ export default function CommentComponent({ setComments, filterBy, id, title, set
                         </div>
                         <div className="d-flex justify-content-end">
                             <label htmlFor="reviseDate" className="text-secondary my-auto small">
-                                Revise Date<i className="ms-1 me-1 bi bi-calendar3-event" />
+                                Revise By<i className="ms-1 me-1 bi bi-calendar3-event" />
                             </label>
                             <DatePicker
                                 className="form-control form-control-sm"
