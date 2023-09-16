@@ -74,6 +74,14 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
             .catch(error => console.error(error.message))
     }
 
+    function generateDateColor(comment) {
+        if (moment().diff(moment(comment.reviseDate)) > 0) {
+            return "text-danger";
+        } else {
+            return "text-secondary";
+        }
+    }
+
     return (
         <div className="comments-overlay">
             <div className="comments-popup">
@@ -160,7 +168,7 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                                     comments.map(
                                         comment => (
                                             <div key={comment.id} className="row comments-list-row">
-                                                <div className="col-10 text-truncate text-start">
+                                                <div className="col-10 text-start">
                                                     <div className="badge text-bg-secondary fw-normal text-start text-wrap" style={{ fontSize: '0.7rem' }}>
                                                         <span>{
                                                             moment(comment.createdAt).fromNow(true)
@@ -185,6 +193,15 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                                                             <span>
                                                                 <i className="ms-2 me-1 bi bi-list-ul" />
                                                                 {comment.task}
+                                                            </span>
+                                                        }
+                                                    </div>
+                                                    <div className="badge text-bg-light fw-normal text-wrap" style={{ fontSize: '0.7rem' }}>
+                                                        {
+                                                            comment.reviseDate &&
+                                                            <span className={generateDateColor(comment)}>
+                                                                <i className="me-1 bi bi-calendar3-event" />
+                                                                {moment(comment.reviseDate).format("DD/MM/yyyy")}
                                                             </span>
                                                         }
                                                     </div>

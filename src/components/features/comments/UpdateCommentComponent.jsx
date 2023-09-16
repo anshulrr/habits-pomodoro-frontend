@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react'
-
 import ReactMarkdown from 'react-markdown'
+import DatePicker from "react-datepicker";
+
+import moment from 'moment';
 
 import { retrieveCommentApi, updateCommentApi } from 'services/api/CommentApiService'
 
 export default function UpdateCommentComponent({ setComments, id, setShowUpdateComment }) {
 
     const [description, setDescription] = useState('')
+    const [reviseDate, setReviseDate] = useState(null)
 
     const [showInput, setShowInput] = useState(true)
 
@@ -19,6 +22,7 @@ export default function UpdateCommentComponent({ setComments, id, setShowUpdateC
         retrieveCommentApi({ id })
             .then(response => {
                 setDescription(response.data.description)
+                setReviseDate(response.data.reviseDate ? moment(response.data.reviseDate).toDate() : null)
             })
             .catch(error => console.error(error.message))
     }
@@ -28,6 +32,7 @@ export default function UpdateCommentComponent({ setComments, id, setShowUpdateC
 
         const comment = {
             description,
+            reviseDate: moment(reviseDate).endOf('date').toDate()
         }
 
         updateCommentApi({ comment, id })
@@ -36,6 +41,7 @@ export default function UpdateCommentComponent({ setComments, id, setShowUpdateC
                 setComments(comments => comments.map(comment => {
                     if (comment.id === id) {
                         comment.description = response.data.description
+                        comment.reviseDate = response.data.reviseDate
                     }
                     return comment;
                 }))
@@ -74,16 +80,28 @@ export default function UpdateCommentComponent({ setComments, id, setShowUpdateC
                             </div>
                         }
                     </div>
-                    <div className="col-lg-12 text-end">
-                        <button
-                            type="button"
-                            className="btn btn-sm btn-outline-secondary me-2"
-                            onClick={() => setShowUpdateComment(-1)}
-                        >Cancel</button>
+                    <div className="d-flex justify-content-end">
+                        <label htmlFor="reviseDate" className="text-secondary my-auto small">
+                            Revise By<i className="ms-1 me-1 bi bi-calendar3-event" />
+                        </label>
+                        <DatePicker
+                            className="form-control form-control-sm"
+                            id="reviseDate"
+                            selected={reviseDate}
+                            dateFormat="dd/MM/yyyy"
+                            minDate={new Date()}
+                            onFocus={e => e.target.blur()}      // fix for keyboard open on focus on mobile device
+                            onChange={(reviseDate) => setReviseDate(reviseDate)}
+                        />
                         <button
                             type="submit"
-                            className="btn btn-sm btn-outline-success"
-                        >Update Comment</button>
+                            className="btn btn-sm btn-outline-success ms-2"
+                        >Update</button>
+                        <button
+                            type="button"
+                            className="btn btn-sm btn-outline-secondary ms-2"
+                            onClick={() => setShowUpdateComment(-1)}
+                        >Cancel</button>
                     </div>
                 </div>
             </form>

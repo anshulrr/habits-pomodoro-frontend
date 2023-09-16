@@ -1,12 +1,15 @@
 import { useState } from 'react'
-
 import ReactMarkdown from 'react-markdown'
+import DatePicker from "react-datepicker";
+
+import moment from 'moment'
 
 import { createCommentApi } from 'services/api/CommentApiService'
 
 export default function CommentComponent({ setComments, filterBy, id, title, setShowCreateComment, setCommentsCount }) {
 
     const [description, setDescription] = useState('')
+    const [reviseDate, setReviseDate] = useState(null)
 
     const [showInput, setShowInput] = useState(true)
 
@@ -15,6 +18,7 @@ export default function CommentComponent({ setComments, filterBy, id, title, set
 
         const comment = {
             description,
+            reviseDate: moment(reviseDate).endOf('date').toDate()
         }
         // console.debug({ comment, filterBy, id })
 
@@ -64,16 +68,28 @@ export default function CommentComponent({ setComments, filterBy, id, title, set
                                 </div>
                             }
                         </div>
-                        <div className="col-lg-12 text-end">
-                            <button
-                                type="button"
-                                className="btn btn-sm btn-outline-secondary me-2"
-                                onClick={() => setShowCreateComment(false)}
-                            >Cancel</button>
+                        <div className="d-flex justify-content-end">
+                            <label htmlFor="reviseDate" className="text-secondary my-auto small">
+                                Revise By<i className="ms-1 me-1 bi bi-calendar3-event" />
+                            </label>
+                            <DatePicker
+                                className="form-control form-control-sm"
+                                id="reviseDate"
+                                selected={reviseDate}
+                                dateFormat="dd/MM/yyyy"
+                                minDate={new Date()}
+                                onFocus={e => e.target.blur()}      // fix for keyboard open on focus on mobile device
+                                onChange={(reviseDate) => setReviseDate(reviseDate)}
+                            />
                             <button
                                 type="submit"
-                                className="btn btn-sm btn-outline-success"
-                            >Save Comment</button>
+                                className="btn btn-sm btn-outline-success ms-2"
+                            >Save</button>
+                            <button
+                                type="button"
+                                className="btn btn-sm btn-outline-secondary ms-2"
+                                onClick={() => setShowCreateComment(false)}
+                            >Cancel</button>
                         </div>
                     </div>
                 </form>

@@ -137,9 +137,9 @@
 /* for pomodoro display at bottom */
 .timer-bottom {
     position: fixed;
-    bottom: 0;
+    bottom: 1rem;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, 0);
 }
 
 .timer-bottom .timer {
@@ -185,6 +185,8 @@
 /* for loader of lists */
 .loader-container {
     margin: auto;
+    /* temp fix using padding */
+    padding: 27px;
     display: flex;
     justify-content: center;
     align-items: center;
