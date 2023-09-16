@@ -185,6 +185,8 @@
 /* for loader of lists */
 .loader-container {
     margin: auto;
+    /* temp fix using padding */
+    padding: 27px;
     display: flex;
     justify-content: center;
     align-items: center;

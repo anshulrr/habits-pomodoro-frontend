@@ -133,7 +133,7 @@ export default function ListPomodorosComponent({
             {
                 pomodorosCount === 0 &&
                 <div className="alert alert-light small text-center mb-0">
-                    <i className="pe-1 bi bi-clipboard-data" style={{ height: elementHeight }} />
+                    <i className="pe-1 bi bi-clipboard-data" />
                     Nothing to display
                 </div>
             }
