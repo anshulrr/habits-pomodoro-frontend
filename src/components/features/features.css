@@ -137,9 +137,9 @@
 /* for pomodoro display at bottom */
 .timer-bottom {
     position: fixed;
-    bottom: 0;
+    bottom: 1rem;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, 0);
 }
 
 .timer-bottom .timer {
