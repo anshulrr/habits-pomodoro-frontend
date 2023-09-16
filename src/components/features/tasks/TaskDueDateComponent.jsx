@@ -34,7 +34,7 @@ export default function TaskDueDateComponent({
                 selected={dueDate}
                 dateFormat="dd/MM/yyyy"
                 minDate={new Date()}
-                onFocus={e => e.target.blur()}      // fix for keyboard open on focus on mobile devide
+                onFocus={e => e.target.blur()}      // fix for keyboard open on focus on mobile device
                 onChange={(dueDate) => setDueDate(dueDate)}
                 autoFocus
             />

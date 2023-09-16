@@ -187,6 +187,13 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                                                                 {comment.task}
                                                             </span>
                                                         }
+                                                        {
+                                                            comment.reviseDate &&
+                                                            <span>
+                                                                <i className="ms-2 me-1 bi bi-calendar3-event" />
+                                                                {moment(comment.reviseDate).format("DD/MM/yyyy")}
+                                                            </span>
+                                                        }
                                                     </div>
 
                                                 </div>

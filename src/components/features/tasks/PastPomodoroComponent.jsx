@@ -69,7 +69,7 @@ export default function PastPomodoroComponent({
                     showTimeSelect
                     timeFormat="HH:mm"
                     filterTime={filterFutureTime}
-                    onFocus={e => e.target.blur()}      // fix for keyboard open on focus on mobile devide
+                    onFocus={e => e.target.blur()}      // fix for keyboard open on focus on mobile device
                     onChange={(date) => setDate(date)}
                     autoFocus
                 />
