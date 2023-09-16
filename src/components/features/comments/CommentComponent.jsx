@@ -84,7 +84,7 @@ export default function CommentComponent({ setComments, filterBy, id, title, set
                             <button
                                 type="submit"
                                 className="btn btn-sm btn-outline-success ms-2"
-                            >Save Comment</button>
+                            >Save</button>
                             <button
                                 type="button"
                                 className="btn btn-sm btn-outline-secondary ms-2"

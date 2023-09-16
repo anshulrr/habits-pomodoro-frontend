@@ -96,7 +96,7 @@ export default function UpdateCommentComponent({ setComments, id, setShowUpdateC
                         <button
                             type="submit"
                             className="btn btn-sm btn-outline-success ms-2"
-                        >Update Comment</button>
+                        >Update</button>
                         <button
                             type="button"
                             className="btn btn-sm btn-outline-secondary ms-2"
