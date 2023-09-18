@@ -58,4 +58,9 @@
 
 .comments-list-row:hover .comments-list-update {
     display: inline;
+    position: absolute;
+}
+
+.comments-subscript {
+    font-size: 0.575rem;
 }
