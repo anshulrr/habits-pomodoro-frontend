@@ -170,35 +170,35 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                                             <div key={comment.id} className="comments-list-row">
 
                                                 <div className="d-flex justify-content-start flex-wrap comments-subscript">
-                                                    <div className="me-2 text-secondary fw-normal">
+                                                    <div className="me-2 text-secondary fw-normal text-start">
                                                         {
                                                             moment(comment.createdAt).fromNow(false)
                                                         }
                                                     </div>
                                                     {
                                                         comment.category &&
-                                                        <div className="me-2 text-secondary fw-normal">
+                                                        <div className="me-2 text-secondary fw-normal text-start">
                                                             <i className="bi bi-link-45deg" />
                                                             {comment.category}
                                                         </div>
                                                     }
                                                     {
                                                         comment.project &&
-                                                        <div className="me-2 text-secondary fw-normal">
+                                                        <div className="me-2 text-secondary fw-normal text-start">
                                                             <span style={{ color: comment.color, paddingRight: "0.1rem" }}>&#9632;</span>
                                                             {comment.project}
                                                         </div>
                                                     }
                                                     {
                                                         comment.task &&
-                                                        <div className="me-2 text-secondary fw-normal">
+                                                        <div className="me-2 text-secondary fw-normal text-start">
                                                             <i className="bi bi-list-ul" style={{ paddingRight: "0.1rem" }} />
                                                             {comment.task}
                                                         </div>
                                                     }
                                                     {
                                                         comment.reviseDate &&
-                                                        <div className="me-2 fw-normal">
+                                                        <div className="me-2 fw-normal text-start">
                                                             <span className={generateDateColor(comment)}>
                                                                 <i className="bi bi-calendar3-event" style={{ paddingRight: "0.1rem" }} />
                                                                 {moment(comment.reviseDate).format("DD/MM/yyyy")}
