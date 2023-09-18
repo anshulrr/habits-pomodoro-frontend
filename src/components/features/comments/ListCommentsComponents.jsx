@@ -11,7 +11,13 @@ import Pagination from "services/pagination/Pagination"
 import CommentComponent from "./CommentComponent";
 import UpdateCommentComponent from "./UpdateCommentComponent";
 
-export default function ListCommentsComponent({ filterBy, id, title, setShowCommentsId }) {
+export default function ListCommentsComponent({
+    filterBy,
+    id,
+    title,
+    projectColor,
+    setShowCommentsId
+}) {
 
     const authContext = useAuth()
     const userSettings = authContext.userSettings
@@ -108,35 +114,33 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                     <div className="row mb-3">
                         <div className="col-lg-12">
 
-                            <div className="row">
-                                <div className="col-10 text-start">
-                                    <h6>
-                                        {
-                                            (filterBy === 'category' &&
-                                                <i className="me-1 bi bi-link-45deg" />
-                                            ) ||
-                                            (filterBy === 'project' &&
-                                                <span className="me-1">&#9632;</span>
-                                            ) ||
-                                            (filterBy === 'task' &&
-                                                <i className="me-1 bi bi-list-ul" />
-                                            ) ||
-                                            (filterBy === 'pomodoro' &&
-                                                <i className="me-1 bi bi-hourglass" />
-                                            )
+                            <div className="d-flex justify-content-between">
+                                <h6>
+                                    {
+                                        (filterBy === 'category' &&
+                                            <i className="me-1 bi bi-link-45deg" />
+                                        ) ||
+                                        (filterBy === 'project' &&
+                                            <span className="me-1" style={{ color: projectColor }}>&#9632;</span>
+                                        ) ||
+                                        (filterBy === 'task' &&
+                                            <i className="me-1 bi bi-list-ul" />
+                                        ) ||
+                                        (filterBy === 'pomodoro' &&
+                                            <i className="me-1 bi bi-hourglass" />
+                                        )
 
-                                        }
-                                        {title}
-                                        {
-                                            commentsCount !== -1 &&
-                                            <span className="ms-1 badge rounded-pill text-bg-secondary">
-                                                {commentsCount}
-                                                <i className="ms-1 bi bi-chat-right-text" />
-                                            </span>
-                                        }
-                                    </h6>
-                                </div>
-                                <div className="col-2 text-end">
+                                    }
+                                    {title}
+                                    {
+                                        commentsCount !== -1 &&
+                                        <span className="ms-1 badge rounded-pill text-bg-secondary">
+                                            {commentsCount}
+                                            <i className="ms-1 bi bi-chat-right-text" />
+                                        </span>
+                                    }
+                                </h6>
+                                <div>
                                     {
                                         !showCreateComment &&
                                         <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowCreateComment(true)}>
