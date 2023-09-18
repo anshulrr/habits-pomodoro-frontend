@@ -119,9 +119,7 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                                                 <span className="me-1">&#9632;</span>
                                             ) ||
                                             (filterBy === 'task' &&
-                                                <span className="badge rounded-pill text-bg-light">
-                                                    <i className="bi bi-list-ul" />
-                                                </span>
+                                                <i className="me-1 bi bi-list-ul" />
                                             ) ||
                                             (filterBy === 'pomodoro' &&
                                                 <i className="me-1 bi bi-hourglass" />
@@ -211,7 +209,7 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                                                     {
                                                         showUpdateComment !== comment.id &&
                                                         <div className="comments-list-update">
-                                                            <button type="button" className="btn btn-sm btn-secondary py-0 px-1" style={{ marginRight: "0.1rem" }} onClick={() => setShowUpdateComment(comment.id)}>
+                                                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" style={{ marginRight: "2px" }} onClick={() => setShowUpdateComment(comment.id)}>
                                                                 <i className="bi bi-pencil-square"></i>
                                                             </button>
                                                         </div>
@@ -220,8 +218,8 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
 
                                                 {
                                                     showUpdateComment !== comment.id &&
-                                                    <div className="col-12 text-truncate text-start mb-3">
-                                                        <div className="border rounded text-wrap ps-2 py-1 small">
+                                                    <div className="text-truncate text-start mb-3">
+                                                        <div className="border rounded text-wrap px-2 py-1 small comments-list-card">
                                                             <ReactMarkdown
                                                                 children={comment.description}
                                                             />
@@ -231,7 +229,7 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
 
                                                 {
                                                     showUpdateComment === comment.id &&
-                                                    <div className="col-12 text-truncate text-start mb-3">
+                                                    <div className="text-truncate text-start mb-3">
                                                         <UpdateCommentComponent
                                                             setComments={setComments}
                                                             id={comment.id}
