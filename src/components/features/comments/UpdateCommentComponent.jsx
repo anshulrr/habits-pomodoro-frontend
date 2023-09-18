@@ -73,7 +73,7 @@ export default function UpdateCommentComponent({ setComments, id, setShowUpdateC
                         }
                         {
                             !showInput &&
-                            <div className="small overflow-scroll border rounded-1 border-2 p-2" style={{ height: "8rem" }}>
+                            <div className="small overflow-scroll bg-white border rounded-1 border-2 p-2" style={{ height: "8rem" }}>
                                 <ReactMarkdown
                                     children={description}
                                 />
