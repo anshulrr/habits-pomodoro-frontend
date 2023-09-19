@@ -251,6 +251,6 @@
 
 .task-close-popup {
     position: fixed;
-    right: 0.5vw;
+    right: 0;
     cursor: pointer;
 }

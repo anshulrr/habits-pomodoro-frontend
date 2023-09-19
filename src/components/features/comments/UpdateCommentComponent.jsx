@@ -73,7 +73,7 @@ export default function UpdateCommentComponent({ setComments, id, setShowUpdateC
                         }
                         {
                             !showInput &&
-                            <div className="small overflow-scroll border rounded-1 border-2 p-2" style={{ height: "8rem" }}>
+                            <div className="small overflow-scroll bg-white border rounded-1 border-2 p-2" style={{ height: "8rem" }}>
                                 <ReactMarkdown
                                     children={description}
                                 />
@@ -93,15 +93,19 @@ export default function UpdateCommentComponent({ setComments, id, setShowUpdateC
                             onFocus={e => e.target.blur()}      // fix for keyboard open on focus on mobile device
                             onChange={(reviseDate) => setReviseDate(reviseDate)}
                         />
-                        <button
-                            type="submit"
-                            className="btn btn-sm btn-outline-success ms-2"
-                        >Update</button>
-                        <button
-                            type="button"
-                            className="btn btn-sm btn-outline-secondary ms-2"
-                            onClick={() => setShowUpdateComment(-1)}
-                        >Cancel</button>
+                        <div>
+                            <button
+                                type="submit"
+                                className="btn btn-sm btn-outline-success ms-1"
+                            >Update</button>
+                        </div>
+                        <div>
+                            <button
+                                type="button"
+                                className="btn btn-sm btn-outline-secondary ms-1"
+                                onClick={() => setShowUpdateComment(-1)}
+                            >Cancel</button>
+                        </div>
                     </div>
                 </div>
             </form>

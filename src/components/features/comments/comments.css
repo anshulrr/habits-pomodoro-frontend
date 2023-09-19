@@ -19,12 +19,12 @@
     overflow: scroll;
     border-radius: 10px;
     box-shadow: 0px 0px 0px 9999px rgba(0, 0, 0, 0.5);
-    background-color: #ffffff;
+    background-color: #e9ecef;
 }
 
 .close-popup {
     position: fixed;
-    right: 0.5vw;
+    right: 0;
     cursor: pointer;
 }
 
@@ -58,4 +58,13 @@
 
 .comments-list-row:hover .comments-list-update {
     display: inline;
+    position: absolute;
+}
+
+.comments-subscript {
+    font-size: 0.575rem;
+}
+
+.comments-list-card {
+    background-color: #ffffff;
 }

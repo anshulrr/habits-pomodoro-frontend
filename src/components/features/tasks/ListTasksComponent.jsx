@@ -174,9 +174,11 @@ export default function ListTasksComponent({
                         </h6>
                         {
                             !showCreateTask && project &&
-                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={() => setShowCreateTask(!showCreateTask)}>
-                                <i className="bi bi-plus-circle" />
-                            </button>
+                            <div>
+                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={() => setShowCreateTask(!showCreateTask)}>
+                                    <i className="bi bi-plus-circle" />
+                                </button>
+                            </div>
                         }
                     </div>
 

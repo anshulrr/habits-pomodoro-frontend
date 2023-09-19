@@ -11,7 +11,13 @@ import Pagination from "services/pagination/Pagination"
 import CommentComponent from "./CommentComponent";
 import UpdateCommentComponent from "./UpdateCommentComponent";
 
-export default function ListCommentsComponent({ filterBy, id, title, setShowCommentsId }) {
+export default function ListCommentsComponent({
+    filterBy,
+    id,
+    title,
+    projectColor,
+    setShowCommentsId
+}) {
 
     const authContext = useAuth()
     const userSettings = authContext.userSettings
@@ -85,8 +91,8 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
     return (
         <div className="comments-overlay">
             <div className="comments-popup">
-                <div className="close-popup m-2">
-                    <i className="p-2 bi bi-x-lg" onClick={() => setShowCommentsId(-1)}></i>
+                <div className="close-popup m-1">
+                    <i className="p-1 bi bi-x-lg" onClick={() => setShowCommentsId(-1)}></i>
                 </div>
 
                 <div className="container mt-5">
@@ -108,37 +114,33 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                     <div className="row mb-3">
                         <div className="col-lg-12">
 
-                            <div className="row">
-                                <div className="col-10 text-start">
-                                    <h6>
-                                        {
-                                            (filterBy === 'category' &&
-                                                <i className="me-1 bi bi-link-45deg" />
-                                            ) ||
-                                            (filterBy === 'project' &&
-                                                <span className="me-1">&#9632;</span>
-                                            ) ||
-                                            (filterBy === 'task' &&
-                                                <span className="badge rounded-pill text-bg-light">
-                                                    <i className="bi bi-list-ul" />
-                                                </span>
-                                            ) ||
-                                            (filterBy === 'pomodoro' &&
-                                                <i className="me-1 bi bi-hourglass" />
-                                            )
+                            <div className="d-flex justify-content-between">
+                                <h6>
+                                    {
+                                        (filterBy === 'category' &&
+                                            <i className="me-1 bi bi-link-45deg" />
+                                        ) ||
+                                        (filterBy === 'project' &&
+                                            <span className="me-1" style={{ color: projectColor }}>&#9632;</span>
+                                        ) ||
+                                        (filterBy === 'task' &&
+                                            <i className="me-1 bi bi-list-ul" />
+                                        ) ||
+                                        (filterBy === 'pomodoro' &&
+                                            <i className="me-1 bi bi-hourglass" />
+                                        )
 
-                                        }
-                                        {title}
-                                        {
-                                            commentsCount !== -1 &&
-                                            <span className="ms-1 badge rounded-pill text-bg-secondary">
-                                                {commentsCount}
-                                                <i className="ms-1 bi bi-chat-right-text" />
-                                            </span>
-                                        }
-                                    </h6>
-                                </div>
-                                <div className="col-2 text-end">
+                                    }
+                                    {title}
+                                    {
+                                        commentsCount !== -1 &&
+                                        <span className="ms-1 badge rounded-pill text-bg-secondary">
+                                            {commentsCount}
+                                            <i className="ms-1 bi bi-chat-right-text" />
+                                        </span>
+                                    }
+                                </h6>
+                                <div>
                                     {
                                         !showCreateComment &&
                                         <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowCreateComment(true)}>
@@ -167,59 +169,61 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
                                 {
                                     comments.map(
                                         comment => (
-                                            <div key={comment.id} className="row comments-list-row">
-                                                <div className="col-10 text-start">
-                                                    <div className="badge text-bg-secondary fw-normal text-start text-wrap" style={{ fontSize: '0.7rem' }}>
-                                                        <span>{
-                                                            moment(comment.createdAt).fromNow(true)
-                                                        }</span>
-                                                        {
-                                                            comment.category &&
-                                                            <span>
-                                                                <i className="ms-2 bi bi-link-45deg" />
-                                                                {comment.category}
-                                                            </span>
-                                                        }
+                                            <div key={comment.id} className="comments-list-row">
 
+                                                <div className="d-flex justify-content-start flex-wrap comments-subscript">
+                                                    <div className="me-2 text-secondary fw-normal text-start">
                                                         {
-                                                            comment.project &&
-                                                            <span>
-                                                                <span className="ms-2 me-1" style={{ color: comment.color }}>&#9632;</span>
-                                                                {comment.project}
-                                                            </span>
-                                                        }
-                                                        {
-                                                            comment.task &&
-                                                            <span>
-                                                                <i className="ms-2 me-1 bi bi-list-ul" />
-                                                                {comment.task}
-                                                            </span>
+                                                            moment(comment.createdAt).fromNow(false)
                                                         }
                                                     </div>
-                                                    <div className="badge text-bg-light fw-normal text-wrap" style={{ fontSize: '0.7rem' }}>
-                                                        {
-                                                            comment.reviseDate &&
+                                                    {
+                                                        comment.category &&
+                                                        <div className="me-2 text-secondary fw-normal text-start">
+                                                            <i className="bi bi-link-45deg" />
+                                                            {comment.category}
+                                                        </div>
+                                                    }
+                                                    {
+                                                        comment.project &&
+                                                        <div className="me-2 text-secondary fw-normal text-start">
+                                                            <span style={{ color: comment.color, paddingRight: "0.1rem" }}>&#9632;</span>
+                                                            {comment.project}
+                                                        </div>
+                                                    }
+                                                    {
+                                                        comment.task &&
+                                                        <div className="me-2 text-secondary fw-normal text-start">
+                                                            <i className="bi bi-list-ul" style={{ paddingRight: "0.1rem" }} />
+                                                            {comment.task}
+                                                        </div>
+                                                    }
+                                                    {
+                                                        comment.reviseDate &&
+                                                        <div className="me-2 fw-normal text-start">
                                                             <span className={generateDateColor(comment)}>
-                                                                <i className="me-1 bi bi-calendar3-event" />
+                                                                <i className="bi bi-calendar3-event" style={{ paddingRight: "0.1rem" }} />
                                                                 {moment(comment.reviseDate).format("DD/MM/yyyy")}
                                                             </span>
-                                                        }
-                                                    </div>
-
+                                                        </div>
+                                                    }
                                                 </div>
-                                                {
-                                                    showUpdateComment !== comment.id &&
-                                                    <div className="col-2 ps-0 text-end comments-list-update">
-                                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 lh-sm" onClick={() => setShowUpdateComment(comment.id)}>
-                                                            <i className="bi bi-pencil-square"></i>
-                                                        </button>
-                                                    </div>
-                                                }
+
+                                                <div className="d-flex justify-content-end">
+                                                    {
+                                                        showUpdateComment !== comment.id &&
+                                                        <div className="comments-list-update">
+                                                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" style={{ marginRight: "2px" }} onClick={() => setShowUpdateComment(comment.id)}>
+                                                                <i className="bi bi-pencil-square"></i>
+                                                            </button>
+                                                        </div>
+                                                    }
+                                                </div>
 
                                                 {
                                                     showUpdateComment !== comment.id &&
-                                                    <div className="col-12 text-truncate text-start mb-3">
-                                                        <div className="border rounded text-wrap ps-2 py-1 small">
+                                                    <div className="text-truncate text-start mb-3">
+                                                        <div className="border rounded text-wrap px-2 py-1 small comments-list-card">
                                                             <ReactMarkdown
                                                                 children={comment.description}
                                                             />
@@ -229,7 +233,7 @@ export default function ListCommentsComponent({ filterBy, id, title, setShowComm
 
                                                 {
                                                     showUpdateComment === comment.id &&
-                                                    <div className="col-12 text-truncate text-start mb-3">
+                                                    <div className="text-truncate text-start mb-3">
                                                         <UpdateCommentComponent
                                                             setComments={setComments}
                                                             id={comment.id}

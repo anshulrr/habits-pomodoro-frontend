@@ -61,7 +61,7 @@ export default function CommentComponent({ setComments, filterBy, id, title, set
                             }
                             {
                                 !showInput &&
-                                <div className="small overflow-scroll border rounded-1 border-2 p-2" style={{ height: "8rem" }}>
+                                <div className="small overflow-scroll bg-white border rounded-1 border-2 p-2" style={{ height: "8rem" }}>
                                     <ReactMarkdown
                                         children={description}
                                     />
@@ -81,15 +81,19 @@ export default function CommentComponent({ setComments, filterBy, id, title, set
                                 onFocus={e => e.target.blur()}      // fix for keyboard open on focus on mobile device
                                 onChange={(reviseDate) => setReviseDate(reviseDate)}
                             />
-                            <button
-                                type="submit"
-                                className="btn btn-sm btn-outline-success ms-2"
-                            >Save</button>
-                            <button
-                                type="button"
-                                className="btn btn-sm btn-outline-secondary ms-2"
-                                onClick={() => setShowCreateComment(false)}
-                            >Cancel</button>
+                            <div>
+                                <button
+                                    type="submit"
+                                    className="btn btn-sm btn-outline-success ms-1"
+                                >Save</button>
+                            </div>
+                            <div>
+                                <button
+                                    type="button"
+                                    className="btn btn-sm btn-outline-secondary ms-1"
+                                    onClick={() => setShowCreateComment(false)}
+                                >Cancel</button>
+                            </div>
                         </div>
                     </div>
                 </form>

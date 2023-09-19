@@ -189,6 +189,7 @@ export default function ListProjectsComponent({ project, setProject }) {
                     filterBy={'project'}
                     id={showCommentsId}
                     title={project.name}
+                    projectColor={project.color}
                     setShowCommentsId={setShowCommentsId}
                 />
             }
