@@ -42,9 +42,9 @@ export const calculateScaleForAdjustedAvg = ({
     if (enableChartAdjustedWeeklyMonthlyAverage) {
         if (limit === 'weekly' &&
             enableChartWeeklyAverage &&
-            chartWeeklyAverage > moment().weekday()
+            chartWeeklyAverage > moment().isoWeekday()
         ) {
-            scale = scale / chartWeeklyAverage * moment().weekday();
+            scale = scale / chartWeeklyAverage * moment().isoWeekday();
         } else if (limit === 'monthly' &&
             enableChartMonthlyAverage &&
             chartMonthlyAverage > moment().date()

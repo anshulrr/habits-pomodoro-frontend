@@ -104,9 +104,9 @@ export const TotalChart = ({ includeCategories, statsSettings, buttonsStates, se
             endDate = date.clone().endOf('day').add(14, 'd').toISOString();
             // console.debug(startDate, endDate);
         } else if (limit === 'weekly') {
-            const date = moment().startOf('week').add(1, 'd').add(-14 + 15 * offset, 'w');
+            const date = moment().startOf('isoWeek').add(-14 + 15 * offset, 'w');
             startDate = date.toISOString();
-            endDate = date.clone().endOf('week').add(14, 'w').add(1, 'd').toISOString();
+            endDate = date.clone().endOf('isoWeek').add(14, 'w').toISOString();
             // console.debug(startDate, endDate);
         } else if (limit === 'monthly') {
             const date = moment().startOf('month').add(-14 + 15 * offset, 'M');
@@ -143,17 +143,16 @@ export const TotalChart = ({ includeCategories, statsSettings, buttonsStates, se
                 labels.push(str)
             }
         } else if (limit === 'weekly') {
-            const dow = moment().format('e');   // day of week
             for (let i = 0; i < 15; i++) {
                 const str = moment()
-                    .add(-dow + 1, 'd')
+                    .startOf('isoWeek')
                     .add(15 * offset, 'w')
                     .add(i - 14, 'w')
                     .format('DD MMM')
                     + "-" + moment()
-                        .add(-dow, 'd')
+                        .endOf('isoWeek')
                         .add(15 * offset, 'w')
-                        .add(i + 1 - 14, 'w')
+                        .add(i - 14, 'w')
                         .format('DD MMM')
                 labels.push(str);
             }

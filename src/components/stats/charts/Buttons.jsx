@@ -15,7 +15,7 @@ export const Buttons = ({
     const [dateString, setDateString] = useState(buttonsStates.dateString)
 
     const [startDate, setStartDate] = useState(moment().startOf('day').toISOString())
-    const [endDate, setEndDate] = useState(moment().startOf('day').add(1, 'd').toISOString())
+    const [endDate, setEndDate] = useState(moment().endOf('day').toISOString())
 
     // to retrive data after click on bottons
     useEffect(
@@ -57,8 +57,8 @@ export const Buttons = ({
         } else if (limit === 'weekly') {
             // substract 1 day first and add it later: to make monday as start of the week
             const date = moment().add(-1, 'd').add(offset, 'w');
-            start = date.clone().startOf('week').add(1, 'd');
-            end = date.clone().endOf('week').add(1, 'd');
+            start = date.clone().startOf('isoWeek');
+            end = date.clone().endOf('isoWeek');
             str = start.format('DD MMM') + "-" + end.format('DD MMM');
         } else if (limit === 'monthly') {
             const date = moment().add(offset, 'M');
