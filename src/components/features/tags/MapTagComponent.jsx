@@ -10,7 +10,7 @@ export default function MapTagComponent({
     setTasksReload
 }) {
 
-    const PAGESIZE = 100;
+    const PAGESIZE = 1000;
 
     const [currentPage, setCurrentPage] = useState(1)
 
@@ -75,6 +75,7 @@ export default function MapTagComponent({
         retrieveTaskApi({ id: task.id })
             .then(response => {
                 // console.debug(response)
+                // TODO: find better solution
                 for (let i = 0; i < tags.length; i++) {
                     tags[i].selected = false;
                     for (let j = 0; j < response.data.tags.length; j++) {

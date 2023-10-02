@@ -14,10 +14,12 @@ import ListCommentsComponent from "components/features/comments/ListCommentsComp
 import UpdateTaskComponent from "components/features/tasks/UpdateTaskComponent";
 import TaskDueDateComponent from "components/features/tasks/TaskDueDateComponent";
 import MapTagComponent from "components/features/tags/MapTagComponent";
+import { getTasksTagsApi } from "services/api/TagApiService";
 
 export default function ListTasksRowsComponent({
     project,
     tag,
+    tags,
     status,
     tasksCount,
     createNewPomodoro,
@@ -107,6 +109,33 @@ export default function ListTasksRowsComponent({
                 } else {
                     setTasks(response.data)
                 }
+                updateTaskTags(response.data);
+            })
+            .catch(error => console.error(error.message))
+    }
+
+    function updateTaskTags(tasks) {
+        // console.log(tags.get(406));
+        if (tags.size === 0) {
+            return;
+        }
+        const taskIds = tasks.map(task => task.id);
+        getTasksTagsApi(taskIds)
+            .then(response => {
+                // console.log(response.data)
+                // TODO: find better solution
+                const updated_tasks = tasks.map(task => {
+                    // console.log(task);
+                    task.tags = [];
+                    for (let i = 0; i < response.data.length; i++) {
+                        if (response.data[i][0] === task.id) {
+                            task.tags.push(tags.get(response.data[i][1]));
+                        }
+                    }
+                    return task;
+                })
+                // console.log(updated_tasks)
+                setTasks(updated_tasks);
             })
             .catch(error => console.error(error.message))
     }
@@ -234,6 +263,24 @@ export default function ListTasksRowsComponent({
                                                         <span className="ps-1" style={{ color: task.project.color, paddingRight: "0.1rem" }}>&#9632;</span>
                                                         {task.project.name}
                                                     </span>
+                                                }
+
+                                                {
+                                                    task.tags &&
+                                                    <span>
+                                                        {task.tags.length}
+                                                    </span>
+                                                }
+                                                {
+                                                    task.tags && task.tags.length > 0 &&
+                                                    task.tags.map(
+                                                        (tag, tag_index) => (
+                                                            <span key={tag_index}>
+                                                                <i className="bi bi-tag-fill ms-1" style={{ color: tag.color, paddingRight: "0.1rem" }} />
+                                                                {tag.name}
+                                                            </span>
+                                                        )
+                                                    )
                                                 }
                                             </div>
                                         </div>
