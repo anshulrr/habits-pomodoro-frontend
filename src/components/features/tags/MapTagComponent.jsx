@@ -128,73 +128,78 @@ export default function MapTagComponent({
                     <i className="p-1 bi bi-x-lg" onClick={() => setShowMapTags(-1)}></i>
                 </div>
 
-                <div className="container mt-5">
+                <div className="container my-5">
 
                     <div className="row mb-3">
                         <div className="col-lg-4 offset-lg-4">
+                            <div className="border rounded p-3 mx-2">
 
-                            <div className="d-flex justify-content-between">
-                                <h6>
-                                    Tags
-                                    {
-                                        tagsCount !== -1 &&
-                                        <span className="ms-1 badge rounded-pill text-bg-secondary">
-                                            {tagsCount}
-                                            <i className="ms-1 bi bi-tags-fill" />
-                                        </span>
-                                    }
-                                </h6>
-                            </div>
-
-                            {
-                                tagsCount === 0 &&
-                                <div className="alert alert-light text-center small mb-0">
-                                    <i className="pe-1 bi bi-clipboard-data" />
-                                    Nothing to display
+                                <div className="d-flex justify-content-between">
+                                    <h6>
+                                        Tags
+                                        {
+                                            tagsCount !== -1 &&
+                                            <span className="ms-1 badge rounded-pill text-bg-secondary">
+                                                {tagsCount}
+                                                <i className="ms-1 bi bi-tags-fill" />
+                                            </span>
+                                        }
+                                    </h6>
                                 </div>
-                            }
 
-                            {
-                                tagsCount !== 0 && tags.length === 0 &&
-                                <div className="loader-container" style={{ height: elementHeight }}>
-                                    <div className="loader"></div>
-                                </div>
-                            }
-
-                            <div id="comments-list" ref={listElement} className="text-start">
                                 {
-                                    tags.map(
-                                        (tag, index) => (
-                                            <div key={index} className="form-check">
-                                                <label className="form-check-label" htmlFor={`custom-checkbox-${index}`}>{tag.name}</label>
-                                                <input
-                                                    type="checkbox"
-                                                    className="form-check-input"
-                                                    id={`custom-checkbox-${index}`}
-                                                    name={tag.name}
-                                                    value={tag.name}
-                                                    checked={checkedState[index]}
-                                                    onChange={() => handleOnChange(index)}
-                                                />
-                                            </div>
-                                        )
-                                    )
+                                    tagsCount === 0 &&
+                                    <div className="alert alert-light text-center small mb-0">
+                                        <i className="pe-1 bi bi-clipboard-data" />
+                                        Nothing to display
+                                    </div>
                                 }
-                            </div>
 
-                            <Pagination
-                                className="pagination-bar ps-0"
-                                currentPage={currentPage}
-                                totalCount={tagsCount}
-                                pageSize={PAGESIZE}
-                                onPageChange={page => setCurrentPage(page)}
-                            />
+                                {
+                                    tagsCount !== 0 && tags.length === 0 &&
+                                    <div className="loader-container" style={{ height: elementHeight }}>
+                                        <div className="loader"></div>
+                                    </div>
+                                }
 
-                            <div className="text-end my-3">
-                                <button className="btn btn-sm btn-outline-secondary me-1" type="button" onClick={() => setShowMapTags(-1)}>
-                                    Cancel
-                                </button>
-                                <button className="btn btn-sm btn-outline-success" type="button" onClick={() => mapTags()}>Map Tags</button>
+                                <div id="comments-list" ref={listElement} className="text-start">
+                                    {
+                                        tags.map(
+                                            (tag, index) => (
+                                                <div key={index} className="form-check">
+                                                    <label className="form-check-label" htmlFor={`custom-checkbox-${index}`}>
+                                                        <i className="bi bi-tag-fill me-1" style={{ color: tag.color }} />
+                                                        {tag.name}
+                                                    </label>
+                                                    <input
+                                                        type="checkbox"
+                                                        className="form-check-input"
+                                                        id={`custom-checkbox-${index}`}
+                                                        name={tag.name}
+                                                        value={tag.name}
+                                                        checked={checkedState[index]}
+                                                        onChange={() => handleOnChange(index)}
+                                                    />
+                                                </div>
+                                            )
+                                        )
+                                    }
+                                </div>
+
+                                <Pagination
+                                    className="pagination-bar ps-0"
+                                    currentPage={currentPage}
+                                    totalCount={tagsCount}
+                                    pageSize={PAGESIZE}
+                                    onPageChange={page => setCurrentPage(page)}
+                                />
+
+                                <div className="text-end mt-3">
+                                    <button className="btn btn-sm btn-outline-secondary me-1" type="button" onClick={() => setShowMapTags(-1)}>
+                                        Cancel
+                                    </button>
+                                    <button className="btn btn-sm btn-outline-success" type="button" onClick={() => mapTags()}>Map Tags</button>
+                                </div>
                             </div>
                         </div>
                     </div>
