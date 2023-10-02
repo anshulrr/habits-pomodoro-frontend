@@ -8,8 +8,8 @@ export default function CreateTagComponent({
 }) {
 
     const [name, setName] = useState('')
-    const [color, setColor] = useState('#abcdef')
-    const [priority, setPriority] = useState(1)
+    const [color] = useState('#abcdef')
+    const [priority] = useState(1)
 
     function handleSubmit(error) {
         error.preventDefault();

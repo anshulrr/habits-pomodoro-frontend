@@ -20,7 +20,7 @@ export default function ListTagsComponent({ setProject, tag, setTag }) {
     // for first time login default value is needed
     const PAGESIZE = userSettings.pageTagsCount || 5;
 
-    const [tagsCount, setTagsCount] = useState(0)
+    const [tagsCount, setTagsCount] = useState(-1)
     const [tags, setTags] = useState([])
 
     const [showTags, setShowTags] = useState(false);
@@ -82,12 +82,15 @@ export default function ListTagsComponent({ setProject, tag, setTag }) {
                         <span>
                             Tags
                         </span>
-                        <span className="ms-1 badge rounded-pill text-bg-secondary">
-                            {tagsCount}
-                            <span className="ms-1">
-                                <i className="bi bi-tags-fill" />
+                        {
+                            tagsCount !== -1 &&
+                            <span className="ms-1 badge rounded-pill text-bg-secondary">
+                                {tagsCount}
+                                <span className="ms-1">
+                                    <i className="bi bi-tags-fill" />
+                                </span>
                             </span>
-                        </span>
+                        }
                     </h6>
                     <div className="input-group justify-content-end">
                         {
@@ -121,7 +124,14 @@ export default function ListTagsComponent({ setProject, tag, setTag }) {
                     </div>
                 }
                 {
-                    tags.length === 0 &&
+                    showTags && tagsCount === 0 &&
+                    <div className="alert alert-light py-1 mt-1 small">
+                        <i className="pe-1 bi bi-clipboard-data" />
+                        Nothing to display
+                    </div>
+                }
+                {
+                    showTags && tagsCount !== 0 && tags.length === 0 &&
                     <div className="loader-container" style={{ height: tagsListElement.current ? tagsListElement.current.offsetHeight : 0 }}>
                         <div className="loader"></div>
                     </div>
