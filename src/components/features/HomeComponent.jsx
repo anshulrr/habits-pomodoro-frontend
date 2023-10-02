@@ -3,10 +3,10 @@ import { useLocation, useNavigate } from 'react-router-dom'
 
 import moment from 'moment';
 
-import ListProjectsComponent from './projects/ListProjectsComponents';
-import ListTasksComponent from './tasks/ListTasksComponent';
+import ListProjectsComponent from 'components/features/projects/ListProjectsComponents';
+import ListTasksComponent from 'components/features/tasks/ListTasksComponent';
 import ListPomodorosComponent from 'components/stats/ListPomodorosComponent';
-import ListTagsComponent from './tasks/ListTagsComponents';
+import ListTagsComponent from 'components/features/tags/ListTagsComponents';
 
 export default function HomeComponent() {
 

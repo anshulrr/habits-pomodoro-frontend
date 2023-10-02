@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { retrieveAllTagsApi, getTagsCountApi } from "services/api/TagApiService";
 import Pagination from "services/pagination/Pagination"
 import { useAuth } from "services/auth/AuthContext";
+
 import CreateTagComponent from "./CreateTagComponent";
 import UpdateTagComponent from "./UpdateTagComponent";
 

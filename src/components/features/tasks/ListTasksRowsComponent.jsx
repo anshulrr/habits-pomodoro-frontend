@@ -7,13 +7,13 @@ import { useAuth } from "services/auth/AuthContext";
 import Pagination from "services/pagination/Pagination";
 import { retrieveAllTasksApi, updateTaskApi } from "services/api/TaskApiService";
 import { timeToDisplay } from "services/helpers/listsHelper";
+import OutsideAlerter from "services/hooks/OutsideAlerter";
 
 import PastPomodoroComponent from "components/features/tasks/PastPomodoroComponent";
 import ListCommentsComponent from "components/features/comments/ListCommentsComponents";
-import OutsideAlerter from "services/hooks/OutsideAlerter";
 import UpdateTaskComponent from "components/features/tasks/UpdateTaskComponent";
-import TaskDueDateComponent from "./TaskDueDateComponent";
-import MapTagComponent from "./MapTagComponent";
+import TaskDueDateComponent from "components/features/tasks/TaskDueDateComponent";
+import MapTagComponent from "components/features/tags/MapTagComponent";
 
 export default function ListTasksRowsComponent({
     project,
