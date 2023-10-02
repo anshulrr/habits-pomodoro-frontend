@@ -1,7 +1,7 @@
 import { apiClient } from "./ApiClient";
 
 export const retrieveAllTagsApi
-    = (limit, offset) => apiClient.get(`/tags?limit=${limit}&offset=${offset}`)
+    = ({ limit, offset }) => apiClient.get(`/tags?limit=${limit}&offset=${offset}`)
 
 export const getTagsCountApi
     = () => apiClient.get(`/tags/count`)
@@ -14,3 +14,6 @@ export const updateTagApi
 
 export const createTagApi
     = (tag) => apiClient.post(`tags`, tag)
+
+export const mapTagsApi
+    = (task_id, data) => apiClient.post(`tasks/${task_id}/tags`, data)

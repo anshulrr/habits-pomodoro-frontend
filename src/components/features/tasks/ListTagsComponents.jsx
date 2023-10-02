@@ -4,6 +4,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { retrieveAllTagsApi, getTagsCountApi } from "services/api/TagApiService";
 import Pagination from "services/pagination/Pagination"
 import { useAuth } from "services/auth/AuthContext";
+import CreateTagComponent from "./CreateTagComponent";
+import UpdateTagComponent from "./UpdateTagComponent";
 
 export default function ListTagsComponent({ setProject, tag, setTag }) {
     const authContext = useAuth()
@@ -21,6 +23,9 @@ export default function ListTagsComponent({ setProject, tag, setTag }) {
     const [tags, setTags] = useState([])
 
     const [showTags, setShowTags] = useState(false);
+
+    const [showCreateTag, setShowCreateTag] = useState(false)
+    const [showUpdateTag, setShowUpdateTag] = useState(-1)
 
     // state might not be preset (eg. opening url in a new tab)
     // const [tag, setTag] = useState(state && state.tag)
@@ -42,13 +47,10 @@ export default function ListTagsComponent({ setProject, tag, setTag }) {
 
     function refreshTags() {
         setTags([]);
-        retrieveAllTagsApi(PAGESIZE, (currentPage - 1) * PAGESIZE)
+        retrieveAllTagsApi({ limit: PAGESIZE, offset: (currentPage - 1) * PAGESIZE })
             .then(response => {
                 // console.debug(response)
                 setTags(response.data)
-                if (!tag && response.data.length > 0) {
-                    setTag(response.data[0]);
-                }
             })
             .catch(error => console.error(error.message))
     }
@@ -59,10 +61,6 @@ export default function ListTagsComponent({ setProject, tag, setTag }) {
                 setTagsCount(response.data)
             })
             .catch(error => console.error(error.message))
-    }
-
-    function updateTag(id) {
-        navigate(`/tags/${id}`, { state })
     }
 
     function onUpdateTag(tg) {
@@ -79,7 +77,7 @@ export default function ListTagsComponent({ setProject, tag, setTag }) {
             {/* {message && <div className="alert alert-warning">{message}</div>} */}
             <div>
                 <div className="d-flex justify-content-between">
-                    <h6>
+                    <h6 className="d-flex justify-content-start">
                         <span>
                             Tags
                         </span>
@@ -90,10 +88,37 @@ export default function ListTagsComponent({ setProject, tag, setTag }) {
                             </span>
                         </span>
                     </h6>
-                    <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={() => setShowTags(!showTags)}>
-                        <i className="bi bi-pencil-square" />
-                    </button>
+                    <div className="input-group justify-content-end">
+                        {
+                            showTags && !showCreateTag &&
+                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={() => setShowCreateTag(true)}>
+                                <i className="bi bi-plus-circle" />
+                            </button>
+                        }
+                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={() => setShowTags(!showTags)}>
+                            {
+                                !showTags &&
+                                <i className="bi bi-eye" />
+                            }
+                            {
+                                showTags &&
+                                <i className="bi bi-eye-slash" />
+                            }
+                        </button>
+                    </div>
+
                 </div>
+
+                {
+                    showTags && showCreateTag &&
+                    <div className="row">
+                        <CreateTagComponent
+                            setTags={setTags}
+                            setShowCreateTag={setShowCreateTag}
+                            setTagsCount={setTagsCount}
+                        />
+                    </div>
+                }
                 {
                     tags.length === 0 &&
                     <div className="loader-container" style={{ height: tagsListElement.current ? tagsListElement.current.offsetHeight : 0 }}>
@@ -109,29 +134,38 @@ export default function ListTagsComponent({ setProject, tag, setTag }) {
                                     tg => (
                                         <div
                                             key={tg.id}
-                                            className={(tag && tg.id === tag.id ? "list-selected " : "") + "row py-2 list-row"}
                                             onClick={() => onUpdateTag(tg)}
                                         >
-                                            {/* todo: decide better solution for maxWidth */}
-                                            <div className="col-8 text-truncate text-start">
-                                                <span className="project-name">
-                                                    <i className="bi bi-tag-fill me-1" style={{ color: tg.color }}></i>
-                                                    {tg.title}
-                                                </span>
-                                            </div>
-                                            <div className="col-4 ps-0 subscript text-secondary text-truncate text-end list-details">
-                                                <span className="">
-                                                    <i className="ps-1 bi bi-arrow-up" />
-                                                    {tg.priority}
-                                                </span>
-                                            </div>
-                                            <div className="col-4 ps-0 text-secondary text-end list-button">
-                                                <div className="input-group justify-content-end">
-                                                    <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateTag(tg.id)}>
-                                                        <i className="bi bi-pencil-square"></i>
-                                                    </button>
+                                            <div className={(tag && tg.id === tag.id ? "list-selected " : "") + "row py-2 list-row"}>
+                                                {/* todo: decide better solution for maxWidth */}
+                                                <div className="col-8 text-truncate text-start">
+                                                    <span className="project-name">
+                                                        <i className="bi bi-tag-fill me-1" style={{ color: tg.color }}></i>
+                                                        {tg.name}
+                                                    </span>
+                                                </div>
+                                                <div className="col-4 ps-0 subscript text-secondary text-truncate text-end list-details">
+                                                    <span className="">
+                                                        <i className="ps-1 bi bi-arrow-up" />
+                                                        {tg.priority}
+                                                    </span>
+                                                </div>
+                                                <div className="col-4 ps-0 text-secondary text-end list-button">
+                                                    <div className="input-group justify-content-end">
+                                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowUpdateTag(tg.id)}>
+                                                            <i className="bi bi-pencil-square"></i>
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
+                                            {
+                                                showUpdateTag === tg.id &&
+                                                <UpdateTagComponent
+                                                    tag={tg}
+                                                    setTags={setTags}
+                                                    setShowUpdateTag={setShowUpdateTag}
+                                                />
+                                            }
                                         </div>
                                     )
                                 )

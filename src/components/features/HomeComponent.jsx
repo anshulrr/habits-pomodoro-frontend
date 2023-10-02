@@ -77,7 +77,14 @@ export default function HomeComponent() {
                                 Tasks Filters
                             </h6>
                             <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={() => setShowTasksFilters(!showTasksFilters)}>
-                                <i className="bi bi-pencil-square" />
+                                {
+                                    !showTasksFilters &&
+                                    <i className="bi bi-eye" />
+                                }
+                                {
+                                    showTasksFilters &&
+                                    <i className="bi bi-eye-slash" />
+                                }
                             </button>
                         </div>
                         {

@@ -13,6 +13,7 @@ import ListCommentsComponent from "components/features/comments/ListCommentsComp
 import OutsideAlerter from "services/hooks/OutsideAlerter";
 import UpdateTaskComponent from "components/features/tasks/UpdateTaskComponent";
 import TaskDueDateComponent from "./TaskDueDateComponent";
+import MapTagComponent from "./MapTagComponent";
 
 export default function ListTasksRowsComponent({
     project,
@@ -52,6 +53,7 @@ export default function ListTasksRowsComponent({
 
     const [showCreatePastPomodoro, setShowCreatePastPomodoro] = useState(-1);
     const [showUpdateDueDate, setShowUpdateDueDate] = useState(-1);
+    const [showMapTags, setShowMapTags] = useState(-1);
 
     const [showUpdateTaskId, setShowUpdateTaskId] = useState(-1)
 
@@ -142,6 +144,13 @@ export default function ListTasksRowsComponent({
         setShowUpdatePopupId(-1);
         // setElementHeight(listElement.current.offsetHeight);
         setShowUpdateDueDate(task.id);
+    }
+
+    function onAddTag(task) {
+        setShowCreatePastPomodoro(-1)
+        setShowUpdatePopupId(-1);
+        // setElementHeight(listElement.current.offsetHeight);
+        setShowMapTags(task.id);
     }
 
     function updateOnPageChange(page) {
@@ -271,6 +280,11 @@ export default function ListTasksRowsComponent({
                                                                 Set Due Date <i className="ps-1 bi bi-calendar-check" />
                                                             </button>
                                                         }
+                                                        {
+                                                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onAddTag(task)}>
+                                                                Map Tags <i className="ps-1 bi bi-tag" />
+                                                            </button>
+                                                        }
                                                     </div>
                                                 </span>
                                             </OutsideAlerter>
@@ -302,6 +316,15 @@ export default function ListTasksRowsComponent({
                                         task={task}
                                         setShowUpdateTaskId={setShowUpdateTaskId}
                                         setTasksReload={setAllTasksReload}
+                                    />
+                                }
+
+                                {
+                                    showMapTags === task.id &&
+                                    <MapTagComponent
+                                        task={task}
+                                        setShowMapTags={setShowMapTags}
+                                        setTasksReload={setCurrentTasksReload}
                                     />
                                 }
                             </div >

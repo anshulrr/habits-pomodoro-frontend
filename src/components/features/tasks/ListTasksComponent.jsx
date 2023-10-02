@@ -164,7 +164,7 @@ export default function ListTasksComponent({
                                 !project && tag &&
                                 <span>
                                     <i className="bi bi-tag-fill me-1" style={{ color: tag.color }}></i>
-                                    {tag.title}
+                                    {tag.name}
                                 </span>
                             }
                             {
