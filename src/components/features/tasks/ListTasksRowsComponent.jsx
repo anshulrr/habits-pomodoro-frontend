@@ -266,12 +266,6 @@ export default function ListTasksRowsComponent({
                                                 }
 
                                                 {
-                                                    task.tags &&
-                                                    <span>
-                                                        {task.tags.length}
-                                                    </span>
-                                                }
-                                                {
                                                     task.tags && task.tags.length > 0 &&
                                                     task.tags.map(
                                                         (tag, tag_index) => (
