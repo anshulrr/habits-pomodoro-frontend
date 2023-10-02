@@ -16,6 +16,7 @@ import TaskDueDateComponent from "./TaskDueDateComponent";
 
 export default function ListTasksRowsComponent({
     project,
+    tag,
     status,
     tasksCount,
     createNewPomodoro,
@@ -90,6 +91,8 @@ export default function ListTasksRowsComponent({
         }
         if (project) {
             taskData.projectId = project.id;
+        } else if (tag) {
+            taskData.tagId = tag.id;
         } else {
             taskData.startDate = startDate;
             taskData.endDate = endDate;

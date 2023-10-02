@@ -8,7 +8,7 @@ import { truncateString } from "services/helpers/listsHelper";
 
 import ListCommentsComponent from "components/features/comments/ListCommentsComponents";
 
-export default function ListProjectsComponent({ project, setProject }) {
+export default function ListProjectsComponent({ project, setProject, setTag }) {
     const authContext = useAuth()
     const userSettings = authContext.userSettings
 
@@ -79,6 +79,7 @@ export default function ListProjectsComponent({ project, setProject }) {
             return;
         }
         setProject(proj);
+        setTag(null);
         // udpate state: to be passed with further navigations
         updateAppStates(proj)
     }

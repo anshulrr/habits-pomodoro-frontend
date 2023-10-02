@@ -6,6 +6,7 @@ import moment from 'moment';
 import ListProjectsComponent from './projects/ListProjectsComponents';
 import ListTasksComponent from './tasks/ListTasksComponent';
 import ListPomodorosComponent from 'components/stats/ListPomodorosComponent';
+import ListTagsComponent from './tasks/ListTagsComponents';
 
 export default function HomeComponent() {
 
@@ -14,6 +15,7 @@ export default function HomeComponent() {
     const navigate = useNavigate()
 
     const [project, setProject] = useState(state && state.project);
+    const [tag, setTag] = useState(null);
 
     const [tasksTitle, setTasksTitle] = useState('');
     const [showTasksFilters, setShowTasksFilters] = useState(false);
@@ -28,6 +30,8 @@ export default function HomeComponent() {
     function fetchUpcomingTasks() {
         setTasksTitle('Upcoming')
         setProject(null);
+        setTag(null);
+
         setReversed(false); // temporary fix: might need better api response
         setStartDate(moment().toISOString());
         setEndDate(moment().add(10, 'y').toISOString());
@@ -37,6 +41,8 @@ export default function HomeComponent() {
     function fetchOverdueTasks() {
         setTasksTitle('Overdue')
         setProject(null);
+        setTag(null);
+
         setReversed(false);
         setStartDate(moment().add(-10, 'y').toISOString());
         setEndDate(moment().toISOString());
@@ -62,6 +68,7 @@ export default function HomeComponent() {
                     <ListProjectsComponent
                         project={project}
                         setProject={setProject}
+                        setTag={setTag}
                     />
 
                     <div className="mb-3">
@@ -76,13 +83,13 @@ export default function HomeComponent() {
                         {
                             showTasksFilters &&
                             <div>
-                                <div className={(!project && tasksTitle === "Upcoming" ? "list-selected " : "") + "py-1 small row list-row"} onClick={fetchUpcomingTasks}>
+                                <div className={(!project && !tag && tasksTitle === "Upcoming" ? "list-selected " : "") + "py-1 small row list-row"} onClick={fetchUpcomingTasks}>
                                     <div className="col-12">
                                         <i className="pe-1 bi bi-calendar-check" />
                                         Upcoming
                                     </div>
                                 </div>
-                                <div className={(!project && tasksTitle === "Overdue" ? "list-selected " : "") + "py-1 small row list-row"} onClick={fetchOverdueTasks}>
+                                <div className={(!project && !tag && tasksTitle === "Overdue" ? "list-selected " : "") + "py-1 small row list-row"} onClick={fetchOverdueTasks}>
                                     <div className="col-12">
                                         <i className="pe-1 bi bi-calendar-check text-danger" />
                                         Overdue
@@ -90,6 +97,14 @@ export default function HomeComponent() {
                                 </div>
                             </div>
                         }
+                    </div>
+
+                    <div className="mb-3">
+                        <ListTagsComponent
+                            setProject={setProject}
+                            tag={tag}
+                            setTag={setTag}
+                        />
                     </div>
 
                 </div>
@@ -104,13 +119,22 @@ export default function HomeComponent() {
                         />
                     }
                     {
-                        !project && startDate &&
+                        !project && !tag && startDate &&
                         <ListTasksComponent
                             key={[startDate, endDate]}
                             startDate={startDate}
                             endDate={endDate}
                             isReversed={isReversed}
                             title={tasksTitle}
+                            setPomodorosListReload={setPomodorosListReload}
+                        />
+                    }
+
+                    {
+                        !project && tag &&
+                        <ListTasksComponent
+                            key={[tag.id]}
+                            tag={tag}
                             setPomodorosListReload={setPomodorosListReload}
                         />
                     }

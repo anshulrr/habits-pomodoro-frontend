@@ -15,6 +15,7 @@ export default function ListTasksComponent({
     endDate,
     isReversed,
     title,
+    tag,
     setPomodorosListReload
 }) {
 
@@ -69,6 +70,8 @@ export default function ListTasksComponent({
         }
         if (project) {
             taskData.projectId = project.id;
+        } else if (tag) {
+            taskData.tagId = tag.id;
         } else {
             taskData.startDate = startDate;
             taskData.endDate = endDate;
@@ -158,7 +161,14 @@ export default function ListTasksComponent({
                                 </span>
                             }
                             {
-                                !project &&
+                                !project && tag &&
+                                <span>
+                                    <i className="bi bi-tag-fill me-1" style={{ color: tag.color }}></i>
+                                    {tag.title}
+                                </span>
+                            }
+                            {
+                                !project && !tag &&
                                 <span>
                                     <i className={(title === "Overdue" ? "text-danger " : "") + "px-1 bi bi-calendar-check"} />
                                     {title} Tasks
@@ -208,6 +218,7 @@ export default function ListTasksComponent({
                                 status={'added'}
                                 tasksCount={tasksCount}
                                 project={project}
+                                tag={tag}
                                 createNewPomodoro={createNewPomodoro}
                                 setPomodorosListReload={setPomodorosListReload}
                                 setCurrentTasksReload={setCurrentTasksReload}
