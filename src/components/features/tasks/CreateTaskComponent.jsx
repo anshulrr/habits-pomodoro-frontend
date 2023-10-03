@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { createTaskApi } from 'services/api/TaskApiService';
 
-export default function CreateTaskComponent({ setShowCreateTask, project, setCurrentTasksReload, setTasksCount }) {
+export default function CreateTaskComponent({ setShowCreateTask, project, setTasksReload, setTasksCount }) {
 
     const navigate = useNavigate()
     const { state } = useLocation()
@@ -23,7 +23,7 @@ export default function CreateTaskComponent({ setShowCreateTask, project, setCur
         createTaskApi({ projectId: project.id, task })
             .then(response => {
                 // console.debug(response)
-                setCurrentTasksReload(prev => prev + 1);
+                setTasksReload(prev => prev + 1);
                 setShowCreateTask(false)
                 setTasksCount(prev => prev + 1)
                 updateAppState()

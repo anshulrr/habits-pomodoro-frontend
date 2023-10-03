@@ -24,7 +24,7 @@ export default function ListTasksRowsComponent({
     tasksCount,
     createNewPomodoro,
     setPomodorosListReload,
-    setCurrentTasksReload,
+    setTasksReload,
     setAllTasksReload,
     elementHeight,
     setElementHeight,
@@ -333,7 +333,7 @@ export default function ListTasksRowsComponent({
                                         setShowCreatePastPomodoro={setShowCreatePastPomodoro}
                                         task={task}
                                         setPomodorosListReload={setPomodorosListReload}
-                                        setTasksReload={setCurrentTasksReload}
+                                        setTasksReload={setTasksReload}
                                     />
                                 }
 
@@ -342,7 +342,7 @@ export default function ListTasksRowsComponent({
                                     <TaskDueDateComponent
                                         setShowUpdateDueDate={setShowUpdateDueDate}
                                         task={task}
-                                        setTasksReload={setCurrentTasksReload}
+                                        setTasksReload={setTasksReload}
                                     />
                                 }
 
@@ -361,7 +361,7 @@ export default function ListTasksRowsComponent({
                                         task={task}
                                         tagsMap={tags}
                                         setShowMapTags={setShowMapTags}
-                                        setTasksReload={setAllTasksReload}
+                                        setTasksReload={setTasksReload}
                                     />
                                 }
                             </div >
