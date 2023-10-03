@@ -75,7 +75,6 @@ export default function MapTagComponent({
     function refreshTaskTags(tags) {
         retrieveTaskApi({ id: task.id })
             .then(response => {
-                // console.debug(response)
                 // using Map for easy access and update
                 const map = new Map(tags.map(i => {
                     i.selected = false;

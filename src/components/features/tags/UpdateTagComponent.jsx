@@ -5,6 +5,7 @@ export default function UpdateTagComponent({
     tag,
     setShowUpdateTag,
     setTags,
+    refreshAllTags
 }) {
 
     const [name, setName] = useState(tag.name)
@@ -32,6 +33,7 @@ export default function UpdateTagComponent({
                     }
                     return tg;
                 }))
+                refreshAllTags();
             })
             .catch(error => console.error(error.message))
     }

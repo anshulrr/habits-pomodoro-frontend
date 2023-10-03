@@ -16,6 +16,9 @@ export default function HomeComponent() {
 
     const [project, setProject] = useState(state && state.project);
     const [tag, setTag] = useState(null);
+    const [tags, setTags] = useState(null);
+
+    const [tasksComponentReload, setTasksComponentReload] = useState(0)
 
     const [tasksTitle, setTasksTitle] = useState('');
     const [showTasksFilters, setShowTasksFilters] = useState(false);
@@ -111,6 +114,8 @@ export default function HomeComponent() {
                             setProject={setProject}
                             tag={tag}
                             setTag={setTag}
+                            setAllTags={setTags}
+                            setTasksComponentReload={setTasksComponentReload}
                         />
                     </div>
 
@@ -118,32 +123,40 @@ export default function HomeComponent() {
 
                 <div className="col-lg-4">
                     {
-                        project &&
-                        <ListTasksComponent
-                            key={project.id}
-                            project={project}
-                            setPomodorosListReload={setPomodorosListReload}
-                        />
-                    }
-                    {
-                        !project && !tag && startDate &&
-                        <ListTasksComponent
-                            key={[startDate, endDate]}
-                            startDate={startDate}
-                            endDate={endDate}
-                            isReversed={isReversed}
-                            title={tasksTitle}
-                            setPomodorosListReload={setPomodorosListReload}
-                        />
-                    }
+                        tags !== null &&
+                        <div>
+                            {
+                                project &&
+                                <ListTasksComponent
+                                    key={[project.id, tasksComponentReload]}
+                                    project={project}
+                                    tags={tags}
+                                    setPomodorosListReload={setPomodorosListReload}
+                                />
+                            }
+                            {
+                                !project && !tag && startDate &&
+                                <ListTasksComponent
+                                    key={[startDate, endDate, tasksComponentReload]}
+                                    tags={tags}
+                                    startDate={startDate}
+                                    endDate={endDate}
+                                    isReversed={isReversed}
+                                    title={tasksTitle}
+                                    setPomodorosListReload={setPomodorosListReload}
+                                />
+                            }
 
-                    {
-                        !project && tag &&
-                        <ListTasksComponent
-                            key={[tag.id]}
-                            tag={tag}
-                            setPomodorosListReload={setPomodorosListReload}
-                        />
+                            {
+                                !project && tag &&
+                                <ListTasksComponent
+                                    key={[tag.id, tasksComponentReload]}
+                                    tags={tags}
+                                    tag={tag}
+                                    setPomodorosListReload={setPomodorosListReload}
+                                />
+                            }
+                        </div>
                     }
                 </div>
 

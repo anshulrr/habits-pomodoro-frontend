@@ -8,7 +8,7 @@ import { useAuth } from "services/auth/AuthContext";
 import CreateTagComponent from "./CreateTagComponent";
 import UpdateTagComponent from "./UpdateTagComponent";
 
-export default function ListTagsComponent({ setProject, tag, setTag }) {
+export default function ListTagsComponent({ setProject, tag, setTag, setAllTags, setTasksComponentReload }) {
     const authContext = useAuth()
     const userSettings = authContext.userSettings
 
@@ -19,6 +19,7 @@ export default function ListTagsComponent({ setProject, tag, setTag }) {
 
     // for first time login default value is needed
     const PAGESIZE = userSettings.pageTagsCount || 5;
+    const ALL_TAGS_PAGESIZE = 1000;
 
     const [tagsCount, setTagsCount] = useState(-1)
     const [tags, setTags] = useState([])
@@ -35,6 +36,7 @@ export default function ListTagsComponent({ setProject, tag, setTag }) {
     useEffect(
         () => {
             getTagsCount()
+            refreshAllTags()
         },
         [] // eslint-disable-line react-hooks/exhaustive-deps
     )
@@ -45,6 +47,17 @@ export default function ListTagsComponent({ setProject, tag, setTag }) {
             refreshTags()
         }, [currentPage] // eslint-disable-line react-hooks/exhaustive-deps
     )
+
+    function refreshAllTags() {
+        retrieveAllTagsApi({ limit: ALL_TAGS_PAGESIZE, offset: 0 })
+            .then(response => {
+                const map = new Map(response.data.map(i => [i.id, i]));
+                setAllTags(map);
+                // TODO: check if needed
+                setTasksComponentReload(prevReload => prevReload + 1)
+            })
+            .catch(error => console.error(error.message))
+    }
 
     function refreshTags() {
         setTags([]);
@@ -120,6 +133,7 @@ export default function ListTagsComponent({ setProject, tag, setTag }) {
                             setTags={setTags}
                             setShowCreateTag={setShowCreateTag}
                             setTagsCount={setTagsCount}
+                            refreshAllTags={refreshAllTags}
                         />
                     </div>
                 }
@@ -175,6 +189,7 @@ export default function ListTagsComponent({ setProject, tag, setTag }) {
                                                     tag={tg}
                                                     setTags={setTags}
                                                     setShowUpdateTag={setShowUpdateTag}
+                                                    refreshAllTags={refreshAllTags}
                                                 />
                                             }
                                         </div>

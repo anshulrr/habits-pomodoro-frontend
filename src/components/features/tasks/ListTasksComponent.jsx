@@ -8,10 +8,10 @@ import ListTasksRowsComponent from "components/features/tasks/ListTasksRowsCompo
 import CreateTaskComponent from "components/features/tasks/CreateTaskComponent";
 import PomodoroComponent from "components/features/pomodoros/PomodoroComponent";
 import StopwatchComponent from "components/features/pomodoros/StopwatchComponent";
-import { retrieveAllTagsApi } from "services/api/TagApiService";
 
 export default function ListTasksComponent({
     project,
+    tags,
     startDate,
     endDate,
     isReversed,
@@ -23,10 +23,6 @@ export default function ListTasksComponent({
     const navigate = useNavigate()
 
     const { state } = useLocation();
-
-    const TAGS_PAGESIZE = 1000;
-
-    const [tags, setTags] = useState(new Map())
 
     const [tasksCount, setTasksCount] = useState(-1)
 
@@ -51,13 +47,6 @@ export default function ListTasksComponent({
 
     const [showCreateTask, setShowCreateTask] = useState(false)
 
-
-    useEffect(
-        () => {
-            refreshTags();
-        }, []
-    )
-
     useEffect(
         () => {
             // need to set it in useEffect, instead of top level, 
@@ -75,16 +64,6 @@ export default function ListTasksComponent({
             }
         }, [project, allTasksReload] // eslint-disable-line react-hooks/exhaustive-deps
     )
-
-    function refreshTags() {
-        retrieveAllTagsApi({ limit: TAGS_PAGESIZE, offset: 0 })
-            .then(response => {
-                const map = new Map(response.data.map(i => [i.id, i]));
-                setTags(map);
-                setAllTasksReload(prevReload => prevReload + 1);
-            })
-            .catch(error => console.error(error.message))
-    }
 
     function getTasksCount(status, setContainer) {
         const taskData = {
