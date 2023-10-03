@@ -6,48 +6,21 @@ import { retrieveTaskApi } from "services/api/TaskApiService";
 
 export default function MapTagComponent({
     task,
+    tagsMap,
     setShowMapTags,
     setTasksReload
 }) {
 
-    const PAGESIZE = 1000;
-
-    const [currentPage, setCurrentPage] = useState(1)
-
     const [tagsCount, setTagsCount] = useState(-1)
     const [tags, setTags] = useState([])
-
-    const listElement = useRef(null);
-    const [elementHeight, setElementHeight] = useState(0);
 
     const [checkedState, setCheckedState] = useState([]);
 
     useEffect(
         () => {
-            getTagsCount()
-
-            const observer = new ResizeObserver(handleResize);
-            observer.observe(listElement.current);
-            return () => {
-                // Cleanup the observer by unobserving all elements
-                observer.disconnect();
-            };
+            refreshTags();
         }, [] // eslint-disable-line react-hooks/exhaustive-deps
     )
-
-    useEffect(
-        () => {
-            // console.debug('re-render ListCommentsComponents')
-            refreshTags()
-        }, [currentPage] // eslint-disable-line react-hooks/exhaustive-deps
-    )
-
-    const handleResize = () => {
-        if (listElement.current !== null && listElement.current.offsetHeight !== 0) {
-            // console.debug(currentPage, listElement.current.offsetHeight);
-            setElementHeight(listElement.current.offsetHeight);
-        }
-    };
 
     const handleOnChange = (position) => {
         // console.debug('handle: ', checkedState)
@@ -60,41 +33,25 @@ export default function MapTagComponent({
     };
 
     function refreshTags() {
-        setTags([]);
-        retrieveAllTagsApi({ limit: PAGESIZE, offset: (currentPage - 1) * PAGESIZE })
-            .then(response => {
-                // console.debug(response)
-                // initialize checkedState for controlled input
-                setCheckedState(response.data.map(c => false));
-                setTags(response.data)
-                refreshTaskTags(response.data)
-            })
-            .catch(error => console.error(error.message))
+        const tagsArray = [...tagsMap.values()];
+        tagsArray.map(tag => tag.selected = false);
+        setTagsCount(tagsArray.length);
+        // initialize checkedState for controlled input
+        setCheckedState(tagsArray.map(t => t.selected));
+        setTags(tagsArray);
+        refreshTaskTags(tagsArray);
     }
 
     function refreshTaskTags(tags) {
         retrieveTaskApi({ id: task.id })
             .then(response => {
                 // using Map for easy access and update
-                const map = new Map(tags.map(i => {
-                    i.selected = false;
-                    return [i.id, i]
-                }));
-
                 for (let j = 0; j < response.data.tags.length; j++) {
-                    map.get(response.data.tags[j].id).selected = true;
+                    tagsMap.get(response.data.tags[j].id).selected = true;
                 }
-                tags = [...map.values()];
+                tags = [...tagsMap.values()];
 
-                setCheckedState(tags.map(t => t.selected));
-            })
-            .catch(error => console.error(error.message))
-    }
-
-    function getTagsCount() {
-        getTagsCountApi()
-            .then(response => {
-                setTagsCount(response.data)
+                setCheckedState(tags.map(tag => tag.selected));
             })
             .catch(error => console.error(error.message))
     }
@@ -157,14 +114,7 @@ export default function MapTagComponent({
                                     </div>
                                 }
 
-                                {
-                                    tagsCount !== 0 && tags.length === 0 &&
-                                    <div className="loader-container" style={{ height: elementHeight }}>
-                                        <div className="loader"></div>
-                                    </div>
-                                }
-
-                                <div id="comments-list" ref={listElement} className="text-start">
+                                <div id="tags-list" className="text-start">
                                     {
                                         tags.map(
                                             (tag, index) => {
@@ -191,14 +141,6 @@ export default function MapTagComponent({
                                         )
                                     }
                                 </div>
-
-                                <Pagination
-                                    className="pagination-bar ps-0"
-                                    currentPage={currentPage}
-                                    totalCount={tagsCount}
-                                    pageSize={PAGESIZE}
-                                    onPageChange={page => setCurrentPage(page)}
-                                />
 
                                 <div className="text-end mt-3">
                                     <button className="btn btn-sm btn-outline-secondary me-1" type="button" onClick={() => setShowMapTags(-1)}>

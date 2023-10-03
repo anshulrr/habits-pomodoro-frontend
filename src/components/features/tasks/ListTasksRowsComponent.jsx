@@ -359,6 +359,7 @@ export default function ListTasksRowsComponent({
                                     showMapTags === task.id &&
                                     <MapTagComponent
                                         task={task}
+                                        tagsMap={tags}
                                         setShowMapTags={setShowMapTags}
                                         setTasksReload={setAllTasksReload}
                                     />
