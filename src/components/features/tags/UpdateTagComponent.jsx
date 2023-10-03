@@ -51,6 +51,7 @@ export default function UpdateTagComponent({
                                 <input
                                     type="text"
                                     name="tag"
+                                    id="tag"
                                     className="form-control form-control-sm"
                                     value={name}
                                     placeholder="Name"

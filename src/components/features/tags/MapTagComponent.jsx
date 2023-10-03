@@ -64,8 +64,9 @@ export default function MapTagComponent({
         retrieveAllTagsApi({ limit: PAGESIZE, offset: (currentPage - 1) * PAGESIZE })
             .then(response => {
                 // console.debug(response)
+                // initialize checkedState for controlled input
+                setCheckedState(response.data.map(c => false));
                 setTags(response.data)
-                // setCheckedState(response.data.map(c => false));
                 refreshTaskTags(response.data)
             })
             .catch(error => console.error(error.message))
@@ -166,23 +167,26 @@ export default function MapTagComponent({
                                 <div id="comments-list" ref={listElement} className="text-start">
                                     {
                                         tags.map(
-                                            (tag, index) => (
-                                                <div key={index} className="form-check">
-                                                    <label className="form-check-label" htmlFor={`custom-checkbox-${index}`}>
-                                                        <i className="bi bi-tag-fill me-1" style={{ color: tag.color }} />
-                                                        {tag.name}
-                                                    </label>
-                                                    <input
-                                                        type="checkbox"
-                                                        className="form-check-input"
-                                                        id={`custom-checkbox-${index}`}
-                                                        name={tag.name}
-                                                        value={tag.name}
-                                                        checked={checkedState[index]}
-                                                        onChange={() => handleOnChange(index)}
-                                                    />
-                                                </div>
-                                            )
+                                            (tag, index) => {
+                                                // console.debug(tag, checkedState[index])
+                                                return (
+                                                    <div key={index} className="form-check">
+                                                        <label className="form-check-label" htmlFor={`custom-checkbox-${index}`}>
+                                                            <i className="bi bi-tag-fill me-1" style={{ color: tag.color }} />
+                                                            {tag.name}
+                                                        </label>
+                                                        <input
+                                                            type="checkbox"
+                                                            className="form-check-input"
+                                                            id={`custom-checkbox-${index}`}
+                                                            name={tag.name}
+                                                            value={tag.name}
+                                                            checked={checkedState[index]}
+                                                            onChange={() => handleOnChange(index)}
+                                                        />
+                                                    </div>
+                                                )
+                                            }
                                         )
                                     }
                                 </div>

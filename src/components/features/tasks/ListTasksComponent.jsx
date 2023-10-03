@@ -81,7 +81,7 @@ export default function ListTasksComponent({
             .then(response => {
                 const map = new Map(response.data.map(i => [i.id, i]));
                 setTags(map);
-                setAllTasksReload(prevReload => prevReload + 1)
+                setAllTasksReload(prevReload => prevReload + 1);
             })
             .catch(error => console.error(error.message))
     }
