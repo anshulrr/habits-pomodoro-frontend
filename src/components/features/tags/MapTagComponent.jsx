@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 
-import Pagination from "services/pagination/Pagination"
-import { getTagsCountApi, mapTagsApi, retrieveAllTagsApi } from "services/api/TagApiService";
+import { mapTagsApi } from "services/api/TagApiService";
 import { retrieveTaskApi } from "services/api/TaskApiService";
 
 export default function MapTagComponent({
