@@ -76,15 +76,16 @@ export default function MapTagComponent({
         retrieveTaskApi({ id: task.id })
             .then(response => {
                 // console.debug(response)
-                // TODO: find better solution
-                for (let i = 0; i < tags.length; i++) {
-                    tags[i].selected = false;
-                    for (let j = 0; j < response.data.tags.length; j++) {
-                        if (response.data.tags[j].id === tags[i].id) {
-                            tags[i].selected = true;
-                        }
-                    }
+                // using Map for easy access and update
+                const map = new Map(tags.map(i => {
+                    i.selected = false;
+                    return [i.id, i]
+                }));
+
+                for (let j = 0; j < response.data.tags.length; j++) {
+                    map.get(response.data.tags[j].id).selected = true;
                 }
+                tags = [...map.values()];
 
                 setCheckedState(tags.map(t => t.selected));
             })
@@ -168,6 +169,7 @@ export default function MapTagComponent({
                                     {
                                         tags.map(
                                             (tag, index) => {
+                                                // const tag = tags.get(tag_index)
                                                 // console.debug(tag, checkedState[index])
                                                 return (
                                                     <div key={index} className="form-check">

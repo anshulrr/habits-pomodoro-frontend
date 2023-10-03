@@ -115,27 +115,22 @@ export default function ListTasksRowsComponent({
     }
 
     function updateTaskTags(tasks) {
-        // console.log(tags.get(406));
         if (tags.size === 0) {
             return;
         }
         const taskIds = tasks.map(task => task.id);
         getTasksTagsApi(taskIds)
             .then(response => {
-                // console.log(response.data)
-                // TODO: find better solution
-                const updated_tasks = tasks.map(task => {
-                    // console.log(task);
-                    task.tags = [];
-                    for (let i = 0; i < response.data.length; i++) {
-                        if (response.data[i][0] === task.id) {
-                            task.tags.push(tags.get(response.data[i][1]));
-                        }
-                    }
-                    return task;
-                })
-                // console.log(updated_tasks)
-                setTasks(updated_tasks);
+                // using Map for easy access and update
+                const map = new Map(tasks.map(i => {
+                    i.tags = [];
+                    return [i.id, i];
+                }));
+                for (let i = 0; i < response.data.length; i++) {
+                    map.get(response.data[i][0]).tags.push(tags.get(response.data[i][1]))
+                }
+
+                setTasks([...map.values()]);
             })
             .catch(error => console.error(error.message))
     }
