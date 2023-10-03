@@ -247,14 +247,14 @@ export default function ListTasksRowsComponent({
                                                         {moment(task.dueDate).format("DD/MM/yyyy")}
                                                     </span>
                                                 }
-                                                <span>
+                                                <span className="me-1">
                                                     <i className="ps-1 bi bi-clock" style={{ paddingRight: "0.1rem" }} />
                                                     {timeToDisplay(task.pomodorosTimeElapsed / 60)}
                                                 </span>
 
                                                 {
                                                     !project &&
-                                                    <span>
+                                                    <span className="me-1">
                                                         <span className="ps-1" style={{ color: task.project.color, paddingRight: "0.1rem" }}>&#9632;</span>
                                                         {task.project.name}
                                                     </span>
@@ -264,8 +264,8 @@ export default function ListTasksRowsComponent({
                                                     task.tags && task.tags.length > 0 &&
                                                     task.tags.map(
                                                         (tag, tag_index) => (
-                                                            <span key={tag_index}>
-                                                                <i className="bi bi-tag-fill ms-1" style={{ color: tag.color, paddingRight: "0.1rem" }} />
+                                                            <span key={tag_index} className="me-1">
+                                                                <i className="bi bi-tag-fill" style={{ color: tag.color, paddingRight: "0.1rem" }} />
                                                                 {tag.name}
                                                             </span>
                                                         )
