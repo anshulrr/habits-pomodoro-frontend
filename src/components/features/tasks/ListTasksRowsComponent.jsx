@@ -365,7 +365,7 @@ export default function ListTasksRowsComponent({
                                     <MapTagComponent
                                         task={task}
                                         setShowMapTags={setShowMapTags}
-                                        setTasksReload={setCurrentTasksReload}
+                                        setTasksReload={setAllTasksReload}
                                     />
                                 }
                             </div >
