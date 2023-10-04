@@ -15,6 +15,7 @@ import UpdateTaskComponent from "components/features/tasks/UpdateTaskComponent";
 import TaskDueDateComponent from "components/features/tasks/TaskDueDateComponent";
 import MapTagComponent from "components/features/tags/MapTagComponent";
 import { getTasksTagsApi } from "services/api/TagApiService";
+import { getTaskTodayTimeElapsedApi } from "services/api/PomodoroApiService";
 
 export default function ListTasksRowsComponent({
     project,
@@ -109,7 +110,8 @@ export default function ListTasksRowsComponent({
                 } else {
                     setTasks(response.data)
                 }
-                updateTaskTags(response.data);
+                // retrieve task today's time elapsed
+                updateTaskTimeElapsed(response.data);
             })
             .catch(error => console.error(error.message))
     }
@@ -122,15 +124,44 @@ export default function ListTasksRowsComponent({
         getTasksTagsApi(taskIds)
             .then(response => {
                 // using Map for easy access and update
-                const map = new Map(tasks.map(i => {
-                    i.tags = [];
-                    return [i.id, i];
+                const map = new Map(tasks.map(task => {
+                    task.tags = [];
+                    return [task.id, task];
                 }));
                 for (let i = 0; i < response.data.length; i++) {
                     map.get(response.data[i][0]).tags.push(tags.get(response.data[i][1]))
                 }
 
                 setTasks([...map.values()]);
+            })
+            .catch(error => console.error(error.message))
+    }
+
+    function updateTaskTimeElapsed(tasks) {
+        const taskIds = tasks.map(task => task.id);
+        const startDate = moment().startOf('day').toISOString();
+        const endDate = moment().endOf('day').toISOString();
+
+        getTaskTodayTimeElapsedApi({ startDate, endDate, taskIds })
+            .then(response => {
+                // console.debug(response.data)
+                // using Map for easy access and update
+                const map = new Map(tasks.map(task => {
+                    task.todaysTimeElapsed = 0;
+                    return [task.id, task];
+                }));
+                for (let i = 0; i < response.data.length; i++) {
+                    // console.debug(response.data[i][0])
+                    map.get(response.data[i][0]).todaysTimeElapsed = parseInt(response.data[i][1]);
+                }
+                // console.debug(map)
+
+                const updated_tasks = [...map.values()]
+                // console.dubug(updated_tasks);
+                setTasks(updated_tasks);
+
+                // retrieve task tags
+                updateTaskTags(updated_tasks);
             })
             .catch(error => console.error(error.message))
     }
@@ -232,30 +263,38 @@ export default function ListTasksRowsComponent({
                                                 {task.description}
                                             </div>
                                             <div className="subscript text-secondary">
-                                                <span>
+                                                <span className="me-1">
                                                     <i className="bi bi-arrow-up" />
                                                     {task.priority}
                                                 </span>
-                                                <span>
-                                                    <i className="ps-1 bi bi-hourglass" />
+                                                <span className="me-1">
+                                                    <i className="bi bi-hourglass" />
                                                     {timeToDisplay(task.pomodoroLength || task.project.pomodoroLength || userSettings.pomodoroLength)}
                                                 </span>
                                                 {
                                                     task.dueDate &&
-                                                    <span className={generateDateColor(task)}>
-                                                        <i className="ps-1 bi bi-calendar-check" style={{ paddingRight: "0.1rem" }} />
+                                                    <span className={generateDateColor(task) + " me-1"}>
+                                                        <i className="bi bi-calendar-check" style={{ paddingRight: "0.1rem" }} />
                                                         {moment(task.dueDate).format("DD/MM/yyyy")}
                                                     </span>
                                                 }
                                                 <span className="me-1">
-                                                    <i className="ps-1 bi bi-clock" style={{ paddingRight: "0.1rem" }} />
+                                                    <i className="bi bi-clock" style={{ paddingRight: "0.1rem" }} />
                                                     {timeToDisplay(task.pomodorosTimeElapsed / 60)}
                                                 </span>
 
                                                 {
+                                                    task.todaysTimeElapsed !== undefined &&
+                                                    <span className="me-1">
+                                                        <i className="bi bi-clock-history" style={{ paddingRight: "0.1rem" }} />
+                                                        {timeToDisplay(task.todaysTimeElapsed / 60)}
+                                                    </span>
+                                                }
+
+                                                {
                                                     !project &&
                                                     <span className="me-1">
-                                                        <span className="ps-1" style={{ color: task.project.color, paddingRight: "0.1rem" }}>&#9632;</span>
+                                                        <span style={{ color: task.project.color, paddingRight: "0.1rem" }}>&#9632;</span>
                                                         {task.project.name}
                                                     </span>
                                                 }
