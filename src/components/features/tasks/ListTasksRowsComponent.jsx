@@ -267,17 +267,12 @@ export default function ListTasksRowsComponent({
                                                     <i className="bi bi-arrow-up" />
                                                     {task.priority}
                                                 </span>
+
                                                 <span className="me-1">
                                                     <i className="bi bi-hourglass" />
                                                     {timeToDisplay(task.pomodoroLength || task.project.pomodoroLength || userSettings.pomodoroLength)}
                                                 </span>
-                                                {
-                                                    task.dueDate &&
-                                                    <span className={generateDateColor(task) + " me-1"}>
-                                                        <i className="bi bi-calendar-check" style={{ paddingRight: "0.1rem" }} />
-                                                        {moment(task.dueDate).format("DD/MM/yyyy")}
-                                                    </span>
-                                                }
+
                                                 <span className="me-1">
                                                     <i className="bi bi-clock" style={{ paddingRight: "0.1rem" }} />
                                                     {timeToDisplay(task.pomodorosTimeElapsed / 60)}
@@ -292,24 +287,34 @@ export default function ListTasksRowsComponent({
                                                 }
 
                                                 {
-                                                    !project &&
-                                                    <span className="me-1">
-                                                        <span style={{ color: task.project.color, paddingRight: "0.1rem" }}>&#9632;</span>
-                                                        {task.project.name}
+                                                    task.dueDate &&
+                                                    <span className={generateDateColor(task) + " me-1"}>
+                                                        <i className="bi bi-calendar-check" style={{ paddingRight: "0.1rem" }} />
+                                                        {moment(task.dueDate).format("DD/MM/yyyy")}
                                                     </span>
                                                 }
 
-                                                {
-                                                    task.tags && task.tags.length > 0 &&
-                                                    task.tags.map(
-                                                        (tag, tag_index) => (
-                                                            <span key={tag_index} className="me-1">
-                                                                <i className="bi bi-tag-fill" style={{ color: tag.color, paddingRight: "0.1rem" }} />
-                                                                {tag.name}
-                                                            </span>
+                                                <span style={{ float: "right" }}>
+                                                    {
+                                                        !project &&
+                                                        <span className="me-1">
+                                                            <span style={{ color: task.project.color, paddingRight: "0.1rem" }}>&#9632;</span>
+                                                            {task.project.name}
+                                                        </span>
+                                                    }
+
+                                                    {
+                                                        task.tags && task.tags.length > 0 &&
+                                                        task.tags.map(
+                                                            (tag, tag_index) => (
+                                                                <span key={tag_index} className="me-1">
+                                                                    <i className="bi bi-tag-fill" style={{ color: tag.color, paddingRight: "0.1rem" }} />
+                                                                    {tag.name}
+                                                                </span>
+                                                            )
                                                         )
-                                                    )
-                                                }
+                                                    }
+                                                </span>
                                             </div>
                                         </div>
                                         {
