@@ -137,16 +137,16 @@
 /* for pomodoro display at bottom */
 .timer-bottom {
     position: fixed;
-    bottom: 1rem;
+    bottom: 5px;
     left: 50%;
     transform: translate(-50%, 0);
-    z-index: 9;
+    z-index: 1031;
 }
 
 .timer-bottom .timer {
     font-size: 1rem;
-    padding-top: 0.3rem;
-    padding-bottom: 0.3rem;
+    padding-top: 3px;
+    padding-bottom: 3px;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
     border-radius: 0.5rem;
