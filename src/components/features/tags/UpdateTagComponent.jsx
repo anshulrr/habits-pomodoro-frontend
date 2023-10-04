@@ -41,7 +41,7 @@ export default function UpdateTagComponent({
     return (
         <div className="task-overlay">
             <div className="task-popup">
-                <div className="close-popup m-1">
+                <div className="close-popup m-2">
                     <i className="p-1 bi bi-x-lg" onClick={() => setShowUpdateTag(-1)}></i>
                 </div>
                 <div className="container mt-3">

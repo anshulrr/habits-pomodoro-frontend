@@ -6,16 +6,14 @@ import Pagination from "services/pagination/Pagination"
 import { useAuth } from "services/auth/AuthContext";
 import { truncateString } from "services/helpers/listsHelper";
 
-import ListCommentsComponent from "components/features/comments/ListCommentsComponents";
-
-export default function ListProjectsComponent({ project, setProject, setTag }) {
+export default function ListProjectsComponent({ project, setProject, setTag, setShowLeftMenu }) {
     const authContext = useAuth()
     const userSettings = authContext.userSettings
 
     const navigate = useNavigate()
     const { state } = useLocation();
 
-    const [showProjects, setShowProjects] = useState(false);
+    const [showProjects, setShowProjects] = useState(true);
 
     const projectsListElement = useRef(null);
 
@@ -28,8 +26,6 @@ export default function ListProjectsComponent({ project, setProject, setTag }) {
     // state might not be preset (eg. opening url in a new tab)
     // const [project, setProject] = useState(state && state.project)
     const [currentPage, setCurrentPage] = useState((state && state.currentProjectsPage) || 1)
-
-    const [showCommentsId, setShowCommentsId] = useState(-1);
 
     useEffect(
         () => {
@@ -83,7 +79,8 @@ export default function ListProjectsComponent({ project, setProject, setTag }) {
         }
         setProject(proj);
         // udpate state: to be passed with further navigations
-        updateAppStates(proj)
+        updateAppStates(proj);
+        setShowLeftMenu(false);
     }
 
     function updateAppStates(proj) {
@@ -180,10 +177,7 @@ export default function ListProjectsComponent({ project, setProject, setTag }) {
                                             </div>
                                             <div className="col-4 ps-0 text-secondary text-end list-button">
                                                 <div className="input-group justify-content-end">
-                                                    <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowCommentsId(proj.id)}>
-                                                        <i className="bi bi-chat-right-text" />
-                                                    </button>
-                                                    <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateProject(proj.id)}>
+                                                    <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => updateProject(proj.id)}>
                                                         <i className="bi bi-pencil-square"></i>
                                                     </button>
                                                 </div>
@@ -208,17 +202,6 @@ export default function ListProjectsComponent({ project, setProject, setTag }) {
                     </div>
                 }
             </div>
-
-            {
-                showCommentsId !== -1 &&
-                <ListCommentsComponent
-                    filterBy={'project'}
-                    id={showCommentsId}
-                    title={project.name}
-                    projectColor={project.color}
-                    setShowCommentsId={setShowCommentsId}
-                />
-            }
         </div>
     )
 }

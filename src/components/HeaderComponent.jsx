@@ -16,8 +16,8 @@ export default function HeaderComponent() {
     }
 
     return (
-        <header className="pt-5 mt-2">
-            <nav className="navbar navbar-expand-sm fixed-top justify-content-between bg-light border-bottom border-2">
+        <header style={{ paddingTop: "40px" }}>
+            <nav className="navbar navbar-expand-sm fixed-top justify-content-between bg-light border-bottom border-2 py-0">
                 <div className="container">
 
                     {

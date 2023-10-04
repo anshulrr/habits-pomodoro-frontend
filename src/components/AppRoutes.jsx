@@ -16,6 +16,7 @@ import ProjectComponent from 'components/features/projects/ProjectComponent'
 import SettingsComponent from 'components/user-settings/SettingsComponent'
 import SignupComponent from 'components/SignupComponent'
 import ForgotPasswordComponent from 'components/ForgotPasswordComponent'
+import FooterComponent from 'components/FooterComponent'
 
 function AuthenticatedRoute({ children }) {
     const authContext = useAuth()
@@ -32,6 +33,7 @@ export default function AppRoutes() {
             <AuthProvider>
                 <BrowserRouter>
                     <HeaderComponent />
+
                     <Routes>
                         <Route path='/' element={<LoginComponent />} />
                         <Route path='/login' element={<LoginComponent />} />
@@ -64,6 +66,10 @@ export default function AppRoutes() {
 
                         <Route path='*' element={<ErrorComponent />} />
                     </Routes>
+
+                    <AuthenticatedRoute>
+                        <FooterComponent />
+                    </AuthenticatedRoute>
                 </BrowserRouter>
             </AuthProvider>
 

@@ -8,7 +8,7 @@ import { useAuth } from "services/auth/AuthContext";
 import CreateTagComponent from "./CreateTagComponent";
 import UpdateTagComponent from "./UpdateTagComponent";
 
-export default function ListTagsComponent({ setProject, tag, setTag, setAllTags, setTasksComponentReload }) {
+export default function ListTagsComponent({ setProject, tag, setTag, setAllTags, setTasksComponentReload, setShowLeftMenu }) {
     const authContext = useAuth()
     const userSettings = authContext.userSettings
 
@@ -24,7 +24,7 @@ export default function ListTagsComponent({ setProject, tag, setTag, setAllTags,
     const [tagsCount, setTagsCount] = useState(-1)
     const [tags, setTags] = useState([])
 
-    const [showTags, setShowTags] = useState(false);
+    const [showTags, setShowTags] = useState(true);
 
     const [showCreateTag, setShowCreateTag] = useState(false)
     const [showUpdateTag, setShowUpdateTag] = useState(-1)
@@ -89,7 +89,8 @@ export default function ListTagsComponent({ setProject, tag, setTag, setAllTags,
         }
         setTag(tg);
         // udpate state: to be passed with further navigations
-        updateAppStates(tg)
+        updateAppStates(tg);
+        setShowLeftMenu(false);
     }
 
     function updateAppStates(tg) {
@@ -201,7 +202,7 @@ export default function ListTagsComponent({ setProject, tag, setTag, setAllTags,
                                                 </div>
                                                 <div className="col-4 ps-0 text-secondary text-end list-button">
                                                     <div className="input-group justify-content-end">
-                                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowUpdateTag(tg.id)}>
+                                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowUpdateTag(tg.id)}>
                                                             <i className="bi bi-pencil-square"></i>
                                                         </button>
                                                     </div>

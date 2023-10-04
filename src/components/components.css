@@ -20,3 +20,55 @@
 .separator:not(:empty)::after {
     margin-left: .25em;
 }
+
+.left-menu-icon {
+    display: none;
+}
+
+
+@media only screen and (max-width: 992px) {
+
+    .left-menu-icon {
+        position: fixed;
+        left: 1rem;
+        bottom: 5px;
+        display: block;
+        z-index: 1031;
+    }
+
+    .left-menu-overlay {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        z-index: 8;
+
+        transition: all 0.25s;
+        -webkit-transition: all 0.25s;
+    }
+
+    .left-menu-popup {
+        position: absolute;
+        top: 40px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        overflow: scroll;
+        box-shadow: 0px 0px 0px 9999px rgba(0, 0, 0, 0.5);
+
+        background-color: #ffffff;
+        padding: 0 1rem 2rem 1rem;
+
+    }
+
+    .left-menu-enter {
+        visibility: visible;
+        left: 0;
+        right: 0;
+    }
+
+    .left-menu-exit {
+        visibility: hidden;
+        left: -100vw;
+        right: 100vw;
+    }
+}

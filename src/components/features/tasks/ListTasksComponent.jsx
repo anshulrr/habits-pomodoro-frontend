@@ -8,6 +8,7 @@ import ListTasksRowsComponent from "components/features/tasks/ListTasksRowsCompo
 import CreateTaskComponent from "components/features/tasks/CreateTaskComponent";
 import PomodoroComponent from "components/features/pomodoros/PomodoroComponent";
 import StopwatchComponent from "components/features/pomodoros/StopwatchComponent";
+import ListCommentsComponent from "components/features/comments/ListCommentsComponents";
 
 export default function ListTasksComponent({
     project,
@@ -48,6 +49,8 @@ export default function ListTasksComponent({
     const [message, setMessage] = useState('')
 
     const [showCreateTask, setShowCreateTask] = useState(false)
+
+    const [showProjectCommentsId, setShowProjectCommentsId] = useState(-1);
 
     useEffect(
         () => {
@@ -185,15 +188,32 @@ export default function ListTasksComponent({
                                 </span>
                             }
                         </h6>
-                        {
-                            !showCreateTask && project &&
-                            <div>
-                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={() => setShowCreateTask(!showCreateTask)}>
+                        <div>
+                            {
+                                project && !showCreateTask &&
+                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2 me-1" onClick={() => setShowCreateTask(!showCreateTask)}>
                                     <i className="bi bi-plus-circle" />
                                 </button>
-                            </div>
-                        }
+                            }
+                            {
+                                project &&
+                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={() => setShowProjectCommentsId(project.id)}>
+                                    <i className="bi bi-chat-right-text" />
+                                </button>
+                            }
+                        </div>
                     </div>
+
+                    {
+                        showProjectCommentsId !== -1 &&
+                        <ListCommentsComponent
+                            filterBy={'project'}
+                            id={showProjectCommentsId}
+                            title={project.name}
+                            projectColor={project.color}
+                            setShowCommentsId={setShowProjectCommentsId}
+                        />
+                    }
 
                     {
                         showCreateTask && project &&
