@@ -265,6 +265,7 @@ export default function ListTasksComponent({
                                         status={'completed'}
                                         tasksCount={completedTasksCount}
                                         project={project}
+                                        tag={tag}
                                         tags={tags}
                                         createNewPomodoro={createNewPomodoro}
                                         setTasksReload={setCompletedTasksReload}
@@ -309,6 +310,7 @@ export default function ListTasksComponent({
                                         status={'archived'}
                                         tasksCount={archivedTasksCount}
                                         project={project}
+                                        tag={tag}
                                         tags={tags}
                                         createNewPomodoro={createNewPomodoro}
                                         setTasksReload={setArchivedTasksReload}
