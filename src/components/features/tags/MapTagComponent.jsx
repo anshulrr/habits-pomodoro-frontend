@@ -82,7 +82,7 @@ export default function MapTagComponent({
         <div className="tags-overlay">
             <div className="tags-popup">
 
-                <div className="close-popup m-1">
+                <div className="close-popup m-2">
                     <i className="p-1 bi bi-x-lg" onClick={() => setShowMapTags(-1)}></i>
                 </div>
 

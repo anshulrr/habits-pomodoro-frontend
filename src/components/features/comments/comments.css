@@ -11,11 +11,11 @@
 
 .comments-popup {
     position: fixed;
-    top: 8vh;
-    bottom: 8vh;
+    top: 66px;
+    bottom: 66px;
     left: 0;
     right: 0;
-    height: 84vh;
+    /* height: 84vh; */
     overflow: scroll;
     border-radius: 10px;
     box-shadow: 0px 0px 0px 9999px rgba(0, 0, 0, 0.5);
@@ -41,14 +41,14 @@
     position: fixed;
     right: 1rem;
     bottom: 5px;
-    z-index: 1032;
+    z-index: 1033;
 }
 
 /* needed for popup over popup */
 /* above bootstrap's navbar */
 .user-comments-overlay {
     position: fixed;
-    z-index: 1031;
+    z-index: 1032;
 }
 
 /* for comments list */

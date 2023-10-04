@@ -77,7 +77,7 @@ export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setTask
     return (
         <div className="task-overlay">
             <div className="task-popup">
-                <div className="task-close-popup m-1">
+                <div className="task-close-popup m-2">
                     <i className="p-1 bi bi-x-lg" onClick={() => setShowUpdateTaskId(-1)}></i>
                 </div>
                 <div className="container mt-3">

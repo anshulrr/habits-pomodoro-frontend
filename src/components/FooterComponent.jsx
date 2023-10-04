@@ -1,7 +1,7 @@
 export default function FooterComponent() {
 
     return (
-        <header className="">
+        <footer className="">
             <nav className="navbar navbar-expand-sm fixed-bottom bg-white border-top border-1 py-2">
                 <div className="container">
 
@@ -12,6 +12,6 @@ export default function FooterComponent() {
                 </div>
             </nav>
 
-        </header>
+        </footer>
     )
 }

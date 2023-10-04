@@ -33,9 +33,6 @@ export default function AppRoutes() {
             <AuthProvider>
                 <BrowserRouter>
                     <HeaderComponent />
-                    <AuthenticatedRoute>
-                        <FooterComponent />
-                    </AuthenticatedRoute>
 
                     <Routes>
                         <Route path='/' element={<LoginComponent />} />
@@ -69,6 +66,10 @@ export default function AppRoutes() {
 
                         <Route path='*' element={<ErrorComponent />} />
                     </Routes>
+
+                    <AuthenticatedRoute>
+                        <FooterComponent />
+                    </AuthenticatedRoute>
                 </BrowserRouter>
             </AuthProvider>
 
