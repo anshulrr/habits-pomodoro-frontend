@@ -4,7 +4,8 @@ import { createTagApi } from 'services/api/TagApiService';
 export default function CreateTagComponent({
     setShowCreateTag,
     setTags,
-    setTagsCount
+    setTagsCount,
+    refreshAllTags
 }) {
 
     const [name, setName] = useState('')
@@ -26,6 +27,7 @@ export default function CreateTagComponent({
                 setTags(prevTag => [response.data, ...prevTag])
                 setShowCreateTag(false)
                 setTagsCount(prev => prev + 1)
+                refreshAllTags()
             })
             .catch(error => console.error(error.message))
     }
