@@ -85,18 +85,18 @@ export default function HomeComponent() {
                     <div className="left-menu-icon">
                         <button type="button" className="btn btn-sm btn-secondary py-0 px-1" onClick={() => setShowLeftMenu(!showLeftMenu)}>
                             {
-                                showLeftMenu &&
+                                !showLeftMenu &&
                                 <i className="bi bi-list" />
                             }
                             {
-                                !showLeftMenu &&
+                                showLeftMenu &&
                                 <i className="bi bi-x-lg" />
                             }
                         </button>
                     </div>
 
                     {
-                        <div className={"left-menu-overlay " + (showLeftMenu ? "left-menu-exit" : "left-menu-enter")} >
+                        <div className={"left-menu-overlay " + (showLeftMenu ? "left-menu-enter" : "left-menu-exit")} >
                             <div className="left-menu-popup">
 
                                 <ListProjectsComponent
