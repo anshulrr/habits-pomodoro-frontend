@@ -15,7 +15,7 @@ export default function ListProjectsComponent({ project, setProject, setTag, set
     const navigate = useNavigate()
     const { state } = useLocation();
 
-    const [showProjects, setShowProjects] = useState(false);
+    const [showProjects, setShowProjects] = useState(true);
 
     const projectsListElement = useRef(null);
 

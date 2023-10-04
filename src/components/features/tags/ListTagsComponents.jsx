@@ -24,7 +24,7 @@ export default function ListTagsComponent({ setProject, tag, setTag, setAllTags,
     const [tagsCount, setTagsCount] = useState(-1)
     const [tags, setTags] = useState([])
 
-    const [showTags, setShowTags] = useState(false);
+    const [showTags, setShowTags] = useState(true);
 
     const [showCreateTag, setShowCreateTag] = useState(false)
     const [showUpdateTag, setShowUpdateTag] = useState(-1)

@@ -21,7 +21,7 @@ export default function HomeComponent() {
     const [tasksComponentReload, setTasksComponentReload] = useState(0)
 
     const [tasksFilter, setTasksFilter] = useState(state && state.filters);
-    const [showTasksFilters, setShowTasksFilters] = useState(false);
+    const [showTasksFilters, setShowTasksFilters] = useState(true);
 
     const [showLeftMenu, setShowLeftMenu] = useState(false);
 
