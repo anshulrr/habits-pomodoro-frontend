@@ -6,8 +6,6 @@ import Pagination from "services/pagination/Pagination"
 import { useAuth } from "services/auth/AuthContext";
 import { truncateString } from "services/helpers/listsHelper";
 
-import ListCommentsComponent from "components/features/comments/ListCommentsComponents";
-
 export default function ListProjectsComponent({ project, setProject, setTag, setShowLeftMenu }) {
     const authContext = useAuth()
     const userSettings = authContext.userSettings
