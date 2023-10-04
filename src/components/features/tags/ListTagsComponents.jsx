@@ -163,7 +163,7 @@ export default function ListTagsComponent({ setProject, tag, setTag, setAllTags,
                 }
                 {
                     showTags && tagsCount === 0 &&
-                    <div className="alert alert-light py-1 mt-1 small">
+                    <div className="alert alert-light py-1 mt-1 small text-center">
                         <i className="pe-1 bi bi-clipboard-data" />
                         Nothing to display
                     </div>
