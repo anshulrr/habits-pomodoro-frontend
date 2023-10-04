@@ -8,7 +8,7 @@ import { useAuth } from "services/auth/AuthContext";
 import CreateTagComponent from "./CreateTagComponent";
 import UpdateTagComponent from "./UpdateTagComponent";
 
-export default function ListTagsComponent({ setProject, tag, setTag, setAllTags, setTasksComponentReload }) {
+export default function ListTagsComponent({ setProject, tag, setTag, setAllTags, setTasksComponentReload, setShowLeftMenu }) {
     const authContext = useAuth()
     const userSettings = authContext.userSettings
 
@@ -89,7 +89,8 @@ export default function ListTagsComponent({ setProject, tag, setTag, setAllTags,
         }
         setTag(tg);
         // udpate state: to be passed with further navigations
-        updateAppStates(tg)
+        updateAppStates(tg);
+        setShowLeftMenu(false);
     }
 
     function updateAppStates(tg) {

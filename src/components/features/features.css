@@ -140,6 +140,7 @@
     bottom: 1rem;
     left: 50%;
     transform: translate(-50%, 0);
+    z-index: 9;
 }
 
 .timer-bottom .timer {
