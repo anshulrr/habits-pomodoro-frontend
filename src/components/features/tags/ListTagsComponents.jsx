@@ -202,7 +202,7 @@ export default function ListTagsComponent({ setProject, tag, setTag, setAllTags,
                                                 </div>
                                                 <div className="col-4 ps-0 text-secondary text-end list-button">
                                                     <div className="input-group justify-content-end">
-                                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowUpdateTag(tg.id)}>
+                                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowUpdateTag(tg.id)}>
                                                             <i className="bi bi-pencil-square"></i>
                                                         </button>
                                                     </div>

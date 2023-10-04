@@ -29,8 +29,6 @@ export default function ListProjectsComponent({ project, setProject, setTag, set
     // const [project, setProject] = useState(state && state.project)
     const [currentPage, setCurrentPage] = useState((state && state.currentProjectsPage) || 1)
 
-    const [showCommentsId, setShowCommentsId] = useState(-1);
-
     useEffect(
         () => {
             getProjectsCount()
@@ -181,10 +179,7 @@ export default function ListProjectsComponent({ project, setProject, setTag, set
                                             </div>
                                             <div className="col-4 ps-0 text-secondary text-end list-button">
                                                 <div className="input-group justify-content-end">
-                                                    <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowCommentsId(proj.id)}>
-                                                        <i className="bi bi-chat-right-text" />
-                                                    </button>
-                                                    <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateProject(proj.id)}>
+                                                    <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => updateProject(proj.id)}>
                                                         <i className="bi bi-pencil-square"></i>
                                                     </button>
                                                 </div>
@@ -209,17 +204,6 @@ export default function ListProjectsComponent({ project, setProject, setTag, set
                     </div>
                 }
             </div>
-
-            {
-                showCommentsId !== -1 &&
-                <ListCommentsComponent
-                    filterBy={'project'}
-                    id={showCommentsId}
-                    title={project.name}
-                    projectColor={project.color}
-                    setShowCommentsId={setShowCommentsId}
-                />
-            }
         </div>
     )
 }
