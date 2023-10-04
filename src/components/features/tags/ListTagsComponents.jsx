@@ -65,6 +65,11 @@ export default function ListTagsComponent({ setProject, tag, setTag, setAllTags,
             .then(response => {
                 // console.debug(response)
                 setTags(response.data)
+                // if (!tag && response.data.length > 0) {
+                //     setTag(response.data[0]);
+                //     // udpate state for first time load
+                //     // updateAppStates(response.data[0]);
+                // }
             })
             .catch(error => console.error(error.message))
     }
@@ -84,6 +89,25 @@ export default function ListTagsComponent({ setProject, tag, setTag, setAllTags,
         }
         setTag(tg);
         // udpate state: to be passed with further navigations
+        updateAppStates(tg)
+    }
+
+    function updateAppStates(tg) {
+        // fix for directly opening url in a new tab
+        let local_state = {};
+        if (state) {
+            local_state = { ...state };
+        }
+        local_state.project = null;
+        local_state.tag = tg;
+        local_state.filters = null;
+        local_state.currentTasksPage = 1;
+        local_state.currentCompletedTasksPage = 1;
+        local_state.currentArchivedTasksPage = 1;
+        local_state.showCompletedTasks = false;
+        local_state.showArchivedTasks = false;
+        // for page refresh: set it right away
+        navigate('/', { state: local_state, replace: true });
     }
 
     return (

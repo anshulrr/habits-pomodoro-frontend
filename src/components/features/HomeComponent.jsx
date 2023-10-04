@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import moment from 'moment';
@@ -15,12 +15,12 @@ export default function HomeComponent() {
     const navigate = useNavigate()
 
     const [project, setProject] = useState(state && state.project);
-    const [tag, setTag] = useState(null);
+    const [tag, setTag] = useState(state && state.tag);
     const [tags, setTags] = useState(null);
 
     const [tasksComponentReload, setTasksComponentReload] = useState(0)
 
-    const [tasksTitle, setTasksTitle] = useState('');
+    const [tasksFilter, setTasksFilter] = useState(state && state.filters);
     const [showTasksFilters, setShowTasksFilters] = useState(false);
 
     const [startDate, setStartDate] = useState(null);
@@ -30,31 +30,41 @@ export default function HomeComponent() {
     const [pomodorosHeight, setPomodorosHeight] = useState(0);
     const [pomodorosListReload, setPomodorosListReload] = useState(0)
 
-    function fetchUpcomingTasks() {
-        setTasksTitle('Upcoming')
+    useEffect(
+        () => {
+            if (tasksFilter) {
+                fetchTasks(tasksFilter);
+            }
+        },
+        [] // eslint-disable-line react-hooks/exhaustive-deps
+    )
+
+    function fetchTasksAndUpdateAppStates(filter) {
+        fetchTasks(filter);
+        updateAppStates(filter);
+    }
+
+    function fetchTasks(filter) {
+        setTasksFilter(filter);
         setProject(null);
         setTag(null);
 
-        setReversed(false); // temporary fix: might need better api response
-        setStartDate(moment().toISOString());
-        setEndDate(moment().add(10, 'y').toISOString());
-        updateAppStates();
+        if (filter === 'Upcoming') {
+            setReversed(false); // temporary fix: might need better api response
+            setStartDate(moment().toISOString());
+            setEndDate(moment().add(10, 'y').toISOString());
+        } else if (filter === 'Overdue') {
+            setReversed(false);
+            setStartDate(moment().add(-10, 'y').toISOString());
+            setEndDate(moment().toISOString());
+        }
     }
 
-    function fetchOverdueTasks() {
-        setTasksTitle('Overdue')
-        setProject(null);
-        setTag(null);
-
-        setReversed(false);
-        setStartDate(moment().add(-10, 'y').toISOString());
-        setEndDate(moment().toISOString());
-        updateAppStates();
-    }
-
-    function updateAppStates() {
+    function updateAppStates(filter) {
         let local_state = { ...state };
-        // local_state.project = null;
+        local_state.project = null;
+        local_state.tag = null;
+        local_state.filters = filter;
         local_state.currentTasksPage = 1;
         local_state.currentCompletedTasksPage = 1;
         local_state.currentArchivedTasksPage = 1;
@@ -93,13 +103,13 @@ export default function HomeComponent() {
                         {
                             showTasksFilters &&
                             <div>
-                                <div className={(!project && !tag && tasksTitle === "Upcoming" ? "list-selected " : "") + "py-1 small row list-row"} onClick={fetchUpcomingTasks}>
+                                <div className={(!project && !tag && tasksFilter === "Upcoming" ? "list-selected " : "") + "py-1 small row list-row"} onClick={() => fetchTasksAndUpdateAppStates('Upcoming')}>
                                     <div className="col-12">
                                         <i className="pe-1 bi bi-calendar-check" />
                                         Upcoming
                                     </div>
                                 </div>
-                                <div className={(!project && !tag && tasksTitle === "Overdue" ? "list-selected " : "") + "py-1 small row list-row"} onClick={fetchOverdueTasks}>
+                                <div className={(!project && !tag && tasksFilter === "Overdue" ? "list-selected " : "") + "py-1 small row list-row"} onClick={() => fetchTasksAndUpdateAppStates('Overdue')}>
                                     <div className="col-12">
                                         <i className="pe-1 bi bi-calendar-check text-danger" />
                                         Overdue
@@ -135,14 +145,14 @@ export default function HomeComponent() {
                                 />
                             }
                             {
-                                !project && !tag && startDate &&
+                                !project && !tag && tasksFilter &&
                                 <ListTasksComponent
                                     key={[startDate, endDate, tasksComponentReload]}
                                     tags={tags}
                                     startDate={startDate}
                                     endDate={endDate}
                                     isReversed={isReversed}
-                                    title={tasksTitle}
+                                    title={tasksFilter}
                                     setPomodorosListReload={setPomodorosListReload}
                                 />
                             }
