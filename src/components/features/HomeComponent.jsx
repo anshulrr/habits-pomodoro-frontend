@@ -83,7 +83,7 @@ export default function HomeComponent() {
                 <div className="col-lg-4 text-start">
 
                     <div className="left-menu-icon">
-                        <button type="button" className="btn btn-sm btn-secondary py-0 px-1" onClick={() => setShowLeftMenu(!showLeftMenu)}>
+                        <button type="button" className="btn btn-sm btn-dark" onClick={() => setShowLeftMenu(!showLeftMenu)}>
                             {
                                 !showLeftMenu &&
                                 <i className="bi bi-list" />
