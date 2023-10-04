@@ -77,14 +77,16 @@ export default function ProjectComponent() {
                 .then(response => {
                     // console.debug(response)
                     state.project = response.data;
-                    navigate(-1, { state })
+                    navigate('/', { state })
+                    // navigate(-1, { state }) // NOTE: passing state with -1 doesn't work
                 })
                 .catch(error => console.error(error.message))
         } else {
             updateProjectApi(id, project)
                 .then(response => {
                     // console.debug(response)
-                    navigate(-1, { state: { project: response.data } })
+                    state.project = response.data;
+                    navigate('/', { state })
                 })
                 .catch(error => console.error(error.message))
         }

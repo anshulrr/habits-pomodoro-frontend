@@ -7,20 +7,24 @@ import { useAuth } from "services/auth/AuthContext";
 import Pagination from "services/pagination/Pagination";
 import { retrieveAllTasksApi, updateTaskApi } from "services/api/TaskApiService";
 import { timeToDisplay } from "services/helpers/listsHelper";
+import OutsideAlerter from "services/hooks/OutsideAlerter";
 
 import PastPomodoroComponent from "components/features/tasks/PastPomodoroComponent";
 import ListCommentsComponent from "components/features/comments/ListCommentsComponents";
-import OutsideAlerter from "services/hooks/OutsideAlerter";
 import UpdateTaskComponent from "components/features/tasks/UpdateTaskComponent";
-import TaskDueDateComponent from "./TaskDueDateComponent";
+import TaskDueDateComponent from "components/features/tasks/TaskDueDateComponent";
+import MapTagComponent from "components/features/tags/MapTagComponent";
+import { getTasksTagsApi } from "services/api/TagApiService";
 
 export default function ListTasksRowsComponent({
     project,
+    tag,
+    tags,
     status,
     tasksCount,
     createNewPomodoro,
     setPomodorosListReload,
-    setCurrentTasksReload,
+    setTasksReload,
     setAllTasksReload,
     elementHeight,
     setElementHeight,
@@ -51,6 +55,7 @@ export default function ListTasksRowsComponent({
 
     const [showCreatePastPomodoro, setShowCreatePastPomodoro] = useState(-1);
     const [showUpdateDueDate, setShowUpdateDueDate] = useState(-1);
+    const [showMapTags, setShowMapTags] = useState(-1);
 
     const [showUpdateTaskId, setShowUpdateTaskId] = useState(-1)
 
@@ -90,6 +95,8 @@ export default function ListTasksRowsComponent({
         }
         if (project) {
             taskData.projectId = project.id;
+        } else if (tag) {
+            taskData.tagId = tag.id;
         } else {
             taskData.startDate = startDate;
             taskData.endDate = endDate;
@@ -102,6 +109,28 @@ export default function ListTasksRowsComponent({
                 } else {
                     setTasks(response.data)
                 }
+                updateTaskTags(response.data);
+            })
+            .catch(error => console.error(error.message))
+    }
+
+    function updateTaskTags(tasks) {
+        if (tags.size === 0) {
+            return;
+        }
+        const taskIds = tasks.map(task => task.id);
+        getTasksTagsApi(taskIds)
+            .then(response => {
+                // using Map for easy access and update
+                const map = new Map(tasks.map(i => {
+                    i.tags = [];
+                    return [i.id, i];
+                }));
+                for (let i = 0; i < response.data.length; i++) {
+                    map.get(response.data[i][0]).tags.push(tags.get(response.data[i][1]))
+                }
+
+                setTasks([...map.values()]);
             })
             .catch(error => console.error(error.message))
     }
@@ -139,6 +168,13 @@ export default function ListTasksRowsComponent({
         setShowUpdatePopupId(-1);
         // setElementHeight(listElement.current.offsetHeight);
         setShowUpdateDueDate(task.id);
+    }
+
+    function onAddTag(task) {
+        setShowCreatePastPomodoro(-1)
+        setShowUpdatePopupId(-1);
+        // setElementHeight(listElement.current.offsetHeight);
+        setShowMapTags(task.id);
     }
 
     function updateOnPageChange(page) {
@@ -211,17 +247,29 @@ export default function ListTasksRowsComponent({
                                                         {moment(task.dueDate).format("DD/MM/yyyy")}
                                                     </span>
                                                 }
-                                                <span>
+                                                <span className="me-1">
                                                     <i className="ps-1 bi bi-clock" style={{ paddingRight: "0.1rem" }} />
                                                     {timeToDisplay(task.pomodorosTimeElapsed / 60)}
                                                 </span>
 
                                                 {
                                                     !project &&
-                                                    <span>
+                                                    <span className="me-1">
                                                         <span className="ps-1" style={{ color: task.project.color, paddingRight: "0.1rem" }}>&#9632;</span>
                                                         {task.project.name}
                                                     </span>
+                                                }
+
+                                                {
+                                                    task.tags && task.tags.length > 0 &&
+                                                    task.tags.map(
+                                                        (tag, tag_index) => (
+                                                            <span key={tag_index} className="me-1">
+                                                                <i className="bi bi-tag-fill" style={{ color: tag.color, paddingRight: "0.1rem" }} />
+                                                                {tag.name}
+                                                            </span>
+                                                        )
+                                                    )
                                                 }
                                             </div>
                                         </div>
@@ -268,6 +316,11 @@ export default function ListTasksRowsComponent({
                                                                 Set Due Date <i className="ps-1 bi bi-calendar-check" />
                                                             </button>
                                                         }
+                                                        {
+                                                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onAddTag(task)}>
+                                                                Map Tags <i className="ps-1 bi bi-tag" />
+                                                            </button>
+                                                        }
                                                     </div>
                                                 </span>
                                             </OutsideAlerter>
@@ -280,7 +333,7 @@ export default function ListTasksRowsComponent({
                                         setShowCreatePastPomodoro={setShowCreatePastPomodoro}
                                         task={task}
                                         setPomodorosListReload={setPomodorosListReload}
-                                        setTasksReload={setCurrentTasksReload}
+                                        setTasksReload={setTasksReload}
                                     />
                                 }
 
@@ -289,7 +342,7 @@ export default function ListTasksRowsComponent({
                                     <TaskDueDateComponent
                                         setShowUpdateDueDate={setShowUpdateDueDate}
                                         task={task}
-                                        setTasksReload={setCurrentTasksReload}
+                                        setTasksReload={setTasksReload}
                                     />
                                 }
 
@@ -299,6 +352,16 @@ export default function ListTasksRowsComponent({
                                         task={task}
                                         setShowUpdateTaskId={setShowUpdateTaskId}
                                         setTasksReload={setAllTasksReload}
+                                    />
+                                }
+
+                                {
+                                    showMapTags === task.id &&
+                                    <MapTagComponent
+                                        task={task}
+                                        tagsMap={tags}
+                                        setShowMapTags={setShowMapTags}
+                                        setTasksReload={setTasksReload}
                                     />
                                 }
                             </div >

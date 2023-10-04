@@ -7,6 +7,7 @@ import StatsComponent from 'components/stats/StatsComponent'
 
 import 'components/components.css'
 import 'components/features/features.css'
+import 'components/features/tags/tags.css'
 import "components/features/comments/comments.css"
 import "components/stats/stats.css"
 

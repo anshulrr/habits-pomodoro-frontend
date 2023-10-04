@@ -75,7 +75,7 @@ export default function HeaderComponent() {
                         {
                             isAuthenticated &&
                             <li className="nav-item">
-                                <Link className="nav-link" onClick={logout} state={state}>
+                                <Link className="nav-link" onClick={logout} state={{}}>
                                     Logout
                                 </Link>
                             </li>
@@ -83,7 +83,7 @@ export default function HeaderComponent() {
                         {
                             !isAuthenticated &&
                             <li className="nav-item">
-                                <Link className="nav-link" to="/login" state={state}>
+                                <Link className="nav-link" to="/login" state={{}}>
                                     Login
                                 </Link>
                             </li>

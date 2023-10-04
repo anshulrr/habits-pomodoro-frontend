@@ -11,10 +11,12 @@ import StopwatchComponent from "components/features/pomodoros/StopwatchComponent
 
 export default function ListTasksComponent({
     project,
+    tags,
     startDate,
     endDate,
     isReversed,
     title,
+    tag,
     setPomodorosListReload
 }) {
 
@@ -39,6 +41,8 @@ export default function ListTasksComponent({
     const [pomodoroStatus, setPomodoroStatus] = useState(null)
 
     const [currentTasksReload, setCurrentTasksReload] = useState(0)
+    const [completedTasksReload, setCompletedTasksReload] = useState(0)
+    const [archivedTasksReload, setArchivedTasksReload] = useState(0)
     const [allTasksReload, setAllTasksReload] = useState(0)
 
     const [message, setMessage] = useState('')
@@ -69,6 +73,8 @@ export default function ListTasksComponent({
         }
         if (project) {
             taskData.projectId = project.id;
+        } else if (tag) {
+            taskData.tagId = tag.id;
         } else {
             taskData.startDate = startDate;
             taskData.endDate = endDate;
@@ -158,7 +164,14 @@ export default function ListTasksComponent({
                                 </span>
                             }
                             {
-                                !project &&
+                                !project && tag &&
+                                <span>
+                                    <i className="bi bi-tag-fill me-1" style={{ color: tag.color }}></i>
+                                    {tag.name}
+                                </span>
+                            }
+                            {
+                                !project && !tag &&
                                 <span>
                                     <i className={(title === "Overdue" ? "text-danger " : "") + "px-1 bi bi-calendar-check"} />
                                     {title} Tasks
@@ -187,7 +200,7 @@ export default function ListTasksComponent({
                         <CreateTaskComponent
                             setShowCreateTask={setShowCreateTask}
                             project={project}
-                            setCurrentTasksReload={setCurrentTasksReload}
+                            setTasksReload={setCurrentTasksReload}
                             setTasksCount={setTasksCount}
                         ></CreateTaskComponent>
                     }
@@ -208,9 +221,11 @@ export default function ListTasksComponent({
                                 status={'added'}
                                 tasksCount={tasksCount}
                                 project={project}
+                                tag={tag}
+                                tags={tags}
                                 createNewPomodoro={createNewPomodoro}
                                 setPomodorosListReload={setPomodorosListReload}
-                                setCurrentTasksReload={setCurrentTasksReload}
+                                setTasksReload={setCurrentTasksReload}
                                 setAllTasksReload={setAllTasksReload}
                                 elementHeight={currentTasksHeight}
                                 setElementHeight={setCurrentTasksHeight}
@@ -246,11 +261,14 @@ export default function ListTasksComponent({
                                 showCompleted && completedTasksCount !== 0 &&
                                 <div className="mt-1">
                                     <ListTasksRowsComponent
-                                        key={[completedTasksCount, allTasksReload]}
+                                        key={[completedTasksCount, completedTasksReload, allTasksReload]}
                                         status={'completed'}
                                         tasksCount={completedTasksCount}
                                         project={project}
+                                        tag={tag}
+                                        tags={tags}
                                         createNewPomodoro={createNewPomodoro}
+                                        setTasksReload={setCompletedTasksReload}
                                         setAllTasksReload={setAllTasksReload}
                                         elementHeight={completedTasksHeight}
                                         setElementHeight={setCompletedTasksHeight}
@@ -288,11 +306,14 @@ export default function ListTasksComponent({
                                 showArchived && archivedTasksCount !== 0 &&
                                 <div className="mt-1">
                                     <ListTasksRowsComponent
-                                        key={[archivedTasksCount, allTasksReload]}
+                                        key={[archivedTasksCount, archivedTasksReload, allTasksReload]}
                                         status={'archived'}
                                         tasksCount={archivedTasksCount}
                                         project={project}
+                                        tag={tag}
+                                        tags={tags}
                                         createNewPomodoro={createNewPomodoro}
+                                        setTasksReload={setArchivedTasksReload}
                                         setAllTasksReload={setAllTasksReload}
                                         elementHeight={archivedTasksHeight}
                                         setElementHeight={setArchivedTasksHeight}
