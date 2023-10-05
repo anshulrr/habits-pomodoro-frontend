@@ -27,7 +27,7 @@
 
 /* for tasks list */
 .task-list-row {
-    border-bottom: thin solid #dee2e6;
+    border-top: thin solid #dee2e6;
 }
 
 .task-list-update {

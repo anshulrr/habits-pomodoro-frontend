@@ -145,62 +145,64 @@ export default function ListPomodorosComponent({
                 </div>
             }
 
-            <table id="pomodoros-list" ref={listElement} className="table table-sm small mb-0">
-                <tbody>
+            <div id="pomodoros-list" ref={listElement} className="small">
+                <div>
                     {
                         pomodoros.map(
                             (pomodoro, index) => (
-                                <tr key={pomodoro.id} className="task-list-row small text-secondary" onClick={() => setShowPomodoroUpdateId(pomodoro.id)} >
-                                    <td className="text-start" style={{ paddingTop: "0.4rem", paddingBottom: "0.4rem", lineHeight: 1.3 }}>
-                                        {pomodoros.length - index}. {pomodoro.task}
-                                    </td>
-                                    <td width="40%" className="align-middle text-end">
-                                        {showPomodoroUpdateId !== pomodoro.id &&
-                                            <span className="task-list-details small">
-                                                <span className="me-1">
-                                                    {
-                                                        pomodoro.status !== 'past' &&
+                                <div key={pomodoro.id} className="task-list-row small text-secondary" onClick={() => setShowPomodoroUpdateId(pomodoro.id)} >
+                                    <div className="px-1 text-start" style={{ padding: "4px 0 4px 0", lineHeight: 1.7 }}>
+                                        <span>
+                                            {pomodoros.length - index}. {pomodoro.task}
+                                        </span>
+                                        <span className="align-middle" style={{ float: "right" }}>
+                                            {showPomodoroUpdateId !== pomodoro.id &&
+                                                <span className="task-list-details small">
+                                                    <span className="me-1">
+                                                        {
+                                                            pomodoro.status !== 'past' &&
+                                                            <span>
+                                                                {moment.utc(pomodoro.startTime).local().format('H:mm')}-
+                                                            </span>
+                                                        }
                                                         <span>
-                                                            {moment.utc(pomodoro.startTime).local().format('H:mm')}-
+                                                            {moment.utc(pomodoro.endTime).local().format('H:mm')}
                                                         </span>
-                                                    }
-                                                    <span>
-                                                        {moment.utc(pomodoro.endTime).local().format('H:mm')}
                                                     </span>
-                                                </span>
-                                                <span className="">
-                                                    <i className="ps-1 bi bi-clock-fill" style={{ paddingRight: "0.1rem" }} />
-                                                    <span style={{ fontVariantNumeric: "tabular-nums" }}>
-                                                        {timeToDisplay(Math.round(pomodoro.timeElapsed / 60))}
+                                                    <span className="">
+                                                        <i className="bi bi-clock-fill" style={{ paddingRight: "0.1rem" }} />
+                                                        <span style={{ fontVariantNumeric: "tabular-nums" }}>
+                                                            {timeToDisplay(Math.round(pomodoro.timeElapsed / 60))}
+                                                        </span>
                                                     </span>
+                                                    <span className="ms-1" style={{ color: pomodoro.color }}>&#9632;</span>
                                                 </span>
-                                                <span className="ms-1" style={{ color: pomodoro.color }}>&#9632;</span>
-                                            </span>
-                                        }
-                                        {
-                                            showPomodoroUpdateId === pomodoro.id &&
-                                            <OutsideAlerter handle={() => setShowPomodoroUpdateId(-1)}>
-                                                <div className="input-group justify-content-end">
-                                                    {
-                                                        pomodoro.status === 'past' &&
-                                                        <button type="button" className="btn btn-sm btn-outline-danger py-0 px-2 lh-sm" onClick={() => deleltePastPomodoro(pomodoro)}>
-                                                            <i className="align-middle bi bi-trash" />
+                                            }
+                                            {
+                                                showPomodoroUpdateId === pomodoro.id &&
+                                                <OutsideAlerter handle={() => setShowPomodoroUpdateId(-1)}>
+                                                    <div className="input-group justify-content-end">
+                                                        {
+                                                            pomodoro.status === 'past' &&
+                                                            <button type="button" className="btn btn-sm btn-outline-danger py-0 px-2 lh-sm" onClick={() => deleltePastPomodoro(pomodoro)}>
+                                                                <i className="align-middle bi bi-trash" />
+                                                            </button>
+                                                        }
+                                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2 lh-sm" onClick={() => updateCommentsData(pomodoro)}>
+                                                            <i className="align-middle bi bi-chat-right-text" />
                                                         </button>
-                                                    }
-                                                    <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2 lh-sm" onClick={() => updateCommentsData(pomodoro)}>
-                                                        <i className="align-middle bi bi-chat-right-text" />
-                                                    </button>
 
-                                                </div>
-                                            </OutsideAlerter>
-                                        }
-                                    </td>
-                                </tr>
+                                                    </div>
+                                                </OutsideAlerter>
+                                            }
+                                        </span>
+                                    </div>
+                                </div>
                             )
                         )
                     }
-                </tbody>
-            </table>
+                </div>
+            </div>
             {
                 showCommentsId !== -1 &&
                 <div className="text-body">
