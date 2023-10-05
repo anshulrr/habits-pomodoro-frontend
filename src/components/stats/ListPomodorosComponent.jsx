@@ -150,9 +150,11 @@ export default function ListPomodorosComponent({
                     {
                         pomodoros.map(
                             (pomodoro, index) => (
-                                <div key={pomodoro.id} className={"pomodoro-list-row" + (showPomodoroUpdateId === pomodoro.id ? " pomodoro-list-row-selected" : "")} onClick={() => setShowPomodoroUpdateId(pomodoro.id)} >
+                                <div key={pomodoro.id}
+                                    className={"update-list-row pomodoro-list-row" + (showPomodoroUpdateId === pomodoro.id ? " pomodoro-list-row-selected" : "")}
+                                    onClick={() => setShowPomodoroUpdateId(pomodoro.id)} >
                                     <div className="mx-2 d-flex text-start small text-secondary">
-                                        <div className="flex-grow-1 pomodoro-popup-container">
+                                        <div className="flex-grow-1 update-popup-container">
                                             <span>
                                                 {pomodoros.length - index}. {pomodoro.task}
                                             </span>
@@ -186,7 +188,7 @@ export default function ListPomodorosComponent({
                                                 showPomodoroUpdateId === pomodoro.id &&
                                                 <OutsideAlerter handle={() => setShowPomodoroUpdateId(-1)}>
                                                     <span className="">
-                                                        <div className="pomodoro-popup">
+                                                        <div className="update-popup pomodoro-list-popup">
                                                             <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2 lh-sm" onClick={() => updateCommentsData(pomodoro)}>
                                                                 Comments <i className="align-middle bi bi-chat-right-text" />
                                                             </button>
