@@ -109,90 +109,65 @@ export default function ListTasksRowsComponent({
                 } else {
                     setTasks(response.data)
                 }
-                // retrieve task today's time elapsed
-                getTasksTodaysTimeElapsed(response.data);
-                getTasksTotalTimeElapsed(response.data);
-                getTasksTags(response.data);
+                // retrieve task data today's time elapsed, total time elapsed and tags
+                const taskIds = response.data.map(task => task.id);
+
+                const map = new Map(response.data.map(task => {
+                    task.tags = [];
+                    task.todaysTimeElapsed = 0;
+                    task.totalTimeElapsed = 0;
+                    return [task.id, task];
+                }));
+
+                getTasksTodaysTimeElapsed(taskIds, map);
+                getTasksTotalTimeElapsed(taskIds, map);
+                getTasksTags(taskIds, map);
             })
             .catch(error => console.error(error.message))
     }
 
-    function getTasksTags(tasks) {
+    function getTasksTags(taskIds, map) {
         if (tags.size === 0) {
             return;
         }
-        const taskIds = tasks.map(task => task.id);
         getTasksTagsApi(taskIds)
             .then(response => {
                 // using Map for easy access and update
-                const map = new Map(tasks.map(task => {
-                    task.tags = [];
-                    return [task.id, task];
-                }));
                 for (let i = 0; i < response.data.length; i++) {
                     map.get(response.data[i][0]).tags.push(tags.get(response.data[i][1]))
                 }
-
                 setTasks([...map.values()]);
             })
             .catch(error => console.error(error.message))
     }
 
-    function getTasksTodaysTimeElapsed(tasks) {
-        const taskIds = tasks.map(task => task.id);
+    function getTasksTodaysTimeElapsed(taskIds, map) {
         const startDate = moment().startOf('day').toISOString();
         const endDate = moment().toISOString();
 
         getTasksTimeElapsedApi({ startDate, endDate, taskIds })
             .then(response => {
-                // console.debug(response.data)
                 // using Map for easy access and update
-                const map = new Map(tasks.map(task => {
-                    task.todaysTimeElapsed = 0;
-                    return [task.id, task];
-                }));
                 for (let i = 0; i < response.data.length; i++) {
-                    // console.debug(response.data[i][0])
                     map.get(response.data[i][0]).todaysTimeElapsed = parseInt(response.data[i][1]);
                 }
-                // console.debug(map)
-
-                const updated_tasks = [...map.values()]
-                // console.dubug(updated_tasks);
-                setTasks(updated_tasks);
-
-                // retrieve task tags
-                // getTasksTotalTimeElapsed(updated_tasks);
+                setTasks([...map.values()]);
             })
             .catch(error => console.error(error.message))
     }
 
-    function getTasksTotalTimeElapsed(tasks) {
-        const taskIds = tasks.map(task => task.id);
+    function getTasksTotalTimeElapsed(taskIds, map) {
         // TODO: decide start date
         const startDate = moment().add(-10, 'y').toISOString();
         const endDate = moment().toISOString();
 
         getTasksTimeElapsedApi({ startDate, endDate, taskIds })
             .then(response => {
-                // console.debug(response.data)
                 // using Map for easy access and update
-                const map = new Map(tasks.map(task => {
-                    task.totalTimeElapsed = 0;
-                    return [task.id, task];
-                }));
                 for (let i = 0; i < response.data.length; i++) {
-                    // console.debug(response.data[i][0])
                     map.get(response.data[i][0]).totalTimeElapsed = parseInt(response.data[i][1]);
                 }
-                // console.debug(map)
-
-                const updated_tasks = [...map.values()]
-                // console.dubug(updated_tasks);
-                setTasks(updated_tasks);
-
-                // retrieve task tags
-                // getTasksTags(updated_tasks);
+                setTasks([...map.values()]);
             })
             .catch(error => console.error(error.message))
     }
