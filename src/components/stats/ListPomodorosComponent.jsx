@@ -20,13 +20,15 @@ export default function ListPomodorosComponent({
 
     const listElement = useRef(null);
 
-    const [pomodoros, setPomodoros] = useState([])
+    const [pomodorosGroup, setPomodorosGroup] = useState([])
     const [pomodorosCount, setPomodorosCount] = useState(-1);
 
     const [totalTimeElapsed, setTotalTimeElapsed] = useState('0');
 
     const [showCommentsId, setShowCommentsId] = useState(-1);
     const [commentsTitle, setCommentsTitle] = useState('')
+
+    const [reload, setReload] = useState(false);
 
     const [showPomodoroUpdateId, setShowPomodoroUpdateId] = useState(-1);
 
@@ -57,7 +59,7 @@ export default function ListPomodorosComponent({
                 // Cleanup the observer by unobserving all elements
                 observer.disconnect();
             };
-        }, []   // eslint-disable-line react-hooks/exhaustive-deps
+        }, [reload]   // eslint-disable-line react-hooks/exhaustive-deps
     )
 
     const handleResize = () => {
@@ -69,16 +71,16 @@ export default function ListPomodorosComponent({
 
     function retrieveTodayPomodoros({ startDate, endDate, allCategories }) {
         // console.debug('api call', { allCategories, includeCategories })
-        setPomodoros([]);
+        setPomodorosGroup([]);
         setPomodorosCount(-1);
         getPomodorosApi({ startDate, endDate, includeCategories: allCategories || includeCategories })
             .then(response => {
                 // console.debug(response)
                 response.data.map((x, index) => x.index = response.data.length - index);
 
-                const poms = groupBy(response.data, 'endTime');
-                // console.log(poms.reverse());
-                setPomodoros(poms.reverse());
+                const quarters = groupBy(response.data, 'endTime');
+                setPomodorosGroup(quarters.reverse());
+
                 setPomodorosCount(response.data.length);
                 const total = response.data.reduce((acc, curr) => acc + Math.round(curr.timeElapsed / 60), 0);
                 setTotalTimeElapsed(timeToDisplay(total));
@@ -93,9 +95,10 @@ export default function ListPomodorosComponent({
         deletePastPomodoroApi(pomodoro.id)
             .then(response => {
                 // console.debug(response)
-                const total = pomodoros.reduce((acc, curr) => acc + Math.round(curr.timeElapsed / 60), 0);
-                setTotalTimeElapsed(timeToDisplay(total - pomodoro.timeElapsed / 60));
-                setPomodoros(pomodoros.filter(p => p.id !== pomodoro.id))
+                setReload(!reload);
+                // const total = pomodorosGroup.reduce((acc, curr) => acc + Math.round(curr.timeElapsed / 60), 0);
+                // setTotalTimeElapsed(timeToDisplay(total - pomodoro.timeElapsed / 60));
+                // setPomodorosGroup(pomodorosGroup.filter(p => p.id !== pomodoro.id))
             })
             .catch(error => console.error(error.message))
     }
@@ -115,7 +118,7 @@ export default function ListPomodorosComponent({
         return arr.reduce(function (result, x) {
             // console.log(x);
             let index = Math.floor(moment(x[key]).format('H') / 3);
-            (result[index] = result[index] || []).push(x);
+            (result[index]).push(x);
             return result;
         }, [[], [], [], [], [], [], [], []]);
     };
@@ -158,10 +161,10 @@ export default function ListPomodorosComponent({
                 </div>
             }
 
-            <div id="pomodoros-list" ref={listElement} className="small">
+            <div id="pomodoros-group-list" ref={listElement} className="small">
                 <div>
                     {
-                        pomodoros.map(
+                        pomodorosGroup.map(
                             (quarters, index) => (
                                 <div>
                                     {
