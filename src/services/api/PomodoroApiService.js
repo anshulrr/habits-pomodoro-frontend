@@ -32,6 +32,3 @@ export const getProjectsPomodorosApi
 
 export const getTotalPomodorosApi
     = ({ limit, startDate, endDate, includeCategories }) => apiClient.get(`/stats/total-time?limit=${limit}&startDate=${startDate}&endDate=${endDate}&include_categories=${includeCategories}&timezone=${to}`)
-
-export const getTaskTodayTimeElapsedApi
-    = ({ startDate, endDate, taskIds }) => apiClient.get(`/tasks/pomodoros/time-elapsed?startDate=${startDate}&endDate=${endDate}&taskIds=${taskIds}`)

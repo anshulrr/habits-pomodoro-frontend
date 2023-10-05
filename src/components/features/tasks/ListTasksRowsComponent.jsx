@@ -5,7 +5,7 @@ import moment from "moment";
 
 import { useAuth } from "services/auth/AuthContext";
 import Pagination from "services/pagination/Pagination";
-import { retrieveAllTasksApi, updateTaskApi } from "services/api/TaskApiService";
+import { getTasksTimeElapsedApi, retrieveAllTasksApi, updateTaskApi } from "services/api/TaskApiService";
 import { timeToDisplay } from "services/helpers/listsHelper";
 import OutsideAlerter from "services/hooks/OutsideAlerter";
 
@@ -15,7 +15,6 @@ import UpdateTaskComponent from "components/features/tasks/UpdateTaskComponent";
 import TaskDueDateComponent from "components/features/tasks/TaskDueDateComponent";
 import MapTagComponent from "components/features/tags/MapTagComponent";
 import { getTasksTagsApi } from "services/api/TagApiService";
-import { getTaskTodayTimeElapsedApi } from "services/api/PomodoroApiService";
 
 export default function ListTasksRowsComponent({
     project,
@@ -111,12 +110,14 @@ export default function ListTasksRowsComponent({
                     setTasks(response.data)
                 }
                 // retrieve task today's time elapsed
-                updateTaskTimeElapsed(response.data);
+                getTasksTodaysTimeElapsed(response.data);
+                getTasksTotalTimeElapsed(response.data);
+                getTasksTags(response.data);
             })
             .catch(error => console.error(error.message))
     }
 
-    function updateTaskTags(tasks) {
+    function getTasksTags(tasks) {
         if (tags.size === 0) {
             return;
         }
@@ -137,12 +138,12 @@ export default function ListTasksRowsComponent({
             .catch(error => console.error(error.message))
     }
 
-    function updateTaskTimeElapsed(tasks) {
+    function getTasksTodaysTimeElapsed(tasks) {
         const taskIds = tasks.map(task => task.id);
         const startDate = moment().startOf('day').toISOString();
-        const endDate = moment().endOf('day').toISOString();
+        const endDate = moment().toISOString();
 
-        getTaskTodayTimeElapsedApi({ startDate, endDate, taskIds })
+        getTasksTimeElapsedApi({ startDate, endDate, taskIds })
             .then(response => {
                 // console.debug(response.data)
                 // using Map for easy access and update
@@ -161,7 +162,37 @@ export default function ListTasksRowsComponent({
                 setTasks(updated_tasks);
 
                 // retrieve task tags
-                updateTaskTags(updated_tasks);
+                // getTasksTotalTimeElapsed(updated_tasks);
+            })
+            .catch(error => console.error(error.message))
+    }
+
+    function getTasksTotalTimeElapsed(tasks) {
+        const taskIds = tasks.map(task => task.id);
+        // TODO: decide start date
+        const startDate = moment().add(-10, 'y').toISOString();
+        const endDate = moment().toISOString();
+
+        getTasksTimeElapsedApi({ startDate, endDate, taskIds })
+            .then(response => {
+                // console.debug(response.data)
+                // using Map for easy access and update
+                const map = new Map(tasks.map(task => {
+                    task.totalTimeElapsed = 0;
+                    return [task.id, task];
+                }));
+                for (let i = 0; i < response.data.length; i++) {
+                    // console.debug(response.data[i][0])
+                    map.get(response.data[i][0]).totalTimeElapsed = parseInt(response.data[i][1]);
+                }
+                // console.debug(map)
+
+                const updated_tasks = [...map.values()]
+                // console.dubug(updated_tasks);
+                setTasks(updated_tasks);
+
+                // retrieve task tags
+                // getTasksTags(updated_tasks);
             })
             .catch(error => console.error(error.message))
     }
@@ -273,10 +304,13 @@ export default function ListTasksRowsComponent({
                                                     {timeToDisplay(task.pomodoroLength || task.project.pomodoroLength || userSettings.pomodoroLength)}
                                                 </span>
 
-                                                <span className="me-1">
-                                                    <i className="bi bi-clock" style={{ paddingRight: "0.1rem" }} />
-                                                    {timeToDisplay(task.pomodorosTimeElapsed / 60)}
-                                                </span>
+                                                {
+                                                    task.totalTimeElapsed !== undefined &&
+                                                    <span className="me-1">
+                                                        <i className="bi bi-clock" style={{ paddingRight: "0.1rem" }} />
+                                                        {timeToDisplay(task.totalTimeElapsed / 60)}
+                                                    </span>
+                                                }
 
                                                 {
                                                     task.todaysTimeElapsed !== undefined &&
