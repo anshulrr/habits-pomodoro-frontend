@@ -145,19 +145,19 @@ export default function ListPomodorosComponent({
                 </div>
             }
 
-            <table id="pomodoros-list" ref={listElement} className="table table-sm table-striped small mb-0">
+            <table id="pomodoros-list" ref={listElement} className="table table-sm small mb-0">
                 <tbody>
                     {
                         pomodoros.map(
-                            pomodoro => (
-                                <tr key={pomodoro.id} className="task-list-row small" onClick={() => setShowPomodoroUpdateId(pomodoro.id)} >
-                                    <td className="text-start text-secondary" style={{ paddingTop: "0.4rem", paddingBottom: "0.4rem", lineHeight: 1.3 }}>
-                                        {pomodoro.task}
+                            (pomodoro, index) => (
+                                <tr key={pomodoro.id} className="task-list-row small text-secondary" onClick={() => setShowPomodoroUpdateId(pomodoro.id)} >
+                                    <td className="text-start" style={{ paddingTop: "0.4rem", paddingBottom: "0.4rem", lineHeight: 1.3 }}>
+                                        {pomodoros.length - index}. {pomodoro.task}
                                     </td>
                                     <td width="40%" className="align-middle text-end">
                                         {showPomodoroUpdateId !== pomodoro.id &&
-                                            <span className="task-list-details">
-                                                <span className="small text-secondary me-1">
+                                            <span className="task-list-details small">
+                                                <span className="me-1">
                                                     {
                                                         pomodoro.status !== 'past' &&
                                                         <span>
@@ -168,9 +168,11 @@ export default function ListPomodorosComponent({
                                                         {moment.utc(pomodoro.endTime).local().format('H:mm')}
                                                     </span>
                                                 </span>
-                                                <span className="badge rounded-pill text-bg-secondary fw-normal">
-                                                    {timeToDisplay(Math.round(pomodoro.timeElapsed / 60))}
-                                                    <i className="ps-1 bi bi-clock" />
+                                                <span className="">
+                                                    <i className="ps-1 bi bi-clock-fill" style={{ paddingRight: "0.1rem" }} />
+                                                    <span style={{ fontVariantNumeric: "tabular-nums" }}>
+                                                        {timeToDisplay(Math.round(pomodoro.timeElapsed / 60))}
+                                                    </span>
                                                 </span>
                                                 <span className="ms-1" style={{ color: pomodoro.color }}>&#9632;</span>
                                             </span>
