@@ -196,7 +196,7 @@ export default function HomeComponent() {
                 </div>
 
                 <div className="col-lg-4">
-                    <div className="mt-3 bg-white text-start text-secondary">
+                    <div className="mt-3 mb-5 bg-white text-start text-secondary">
                         <ListPomodorosComponent
                             key={[pomodorosListReload]}
                             title={"Today's Pomodoros"}
