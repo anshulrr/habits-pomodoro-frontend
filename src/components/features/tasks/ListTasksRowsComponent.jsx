@@ -114,8 +114,8 @@ export default function ListTasksRowsComponent({
 
                 const map = new Map(response.data.map(task => {
                     task.tags = [];
-                    task.todaysTimeElapsed = 0;
-                    task.totalTimeElapsed = 0;
+                    // task.todaysTimeElapsed = 0;
+                    // task.totalTimeElapsed = 0;
                     return [task.id, task];
                 }));
 
@@ -290,7 +290,7 @@ export default function ListTasksRowsComponent({
                                                 {
                                                     task.todaysTimeElapsed !== undefined &&
                                                     <span className="me-1">
-                                                        <i className="bi bi-clock-history" style={{ paddingRight: "0.1rem" }} />
+                                                        <i className="bi bi-clock-fill" style={{ paddingRight: "0.1rem" }} />
                                                         {timeToDisplay(task.todaysTimeElapsed / 60)}
                                                     </span>
                                                 }
