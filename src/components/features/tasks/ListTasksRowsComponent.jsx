@@ -5,7 +5,7 @@ import moment from "moment";
 
 import { useAuth } from "services/auth/AuthContext";
 import Pagination from "services/pagination/Pagination";
-import { retrieveAllTasksApi, updateTaskApi } from "services/api/TaskApiService";
+import { getTasksTimeElapsedApi, retrieveAllTasksApi, updateTaskApi } from "services/api/TaskApiService";
 import { timeToDisplay } from "services/helpers/listsHelper";
 import OutsideAlerter from "services/hooks/OutsideAlerter";
 
@@ -109,27 +109,64 @@ export default function ListTasksRowsComponent({
                 } else {
                     setTasks(response.data)
                 }
-                updateTaskTags(response.data);
+                // retrieve task data today's time elapsed, total time elapsed and tags
+                const taskIds = response.data.map(task => task.id);
+
+                const map = new Map(response.data.map(task => {
+                    task.tags = [];
+                    task.todaysTimeElapsed = 0;
+                    task.totalTimeElapsed = 0;
+                    return [task.id, task];
+                }));
+
+                getTasksTodaysTimeElapsed(taskIds, map);
+                getTasksTotalTimeElapsed(taskIds, map);
+                getTasksTags(taskIds, map);
             })
             .catch(error => console.error(error.message))
     }
 
-    function updateTaskTags(tasks) {
+    function getTasksTags(taskIds, map) {
         if (tags.size === 0) {
             return;
         }
-        const taskIds = tasks.map(task => task.id);
         getTasksTagsApi(taskIds)
             .then(response => {
                 // using Map for easy access and update
-                const map = new Map(tasks.map(i => {
-                    i.tags = [];
-                    return [i.id, i];
-                }));
                 for (let i = 0; i < response.data.length; i++) {
                     map.get(response.data[i][0]).tags.push(tags.get(response.data[i][1]))
                 }
+                setTasks([...map.values()]);
+            })
+            .catch(error => console.error(error.message))
+    }
 
+    function getTasksTodaysTimeElapsed(taskIds, map) {
+        const startDate = moment().startOf('day').toISOString();
+        const endDate = moment().toISOString();
+
+        getTasksTimeElapsedApi({ startDate, endDate, taskIds })
+            .then(response => {
+                // using Map for easy access and update
+                for (let i = 0; i < response.data.length; i++) {
+                    map.get(response.data[i][0]).todaysTimeElapsed = parseInt(response.data[i][1]);
+                }
+                setTasks([...map.values()]);
+            })
+            .catch(error => console.error(error.message))
+    }
+
+    function getTasksTotalTimeElapsed(taskIds, map) {
+        // TODO: decide start date
+        const startDate = moment().add(-10, 'y').toISOString();
+        const endDate = moment().toISOString();
+
+        getTasksTimeElapsedApi({ startDate, endDate, taskIds })
+            .then(response => {
+                // using Map for easy access and update
+                for (let i = 0; i < response.data.length; i++) {
+                    map.get(response.data[i][0]).totalTimeElapsed = parseInt(response.data[i][1]);
+                }
                 setTasks([...map.values()]);
             })
             .catch(error => console.error(error.message))
@@ -232,45 +269,61 @@ export default function ListTasksRowsComponent({
                                                 {task.description}
                                             </div>
                                             <div className="subscript text-secondary">
-                                                <span>
+                                                <span className="me-1">
                                                     <i className="bi bi-arrow-up" />
                                                     {task.priority}
                                                 </span>
-                                                <span>
-                                                    <i className="ps-1 bi bi-hourglass" />
+
+                                                <span className="me-1">
+                                                    <i className="bi bi-hourglass" />
                                                     {timeToDisplay(task.pomodoroLength || task.project.pomodoroLength || userSettings.pomodoroLength)}
                                                 </span>
+
+                                                {
+                                                    task.totalTimeElapsed !== undefined &&
+                                                    <span className="me-1">
+                                                        <i className="bi bi-clock" style={{ paddingRight: "0.1rem" }} />
+                                                        {timeToDisplay(task.totalTimeElapsed / 60)}
+                                                    </span>
+                                                }
+
+                                                {
+                                                    task.todaysTimeElapsed !== undefined &&
+                                                    <span className="me-1">
+                                                        <i className="bi bi-clock-history" style={{ paddingRight: "0.1rem" }} />
+                                                        {timeToDisplay(task.todaysTimeElapsed / 60)}
+                                                    </span>
+                                                }
+
                                                 {
                                                     task.dueDate &&
-                                                    <span className={generateDateColor(task)}>
-                                                        <i className="ps-1 bi bi-calendar-check" style={{ paddingRight: "0.1rem" }} />
+                                                    <span className={generateDateColor(task) + " me-1"}>
+                                                        <i className="bi bi-calendar-check" style={{ paddingRight: "0.1rem" }} />
                                                         {moment(task.dueDate).format("DD/MM/yyyy")}
                                                     </span>
                                                 }
-                                                <span className="me-1">
-                                                    <i className="ps-1 bi bi-clock" style={{ paddingRight: "0.1rem" }} />
-                                                    {timeToDisplay(task.pomodorosTimeElapsed / 60)}
-                                                </span>
 
-                                                {
-                                                    !project &&
-                                                    <span className="me-1">
-                                                        <span className="ps-1" style={{ color: task.project.color, paddingRight: "0.1rem" }}>&#9632;</span>
-                                                        {task.project.name}
-                                                    </span>
-                                                }
+                                                <span style={{ float: "right" }}>
+                                                    {
+                                                        !project &&
+                                                        <span className="me-1">
+                                                            <span style={{ color: task.project.color, paddingRight: "0.1rem" }}>&#9632;</span>
+                                                            {task.project.name}
+                                                        </span>
+                                                    }
 
-                                                {
-                                                    task.tags && task.tags.length > 0 &&
-                                                    task.tags.map(
-                                                        (tag, tag_index) => (
-                                                            <span key={tag_index} className="me-1">
-                                                                <i className="bi bi-tag-fill" style={{ color: tag.color, paddingRight: "0.1rem" }} />
-                                                                {tag.name}
-                                                            </span>
+                                                    {
+                                                        task.tags && task.tags.length > 0 &&
+                                                        task.tags.map(
+                                                            (tag, tag_index) => (
+                                                                <span key={tag_index} className="me-1">
+                                                                    <i className="bi bi-tag-fill" style={{ color: tag.color, paddingRight: "0.1rem" }} />
+                                                                    {tag.name}
+                                                                </span>
+                                                            )
                                                         )
-                                                    )
-                                                }
+                                                    }
+                                                </span>
                                             </div>
                                         </div>
                                         {

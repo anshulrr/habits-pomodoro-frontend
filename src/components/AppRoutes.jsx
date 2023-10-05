@@ -67,9 +67,7 @@ export default function AppRoutes() {
                         <Route path='*' element={<ErrorComponent />} />
                     </Routes>
 
-                    <AuthenticatedRoute>
-                        <FooterComponent />
-                    </AuthenticatedRoute>
+                    <FooterComponent />
                 </BrowserRouter>
             </AuthProvider>
 

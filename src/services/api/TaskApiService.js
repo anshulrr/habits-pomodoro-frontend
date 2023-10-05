@@ -34,3 +34,6 @@ export const retrieveTaskApi
 
 export const updateTaskApi
     = ({ id, task }) => apiClient.put(`/tasks/${id}`, task)
+
+export const getTasksTimeElapsedApi
+    = ({ startDate, endDate, taskIds }) => apiClient.get(`/tasks/pomodoros/time-elapsed?startDate=${startDate}&endDate=${endDate}&taskIds=${taskIds}`)
