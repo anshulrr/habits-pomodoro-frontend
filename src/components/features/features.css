@@ -99,22 +99,29 @@
 /* pomodoro-list-row to be used with update-list-row */
 .pomodoro-list-row {
     /* border: thin solid #ffffff; */
-    border: thin solid #dee2e6;
+    border-bottom: thin solid #dee2e6;
+    border-left: thin solid #dee2e6;
+    border-right: thin solid #dee2e6;
     padding-top: 4px;
     padding-bottom: 4px;
     margin-top: 0px;
     margin-bottom: 0px;
-    /* border-radius: 0px; */
+    border-radius: 0px;
 }
 
 .pomodoro-list-row-selected {
     border: thin solid gray;
-    border-radius: 8px;
+    border-radius: 0px;
 }
 
 .pomodoro-list-popup {
     top: 1rem;
     width: 8rem;
+}
+
+.pomodoro-list-quarter {
+    /* border-top: thin solid #dee2e6; */
+    border-bottom: thin solid #dee2e6;
 }
 
 /* for pomodoro timer popups */

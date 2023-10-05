@@ -166,7 +166,7 @@ export default function ListPomodorosComponent({
                                 <div>
                                     {
                                         quarters.length > 0 &&
-                                        <div className="small text-end">
+                                        <div className="small text-end pomodoro-list-quarter">
                                             <div className="small badge rounded-pill text-bg-secondary fw-normal">
                                                 {quarters.length > 0 ? ((8 - 1 - index) * 3) + ":00 - " + ((8 - index) * 3) + ":00" : ""}
                                             </div>
