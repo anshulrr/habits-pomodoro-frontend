@@ -1,6 +1,11 @@
 import { useState } from "react"
 
-export default function CategoryChecklistComponent({ categories, setIncludeCategories, setReload, setShowIncludeCategories }) {
+export default function CategoryChecklistComponent({
+    categories,
+    setIncludeCategories,
+    setReload,
+    setShowIncludeCategories
+}) {
 
     const [checkedState, setCheckedState] = useState(categories.map(c => c.statsDefault));
 
@@ -8,7 +13,7 @@ export default function CategoryChecklistComponent({ categories, setIncludeCateg
 
     const [errorMessage, setErrorMessage] = useState("");
 
-    const message = "Click on Fetch to update stats";
+    const message = "Click on Fetch to update";
 
     const handleOnChange = (position) => {
         // console.debug('handle: ', checkedState)
