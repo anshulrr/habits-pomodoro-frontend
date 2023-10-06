@@ -59,8 +59,8 @@ export default function ListCommentsComponent({
 
                     {
                         filterBy === 'user' &&
-                        <div className="row border rounded py-1 my-2">
-                            <div className="col-lg-4 text-start text-secondary">
+                        <div className="row border rounded my-2">
+                            <div className="col-lg-4 text-start text-secondary mt-2">
                                 <div className="d-flex justify-content-between">
                                     <div className="text-secondary">
                                         Included Project Categories
@@ -73,7 +73,7 @@ export default function ListCommentsComponent({
                                         <i className="bi bi-pencil-square" />
                                     </button>
                                 </div>
-                                <div style={{ display: showIncludeCategories ? "block" : "none" }} >
+                                <div className="small" style={{ display: showIncludeCategories ? "block" : "none" }} >
                                     <CategoryChecklistComponent
                                         key={categories}
                                         categories={categories}
@@ -84,8 +84,8 @@ export default function ListCommentsComponent({
                                     />
                                 </div>
                             </div>
-                            <div className="col-lg-8 text-end">
-                                <button className="btn btn-sm btn-outline-secondary py-0" type="button" onClick={() => setFilterWithReviseDate(!filterWithReviseDate)}>
+                            <div className="col-lg-8 text-end my-2">
+                                <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setFilterWithReviseDate(!filterWithReviseDate)}>
                                     {!filterWithReviseDate && "Filter comments with revise date"}
                                     {filterWithReviseDate && "Fetch all comments"}
                                 </button>
