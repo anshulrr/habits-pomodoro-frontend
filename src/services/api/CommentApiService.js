@@ -10,9 +10,9 @@ import { apiClient } from "./ApiClient";
 //     = (comment) => apiClient.post(`comments`, comment)
 
 export const retrieveAllCommentsApi
-    = ({ limit, offset, filterBy, id, categoryIds }) => {
+    = ({ limit, offset, filterBy, id, categoryIds, withReviseDate }) => {
         if (filterBy === 'user')
-            return apiClient.get(`/comments?limit=${limit}&offset=${offset}&categoryIds=${categoryIds}`)
+            return apiClient.get(`/comments?limit=${limit}&offset=${offset}&categoryIds=${categoryIds}&withReviseDate=${withReviseDate}`)
         else if (filterBy === 'category')
             return apiClient.get(`project-categories/${id}/comments?limit=${limit}&offset=${offset}`)
         else if (filterBy === 'project')
@@ -24,9 +24,9 @@ export const retrieveAllCommentsApi
     }
 
 export const getCommentsCountApi
-    = ({ filterBy, id, categoryIds }) => {
+    = ({ filterBy, id, categoryIds, withReviseDate }) => {
         if (filterBy === 'user')
-            return apiClient.get(`/comments/count?categoryIds=${categoryIds}`)
+            return apiClient.get(`/comments/count?categoryIds=${categoryIds}&withReviseDate=${withReviseDate}`)
         else if (filterBy === 'category')
             return apiClient.get(`project-categories/${id}/comments/count`)
         else if (filterBy === 'project')

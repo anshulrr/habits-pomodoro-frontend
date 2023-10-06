@@ -20,6 +20,8 @@ export default function ListCommentsComponent({
 
     const [reload, setReload] = useState(0)
 
+    const [withReviseDate, setWithReviseDate] = useState(false)
+
     useEffect(
         () => {
             if (filterBy === 'user') {
@@ -82,18 +84,25 @@ export default function ListCommentsComponent({
                                     />
                                 </div>
                             </div>
+                            <div className="col-lg-4 text-start">
+                                <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setWithReviseDate(!withReviseDate)}>
+                                    {!withReviseDate && "Fetch all comments with revise date"}
+                                    {withReviseDate && "Fetch all comments"}
+                                </button>
+                            </div>
                         </div>
                     }
 
                     {
                         (filterBy !== 'user' || includedCategoryIds.length !== 0) &&
                         <ListFilteredCommentsComponent
-                            key={includedCategoryIds}
+                            key={[includedCategoryIds, withReviseDate]}
                             filterBy={filterBy}
                             id={id}
                             title={title}
                             projectColor={projectColor}
                             categoryIds={includedCategoryIds}
+                            withReviseDate={withReviseDate}
                         />
                     }
 
