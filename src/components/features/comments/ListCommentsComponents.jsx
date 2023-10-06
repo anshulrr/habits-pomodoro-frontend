@@ -60,7 +60,7 @@ export default function ListCommentsComponent({
                     {
                         filterBy === 'user' &&
                         <div className="row">
-                            <div className="col-lg-4">
+                            <div className="col-lg-4 text-start">
                                 <div className="d-flex justify-content-between mb-2">
                                     <h6 className="mb-0">
                                         Included Project Categories
@@ -84,7 +84,7 @@ export default function ListCommentsComponent({
                                     />
                                 </div>
                             </div>
-                            <div className="col-lg-4 text-start">
+                            <div className="col-lg-8 mb-1 text-end">
                                 <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setFilterWithReviseDate(!filterWithReviseDate)}>
                                     {!filterWithReviseDate && "Filter comments with revise date"}
                                     {filterWithReviseDate && "Fetch all comments"}
