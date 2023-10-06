@@ -59,10 +59,10 @@ export default function ListCommentsComponent({
 
                     {
                         filterBy === 'user' &&
-                        <div className="row border rounded my-2">
-                            <div className="col-lg-4 text-start text-secondary mt-2">
+                        <div className="row mb-2">
+                            <div className="col-lg-4 text-start text-secondary mb-2">
                                 <div className="d-flex justify-content-between">
-                                    <div className="text-secondary">
+                                    <div className="text-secondary small">
                                         Included Project Categories
                                         <span className="ms-1 badge rounded-pill text-bg-secondary">
                                             {includedCategoryIds.length}
@@ -84,7 +84,7 @@ export default function ListCommentsComponent({
                                     />
                                 </div>
                             </div>
-                            <div className="col-lg-8 text-end my-2">
+                            <div className="col-lg-8 text-end">
                                 <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setFilterWithReviseDate(!filterWithReviseDate)}>
                                     {!filterWithReviseDate && "Filter comments with revise date"}
                                     {filterWithReviseDate && "Fetch all comments"}
