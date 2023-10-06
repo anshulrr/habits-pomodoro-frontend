@@ -166,7 +166,7 @@ export default function ListPomodorosComponent({
                     {
                         pomodorosGroup.map(
                             (timeSlots, index) => (
-                                <div>
+                                <div key={"slot-" + index}>
                                     {
                                         timeSlots.length > 0 &&
                                         <div className="small text-end pomodoro-list-time-slot">
