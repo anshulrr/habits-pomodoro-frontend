@@ -22,7 +22,9 @@ export default function ListCommentsComponent({
 
     useEffect(
         () => {
-            retrieveProjectCategories();
+            if (filterBy === 'user') {
+                retrieveProjectCategories();
+            }
         }, [] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
@@ -83,14 +85,17 @@ export default function ListCommentsComponent({
                         </div>
                     }
 
-                    <ListFilteredCommentsComponent
-                        key={includedCategoryIds}
-                        filterBy={filterBy}
-                        id={id}
-                        title={title}
-                        projectColor={projectColor}
-                        categoryIds={includedCategoryIds}
-                    />
+                    {
+                        (filterBy !== 'user' || includedCategoryIds.length !== 0) &&
+                        <ListFilteredCommentsComponent
+                            key={includedCategoryIds}
+                            filterBy={filterBy}
+                            id={id}
+                            title={title}
+                            projectColor={projectColor}
+                            categoryIds={includedCategoryIds}
+                        />
+                    }
 
                 </div >
 
