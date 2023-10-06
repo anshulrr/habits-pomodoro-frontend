@@ -20,7 +20,7 @@ export default function ListCommentsComponent({
 
     const [reload, setReload] = useState(0)
 
-    const [withReviseDate, setWithReviseDate] = useState(false)
+    const [filterWithReviseDate, setFilterWithReviseDate] = useState(false)
 
     useEffect(
         () => {
@@ -85,9 +85,9 @@ export default function ListCommentsComponent({
                                 </div>
                             </div>
                             <div className="col-lg-4 text-start">
-                                <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setWithReviseDate(!withReviseDate)}>
-                                    {!withReviseDate && "Fetch all comments with revise date"}
-                                    {withReviseDate && "Fetch all comments"}
+                                <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setFilterWithReviseDate(!filterWithReviseDate)}>
+                                    {!filterWithReviseDate && "Filter comments with revise date"}
+                                    {filterWithReviseDate && "Fetch all comments"}
                                 </button>
                             </div>
                         </div>
@@ -96,13 +96,13 @@ export default function ListCommentsComponent({
                     {
                         (filterBy !== 'user' || includedCategoryIds.length !== 0) &&
                         <ListFilteredCommentsComponent
-                            key={[includedCategoryIds, withReviseDate]}
+                            key={[includedCategoryIds, filterWithReviseDate]}
                             filterBy={filterBy}
                             id={id}
                             title={title}
                             projectColor={projectColor}
                             categoryIds={includedCategoryIds}
-                            withReviseDate={withReviseDate}
+                            filterWithReviseDate={filterWithReviseDate}
                         />
                     }
 

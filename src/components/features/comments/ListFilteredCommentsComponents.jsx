@@ -17,7 +17,7 @@ export default function ListFilteredCommentsComponent({
     title,
     projectColor,
     categoryIds,
-    withReviseDate
+    filterWithReviseDate
 }) {
 
     const authContext = useAuth()
@@ -65,7 +65,7 @@ export default function ListFilteredCommentsComponent({
 
     function refreshComments() {
         setComments([]);
-        retrieveAllCommentsApi({ limit: PAGESIZE, offset: (currentPage - 1) * PAGESIZE, filterBy, id, categoryIds, withReviseDate })
+        retrieveAllCommentsApi({ limit: PAGESIZE, offset: (currentPage - 1) * PAGESIZE, filterBy, id, categoryIds, filterWithReviseDate })
             .then(response => {
                 // console.debug(response)
                 setComments(response.data)
@@ -74,7 +74,7 @@ export default function ListFilteredCommentsComponent({
     }
 
     function getCommentsCount() {
-        getCommentsCountApi({ filterBy, id, categoryIds, withReviseDate })
+        getCommentsCountApi({ filterBy, id, categoryIds, filterWithReviseDate })
             .then(response => {
                 setCommentsCount(response.data)
             })
