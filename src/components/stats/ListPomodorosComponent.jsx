@@ -78,8 +78,8 @@ export default function ListPomodorosComponent({
                 // console.debug(response)
                 response.data.map((x, index) => x.index = response.data.length - index);
 
-                const quarters = groupBy(response.data, 'endTime');
-                setPomodorosGroup(quarters.reverse());
+                const timeSlots = groupBy(response.data, 'endTime');
+                setPomodorosGroup(timeSlots.reverse());
 
                 setPomodorosCount(response.data.length);
                 const total = response.data.reduce((acc, curr) => acc + Math.round(curr.timeElapsed / 60), 0);
@@ -165,18 +165,18 @@ export default function ListPomodorosComponent({
                 <div>
                     {
                         pomodorosGroup.map(
-                            (quarters, index) => (
+                            (timeSlots, index) => (
                                 <div>
                                     {
-                                        quarters.length > 0 &&
-                                        <div className="small text-end pomodoro-list-quarter">
+                                        timeSlots.length > 0 &&
+                                        <div className="small text-end pomodoro-list-time-slot">
                                             <div className="small badge rounded-pill text-bg-secondary fw-normal">
-                                                {quarters.length > 0 ? ((8 - 1 - index) * 3) + ":00 - " + ((8 - index) * 3) + ":00" : ""}
+                                                {timeSlots.length > 0 ? ((8 - 1 - index) * 3) + ":00 - " + ((8 - index) * 3) + ":00" : ""}
                                             </div>
                                         </div>
                                     }
                                     {
-                                        quarters.map(
+                                        timeSlots.map(
                                             (pomodoro) => (
                                                 <div key={pomodoro.id}
                                                     className={"update-list-row pomodoro-list-row" + (showPomodoroUpdateId === pomodoro.id ? " pomodoro-list-row-selected" : "")}
