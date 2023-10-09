@@ -10,6 +10,7 @@ import Pagination from "services/pagination/Pagination"
 
 import CommentComponent from "./CommentComponent";
 import UpdateCommentComponent from "./UpdateCommentComponent";
+import MapCommentTagsComponent from "../tags/MapCommentTagsComponent";
 
 export default function ListFilteredCommentsComponent({
     filterBy,
@@ -33,6 +34,7 @@ export default function ListFilteredCommentsComponent({
 
     const [showCreateComment, setShowCreateComment] = useState(false)
     const [showUpdateComment, setShowUpdateComment] = useState(false)
+    const [showMapTags, setShowMapTags] = useState(-1);
 
     const listElement = useRef(null);
     const [elementHeight, setElementHeight] = useState(0);
@@ -84,7 +86,7 @@ export default function ListFilteredCommentsComponent({
     }
 
     function getCommentsTags(comments) {
-        console.log(tags)
+        // console.debug(tags)
         const commentIds = comments.map(comment => comment.id);
         const map = new Map(comments.map(comment => {
             comment.tags = [];
@@ -248,6 +250,9 @@ export default function ListFilteredCommentsComponent({
                                             {
                                                 showUpdateComment !== comment.id &&
                                                 <div className="comments-list-update">
+                                                    <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowMapTags(comment.id)}>
+                                                        <i className="bi bi-tags" />
+                                                    </button>
                                                     <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" style={{ marginRight: "2px" }} onClick={() => setShowUpdateComment(comment.id)}>
                                                         <i className="bi bi-pencil-square"></i>
                                                     </button>
@@ -275,6 +280,16 @@ export default function ListFilteredCommentsComponent({
                                                     setShowUpdateComment={setShowUpdateComment}
                                                 />
                                             </div>
+                                        }
+
+                                        {
+                                            showMapTags === comment.id &&
+                                            <MapCommentTagsComponent
+                                                id={comment.id}
+                                                setComments={setComments}
+                                                tagsMap={tags}
+                                                setShowMapTags={setShowMapTags}
+                                            />
                                         }
 
                                     </div>
