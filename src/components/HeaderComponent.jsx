@@ -92,11 +92,6 @@ export default function HeaderComponent() {
                 </div>
             </nav>
 
-            {
-                isAuthenticated &&
-                <UserCommentsComponent />
-            }
-
         </header>
     )
 }

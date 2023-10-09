@@ -438,6 +438,7 @@ export default function ListTasksRowsComponent({
                     id={showCommentsId}
                     title={commentsTitle}
                     setShowCommentsId={setShowCommentsId}
+                    tags={tags}
                 />
             }
         </>

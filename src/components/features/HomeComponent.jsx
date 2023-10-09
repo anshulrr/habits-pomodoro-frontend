@@ -7,6 +7,7 @@ import ListProjectsComponent from 'components/features/projects/ListProjectsComp
 import ListTasksComponent from 'components/features/tasks/ListTasksComponent';
 import ListPomodorosComponent from 'components/stats/ListPomodorosComponent';
 import ListTagsComponent from 'components/features/tags/ListTagsComponents';
+import UserCommentsComponent from './comments/UserCommentsComponent';
 
 export default function HomeComponent() {
 
@@ -203,10 +204,15 @@ export default function HomeComponent() {
                             elementHeight={pomodorosHeight}
                             setElementHeight={setPomodorosHeight}
                             setPomodorosListReload={setPomodorosListReload}
+                            tags={tags}
                         />
                     </div >
                 </div >
             </div>
+
+            <UserCommentsComponent
+                tags={tags}
+            />
 
         </div >
     )

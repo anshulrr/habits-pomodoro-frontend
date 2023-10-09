@@ -212,6 +212,7 @@ export default function ListTasksComponent({
                             title={project.name}
                             projectColor={project.color}
                             setShowCommentsId={setShowProjectCommentsId}
+                            tags={tags}
                         />
                     }
 
@@ -370,6 +371,7 @@ export default function ListTasksComponent({
                             createNewPomodoro={createNewPomodoro}
                             setTasksMessage={setMessage}
                             setPomodorosListReload={setPomodorosListReload}
+                            tags={tags}
                         ></PomodoroComponent>
                     }
                 </div>

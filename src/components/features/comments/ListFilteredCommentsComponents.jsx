@@ -5,7 +5,7 @@ import ReactMarkdown from 'react-markdown'
 import moment from "moment";
 
 import { useAuth } from "services/auth/AuthContext";
-import { retrieveAllCommentsApi, getCommentsCountApi } from "services/api/CommentApiService";
+import { retrieveAllCommentsApi, getCommentsCountApi, getCommentsTagsApi } from "services/api/CommentApiService";
 import Pagination from "services/pagination/Pagination"
 
 import CommentComponent from "./CommentComponent";
@@ -17,7 +17,8 @@ export default function ListFilteredCommentsComponent({
     title,
     projectColor,
     categoryIds,
-    filterWithReviseDate
+    filterWithReviseDate,
+    tags
 }) {
 
     const authContext = useAuth()
@@ -69,6 +70,7 @@ export default function ListFilteredCommentsComponent({
             .then(response => {
                 // console.debug(response)
                 setComments(response.data)
+                getCommentsTags(response.data)
             })
             .catch(error => console.error(error.message))
     }
@@ -77,6 +79,28 @@ export default function ListFilteredCommentsComponent({
         getCommentsCountApi({ filterBy, id, categoryIds, filterWithReviseDate })
             .then(response => {
                 setCommentsCount(response.data)
+            })
+            .catch(error => console.error(error.message))
+    }
+
+    function getCommentsTags(comments) {
+        console.log(tags)
+        const commentIds = comments.map(comment => comment.id);
+        const map = new Map(comments.map(comment => {
+            comment.tags = [];
+            return [comment.id, comment];
+        }));
+
+        if (tags.size === 0) {
+            return;
+        }
+        getCommentsTagsApi(commentIds)
+            .then(response => {
+                // using Map for easy access and update
+                for (let i = 0; i < response.data.length; i++) {
+                    map.get(response.data[i][0]).tags.push(tags.get(response.data[i][1]))
+                }
+                setComments([...map.values()]);
             })
             .catch(error => console.error(error.message))
     }
@@ -166,42 +190,58 @@ export default function ListFilteredCommentsComponent({
                                 comment => (
                                     <div key={comment.id} className="comments-list-row">
 
-                                        <div className="d-flex justify-content-start flex-wrap comments-subscript">
-                                            <div className="me-2 text-secondary fw-normal text-start">
+                                        <div className="d-flex justify-content-between flex-wrap comments-subscript">
+                                            <div className="d-flex justify-content-start flex-wrap comments-subscript">
+                                                <div className="me-2 text-secondary fw-normal text-start">
+                                                    {
+                                                        moment(comment.createdAt).fromNow(false)
+                                                    }
+                                                </div>
                                                 {
-                                                    moment(comment.createdAt).fromNow(false)
+                                                    comment.category &&
+                                                    <div className="me-2 text-secondary fw-normal text-start">
+                                                        <i className="bi bi-link-45deg" />
+                                                        {comment.category}
+                                                    </div>
+                                                }
+                                                {
+                                                    comment.project &&
+                                                    <div className="me-2 text-secondary fw-normal text-start">
+                                                        <span style={{ color: comment.color, paddingRight: "0.1rem" }}>&#9632;</span>
+                                                        {comment.project}
+                                                    </div>
+                                                }
+                                                {
+                                                    comment.task &&
+                                                    <div className="me-2 text-secondary fw-normal text-start">
+                                                        <i className="bi bi-list-ul" style={{ paddingRight: "0.1rem" }} />
+                                                        {comment.task}
+                                                    </div>
+                                                }
+                                                {
+                                                    comment.reviseDate &&
+                                                    <div className="me-2 fw-normal text-start">
+                                                        <span className={generateDateColor(comment)}>
+                                                            <i className="bi bi-calendar3-event" style={{ paddingRight: "0.1rem" }} />
+                                                            {moment(comment.reviseDate).format("DD/MM/yyyy")}
+                                                        </span>
+                                                    </div>
                                                 }
                                             </div>
-                                            {
-                                                comment.category &&
-                                                <div className="me-2 text-secondary fw-normal text-start">
-                                                    <i className="bi bi-link-45deg" />
-                                                    {comment.category}
-                                                </div>
-                                            }
-                                            {
-                                                comment.project &&
-                                                <div className="me-2 text-secondary fw-normal text-start">
-                                                    <span style={{ color: comment.color, paddingRight: "0.1rem" }}>&#9632;</span>
-                                                    {comment.project}
-                                                </div>
-                                            }
-                                            {
-                                                comment.task &&
-                                                <div className="me-2 text-secondary fw-normal text-start">
-                                                    <i className="bi bi-list-ul" style={{ paddingRight: "0.1rem" }} />
-                                                    {comment.task}
-                                                </div>
-                                            }
-                                            {
-                                                comment.reviseDate &&
-                                                <div className="me-2 fw-normal text-start">
-                                                    <span className={generateDateColor(comment)}>
-                                                        <i className="bi bi-calendar3-event" style={{ paddingRight: "0.1rem" }} />
-                                                        {moment(comment.reviseDate).format("DD/MM/yyyy")}
-                                                    </span>
-                                                </div>
-                                            }
+
+                                            <div className="justify-content-end text-secondary">
+                                                {
+                                                    comment.tags && comment.tags.length > 0 &&
+                                                    comment.tags.map(
+                                                        (tag, tag_index) => (
+                                                            <span key={tag_index} className="me-1">
+                                                                <i className="bi bi-tag-fill" style={{ color: tag.color, paddingRight: "0.1rem" }} />
+                                                                {tag.name}
+                                                            </span>
+                                                        )
+                                                    )
+                                                }
+                                            </div>
                                         </div>
 
                                         <div className="d-flex justify-content-end">
