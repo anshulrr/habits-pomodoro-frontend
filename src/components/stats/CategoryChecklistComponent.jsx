@@ -1,6 +1,11 @@
 import { useState } from "react"
 
-export default function CategoryChecklistComponent({ categories, setIncludeCategories, setReload, setShowIncludeCategories }) {
+export default function CategoryChecklistComponent({
+    categories,
+    setIncludeCategories,
+    setReload,
+    setShowIncludeCategories
+}) {
 
     const [checkedState, setCheckedState] = useState(categories.map(c => c.statsDefault));
 
@@ -8,7 +13,7 @@ export default function CategoryChecklistComponent({ categories, setIncludeCateg
 
     const [errorMessage, setErrorMessage] = useState("");
 
-    const message = "Click on Fetch to update stats";
+    const message = "Click on Fetch to update";
 
     const handleOnChange = (position) => {
         // console.debug('handle: ', checkedState)
@@ -94,7 +99,7 @@ export default function CategoryChecklistComponent({ categories, setIncludeCateg
 
             <div className="text-danger"><small>{errorMessage}</small></div>
 
-            <div className="input-group my-2">
+            <div className="input-group my-2 justify-content-end">
                 <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => selectUpto()}>Upto</button>
                 <input type="number" className="form-control form-control-sm" name="level" value={level} placeholder="Priority Level" onChange={(e) => setLevel(e.target.value)} />
                 <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => selectAbove()}>Above</button>
