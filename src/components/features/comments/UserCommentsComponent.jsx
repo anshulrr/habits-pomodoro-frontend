@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import ListCommentsComponent from './ListCommentsComponents';
 
-export default function UserCommentsComponent() {
+export default function UserCommentsComponent({ tags }) {
     const [showComments, setShowComments] = useState(-1);
 
     return (
@@ -19,6 +19,7 @@ export default function UserCommentsComponent() {
                         filterBy={'user'}
                         setShowCommentsId={setShowComments}
                         title={'All Comments'}
+                        tags={tags}
                     />
                 </span>
             }

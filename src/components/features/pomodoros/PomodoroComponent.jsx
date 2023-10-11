@@ -16,7 +16,8 @@ export default function PomodoroComponent({
     setPomodoroStatus,
     createNewPomodoro,
     setTasksMessage,
-    setPomodorosListReload
+    setPomodorosListReload,
+    tags
 }) {
     const authContext = useAuth()
     const userSettings = authContext.userSettings
@@ -259,6 +260,7 @@ export default function PomodoroComponent({
                     id={showCommentsId}
                     title={commentsTitle}
                     setShowCommentsId={setShowCommentsId}
+                    tags={tags}
                 />
             }
         </div >

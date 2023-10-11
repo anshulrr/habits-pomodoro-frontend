@@ -4,7 +4,6 @@ import { retrieveAllProjectCategoriesApi, getProjectCategoriesCountApi } from "s
 import Pagination from "services/pagination/Pagination"
 
 import ProjectCategoryComponent from "components/user-settings/ProjectCategoryComponent";
-import ListCommentsComponent from "components/features/comments/ListCommentsComponents";
 
 const PAGESIZE = 5;
 
@@ -17,8 +16,6 @@ export default function ListProjectCategoriesComponent() {
     const [category, setCategory] = useState(null)
 
     const [isNewCategory, setNewCategory] = useState(false)
-
-    const [showCommentsId, setShowCommentsId] = useState(-1);
 
     useEffect(
         () => getProjectCategoriesCount(),
@@ -97,18 +94,11 @@ export default function ListProjectCategoriesComponent() {
                                                 </span>
                                                 <span>&nbsp;{cat.name}</span>
                                             </div>
-                                            <div className="col-4 text-secondary text-end list-details">
+                                            <div className="col-4 text-secondary text-end">
                                                 <small>
                                                     <i className="bi bi-arrow-up" />
                                                 </small>
                                                 {cat.level}&nbsp;
-                                            </div>
-                                            <div className="col-4 text-secondary text-end list-button">
-                                                <div className="input-group justify-content-end">
-                                                    <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowCommentsId(cat.id)}>
-                                                        <i className="bi bi-chat-right-text" onClick={() => setShowCommentsId(cat.id)} />
-                                                    </button>
-                                                </div>
                                             </div>
                                         </div>
                                     )
@@ -123,16 +113,6 @@ export default function ListProjectCategoriesComponent() {
                             onPageChange={page => setCurrentPage(page)}
                         />
                     </div>
-
-                    {
-                        showCommentsId !== -1 &&
-                        <ListCommentsComponent
-                            filterBy={'category'}
-                            id={showCommentsId}
-                            title={category.name}
-                            setShowCommentsId={setShowCommentsId}
-                        />
-                    }
                 </div>
                 <div className="col-lg-8 mt-2">
                     {

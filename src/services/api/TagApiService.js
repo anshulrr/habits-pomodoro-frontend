@@ -20,3 +20,6 @@ export const mapTagsApi
 
 export const getTasksTagsApi
     = (taskIds) => apiClient.get(`tasks/tags?taskIds=${taskIds}`)
+
+export const mapCommentTagsApi
+    = (comment_id, data) => apiClient.post(`comments/${comment_id}/tags`, data)

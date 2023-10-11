@@ -10,7 +10,8 @@ export default function ListCommentsComponent({
     id,
     title,
     projectColor,
-    setShowCommentsId
+    setShowCommentsId,
+    tags
 }) {
 
     const [categories, setCategories] = useState([])
@@ -103,6 +104,7 @@ export default function ListCommentsComponent({
                             projectColor={projectColor}
                             categoryIds={includedCategoryIds}
                             filterWithReviseDate={filterWithReviseDate}
+                            tags={tags}
                         />
                     }
 

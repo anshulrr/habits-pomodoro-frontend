@@ -16,6 +16,7 @@ export default function ListPomodorosComponent({
     title = "Pomodoros",
     elementHeight,
     setElementHeight,
+    tags
 }) {
 
     const listElement = useRef(null);
@@ -252,6 +253,7 @@ export default function ListPomodorosComponent({
                         id={showCommentsId}
                         title={commentsTitle}
                         setShowCommentsId={setShowCommentsId}
+                        tags={tags}
                     />
                 </div>
             }
