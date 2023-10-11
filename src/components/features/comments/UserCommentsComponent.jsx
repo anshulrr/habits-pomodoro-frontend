@@ -13,8 +13,7 @@ export default function UserCommentsComponent({ tags }) {
                 </button>
             </span>
             {
-                showComments === 1 &&
-                <span className="user-comments-overlay">
+                <span className="user-comments-overlay" style={{ display: (showComments === 1 ? "block" : "none") }} >
                     <ListCommentsComponent
                         filterBy={'user'}
                         setShowCommentsId={setShowComments}
