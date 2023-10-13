@@ -72,7 +72,7 @@ export default function MapCommentTagsComponent({
         mapCommentTagsApi(id, { tagIds: selectedTags })
             .then(response => {
                 setComments(comments => comments.map(comment => {
-                    if (comment.id == id) {
+                    if (comment.id === id) {
                         comment.tags = response.data.tags;
                     }
                     return comment;

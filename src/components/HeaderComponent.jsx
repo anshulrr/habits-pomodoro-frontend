@@ -1,7 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 
 import { useAuth } from 'services/auth/AuthContext';
-import UserCommentsComponent from 'components/features/comments/UserCommentsComponent';
 
 export default function HeaderComponent() {
 
