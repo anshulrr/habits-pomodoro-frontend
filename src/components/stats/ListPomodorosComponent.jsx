@@ -105,13 +105,10 @@ export default function ListPomodorosComponent({
     }
 
     function updateCommentsData(pomodoro) {
-        setShowCommentsId(pomodoro.id)
-
+        setShowCommentsId(pomodoro.taskId)
+        console.log(pomodoro);
         setCommentsTitle(
-            pomodoro.task + ": " +
-            moment.utc(pomodoro.endTime).local().format('YYYY MMM Do') + ' (' +
-            moment.utc(pomodoro.startTime).local().format('H:mm') + '-' +
-            moment.utc(pomodoro.endTime).local().format('H:mm') + ')'
+            pomodoro.task
         )
     }
 
@@ -249,7 +246,7 @@ export default function ListPomodorosComponent({
                 showCommentsId !== -1 &&
                 <div className="text-body">
                     <ListCommentsComponent
-                        filterBy={'pomodoro'}
+                        filterBy={'task'}
                         id={showCommentsId}
                         title={commentsTitle}
                         setShowCommentsId={setShowCommentsId}

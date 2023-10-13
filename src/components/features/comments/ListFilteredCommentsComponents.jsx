@@ -138,17 +138,11 @@ export default function ListFilteredCommentsComponent({
                     <div className="d-flex justify-content-between">
                         <h6>
                             {
-                                (filterBy === 'category' &&
-                                    <i className="me-1 bi bi-link-45deg" />
-                                ) ||
                                 (filterBy === 'project' &&
                                     <span className="me-1" style={{ color: projectColor }}>&#9632;</span>
                                 ) ||
                                 (filterBy === 'task' &&
                                     <i className="me-1 bi bi-list-ul" />
-                                ) ||
-                                (filterBy === 'pomodoro' &&
-                                    <i className="me-1 bi bi-hourglass" />
                                 )
 
                             }

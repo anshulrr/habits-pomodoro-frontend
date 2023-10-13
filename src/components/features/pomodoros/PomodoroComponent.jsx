@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 // import { useParams, useLocation, Link } from 'react-router-dom';
 
-import moment from 'moment';
-
 import { useAuth } from 'services/auth/AuthContext';
 import { updatePomodoroApi } from 'services/api/PomodoroApiService';
 import { generateInitialTimer, calculateTimeRemaining, generateTimer } from 'services/helpers/timerHelper';
@@ -188,11 +186,10 @@ export default function PomodoroComponent({
     }
 
     function updateCommentsData(pomodoro) {
-        setShowCommentsId(pomodoro.id)
+        setShowCommentsId(pomodoro.task.id)
 
         setCommentsTitle(
-            pomodoro.task.description + ": " +
-            moment.utc(pomodoro.startTime).local().format('YYYY MMM Do (H:mm)')
+            pomodoro.task.description
         )
     }
 
@@ -256,7 +253,7 @@ export default function PomodoroComponent({
             {
                 showCommentsId !== -1 &&
                 <ListCommentsComponent
-                    filterBy={'pomodoro'}
+                    filterBy={'task'}
                     id={showCommentsId}
                     title={commentsTitle}
                     setShowCommentsId={setShowCommentsId}
