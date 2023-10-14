@@ -164,7 +164,7 @@ export default function HomeComponent() {
                             {
                                 project &&
                                 <ListTasksComponent
-                                    key={[project.id, tasksComponentReload]}
+                                    key={[project.id, tag, tasksComponentReload]}
                                     project={project}
                                     tags={tags}
                                     setPomodorosListReload={setPomodorosListReload}
@@ -186,7 +186,7 @@ export default function HomeComponent() {
                             {
                                 !project && tag &&
                                 <ListTasksComponent
-                                    key={[tag.id, tasksComponentReload]}
+                                    key={[project, tag.id, tasksComponentReload]}
                                     tags={tags}
                                     tag={tag}
                                     setPomodorosListReload={setPomodorosListReload}
