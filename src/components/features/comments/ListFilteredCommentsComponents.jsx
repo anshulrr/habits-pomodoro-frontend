@@ -110,6 +110,8 @@ export default function ListFilteredCommentsComponent({
     function generateDateColor(comment) {
         if (moment().diff(moment(comment.reviseDate)) > 0) {
             return "text-danger";
+        } else if (moment().diff(moment(comment.reviseDate)) > -24 * 60 * 60 * 1000) {
+            return "text-primary";
         } else {
             return "text-secondary";
         }

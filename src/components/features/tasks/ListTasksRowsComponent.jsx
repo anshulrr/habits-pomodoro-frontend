@@ -232,6 +232,8 @@ export default function ListTasksRowsComponent({
         if (task.status === 'added') {
             if (moment().diff(moment(task.dueDate)) > 0) {
                 return "text-danger";
+            } else if (moment().diff(moment(task.dueDate)) > -24 * 60 * 60 * 1000) {
+                return "text-primary";
             } else {
                 return "text-secondary";
             }
