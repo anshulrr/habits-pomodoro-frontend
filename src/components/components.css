@@ -30,7 +30,7 @@
 
     .left-menu-icon {
         position: fixed;
-        right: 1rem;
+        left: 16px;
         bottom: 5px;
         display: block;
         z-index: 1031;

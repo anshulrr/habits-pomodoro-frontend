@@ -85,21 +85,25 @@ export default function HomeComponent() {
                 <div className="col-lg-4 text-start">
 
                     <div className="left-menu-icon">
-                        <button type="button" className="btn btn-sm btn-dark" onClick={() => setShowLeftMenu(!showLeftMenu)}>
-                            {
-                                !showLeftMenu &&
-                                <i className="bi bi-list" />
-                            }
-                            {
-                                showLeftMenu &&
-                                <i className="bi bi-x-lg" />
-                            }
-                        </button>
+                        {
+                            !showLeftMenu &&
+                            <button type="button" className="btn btn-sm btn-dark" onClick={() => setShowLeftMenu(!showLeftMenu)}>
+                                Sidebar
+                                <i className="ps-1 bi bi-list" />
+                            </button>
+                        }
+                        {
+                            showLeftMenu &&
+                            <button type="button" className="btn btn-sm btn-dark">
+                                Sidebar
+                                <i className="ps-1 bi bi-x-lg" />
+                            </button>
+                        }
                     </div>
 
                     {
                         <div className={"left-menu-overlay " + (showLeftMenu ? "left-menu-enter" : "left-menu-exit")} >
-                            <div>
+                            <div id="outside-alerter-parent">
                                 <OutsideAlerter handle={() => setShowLeftMenu(false)}>
                                     <div className="left-menu-popup">
 
