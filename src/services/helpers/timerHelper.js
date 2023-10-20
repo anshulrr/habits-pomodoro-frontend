@@ -10,8 +10,8 @@ export const calculateTimeRemaining = (endTime) => {
 }
 
 export const generateTimer = ({ hours, minutes, seconds }) => {
-    let updatedTimer = hours !== 0 ? ((hours > 9 ? hours : '0' + hours) + ':') : ''
-    updatedTimer += minutes !== 0 ? ((minutes > 9 ? minutes : '0' + minutes) + ':') : ''
+    let updatedTimer = hours === 0 ? '' : ((hours > 9 ? hours : '0' + hours) + ':')
+    updatedTimer += (hours === 0 && minutes === 0) ? '' : ((minutes > 9 ? minutes : '0' + minutes) + ':')
     updatedTimer += (seconds > 9 ? seconds : '0' + seconds);
     return updatedTimer;
 }
