@@ -8,6 +8,7 @@ import ListTasksComponent from 'components/features/tasks/ListTasksComponent';
 import ListPomodorosComponent from 'components/stats/ListPomodorosComponent';
 import ListTagsComponent from 'components/features/tags/ListTagsComponents';
 import UserCommentsComponent from './comments/UserCommentsComponent';
+import OutsideAlerter from 'services/hooks/OutsideAlerter';
 
 export default function HomeComponent() {
 
@@ -98,60 +99,64 @@ export default function HomeComponent() {
 
                     {
                         <div className={"left-menu-overlay " + (showLeftMenu ? "left-menu-enter" : "left-menu-exit")} >
-                            <div className="left-menu-popup">
+                            <div>
+                                <OutsideAlerter handle={() => setShowLeftMenu(false)}>
+                                    <div className="left-menu-popup">
 
-                                <ListProjectsComponent
-                                    project={project}
-                                    setProject={setProject}
-                                    setTag={setTag}
-                                    setShowLeftMenu={setShowLeftMenu}
-                                />
+                                        <ListProjectsComponent
+                                            project={project}
+                                            setProject={setProject}
+                                            setTag={setTag}
+                                            setShowLeftMenu={setShowLeftMenu}
+                                        />
 
-                                <div className="mb-3">
-                                    <div className="d-flex justify-content-between">
-                                        <h6>
-                                            Tasks Filters
-                                        </h6>
-                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={() => setShowTasksFilters(!showTasksFilters)}>
-                                            {
-                                                !showTasksFilters &&
-                                                <i className="bi bi-eye" />
-                                            }
+                                        <div className="mb-3">
+                                            <div className="d-flex justify-content-between">
+                                                <h6>
+                                                    Tasks Filters
+                                                </h6>
+                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={() => setShowTasksFilters(!showTasksFilters)}>
+                                                    {
+                                                        !showTasksFilters &&
+                                                        <i className="bi bi-eye" />
+                                                    }
+                                                    {
+                                                        showTasksFilters &&
+                                                        <i className="bi bi-eye-slash" />
+                                                    }
+                                                </button>
+                                            </div>
                                             {
                                                 showTasksFilters &&
-                                                <i className="bi bi-eye-slash" />
+                                                <div>
+                                                    <div className={(!project && !tag && tasksFilter === "Upcoming" ? "list-selected " : "") + "py-1 small row list-row"} onClick={() => fetchTasksAndUpdateAppStates('Upcoming')}>
+                                                        <div className="col-12">
+                                                            <i className="pe-1 bi bi-calendar-check" />
+                                                            Upcoming
+                                                        </div>
+                                                    </div>
+                                                    <div className={(!project && !tag && tasksFilter === "Overdue" ? "list-selected " : "") + "py-1 small row list-row"} onClick={() => fetchTasksAndUpdateAppStates('Overdue')}>
+                                                        <div className="col-12">
+                                                            <i className="pe-1 bi bi-calendar-check text-danger" />
+                                                            Overdue
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             }
-                                        </button>
-                                    </div>
-                                    {
-                                        showTasksFilters &&
-                                        <div>
-                                            <div className={(!project && !tag && tasksFilter === "Upcoming" ? "list-selected " : "") + "py-1 small row list-row"} onClick={() => fetchTasksAndUpdateAppStates('Upcoming')}>
-                                                <div className="col-12">
-                                                    <i className="pe-1 bi bi-calendar-check" />
-                                                    Upcoming
-                                                </div>
-                                            </div>
-                                            <div className={(!project && !tag && tasksFilter === "Overdue" ? "list-selected " : "") + "py-1 small row list-row"} onClick={() => fetchTasksAndUpdateAppStates('Overdue')}>
-                                                <div className="col-12">
-                                                    <i className="pe-1 bi bi-calendar-check text-danger" />
-                                                    Overdue
-                                                </div>
-                                            </div>
                                         </div>
-                                    }
-                                </div>
 
-                                <div className="mb-3">
-                                    <ListTagsComponent
-                                        setProject={setProject}
-                                        tag={tag}
-                                        setTag={setTag}
-                                        setAllTags={setTags}
-                                        setTasksComponentReload={setTasksComponentReload}
-                                        setShowLeftMenu={setShowLeftMenu}
-                                    />
-                                </div>
+                                        <div className="mb-3">
+                                            <ListTagsComponent
+                                                setProject={setProject}
+                                                tag={tag}
+                                                setTag={setTag}
+                                                setAllTags={setTags}
+                                                setTasksComponentReload={setTasksComponentReload}
+                                                setShowLeftMenu={setShowLeftMenu}
+                                            />
+                                        </div>
+                                    </div>
+                                </OutsideAlerter>
                             </div>
                         </div>
                     }
