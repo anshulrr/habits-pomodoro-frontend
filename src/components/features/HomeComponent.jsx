@@ -157,7 +157,7 @@ export default function HomeComponent() {
                     }
                 </div>
 
-                <div className="col-lg-4">
+                <div className="col-lg-4" style={{ backgroundColor: "#e9ecef" }}>
                     {
                         tags !== null &&
                         <div>

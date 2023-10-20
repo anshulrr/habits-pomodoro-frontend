@@ -153,7 +153,7 @@ export default function ListTasksComponent({
         <div className="">
             <div className="row">
 
-                <div className="col-lg-12 py-3" style={{ backgroundColor: "#e9ecef" }}>
+                <div className="col-lg-12 py-3">
 
                     <div className="d-flex justify-content-between">
                         <h6>
