@@ -32,7 +32,7 @@ export default function HeaderComponent() {
                                                 style={{ borderRadius: "50%" }}
                                                 width="35rem"
                                                 height="35rem"
-                                                className={url === "/" ? "" : "opacity-75"}
+                                                className={(url === "/" ? "" : "border-white") + " border border-2"}
                                                 alt={user.displayName}
                                             // referrerPolicy='no-referrer'
                                             />
