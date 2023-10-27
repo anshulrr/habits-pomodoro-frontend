@@ -8,7 +8,7 @@ export default function UserCommentsComponent({ tags }) {
     return (
         <div>
             <span className="user-comments-icon">
-                <button type="button" className="btn btn-sm btn-success" onClick={() => setShowComments(-showComments)}>
+                <button type="button" className="btn btn-success" onClick={() => setShowComments(-showComments)}>
                     <i className="bi bi-chat-right-text" />
                 </button>
             </span>
