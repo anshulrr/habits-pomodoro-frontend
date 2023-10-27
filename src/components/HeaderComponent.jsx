@@ -10,10 +10,6 @@ export default function HeaderComponent() {
     const isAuthenticated = authContext.isAuthenticated
     const user = authContext.user;
 
-    function logout() {
-        authContext.logout()
-    }
-
     return (
         <header style={{ paddingTop: "40px" }}>
             <nav className="navbar navbar-expand-sm fixed-top justify-content-between bg-light border-bottom border-2 py-0">
@@ -24,25 +20,8 @@ export default function HeaderComponent() {
                         <ul className="navbar-nav">
                             <li className="nav-item">
                                 {
-                                    user.photoURL &&
-                                    <Link className="nav-link py-0" to="/" state={state}>
-                                        <div className="text-center">
-                                            <img
-                                                src={user.photoURL}
-                                                style={{ borderRadius: "50%" }}
-                                                width="35rem"
-                                                height="35rem"
-                                                className={(url === "/" ? "" : "border-white") + " border border-2"}
-                                                alt={user.displayName}
-                                            // referrerPolicy='no-referrer'
-                                            />
-                                        </div>
-                                    </Link>
-                                }
-                                {
-                                    !user.photoURL &&
                                     <Link className={"nav-link" + (url === "/" ? " active" : "")} to="/" state={state}>
-                                        Projects
+                                        Home
                                     </Link>
                                 }
                             </li>
@@ -59,35 +38,44 @@ export default function HeaderComponent() {
                             </li>
                         }
                     </ul>
+
                     <ul className="navbar-nav">
-                        {
-                            isAuthenticated &&
-                            <li className="nav-item">
+                        <li className="nav-item">
+                            {
+                                user.photoURL &&
+                                <Link className="nav-link py-0" to="/settings" state={state}>
+                                    <div className="text-center">
+                                        <img
+                                            src={user.photoURL}
+                                            style={{ borderRadius: "50%" }}
+                                            width="35rem"
+                                            height="35rem"
+                                            className={(url.includes("settings") ? "" : "border-white") + " border border-2"}
+                                            alt={user.displayName}
+                                        // referrerPolicy='no-referrer'
+                                        />
+                                    </div>
+                                </Link>
+                            }
+                            {
+                                !user.photoURL &&
                                 <Link className={"nav-link" + (url.includes("settings") ? " active" : "")} to="/settings" state={state}>
                                     Settings
                                 </Link>
-                            </li>
-                        }
+                            }
+                        </li>
                     </ul>
 
-                    <ul className="navbar-nav">
-                        {
-                            isAuthenticated &&
-                            <li className="nav-item">
-                                <Link className="nav-link" onClick={logout} state={{}}>
-                                    Logout
-                                </Link>
-                            </li>
-                        }
-                        {
-                            !isAuthenticated &&
+                    {
+                        !isAuthenticated &&
+                        <ul className="navbar-nav">
                             <li className="nav-item">
                                 <Link className="nav-link" to="/login" state={{}}>
                                     Login
                                 </Link>
                             </li>
-                        }
-                    </ul>
+                        </ul>
+                    }
                 </div>
             </nav>
 

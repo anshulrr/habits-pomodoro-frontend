@@ -4,9 +4,17 @@ import ListProjectCategoriesComponent from 'components/user-settings/ListProject
 import ChangePasswordComponent from 'components/user-settings/ChangePasswordComponent';
 import UserSettingsComponent from 'components/user-settings/UserSettingsComponent';
 
+import { useAuth } from 'services/auth/AuthContext';
+
 export default function SettingsComponent() {
 
     const [showChangePassword, setShowChangePassword] = useState(false)
+
+    const authContext = useAuth()
+
+    function logout() {
+        authContext.logout()
+    }
 
     useEffect(
         () => {
@@ -42,6 +50,13 @@ export default function SettingsComponent() {
 
                 <div className="col-lg-12">
                     <UserSettingsComponent />
+                    <hr />
+                </div>
+
+                <div className="col-lg-12 text-start">
+                    <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => logout()}>
+                        Logout
+                    </button>
                     <hr />
                 </div>
 
