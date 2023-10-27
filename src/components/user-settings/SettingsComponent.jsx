@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import ListProjectCategoriesComponent from 'components/user-settings/ListProjectsCategoriesComponent';
 import ChangePasswordComponent from 'components/user-settings/ChangePasswordComponent';
@@ -7,6 +7,12 @@ import UserSettingsComponent from 'components/user-settings/UserSettingsComponen
 export default function SettingsComponent() {
 
     const [showChangePassword, setShowChangePassword] = useState(false)
+
+    useEffect(
+        () => {
+            document.title = 'Settings';
+        }, []
+    )
 
     return (
         <div className="container mt-3">

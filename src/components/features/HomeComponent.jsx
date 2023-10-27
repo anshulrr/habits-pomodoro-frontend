@@ -36,6 +36,7 @@ export default function HomeComponent() {
 
     useEffect(
         () => {
+            document.title = 'Habits Pomodoro';
             if (tasksFilter) {
                 fetchTasks(tasksFilter);
             }

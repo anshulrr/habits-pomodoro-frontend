@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from 'services/auth/AuthContext'
 import HomeComponent from 'components/features/HomeComponent'
@@ -14,6 +14,12 @@ export default function LoginComponent() {
     const [errorMessage, setErrorMessage] = useState('')
 
     const navigate = useNavigate();
+
+    useEffect(
+        () => {
+            document.title = 'Habits Pomodoro';
+        }, []
+    )
 
     async function handleSubmit(error) {
         error.preventDefault();

@@ -58,6 +58,7 @@ export default function PomodoroComponent({
             //         registration.active.postMessage('keep alive')
             //     })
             // }
+            // document.title = 'Habits Pomodoro - ' + updatedTimer;
         } else {
             // TODO: find fix for extra seconds elapsed due to inactive tab
             // console.warn('from pomodoro timer error:', total / 1000)
@@ -67,6 +68,7 @@ export default function PomodoroComponent({
             updatePomodoro('completed', 0);
             const audio = new Audio(process.env.PUBLIC_URL + '/audio/success-1-6297.mp3')
             audio.play();
+            // document.title = 'Habits Pomodoro';
         }
     }
     const refreshTimer = (endTime) => {

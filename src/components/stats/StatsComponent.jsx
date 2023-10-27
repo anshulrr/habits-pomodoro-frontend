@@ -55,7 +55,8 @@ export default function ListStatsComponent() {
     useEffect(
         () => {
             // console.debug('re-render StatsComponent')
-            retrieveProjectCategories()
+            document.title = 'Stats';
+            retrieveProjectCategories();
         }, []   // eslint-disable-line react-hooks/exhaustive-deps
     )
 
