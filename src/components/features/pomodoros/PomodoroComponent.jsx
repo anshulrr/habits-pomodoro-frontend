@@ -193,6 +193,9 @@ export default function PomodoroComponent({
         setCommentsTitle(
             pomodoro.task.description
         )
+
+        // minimise popup to footer
+        setOpenPomodorosPopup(false)
     }
 
     function handleDobuleClick(e) {
