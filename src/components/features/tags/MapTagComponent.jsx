@@ -67,7 +67,7 @@ export default function MapTagComponent({
             },
             []
         );
-        // console.log(selectedTags)
+        // console.debug(selectedTags)
 
         mapTagsApi(task.id, { tagIds: selectedTags })
             .then(response => {

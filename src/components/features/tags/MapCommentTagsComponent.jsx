@@ -67,7 +67,7 @@ export default function MapCommentTagsComponent({
             },
             []
         );
-        // console.log(selectedTags)
+        // console.debug(selectedTags)
 
         mapCommentTagsApi(id, { tagIds: selectedTags })
             .then(response => {

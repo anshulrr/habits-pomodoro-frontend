@@ -47,13 +47,26 @@ export default function ListProjectsComponent({ project, setProject, setTag, set
             .then(response => {
                 // console.debug(response)
                 setProjects(response.data)
-                // if (!project && response.data.length > 0) {
-                //     setProject(response.data[0]);
-                //     // udpate state for first time load
-                //     // updateAppStates(response.data[0]);
-                // }
+                // set project for first time load
+                if (isStateEmpty() && !project && response.data.length > 0) {
+                    setProject(response.data[0]);
+                    // udpate state for first time load
+                    updateAppStates(response.data[0]);
+                }
             })
             .catch(error => console.error(error.message))
+    }
+
+    function isStateEmpty() {
+        if (!state) {
+            return true;
+        }
+        for (const prop in state) {
+            if (Object.hasOwn(state, prop)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     function getProjectsCount() {

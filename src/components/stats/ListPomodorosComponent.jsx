@@ -106,7 +106,6 @@ export default function ListPomodorosComponent({
 
     function updateCommentsData(pomodoro) {
         setShowCommentsId(pomodoro.taskId)
-        console.log(pomodoro);
         setCommentsTitle(
             pomodoro.task
         )
@@ -114,7 +113,7 @@ export default function ListPomodorosComponent({
 
     const groupBy = function (arr, key) {
         return arr.reduce(function (result, x) {
-            // console.log(x);
+            // console.debug(x);
             let index = Math.floor(moment(x[key]).format('H') / 3);
             (result[index]).push(x);
             return result;
