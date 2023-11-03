@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker";
 import moment from 'moment'
 
 import { createCommentApi } from 'services/api/CommentApiService'
+import { truncateParagraph } from 'services/helpers/listsHelper';
 
 export default function CommentComponent({ setComments, filterBy, id, title, setShowCreateComment, setCommentsCount }) {
 
@@ -28,6 +29,12 @@ export default function CommentComponent({ setComments, filterBy, id, title, set
                 setDescription('')
                 const data = response.data
                 data[filterBy] = title
+
+                // update truncated description
+                const [para, truncated] = truncateParagraph(data.description);
+                data.truncated_description = para;
+                data.truncated = truncated
+
                 setComments(prevComment => [data, ...prevComment])
                 setCommentsCount(count => count + 1)
                 setShowInput(true)

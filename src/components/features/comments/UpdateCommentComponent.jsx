@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker";
 import moment from 'moment';
 
 import { retrieveCommentApi, updateCommentApi } from 'services/api/CommentApiService'
+import { truncateParagraph } from 'services/helpers/listsHelper';
 
 export default function UpdateCommentComponent({ setComments, id, setShowUpdateComment }) {
 
@@ -40,8 +41,9 @@ export default function UpdateCommentComponent({ setComments, id, setShowUpdateC
                 // console.debug(response)
                 setComments(comments => comments.map(comment => {
                     if (comment.id === id) {
-                        comment.description = response.data.description
-                        comment.reviseDate = response.data.reviseDate
+                        comment.description = response.data.description;
+                        comment.reviseDate = response.data.reviseDate;
+                        [comment.truncated_description, comment.truncated] = truncateParagraph(response.data.description);
                     }
                     return comment;
                 }))

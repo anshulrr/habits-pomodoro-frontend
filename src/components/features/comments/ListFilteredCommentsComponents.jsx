@@ -11,6 +11,7 @@ import Pagination from "services/pagination/Pagination"
 import CommentComponent from "./CommentComponent";
 import UpdateCommentComponent from "./UpdateCommentComponent";
 import MapCommentTagsComponent from "../tags/MapCommentTagsComponent";
+import { truncateParagraph } from "services/helpers/listsHelper";
 
 export default function ListFilteredCommentsComponent({
     filterBy,
@@ -35,6 +36,8 @@ export default function ListFilteredCommentsComponent({
     const [showCreateComment, setShowCreateComment] = useState(false)
     const [showUpdateComment, setShowUpdateComment] = useState(false)
     const [showMapTags, setShowMapTags] = useState(-1);
+
+    const [showMoreId, setShowMoreId] = useState(-1);
 
     const listElement = useRef(null);
     const [elementHeight, setElementHeight] = useState(0);
@@ -71,10 +74,18 @@ export default function ListFilteredCommentsComponent({
         retrieveAllCommentsApi({ limit: PAGESIZE, offset: (currentPage - 1) * PAGESIZE, filterBy, id, categoryIds, filterWithReviseDate })
             .then(response => {
                 // console.debug(response)
-                setComments(response.data)
-                getCommentsTags(response.data)
+                const truncated_comments = truncateComments(response.data);
+                setComments(truncated_comments);
+                getCommentsTags(truncated_comments);
             })
             .catch(error => console.error(error.message))
+    }
+
+    function truncateComments(comments) {
+        for (const element of comments) {
+            [element.truncated_description, element.truncated] = truncateParagraph(element.description);
+        }
+        return comments;
     }
 
     function getCommentsCount() {
@@ -115,6 +126,11 @@ export default function ListFilteredCommentsComponent({
         } else {
             return "text-secondary";
         }
+    }
+
+    function reloadComments() {
+        getCommentsCount();
+        refreshComments();
     }
 
     return (
@@ -165,7 +181,7 @@ export default function ListFilteredCommentsComponent({
                                 </button>
                             }
                             {
-                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 ms-1" onClick={() => refreshComments()}>
+                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 ms-1" onClick={() => reloadComments()}>
                                     <i className="bi bi-arrow-clockwise" />
                                 </button>
                             }
@@ -266,9 +282,28 @@ export default function ListFilteredCommentsComponent({
                                             <div className="text-truncate text-start mb-3">
                                                 <div className="border rounded text-wrap px-2 py-1 small comments-list-card">
                                                     <ReactMarkdown
-                                                        children={comment.description}
+                                                        children={showMoreId === comment.id ? comment.description : comment.truncated_description}
                                                     />
+
+                                                    {
+                                                        comment.truncated &&
+                                                        <div className="d-flex justify-content-end mb-1">
+                                                            {
+                                                                showMoreId !== comment.id &&
+                                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowMoreId(comment.id)}>
+                                                                    <i className="bi bi-arrow-down" />
+                                                                </button>
+                                                            }
+                                                            {
+                                                                showMoreId === comment.id &&
+                                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowMoreId(-1)}>
+                                                                    <i className="bi bi-arrow-up" />
+                                                                </button>
+                                                            }
+                                                        </div>
+                                                    }
                                                 </div>
+
                                             </div>
                                         }
 
