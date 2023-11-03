@@ -164,6 +164,11 @@ export default function ListFilteredCommentsComponent({
                                     <i className="bi bi-plus-circle"></i>
                                 </button>
                             }
+                            {
+                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 ms-1" onClick={() => refreshComments()}>
+                                    <i className="bi bi-arrow-clockwise" />
+                                </button>
+                            }
                         </div>
                     </div>
 
@@ -249,7 +254,7 @@ export default function ListFilteredCommentsComponent({
                                                     <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowMapTags(comment.id)}>
                                                         <i className="bi bi-tags" />
                                                     </button>
-                                                    <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" style={{ marginRight: "2px" }} onClick={() => setShowUpdateComment(comment.id)}>
+                                                    <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 ms-1" style={{ marginRight: "2px" }} onClick={() => setShowUpdateComment(comment.id)}>
                                                         <i className="bi bi-pencil-square"></i>
                                                     </button>
                                                 </div>
