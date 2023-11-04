@@ -87,15 +87,8 @@ export default function HomeComponent() {
 
                     <div className="left-menu-icon">
                         {
-                            !showLeftMenu &&
-                            <button type="button" className="btn btn-light" onClick={() => setShowLeftMenu(!showLeftMenu)}>
+                            <button type="button" className="btn btn-light bg-white border-secondary mx-2" onClick={() => setShowLeftMenu(!showLeftMenu)}>
                                 <i className="px-3 bi bi-list" />
-                            </button>
-                        }
-                        {
-                            showLeftMenu &&
-                            <button type="button" className="btn btn-light">
-                                <i className="px-3 bi bi-x-lg" />
                             </button>
                         }
                     </div>

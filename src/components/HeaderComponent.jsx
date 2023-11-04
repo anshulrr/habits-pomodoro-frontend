@@ -20,7 +20,7 @@ export default function HeaderComponent() {
                         <ul className="navbar-nav">
                             <li className="nav-item">
                                 {
-                                    <Link className={"nav-link" + (url === "/" ? " active" : "")} to="/" state={state}>
+                                    <Link className={"nav-link" + (url === "/" ? " text-dark" : "")} to="/" state={state}>
                                         Home
                                     </Link>
                                 }
@@ -32,7 +32,7 @@ export default function HeaderComponent() {
                         {
                             isAuthenticated &&
                             <li className="nav-item">
-                                <Link className={"nav-link" + (url.includes("stats") ? " active" : "")} to="/stats" state={state}>
+                                <Link className={"nav-link" + (url.includes("stats") ? " text-dark" : "")} to="/stats" state={state}>
                                     Stats
                                 </Link>
                             </li>
@@ -50,7 +50,7 @@ export default function HeaderComponent() {
                                             style={{ borderRadius: "50%" }}
                                             width="35rem"
                                             height="35rem"
-                                            className={(url.includes("settings") ? "" : "border-white") + " border border-2"}
+                                            className={(url.includes("settings") ? "border-dark" : "border-light-subtle") + " border border-1"}
                                             alt={user.displayName}
                                         // referrerPolicy='no-referrer'
                                         />
