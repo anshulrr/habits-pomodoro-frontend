@@ -87,8 +87,8 @@ export default function ListCommentsComponent({
                             </div>
                             <div className="col-lg-8 text-end">
                                 <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setFilterWithReviseDate(!filterWithReviseDate)}>
-                                    {!filterWithReviseDate && "Filter comments with revise date"}
-                                    {filterWithReviseDate && "Fetch all comments"}
+                                    {!filterWithReviseDate && "Filter notes with revise date"}
+                                    {filterWithReviseDate && "Fetch all notes"}
                                 </button>
                             </div>
                         </div>

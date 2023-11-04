@@ -17,7 +17,7 @@ export default function UserCommentsComponent({ tags }) {
                     <ListCommentsComponent
                         filterBy={'user'}
                         setShowCommentsId={setShowComments}
-                        title={'All Comments'}
+                        title={'All Notes'}
                         tags={tags}
                     />
                 </span>
