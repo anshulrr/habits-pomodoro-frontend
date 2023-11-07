@@ -106,7 +106,14 @@ export default function ListStatsComponent() {
                             Settings
                         </h6>
                         <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowStatsSettings(!showStatsSettings)}>
-                            <i className="bi bi-pencil-square" />
+                            {
+                                !showStatsSettings &&
+                                <i className="bi bi-eye" />
+                            }
+                            {
+                                showStatsSettings &&
+                                <i className="bi bi-eye-slash" />
+                            }
                         </button>
                     </div>
                     <div style={{ display: showStatsSettings ? "block" : "none" }} >
@@ -128,7 +135,14 @@ export default function ListStatsComponent() {
                             </span>
                         </h6>
                         <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowIncludeCategories(!showIncludeCategories)}>
-                            <i className="bi bi-pencil-square" />
+                            {
+                                !showIncludeCategories &&
+                                <i className="bi bi-eye" />
+                            }
+                            {
+                                showIncludeCategories &&
+                                <i className="bi bi-eye-slash" />
+                            }
                         </button>
                     </div>
                     <div style={{ display: showIncludeCategories ? "block" : "none" }} >
@@ -146,11 +160,19 @@ export default function ListStatsComponent() {
                         <h6 className="mb-0">
                             Friends Stats
                             <span className="ms-1 badge rounded-pill text-bg-secondary">
-                                <i className="bi bi-person-fill" />
+                                {subjects.length}
+                                <i className="ps-1 bi bi-person-fill" />
                             </span>
                         </h6>
                         <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowFriendsStats(!showFriendsStats)}>
-                            <i className="bi bi-pencil-square" />
+                            {
+                                !showFriendsStats &&
+                                <i className="bi bi-eye" />
+                            }
+                            {
+                                showFriendsStats &&
+                                <i className="bi bi-eye-slash" />
+                            }
                         </button>
                     </div>
 

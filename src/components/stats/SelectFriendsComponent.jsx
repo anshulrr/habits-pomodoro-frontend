@@ -65,7 +65,7 @@ export default function SelectFriendsComponent({
                     <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowFriendsStats(false)}>
                         <i className="bi bi-x-lg align-middle lh-sm" />
                     </button>
-                    <button className="btn btn-sm btn-outline-success" type="button" onClick={updateStats}>Fetch Friend's Stats</button>
+                    <button className="btn btn-sm btn-outline-success" type="button" onClick={updateStats}>Fetch</button>
                 </div>
             </div>
         </div>
