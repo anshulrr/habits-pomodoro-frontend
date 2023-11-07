@@ -143,6 +143,9 @@ export default function ListStatsComponent() {
                     <div className="d-flex justify-content-between mb-2">
                         <h6 className="mb-0">
                             Friends Stats
+                            <span className="ms-1 badge rounded-pill text-bg-secondary">
+                                <i className="bi bi-person-fill" />
+                            </span>
                         </h6>
                         <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowFriendsStats(!showFriendsStats)}>
                             <i className="bi bi-pencil-square" />

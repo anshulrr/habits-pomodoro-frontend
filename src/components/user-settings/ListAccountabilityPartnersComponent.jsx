@@ -66,7 +66,7 @@ export default function ListAccountabilityPartnersComponent() {
                                     Accountability Partners
                                     <span className="ms-1 badge rounded-pill text-bg-secondary">
                                         {partners.length}
-                                        <i className="ms-1 bi bi-link-45deg" />
+                                        <i className="ps-1 bi bi-person-fill" />
                                     </span>
                                 </h6>
                             </div>
@@ -115,9 +115,9 @@ export default function ListAccountabilityPartnersComponent() {
                                                 {partner.email}&nbsp;
                                             </small>
                                         </div>
-                                        <div className="col-4 text-end">
+                                        <div className="col-4 pe-0 text-end">
                                             <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => removeAccountabilityPartner(partner)}>
-                                                Remove Accountability Partner
+                                                Remove
                                             </button>
                                         </div>
                                     </div>
