@@ -34,9 +34,6 @@ export default function SelectFriendsComponent({
         <div className="row mb-3">
             <div className="col-lg-12">
                 <div className="input-group input-group-sm mb-2">
-                    <label className="input-group-text" htmlFor="subjectId">
-                        Select Friend
-                    </label>
                     <select
                         className="form-select form-select-sm"
                         name="projects-chart-type"
@@ -61,10 +58,7 @@ export default function SelectFriendsComponent({
             <div className="text-danger"><small>{errorMessage}</small></div>
 
             <div className="col-lg-12">
-                <div className="input-group my-2 justify-content-end">
-                    <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowFriendsStats(false)}>
-                        <i className="bi bi-x-lg align-middle lh-sm" />
-                    </button>
+                <div className="my-2 text-end">
                     <button className="btn btn-sm btn-outline-success" type="button" onClick={updateStats}>Fetch</button>
                 </div>
             </div>

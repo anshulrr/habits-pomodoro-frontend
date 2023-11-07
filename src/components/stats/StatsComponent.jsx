@@ -122,7 +122,6 @@ export default function ListStatsComponent() {
                             setStatsSettings={setStatsSettings}
                             reload={reload}
                             setReload={setReload}
-                            setShowStatsSettings={setShowStatsSettings}
                         />
                     </div>
 
@@ -152,7 +151,6 @@ export default function ListStatsComponent() {
                             setIncludeCategories={setIncludeCategories}
                             reload={reload}
                             setReload={setReload}
-                            setShowIncludeCategories={setShowIncludeCategories}
                         />
                     </div>
 

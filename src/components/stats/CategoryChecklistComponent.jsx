@@ -4,7 +4,6 @@ export default function CategoryChecklistComponent({
     categories,
     setIncludeCategories,
     setReload,
-    setShowIncludeCategories
 }) {
 
     const [checkedState, setCheckedState] = useState(categories.map(c => c.statsDefault));
@@ -105,9 +104,6 @@ export default function CategoryChecklistComponent({
                 <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => selectAbove()}>Above</button>
                 <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => selectAll()}>All</button>
                 <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => selectNone()}>None</button>
-                <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowIncludeCategories(false)}>
-                    <i className="bi bi-x-lg align-middle lh-sm" />
-                </button>
                 <button className="btn btn-sm btn-outline-success" type="button" onClick={fetchSelected}>Fetch</button>
             </div>
 
