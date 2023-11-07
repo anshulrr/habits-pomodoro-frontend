@@ -5,7 +5,7 @@ import { calculateScaleAndLabel, calculateScaleForAdjustedAvg, truncateString } 
 import { BarChart } from "components/stats/charts/BarChart";
 import { DoughnutChart } from "components/stats/charts/DoughnutChart";
 
-export const TasksChart = ({ includeCategories, statsSettings, buttonsStates, setButtonsStates }) => {
+export const TasksChart = ({ includeCategories, subject, statsSettings, buttonsStates, setButtonsStates }) => {
     // console.debug('from TasksChart', includeCategories, statsSettings)
 
     const [chartData, setChartData] = useState({ label: '', labels: [], data: [], colors: [] })
@@ -20,7 +20,7 @@ export const TasksChart = ({ includeCategories, statsSettings, buttonsStates, se
             scale = calculateScaleForAdjustedAvg({ limit, scale, ...statsSettings });
         }
 
-        getTasksPomodorosApi({ startDate, endDate, includeCategories })
+        getTasksPomodorosApi({ startDate, endDate, includeCategories, subject })
             .then(response => {
                 // console.debug(response)
                 const updated_data = {

@@ -19,7 +19,7 @@ const POMODORO_LENGTH = 25;
 const WEEKLY_DAYS = 7;
 const MONTHLY_AVG = 22;
 
-export const TotalChart = ({ includeCategories, statsSettings, buttonsStates, setButtonsStates }) => {
+export const TotalChart = ({ includeCategories, subject, statsSettings, buttonsStates, setButtonsStates }) => {
 
     const [datasets, setDatasets] = useState([])
 
@@ -42,7 +42,7 @@ export const TotalChart = ({ includeCategories, statsSettings, buttonsStates, se
         const { startDate, endDate } = calculateDates({ limit, offset });
         // console.debug({ limit, offset, startDate, endDate })
 
-        getTotalPomodorosApi({ limit, startDate, endDate, includeCategories })
+        getTotalPomodorosApi({ limit, startDate, endDate, includeCategories, subject })
             .then(response => {
                 // console.debug("stacked", response.data)
 

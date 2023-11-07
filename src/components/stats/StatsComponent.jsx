@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import moment from "moment"
 
 import { retrieveAllProjectCategoriesApi } from "services/api/ProjectCategoryApiService";
+import { retrieveAccountabilitySubjectsApi } from "services/api/AccountabilityPartnerApiService";
 
 import { TasksChart } from "components/stats/charts/TasksChart";
 import { ProjectsDistributionChart } from "components/stats/charts/ProjectsDistributionChart";
@@ -11,6 +12,7 @@ import ListPomodorosComponent from "components/stats/ListPomodorosComponent";
 
 import CategoryChecklistComponent from "components/stats/CategoryChecklistComponent";
 import StatsSettingsComponent from "components/stats/StatsSettingsComponent";
+import SelectFriendsComponent from "components/stats//SelectFriendsComponent";
 
 export default function ListStatsComponent() {
 
@@ -22,8 +24,12 @@ export default function ListStatsComponent() {
 
     const [showIncludeCategories, setShowIncludeCategories] = useState(false)
     const [showStatsSettings, setShowStatsSettings] = useState(false)
+    const [showFriendsStats, setShowFriendsStats] = useState(false)
 
     const [reload, setReload] = useState(0)
+
+    const [subject, setSubject] = useState(null)
+    const [subjects, setSubjects] = useState([])
 
     const [pomodorosHeight, setPomodorosHeight] = useState(0);
 
@@ -57,11 +63,12 @@ export default function ListStatsComponent() {
             // console.debug('re-render StatsComponent')
             document.title = 'Stats';
             retrieveProjectCategories();
+            retrieveAccountibilitySubjects();
         }, []   // eslint-disable-line react-hooks/exhaustive-deps
     )
 
-    function retrieveProjectCategories() {
-        retrieveAllProjectCategoriesApi(10, 0)
+    function retrieveProjectCategories(subject) {
+        retrieveAllProjectCategoriesApi(10, 0, subject)
             .then(response => {
                 // console.debug(response)
                 setCategories(response.data)
@@ -69,14 +76,28 @@ export default function ListStatsComponent() {
                     .filter(c => c.statsDefault === true)
                     .map(c => c.id)
                 )
+                setReload(prev => prev + 1);
             })
             .catch(error => console.error(error.message))
+    }
+
+    function retrieveAccountibilitySubjects() {
+        retrieveAccountabilitySubjectsApi()
+            .then(response => {
+                setSubjects(response.data);
+            })
     }
 
     return (
         <div className="container mt-3">
 
             <div className="row">
+                {
+                    subject != null &&
+                    <div className="alert alert-primary" role="alert">
+                        {subject.email}
+                    </div>
+                }
                 <div className="col-lg-4">
                     <div className="d-flex justify-content-between mb-2">
                         <h6 className="mb-0">
@@ -118,6 +139,24 @@ export default function ListStatsComponent() {
                             setShowStatsSettings={setShowStatsSettings}
                         />
                     </div>
+
+                    <div className="d-flex justify-content-between mb-2">
+                        <h6 className="mb-0">
+                            Friends Stats
+                        </h6>
+                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowFriendsStats(!showFriendsStats)}>
+                            <i className="bi bi-pencil-square" />
+                        </button>
+                    </div>
+
+                    <div style={{ display: showFriendsStats ? "block" : "none" }} >
+                        <SelectFriendsComponent
+                            subjects={subjects}
+                            setSubject={setSubject}
+                            retrieveProjectCategories={retrieveProjectCategories}
+                            setShowFriendsStats={setShowFriendsStats}
+                        />
+                    </div>
                 </div>
 
                 {
@@ -129,6 +168,7 @@ export default function ListStatsComponent() {
                                     <TasksChart
                                         key={reload}
                                         includeCategories={includeCategories}
+                                        subject={subject}
                                         statsSettings={statsSettings}
                                         buttonsStates={tasksChartButtonsStates}
                                         setButtonsStates={setTasksChartBButtonsStates}
@@ -140,6 +180,7 @@ export default function ListStatsComponent() {
                                     <ProjectsDistributionChart
                                         key={reload}
                                         includeCategories={includeCategories}
+                                        subject={subject}
                                         statsSettings={statsSettings}
                                         buttonsStates={projectsChartButtonsStates}
                                         setButtonsStates={setProjectsChartBButtonsStates}
@@ -151,6 +192,7 @@ export default function ListStatsComponent() {
                                     <TotalChart
                                         key={reload}
                                         includeCategories={includeCategories}
+                                        subject={subject}
                                         statsSettings={statsSettings}
                                         buttonsStates={totalChartButtonsStates}
                                         setButtonsStates={setTotalChartBButtonsStates}
@@ -162,6 +204,7 @@ export default function ListStatsComponent() {
                                     <ListPomodorosComponent
                                         key={reload}
                                         includeCategories={includeCategories}
+                                        subject={subject}
                                         buttonsStates={listPomodorosButtonsStates}
                                         setButtonsStates={setListPomodorosButtonsStates}
                                         elementHeight={pomodorosHeight}

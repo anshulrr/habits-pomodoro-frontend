@@ -6,7 +6,7 @@ import { calculateScaleAndLabel, calculateScaleForAdjustedAvg } from "services/h
 import { BarChart } from "components/stats/charts/BarChart";
 import { DoughnutChart } from "components/stats/charts/DoughnutChart";
 
-export const ProjectsDistributionChart = ({ includeCategories, statsSettings, buttonsStates, setButtonsStates }) => {
+export const ProjectsDistributionChart = ({ includeCategories, subject, statsSettings, buttonsStates, setButtonsStates }) => {
     // console.debug("hi", chartData);
     // console.debug(statsSettings)
 
@@ -21,7 +21,7 @@ export const ProjectsDistributionChart = ({ includeCategories, statsSettings, bu
         }
 
         // console.debug("p", includeCategories)
-        getProjectsPomodorosApi({ startDate, endDate, includeCategories })
+        getProjectsPomodorosApi({ startDate, endDate, includeCategories, subject })
             .then(response => {
                 // console.debug(response)
                 const updated_data = {

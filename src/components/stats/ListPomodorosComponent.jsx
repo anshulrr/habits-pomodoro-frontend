@@ -11,6 +11,7 @@ import OutsideAlerter from "services/hooks/OutsideAlerter";
 
 export default function ListPomodorosComponent({
     includeCategories,
+    subject,
     buttonsStates,
     setButtonsStates,
     title = "Pomodoros",
@@ -74,7 +75,7 @@ export default function ListPomodorosComponent({
         // console.debug('api call', { allCategories, includeCategories })
         setPomodorosGroup([]);
         setPomodorosCount(-1);
-        getPomodorosApi({ startDate, endDate, includeCategories: allCategories || includeCategories })
+        getPomodorosApi({ startDate, endDate, includeCategories: allCategories || includeCategories, subject })
             .then(response => {
                 // console.debug(response)
                 response.data.map((x, index) => x.index = response.data.length - index);
