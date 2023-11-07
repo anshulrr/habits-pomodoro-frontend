@@ -20,8 +20,10 @@ export default function HeaderComponent() {
                         <ul className="navbar-nav">
                             <li className="nav-item">
                                 {
-                                    <Link className={"nav-link" + (url === "/" ? " text-dark" : "")} to="/" state={state}>
-                                        Home
+                                    <Link className="nav-link" to="/" state={state}>
+                                        <div className={"border-bottom border-1 " + (url === "/" ? "text-dark border-dark" : "border-light")}>
+                                            Home
+                                        </div>
                                     </Link>
                                 }
                             </li>
@@ -32,8 +34,10 @@ export default function HeaderComponent() {
                         {
                             isAuthenticated &&
                             <li className="nav-item">
-                                <Link className={"nav-link" + (url.includes("stats") ? " text-dark" : "")} to="/stats" state={state}>
-                                    Stats
+                                <Link className="nav-link" to="/stats" state={state}>
+                                    <div className={"border-bottom border-1 " + (url.includes("stats") ? "text-dark border-dark" : "border-light")}>
+                                        Stats
+                                    </div>
                                 </Link>
                             </li>
                         }
@@ -44,12 +48,12 @@ export default function HeaderComponent() {
                             {
                                 isAuthenticated && user.photoURL &&
                                 <Link className="nav-link py-0" to="/settings" state={state}>
-                                    <div className="text-center">
+                                    <div className={"text-center border-bottom border-1 " + (url.includes("settings") ? "text-dark border-dark" : "border-light")}>
                                         <img
                                             src={user.photoURL}
                                             style={{ borderRadius: "50%" }}
-                                            width="35rem"
-                                            height="35rem"
+                                            width="33rem"
+                                            height="33rem"
                                             className={(url.includes("settings") ? "border-dark" : "border-light-subtle") + " border border-1"}
                                             alt={user.displayName}
                                         // referrerPolicy='no-referrer'
@@ -59,8 +63,10 @@ export default function HeaderComponent() {
                             }
                             {
                                 isAuthenticated && !user.photoURL &&
-                                <Link className={"nav-link" + (url.includes("settings") ? " active" : "")} to="/settings" state={state}>
-                                    Settings
+                                <Link className={"nav-link" + (url.includes("settings") ? " text-dark" : "")} to="/settings" state={state}>
+                                    <div className={"border-bottom border-1 " + (url.includes("settings") ? "text-dark border-dark" : "border-light")}>
+                                        Settings
+                                    </div>
                                 </Link>
                             }
                         </li>
