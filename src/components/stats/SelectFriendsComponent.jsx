@@ -45,7 +45,6 @@ export default function SelectFriendsComponent({
                         id="subjectId"
                     >
                         <option value="0" disabled>Select a Friend</option>
-                        <option value="-1">Unselect</option>
                         {
                             subjects.map(
                                 subject => (
@@ -53,6 +52,7 @@ export default function SelectFriendsComponent({
                                 )
                             )
                         }
+                        <option value="-1">Unselect</option>
                     </select>
                 </div>
             </div>

@@ -27,6 +27,7 @@ export default function ListStatsComponent() {
     const [showFriendsStats, setShowFriendsStats] = useState(false)
 
     const [reload, setReload] = useState(0)
+    const [reloadCategories, setReloadCategories] = useState(0)
 
     const [subject, setSubject] = useState(null)
     const [subjects, setSubjects] = useState([])
@@ -71,11 +72,12 @@ export default function ListStatsComponent() {
         retrieveAllProjectCategoriesApi(10, 0, subject)
             .then(response => {
                 // console.debug(response)
-                setCategories(response.data)
                 setIncludeCategories(response.data
                     .filter(c => c.statsDefault === true)
                     .map(c => c.id)
                 )
+                setCategories(response.data)
+                setReloadCategories(reloadCategories + 1);
                 setReload(prev => prev + 1);
             })
             .catch(error => console.error(error.message))
@@ -101,29 +103,6 @@ export default function ListStatsComponent() {
                 <div className="col-lg-4">
                     <div className="d-flex justify-content-between mb-2">
                         <h6 className="mb-0">
-                            Included Project Categories
-                            <span className="ms-1 badge rounded-pill text-bg-secondary">
-                                {includeCategories.length}
-                                <i className="ms-1 bi bi-link-45deg" />
-                            </span>
-                        </h6>
-                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowIncludeCategories(!showIncludeCategories)}>
-                            <i className="bi bi-pencil-square" />
-                        </button>
-                    </div>
-                    <div style={{ display: showIncludeCategories ? "block" : "none" }} >
-                        <CategoryChecklistComponent
-                            key={categories}
-                            categories={categories}
-                            setIncludeCategories={setIncludeCategories}
-                            reload={reload}
-                            setReload={setReload}
-                            setShowIncludeCategories={setShowIncludeCategories}
-                        />
-                    </div>
-
-                    <div className="d-flex justify-content-between mb-2">
-                        <h6 className="mb-0">
                             Settings
                         </h6>
                         <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowStatsSettings(!showStatsSettings)}>
@@ -137,6 +116,29 @@ export default function ListStatsComponent() {
                             reload={reload}
                             setReload={setReload}
                             setShowStatsSettings={setShowStatsSettings}
+                        />
+                    </div>
+
+                    <div className="d-flex justify-content-between mb-2">
+                        <h6 className="mb-0">
+                            Included Project Categories
+                            <span className="ms-1 badge rounded-pill text-bg-secondary">
+                                {includeCategories.length}
+                                <i className="ms-1 bi bi-link-45deg" />
+                            </span>
+                        </h6>
+                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowIncludeCategories(!showIncludeCategories)}>
+                            <i className="bi bi-pencil-square" />
+                        </button>
+                    </div>
+                    <div style={{ display: showIncludeCategories ? "block" : "none" }} >
+                        <CategoryChecklistComponent
+                            key={reloadCategories}
+                            categories={categories}
+                            setIncludeCategories={setIncludeCategories}
+                            reload={reload}
+                            setReload={setReload}
+                            setShowIncludeCategories={setShowIncludeCategories}
                         />
                     </div>
 
