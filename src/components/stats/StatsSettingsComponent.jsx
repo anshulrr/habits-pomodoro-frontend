@@ -216,7 +216,7 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
             <div className="text-danger"><small>{errorMessage}</small></div>
 
             <div className="col-lg-12">
-                <div className="my-2 text-end">
+                <div className="mt-2 text-end">
                     <button className="btn btn-sm btn-outline-success" type="button" onClick={updateSettings}>Fetch</button>
                 </div>
             </div>
