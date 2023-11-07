@@ -259,7 +259,14 @@ export default function ListTasksComponent({
                         <div className="my-1">
                             {
                                 completedTasksCount !== 0 &&
-                                <div className="d-flex justify-content-center">
+                                <div className="d-flex justify-content-center"
+                                    onClick={() => {
+                                        state.showCompletedTasks = !showCompleted;
+                                        setShowCompleted(!showCompleted);
+                                        navigate(`/`, { state, replace: true })
+                                    }}
+                                    style={{ cursor: "pointer" }}
+                                >
                                     <span className="badge me-1 text-bg-light">
                                         Completed
                                     </span>
@@ -267,13 +274,9 @@ export default function ListTasksComponent({
                                         {completedTasksCount}
                                         <i className="ms-1 bi bi-list-ul" />
                                     </span>
-                                    <button type="button" className="ms-1 btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => {
-                                        state.showCompletedTasks = !showCompleted;
-                                        setShowCompleted(!showCompleted);
-                                        navigate(`/`, { state, replace: true })
-                                    }}>
-                                        {!showCompleted && <i className="bi bi-arrow-down" />}
-                                        {showCompleted && <i className="bi bi-arrow-up" />}
+                                    <button type="button" className="ms-1 btn btn-sm btn-outline-secondary py-0 px-1" >
+                                        {!showCompleted && <i className="bi bi-eye-slash" />}
+                                        {showCompleted && <i className="bi bi-eye" />}
                                     </button>
                                 </div>
                             }
@@ -304,7 +307,14 @@ export default function ListTasksComponent({
                         <div className="my-1">
                             {
                                 archivedTasksCount !== 0 &&
-                                <div className="d-flex justify-content-center">
+                                <div className="d-flex justify-content-center"
+                                    onClick={() => {
+                                        state.showArchivedTasks = !showArchived;
+                                        setShowArchived(!showArchived);
+                                        navigate(`/`, { state, replace: true })
+                                    }}
+                                    style={{ cursor: "pointer" }}
+                                >
                                     <span className="badge me-1 text-bg-light">
                                         Archived
                                     </span>
@@ -312,13 +322,9 @@ export default function ListTasksComponent({
                                         {archivedTasksCount}
                                         <i className="ms-1 bi bi-list-ul" />
                                     </span>
-                                    <button type="button" className="ms-1 btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => {
-                                        state.showArchivedTasks = !showArchived;
-                                        setShowArchived(!showArchived);
-                                        navigate(`/`, { state, replace: true })
-                                    }}>
-                                        {!showArchived && <i className="bi bi-arrow-down" />}
-                                        {showArchived && <i className="bi bi-arrow-up" />}
+                                    <button type="button" className="ms-1 btn btn-sm btn-outline-secondary py-0 px-1">
+                                        {!showArchived && <i className="bi bi-eye-slash" />}
+                                        {showArchived && <i className="bi bi-eye" />}
                                     </button>
                                 </div>
                             }

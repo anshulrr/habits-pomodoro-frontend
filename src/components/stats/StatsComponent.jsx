@@ -101,11 +101,14 @@ export default function ListStatsComponent() {
                     </div>
                 }
                 <div className="col-lg-4">
-                    <div className="d-flex justify-content-between mb-2">
+                    <div className="d-flex justify-content-between mb-2"
+                        onClick={() => setShowStatsSettings(!showStatsSettings)}
+                        style={{ cursor: "pointer" }}
+                    >
                         <h6 className="mb-0">
                             Settings
                         </h6>
-                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowStatsSettings(!showStatsSettings)}>
+                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1">
                             {
                                 !showStatsSettings &&
                                 <i className="bi bi-eye-slash" />
@@ -125,7 +128,10 @@ export default function ListStatsComponent() {
                         />
                     </div>
 
-                    <div className="d-flex justify-content-between mb-2">
+                    <div className="d-flex justify-content-between mb-2"
+                        onClick={() => setShowIncludeCategories(!showIncludeCategories)}
+                        style={{ cursor: "pointer" }}
+                    >
                         <h6 className="mb-0">
                             Included Project Categories
                             <span className="ms-1 badge rounded-pill text-bg-secondary">
@@ -133,7 +139,7 @@ export default function ListStatsComponent() {
                                 <i className="ms-1 bi bi-link-45deg" />
                             </span>
                         </h6>
-                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowIncludeCategories(!showIncludeCategories)}>
+                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1">
                             {
                                 !showIncludeCategories &&
                                 <i className="bi bi-eye-slash" />
@@ -154,7 +160,10 @@ export default function ListStatsComponent() {
                         />
                     </div>
 
-                    <div className="d-flex justify-content-between mb-2">
+                    <div className="d-flex justify-content-between mb-2"
+                        onClick={() => setShowFriendsStats(!showFriendsStats)}
+                        style={{ cursor: "pointer" }}
+                    >
                         <h6 className="mb-0">
                             Friends Stats
                             <span className="ms-1 badge rounded-pill text-bg-secondary">
@@ -162,7 +171,7 @@ export default function ListStatsComponent() {
                                 <i className="ps-1 bi bi-person-fill" />
                             </span>
                         </h6>
-                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowFriendsStats(!showFriendsStats)}>
+                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1">
                             {
                                 !showFriendsStats &&
                                 <i className="bi bi-eye-slash" />
