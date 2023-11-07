@@ -88,7 +88,7 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
                         />
                     </div>
                     <label className="input-group-text" htmlFor="eChartScale">
-                        Enable Scale
+                        Enable Scale (mins)
                     </label>
                     <input
                         type="number"
@@ -116,7 +116,7 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
                         />
                     </div>
                     <label className="input-group-text" htmlFor="eChartWeeklyAverage">
-                        Enable Weekly Avg
+                        Enable Weekly Avg (days)
                     </label>
                     <input
                         type="number"
@@ -144,7 +144,7 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
                         />
                     </div>
                     <label className="input-group-text" htmlFor="eChartMonthlyAverage">
-                        Enable Monthly Avg
+                        Enable Monthly Avg (days)
                     </label>
                     <input
                         type="number"

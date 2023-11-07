@@ -108,11 +108,11 @@ export default function ListStatsComponent() {
                         <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowStatsSettings(!showStatsSettings)}>
                             {
                                 !showStatsSettings &&
-                                <i className="bi bi-eye" />
+                                <i className="bi bi-eye-slash" />
                             }
                             {
                                 showStatsSettings &&
-                                <i className="bi bi-eye-slash" />
+                                <i className="bi bi-eye" />
                             }
                         </button>
                     </div>
@@ -136,11 +136,11 @@ export default function ListStatsComponent() {
                         <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowIncludeCategories(!showIncludeCategories)}>
                             {
                                 !showIncludeCategories &&
-                                <i className="bi bi-eye" />
+                                <i className="bi bi-eye-slash" />
                             }
                             {
                                 showIncludeCategories &&
-                                <i className="bi bi-eye-slash" />
+                                <i className="bi bi-eye" />
                             }
                         </button>
                     </div>
@@ -165,11 +165,11 @@ export default function ListStatsComponent() {
                         <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowFriendsStats(!showFriendsStats)}>
                             {
                                 !showFriendsStats &&
-                                <i className="bi bi-eye" />
+                                <i className="bi bi-eye-slash" />
                             }
                             {
                                 showFriendsStats &&
-                                <i className="bi bi-eye-slash" />
+                                <i className="bi bi-eye" />
                             }
                         </button>
                     </div>

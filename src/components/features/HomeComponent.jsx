@@ -114,11 +114,11 @@ export default function HomeComponent() {
                                                 <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={() => setShowTasksFilters(!showTasksFilters)}>
                                                     {
                                                         !showTasksFilters &&
-                                                        <i className="bi bi-eye" />
+                                                        <i className="bi bi-eye-slash" />
                                                     }
                                                     {
                                                         showTasksFilters &&
-                                                        <i className="bi bi-eye-slash" />
+                                                        <i className="bi bi-eye" />
                                                     }
                                                 </button>
                                             </div>
