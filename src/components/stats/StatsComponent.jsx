@@ -108,7 +108,7 @@ export default function ListStatsComponent() {
                         <h6 className="mb-0">
                             Settings
                         </h6>
-                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1">
+                        <div className="text-secondary px-1" >
                             {
                                 !showStatsSettings &&
                                 <i className="bi bi-eye-slash" />
@@ -117,7 +117,7 @@ export default function ListStatsComponent() {
                                 showStatsSettings &&
                                 <i className="bi bi-eye" />
                             }
-                        </button>
+                        </div>
                     </div>
                     <div style={{ display: showStatsSettings ? "block" : "none" }} >
                         <StatsSettingsComponent
@@ -139,7 +139,7 @@ export default function ListStatsComponent() {
                                 <i className="ms-1 bi bi-link-45deg" />
                             </span>
                         </h6>
-                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1">
+                        <div className="text-secondary px-1">
                             {
                                 !showIncludeCategories &&
                                 <i className="bi bi-eye-slash" />
@@ -148,7 +148,7 @@ export default function ListStatsComponent() {
                                 showIncludeCategories &&
                                 <i className="bi bi-eye" />
                             }
-                        </button>
+                        </div>
                     </div>
                     <div style={{ display: showIncludeCategories ? "block" : "none" }} >
                         <CategoryChecklistComponent
@@ -171,7 +171,7 @@ export default function ListStatsComponent() {
                                 <i className="ps-1 bi bi-person-fill" />
                             </span>
                         </h6>
-                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1">
+                        <div className="text-secondary px-1">
                             {
                                 !showFriendsStats &&
                                 <i className="bi bi-eye-slash" />
@@ -180,7 +180,7 @@ export default function ListStatsComponent() {
                                 showFriendsStats &&
                                 <i className="bi bi-eye" />
                             }
-                        </button>
+                        </div>
                     </div>
 
                     <div style={{ display: showFriendsStats ? "block" : "none" }} >

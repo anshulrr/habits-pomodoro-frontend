@@ -274,10 +274,10 @@ export default function ListTasksComponent({
                                         {completedTasksCount}
                                         <i className="ms-1 bi bi-list-ul" />
                                     </span>
-                                    <button type="button" className="ms-1 btn btn-sm btn-outline-secondary py-0 px-1" >
+                                    <div className="text-secondary px-1" >
                                         {!showCompleted && <i className="bi bi-eye-slash" />}
                                         {showCompleted && <i className="bi bi-eye" />}
-                                    </button>
+                                    </div>
                                 </div>
                             }
 
@@ -322,10 +322,10 @@ export default function ListTasksComponent({
                                         {archivedTasksCount}
                                         <i className="ms-1 bi bi-list-ul" />
                                     </span>
-                                    <button type="button" className="ms-1 btn btn-sm btn-outline-secondary py-0 px-1">
+                                    <div className="text-secondary px-1" >
                                         {!showArchived && <i className="bi bi-eye-slash" />}
                                         {showArchived && <i className="bi bi-eye" />}
-                                    </button>
+                                    </div>
                                 </div>
                             }
 
