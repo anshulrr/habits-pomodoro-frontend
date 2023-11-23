@@ -27,7 +27,10 @@ export const TotalChart = ({ includeCategories, subject, statsSettings, buttonsS
 
     const [labels, setLabels] = useState([])
 
+    const [showLoader, setShowLoader] = useState(false);
+
     function retrieveTotalPomodoros({ limit, offset }) {
+        setShowLoader(true);
         // console.debug({ limit, offset });
         // console.debug("total", includeCategories)
 
@@ -91,6 +94,7 @@ export const TotalChart = ({ includeCategories, subject, statsSettings, buttonsS
                 // console.debug(localDatasets)
                 setDatasets(localDatasets);
                 // setDatasets(structuredClone(datasets))
+                setShowLoader(false);
             })
             .catch(error => console.error(error.message))
     }
@@ -174,6 +178,9 @@ export const TotalChart = ({ includeCategories, subject, statsSettings, buttonsS
         <div>
             <h6>
                 {chartLabel}<wbr />
+                <span className="loader-container-2" >
+                    <span className="ms-1 loader-2" style={{ display: showLoader ? "inline" : "none" }}></span>
+                </span>
             </h6>
 
             <Buttons

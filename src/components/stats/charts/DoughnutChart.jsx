@@ -9,13 +9,17 @@ export const DoughnutChart = ({
     chartData,
     retrievePomodoros,
     buttonsStates,
-    setButtonsStates
+    setButtonsStates,
+    showLoader
 }) => {
 
     return (
         <div>
             <h6>
                 {chartData.label}<wbr />
+                <span className="loader-container-2" >
+                    <span className="ms-1 loader-2" style={{ display: showLoader ? "inline" : "none" }}></span>
+                </span>
             </h6>
 
             <Buttons

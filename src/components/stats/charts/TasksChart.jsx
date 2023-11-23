@@ -9,8 +9,10 @@ export const TasksChart = ({ includeCategories, subject, statsSettings, buttonsS
     // console.debug('from TasksChart', includeCategories, statsSettings)
 
     const [chartData, setChartData] = useState({ label: '', labels: [], data: [], colors: [] })
+    const [showLoader, setShowLoader] = useState(false);
 
     function retrieveTasksPomodoros({ startDate, endDate, limit, offset }) {
+        setShowLoader(true);
         // console.debug(startDate, endDate)
         // console.debug("t", includeCategories)
 
@@ -38,6 +40,7 @@ export const TasksChart = ({ includeCategories, subject, statsSettings, buttonsS
                 // console.debug(updated_data);
                 setChartData(updated_data)
                 // console.debug("retrieved updated data: ", chartData);
+                setShowLoader(false);
             })
             .catch(error => console.error(error.message))
     }
@@ -51,6 +54,7 @@ export const TasksChart = ({ includeCategories, subject, statsSettings, buttonsS
                     retrievePomodoros={retrieveTasksPomodoros}
                     setButtonsStates={setButtonsStates}
                     buttonsStates={buttonsStates}
+                    showLoader={showLoader}
                 />
             }
 
@@ -61,6 +65,7 @@ export const TasksChart = ({ includeCategories, subject, statsSettings, buttonsS
                     retrievePomodoros={retrieveTasksPomodoros}
                     setButtonsStates={setButtonsStates}
                     buttonsStates={buttonsStates}
+                    showLoader={showLoader}
                 />
             }
         </>
