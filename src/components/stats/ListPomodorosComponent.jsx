@@ -82,6 +82,10 @@ export default function ListPomodorosComponent({
 
                 const timeSlots = groupBy(response.data, 'endTime');
                 setPomodorosGroup(timeSlots.reverse());
+                for (let i = 0; i < timeSlots.length; i++) {
+                    timeSlots[i].totalTimeElapsed = timeSlots[i].reduce((acc, curr) => acc + Math.round(curr.timeElapsed / 60), 0);
+                }
+                // console.debug(timeSlots);
 
                 setPomodorosCount(response.data.length);
                 const total = response.data.reduce((acc, curr) => acc + Math.round(curr.timeElapsed / 60), 0);
@@ -169,6 +173,10 @@ export default function ListPomodorosComponent({
                                         timeSlots.length > 0 &&
                                         <div className="small text-end pomodoro-list-time-slot">
                                             <div className="small badge rounded-pill text-bg-secondary fw-normal">
+                                                {timeToDisplay(Math.round(timeSlots.totalTimeElapsed))}
+                                                <i className="ms-1 bi bi-clock" />
+                                            </div>
+                                            <div className="ms-1 small badge rounded-pill text-bg-secondary fw-normal">
                                                 {timeSlots.length > 0 ? ((8 - 1 - index) * 3) + ":00 - " + ((8 - index) * 3) + ":00" : ""}
                                             </div>
                                         </div>
