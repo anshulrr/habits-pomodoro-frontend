@@ -19,7 +19,7 @@ export default function HeaderComponent() {
                         {
                             isAuthenticated &&
                             <Link className={"nav-link" + (url === "/" ? " text-success" : "")} to="/" state={state}>
-                                <div className={"my-2 ms-1 border-bottom border-1 " + (url === "/" ? "text-success border-success" : "text-secondary border-light")}>
+                                <div className={"my-2 mx-2 border-bottom border-1 " + (url === "/" ? "text-success border-success" : "text-secondary border-light")}>
                                     <i className="bi bi-house"></i>
                                     <div className="button-title">
                                         Home
@@ -32,7 +32,7 @@ export default function HeaderComponent() {
                             {
                                 isAuthenticated &&
                                 <Link className="nav-link" to="/stats" state={state}>
-                                    <div className={"my-2 border-bottom border-1 " + (url.includes("stats") ? "text-success border-success" : "text-secondary border-light")}>
+                                    <div className={"my-2 mx-2 border-bottom border-1 " + (url.includes("stats") ? "text-success border-success" : "text-secondary border-light")}>
                                         <i className="bi bi-graph-up"></i>
                                         <div className="button-title">
                                             Stats
@@ -43,7 +43,7 @@ export default function HeaderComponent() {
                             {
                                 isAuthenticated &&
                                 <Link className="nav-link" to="/settings" state={state}>
-                                    <div className={"my-2 ms-3 border-bottom border-1 " + (url.includes("settings") ? "text-success border-success" : "text-secondary border-light")}>
+                                    <div className={"my-2 mx-2 border-bottom border-1 " + (url.includes("settings") ? "text-success border-success" : "text-secondary border-light")}>
                                         <i className="bi bi-gear"></i>
                                         <div className="button-title">
                                             Settings
@@ -53,7 +53,7 @@ export default function HeaderComponent() {
                             }
                             {
                                 isAuthenticated && user.photoURL &&
-                                <div className="ms-2 text-center" style={{ paddingTop: "8px" }}>
+                                <div className="text-center" style={{ paddingTop: "8px" }}>
                                     <img
                                         src={user.photoURL}
                                         style={{ borderRadius: "50%" }}
