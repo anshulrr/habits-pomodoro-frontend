@@ -17,7 +17,7 @@ export default function ProjectCategoryComponent({
     const [visibleToPartners, setVisibleToPartners] = useState(true)
     const [level, setLevel] = useState('')
 
-    const [errorMessage, setErrorMessage] = useState('')
+    // const [errorMessage, setErrorMessage] = useState('')
 
     useEffect(
         () => {
@@ -43,7 +43,7 @@ export default function ProjectCategoryComponent({
 
     function onSubmit(values) {
         // console.debug({ name, description, projectCategoryId, level, pomodoroLength })
-        setErrorMessage("")
+        // setErrorMessage("")
         const project_category = {
             id: category?.id,
             name: values.name,
@@ -64,9 +64,9 @@ export default function ProjectCategoryComponent({
                 })
                 .catch(error => {
                     console.error(error.message)
-                    if (error.response.status === 409) {
-                        setErrorMessage("Priority must be unique")
-                    }
+                    // if (error.response.status === 409) {
+                    //     setErrorMessage("Priority must be unique")
+                    // }
                 })
         } else {
             updateProjectCategoryApi(category.id, project_category)
@@ -83,9 +83,9 @@ export default function ProjectCategoryComponent({
                 })
                 .catch(error => {
                     console.error(error.message)
-                    if (error.response.status === 409) {
-                        setErrorMessage("Priority must be unique")
-                    }
+                    // if (error.response.status === 409) {
+                    //     setErrorMessage("Priority must be unique")
+                    // }
                 })
         }
     }
@@ -113,14 +113,25 @@ export default function ProjectCategoryComponent({
                         ({ errors, handleSubmit }) => (
                             <form onSubmit={handleSubmit}>
                                 <div className="row">
-                                    <div className="col-8 mb-2">
+                                    <div className="col-lg-8 mb-2">
                                         <Field type="text" className="form-control form-control-sm" name="name" placeholder="Project Category Name" required />
                                         <ErrorMessage name="name" component="div" className="small text-danger" />
                                     </div>
-                                    <div className="col-4 mb-2">
-                                        <Field type="number" className="form-control form-control-sm" name="level" placeholder="Priority Level" required />
-                                        {/* <small>(All categories must have different levels)</small> */}
-                                        {<div className="text-danger small">{errorMessage}</div>}
+                                    <div className="col-lg-4 mb-2">
+                                        <div className="input-group input-group-sm">
+                                            <label className="input-group-text" htmlFor="level">
+                                                Priority
+                                                <i className="ps-1 bi bi-arrow-up" />
+                                            </label>
+                                            <Field
+                                                type="number"
+                                                className="form-control form-control-sm"
+                                                name="level"
+                                                id="level"
+                                                placeholder="Priority Level"
+                                                required
+                                            />
+                                        </div>
                                     </div>
 
                                     <div className="col-12 mb-2">
@@ -130,9 +141,11 @@ export default function ProjectCategoryComponent({
                                                     type="checkbox"
                                                     className="form-check-input"
                                                     name="statsDefault"
-                                                    id="flexCheck" />
+                                                    id="statsDefault"
+                                                />
                                             </div>
-                                            <label className="input-group-text" htmlFor="flexCheck">
+                                            <label className="input-group-text" htmlFor="statsDefault">
+                                                <i className="pe-1 bi bi-graph-up" />
                                                 Stats List Default
                                             </label>
                                         </div>
@@ -145,9 +158,11 @@ export default function ProjectCategoryComponent({
                                                     type="checkbox"
                                                     className="form-check-input"
                                                     name="visibleToPartners"
-                                                    id="vToPartners" />
+                                                    id="visibleToPartners"
+                                                />
                                             </div>
-                                            <label className="input-group-text" htmlFor="vToPartners">
+                                            <label className="input-group-text" htmlFor="visibleToPartners">
+                                                <i className="pe-1 bi bi-person-fill" />
                                                 Visible to Accountibility Partners
                                             </label>
                                         </div>

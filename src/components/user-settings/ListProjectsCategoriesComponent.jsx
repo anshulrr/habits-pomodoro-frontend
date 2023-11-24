@@ -87,18 +87,23 @@ export default function ListProjectCategoriesComponent() {
                                             onClick={() => updateProjectCategory(cat)}
                                         >
                                             {/* todo: decide better solution for maxWidth */}
-                                            <div className="col-8 text-truncate text-start">
+                                            <div className="col-7 text-truncate text-start">
                                                 {/* <span style={{ color: cat.color }}>&#9632; </span> */}
-                                                <span>
-                                                    <input className="form-check-input" type="checkbox" checked={cat.statsDefault} disabled />
-                                                </span>
-                                                <span>&nbsp;{cat.name}</span>
+                                                <span>{cat.name}</span>
                                             </div>
-                                            <div className="col-4 text-secondary text-end">
+                                            <div className="col-5 text-secondary text-end">
                                                 <small>
                                                     <i className="bi bi-arrow-up" />
                                                 </small>
                                                 {cat.level}&nbsp;
+                                                <span>
+                                                    <i className="px-1 bi bi-graph-up" />
+                                                    <input className="form-check-input" type="checkbox" checked={cat.statsDefault} disabled />
+                                                </span>
+                                                <span>
+                                                    <i className="ps-1 bi bi-person-fill" />
+                                                    <input className="ms-1 form-check-input" type="checkbox" checked={cat.visibleToPartners} disabled />
+                                                </span>
                                             </div>
                                         </div>
                                     )

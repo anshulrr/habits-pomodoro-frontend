@@ -392,7 +392,7 @@ export default function UserSettingsComponent() {
 
                 <div className="col-lg-4">
                     <div className="input-group input-group-sm mb-2">
-                        <label className="input-group-text" htmlFor="breakLength">
+                        <label className="input-group-text" htmlFor="pageProjectsCount">
                             Number of projects in a page
                         </label>
                         <input
@@ -410,7 +410,7 @@ export default function UserSettingsComponent() {
 
                 <div className="col-lg-4">
                     <div className="input-group input-group-sm mb-2">
-                        <label className="input-group-text" htmlFor="breakLength">
+                        <label className="input-group-text" htmlFor="pageTasksCount">
                             Number of tasks in a page
                         </label>
                         <input
@@ -428,7 +428,7 @@ export default function UserSettingsComponent() {
 
                 <div className="col-lg-4">
                     <div className="input-group input-group-sm mb-2">
-                        <label className="input-group-text" htmlFor="breakLength">
+                        <label className="input-group-text" htmlFor="pageCommentsCount">
                             Number of notes in a page
                         </label>
                         <input
