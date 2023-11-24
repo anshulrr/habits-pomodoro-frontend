@@ -70,7 +70,7 @@ export default function ListAccountabilityPartnersComponent() {
                                     </span>
                                 </h6>
                             </div>
-                            <div className="col-2 text-end">
+                            <div className="col-2 px-0 text-end">
                                 <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-1" onClick={() => setShowAddPartner(!showAddPartner)}>
                                     <i className="bi bi-plus-circle" />
                                 </button>
