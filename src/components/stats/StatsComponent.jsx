@@ -69,7 +69,8 @@ export default function ListStatsComponent() {
     )
 
     function retrieveProjectCategories(subject) {
-        retrieveAllProjectCategoriesApi(10, 0, subject)
+        // TODO: better implementation for limit
+        retrieveAllProjectCategoriesApi(100, 0, subject)
             .then(response => {
                 // console.debug(response)
                 setIncludeCategories(response.data
