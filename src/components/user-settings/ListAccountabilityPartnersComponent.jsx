@@ -75,6 +75,11 @@ export default function ListAccountabilityPartnersComponent() {
                                     <i className="bi bi-plus-circle" />
                                 </button>
                             </div>
+
+                            <div className="alert alert-primary small py-0" role="alert">
+                                <i className="me-2 bi bi-info-circle-fill" />
+                                Accountability Partners will be able to see the stats of all visible project categories
+                            </div>
                         </div>
 
                         {
