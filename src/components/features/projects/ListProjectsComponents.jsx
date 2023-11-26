@@ -139,11 +139,11 @@ export default function ListProjectsComponent({ project, setProject, setTag, set
                         <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={() => setShowProjects(!showProjects)}>
                             {
                                 !showProjects &&
-                                <i className="bi bi-eye" />
+                                <i className="bi bi-eye-slash" />
                             }
                             {
                                 showProjects &&
-                                <i className="bi bi-eye-slash" />
+                                <i className="bi bi-eye" />
                             }
                         </button>
                     </div>

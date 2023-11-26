@@ -5,12 +5,14 @@ import { calculateScaleAndLabel, calculateScaleForAdjustedAvg, truncateString } 
 import { BarChart } from "components/stats/charts/BarChart";
 import { DoughnutChart } from "components/stats/charts/DoughnutChart";
 
-export const TasksChart = ({ includeCategories, statsSettings, buttonsStates, setButtonsStates }) => {
+export const TasksChart = ({ includeCategories, subject, statsSettings, buttonsStates, setButtonsStates }) => {
     // console.debug('from TasksChart', includeCategories, statsSettings)
 
     const [chartData, setChartData] = useState({ label: '', labels: [], data: [], colors: [] })
+    const [showLoader, setShowLoader] = useState(false);
 
     function retrieveTasksPomodoros({ startDate, endDate, limit, offset }) {
+        setShowLoader(true);
         // console.debug(startDate, endDate)
         // console.debug("t", includeCategories)
 
@@ -20,7 +22,7 @@ export const TasksChart = ({ includeCategories, statsSettings, buttonsStates, se
             scale = calculateScaleForAdjustedAvg({ limit, scale, ...statsSettings });
         }
 
-        getTasksPomodorosApi({ startDate, endDate, includeCategories })
+        getTasksPomodorosApi({ startDate, endDate, includeCategories, subject })
             .then(response => {
                 // console.debug(response)
                 const updated_data = {
@@ -38,6 +40,7 @@ export const TasksChart = ({ includeCategories, statsSettings, buttonsStates, se
                 // console.debug(updated_data);
                 setChartData(updated_data)
                 // console.debug("retrieved updated data: ", chartData);
+                setShowLoader(false);
             })
             .catch(error => console.error(error.message))
     }
@@ -51,6 +54,7 @@ export const TasksChart = ({ includeCategories, statsSettings, buttonsStates, se
                     retrievePomodoros={retrieveTasksPomodoros}
                     setButtonsStates={setButtonsStates}
                     buttonsStates={buttonsStates}
+                    showLoader={showLoader}
                 />
             }
 
@@ -61,6 +65,7 @@ export const TasksChart = ({ includeCategories, statsSettings, buttonsStates, se
                     retrievePomodoros={retrieveTasksPomodoros}
                     setButtonsStates={setButtonsStates}
                     buttonsStates={buttonsStates}
+                    showLoader={showLoader}
                 />
             }
         </>

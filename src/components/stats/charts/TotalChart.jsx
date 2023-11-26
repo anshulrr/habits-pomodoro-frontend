@@ -19,7 +19,7 @@ const POMODORO_LENGTH = 25;
 const WEEKLY_DAYS = 7;
 const MONTHLY_AVG = 22;
 
-export const TotalChart = ({ includeCategories, statsSettings, buttonsStates, setButtonsStates }) => {
+export const TotalChart = ({ includeCategories, subject, statsSettings, buttonsStates, setButtonsStates }) => {
 
     const [datasets, setDatasets] = useState([])
 
@@ -27,7 +27,10 @@ export const TotalChart = ({ includeCategories, statsSettings, buttonsStates, se
 
     const [labels, setLabels] = useState([])
 
+    const [showLoader, setShowLoader] = useState(false);
+
     function retrieveTotalPomodoros({ limit, offset }) {
+        setShowLoader(true);
         // console.debug({ limit, offset });
         // console.debug("total", includeCategories)
 
@@ -42,7 +45,7 @@ export const TotalChart = ({ includeCategories, statsSettings, buttonsStates, se
         const { startDate, endDate } = calculateDates({ limit, offset });
         // console.debug({ limit, offset, startDate, endDate })
 
-        getTotalPomodorosApi({ limit, startDate, endDate, includeCategories })
+        getTotalPomodorosApi({ limit, startDate, endDate, includeCategories, subject })
             .then(response => {
                 // console.debug("stacked", response.data)
 
@@ -91,6 +94,7 @@ export const TotalChart = ({ includeCategories, statsSettings, buttonsStates, se
                 // console.debug(localDatasets)
                 setDatasets(localDatasets);
                 // setDatasets(structuredClone(datasets))
+                setShowLoader(false);
             })
             .catch(error => console.error(error.message))
     }
@@ -174,6 +178,9 @@ export const TotalChart = ({ includeCategories, statsSettings, buttonsStates, se
         <div>
             <h6>
                 {chartLabel}<wbr />
+                <span className="loader-container-2" >
+                    <span className="ms-1 loader-2" style={{ display: showLoader ? "inline" : "none" }}></span>
+                </span>
             </h6>
 
             <Buttons

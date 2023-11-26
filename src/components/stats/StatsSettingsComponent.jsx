@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 import { useAuth } from 'services/auth/AuthContext';
 
-export default function StatsSettingsComponent({ setStatsSettings, setReload, setShowStatsSettings }) {
+export default function StatsSettingsComponent({ setStatsSettings, setReload }) {
 
     const authContext = useAuth();
     const userSettings = authContext.userSettings;
@@ -88,7 +88,7 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload, se
                         />
                     </div>
                     <label className="input-group-text" htmlFor="eChartScale">
-                        Enable Scale
+                        Enable Scale (mins)
                     </label>
                     <input
                         type="number"
@@ -116,7 +116,7 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload, se
                         />
                     </div>
                     <label className="input-group-text" htmlFor="eChartWeeklyAverage">
-                        Enable Weekly Avg
+                        Enable Weekly Avg (days)
                     </label>
                     <input
                         type="number"
@@ -144,7 +144,7 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload, se
                         />
                     </div>
                     <label className="input-group-text" htmlFor="eChartMonthlyAverage">
-                        Enable Monthly Avg
+                        Enable Monthly Avg (days)
                     </label>
                     <input
                         type="number"
@@ -216,10 +216,7 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload, se
             <div className="text-danger"><small>{errorMessage}</small></div>
 
             <div className="col-lg-12">
-                <div className="input-group my-2 justify-content-end">
-                    <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowStatsSettings(false)}>
-                        <i className="bi bi-x-lg align-middle lh-sm" />
-                    </button>
+                <div className="mt-2 text-end">
                     <button className="btn btn-sm btn-outline-success" type="button" onClick={updateSettings}>Fetch</button>
                 </div>
             </div>

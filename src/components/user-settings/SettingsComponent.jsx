@@ -5,6 +5,7 @@ import ChangePasswordComponent from 'components/user-settings/ChangePasswordComp
 import UserSettingsComponent from 'components/user-settings/UserSettingsComponent';
 
 import { useAuth } from 'services/auth/AuthContext';
+import ListAccountabilityPartnersComponent from './ListAccountabilityPartnersComponent';
 
 export default function SettingsComponent() {
 
@@ -50,6 +51,11 @@ export default function SettingsComponent() {
 
                 <div className="col-lg-12">
                     <UserSettingsComponent />
+                    <hr />
+                </div>
+
+                <div className="col-lg-12">
+                    <ListAccountabilityPartnersComponent />
                     <hr />
                 </div>
 

@@ -11,6 +11,7 @@ import OutsideAlerter from "services/hooks/OutsideAlerter";
 
 export default function ListPomodorosComponent({
     includeCategories,
+    subject,
     buttonsStates,
     setButtonsStates,
     title = "Pomodoros",
@@ -74,13 +75,17 @@ export default function ListPomodorosComponent({
         // console.debug('api call', { allCategories, includeCategories })
         setPomodorosGroup([]);
         setPomodorosCount(-1);
-        getPomodorosApi({ startDate, endDate, includeCategories: allCategories || includeCategories })
+        getPomodorosApi({ startDate, endDate, includeCategories: allCategories || includeCategories, subject })
             .then(response => {
                 // console.debug(response)
                 response.data.map((x, index) => x.index = response.data.length - index);
 
                 const timeSlots = groupBy(response.data, 'endTime');
                 setPomodorosGroup(timeSlots.reverse());
+                for (let i = 0; i < timeSlots.length; i++) {
+                    timeSlots[i].totalTimeElapsed = timeSlots[i].reduce((acc, curr) => acc + Math.round(curr.timeElapsed / 60), 0);
+                }
+                // console.debug(timeSlots);
 
                 setPomodorosCount(response.data.length);
                 const total = response.data.reduce((acc, curr) => acc + Math.round(curr.timeElapsed / 60), 0);
@@ -168,6 +173,10 @@ export default function ListPomodorosComponent({
                                         timeSlots.length > 0 &&
                                         <div className="small text-end pomodoro-list-time-slot">
                                             <div className="small badge rounded-pill text-bg-secondary fw-normal">
+                                                {timeToDisplay(Math.round(timeSlots.totalTimeElapsed))}
+                                                <i className="ms-1 bi bi-clock" />
+                                            </div>
+                                            <div className="ms-1 small badge rounded-pill text-bg-secondary fw-normal">
                                                 {timeSlots.length > 0 ? ((8 - 1 - index) * 3) + ":00 - " + ((8 - index) * 3) + ":00" : ""}
                                             </div>
                                         </div>
@@ -215,7 +224,7 @@ export default function ListPomodorosComponent({
                                                                     <span className="">
                                                                         <div className="update-popup pomodoro-list-popup">
                                                                             <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2 lh-sm" onClick={() => updateCommentsData(pomodoro)}>
-                                                                                Comments <i className="align-middle bi bi-chat-right-text" />
+                                                                                Notes <i className="align-middle bi bi-chat-right-text" />
                                                                             </button>
                                                                             {
                                                                                 pomodoro.status === 'past' &&

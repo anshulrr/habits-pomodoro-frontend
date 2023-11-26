@@ -180,7 +180,7 @@ export default function UserSettingsComponent() {
                             />
                         </div>
                         <label className="input-group-text" htmlFor="eChartScale">
-                            Enable Chart Scale
+                            Enable Chart Scale (mins)
                         </label>
                         <input
                             type="number"
@@ -207,7 +207,7 @@ export default function UserSettingsComponent() {
                             />
                         </div>
                         <label className="input-group-text" htmlFor="eChartWeeklyAverage">
-                            Enable Chart Weekly Average
+                            Enable Chart Weekly Avg (days)
                         </label>
                         <input
                             type="number"
@@ -234,7 +234,7 @@ export default function UserSettingsComponent() {
                             />
                         </div>
                         <label className="input-group-text" htmlFor="eChartMonthlyAverage">
-                            Enable Chart Monthly Average
+                            Enable Chart Monthly Avg (days)
                         </label>
                         <input
                             type="number"
@@ -351,7 +351,7 @@ export default function UserSettingsComponent() {
                 <div className="col-lg-4">
                     <div className="input-group input-group-sm mb-2">
                         <label className="input-group-text" htmlFor="pomodoroLength">
-                            Default Pomodoro Length
+                            Default Pomodoro Length (mins)
                         </label>
                         <input
                             type="number"
@@ -369,7 +369,7 @@ export default function UserSettingsComponent() {
                 <div className="col-lg-4">
                     <div className="input-group input-group-sm mb-2">
                         <label className="input-group-text" htmlFor="breakLength">
-                            Break Length
+                            Break Length (mins)
                         </label>
                         <input
                             type="number"
@@ -392,7 +392,7 @@ export default function UserSettingsComponent() {
 
                 <div className="col-lg-4">
                     <div className="input-group input-group-sm mb-2">
-                        <label className="input-group-text" htmlFor="breakLength">
+                        <label className="input-group-text" htmlFor="pageProjectsCount">
                             Number of projects in a page
                         </label>
                         <input
@@ -410,7 +410,7 @@ export default function UserSettingsComponent() {
 
                 <div className="col-lg-4">
                     <div className="input-group input-group-sm mb-2">
-                        <label className="input-group-text" htmlFor="breakLength">
+                        <label className="input-group-text" htmlFor="pageTasksCount">
                             Number of tasks in a page
                         </label>
                         <input
@@ -428,8 +428,8 @@ export default function UserSettingsComponent() {
 
                 <div className="col-lg-4">
                     <div className="input-group input-group-sm mb-2">
-                        <label className="input-group-text" htmlFor="breakLength">
-                            Number of comments in a page
+                        <label className="input-group-text" htmlFor="pageCommentsCount">
+                            Number of notes in a page
                         </label>
                         <input
                             type="number"
@@ -437,7 +437,7 @@ export default function UserSettingsComponent() {
                             className="form-control"
                             value={pageCommentsCount}
                             min={1}
-                            placeholder="Default Number of Comments"
+                            placeholder="Default Number of Notes"
                             onChange={(e) => handleOnChange(setPageCommentsCount, e.target.value)}
                             id="pageCommentsCount"
                         />

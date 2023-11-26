@@ -71,13 +71,27 @@ export default function ListProjectCategoriesComponent() {
                                     </span>
                                 </h6>
                             </div>
-                            <div className="col-2 text-end">
+                            <div className="col-2 px-0 text-end">
                                 <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-1" onClick={addNewProjectCategory}>
                                     <i className="bi bi-plus-circle" />
                                 </button>
                             </div>
                         </div>
                         <small>
+                            <div className="row fw-bold border-top">
+                                <div className="col-9 text-start">
+                                    Category Name
+                                </div>
+                                <div className="col-1 px-0 text-end">
+                                    <i className="bi bi-arrow-up" />
+                                </div>
+                                <div className="col-1 px-0 text-end">
+                                    <i className="bi bi-graph-up" />
+                                </div>
+                                <div className="col-1 px-0 text-end">
+                                    <i className="bi bi-person-fill" />
+                                </div>
+                            </div>
                             {
                                 categories.map(
                                     cat => (
@@ -87,18 +101,22 @@ export default function ListProjectCategoriesComponent() {
                                             onClick={() => updateProjectCategory(cat)}
                                         >
                                             {/* todo: decide better solution for maxWidth */}
-                                            <div className="col-8 text-truncate text-start">
+                                            <div className="col-9 text-truncate text-start">
                                                 {/* <span style={{ color: cat.color }}>&#9632; </span> */}
+                                                <span>{cat.name}</span>
+                                            </div>
+                                            <div className="col-1 px-0 text-secondary text-end">
+                                                {cat.level}&nbsp;
+                                            </div>
+                                            <div className="col-1 px-0 text-secondary text-end">
                                                 <span>
                                                     <input className="form-check-input" type="checkbox" checked={cat.statsDefault} disabled />
                                                 </span>
-                                                <span>&nbsp;{cat.name}</span>
                                             </div>
-                                            <div className="col-4 text-secondary text-end">
-                                                <small>
-                                                    <i className="bi bi-arrow-up" />
-                                                </small>
-                                                {cat.level}&nbsp;
+                                            <div className="col-1 px-0 text-secondary text-end">
+                                                <span>
+                                                    <input className="ms-1 form-check-input" type="checkbox" checked={cat.visibleToPartners} disabled />
+                                                </span>
                                             </div>
                                         </div>
                                     )

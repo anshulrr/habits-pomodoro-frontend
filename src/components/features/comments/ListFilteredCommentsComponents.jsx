@@ -98,15 +98,16 @@ export default function ListFilteredCommentsComponent({
 
     function getCommentsTags(comments) {
         // console.debug(tags)
+        if (!tags || tags.size === 0) {
+            return;
+        }
+
         const commentIds = comments.map(comment => comment.id);
         const map = new Map(comments.map(comment => {
             comment.tags = [];
             return [comment.id, comment];
         }));
 
-        if (tags.size === 0) {
-            return;
-        }
         getCommentsTagsApi(commentIds)
             .then(response => {
                 // using Map for easy access and update
