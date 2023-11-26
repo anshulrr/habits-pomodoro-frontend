@@ -16,6 +16,7 @@ export default function HomeComponent() {
 
     const navigate = useNavigate()
 
+    const [projects, setProjects] = useState([])
     const [project, setProject] = useState(state && state.project);
     const [tag, setTag] = useState(state && state.tag);
     const [tags, setTags] = useState(null);
@@ -100,10 +101,13 @@ export default function HomeComponent() {
                                     <div className="left-menu-popup">
 
                                         <ListProjectsComponent
+                                            projects={projects}
+                                            setProjects={setProjects}
                                             project={project}
                                             setProject={setProject}
                                             setTag={setTag}
                                             setShowLeftMenu={setShowLeftMenu}
+                                            setPomodorosListReload={setPomodorosListReload}
                                         />
 
                                         <div className="mb-3">
@@ -206,6 +210,7 @@ export default function HomeComponent() {
                             setElementHeight={setPomodorosHeight}
                             setPomodorosListReload={setPomodorosListReload}
                             tags={tags}
+                            setProjects={setProjects}
                         />
                     </div >
                 </div >

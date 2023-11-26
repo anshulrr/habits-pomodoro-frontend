@@ -4,9 +4,17 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { retrieveAllProjectsApi, getProjectsCountApi } from "services/api/ProjectApiService";
 import Pagination from "services/pagination/Pagination"
 import { useAuth } from "services/auth/AuthContext";
-import { truncateString } from "services/helpers/listsHelper";
+import { timeToDisplay, truncateString } from "services/helpers/listsHelper";
 
-export default function ListProjectsComponent({ project, setProject, setTag, setShowLeftMenu }) {
+export default function ListProjectsComponent({
+    projects,
+    setProjects,
+    project,
+    setProject,
+    setTag,
+    setShowLeftMenu,
+    setPomodorosListReload
+}) {
     const authContext = useAuth()
     const userSettings = authContext.userSettings
 
@@ -21,7 +29,6 @@ export default function ListProjectsComponent({ project, setProject, setTag, set
     const PAGESIZE = userSettings.pageProjectsCount || 5;
 
     const [projectsCount, setProjectsCount] = useState(0)
-    const [projects, setProjects] = useState([])
 
     // state might not be preset (eg. opening url in a new tab)
     // const [project, setProject] = useState(state && state.project)
@@ -175,8 +182,18 @@ export default function ListProjectsComponent({ project, setProject, setTag, set
                                                 </span>
                                             </div>
                                             <div className="col-4 ps-0 subscript text-secondary text-truncate text-end list-details">
+
+                                                {
+                                                    proj.timeElapsed &&
+                                                    <span className="">
+                                                        <i className="bi bi-clock-fill" style={{ paddingRight: "0.1rem" }} />
+                                                        <span style={{ fontVariantNumeric: "tabular-nums" }}>
+                                                            {timeToDisplay(Math.round(proj.timeElapsed / 60))}
+                                                        </span>
+                                                    </span>
+                                                }
                                                 <span className="">
-                                                    <i className="bi bi-link-45deg" style={{ paddingRight: '0.1rem' }} />
+                                                    <i className="ps-1 bi bi-link-45deg" style={{ paddingRight: '0.1rem' }} />
                                                     {truncateString(proj.category, 8)}
                                                 </span>
                                                 <span className="">
@@ -209,6 +226,7 @@ export default function ListProjectsComponent({ project, setProject, setTag, set
                             onPageChange={page => {
                                 setCurrentPage(page);
                                 state.currentProjectsPage = page;
+                                setPomodorosListReload(prev => prev + 1);
                                 navigate(`/`, { state, replace: true });
                             }}
                         />
