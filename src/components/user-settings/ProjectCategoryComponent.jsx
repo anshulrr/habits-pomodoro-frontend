@@ -176,7 +176,7 @@ export default function ProjectCategoryComponent({
                                                             </div>
                                                             <label className="input-group-text" htmlFor="visibleToPartners">
                                                                 <i className="pe-1 bi bi-person-fill" />
-                                                                Visible to Accountibility Partners
+                                                                Visible to Accountability Partners
                                                             </label>
                                                         </div>
                                                     </div>

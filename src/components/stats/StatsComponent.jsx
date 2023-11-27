@@ -64,7 +64,7 @@ export default function ListStatsComponent() {
             // console.debug('re-render StatsComponent')
             document.title = 'Stats';
             retrieveProjectCategories();
-            retrieveAccountibilitySubjects();
+            retrieveAccountabilitySubjects();
         }, []   // eslint-disable-line react-hooks/exhaustive-deps
     )
 
@@ -84,7 +84,7 @@ export default function ListStatsComponent() {
             .catch(error => console.error(error.message))
     }
 
-    function retrieveAccountibilitySubjects() {
+    function retrieveAccountabilitySubjects() {
         retrieveAccountabilitySubjectsApi()
             .then(response => {
                 setSubjects(response.data);

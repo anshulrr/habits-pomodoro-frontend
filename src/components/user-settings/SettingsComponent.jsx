@@ -14,6 +14,9 @@ export default function SettingsComponent() {
     const authContext = useAuth()
 
     function logout() {
+        if (!window.confirm("Are you sure? Press OK to Logout.")) {
+            return;
+        }
         authContext.logout()
     }
 
@@ -44,7 +47,12 @@ export default function SettingsComponent() {
 
                     <h6 className="text-start pb-2">
                         Change Password &nbsp;
-                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowChangePassword(!showChangePassword)}>
+                        <button
+                            type="button"
+                            className="btn btn-sm btn-outline-secondary py-0 px-1"
+                            onClick={() => setShowChangePassword(!showChangePassword)}
+                            style={{ float: "right" }}
+                        >
                             <i className="bi bi-pencil-square" />
                         </button>
                     </h6>
