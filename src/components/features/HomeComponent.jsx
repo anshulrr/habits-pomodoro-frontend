@@ -16,7 +16,8 @@ export default function HomeComponent() {
 
     const navigate = useNavigate()
 
-    const [projects, setProjects] = useState([])
+    const [todaysPomodorosMap, setTodaysPomodorosMap] = useState(null);
+    const [projects, setProjects] = useState([]);
     const [project, setProject] = useState(state && state.project);
     const [tag, setTag] = useState(state && state.tag);
     const [tags, setTags] = useState(null);
@@ -107,7 +108,7 @@ export default function HomeComponent() {
                                             setProject={setProject}
                                             setTag={setTag}
                                             setShowLeftMenu={setShowLeftMenu}
-                                            setPomodorosListReload={setPomodorosListReload}
+                                            todaysPomodorosMap={todaysPomodorosMap}
                                         />
 
                                         <div className="mb-3">
@@ -211,6 +212,7 @@ export default function HomeComponent() {
                             setPomodorosListReload={setPomodorosListReload}
                             tags={tags}
                             setProjects={setProjects}
+                            setTodaysPomodorosMap={setTodaysPomodorosMap}
                         />
                     </div >
                 </div >

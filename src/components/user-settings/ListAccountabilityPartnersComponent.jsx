@@ -26,7 +26,7 @@ export default function ListAccountabilityPartnersComponent() {
     }
 
     function removeAccountabilityPartner(partner) {
-        console.log(partner)
+        // console.debug(partner)
         removeAccountabilityPartnerssApi(partner)
             .then(response => {
                 refreshPartners();

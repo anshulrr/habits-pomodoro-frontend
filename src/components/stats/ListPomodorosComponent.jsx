@@ -18,6 +18,7 @@ export default function ListPomodorosComponent({
     elementHeight,
     setElementHeight,
     tags,
+    setTodaysPomodorosMap,
     setProjects
 }) {
 
@@ -99,7 +100,7 @@ export default function ListPomodorosComponent({
     }
 
     function updateTodaysProjectsTimeElapsed(pomodoros) {
-        if (title != "Today's Pomodoros") {
+        if (title !== "Today's Pomodoros") {
             return;
         }
         const map = new Map();
@@ -112,7 +113,8 @@ export default function ListPomodorosComponent({
                 map.set(projectId, pomodoro.timeElapsed);
             }
         }
-        // console.log(map);
+        // for projects component
+        setTodaysPomodorosMap(map)
         setProjects(projects => projects.map((project) => {
             // console.log(project.id)
             if (map.has(project.id)) {

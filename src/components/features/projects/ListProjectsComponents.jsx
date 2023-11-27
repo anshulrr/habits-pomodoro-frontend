@@ -13,7 +13,7 @@ export default function ListProjectsComponent({
     setProject,
     setTag,
     setShowLeftMenu,
-    setPomodorosListReload
+    todaysPomodorosMap
 }) {
     const authContext = useAuth()
     const userSettings = authContext.userSettings
@@ -53,7 +53,18 @@ export default function ListProjectsComponent({
         retrieveAllProjectsApi(PAGESIZE, (currentPage - 1) * PAGESIZE)
             .then(response => {
                 // console.debug(response)
-                setProjects(response.data)
+                const projectsList = response.data;
+                if (todaysPomodorosMap != null) {
+                    projectsList.map((project) => {
+                        // console.log(project.id)
+                        if (todaysPomodorosMap.has(project.id)) {
+                            project.timeElapsed = todaysPomodorosMap.get(project.id);
+                        }
+                        return project;
+                    });
+                }
+
+                setProjects(projectsList)
                 // set project for first time load
                 if (isStateEmpty() && !project && response.data.length > 0) {
                     setProject(response.data[0]);
@@ -226,7 +237,6 @@ export default function ListProjectsComponent({
                             onPageChange={page => {
                                 setCurrentPage(page);
                                 state.currentProjectsPage = page;
-                                setPomodorosListReload(prev => prev + 1);
                                 navigate(`/`, { state, replace: true });
                             }}
                         />
