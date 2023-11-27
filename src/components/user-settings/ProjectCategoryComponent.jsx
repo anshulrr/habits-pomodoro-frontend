@@ -99,96 +99,113 @@ export default function ProjectCategoryComponent({
     }
 
     return (
-        <div>
-            <p>Enter Project Category Details </p>
-            <div>
-                <Formik initialValues={{ name, level, statsDefault, visibleToPartners }}
-                    enableReinitialize={true}
-                    onSubmit={onSubmit}
-                    validate={validate}
-                    validateOnChange={false}
-                    validateOnBlur={false}
-                >
-                    {
-                        ({ errors, handleSubmit }) => (
-                            <form onSubmit={handleSubmit}>
-                                <div className="row">
-                                    <div className="col-12 mb-2">
-                                        <Field type="text" className="form-control form-control-sm" name="name" placeholder="Project Category Name" required />
-                                        <ErrorMessage name="name" component="div" className="small text-danger" />
-                                    </div>
-                                    <div className="col-12 mb-2">
-                                        <div className="input-group input-group-sm">
-                                            <label className="input-group-text" htmlFor="level">
-                                                Priority
-                                                <i className="ps-1 bi bi-arrow-up" />
-                                            </label>
-                                            <Field
-                                                type="number"
-                                                className="form-control form-control-sm"
-                                                name="level"
-                                                id="level"
-                                                placeholder="Priority Level"
-                                                required
-                                            />
-                                        </div>
-                                    </div>
+        <div className="task-overlay">
+            <div className="task-popup">
 
-                                    <div className="col-12 mb-2">
-                                        <div className="input-group input-group-sm">
-                                            <div className="input-group-text">
-                                                <Field
-                                                    type="checkbox"
-                                                    className="form-check-input"
-                                                    name="statsDefault"
-                                                    id="statsDefault"
-                                                />
-                                            </div>
-                                            <label className="input-group-text" htmlFor="statsDefault">
-                                                <i className="pe-1 bi bi-graph-up" />
-                                                Stats List Default
-                                            </label>
-                                        </div>
-                                    </div>
+                <div className="task-close-popup m-2">
+                    <i className="p-1 bi bi-x-lg" onClick={() => {
+                        setCategory(null);
+                        setNewCategory(false);
+                    }}></i>
+                </div>
+                <div className="container my-3">
 
-                                    <div className="col-12 mb-2">
-                                        <div className="input-group input-group-sm">
-                                            <div className="input-group-text">
-                                                <Field
-                                                    type="checkbox"
-                                                    className="form-check-input"
-                                                    name="visibleToPartners"
-                                                    id="visibleToPartners"
-                                                />
-                                            </div>
-                                            <label className="input-group-text" htmlFor="visibleToPartners">
-                                                <i className="pe-1 bi bi-person-fill" />
-                                                Visible to Accountibility Partners
-                                            </label>
-                                        </div>
-                                    </div>
+                    <div className="row">
+                        <div className="col-lg-4 offset-lg-4">
 
-                                    <div className="col-lg-12">
-                                        {
-                                            category &&
-                                            <span>
-                                                <button className="me-2 btn btn-sm btn-outline-secondary" type="button" onClick={() => setCategory(null)}>Cancel</button>
-                                                <button className="btn btn-sm btn-outline-success" type="submit">Update Project Category</button>
-                                            </span>
-                                        }
-                                        {
-                                            !category &&
-                                            <span>
-                                                <button className="me-2 btn btn-sm btn-outline-secondary" type="button" onClick={() => setNewCategory(false)}>Cancel</button>
-                                                <button className="btn btn-sm btn-outline-success" type="submit">Create Project Category</button>
-                                            </span>
-                                        }
-                                    </div>
-                                </div>
-                            </form>
-                        )
-                    }
-                </Formik>
+                            <p>Enter Project Category Details </p>
+                            <div>
+                                <Formik initialValues={{ name, level, statsDefault, visibleToPartners }}
+                                    enableReinitialize={true}
+                                    onSubmit={onSubmit}
+                                    validate={validate}
+                                    validateOnChange={false}
+                                    validateOnBlur={false}
+                                >
+                                    {
+                                        ({ errors, handleSubmit }) => (
+                                            <form onSubmit={handleSubmit}>
+                                                <div className="row">
+                                                    <div className="col-12 mb-2">
+                                                        <Field type="text" className="form-control form-control-sm" name="name" placeholder="Project Category Name" required />
+                                                        <ErrorMessage name="name" component="div" className="small text-danger" />
+                                                    </div>
+                                                    <div className="col-12 mb-2">
+                                                        <div className="input-group input-group-sm">
+                                                            <label className="input-group-text" htmlFor="level">
+                                                                Priority
+                                                                <i className="ps-1 bi bi-arrow-up" />
+                                                            </label>
+                                                            <Field
+                                                                type="number"
+                                                                className="form-control form-control-sm"
+                                                                name="level"
+                                                                id="level"
+                                                                placeholder="Priority Level"
+                                                                required
+                                                            />
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="col-12 mb-2">
+                                                        <div className="input-group input-group-sm">
+                                                            <div className="input-group-text">
+                                                                <Field
+                                                                    type="checkbox"
+                                                                    className="form-check-input"
+                                                                    name="statsDefault"
+                                                                    id="statsDefault"
+                                                                />
+                                                            </div>
+                                                            <label className="input-group-text" htmlFor="statsDefault">
+                                                                <i className="pe-1 bi bi-graph-up" />
+                                                                Stats List Default
+                                                            </label>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="col-12 mb-2">
+                                                        <div className="input-group input-group-sm">
+                                                            <div className="input-group-text">
+                                                                <Field
+                                                                    type="checkbox"
+                                                                    className="form-check-input"
+                                                                    name="visibleToPartners"
+                                                                    id="visibleToPartners"
+                                                                />
+                                                            </div>
+                                                            <label className="input-group-text" htmlFor="visibleToPartners">
+                                                                <i className="pe-1 bi bi-person-fill" />
+                                                                Visible to Accountibility Partners
+                                                            </label>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="col-lg-12">
+                                                        {
+                                                            category &&
+                                                            <span>
+                                                                <button className="me-2 btn btn-sm btn-outline-secondary" type="button" onClick={() => setCategory(null)}>Cancel</button>
+                                                                <button className="btn btn-sm btn-outline-success" type="submit">Update Project Category</button>
+                                                            </span>
+                                                        }
+                                                        {
+                                                            !category &&
+                                                            <span>
+                                                                <button className="me-2 btn btn-sm btn-outline-secondary" type="button" onClick={() => setNewCategory(false)}>Cancel</button>
+                                                                <button className="btn btn-sm btn-outline-success" type="submit">Create Project Category</button>
+                                                            </span>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        )
+                                    }
+                                </Formik>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     )

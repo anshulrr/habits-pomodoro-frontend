@@ -5,7 +5,7 @@ import { addAccountabilityPartnerssApi, removeAccountabilityPartnerssApi, retrie
 export default function ListAccountabilityPartnersComponent() {
 
     const [partners, setPartners] = useState([])
-    const [email, setEmail] = useState(null)
+    const [email, setEmail] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
 
     const [showAddPartner, setShowAddPartner] = useState(false)

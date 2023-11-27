@@ -41,6 +41,7 @@ export default function SettingsComponent() {
 
                     <ListAccountabilityPartnersComponent />
                     <hr />
+
                     <h6 className="text-start pb-2">
                         Change Password &nbsp;
                         <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowChangePassword(!showChangePassword)}>
