@@ -47,7 +47,7 @@ export default function ChangePasswordComponent({ setShowChangePassword }) {
             <form className="ChangePasswordForm" onSubmit={handleSubmit}>
                 <div className="container">
                     <div className="row">
-                        <div className="col-lg-4">
+                        <div className="col-lg-12">
                             <input
                                 type="email"
                                 name="email"
@@ -79,7 +79,7 @@ export default function ChangePasswordComponent({ setShowChangePassword }) {
                             />
                             <div className="mb-2 text-danger"><small>{errorMessage}</small></div>
 
-                            <div className="">
+                            <div className="text-end">
                                 <button className="me-2 btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowChangePassword(false)}>Cancel</button>
                                 <button
                                     type="submit"

@@ -59,7 +59,7 @@ export default function ListProjectCategoriesComponent() {
     return (
         <div className="container">
             <div className="row">
-                <div className="col-lg-4">
+                <div className="col-lg-12">
                     <div>
                         <div className="row px-0">
                             <div className="col-10 text-start px-0">
@@ -78,7 +78,7 @@ export default function ListProjectCategoriesComponent() {
                             </div>
                         </div>
                         <small>
-                            <div className="row fw-bold border-top">
+                            <div className="row py-1 fw-bold border-top">
                                 <div className="col-9 text-start">
                                     Category Name
                                 </div>
@@ -97,7 +97,7 @@ export default function ListProjectCategoriesComponent() {
                                     cat => (
                                         <div
                                             key={cat.id}
-                                            className={(category && cat.id === category.id ? "list-selected " : "") + "row py-0 list-row"}
+                                            className={(category && cat.id === category.id ? "list-selected " : "") + "row py-1 list-row"}
                                             onClick={() => updateProjectCategory(cat)}
                                         >
                                             {/* todo: decide better solution for maxWidth */}
@@ -132,7 +132,7 @@ export default function ListProjectCategoriesComponent() {
                         />
                     </div>
                 </div>
-                <div className="col-lg-8 mt-2">
+                <div className="col-lg-12 mt-2">
                     {
                         (category || isNewCategory) &&
                         <ProjectCategoryComponent

@@ -113,11 +113,11 @@ export default function ProjectCategoryComponent({
                         ({ errors, handleSubmit }) => (
                             <form onSubmit={handleSubmit}>
                                 <div className="row">
-                                    <div className="col-lg-8 mb-2">
+                                    <div className="col-12 mb-2">
                                         <Field type="text" className="form-control form-control-sm" name="name" placeholder="Project Category Name" required />
                                         <ErrorMessage name="name" component="div" className="small text-danger" />
                                     </div>
-                                    <div className="col-lg-4 mb-2">
+                                    <div className="col-12 mb-2">
                                         <div className="input-group input-group-sm">
                                             <label className="input-group-text" htmlFor="level">
                                                 Priority

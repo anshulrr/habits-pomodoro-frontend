@@ -92,7 +92,7 @@ export default function ListStatsComponent() {
     }
 
     return (
-        <div className="container mt-3">
+        <div className="container pt-3" style={{ backgroundColor: "#f2f3f4" }}>
 
             <div className="row">
                 {
