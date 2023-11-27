@@ -200,13 +200,13 @@ export default function ListStatsComponent() {
                         <div className="row">
                             <div className="col-lg-6 px-0">
                                 <div className="p-1 chart-card">
-                                    <TasksChart
+                                    <TotalChart
                                         key={reload}
                                         includeCategories={includeCategories}
                                         subject={subject}
                                         statsSettings={statsSettings}
-                                        buttonsStates={tasksChartButtonsStates}
-                                        setButtonsStates={setTasksChartBButtonsStates}
+                                        buttonsStates={totalChartButtonsStates}
+                                        setButtonsStates={setTotalChartBButtonsStates}
                                     />
                                 </div>
                             </div>
@@ -224,13 +224,13 @@ export default function ListStatsComponent() {
                             </div>
                             <div className="col-lg-6 px-0">
                                 <div className="p-1 chart-card">
-                                    <TotalChart
+                                    <TasksChart
                                         key={reload}
                                         includeCategories={includeCategories}
                                         subject={subject}
                                         statsSettings={statsSettings}
-                                        buttonsStates={totalChartButtonsStates}
-                                        setButtonsStates={setTotalChartBButtonsStates}
+                                        buttonsStates={tasksChartButtonsStates}
+                                        setButtonsStates={setTasksChartBButtonsStates}
                                     />
                                 </div>
                             </div>
