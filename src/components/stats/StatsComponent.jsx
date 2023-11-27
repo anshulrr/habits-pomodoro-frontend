@@ -22,9 +22,9 @@ export default function ListStatsComponent() {
 
     const [statsSettings, setStatsSettings] = useState({})
 
-    const [showIncludeCategories, setShowIncludeCategories] = useState(false)
-    const [showStatsSettings, setShowStatsSettings] = useState(false)
-    const [showFriendsStats, setShowFriendsStats] = useState(false)
+    const [showIncludeCategories, setShowIncludeCategories] = useState(window.innerWidth <= 992 ? false : true);
+    const [showStatsSettings, setShowStatsSettings] = useState(window.innerWidth <= 992 ? false : true);
+    const [showFriendsStats, setShowFriendsStats] = useState(window.innerWidth <= 992 ? false : true);
 
     const [reload, setReload] = useState(0)
     const [reloadCategories, setReloadCategories] = useState(0)
