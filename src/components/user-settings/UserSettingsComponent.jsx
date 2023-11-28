@@ -29,6 +29,7 @@ export default function UserSettingsComponent() {
     const [pageCommentsCount, setPageCommentsCount] = useState('')
     const [tasksChartType, setTasksChartType] = useState('')
     const [projectsChartType, setProjectsChartType] = useState('')
+    const [homePageDefaultList, setHomePageDefaultList] = useState('')
 
     const [errorMessage, setErrorMessage] = useState('')
     const [successMessage, setSuccessMessage] = useState('')
@@ -56,6 +57,7 @@ export default function UserSettingsComponent() {
             setPageCommentsCount(userSettings.pageCommentsCount)
             setTasksChartType(userSettings.tasksChartType || "doughnut")
             setProjectsChartType(userSettings.projectsChartType || "bar")
+            setHomePageDefaultList(userSettings.homePageDefaultList || "projects")
         }
 
         fetchAndSetSettings();
@@ -89,7 +91,8 @@ export default function UserSettingsComponent() {
             pageTasksCount,
             pageCommentsCount,
             tasksChartType,
-            projectsChartType
+            projectsChartType,
+            homePageDefaultList
         }
         // console.debug(request_settings);
 
@@ -163,111 +166,6 @@ export default function UserSettingsComponent() {
 
     return (
         <div>
-            <h6 className='text-start'>Stats Settings</h6>
-
-            <div className="row">
-
-                <div className="col-lg-12">
-                    <div className="input-group input-group-sm mb-2">
-                        <div className="input-group-text">
-                            <input
-                                type="checkbox"
-                                name="enableChartScale"
-                                className="form-check-input mt-0"
-                                checked={enableChartScale}
-                                onChange={(e) => handleOnChange(setEnableChartScale, e.target.checked)}
-                                id="eChartScale"
-                            />
-                        </div>
-                        <label className="input-group-text" htmlFor="eChartScale">
-                            Enable Chart Scale (mins)
-                        </label>
-                        <input
-                            type="number"
-                            name="chartScale"
-                            className="form-control"
-                            value={chartScale}
-                            min={1}
-                            placeholder="Chart Scale"
-                            onChange={(e) => handleOnChange(setChartScale, e.target.value)}
-                        />
-                    </div>
-                </div>
-
-                <div className="col-lg-12">
-                    <div className="input-group input-group-sm mb-2">
-                        <div className="input-group-text">
-                            <input
-                                type="checkbox"
-                                name="enableChartWeeklyAverage"
-                                className="form-check-input mt-0"
-                                checked={enableChartWeeklyAverage}
-                                onChange={(e) => handleOnChange(setEnableChartWeeklyAverage, e.target.checked)}
-                                id="eChartWeeklyAverage"
-                            />
-                        </div>
-                        <label className="input-group-text" htmlFor="eChartWeeklyAverage">
-                            Enable Chart Weekly Avg (days)
-                        </label>
-                        <input
-                            type="number"
-                            name="chartWeeklyAverage"
-                            className="form-control"
-                            value={chartWeeklyAverage}
-                            min={1}
-                            placeholder="Chart Weekly Average"
-                            onChange={(e) => handleOnChange(setChartWeeklyAverage, e.target.value)}
-                        />
-                    </div>
-                </div>
-
-                <div className="col-lg-12">
-                    <div className="input-group input-group-sm mb-2">
-                        <div className="input-group-text">
-                            <input
-                                type="checkbox"
-                                name="enableChartMonthlyAverage"
-                                className="form-check-input mt-0"
-                                checked={enableChartMonthlyAverage}
-                                onChange={(e) => handleOnChange(setEnableChartMonthlyAverage, e.target.checked)}
-                                id="eChartMonthlyAverage"
-                            />
-                        </div>
-                        <label className="input-group-text" htmlFor="eChartMonthlyAverage">
-                            Enable Chart Monthly Avg (days)
-                        </label>
-                        <input
-                            type="number"
-                            name="chartMonthlyAverage"
-                            className="form-control"
-                            value={chartMonthlyAverage}
-                            min={1}
-                            placeholder="Chart Monthly Average"
-                            onChange={(e) => handleOnChange(setChartMonthlyAverage, e.target.value)}
-                        />
-                    </div>
-                </div>
-
-                <div className="col-lg-12">
-                    <div className="input-group input-group-sm mb-2">
-                        <div className="input-group-text">
-                            <input
-                                type="checkbox"
-                                name="enableChartAdjustedWeeklyMonthlyAverage"
-                                className="form-check-input mt-0"
-                                checked={enableChartAdjustedWeeklyMonthlyAverage}
-                                onChange={(e) => handleOnChange(setEnableChartAdjustedWeeklyMonthlyAverage, e.target.checked)}
-                                id="eChartAdjustedWeeklyMonthlyAverage"
-                            />
-                        </div>
-                        <label className="input-group-text" htmlFor="eChartAdjustedWeeklyMonthlyAverage">
-                            Enable Adjusted Avg for current W/M
-                        </label>
-                    </div>
-                </div>
-
-            </div>
-
             <h6 className='text-start'>General Settings</h6>
 
             <div className="row">
@@ -446,6 +344,129 @@ export default function UserSettingsComponent() {
 
                 <div className="col-lg-12">
                     <div className="input-group input-group-sm mb-2">
+                        <label className="input-group-text" htmlFor="homePageDefaultList">
+                            Home Page Default List
+                        </label>
+                        <select
+                            className="form-select form-select-sm"
+                            name="home-page-default-list"
+                            onChange={(e) => handleOnChange(setHomePageDefaultList, e.target.value)}
+                            value={homePageDefaultList}   // using react's value instead of defaultValue to handle it with state variable
+                            id="homePageDefaultList"
+                        >
+                            <option value="projects">Projects</option>
+                            <option value="filters">Filters</option>
+                            <option value="tags">Tags</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <h6 className='text-start'>Stats Settings</h6>
+
+            <div className="row">
+
+                <div className="col-lg-12">
+                    <div className="input-group input-group-sm mb-2">
+                        <div className="input-group-text">
+                            <input
+                                type="checkbox"
+                                name="enableChartScale"
+                                className="form-check-input mt-0"
+                                checked={enableChartScale}
+                                onChange={(e) => handleOnChange(setEnableChartScale, e.target.checked)}
+                                id="eChartScale"
+                            />
+                        </div>
+                        <label className="input-group-text" htmlFor="eChartScale">
+                            Enable Chart Scale (mins)
+                        </label>
+                        <input
+                            type="number"
+                            name="chartScale"
+                            className="form-control"
+                            value={chartScale}
+                            min={1}
+                            placeholder="Chart Scale"
+                            onChange={(e) => handleOnChange(setChartScale, e.target.value)}
+                        />
+                    </div>
+                </div>
+
+                <div className="col-lg-12">
+                    <div className="input-group input-group-sm mb-2">
+                        <div className="input-group-text">
+                            <input
+                                type="checkbox"
+                                name="enableChartWeeklyAverage"
+                                className="form-check-input mt-0"
+                                checked={enableChartWeeklyAverage}
+                                onChange={(e) => handleOnChange(setEnableChartWeeklyAverage, e.target.checked)}
+                                id="eChartWeeklyAverage"
+                            />
+                        </div>
+                        <label className="input-group-text" htmlFor="eChartWeeklyAverage">
+                            Enable Chart Weekly Avg (days)
+                        </label>
+                        <input
+                            type="number"
+                            name="chartWeeklyAverage"
+                            className="form-control"
+                            value={chartWeeklyAverage}
+                            min={1}
+                            placeholder="Chart Weekly Average"
+                            onChange={(e) => handleOnChange(setChartWeeklyAverage, e.target.value)}
+                        />
+                    </div>
+                </div>
+
+                <div className="col-lg-12">
+                    <div className="input-group input-group-sm mb-2">
+                        <div className="input-group-text">
+                            <input
+                                type="checkbox"
+                                name="enableChartMonthlyAverage"
+                                className="form-check-input mt-0"
+                                checked={enableChartMonthlyAverage}
+                                onChange={(e) => handleOnChange(setEnableChartMonthlyAverage, e.target.checked)}
+                                id="eChartMonthlyAverage"
+                            />
+                        </div>
+                        <label className="input-group-text" htmlFor="eChartMonthlyAverage">
+                            Enable Chart Monthly Avg (days)
+                        </label>
+                        <input
+                            type="number"
+                            name="chartMonthlyAverage"
+                            className="form-control"
+                            value={chartMonthlyAverage}
+                            min={1}
+                            placeholder="Chart Monthly Average"
+                            onChange={(e) => handleOnChange(setChartMonthlyAverage, e.target.value)}
+                        />
+                    </div>
+                </div>
+
+                <div className="col-lg-12">
+                    <div className="input-group input-group-sm mb-2">
+                        <div className="input-group-text">
+                            <input
+                                type="checkbox"
+                                name="enableChartAdjustedWeeklyMonthlyAverage"
+                                className="form-check-input mt-0"
+                                checked={enableChartAdjustedWeeklyMonthlyAverage}
+                                onChange={(e) => handleOnChange(setEnableChartAdjustedWeeklyMonthlyAverage, e.target.checked)}
+                                id="eChartAdjustedWeeklyMonthlyAverage"
+                            />
+                        </div>
+                        <label className="input-group-text" htmlFor="eChartAdjustedWeeklyMonthlyAverage">
+                            Enable Adjusted Avg for current W/M
+                        </label>
+                    </div>
+                </div>
+
+                <div className="col-lg-12">
+                    <div className="input-group input-group-sm mb-2">
                         <label className="input-group-text" htmlFor="tasksChartType">
                             Tasks Chart Type
                         </label>
@@ -479,6 +500,7 @@ export default function UserSettingsComponent() {
                         </select>
                     </div>
                 </div>
+
             </div>
 
             <div className="col-lg-12 text-end">

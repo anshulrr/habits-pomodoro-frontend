@@ -5,6 +5,7 @@ import { retrieveAllProjectsApi, getProjectsCountApi } from "services/api/Projec
 import Pagination from "services/pagination/Pagination"
 import { useAuth } from "services/auth/AuthContext";
 import { timeToDisplay, truncateString } from "services/helpers/listsHelper";
+import { isEmpty } from "services/helpers/helper";
 
 export default function ListProjectsComponent({
     projects,
@@ -27,6 +28,9 @@ export default function ListProjectsComponent({
 
     // for first time login default value is needed
     const PAGESIZE = userSettings.pageProjectsCount || 5;
+
+    // for first time login default value is needed
+    const IS_PROJECTS_DEFAULT = isEmpty(userSettings) || userSettings.homePageDefaultList === 'projects';
 
     const [projectsCount, setProjectsCount] = useState(0)
 
@@ -56,7 +60,6 @@ export default function ListProjectsComponent({
                 const projectsList = response.data;
                 if (todaysPomodorosMap != null) {
                     projectsList.map((project) => {
-                        // console.log(project.id)
                         if (todaysPomodorosMap.has(project.id)) {
                             project.timeElapsed = todaysPomodorosMap.get(project.id);
                         }
@@ -66,25 +69,14 @@ export default function ListProjectsComponent({
 
                 setProjects(projectsList)
                 // set project for first time load
-                if (isStateEmpty() && !project && response.data.length > 0) {
+                // console.log(userSettings, state, IS_PROJECTS_DEFAULT);
+                if (IS_PROJECTS_DEFAULT && isEmpty(state) && !project && response.data.length > 0) {
                     setProject(response.data[0]);
                     // udpate state for first time load
                     updateAppStates(response.data[0]);
                 }
             })
             .catch(error => console.error(error.message))
-    }
-
-    function isStateEmpty() {
-        if (!state) {
-            return true;
-        }
-        for (const prop in state) {
-            if (Object.hasOwn(state, prop)) {
-                return false;
-            }
-        }
-        return true;
     }
 
     function getProjectsCount() {

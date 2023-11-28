@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { retrieveAllTagsApi, getTagsCountApi } from "services/api/TagApiService";
 import Pagination from "services/pagination/Pagination"
 import { useAuth } from "services/auth/AuthContext";
+import { isEmpty } from "services/helpers/helper";
 
 import CreateTagComponent from "./CreateTagComponent";
 import UpdateTagComponent from "./UpdateTagComponent";
@@ -20,6 +21,8 @@ export default function ListTagsComponent({ setProject, tag, setTag, setAllTags,
     // for first time login default value is needed
     const PAGESIZE = userSettings.pageTagsCount || 5;
     const ALL_TAGS_PAGESIZE = 1000;
+
+    const IS_TAGS_DEFAULT = userSettings.homePageDefaultList === 'tags';
 
     const [tagsCount, setTagsCount] = useState(-1)
     const [tags, setTags] = useState([])
@@ -65,11 +68,11 @@ export default function ListTagsComponent({ setProject, tag, setTag, setAllTags,
             .then(response => {
                 // console.debug(response)
                 setTags(response.data)
-                // if (!tag && response.data.length > 0) {
-                //     setTag(response.data[0]);
-                //     // udpate state for first time load
-                //     // updateAppStates(response.data[0]);
-                // }
+                if (IS_TAGS_DEFAULT && isEmpty(state) && !tag && response.data.length > 0) {
+                    setTag(response.data[0]);
+                    // udpate state for first time load
+                    updateAppStates(response.data[0]);
+                }
             })
             .catch(error => console.error(error.message))
     }
