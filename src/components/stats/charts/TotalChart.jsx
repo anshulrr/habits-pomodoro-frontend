@@ -56,7 +56,9 @@ export const TotalChart = ({ includeCategories, subject, statsSettings, buttonsS
                     const dataset = {
                         label: key,
                         backgroundColor: response.data[key][0][3],
-                        data: new Array(15).fill(0)
+                        data: new Array(15).fill(0),
+                        level: response.data[key][0][4], // for sort order
+                        priority: response.data[key][0][5] // for sort order
                     }
                     if (limit === 'daily') {
                         for (const val of response.data[key]) {
@@ -91,6 +93,8 @@ export const TotalChart = ({ includeCategories, subject, statsSettings, buttonsS
                     // console.debug(dataset);
                     localDatasets.push(dataset);
                 }
+                localDatasets.sort((a, b) => +a.priority - +b.priority);
+                localDatasets.sort((a, b) => +a.level - +b.level);
                 // console.debug(localDatasets)
                 setDatasets(localDatasets);
                 // setDatasets(structuredClone(datasets))
