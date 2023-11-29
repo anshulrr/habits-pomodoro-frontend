@@ -46,6 +46,7 @@ export default function HomeComponent() {
     useEffect(
         () => {
             document.title = 'Habits Pomodoro';
+            // console.debug("home", authContext.userSettings)
             if (tasksFilter) {
                 fetchTasks(tasksFilter);
             }

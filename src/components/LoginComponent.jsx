@@ -137,7 +137,8 @@ export default function LoginComponent() {
             }
 
             {
-                authContext.isAuthenticated &&
+                // don't load HomeComponent until userSettings is retrieved, to avoid multiple API calls during first time signin
+                authContext.isAuthenticated && authContext.userSettings &&
                 <HomeComponent />
             }
         </div >

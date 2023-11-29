@@ -20,7 +20,7 @@ export default function AuthProvider({ children }) {
     const [isAuthenticated, setAuthenticated] = useState(false)
     const [isFirebaseAuthLoaded, setFirebaseAuthLoaded] = useState(false)
     const [user, setUser] = useState(null)
-    const [userSettings, setUserSettings] = useState({})
+    const [userSettings, setUserSettings] = useState(null)
 
     useEffect(
         () => {
@@ -122,6 +122,9 @@ export default function AuthProvider({ children }) {
 
         // remove user settings from local storage
         localStorage.removeItem('habits_pomodoro')
+        setUserSettings(null)
+        setUser(null)
+        setAuthenticated(false)
 
         // sign out from firebase: removes data from firebaseLocalStorageDb
         try {
