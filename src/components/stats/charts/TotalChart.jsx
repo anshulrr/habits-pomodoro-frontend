@@ -2,6 +2,7 @@ import { useState } from "react"
 import moment from "moment"
 
 import { getTotalPomodorosApi } from "services/api/PomodoroApiService"
+import { calculateScaleAndLabel, calculateScaleForAdjustedAvg } from "services/helpers/chartHelper";
 
 import { Buttons } from "components/stats/charts/Buttons";
 
@@ -9,7 +10,6 @@ import { Bar } from "react-chartjs-2"
 import { CategoryScale } from 'chart.js'
 import Chart from 'chart.js/auto'
 import annotationPlugin from "chartjs-plugin-annotation";
-import { calculateScaleAndLabel, calculateScaleForAdjustedAvg } from "services/helpers/chartHelper";
 Chart.register(CategoryScale)
 Chart.register(annotationPlugin);
 
@@ -95,7 +95,7 @@ export const TotalChart = ({ includeCategories, subject, statsSettings, buttonsS
                 }
                 localDatasets.sort((a, b) => +a.priority - +b.priority);
                 localDatasets.sort((a, b) => +a.level - +b.level);
-                console.debug(localDatasets)
+                // console.debug(localDatasets)
                 setDatasets(localDatasets);
                 // setDatasets(structuredClone(datasets))
                 setShowLoader(false);
