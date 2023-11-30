@@ -222,6 +222,7 @@ export default function HomeComponent() {
                             elementHeight={pomodorosHeight}
                             setElementHeight={setPomodorosHeight}
                             setPomodorosListReload={setPomodorosListReload}
+                            setTasksComponentReload={setTasksComponentReload}
                             tags={tags}
                             setProjects={setProjects}
                             setTodaysPomodorosMap={setTodaysPomodorosMap}

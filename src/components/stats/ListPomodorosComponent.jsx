@@ -19,7 +19,8 @@ export default function ListPomodorosComponent({
     setElementHeight,
     tags,
     setTodaysPomodorosMap,
-    setProjects
+    setProjects,
+    setTasksComponentReload
 }) {
 
     const listElement = useRef(null);
@@ -42,7 +43,8 @@ export default function ListPomodorosComponent({
             async function fetchAPI() {
                 try {
                     if (!includeCategories) {
-                        // todo: decide limit
+                        // TODO: decide limit
+                        // TODO: find better way of getting all categories
                         const response = await retrieveAllProjectCategoriesApi(100, 0);
                         const allCategories = response.data.map(c => c.id);
                         // console.debug('useEffect', { allCategories, includeCategories })
@@ -132,6 +134,7 @@ export default function ListPomodorosComponent({
             .then(response => {
                 // console.debug(response)
                 setReload(!reload);
+                setTasksComponentReload(prev => prev + 1);
                 // const total = pomodorosGroup.reduce((acc, curr) => acc + Math.round(curr.timeElapsed / 60), 0);
                 // setTotalTimeElapsed(timeToDisplay(total - pomodoro.timeElapsed / 60));
                 // setPomodorosGroup(pomodorosGroup.filter(p => p.id !== pomodoro.id))
