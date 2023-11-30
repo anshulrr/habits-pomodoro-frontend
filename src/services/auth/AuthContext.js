@@ -120,11 +120,9 @@ export default function AuthProvider({ children }) {
         apiClient.interceptors.request.eject(requestInterceptor)
         apiClient.interceptors.response.eject(responseInterceptor)
 
-        // remove user settings from local storage
+        // remove user settings from local storage and AuthProvider
         localStorage.removeItem('habits_pomodoro')
         setUserSettings(null)
-        setUser(null)
-        setAuthenticated(false)
 
         // sign out from firebase: removes data from firebaseLocalStorageDb
         try {
