@@ -37,6 +37,12 @@ export default function ForgotPasswordComponent() {
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-4 offset-lg-4">
+                            <h1 className="h3">
+                                Habits Pomodoro
+                            </h1>
+                            <h2 className="h5 py-2">
+                                Reset Password
+                            </h2>
                             <div className="mb-3">
                                 <input
                                     type="email"
