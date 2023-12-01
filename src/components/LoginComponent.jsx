@@ -68,7 +68,7 @@ export default function LoginComponent() {
                                 Habits Pomodoro
                             </h1>
                             <div>
-                                A productivity tracking web app for students and anyone who wants to build good habits and break bad habits.
+                                A productivity tracking web app for students and anyone who wants to build good habits and break bad once.
                             </div>
                             <div className="login-img mt-4">
                                 <img
@@ -136,9 +136,6 @@ export default function LoginComponent() {
                                         <div className="separator">or</div>
                                     </div>
                                 </form>
-                                {/* // <button type="button" className="btn btn-primary p-0" style={{ backgroundColor: '#4285F4' }} name="login" onClick={signInWithGoogle}>
-                //     <img src="btn_google_dark_normal_ios.svg" /> Sign in with Google &nbsp;
-                // </button> */}
                                 <input
                                     type="image"
                                     style={{ height: '50px', imageRendering: '-webkit-optimize-contrast', padding: '0' }}
