@@ -87,10 +87,6 @@ export default function ListProjectsComponent({
             .catch(error => console.error(error.message))
     }
 
-    function updateProject(id) {
-        navigate(`/projects/${id}`, { state })
-    }
-
     function addNewProject() {
         navigate(`/projects/-1`, { state })
     }
@@ -184,7 +180,7 @@ export default function ListProjectsComponent({
                                                     {proj.name}
                                                 </span>
                                             </div>
-                                            <div className="col-4 ps-0 subscript text-secondary text-truncate text-end list-details">
+                                            <div className="col-4 ps-0 subscript text-secondary text-truncate text-end">
 
                                                 {
                                                     proj.timeElapsed &&
@@ -207,13 +203,6 @@ export default function ListProjectsComponent({
                                                     <i className="ps-1 bi bi-hourglass" />
                                                     {proj.pomodoroLength || userSettings.pomodoroLength}
                                                 </span>
-                                            </div>
-                                            <div className="col-4 ps-0 text-secondary text-end list-button">
-                                                <div className="input-group justify-content-end">
-                                                    <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => updateProject(proj.id)}>
-                                                        <i className="bi bi-pencil-square"></i>
-                                                    </button>
-                                                </div>
                                             </div>
                                         </div>
                                     )

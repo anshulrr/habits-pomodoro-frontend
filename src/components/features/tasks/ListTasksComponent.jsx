@@ -143,6 +143,10 @@ export default function ListTasksComponent({
             })
     }
 
+    const updateProject = (id) => {
+        navigate(`/projects/${id}`, { state })
+    }
+
     const refreshAllTaskAndPomodoros = () => {
         setAllTasksReload(prevReload => prevReload + 1)
         setPomodorosListReload(prevReload => prevReload + 1)
@@ -181,6 +185,18 @@ export default function ListTasksComponent({
                                 </span>
                             }
                             {
+                                project &&
+                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 ms-1" onClick={() => updateProject(project.id)}>
+                                    <i className="bi bi-pencil-square" />
+                                </button>
+                            }
+                            {
+                                project &&
+                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 ms-1" onClick={() => setShowProjectCommentsId(project.id)}>
+                                    <i className="bi bi-chat-right-text" />
+                                </button>
+                            }
+                            {
                                 tasksCount !== -1 &&
                                 <span className="ms-1 badge rounded-pill text-bg-secondary">
                                     {tasksCount}
@@ -191,14 +207,8 @@ export default function ListTasksComponent({
                         <div>
                             {
                                 project && !showCreateTask &&
-                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2 me-1" onClick={() => setShowCreateTask(!showCreateTask)}>
+                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={() => setShowCreateTask(!showCreateTask)}>
                                     <i className="bi bi-plus-circle" />
-                                </button>
-                            }
-                            {
-                                project &&
-                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={() => setShowProjectCommentsId(project.id)}>
-                                    <i className="bi bi-chat-right-text" />
                                 </button>
                             }
                         </div>
