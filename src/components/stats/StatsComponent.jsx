@@ -13,6 +13,8 @@ import ListPomodorosComponent from "components/stats/ListPomodorosComponent";
 import CategoryChecklistComponent from "components/stats/CategoryChecklistComponent";
 import StatsSettingsComponent from "components/stats/StatsSettingsComponent";
 import SelectFriendsComponent from "components/stats//SelectFriendsComponent";
+import { CalendarChart } from "./charts/CalendarChart";
+import { ProjectCategoriesChart } from "./charts/ProjectCategoriesChart";
 
 export default function ListStatsComponent() {
 
@@ -207,6 +209,18 @@ export default function ListStatsComponent() {
                                         statsSettings={statsSettings}
                                         buttonsStates={totalChartButtonsStates}
                                         setButtonsStates={setTotalChartBButtonsStates}
+                                    />
+                                </div>
+                            </div>
+                            <div className="col-lg-6 px-0">
+                                <div className="p-1 chart-card">
+                                    <ProjectCategoriesChart
+                                        key={reload}
+                                        includeCategories={includeCategories}
+                                        subject={subject}
+                                        statsSettings={statsSettings}
+                                        buttonsStates={projectsChartButtonsStates}
+                                        setButtonsStates={setProjectsChartBButtonsStates}
                                     />
                                 </div>
                             </div>

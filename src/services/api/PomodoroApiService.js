@@ -51,6 +51,16 @@ export const getProjectsPomodorosApi
         }
     }
 
+export const getProjectCategoriesPomodorosApi
+    = ({ startDate, endDate, includeCategories, subject }) => {
+        const url = `/stats/project-categories-time?startDate=${startDate}&endDate=${endDate}&include_categories=${includeCategories}`;
+        if (!subject) {
+            return apiClient.get(url)
+        } else {
+            return apiClient.get(url + `&subjectId=${subject.id}`)
+        }
+    }
+
 export const getTotalPomodorosApi
     = ({ limit, startDate, endDate, includeCategories, subject }) => {
         const url = `/stats/total-time?limit=${limit}&startDate=${startDate}&endDate=${endDate}&include_categories=${includeCategories}&timezone=${to}`;

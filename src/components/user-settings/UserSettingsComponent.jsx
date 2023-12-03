@@ -29,6 +29,7 @@ export default function UserSettingsComponent() {
     const [pageCommentsCount, setPageCommentsCount] = useState('')
     const [tasksChartType, setTasksChartType] = useState('')
     const [projectsChartType, setProjectsChartType] = useState('')
+    const [projectCategoriesChartType, setProjectCategoriesChartType] = useState('')
     const [homePageDefaultList, setHomePageDefaultList] = useState('')
 
     const [errorMessage, setErrorMessage] = useState('')
@@ -57,6 +58,7 @@ export default function UserSettingsComponent() {
             setPageCommentsCount(userSettings.pageCommentsCount)
             setTasksChartType(userSettings.tasksChartType || "doughnut")
             setProjectsChartType(userSettings.projectsChartType || "bar")
+            setProjectCategoriesChartType(userSettings.projectCategoriesChartType || "bar")
             setHomePageDefaultList(userSettings.homePageDefaultList || "projects")
         }
 
@@ -92,6 +94,7 @@ export default function UserSettingsComponent() {
             pageCommentsCount,
             tasksChartType,
             projectsChartType,
+            projectCategoriesChartType,
             homePageDefaultList
         }
         // console.debug(request_settings);
@@ -467,15 +470,15 @@ export default function UserSettingsComponent() {
 
                 <div className="col-lg-12">
                     <div className="input-group input-group-sm mb-2">
-                        <label className="input-group-text" htmlFor="tasksChartType">
-                            Tasks Chart Type
+                        <label className="input-group-text" htmlFor="projectCategoriesChartType">
+                            Project Categories Chart Type
                         </label>
                         <select
                             className="form-select form-select-sm"
-                            name="tasks-chart-type"
-                            onChange={(e) => handleOnChange(setTasksChartType, e.target.value)}
-                            value={tasksChartType}
-                            id="tasksChartType"
+                            name="projects-categories-chart-type"
+                            onChange={(e) => handleOnChange(setProjectCategoriesChartType, e.target.value)}
+                            value={projectCategoriesChartType}   // using react's value instead of defaultValue to handle it with state variable
+                            id="projectCategoriesChartType"
                         >
                             <option value="bar">Bar</option>
                             <option value="doughnut">Doughnut</option>
@@ -494,6 +497,24 @@ export default function UserSettingsComponent() {
                             onChange={(e) => handleOnChange(setProjectsChartType, e.target.value)}
                             value={projectsChartType}   // using react's value instead of defaultValue to handle it with state variable
                             id="projectsChartType"
+                        >
+                            <option value="bar">Bar</option>
+                            <option value="doughnut">Doughnut</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div className="col-lg-12">
+                    <div className="input-group input-group-sm mb-2">
+                        <label className="input-group-text" htmlFor="tasksChartType">
+                            Tasks Chart Type
+                        </label>
+                        <select
+                            className="form-select form-select-sm"
+                            name="tasks-chart-type"
+                            onChange={(e) => handleOnChange(setTasksChartType, e.target.value)}
+                            value={tasksChartType}
+                            id="tasksChartType"
                         >
                             <option value="bar">Bar</option>
                             <option value="doughnut">Doughnut</option>

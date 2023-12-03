@@ -16,6 +16,7 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
     const [enableChartAdjustedWeeklyMonthlyAverage, setEnableChartAdjustedWeeklyMonthlyAverage] = useState(userSettings.enableChartAdjustedWeeklyMonthlyAverage)
     const [tasksChartType, setTasksChartType] = useState(userSettings.tasksChartType || "doughnut")
     const [projectsChartType, setProjectsChartType] = useState(userSettings.projectsChartType || "bar")
+    const [projectCategoriesChartType, setProjectCategoriesChartType] = useState(userSettings.projectCategoriesChartType || "bar")
 
     const [errorMessage, setErrorMessage] = useState('')
 
@@ -40,7 +41,8 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
             chartMonthlyAverage,
             enableChartAdjustedWeeklyMonthlyAverage,
             tasksChartType,
-            projectsChartType
+            projectsChartType,
+            projectCategoriesChartType
         };
         // console.debug(updatedStatsSetting)
         setStatsSettings(updatedStatsSetting)
@@ -179,15 +181,15 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
 
             <div className="col-lg-12">
                 <div className="input-group input-group-sm mb-2">
-                    <label className="input-group-text" htmlFor="tasksChartType">
-                        Tasks Chart Type
+                    <label className="input-group-text" htmlFor="projectCategoriesChartType">
+                        Project Categories Chart Type
                     </label>
                     <select
                         className="form-select form-select-sm"
-                        name="tasks-chart-type"
-                        onChange={(e) => handleOnChange(setTasksChartType, e.target.value)}
-                        value={tasksChartType}
-                        id="tasksChartType"
+                        name="project-categories-chart-type"
+                        onChange={(e) => handleOnChange(setProjectCategoriesChartType, e.target.value)}
+                        value={projectCategoriesChartType}
+                        id="projectCategoriesChartType"
                     >
                         <option value="bar">Bar</option>
                         <option value="doughnut">Doughnut</option>
@@ -206,6 +208,24 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
                         onChange={(e) => handleOnChange(setProjectsChartType, e.target.value)}
                         value={projectsChartType}
                         id="projectsChartType"
+                    >
+                        <option value="bar">Bar</option>
+                        <option value="doughnut">Doughnut</option>
+                    </select>
+                </div>
+            </div>
+
+            <div className="col-lg-12">
+                <div className="input-group input-group-sm mb-2">
+                    <label className="input-group-text" htmlFor="tasksChartType">
+                        Tasks Chart Type
+                    </label>
+                    <select
+                        className="form-select form-select-sm"
+                        name="tasks-chart-type"
+                        onChange={(e) => handleOnChange(setTasksChartType, e.target.value)}
+                        value={tasksChartType}
+                        id="tasksChartType"
                     >
                         <option value="bar">Bar</option>
                         <option value="doughnut">Doughnut</option>
