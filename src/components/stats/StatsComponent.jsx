@@ -214,18 +214,6 @@ export default function ListStatsComponent() {
                             </div>
                             <div className="col-lg-6 px-0">
                                 <div className="p-1 chart-card">
-                                    <ProjectCategoriesChart
-                                        key={reload}
-                                        includeCategories={includeCategories}
-                                        subject={subject}
-                                        statsSettings={statsSettings}
-                                        buttonsStates={projectsChartButtonsStates}
-                                        setButtonsStates={setProjectsChartBButtonsStates}
-                                    />
-                                </div>
-                            </div>
-                            <div className="col-lg-6 px-0">
-                                <div className="p-1 chart-card">
                                     <ProjectsDistributionChart
                                         key={reload}
                                         includeCategories={includeCategories}
@@ -245,6 +233,18 @@ export default function ListStatsComponent() {
                                         statsSettings={statsSettings}
                                         buttonsStates={tasksChartButtonsStates}
                                         setButtonsStates={setTasksChartBButtonsStates}
+                                    />
+                                </div>
+                            </div>
+                            <div className="col-lg-6 px-0">
+                                <div className="p-1 chart-card">
+                                    <ProjectCategoriesChart
+                                        key={reload}
+                                        includeCategories={includeCategories}
+                                        subject={subject}
+                                        statsSettings={statsSettings}
+                                        buttonsStates={projectsChartButtonsStates}
+                                        setButtonsStates={setProjectsChartBButtonsStates}
                                     />
                                 </div>
                             </div>
