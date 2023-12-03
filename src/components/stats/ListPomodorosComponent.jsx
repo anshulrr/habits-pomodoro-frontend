@@ -17,7 +17,10 @@ export default function ListPomodorosComponent({
     title = "Pomodoros",
     elementHeight,
     setElementHeight,
-    tags
+    tags,
+    setTodaysPomodorosMap,
+    setProjects,
+    setTasksComponentReload
 }) {
 
     const listElement = useRef(null);
@@ -40,7 +43,8 @@ export default function ListPomodorosComponent({
             async function fetchAPI() {
                 try {
                     if (!includeCategories) {
-                        // todo: decide limit
+                        // TODO: decide limit
+                        // TODO: find better way of getting all categories
                         const response = await retrieveAllProjectCategoriesApi(100, 0);
                         const allCategories = response.data.map(c => c.id);
                         // console.debug('useEffect', { allCategories, includeCategories })
@@ -87,11 +91,39 @@ export default function ListPomodorosComponent({
                 }
                 // console.debug(timeSlots);
 
+                // update today's project's time elapsed
+                updateTodaysProjectsTimeElapsed(response.data);
+
                 setPomodorosCount(response.data.length);
                 const total = response.data.reduce((acc, curr) => acc + Math.round(curr.timeElapsed / 60), 0);
                 setTotalTimeElapsed(timeToDisplay(total));
             })
             .catch(error => console.error(error.message))
+    }
+
+    function updateTodaysProjectsTimeElapsed(pomodoros) {
+        if (title !== "Today's Pomodoros") {
+            return;
+        }
+        const map = new Map();
+        for (let i = 0; i < pomodoros.length; i++) {
+            const pomodoro = pomodoros[i];
+            const projectId = parseInt(pomodoro.projectId);
+            if (map.has(projectId)) {
+                map.set(projectId, map.get(projectId) + pomodoro.timeElapsed);
+            } else {
+                map.set(projectId, pomodoro.timeElapsed);
+            }
+        }
+        // for projects component
+        setTodaysPomodorosMap(map)
+        setProjects(projects => projects.map((project) => {
+            // console.log(project.id)
+            if (map.has(project.id)) {
+                project.timeElapsed = map.get(project.id);
+            }
+            return project;
+        }))
     }
 
     function deleltePastPomodoro(pomodoro) {
@@ -102,6 +134,7 @@ export default function ListPomodorosComponent({
             .then(response => {
                 // console.debug(response)
                 setReload(!reload);
+                setTasksComponentReload(prev => prev + 1);
                 // const total = pomodorosGroup.reduce((acc, curr) => acc + Math.round(curr.timeElapsed / 60), 0);
                 // setTotalTimeElapsed(timeToDisplay(total - pomodoro.timeElapsed / 60));
                 // setPomodorosGroup(pomodorosGroup.filter(p => p.id !== pomodoro.id))

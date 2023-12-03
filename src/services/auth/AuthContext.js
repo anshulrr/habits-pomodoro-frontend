@@ -20,7 +20,7 @@ export default function AuthProvider({ children }) {
     const [isAuthenticated, setAuthenticated] = useState(false)
     const [isFirebaseAuthLoaded, setFirebaseAuthLoaded] = useState(false)
     const [user, setUser] = useState(null)
-    const [userSettings, setUserSettings] = useState({})
+    const [userSettings, setUserSettings] = useState(null)
 
     useEffect(
         () => {
@@ -120,8 +120,9 @@ export default function AuthProvider({ children }) {
         apiClient.interceptors.request.eject(requestInterceptor)
         apiClient.interceptors.response.eject(responseInterceptor)
 
-        // remove user settings from local storage
+        // remove user settings from local storage and AuthProvider
         localStorage.removeItem('habits_pomodoro')
+        setUserSettings(null)
 
         // sign out from firebase: removes data from firebaseLocalStorageDb
         try {

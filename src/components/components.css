@@ -76,3 +76,13 @@
     font-size: 9.5px;
     font-weight: 550;
 }
+
+.login-img {
+    height: 50vh;
+}
+
+@media only screen and (max-width: 992px) {
+    .login-img {
+        height: 30vh;
+    }
+}

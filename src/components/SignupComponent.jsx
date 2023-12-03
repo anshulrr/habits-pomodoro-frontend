@@ -41,6 +41,12 @@ export default function SignupComponent() {
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-4 offset-lg-4">
+                            <h1 className="h3">
+                                Habits Pomodoro
+                            </h1>
+                            <h2 className="h5 py-2">
+                                Create an account
+                            </h2>
                             <input
                                 type="email"
                                 name="email"

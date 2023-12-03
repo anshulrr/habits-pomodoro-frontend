@@ -22,9 +22,9 @@ export default function ListStatsComponent() {
 
     const [statsSettings, setStatsSettings] = useState({})
 
-    const [showIncludeCategories, setShowIncludeCategories] = useState(false)
-    const [showStatsSettings, setShowStatsSettings] = useState(false)
-    const [showFriendsStats, setShowFriendsStats] = useState(false)
+    const [showIncludeCategories, setShowIncludeCategories] = useState(window.innerWidth <= 992 ? false : true);
+    const [showStatsSettings, setShowStatsSettings] = useState(window.innerWidth <= 992 ? false : true);
+    const [showFriendsStats, setShowFriendsStats] = useState(window.innerWidth <= 992 ? false : true);
 
     const [reload, setReload] = useState(0)
     const [reloadCategories, setReloadCategories] = useState(0)
@@ -64,7 +64,7 @@ export default function ListStatsComponent() {
             // console.debug('re-render StatsComponent')
             document.title = 'Stats';
             retrieveProjectCategories();
-            retrieveAccountibilitySubjects();
+            retrieveAccountabilitySubjects();
         }, []   // eslint-disable-line react-hooks/exhaustive-deps
     )
 
@@ -84,7 +84,7 @@ export default function ListStatsComponent() {
             .catch(error => console.error(error.message))
     }
 
-    function retrieveAccountibilitySubjects() {
+    function retrieveAccountabilitySubjects() {
         retrieveAccountabilitySubjectsApi()
             .then(response => {
                 setSubjects(response.data);
@@ -92,7 +92,7 @@ export default function ListStatsComponent() {
     }
 
     return (
-        <div className="container mt-3">
+        <div className="container pt-3" style={{ backgroundColor: "#f2f3f4" }}>
 
             <div className="row">
                 {
@@ -200,13 +200,13 @@ export default function ListStatsComponent() {
                         <div className="row">
                             <div className="col-lg-6 px-0">
                                 <div className="p-1 chart-card">
-                                    <TasksChart
+                                    <TotalChart
                                         key={reload}
                                         includeCategories={includeCategories}
                                         subject={subject}
                                         statsSettings={statsSettings}
-                                        buttonsStates={tasksChartButtonsStates}
-                                        setButtonsStates={setTasksChartBButtonsStates}
+                                        buttonsStates={totalChartButtonsStates}
+                                        setButtonsStates={setTotalChartBButtonsStates}
                                     />
                                 </div>
                             </div>
@@ -224,13 +224,13 @@ export default function ListStatsComponent() {
                             </div>
                             <div className="col-lg-6 px-0">
                                 <div className="p-1 chart-card">
-                                    <TotalChart
+                                    <TasksChart
                                         key={reload}
                                         includeCategories={includeCategories}
                                         subject={subject}
                                         statsSettings={statsSettings}
-                                        buttonsStates={totalChartButtonsStates}
-                                        setButtonsStates={setTotalChartBButtonsStates}
+                                        buttonsStates={tasksChartButtonsStates}
+                                        setButtonsStates={setTasksChartBButtonsStates}
                                     />
                                 </div>
                             </div>

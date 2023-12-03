@@ -2,6 +2,7 @@ import { useState } from "react"
 import moment from "moment"
 
 import { getTotalPomodorosApi } from "services/api/PomodoroApiService"
+import { calculateScaleAndLabel, calculateScaleForAdjustedAvg } from "services/helpers/chartHelper";
 
 import { Buttons } from "components/stats/charts/Buttons";
 
@@ -9,7 +10,6 @@ import { Bar } from "react-chartjs-2"
 import { CategoryScale } from 'chart.js'
 import Chart from 'chart.js/auto'
 import annotationPlugin from "chartjs-plugin-annotation";
-import { calculateScaleAndLabel, calculateScaleForAdjustedAvg } from "services/helpers/chartHelper";
 Chart.register(CategoryScale)
 Chart.register(annotationPlugin);
 
@@ -55,42 +55,46 @@ export const TotalChart = ({ includeCategories, subject, statsSettings, buttonsS
                 for (const key in response.data) {
                     const dataset = {
                         label: key,
-                        backgroundColor: response.data[key][0][3],
-                        data: new Array(15).fill(0)
+                        backgroundColor: response.data[key].color,
+                        data: new Array(15).fill(0),
+                        level: response.data[key].level, // for sort order
+                        priority: response.data[key].priority // for sort order
                     }
                     if (limit === 'daily') {
-                        for (const val of response.data[key]) {
-                            // console.debug(val[0], moment().add(-val[0] + 1, 'd').format('DD'));
+                        for (const val of response.data[key].dataArr) {
+                            // console.debug(val.index, moment().add(-val.index + 1, 'd').format('DD'));
                             // todo: find cleaner solution for mapping data to labels
-                            const date_index = 15 - moment().add(-val[0] + 1, 'd').add(15 * offset, 'd').format('DD');
-                            dataset.data[date_index] = val[1] / scale;
+                            const date_index = 15 - moment().add(-val.index + 1, 'd').add(15 * offset, 'd').format('DD');
+                            dataset.data[date_index] = val.timeElapsed / scale;
                         }
                     } else if (limit === 'weekly') {
-                        for (const val of response.data[key]) {
-                            // console.debug(val, val[1], moment().format('W'));
-                            const date_index = 15 - moment().add(-val[0] + 1, 'W').add(15 * offset, 'W').format('W');
+                        for (const val of response.data[key].dataArr) {
+                            // console.debug(val, val.timeElapsed, moment().format('W'));
+                            const date_index = 15 - moment().add(-val.index + 1, 'W').add(15 * offset, 'W').format('W');
 
                             let adjusted_scale = scale;
                             if (offset === 0 && date_index === 14) {
                                 adjusted_scale = calculateScaleForAdjustedAvg({ limit, scale, ...statsSettings });
                             }
-                            dataset.data[date_index] = val[1] / adjusted_scale;
+                            dataset.data[date_index] = val.timeElapsed / adjusted_scale;
                         }
                     } else if (limit === 'monthly') {
-                        for (const val of response.data[key]) {
-                            const date = moment().add(-val[0] + 1, 'M').add(15 * offset, 'M');
+                        for (const val of response.data[key].dataArr) {
+                            const date = moment().add(-val.index + 1, 'M').add(15 * offset, 'M');
                             const date_index = 15 - (date.format('M'));
 
                             let adjusted_scale = scale;
                             if (offset === 0 && date_index === 14) {
                                 adjusted_scale = calculateScaleForAdjustedAvg({ limit, scale, ...statsSettings });
                             }
-                            dataset.data[date_index] = val[1] / adjusted_scale;
+                            dataset.data[date_index] = val.timeElapsed / adjusted_scale;
                         }
                     }
                     // console.debug(dataset);
                     localDatasets.push(dataset);
                 }
+                localDatasets.sort((a, b) => +a.priority - +b.priority);
+                localDatasets.sort((a, b) => +a.level - +b.level);
                 // console.debug(localDatasets)
                 setDatasets(localDatasets);
                 // setDatasets(structuredClone(datasets))

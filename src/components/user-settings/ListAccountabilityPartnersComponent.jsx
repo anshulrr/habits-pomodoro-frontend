@@ -5,7 +5,7 @@ import { addAccountabilityPartnerssApi, removeAccountabilityPartnerssApi, retrie
 export default function ListAccountabilityPartnersComponent() {
 
     const [partners, setPartners] = useState([])
-    const [email, setEmail] = useState(null)
+    const [email, setEmail] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
 
     const [showAddPartner, setShowAddPartner] = useState(false)
@@ -20,13 +20,17 @@ export default function ListAccountabilityPartnersComponent() {
         retrieveAccountabilityPartnerssApi()
             .then(response => {
                 // console.debug(response)
-                setPartners(response.data)
+                setPartners(response.data);
+                setEmail('');
             })
             .catch(error => console.error(error.message))
     }
 
     function removeAccountabilityPartner(partner) {
-        console.log(partner)
+        if (!window.confirm("Are you sure? Press OK to remove accountability partner.")) {
+            return;
+        }
+        // console.debug(partner)
         removeAccountabilityPartnerssApi(partner)
             .then(response => {
                 refreshPartners();

@@ -34,7 +34,7 @@ export const TasksChart = ({ includeCategories, subject, statsSettings, buttonsS
                 response.data.forEach(element => {
                     // console.debug(element);
                     updated_data.colors.push(element[2]);
-                    updated_data.labels.push(truncateString(element[1], 20));
+                    updated_data.labels.push(truncateString(element[3] + ': ' + element[1], 50));
                     updated_data.data.push(element[0] / scale);
                 });
                 // console.debug(updated_data);

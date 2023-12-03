@@ -50,7 +50,7 @@ export const BarChart = ({
                     options={{
                         responsive: true,
                         maintainAspectRatio: true,
-                        aspectRatio: 1,
+                        aspectRatio: 0.75,
                         plugins: {
                             legend: {
                                 display: false

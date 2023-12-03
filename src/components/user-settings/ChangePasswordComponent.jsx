@@ -43,55 +43,72 @@ export default function ChangePasswordComponent({ setShowChangePassword }) {
     }
 
     return (
-        <div className="ChangePassword">
-            <form className="ChangePasswordForm" onSubmit={handleSubmit}>
-                <div className="container">
+        <div className="task-overlay">
+            <div className="task-popup">
+                <div className="task-close-popup m-2">
+                    <i className="p-1 bi bi-x-lg" onClick={() => setShowChangePassword(false)}></i>
+                </div>
+                <div className="container my-3">
                     <div className="row">
-                        <div className="col-lg-4">
-                            <input
-                                type="email"
-                                name="email"
-                                className="form-control form-control-sm mb-2"
-                                value={email}
-                                autoComplete="email"
-                                // style={{ display: "none" }}
-                                disabled    // for password manager
-                            />
-                            <input
-                                type="password"
-                                name="password"
-                                className="form-control form-control-sm mb-2"
-                                value={password}
-                                onChange={handlePasswordChange}
-                                autoComplete="new-password"
-                                placeholder='New password'
-                                required
-                            />
-                            <input
-                                type="password"
-                                name="confirmPassword"
-                                className="form-control form-control-sm mb-2"
-                                value={confirmPassword}
-                                onChange={handleConfirmPasswordChange}
-                                autoComplete="new-password"
-                                placeholder="Confirm password"
-                                required
-                            />
-                            <div className="mb-2 text-danger"><small>{errorMessage}</small></div>
+                        <div className="col-lg-4 offset-lg-4">
 
-                            <div className="">
-                                <button className="me-2 btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowChangePassword(false)}>Cancel</button>
-                                <button
-                                    type="submit"
-                                    className="btn btn-sm btn-outline-success"
-                                    name="changePassword"
-                                >Change Password</button>
+                            <h6>
+                                Change Password
+                            </h6>
+                            <div className="ChangePassword">
+                                <form className="ChangePasswordForm" onSubmit={handleSubmit}>
+                                    <div className="container">
+                                        <div className="row">
+                                            <div className="col-lg-12">
+                                                <input
+                                                    type="email"
+                                                    name="email"
+                                                    className="form-control form-control-sm mb-2"
+                                                    value={email}
+                                                    autoComplete="email"
+                                                    // style={{ display: "none" }}
+                                                    disabled    // for password manager
+                                                />
+                                                <input
+                                                    type="password"
+                                                    name="password"
+                                                    className="form-control form-control-sm mb-2"
+                                                    value={password}
+                                                    onChange={handlePasswordChange}
+                                                    autoComplete="new-password"
+                                                    placeholder='New password'
+                                                    required
+                                                />
+                                                <input
+                                                    type="password"
+                                                    name="confirmPassword"
+                                                    className="form-control form-control-sm mb-2"
+                                                    value={confirmPassword}
+                                                    onChange={handleConfirmPasswordChange}
+                                                    autoComplete="new-password"
+                                                    placeholder="Confirm password"
+                                                    required
+                                                />
+                                                <div className="mb-2 text-danger"><small>{errorMessage}</small></div>
+
+                                                <div className="text-end">
+                                                    <button className="me-2 btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowChangePassword(false)}>Cancel</button>
+                                                    <button
+                                                        type="submit"
+                                                        className="btn btn-sm btn-outline-success"
+                                                        name="changePassword"
+                                                    >Change Password</button>
+                                                </div>
+                                                <div className="text-success"><small>{successMessage}</small></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
-                            <div className="text-success"><small>{successMessage}</small></div>
                         </div>
                     </div>
                 </div>
-            </form>
+            </div>
         </div>
     )
 }

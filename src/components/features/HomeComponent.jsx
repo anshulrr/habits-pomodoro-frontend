@@ -8,21 +8,30 @@ import ListTasksComponent from 'components/features/tasks/ListTasksComponent';
 import ListPomodorosComponent from 'components/stats/ListPomodorosComponent';
 import ListTagsComponent from 'components/features/tags/ListTagsComponents';
 import UserCommentsComponent from './comments/UserCommentsComponent';
+
 import OutsideAlerter from 'services/hooks/OutsideAlerter';
+import { useAuth } from 'services/auth/AuthContext';
+import { isEmpty } from 'services/helpers/helper';
 
 export default function HomeComponent() {
 
     const { state } = useLocation();
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
+    const authContext = useAuth();
+    const userSettings = authContext.userSettings;
+    const IS_FILTERS_DEFAULT = userSettings.homePageDefaultList === 'filters';
+
+    const [todaysPomodorosMap, setTodaysPomodorosMap] = useState(null);
+    const [projects, setProjects] = useState([]);
     const [project, setProject] = useState(state && state.project);
     const [tag, setTag] = useState(state && state.tag);
     const [tags, setTags] = useState(null);
 
     const [tasksComponentReload, setTasksComponentReload] = useState(0)
 
-    const [tasksFilter, setTasksFilter] = useState(state && state.filters);
+    const [tasksFilter, setTasksFilter] = useState((state && state.filters) || (isEmpty(state) && IS_FILTERS_DEFAULT && 'Overdue'));
     const [showTasksFilters, setShowTasksFilters] = useState(true);
 
     const [showLeftMenu, setShowLeftMenu] = useState(false);
@@ -37,6 +46,7 @@ export default function HomeComponent() {
     useEffect(
         () => {
             document.title = 'Habits Pomodoro';
+            // console.debug("home", authContext.userSettings)
             if (tasksFilter) {
                 fetchTasks(tasksFilter);
             }
@@ -46,7 +56,6 @@ export default function HomeComponent() {
 
     function fetchTasksAndUpdateAppStates(filter) {
         fetchTasks(filter);
-        updateAppStates(filter);
         setShowLeftMenu(false);
     }
 
@@ -64,10 +73,15 @@ export default function HomeComponent() {
             setStartDate(moment().add(-10, 'y').toISOString());
             setEndDate(moment().toISOString());
         }
+        updateAppStates(filter);
     }
 
     function updateAppStates(filter) {
-        let local_state = { ...state };
+        // fix for directly opening url in a new tab
+        let local_state = {};
+        if (state) {
+            local_state = { ...state };
+        }
         local_state.project = null;
         local_state.tag = null;
         local_state.filters = filter;
@@ -100,10 +114,13 @@ export default function HomeComponent() {
                                     <div className="left-menu-popup">
 
                                         <ListProjectsComponent
+                                            projects={projects}
+                                            setProjects={setProjects}
                                             project={project}
                                             setProject={setProject}
                                             setTag={setTag}
                                             setShowLeftMenu={setShowLeftMenu}
+                                            todaysPomodorosMap={todaysPomodorosMap}
                                         />
 
                                         <div className="mb-3">
@@ -125,16 +142,16 @@ export default function HomeComponent() {
                                             {
                                                 showTasksFilters &&
                                                 <div>
-                                                    <div className={(!project && !tag && tasksFilter === "Upcoming" ? "list-selected " : "") + "py-1 small row list-row"} onClick={() => fetchTasksAndUpdateAppStates('Upcoming')}>
-                                                        <div className="col-12">
-                                                            <i className="pe-1 bi bi-calendar-check" />
-                                                            Upcoming
-                                                        </div>
-                                                    </div>
                                                     <div className={(!project && !tag && tasksFilter === "Overdue" ? "list-selected " : "") + "py-1 small row list-row"} onClick={() => fetchTasksAndUpdateAppStates('Overdue')}>
                                                         <div className="col-12">
                                                             <i className="pe-1 bi bi-calendar-check text-danger" />
                                                             Overdue
+                                                        </div>
+                                                    </div>
+                                                    <div className={(!project && !tag && tasksFilter === "Upcoming" ? "list-selected " : "") + "py-1 small row list-row"} onClick={() => fetchTasksAndUpdateAppStates('Upcoming')}>
+                                                        <div className="col-12">
+                                                            <i className="pe-1 bi bi-calendar-check" />
+                                                            Upcoming
                                                         </div>
                                                     </div>
                                                 </div>
@@ -205,7 +222,10 @@ export default function HomeComponent() {
                             elementHeight={pomodorosHeight}
                             setElementHeight={setPomodorosHeight}
                             setPomodorosListReload={setPomodorosListReload}
+                            setTasksComponentReload={setTasksComponentReload}
                             tags={tags}
+                            setProjects={setProjects}
+                            setTodaysPomodorosMap={setTodaysPomodorosMap}
                         />
                     </div >
                 </div >

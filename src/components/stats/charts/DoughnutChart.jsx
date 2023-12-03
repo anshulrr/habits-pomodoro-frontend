@@ -46,10 +46,12 @@ export const DoughnutChart = ({
                     }
                     options={{
                         responsive: true,
+                        maintainAspectRatio: true,
+                        aspectRatio: 0.75,
                         plugins: {
                             legend: {
                                 display: true,
-                                position: 'right',
+                                position: 'top',
                                 labels: {
                                     boxWidth: 10
                                 }

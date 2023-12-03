@@ -29,6 +29,7 @@ export default function UserSettingsComponent() {
     const [pageCommentsCount, setPageCommentsCount] = useState('')
     const [tasksChartType, setTasksChartType] = useState('')
     const [projectsChartType, setProjectsChartType] = useState('')
+    const [homePageDefaultList, setHomePageDefaultList] = useState('')
 
     const [errorMessage, setErrorMessage] = useState('')
     const [successMessage, setSuccessMessage] = useState('')
@@ -56,6 +57,7 @@ export default function UserSettingsComponent() {
             setPageCommentsCount(userSettings.pageCommentsCount)
             setTasksChartType(userSettings.tasksChartType || "doughnut")
             setProjectsChartType(userSettings.projectsChartType || "bar")
+            setHomePageDefaultList(userSettings.homePageDefaultList || "projects")
         }
 
         fetchAndSetSettings();
@@ -89,7 +91,8 @@ export default function UserSettingsComponent() {
             pageTasksCount,
             pageCommentsCount,
             tasksChartType,
-            projectsChartType
+            projectsChartType,
+            homePageDefaultList
         }
         // console.debug(request_settings);
 
@@ -163,11 +166,207 @@ export default function UserSettingsComponent() {
 
     return (
         <div>
+            <h6 className='text-start'>General Settings</h6>
+
+            <div className="row">
+                <div className="col-lg-12">
+                    <div className="input-group input-group-sm mb-2">
+                        <div className="input-group-text">
+                            <input
+                                type="checkbox"
+                                name="enableAutoStartBreak"
+                                className="form-check-input mt-0"
+                                checked={enableAutoStartBreak}
+                                onChange={(e) => handleOnChange(setEnableAutoStartBreak, e.target.checked)}
+                                id="eAutoStartBreak"
+                            />
+                        </div>
+                        <label className="input-group-text" htmlFor="eAutoStartBreak">
+                            Auto Start Break
+                        </label>
+                    </div>
+                </div>
+
+                <div className="col-lg-12">
+                    <div className="input-group input-group-sm mb-2">
+                        <div className="input-group-text">
+                            <input
+                                type="checkbox"
+                                name="enableAutoTimerFullscreen"
+                                className="form-check-input mt-0"
+                                checked={enableAutoTimerFullscreen}
+                                onChange={(e) => handleOnChange(setEnableAutoTimerFullscreen, e.target.checked)}
+                                id="eAutoTimerFullscreen"
+                            />
+                        </div>
+                        <label className="input-group-text" htmlFor="eAutoTimerFullscreen">
+                            Auto Fullscreen Timer
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div className="row">
+                <div className="col-lg-12">
+                    <div className="input-group input-group-sm mb-2">
+                        <div className="input-group-text">
+                            <input
+                                type="checkbox"
+                                name="enableStopwatch"
+                                className="form-check-input mt-0"
+                                checked={enableStopwatch}
+                                onChange={(e) => handleOnChange(setEnableStopwatch, e.target.checked)}
+                                id="eStopwatch"
+                            />
+                        </div>
+                        <label className="input-group-text" htmlFor="eStopwatch">
+                            Enable Stopwatch after a break
+                        </label>
+                    </div>
+                </div>
+
+                <div className="col-lg-12">
+                    <div className="input-group input-group-sm mb-2">
+                        <div className="input-group-text">
+                            <input
+                                type="checkbox"
+                                name="enableStopwatchAudio"
+                                className="form-check-input mt-0"
+                                checked={enableStopwatchAudio}
+                                onChange={(e) => handleOnChange(setEnableStopwatchAudio, e.target.checked)}
+                                id="eStopwatchAudio"
+                            />
+                        </div>
+                        <label className="input-group-text" htmlFor="eStopwatchAudio">
+                            Enable Stopwatch Audio after a break
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div className="row">
+
+                <div className="col-lg-12">
+                    <div className="input-group input-group-sm mb-2">
+                        <label className="input-group-text" htmlFor="pomodoroLength">
+                            Default Pomodoro Length (mins)
+                        </label>
+                        <input
+                            type="number"
+                            name="pomodoroLength"
+                            className="form-control"
+                            value={pomodoroLength}
+                            min={1}
+                            placeholder="Default Pomodoro Length"
+                            onChange={(e) => handleOnChange(setPomodoroLength, e.target.value)}
+                            id="pomodoroLength"
+                        />
+                    </div>
+                </div>
+
+                <div className="col-lg-12">
+                    <div className="input-group input-group-sm mb-2">
+                        <label className="input-group-text" htmlFor="breakLength">
+                            Break Length (mins)
+                        </label>
+                        <input
+                            type="number"
+                            name="breakLength"
+                            className="form-control"
+                            value={breakLength}
+                            min={0}
+                            placeholder="Default Break Length"
+                            onChange={(e) => handleOnChange(setBreakLength, e.target.value)}
+                            id="breakLength"
+                        />
+                    </div>
+                </div>
+
+            </div>
+
+            <h6 className='text-start'>Display Settings</h6>
+
+            <div className="row">
+
+                <div className="col-lg-12">
+                    <div className="input-group input-group-sm mb-2">
+                        <label className="input-group-text" htmlFor="pageProjectsCount">
+                            Number of projects in a page
+                        </label>
+                        <input
+                            type="number"
+                            name="pageProjectsCount"
+                            className="form-control"
+                            value={pageProjectsCount}
+                            min={1}
+                            placeholder="Default Number of Projects"
+                            onChange={(e) => handleOnChange(setPageProjectsCount, e.target.value)}
+                            id="pageProjectsCount"
+                        />
+                    </div>
+                </div>
+
+                <div className="col-lg-12">
+                    <div className="input-group input-group-sm mb-2">
+                        <label className="input-group-text" htmlFor="pageTasksCount">
+                            Number of tasks in a page
+                        </label>
+                        <input
+                            type="number"
+                            name="pageTasksCount"
+                            className="form-control"
+                            value={pageTasksCount}
+                            min={1}
+                            placeholder="Default Number of Tasks"
+                            onChange={(e) => handleOnChange(setPageTasksCount, e.target.value)}
+                            id="pageTasksCount"
+                        />
+                    </div>
+                </div>
+
+                <div className="col-lg-12">
+                    <div className="input-group input-group-sm mb-2">
+                        <label className="input-group-text" htmlFor="pageCommentsCount">
+                            Number of notes in a page
+                        </label>
+                        <input
+                            type="number"
+                            name="pageCommentsCount"
+                            className="form-control"
+                            value={pageCommentsCount}
+                            min={1}
+                            placeholder="Default Number of Notes"
+                            onChange={(e) => handleOnChange(setPageCommentsCount, e.target.value)}
+                            id="pageCommentsCount"
+                        />
+                    </div>
+                </div>
+
+                <div className="col-lg-12">
+                    <div className="input-group input-group-sm mb-2">
+                        <label className="input-group-text" htmlFor="homePageDefaultList">
+                            Home Page Default List
+                        </label>
+                        <select
+                            className="form-select form-select-sm"
+                            name="home-page-default-list"
+                            onChange={(e) => handleOnChange(setHomePageDefaultList, e.target.value)}
+                            value={homePageDefaultList}   // using react's value instead of defaultValue to handle it with state variable
+                            id="homePageDefaultList"
+                        >
+                            <option value="projects">Projects</option>
+                            <option value="filters">Filters</option>
+                            <option value="tags">Tags</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
             <h6 className='text-start'>Stats Settings</h6>
 
             <div className="row">
 
-                <div className="col-lg-4">
+                <div className="col-lg-12">
                     <div className="input-group input-group-sm mb-2">
                         <div className="input-group-text">
                             <input
@@ -194,7 +393,7 @@ export default function UserSettingsComponent() {
                     </div>
                 </div>
 
-                <div className="col-lg-4">
+                <div className="col-lg-12">
                     <div className="input-group input-group-sm mb-2">
                         <div className="input-group-text">
                             <input
@@ -221,7 +420,7 @@ export default function UserSettingsComponent() {
                     </div>
                 </div>
 
-                <div className="col-lg-4">
+                <div className="col-lg-12">
                     <div className="input-group input-group-sm mb-2">
                         <div className="input-group-text">
                             <input
@@ -266,185 +465,7 @@ export default function UserSettingsComponent() {
                     </div>
                 </div>
 
-            </div>
-
-            <h6 className='text-start'>General Settings</h6>
-
-            <div className="row">
-                <div className="col-lg-4">
-                    <div className="input-group input-group-sm mb-2">
-                        <div className="input-group-text">
-                            <input
-                                type="checkbox"
-                                name="enableAutoStartBreak"
-                                className="form-check-input mt-0"
-                                checked={enableAutoStartBreak}
-                                onChange={(e) => handleOnChange(setEnableAutoStartBreak, e.target.checked)}
-                                id="eAutoStartBreak"
-                            />
-                        </div>
-                        <label className="input-group-text" htmlFor="eAutoStartBreak">
-                            Auto Start Break
-                        </label>
-                    </div>
-                </div>
-
-                <div className="col-lg-4">
-                    <div className="input-group input-group-sm mb-2">
-                        <div className="input-group-text">
-                            <input
-                                type="checkbox"
-                                name="enableAutoTimerFullscreen"
-                                className="form-check-input mt-0"
-                                checked={enableAutoTimerFullscreen}
-                                onChange={(e) => handleOnChange(setEnableAutoTimerFullscreen, e.target.checked)}
-                                id="eAutoTimerFullscreen"
-                            />
-                        </div>
-                        <label className="input-group-text" htmlFor="eAutoTimerFullscreen">
-                            Auto Fullscreen Timer
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <div className="row">
-                <div className="col-lg-4">
-                    <div className="input-group input-group-sm mb-2">
-                        <div className="input-group-text">
-                            <input
-                                type="checkbox"
-                                name="enableStopwatch"
-                                className="form-check-input mt-0"
-                                checked={enableStopwatch}
-                                onChange={(e) => handleOnChange(setEnableStopwatch, e.target.checked)}
-                                id="eStopwatch"
-                            />
-                        </div>
-                        <label className="input-group-text" htmlFor="eStopwatch">
-                            Enable Stopwatch after a break
-                        </label>
-                    </div>
-                </div>
-
-                <div className="col-lg-4">
-                    <div className="input-group input-group-sm mb-2">
-                        <div className="input-group-text">
-                            <input
-                                type="checkbox"
-                                name="enableStopwatchAudio"
-                                className="form-check-input mt-0"
-                                checked={enableStopwatchAudio}
-                                onChange={(e) => handleOnChange(setEnableStopwatchAudio, e.target.checked)}
-                                id="eStopwatchAudio"
-                            />
-                        </div>
-                        <label className="input-group-text" htmlFor="eStopwatchAudio">
-                            Enable Stopwatch Audio after a break
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <div className="row">
-
-                <div className="col-lg-4">
-                    <div className="input-group input-group-sm mb-2">
-                        <label className="input-group-text" htmlFor="pomodoroLength">
-                            Default Pomodoro Length (mins)
-                        </label>
-                        <input
-                            type="number"
-                            name="pomodoroLength"
-                            className="form-control"
-                            value={pomodoroLength}
-                            min={1}
-                            placeholder="Default Pomodoro Length"
-                            onChange={(e) => handleOnChange(setPomodoroLength, e.target.value)}
-                            id="pomodoroLength"
-                        />
-                    </div>
-                </div>
-
-                <div className="col-lg-4">
-                    <div className="input-group input-group-sm mb-2">
-                        <label className="input-group-text" htmlFor="breakLength">
-                            Break Length (mins)
-                        </label>
-                        <input
-                            type="number"
-                            name="breakLength"
-                            className="form-control"
-                            value={breakLength}
-                            min={0}
-                            placeholder="Default Break Length"
-                            onChange={(e) => handleOnChange(setBreakLength, e.target.value)}
-                            id="breakLength"
-                        />
-                    </div>
-                </div>
-
-            </div>
-
-            <h6 className='text-start'>Display Settings</h6>
-
-            <div className="row">
-
-                <div className="col-lg-4">
-                    <div className="input-group input-group-sm mb-2">
-                        <label className="input-group-text" htmlFor="pageProjectsCount">
-                            Number of projects in a page
-                        </label>
-                        <input
-                            type="number"
-                            name="pageProjectsCount"
-                            className="form-control"
-                            value={pageProjectsCount}
-                            min={1}
-                            placeholder="Default Number of Projects"
-                            onChange={(e) => handleOnChange(setPageProjectsCount, e.target.value)}
-                            id="pageProjectsCount"
-                        />
-                    </div>
-                </div>
-
-                <div className="col-lg-4">
-                    <div className="input-group input-group-sm mb-2">
-                        <label className="input-group-text" htmlFor="pageTasksCount">
-                            Number of tasks in a page
-                        </label>
-                        <input
-                            type="number"
-                            name="pageTasksCount"
-                            className="form-control"
-                            value={pageTasksCount}
-                            min={1}
-                            placeholder="Default Number of Tasks"
-                            onChange={(e) => handleOnChange(setPageTasksCount, e.target.value)}
-                            id="pageTasksCount"
-                        />
-                    </div>
-                </div>
-
-                <div className="col-lg-4">
-                    <div className="input-group input-group-sm mb-2">
-                        <label className="input-group-text" htmlFor="pageCommentsCount">
-                            Number of notes in a page
-                        </label>
-                        <input
-                            type="number"
-                            name="pageCommentsCount"
-                            className="form-control"
-                            value={pageCommentsCount}
-                            min={1}
-                            placeholder="Default Number of Notes"
-                            onChange={(e) => handleOnChange(setPageCommentsCount, e.target.value)}
-                            id="pageCommentsCount"
-                        />
-                    </div>
-                </div>
-
-                <div className="col-lg-4">
+                <div className="col-lg-12">
                     <div className="input-group input-group-sm mb-2">
                         <label className="input-group-text" htmlFor="tasksChartType">
                             Tasks Chart Type
@@ -462,7 +483,7 @@ export default function UserSettingsComponent() {
                     </div>
                 </div>
 
-                <div className="col-lg-4">
+                <div className="col-lg-12">
                     <div className="input-group input-group-sm mb-2">
                         <label className="input-group-text" htmlFor="projectsChartType">
                             Projects Chart Type
@@ -479,6 +500,7 @@ export default function UserSettingsComponent() {
                         </select>
                     </div>
                 </div>
+
             </div>
 
             <div className="col-lg-12 text-end">
