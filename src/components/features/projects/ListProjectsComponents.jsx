@@ -54,7 +54,7 @@ export default function ListProjectsComponent({
 
     function refreshProjects() {
         setProjects([]);
-        retrieveAllProjectsApi(PAGESIZE, (currentPage - 1) * PAGESIZE)
+        retrieveAllProjectsApi({ limit: PAGESIZE, offset: (currentPage - 1) * PAGESIZE })
             .then(response => {
                 // console.debug(response)
                 const projectsList = response.data;
