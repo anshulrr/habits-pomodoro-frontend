@@ -15,7 +15,7 @@ export default function ProjectComponent() {
     const [pomodoroLength, setPomodoroLength] = useState(0)
     const [priority, setPriority] = useState(1)
     const [projectCategories, setProjectCategories] = useState([])
-    const [categoryColor, setCategoryColor] = useState('818181');
+    const [categoriesMap, setCategoriesMap] = useState(new Map())
     const [errors, setErrors] = useState({})
 
     const navigate = useNavigate()
@@ -25,6 +25,7 @@ export default function ProjectComponent() {
         () => {
             (() => {
                 // console.debug('re-render ProjectComponents')
+                retrieveProject()
                 retrieveProjectCategories()
             })();
         }, [] // eslint-disable-line react-hooks/exhaustive-deps
@@ -32,15 +33,19 @@ export default function ProjectComponent() {
 
     function retrieveProjectCategories() {
         // TODO: decide limit
-        retrieveAllProjectCategoriesApi(10, 0)
+        retrieveAllProjectCategoriesApi(100, 0)
             .then(response => {
                 setProjectCategories(response.data)
-                retrieveProject(response.data)
+                const map = new Map();
+                for (const category of response.data) {
+                    map.set(category.id, category);
+                }
+                setCategoriesMap(map);
             })
             .catch(error => console.error(error.message))
     }
 
-    function retrieveProject(categories) {
+    function retrieveProject() {
 
         if (parseInt(id) === -1) {
             return;
@@ -54,11 +59,6 @@ export default function ProjectComponent() {
                 setPomodoroLength(response.data.pomodoroLength)
                 setPriority(response.data.priority)
                 setProjectCategoryId(response.data.projectCategoryId)
-                for (const category of categories) {
-                    if (category.id === response.data.projectCategoryId) {
-                        setCategoryColor(category.color);
-                    }
-                }
             })
             .catch(error => console.error(error.message))
     }
@@ -85,7 +85,6 @@ export default function ProjectComponent() {
         if (parseInt(id) === -1) {
             createProjectApi(project)
                 .then(response => {
-                    // console.debug(response)
                     state.project = response.data;
                     navigate('/', { state })
                     // navigate(-1, { state }) // NOTE: passing state with -1 doesn't work
@@ -94,7 +93,6 @@ export default function ProjectComponent() {
         } else {
             updateProjectApi(id, project)
                 .then(response => {
-                    // console.debug(response)
                     state.project = response.data;
                     navigate('/', { state })
                 })
@@ -203,7 +201,7 @@ export default function ProjectComponent() {
                         <div className="col-lg-4 mb-3">
                             <label htmlFor="projectCategoryId">
                                 Project Category
-                                <i className="ms-1 bi bi-link-45deg" style={{ color: categoryColor }} />
+                                <i className="ms-1 bi bi-link-45deg" style={{ color: categoriesMap.has(projectCategoryId) ? categoriesMap.get(projectCategoryId).color : '#818181' }} />
                             </label>
                             <select
                                 className="form-select form-select-sm"
@@ -212,12 +210,7 @@ export default function ProjectComponent() {
                                 value={projectCategoryId}
                                 onChange={(e) => {
                                     const id = e.target.value;
-                                    setProjectCategoryId(id)
-                                    for (const category of projectCategories) {
-                                        if (category.id === parseInt(id)) {
-                                            setCategoryColor(category.color);
-                                        }
-                                    }
+                                    setProjectCategoryId(parseInt(id))
                                 }}
                             >
                                 {/* disabled option with value 0 for dropdown to avoid confusion of initial selection */}
