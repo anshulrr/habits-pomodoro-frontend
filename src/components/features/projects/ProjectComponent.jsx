@@ -13,7 +13,7 @@ export default function ProjectComponent() {
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [projectCategoryId, setProjectCategoryId] = useState(0)   // value for disabled option in dropdown
-    const [color, setColor] = useState('#228B22')
+    const [color, setColor] = useState('#818181')
     const [pomodoroLength, setPomodoroLength] = useState(0)
     const [priority, setPriority] = useState(1)
     const [projectCategories, setProjectCategories] = useState([])

@@ -16,6 +16,7 @@ export default function ProjectCategoryComponent({
     const [statsDefault, setStatsDefault] = useState(false)
     const [visibleToPartners, setVisibleToPartners] = useState(true)
     const [level, setLevel] = useState('')
+    const [color, setColor] = useState('#a1a1a1')
 
     // const [errorMessage, setErrorMessage] = useState('')
 
@@ -37,6 +38,7 @@ export default function ProjectCategoryComponent({
                 setVisibleToPartners(response.data.visibleToPartners)
                 setName(response.data.name)
                 setLevel(response.data.level)
+                setColor(response.data.color)
             })
             .catch(error => console.error(error.message))
     }
@@ -50,6 +52,7 @@ export default function ProjectCategoryComponent({
             statsDefault: values.statsDefault,
             visibleToPartners: values.visibleToPartners,
             level: values.level,
+            color: values.color
         }
 
         if (category === null) {
@@ -115,7 +118,7 @@ export default function ProjectCategoryComponent({
 
                             <p>Enter Project Category Details </p>
                             <div>
-                                <Formik initialValues={{ name, level, statsDefault, visibleToPartners }}
+                                <Formik initialValues={{ name, level, color, statsDefault, visibleToPartners }}
                                     enableReinitialize={true}
                                     onSubmit={onSubmit}
                                     validate={validate}
@@ -130,6 +133,23 @@ export default function ProjectCategoryComponent({
                                                         <Field type="text" className="form-control form-control-sm" name="name" placeholder="Project Category Name" required />
                                                         <ErrorMessage name="name" component="div" className="small text-danger" />
                                                     </div>
+
+                                                    <div className="col-12 mb-2">
+                                                        <div className="input-group input-group-sm">
+                                                            <label className="input-group-text" htmlFor="color">
+                                                                Category Color
+                                                            </label>
+                                                            <Field
+                                                                type="color"
+                                                                className="form-control form-control-sm"
+                                                                name="color"
+                                                                id="color"
+                                                                placeholder="color"
+                                                                required
+                                                            />
+                                                        </div>
+                                                    </div>
+
                                                     <div className="col-12 mb-2">
                                                         <div className="input-group input-group-sm">
                                                             <label className="input-group-text" htmlFor="level">

@@ -102,7 +102,9 @@ export default function ListProjectCategoriesComponent() {
                                         >
                                             {/* todo: decide better solution for maxWidth */}
                                             <div className="col-9 text-truncate text-start">
-                                                {/* <span style={{ color: cat.color }}>&#9632; </span> */}
+                                                <span style={{ color: cat.color }}>
+                                                    <i className="me-1 bi bi-link-45deg" />
+                                                </span>
                                                 <span>{cat.name}</span>
                                             </div>
                                             <div className="col-1 px-0 text-secondary text-end">

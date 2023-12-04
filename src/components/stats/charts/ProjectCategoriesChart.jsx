@@ -30,9 +30,7 @@ export const ProjectCategoriesChart = ({ includeCategories, subject, statsSettin
                 }
                 response.data.forEach((element, i) => {
                     // console.debug(element);
-                    // gray 7 shades
-                    let gray = `rgb(${(i * 40) % 241}, ${(i * 40) % 241}, ${(i * 40) % 241})`;
-                    updated_data.colors.push(gray);
+                    updated_data.colors.push(element[2]);
                     updated_data.labels.push(element[1]);
                     updated_data.data.push(element[0] / scale);
                 });
