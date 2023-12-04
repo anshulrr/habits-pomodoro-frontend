@@ -122,6 +122,7 @@ export const CalendarChart = ({ subject, categories }) => {
                 startDate={startDate}
                 endDate={endDate}
                 values={chartData.data}
+                showWeekdayLabels={true}
             />
         </div >
     )

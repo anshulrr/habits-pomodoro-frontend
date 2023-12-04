@@ -36,7 +36,7 @@ export default function SelectFriendsComponent({
                 <div className="input-group input-group-sm mb-2">
                     <select
                         className="form-select form-select-sm"
-                        name="projects-chart-type"
+                        name="subject-id"
                         onChange={(e) => handleOnChange(setSubjectId, e.target.value)}
                         value={subjectId}
                         id="subjectId"
