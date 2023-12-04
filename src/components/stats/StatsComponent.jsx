@@ -248,6 +248,11 @@ export default function ListStatsComponent() {
                                     />
                                 </div>
                             </div>
+                            <div className="col-lg-12 px-0">
+                                <div className="p-1 chart-card">
+                                    <CalendarChart />
+                                </div>
+                            </div >
                             <div className="col-lg-6 px-0">
                                 <div className="p-1 mb-5 chart-card">
                                     <ListPomodorosComponent

@@ -70,3 +70,13 @@ export const getTotalPomodorosApi
             return apiClient.get(url + `&subjectId=${subject.id}`)
         }
     }
+
+export const getStatsPomodorosCountApi
+    = ({ startDate, endDate, subject, type, typeId }) => {
+        const url = `/stats/pomodoros-count?startDate=${startDate}&endDate=${endDate}&timezone=${to}&type=${type}&typeId=${typeId}`;
+        if (!subject) {
+            return apiClient.get(url);
+        } else {
+            return apiClient.get(url + `&subjectId=${subject.id}`)
+        }
+    }
