@@ -8,13 +8,14 @@ import Pagination from "services/pagination/Pagination";
 import { getTasksTimeElapsedApi, retrieveAllTasksApi, updateTaskApi } from "services/api/TaskApiService";
 import { timeToDisplay } from "services/helpers/listsHelper";
 import OutsideAlerter from "services/hooks/OutsideAlerter";
+import { getTasksTagsApi } from "services/api/TagApiService";
 
 import PastPomodoroComponent from "components/features/tasks/PastPomodoroComponent";
 import ListCommentsComponent from "components/features/comments/ListCommentsComponents";
 import UpdateTaskComponent from "components/features/tasks/UpdateTaskComponent";
 import TaskDueDateComponent from "components/features/tasks/TaskDueDateComponent";
 import MapTagComponent from "components/features/tags/MapTagComponent";
-import { getTasksTagsApi } from "services/api/TagApiService";
+import { TaskStats } from "components/features/tasks/TaskStats";
 
 export default function ListTasksRowsComponent({
     project,
@@ -56,6 +57,7 @@ export default function ListTasksRowsComponent({
     const [showCreatePastPomodoro, setShowCreatePastPomodoro] = useState(-1);
     const [showUpdateDueDate, setShowUpdateDueDate] = useState(-1);
     const [showMapTags, setShowMapTags] = useState(-1);
+    const [showTaskStats, setShowTaskStats] = useState(-1);
 
     const [showUpdateTaskId, setShowUpdateTaskId] = useState(-1)
 
@@ -212,6 +214,13 @@ export default function ListTasksRowsComponent({
         setShowUpdatePopupId(-1);
         // setElementHeight(listElement.current.offsetHeight);
         setShowMapTags(task.id);
+    }
+
+    function onClickStats(task) {
+        setShowCreatePastPomodoro(-1)
+        setShowUpdatePopupId(-1);
+        // setElementHeight(listElement.current.offsetHeight);
+        setShowTaskStats(task.id);
     }
 
     function updateOnPageChange(page) {
@@ -376,6 +385,11 @@ export default function ListTasksRowsComponent({
                                                                 Map Tags <i className="ps-1 bi bi-tag" />
                                                             </button>
                                                         }
+                                                        {
+                                                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onClickStats(task)}>
+                                                                Stats <i className="ps-1 bi bi-graph-up" />
+                                                            </button>
+                                                        }
                                                     </div>
                                                 </span>
                                             </OutsideAlerter>
@@ -417,6 +431,14 @@ export default function ListTasksRowsComponent({
                                         tagsMap={tags}
                                         setShowMapTags={setShowMapTags}
                                         setTasksReload={setTasksReload}
+                                    />
+                                }
+
+                                {
+                                    showTaskStats === task.id &&
+                                    <TaskStats
+                                        task={task}
+                                        setShowTaskStats={setShowTaskStats}
                                     />
                                 }
                             </div >
