@@ -35,10 +35,13 @@ export default function UserSettingsComponent() {
     const [errorMessage, setErrorMessage] = useState('')
     const [successMessage, setSuccessMessage] = useState('')
 
+    const [showLoader, setShowLoader] = useState(true)
+
     useEffect(() => {
         const fetchAndSetSettings = async () => {
             // get updated userSettings
             const userSettings = await authContext.getUserSettings();
+            setShowLoader(false)
 
             setEnableChartScale(userSettings.enableChartScale)
             setChartScale(userSettings.chartScale)
@@ -165,6 +168,16 @@ export default function UserSettingsComponent() {
         fun(val)
         setErrorMessage("Click on Save to update settings")
         setSuccessMessage('')
+    }
+
+    if (showLoader) {
+        return (
+            <div>
+                <div className="pb-3 loader-container-2" >
+                    <span className="loader-2"></span>
+                </div>
+            </div>
+        )
     }
 
     return (
@@ -529,6 +542,7 @@ export default function UserSettingsComponent() {
                 <div className="text-danger"><small>{errorMessage}</small></div>
                 <div className="text-success"><small>{successMessage}</small></div>
             </div>
-        </div >
+        </div>
+
     )
 }

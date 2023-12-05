@@ -17,6 +17,8 @@ export default function ListProjectCategoriesComponent() {
 
     const [isNewCategory, setNewCategory] = useState(false)
 
+    const [showLoader, setShowLoader] = useState(true)
+
     useEffect(
         () => getProjectCategoriesCount(),
         []
@@ -33,6 +35,7 @@ export default function ListProjectCategoriesComponent() {
             .then(response => {
                 // console.debug(response)
                 setCategories(response.data)
+                setShowLoader(false)
             })
             .catch(error => console.error(error.message))
     }
@@ -69,6 +72,12 @@ export default function ListProjectCategoriesComponent() {
                                         {categoriesCount}
                                         <i className="ms-1 bi bi-link-45deg" />
                                     </span>
+                                    {
+                                        showLoader &&
+                                        <span className="loader-container-2" >
+                                            <span className="ms-2 loader-2"></span>
+                                        </span>
+                                    }
                                 </h6>
                             </div>
                             <div className="col-2 px-0 text-end">

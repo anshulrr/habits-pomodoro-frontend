@@ -19,6 +19,8 @@ export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setTask
 
     const [status, setStatus] = useState('added')
 
+    const [showLoader, setShowLoader] = useState(true)
+
     useEffect(
         () => retrieveTask()
         , []  // eslint-disable-line react-hooks/exhaustive-deps
@@ -34,6 +36,7 @@ export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setTask
                 if (response.data.dueDate) {
                     setDueDate(moment(response.data.dueDate).toDate())
                 }
+                setShowLoader(false)
             })
             .catch(error => console.error(error.message))
     }
@@ -84,68 +87,78 @@ export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setTask
                     <h6>
                         <span className="me-1" style={{ color: task.project.color }}>&#9632;</span>
                         {task.project.name}
+                        {
+                            showLoader &&
+                            <span className="loader-container-2" >
+                                <span className="ms-1 loader-2"></span>
+                            </span>
+                        }
                     </h6>
-                    <div>
-                        <Formik initialValues={{ description, pomodoroLength, priority, status, dueDate }}
-                            enableReinitialize={true}
-                            onSubmit={onSubmit}
-                            validate={validate}
-                            validateOnChange={false}
-                            validateOnBlur={false}
-                        >
-                            {
-                                (props) => (
-                                    <Form>
-                                        <div className="row small text-start text-secondary">
-                                            <div className="col-lg-12 mb-3">
-                                                <label htmlFor="description">Task Description</label>
-                                                <Field type="text" className="form-control form-control-sm" id="description" name="description" placeholder="Description" />
-                                                <ErrorMessage name="description" component="small" className="text-danger small" />
-                                            </div>
-                                            <div className="col-lg-4 mb-3">
-                                                <label htmlFor="pomodoroLength">Default Pomodoro Length <i className="bi bi-hourglass" /></label>
-                                                <Field type="number" className="form-control form-control-sm" min="0" id="pomodoroLength" name="pomodoroLength" placeholder="Default Pomodoro Length" />
-                                                <small>(To use project's settings, set length to zero)</small>
-                                                {props.errors.pomodoroLength && <div className="text-danger small">{props.errors.pomodoroLength}</div>}
-                                            </div>
-                                            <div className="col-lg-4 mb-3">
-                                                <label htmlFor="priority">Priority <i className="bi bi-arrow-up" /></label>
-                                                <Field type="number" className="form-control form-control-sm" min="0" id="priority" name="priority" placeholder="Priority" />
-                                                {props.errors.priority && <div className="text-danger small">{props.errors.priority}</div>}
-                                            </div>
-                                            <div className="col-lg-4 mb-3">
-                                                <div>
-                                                    <label htmlFor="dueDate">Due Date <i className="bi bi-calendar-check" /></label>
+
+                    {
+                        !showLoader &&
+                        <div>
+                            <Formik initialValues={{ description, pomodoroLength, priority, status, dueDate }}
+                                enableReinitialize={true}
+                                onSubmit={onSubmit}
+                                validate={validate}
+                                validateOnChange={false}
+                                validateOnBlur={false}
+                            >
+                                {
+                                    (props) => (
+                                        <Form>
+                                            <div className="row small text-start text-secondary">
+                                                <div className="col-lg-12 mb-3">
+                                                    <label htmlFor="description">Task Description</label>
+                                                    <Field type="text" className="form-control form-control-sm" id="description" name="description" placeholder="Description" />
+                                                    <ErrorMessage name="description" component="small" className="text-danger small" />
                                                 </div>
-                                                <ReactDatePicker
-                                                    className="form-control form-control-sm"
-                                                    id="dueDate"
-                                                    selected={dueDate}
-                                                    dateFormat="dd/MM/yyyy"
-                                                    minDate={new Date()}
-                                                    onFocus={e => e.target.blur()}      // fix for keyboard open on focus on mobile devide
-                                                    onChange={(date) => setDueDate(date)}
-                                                />
+                                                <div className="col-lg-4 mb-3">
+                                                    <label htmlFor="pomodoroLength">Default Pomodoro Length <i className="bi bi-hourglass" /></label>
+                                                    <Field type="number" className="form-control form-control-sm" min="0" id="pomodoroLength" name="pomodoroLength" placeholder="Default Pomodoro Length" />
+                                                    <small>(To use project's settings, set length to zero)</small>
+                                                    {props.errors.pomodoroLength && <div className="text-danger small">{props.errors.pomodoroLength}</div>}
+                                                </div>
+                                                <div className="col-lg-4 mb-3">
+                                                    <label htmlFor="priority">Priority <i className="bi bi-arrow-up" /></label>
+                                                    <Field type="number" className="form-control form-control-sm" min="0" id="priority" name="priority" placeholder="Priority" />
+                                                    {props.errors.priority && <div className="text-danger small">{props.errors.priority}</div>}
+                                                </div>
+                                                <div className="col-lg-4 mb-3">
+                                                    <div>
+                                                        <label htmlFor="dueDate">Due Date <i className="bi bi-calendar-check" /></label>
+                                                    </div>
+                                                    <ReactDatePicker
+                                                        className="form-control form-control-sm"
+                                                        id="dueDate"
+                                                        selected={dueDate}
+                                                        dateFormat="dd/MM/yyyy"
+                                                        minDate={new Date()}
+                                                        onFocus={e => e.target.blur()}      // fix for keyboard open on focus on mobile devide
+                                                        onChange={(date) => setDueDate(date)}
+                                                    />
+                                                </div>
+                                                <div className="col-lg-4 mb-3">
+                                                    <label htmlFor="status">Status</label>
+                                                    <Field as="select" className="form-select form-select-sm" id="status" name="status">
+                                                        {/* disabled option with value 0 for dropdown to avoid confusion of initial selection */}
+                                                        <option value="added">current</option>
+                                                        <option value="completed">completed</option>
+                                                        <option value="archived">archived</option>
+                                                    </Field>
+                                                </div>
+                                                <div className="col-lg-12 mb-3 text-end">
+                                                    <button className="me-2 btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowUpdateTaskId(-1)}>Cancel</button>
+                                                    <button className="btn btn-sm btn-outline-success" type="submit">Save Task</button>
+                                                </div>
                                             </div>
-                                            <div className="col-lg-4 mb-3">
-                                                <label htmlFor="status">Status</label>
-                                                <Field as="select" className="form-select form-select-sm" id="status" name="status">
-                                                    {/* disabled option with value 0 for dropdown to avoid confusion of initial selection */}
-                                                    <option value="added">current</option>
-                                                    <option value="completed">completed</option>
-                                                    <option value="archived">archived</option>
-                                                </Field>
-                                            </div>
-                                            <div className="col-lg-12 mb-3 text-end">
-                                                <button className="me-2 btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowUpdateTaskId(-1)}>Cancel</button>
-                                                <button className="btn btn-sm btn-outline-success" type="submit">Save Task</button>
-                                            </div>
-                                        </div>
-                                    </Form>
-                                )
-                            }
-                        </Formik>
-                    </div>
+                                        </Form>
+                                    )
+                                }
+                            </Formik>
+                        </div>
+                    }
                 </div>
             </div>
         </div>

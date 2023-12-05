@@ -13,6 +13,8 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
     const [endDate, setEndDate] = useState(moment().toISOString());
     const [chartData, setChartData] = useState({ data: [] })
 
+    const [showLoader, setShowLoader] = useState(true)
+
     useEffect(
         () => {
             retrieveStatsPomodorosCount('task', task.id)
@@ -35,6 +37,7 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
                     })
                 });
                 setChartData(updated_data)
+                setShowLoader(false)
             })
             .catch(error => console.error(error.message))
     }
@@ -52,6 +55,12 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
                     <h6 className="text-start">
                         <i className="me-1 bi bi-list-ul" />
                         {task.description}
+                        {
+                            showLoader &&
+                            <span className="loader-container-2" >
+                                <span className="ms-2 loader-2"></span>
+                            </span>
+                        }
                     </h6>
                     <div className="row small">
                         <div className="col-lg-6">

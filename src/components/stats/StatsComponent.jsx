@@ -34,6 +34,8 @@ export default function ListStatsComponent() {
     const [subject, setSubject] = useState(null)
     const [subjects, setSubjects] = useState([])
 
+    const [showLoader, setShowLoader] = useState(true)
+
     const [pomodorosHeight, setPomodorosHeight] = useState(0);
 
     const [tasksChartButtonsStates, setTasksChartBButtonsStates] = useState({
@@ -82,6 +84,7 @@ export default function ListStatsComponent() {
                 setCategories(response.data)
                 setReloadCategories(reloadCategories + 1);
                 setReload(prev => prev + 1);
+                setShowLoader(false)
             })
             .catch(error => console.error(error.message))
     }
@@ -141,6 +144,12 @@ export default function ListStatsComponent() {
                                 {includeCategories.length}/{categories.length}
                                 <i className="ms-1 bi bi-link-45deg" />
                             </span>
+                            {
+                                showLoader &&
+                                <span className="loader-container-2" >
+                                    <span className="ms-2 loader-2"></span>
+                                </span>
+                            }
                         </h6>
                         <div className="text-secondary px-1">
                             {

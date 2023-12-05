@@ -13,6 +13,7 @@ export default function UpdateCommentComponent({ setComments, id, setShowUpdateC
     const [reviseDate, setReviseDate] = useState(null)
 
     const [showInput, setShowInput] = useState(true)
+    const [showLoader, setShowLoader] = useState(true)
 
     useEffect(
         () => retrieveComment()
@@ -24,6 +25,7 @@ export default function UpdateCommentComponent({ setComments, id, setShowUpdateC
             .then(response => {
                 setDescription(response.data.description)
                 setReviseDate(response.data.reviseDate ? moment(response.data.reviseDate).toDate() : null)
+                setShowLoader(false)
             })
             .catch(error => console.error(error.message))
     }
@@ -60,6 +62,12 @@ export default function UpdateCommentComponent({ setComments, id, setShowUpdateC
                         <div className="input-group">
                             <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => setShowInput(true)}>Write</button>
                             <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => setShowInput(false)}>Preview</button>
+                            {
+                                showLoader &&
+                                <span className="loader-container-2" >
+                                    <span className="ms-2 loader-2"></span>
+                                </span>
+                            }
                         </div>
                         {
                             showInput &&
