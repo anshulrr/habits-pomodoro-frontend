@@ -16,6 +16,8 @@ export const CalendarChart = ({ subject, categories }) => {
     const [projects, setProjects] = useState([]);
     const [chartData, setChartData] = useState({ label: '', labels: [], data: [], colors: [] })
 
+    const [showLoader, setShowLoader] = useState(false);
+
     useEffect(
         () => {
             retrieveStatsPomodorosCount('user')
@@ -24,6 +26,7 @@ export const CalendarChart = ({ subject, categories }) => {
     )
 
     const retrieveStatsPomodorosCount = (type, typeId = 0) => {
+        setShowLoader(true);
         setStartDate(startDate);
         setEndDate(endDate);
         getStatsPomodorosCountApi({ startDate, endDate, type, typeId, subject })
@@ -42,6 +45,7 @@ export const CalendarChart = ({ subject, categories }) => {
                 // console.debug(updated_data);
                 setChartData(updated_data)
                 // console.debug("retrieved updated data: ", chartData);
+                setShowLoader(false);
             })
             .catch(error => console.error(error.message))
     }
@@ -58,6 +62,7 @@ export const CalendarChart = ({ subject, categories }) => {
 
     function updateCategory(id) {
         setCategoryId(id);
+        setProjectId('0');
         if (id === '0') {
             retrieveStatsPomodorosCount('user')
         } else {
@@ -79,7 +84,16 @@ export const CalendarChart = ({ subject, categories }) => {
         <div>
 
             <div className="row">
-                <div className="col-lg-4 mb-1">
+                <div className="col-lg-12 mb-1">
+                    <h6 className='mb-0'>
+                        Daily Streak<wbr />
+                        <span className="loader-container-2" >
+                            <span className="ms-1 loader-2" style={{ display: showLoader ? "inline" : "none" }}></span>
+                        </span>
+                    </h6>
+                </div>
+
+                <div className="col-6 px-0 mb-1">
                     <select
                         className="form-select form-select-sm"
                         id="project_category_id"
@@ -98,7 +112,7 @@ export const CalendarChart = ({ subject, categories }) => {
                     </select>
                 </div>
 
-                <div className="col-lg-4 mb-1">
+                <div className="col-6 px-0 mb-1">
                     <select
                         className="form-select form-select-sm"
                         id="project_id"
