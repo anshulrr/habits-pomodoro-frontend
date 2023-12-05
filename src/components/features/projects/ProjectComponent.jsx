@@ -11,12 +11,12 @@ export default function ProjectComponent() {
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [projectCategoryId, setProjectCategoryId] = useState(0)   // value for disabled option in dropdown
-    const [color, setColor] = useState('#818181')
+    const [color, setColor] = useState('#ffffff')
     const [pomodoroLength, setPomodoroLength] = useState(0)
     const [priority, setPriority] = useState(1)
     const [projectCategories, setProjectCategories] = useState([])
     const [categoriesMap, setCategoriesMap] = useState(new Map())
-    const [errors, setErrors] = useState({})
+    const [errors, setErrors] = useState({ color: projectCategoryId === 0 ? 'To select a color, first select a category' : '' })
 
     const navigate = useNavigate()
     const { state } = useLocation();
@@ -59,6 +59,7 @@ export default function ProjectComponent() {
                 setPomodoroLength(response.data.pomodoroLength)
                 setPriority(response.data.priority)
                 setProjectCategoryId(response.data.projectCategoryId)
+                errors.color = ''
             })
             .catch(error => console.error(error.message))
     }
@@ -166,8 +167,10 @@ export default function ProjectComponent() {
                                 placeholder="color"
                                 value={color}
                                 required
+                                disabled={projectCategoryId === 0}
                                 onChange={(e) => setColor(e.target.value)}
                             />
+                            <div className="text-danger small">{errors.color}</div>
                         </div>
                         <div className="col-lg-4 mb-3">
                             <label htmlFor="pomodoroLength">Default Pomodoro Length <i className="bi bi-hourglass" /></label>
@@ -209,8 +212,10 @@ export default function ProjectComponent() {
                                 name="projectCategoryId"
                                 value={projectCategoryId}
                                 onChange={(e) => {
-                                    const id = e.target.value;
-                                    setProjectCategoryId(parseInt(id))
+                                    const id = parseInt(e.target.value);
+                                    setProjectCategoryId(id)
+                                    setColor(categoriesMap.get(id).color)
+                                    errors.color = '';
                                 }}
                             >
                                 {/* disabled option with value 0 for dropdown to avoid confusion of initial selection */}
