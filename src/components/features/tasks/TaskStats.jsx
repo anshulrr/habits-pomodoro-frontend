@@ -41,8 +41,8 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
 
     return (
 
-        <div className="tags-overlay">
-            <div className="tags-popup">
+        <div className="task-overlay">
+            <div className="task-popup">
                 <div className="close-popup m-2">
                     <i className="p-1 bi bi-x-lg" onClick={() => setShowTaskStats(-1)}></i>
                 </div>
@@ -50,7 +50,6 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
                 <div className="container my-5">
 
                     <h6 className="text-start">
-
                         <i className="me-1 bi bi-list-ul" />
                         {task.description}
                     </h6>

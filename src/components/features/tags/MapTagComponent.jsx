@@ -90,6 +90,10 @@ export default function MapTagComponent({
 
                     <div className="row mb-3">
                         <div className="col-lg-4 offset-lg-4">
+                            <h6 className="ms-2 text-start">
+                                <i className="me-1 bi bi-list-ul" />
+                                {task.description}
+                            </h6>
                             <div className="border rounded p-3 mx-2">
 
                                 <div className="d-flex justify-content-between">
