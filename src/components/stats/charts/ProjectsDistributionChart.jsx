@@ -56,6 +56,7 @@ export const ProjectsDistributionChart = ({ includeCategories, subject, statsSet
                     setButtonsStates={setButtonsStates}
                     buttonsStates={buttonsStates}
                     showLoader={showLoader}
+                    thickness={2}
                 />
             }
 
@@ -67,6 +68,7 @@ export const ProjectsDistributionChart = ({ includeCategories, subject, statsSet
                     setButtonsStates={setButtonsStates}
                     buttonsStates={buttonsStates}
                     showLoader={showLoader}
+                    thickness={3}
                 />
             }
         </>

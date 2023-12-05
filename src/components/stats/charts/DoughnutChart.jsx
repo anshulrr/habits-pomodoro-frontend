@@ -10,7 +10,8 @@ export const DoughnutChart = ({
     retrievePomodoros,
     buttonsStates,
     setButtonsStates,
-    showLoader
+    showLoader,
+    thickness
 }) => {
 
     return (
@@ -48,6 +49,7 @@ export const DoughnutChart = ({
                         responsive: true,
                         maintainAspectRatio: true,
                         aspectRatio: 0.75,
+                        cutout: 25 * (4 - thickness),
                         plugins: {
                             legend: {
                                 display: true,

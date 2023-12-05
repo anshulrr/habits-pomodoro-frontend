@@ -55,6 +55,7 @@ export const TasksChart = ({ includeCategories, subject, statsSettings, buttonsS
                     setButtonsStates={setButtonsStates}
                     buttonsStates={buttonsStates}
                     showLoader={showLoader}
+                    thickness={1}
                 />
             }
 
@@ -66,6 +67,7 @@ export const TasksChart = ({ includeCategories, subject, statsSettings, buttonsS
                     setButtonsStates={setButtonsStates}
                     buttonsStates={buttonsStates}
                     showLoader={showLoader}
+                    thickness={1}
                 />
             }
         </>
