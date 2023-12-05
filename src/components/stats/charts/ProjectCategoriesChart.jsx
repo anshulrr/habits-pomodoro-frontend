@@ -52,7 +52,7 @@ export const ProjectCategoriesChart = ({ includeCategories, subject, statsSettin
                     setButtonsStates={setButtonsStates}
                     buttonsStates={buttonsStates}
                     showLoader={showLoader}
-                    thickness={4}
+                    thickness={3}
                 />
             }
 

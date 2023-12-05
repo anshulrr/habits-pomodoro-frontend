@@ -41,8 +41,8 @@ export const BarChart = ({
                                     // you can set indiviual colors for each bar
                                     backgroundColor: chartData.colors,
                                     borderWidth: 1,
-                                    barThickness: 6 * thickness,  // number (pixels) or 'flex'
-                                    maxBarThickness: 6 * thickness // number (pixels)
+                                    barThickness: 10 * thickness,  // number (pixels) or 'flex'
+                                    maxBarThickness: 10 * thickness // number (pixels)
                                 }
                             ]
                         }
