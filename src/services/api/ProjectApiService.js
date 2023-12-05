@@ -1,12 +1,17 @@
 import { apiClient } from "./ApiClient";
 
 export const retrieveAllProjectsApi
-    = ({ limit, offset, categoryId }) => {
+    = ({ limit, offset, categoryId, subject }) => {
+        let url;
         if (categoryId) {
-            return apiClient.get(`/projects?categoryId=${categoryId}`)
+            url = `/projects?categoryId=${categoryId}`;
         } else {
-            return apiClient.get(`/projects?limit=${limit}&offset=${offset}`)
+            url = `/projects?limit=${limit}&offset=${offset}`;
         }
+        if (subject) {
+            url += `&subjectId=${subject.id}`
+        }
+        return apiClient.get(url);
     }
 
 export const getProjectsCountApi

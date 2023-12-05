@@ -48,7 +48,7 @@ export const CalendarChart = ({ subject, categories }) => {
 
     function refreshProjects(categoryId) {
         setProjects([]);
-        retrieveAllProjectsApi({ categoryId })
+        retrieveAllProjectsApi({ categoryId, subject })
             .then(response => {
                 // console.debug(response)
                 setProjects(response.data)
