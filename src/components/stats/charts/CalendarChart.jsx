@@ -79,7 +79,7 @@ export const CalendarChart = ({ subject, categories }) => {
         <div>
 
             <div className="row">
-                <div className="col-lg-4 px-4 mb-1">
+                <div className="col-lg-4 mb-1">
                     <select
                         className="form-select form-select-sm"
                         id="project_category_id"
@@ -98,7 +98,7 @@ export const CalendarChart = ({ subject, categories }) => {
                     </select>
                 </div>
 
-                <div className="col-lg-4 px-4 mb-1">
+                <div className="col-lg-4 mb-1">
                     <select
                         className="form-select form-select-sm"
                         id="project_id"
