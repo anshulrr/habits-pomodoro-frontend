@@ -6,6 +6,7 @@ import moment from 'moment'
 
 import { createCommentApi } from 'services/api/CommentApiService'
 import { truncateParagraph } from 'services/helpers/listsHelper';
+import { filterPastTime } from 'services/helpers/helper';
 
 export default function CommentComponent({ setComments, filterBy, id, title, setShowCreateComment, setCommentsCount }) {
 
@@ -19,7 +20,7 @@ export default function CommentComponent({ setComments, filterBy, id, title, set
 
         const comment = {
             description,
-            reviseDate: moment(reviseDate).endOf('date').toDate()
+            reviseDate
         }
         // console.debug({ comment, filterBy, id })
 
@@ -83,10 +84,14 @@ export default function CommentComponent({ setComments, filterBy, id, title, set
                                 className="form-control form-control-sm"
                                 id="reviseDate"
                                 selected={reviseDate}
-                                dateFormat="dd/MM/yyyy"
+                                dateFormat="dd/MM/yyyy HH:mm"
                                 minDate={new Date()}
+                                showTimeSelect
+                                timeFormat="HH:mm"
+                                filterTime={filterPastTime}
                                 onFocus={e => e.target.blur()}      // fix for keyboard open on focus on mobile device
-                                onChange={(reviseDate) => setReviseDate(reviseDate)}
+                                onSelect={(date) => setReviseDate(moment(date).endOf('date').toDate())}
+                                onChange={(date) => setReviseDate(date)}
                             />
                             <div>
                                 <button

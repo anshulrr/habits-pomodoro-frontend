@@ -6,6 +6,7 @@ import ReactDatePicker from 'react-datepicker'
 import moment from 'moment'
 
 import { retrieveTaskApi, updateTaskApi } from 'services/api/TaskApiService'
+import { filterPastTime } from 'services/helpers/helper'
 
 export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setTasksReload }) {
 
@@ -49,7 +50,7 @@ export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setTask
             pomodoroLength: values.pomodoroLength,
             priority: values.priority,
             status: values.status,
-            dueDate: moment(dueDate).endOf('date').toDate(),
+            dueDate: dueDate,
         }
 
         updateTaskApi({ id: task.id, task: updated_task })
@@ -133,9 +134,13 @@ export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setTask
                                                         className="form-control form-control-sm"
                                                         id="dueDate"
                                                         selected={dueDate}
-                                                        dateFormat="dd/MM/yyyy"
+                                                        dateFormat="dd/MM/yyyy HH:mm"
                                                         minDate={new Date()}
+                                                        showTimeSelect
+                                                        timeFormat="HH:mm"
+                                                        filterTime={filterPastTime}
                                                         onFocus={e => e.target.blur()}      // fix for keyboard open on focus on mobile devide
+                                                        onSelect={(date) => setDueDate(moment(date).endOf('date').toDate())}
                                                         onChange={(date) => setDueDate(date)}
                                                     />
                                                 </div>

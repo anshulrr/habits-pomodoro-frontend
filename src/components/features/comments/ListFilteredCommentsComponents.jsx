@@ -243,7 +243,7 @@ export default function ListFilteredCommentsComponent({
                                                     <div className="me-2 fw-normal text-start">
                                                         <span className={generateDateColor(comment)}>
                                                             <i className="bi bi-calendar3-event" style={{ paddingRight: "0.1rem" }} />
-                                                            {moment(comment.reviseDate).format("DD/MM/yyyy")}
+                                                            {moment(comment.reviseDate).format((moment(comment.reviseDate).isSame(new Date(), 'day')) ? 'HH:mm' : 'DD/MM/yyyy')}
                                                         </span>
                                                     </div>
                                                 }

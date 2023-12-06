@@ -310,7 +310,7 @@ export default function ListTasksRowsComponent({
                                                     task.dueDate &&
                                                     <span className={generateDateColor(task) + " me-1"}>
                                                         <i className="bi bi-calendar-check" style={{ paddingRight: "0.1rem" }} />
-                                                        {moment(task.dueDate).format("DD/MM/yyyy")}
+                                                        {moment(task.dueDate).format((moment(task.dueDate).isSame(new Date(), 'day')) ? 'HH:mm' : 'DD/MM/yyyy')}
                                                     </span>
                                                 }
 

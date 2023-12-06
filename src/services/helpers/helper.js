@@ -9,3 +9,10 @@ export const isEmpty = function (obj) {
     }
     return true;
 }
+
+export const filterPastTime = (time) => {
+    const currentDate = new Date();
+    const selectedDate = new Date(time);
+
+    return currentDate.getTime() < selectedDate.getTime();
+};

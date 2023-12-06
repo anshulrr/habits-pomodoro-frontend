@@ -6,6 +6,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 import { updateTaskApi } from 'services/api/TaskApiService';
+import { filterPastTime } from 'services/helpers/helper';
 
 export default function TaskDueDateComponent({
     setShowUpdateDueDate,
@@ -16,7 +17,7 @@ export default function TaskDueDateComponent({
     const [dueDate, setDueDate] = useState(task.dueDate ? moment(task.dueDate).toDate() : null);
 
     function createPastPomodoro() {
-        task.dueDate = moment(dueDate).endOf('date').toDate()
+        task.dueDate = dueDate;
 
         updateTaskApi({ id: task.id, task })
             .then(response => {
@@ -32,10 +33,14 @@ export default function TaskDueDateComponent({
             <DatePicker
                 className="form-control form-control-sm"
                 selected={dueDate}
-                dateFormat="dd/MM/yyyy"
+                dateFormat="dd/MM/yyyy HH:mm"
                 minDate={new Date()}
+                showTimeSelect
+                timeFormat="HH:mm"
+                filterTime={filterPastTime}
                 onFocus={e => e.target.blur()}      // fix for keyboard open on focus on mobile device
-                onChange={(dueDate) => setDueDate(dueDate)}
+                onSelect={(date) => setDueDate(moment(date).endOf('date').toDate())}
+                onChange={(date) => setDueDate(date)}
                 autoFocus
             />
             <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowUpdateDueDate(-1)}>
