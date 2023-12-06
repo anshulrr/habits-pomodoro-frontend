@@ -45,8 +45,8 @@ export default function TaskDueDateComponent({
     }
 
     return (
-        <div className="px-1 py-1">
-            <div className="input-group input-group-sm">
+        <div className="row m-0 px-1 py-1">
+            <div className="col-5 px-0 text-end">
                 <DatePicker
                     className="form-control form-control-sm"
                     selected={dueDate}
@@ -60,40 +60,48 @@ export default function TaskDueDateComponent({
                     onChange={(date) => setDueDate(date)}
                     autoFocus
                 />
-                <label className="input-group-text" htmlFor="repeat"><i className="bi bi-arrow-repeat" /></label>
-                <div className="input-group-text">
-                    <input
-                        type="checkbox"
-                        name="repeat"
-                        className="form-check-input mt-0"
-                        checked={repeat}
-                        onChange={(e) => {
-                            setRepeat(e.target.checked)
-                            setRepeatDays(1)
-                        }}
-                        id="repeat"
-                    />
-                </div>
-
-                {
-                    repeat &&
-                    <input
-                        type="number"
-                        name="repeatDays"
-                        className="form-control"
-                        value={repeatDays}
-                        min={1}
-                        placeholder="Days"
-                        onChange={(e) => setRepeatDays(e.target.value)}
-                    />
-                }
-                <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowUpdateDueDate(-1)}>
-                    <i className="bi bi-x-lg" />
-                </button>
-                <button className="btn btn-sm btn-outline-success" type="button" onClick={() => createPastPomodoro()}>
-                    Save
-                </button>
             </div>
+
+            <div className="col-7 px-0 text-end">
+                <div className="input-group input-group-sm justify-content-end">
+                    <label className="input-group-text" htmlFor="repeat">
+                        <i className="bi bi-arrow-repeat" />
+                    </label>
+                    <div className="input-group-text">
+                        <input
+                            type="checkbox"
+                            name="repeat"
+                            id="repeat"
+                            className="form-check-input mt-0"
+                            checked={repeat}
+                            onChange={(e) => {
+                                setRepeat(e.target.checked)
+                                setRepeatDays(1)
+                            }}
+                        />
+                    </div>
+
+                    {
+                        repeat &&
+                        <input
+                            type="number"
+                            name="repeatDays"
+                            className="form-control"
+                            value={repeatDays}
+                            min={1}
+                            placeholder="Days"
+                            onChange={(e) => setRepeatDays(e.target.value)}
+                        />
+                    }
+                    <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowUpdateDueDate(-1)}>
+                        <i className="bi bi-x-lg" />
+                    </button>
+                    <button className="btn btn-sm btn-outline-success" type="button" onClick={() => createPastPomodoro()}>
+                        Save
+                    </button>
+                </div>
+            </div>
+
             <div className="text-danger small">{error}</div>
         </div>
     )
