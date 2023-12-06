@@ -49,7 +49,6 @@ export default function ListTasksRowsComponent({
 
     const [currentPage, setCurrentPage] = useState(
         (status === 'added' && state.currentTasksPage) ||
-        (status === 'completed' && state.currentCompletedTasksPage) ||
         (status === 'archived' && state.currentArchivedTasksPage) ||
         1
     )
@@ -227,7 +226,6 @@ export default function ListTasksRowsComponent({
         // setElementHeight(listElement.current.offsetHeight)
         setCurrentPage(page)
         status === 'added' && (state.currentTasksPage = page);
-        status === 'completed' && (state.currentCompletedTasksPage = page);
         status === 'archived' && (state.currentArchivedTasksPage = page);
         navigate(`/`, { state, replace: true })
     }
@@ -363,15 +361,9 @@ export default function ListTasksRowsComponent({
                                                             </button>
                                                         }
                                                         {
-                                                            task.status !== 'completed' &&
-                                                            < button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateTaskStatus(task, 'completed')}>
-                                                                Mark as completed <i className="bi bi-check2-circle" />
-                                                            </button>
-                                                        }
-                                                        {
                                                             task.status !== 'archived' &&
                                                             <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateTaskStatus(task, 'archived')}>
-                                                                Mark as archived <i className="bi bi-archive" />
+                                                                Move to Archive <i className="bi bi-archive" />
                                                             </button>
                                                         }
                                                         {

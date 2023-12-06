@@ -149,7 +149,6 @@ export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setTask
                                                     <Field as="select" className="form-select form-select-sm" id="status" name="status">
                                                         {/* disabled option with value 0 for dropdown to avoid confusion of initial selection */}
                                                         <option value="added">current</option>
-                                                        <option value="completed">completed</option>
                                                         <option value="archived">archived</option>
                                                     </Field>
                                                 </div>
