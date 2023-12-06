@@ -127,7 +127,6 @@ export default function UserSettingsComponent() {
         }
         state.currentProjectsPage = 1
         state.currentTasksPage = 1;
-        state.currentCompletedTasksPage = 1;
         state.currentArchivedTasksPage = 1;
         // for page refresh: set it right away
         navigate(`/settings`, { state, replace: true });

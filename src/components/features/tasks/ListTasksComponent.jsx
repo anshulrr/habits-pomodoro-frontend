@@ -28,11 +28,7 @@ export default function ListTasksComponent({
     const [tasksCount, setTasksCount] = useState(-1)
 
     const [currentTasksHeight, setCurrentTasksHeight] = useState(0);
-    const [completedTasksHeight, setCompletedTasksHeight] = useState(0);
     const [archivedTasksHeight, setArchivedTasksHeight] = useState(0);
-
-    const [completedTasksCount, setCompletedTasksCount] = useState(0)
-    const [showCompleted, setShowCompleted] = useState(false)
 
     const [archivedTasksCount, setArchivedTasksCount] = useState(0)
     const [showArchived, setShowArchived] = useState(false)
@@ -42,7 +38,6 @@ export default function ListTasksComponent({
     const [pomodoroStatus, setPomodoroStatus] = useState(null)
 
     const [currentTasksReload, setCurrentTasksReload] = useState(0)
-    const [completedTasksReload, setCompletedTasksReload] = useState(0)
     const [archivedTasksReload, setArchivedTasksReload] = useState(0)
     const [allTasksReload, setAllTasksReload] = useState(0)
 
@@ -57,13 +52,11 @@ export default function ListTasksComponent({
             // need to set it in useEffect, instead of top level, 
             // complete component won't reload
             // as project is not a key during component call
-            setShowCompleted(state.showCompletedTasks || false)
             setShowArchived(state.showArchivedTasks || false)
 
             // console.debug('re-render ListTasksComponents')
-            getTasksCount('added', setTasksCount)
+            getTasksCount('current', setTasksCount)
             getTasksCount('archived', setArchivedTasksCount)
-            getTasksCount('completed', setCompletedTasksCount)
             if (pomodoro === null) {
                 getRunningPomodoro()
             }
@@ -249,7 +242,7 @@ export default function ListTasksComponent({
                             tasksCount > 0 &&
                             <ListTasksRowsComponent
                                 key={[pomodoroStatus, currentTasksReload, allTasksReload]}    // re-render ListTasksComponents for completed pomodoro'
-                                status={'added'}
+                                status={'current'}
                                 tasksCount={tasksCount}
                                 project={project}
                                 tag={tag}
@@ -265,56 +258,6 @@ export default function ListTasksComponent({
                                 isReversed={isReversed}
                             />
                         }
-
-                        <div className="my-1">
-                            {
-                                completedTasksCount !== 0 &&
-                                <div className="d-flex justify-content-center">
-                                    <div
-                                        onClick={() => {
-                                            state.showCompletedTasks = !showCompleted;
-                                            setShowCompleted(!showCompleted);
-                                            navigate(`/`, { state, replace: true })
-                                        }}
-                                        style={{ cursor: "pointer" }}
-                                    >
-                                        <span className="badge text-bg-light">
-                                            Completed
-                                            <span className="text-secondary ps-1" >
-                                                {!showCompleted && <i className="bi bi-eye-slash" />}
-                                                {showCompleted && <i className="bi bi-eye" />}
-                                            </span>
-                                        </span>
-                                        <span className="badge rounded-pill text-bg-secondary">
-                                            {completedTasksCount}
-                                            <i className="ms-1 bi bi-list-ul" />
-                                        </span>
-                                    </div>
-                                </div>
-                            }
-
-                            {
-                                showCompleted && completedTasksCount !== 0 &&
-                                <div className="mt-1">
-                                    <ListTasksRowsComponent
-                                        key={[completedTasksCount, completedTasksReload, allTasksReload]}
-                                        status={'completed'}
-                                        tasksCount={completedTasksCount}
-                                        project={project}
-                                        tag={tag}
-                                        tags={tags}
-                                        createNewPomodoro={createNewPomodoro}
-                                        setTasksReload={setCompletedTasksReload}
-                                        setAllTasksReload={setAllTasksReload}
-                                        elementHeight={completedTasksHeight}
-                                        setElementHeight={setCompletedTasksHeight}
-                                        startDate={startDate}
-                                        endDate={endDate}
-                                        isReversed={isReversed}
-                                    />
-                                </div>
-                            }
-                        </div>
 
                         <div className="my-1">
                             {

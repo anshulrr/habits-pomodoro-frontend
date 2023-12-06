@@ -86,9 +86,7 @@ export default function HomeComponent() {
         local_state.tag = null;
         local_state.filters = filter;
         local_state.currentTasksPage = 1;
-        local_state.currentCompletedTasksPage = 1;
         local_state.currentArchivedTasksPage = 1;
-        local_state.showCompletedTasks = false;
         local_state.showArchivedTasks = false;
         // for page refresh: set it right away
         navigate('/', { state: local_state, replace: true });
