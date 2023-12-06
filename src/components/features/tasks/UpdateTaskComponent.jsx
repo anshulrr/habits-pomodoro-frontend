@@ -18,7 +18,7 @@ export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setTask
 
     const [dueDate, setDueDate] = useState(null)
 
-    const [status, setStatus] = useState('added')
+    const [status, setStatus] = useState('current')
 
     const [showLoader, setShowLoader] = useState(true)
 
@@ -148,7 +148,7 @@ export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setTask
                                                     <label htmlFor="status">Status</label>
                                                     <Field as="select" className="form-select form-select-sm" id="status" name="status">
                                                         {/* disabled option with value 0 for dropdown to avoid confusion of initial selection */}
-                                                        <option value="added">current</option>
+                                                        <option value="current">current</option>
                                                         <option value="archived">archived</option>
                                                     </Field>
                                                 </div>

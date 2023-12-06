@@ -55,7 +55,7 @@ export default function ListTasksComponent({
             setShowArchived(state.showArchivedTasks || false)
 
             // console.debug('re-render ListTasksComponents')
-            getTasksCount('added', setTasksCount)
+            getTasksCount('current', setTasksCount)
             getTasksCount('archived', setArchivedTasksCount)
             if (pomodoro === null) {
                 getRunningPomodoro()
@@ -242,7 +242,7 @@ export default function ListTasksComponent({
                             tasksCount > 0 &&
                             <ListTasksRowsComponent
                                 key={[pomodoroStatus, currentTasksReload, allTasksReload]}    // re-render ListTasksComponents for completed pomodoro'
-                                status={'added'}
+                                status={'current'}
                                 tasksCount={tasksCount}
                                 project={project}
                                 tag={tag}
