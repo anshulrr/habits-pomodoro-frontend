@@ -379,6 +379,19 @@ export default function ListTasksRowsComponent({
                                                             </button>
                                                         }
                                                         {
+                                                            task.status === 'current' &&
+                                                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateDueDate(task)}>
+                                                                Set Due Date <i className="ps-1 bi bi-calendar-check" />
+                                                            </button>
+                                                        }
+                                                        {
+                                                            task.dueDate &&
+                                                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => markCompleted(task)}>
+                                                                Mark as Completed <i className="bi bi-calendar-check-fill" />
+                                                            </button>
+                                                        }
+                                                        <hr className="my-2" />
+                                                        {
                                                             task.status !== 'current' &&
                                                             < button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateTaskStatus(task, 'current')}>
                                                                 Move to Current <i className="bi bi-check2-circle" />
@@ -388,18 +401,6 @@ export default function ListTasksRowsComponent({
                                                             task.status !== 'archived' &&
                                                             <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateTaskStatus(task, 'archived')}>
                                                                 Move to Archive <i className="bi bi-archive" />
-                                                            </button>
-                                                        }
-                                                        {
-                                                            task.status === 'current' &&
-                                                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateDueDate(task)}>
-                                                                Set Due Date <i className="ps-1 bi bi-calendar-check" />
-                                                            </button>
-                                                        }
-                                                        {
-                                                            task.dueDate &&
-                                                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => markCompleted(task)}>
-                                                                Mark as Completed <i className="bi bi-archive" />
                                                             </button>
                                                         }
                                                         {
