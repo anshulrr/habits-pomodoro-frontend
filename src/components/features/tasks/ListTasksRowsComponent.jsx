@@ -279,14 +279,7 @@ export default function ListTasksRowsComponent({
                         task => (
                             <div key={task.id} className={"update-list-row" + (showUpdatePopupId === task.id ? " update-list-row-selected" : "")}>
                                 <div className="d-flex justify-content-start">
-                                    {
-                                        task.status === 'current' &&
-                                        <div className="my-auto ms-2 text-start">
-                                            <button type="button" className="btn btn-sm btn-outline-success px-1 py-0 align-middle" onClick={() => onCreateNewPomodoro(task)}>
-                                                <i className="bi bi-play-circle"></i>
-                                            </button>
-                                        </div>
-                                    }
+
                                     <div className="mx-2 flex-grow-1 text-start update-popup-container">
 
                                         <div className="py-2" onClick={() => setShowUpdatePopupId(task.id)}>
@@ -417,6 +410,14 @@ export default function ListTasksRowsComponent({
                                             </OutsideAlerter>
                                         }
                                     </div>
+                                    {
+                                        task.status === 'current' &&
+                                        <div className="my-auto me-2 text-start">
+                                            <button type="button" className="btn btn-sm btn-outline-success px-1 py-0 align-middle" onClick={() => onCreateNewPomodoro(task)}>
+                                                <i className="bi bi-play-circle-fill"></i>
+                                            </button>
+                                        </div>
+                                    }
                                 </div>
                                 {
                                     task.status === 'current' && showCreatePastPomodoro === task.id &&
