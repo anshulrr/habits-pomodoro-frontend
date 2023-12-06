@@ -83,7 +83,7 @@ export default function TaskDueDateComponent({
                         className="form-control"
                         value={repeatDays}
                         min={1}
-                        placeholder="Repeat After Days"
+                        placeholder="Days"
                         onChange={(e) => setRepeatDays(e.target.value)}
                     />
                 }

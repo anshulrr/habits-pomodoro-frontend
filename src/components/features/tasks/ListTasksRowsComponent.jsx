@@ -222,7 +222,7 @@ export default function ListTasksRowsComponent({
     }
 
     function markCompleted(task) {
-        if (!window.confirm(`Press OK to mark task as completed.`)) {
+        if (!window.confirm(`Press OK to mark task as completed and update the due date`)) {
             return;
         }
         if (task.repeatDays === 0) {

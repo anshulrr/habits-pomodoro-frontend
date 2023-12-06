@@ -167,7 +167,7 @@ export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setTask
                                                 {
                                                     dueDate &&
                                                     <div className="col-lg-4 col-6 mb-3">
-                                                        <label htmlFor="repeat">Repeat Due Date after Completion <i className="bi bi-arrow-repeat" /></label>
+                                                        <label htmlFor="repeat">Repeat after completion (days) <i className="bi bi-arrow-repeat" /></label>
                                                         <div className="input-group input-group-sm">
 
                                                             <div className="input-group-text">
@@ -192,7 +192,7 @@ export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setTask
                                                                     className="form-control"
                                                                     value={repeatDays}
                                                                     min={1}
-                                                                    placeholder="Repeat After Days"
+                                                                    placeholder="Days"
                                                                     onChange={(e) => setRepeatDays(e.target.value)}
                                                                 />
                                                             }
