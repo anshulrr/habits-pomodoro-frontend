@@ -221,6 +221,24 @@ export default function ListTasksRowsComponent({
         setShowTaskStats(task.id);
     }
 
+    function markCompleted(task) {
+        console.log(task);
+        if (!window.confirm(`Press OK to mark task as completed.`)) {
+            return;
+        }
+        if (task.repeatDays === 0) {
+            task.dueDate = null;
+        } else {
+            task.dueDate = moment(task.dueDate).add(task.repeatDays, 'd').toDate();
+        }
+
+        updateTaskApi({ id: task.id, task })
+            .then(() => {
+                setAllTasksReload(prevReload => prevReload + 1)
+            })
+            .catch(error => console.error(error.message))
+    }
+
     function updateOnPageChange(page) {
         // setElementHeight(listElement.current.offsetHeight)
         setCurrentPage(page)
@@ -305,9 +323,16 @@ export default function ListTasksRowsComponent({
 
                                                 {
                                                     task.dueDate &&
-                                                    <span className={generateDateColor(task) + " me-1"}>
+                                                    <span className={generateDateColor(task)} style={{ paddingRight: "0.1rem" }} >
                                                         <i className="bi bi-calendar-check" style={{ paddingRight: "0.1rem" }} />
                                                         {moment(task.dueDate).format((moment(task.dueDate).isSame(new Date(), 'day')) ? 'HH:mm' : 'DD/MM/yyyy')}
+                                                    </span>
+                                                }
+                                                {
+                                                    task.dueDate && task.repeatDays !== 0 &&
+                                                    <span>
+                                                        <i className="bi bi-arrow-repeat" style={{ paddingRight: "0.1rem" }} />
+                                                        {task.repeatDays}
                                                     </span>
                                                 }
 
@@ -369,6 +394,12 @@ export default function ListTasksRowsComponent({
                                                             task.status === 'current' &&
                                                             <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateDueDate(task)}>
                                                                 Set Due Date <i className="ps-1 bi bi-calendar-check" />
+                                                            </button>
+                                                        }
+                                                        {
+                                                            task.dueDate &&
+                                                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => markCompleted(task)}>
+                                                                Mark as Completed <i className="bi bi-archive" />
                                                             </button>
                                                         }
                                                         {
