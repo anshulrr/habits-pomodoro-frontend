@@ -222,7 +222,6 @@ export default function ListTasksRowsComponent({
     }
 
     function markCompleted(task) {
-        console.log(task);
         if (!window.confirm(`Press OK to mark task as completed.`)) {
             return;
         }
@@ -256,7 +255,7 @@ export default function ListTasksRowsComponent({
         if (task.status === 'current') {
             if (moment().diff(moment(task.dueDate)) > 0) {
                 return "text-danger";
-            } else if (moment().diff(moment(task.dueDate)) > -24 * 60 * 60 * 1000) {
+            } else if (moment(task.dueDate).isSame(new Date(), 'day')) {
                 return "text-primary";
             } else {
                 return "text-secondary";
