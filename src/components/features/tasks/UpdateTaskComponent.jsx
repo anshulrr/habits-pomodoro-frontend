@@ -83,7 +83,7 @@ export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setTask
         if (values.priority === '' || values.priority < 1) {
             errors.priority = 'Enter positive value'
         }
-        if (repeatDays === '' || repeatDays < 1) {
+        if (dueDate && repeat && (repeatDays === '' || repeatDays < 1)) {
             errors.repeatDays = 'Enter positive value'
         }
         // console.debug(values)
