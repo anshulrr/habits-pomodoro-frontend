@@ -69,7 +69,7 @@ export default function CategoryChecklistComponent({
     return (
         <div className="mb-3">
             <div className="text-start">
-                {categories.map(({ name, level }, index) => {
+                {categories.map(({ name, level, color }, index) => {
                     return (
                         <div key={index} className="form-check">
                             <input
@@ -83,10 +83,13 @@ export default function CategoryChecklistComponent({
                             />
                             <small>
                                 <div className="row">
-                                    <div className="col">
+                                    <div className="col-10">
+                                        <span style={{ color: color }}>
+                                            <i className="me-1 bi bi-link-45deg" />
+                                        </span>
                                         <label className="form-check-label" htmlFor={`custom-checkbox-${index}`}>{name}</label>
                                     </div>
-                                    <div className="col text-end text-secondary">
+                                    <div className="col-2 text-end text-secondary">
                                         {level}
                                     </div>
                                 </div>

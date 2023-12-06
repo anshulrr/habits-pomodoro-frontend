@@ -51,9 +51,29 @@ export const getProjectsPomodorosApi
         }
     }
 
+export const getProjectCategoriesPomodorosApi
+    = ({ startDate, endDate, includeCategories, subject }) => {
+        const url = `/stats/project-categories-time?startDate=${startDate}&endDate=${endDate}&include_categories=${includeCategories}`;
+        if (!subject) {
+            return apiClient.get(url)
+        } else {
+            return apiClient.get(url + `&subjectId=${subject.id}`)
+        }
+    }
+
 export const getTotalPomodorosApi
     = ({ limit, startDate, endDate, includeCategories, subject }) => {
         const url = `/stats/total-time?limit=${limit}&startDate=${startDate}&endDate=${endDate}&include_categories=${includeCategories}&timezone=${to}`;
+        if (!subject) {
+            return apiClient.get(url);
+        } else {
+            return apiClient.get(url + `&subjectId=${subject.id}`)
+        }
+    }
+
+export const getStatsPomodorosCountApi
+    = ({ startDate, endDate, subject, type, typeId }) => {
+        const url = `/stats/pomodoros-count?startDate=${startDate}&endDate=${endDate}&timezone=${to}&type=${type}&typeId=${typeId}`;
         if (!subject) {
             return apiClient.get(url);
         } else {

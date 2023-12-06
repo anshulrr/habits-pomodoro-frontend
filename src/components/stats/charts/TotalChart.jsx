@@ -58,7 +58,8 @@ export const TotalChart = ({ includeCategories, subject, statsSettings, buttonsS
                         backgroundColor: response.data[key].color,
                         data: new Array(15).fill(0),
                         level: response.data[key].level, // for sort order
-                        priority: response.data[key].priority // for sort order
+                        priority: response.data[key].priority, // for sort order
+                        maxBarThickness: 6 * 3,
                     }
                     if (limit === 'daily') {
                         for (const val of response.data[key].dataArr) {

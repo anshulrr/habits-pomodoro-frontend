@@ -10,7 +10,8 @@ export const BarChart = ({
     retrievePomodoros,
     buttonsStates,
     setButtonsStates,
-    showLoader
+    showLoader,
+    thickness
 }) => {
 
     return (
@@ -40,8 +41,8 @@ export const BarChart = ({
                                     // you can set indiviual colors for each bar
                                     backgroundColor: chartData.colors,
                                     borderWidth: 1,
-                                    barThickness: 6,  // number (pixels) or 'flex'
-                                    maxBarThickness: 8 // number (pixels)
+                                    barThickness: 10 * thickness,  // number (pixels) or 'flex'
+                                    maxBarThickness: 10 * thickness // number (pixels)
                                 }
                             ]
                         }

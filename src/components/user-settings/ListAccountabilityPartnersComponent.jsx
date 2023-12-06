@@ -10,6 +10,8 @@ export default function ListAccountabilityPartnersComponent() {
 
     const [showAddPartner, setShowAddPartner] = useState(false)
 
+    const [showLoader, setShowLoader] = useState(true)
+
     useEffect(
         () => {
             refreshPartners()
@@ -17,11 +19,12 @@ export default function ListAccountabilityPartnersComponent() {
     )
 
     function refreshPartners() {
+        setShowLoader(true)
         retrieveAccountabilityPartnerssApi()
             .then(response => {
                 // console.debug(response)
                 setPartners(response.data);
-                setEmail('');
+                setShowLoader(false)
             })
             .catch(error => console.error(error.message))
     }
@@ -46,6 +49,7 @@ export default function ListAccountabilityPartnersComponent() {
                 // console.debug(response)
                 setShowAddPartner(false)
                 refreshPartners()
+                setEmail('');
                 setErrorMessage('')
             })
             .catch(error => {
@@ -72,6 +76,12 @@ export default function ListAccountabilityPartnersComponent() {
                                         {partners.length}
                                         <i className="ps-1 bi bi-person-fill" />
                                     </span>
+                                    {
+                                        showLoader &&
+                                        <span className="loader-container-2" >
+                                            <span className="ms-2 loader-2"></span>
+                                        </span>
+                                    }
                                 </h6>
                             </div>
                             <div className="col-2 px-0 text-end">

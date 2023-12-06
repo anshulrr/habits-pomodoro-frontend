@@ -54,7 +54,7 @@ export default function ListProjectsComponent({
 
     function refreshProjects() {
         setProjects([]);
-        retrieveAllProjectsApi(PAGESIZE, (currentPage - 1) * PAGESIZE)
+        retrieveAllProjectsApi({ limit: PAGESIZE, offset: (currentPage - 1) * PAGESIZE })
             .then(response => {
                 // console.debug(response)
                 const projectsList = response.data;
@@ -192,7 +192,7 @@ export default function ListProjectsComponent({
                                                     </span>
                                                 }
                                                 <span className="">
-                                                    <i className="ps-1 bi bi-link-45deg" style={{ paddingRight: '0.1rem' }} />
+                                                    <i className="ps-1 bi bi-link-45deg" style={{ paddingRight: '0.1rem', color: proj.categoryColor }} />
                                                     {truncateString(proj.category, 8)}
                                                 </span>
                                                 <span className="">

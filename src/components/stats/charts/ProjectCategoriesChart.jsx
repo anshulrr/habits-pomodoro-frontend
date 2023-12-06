@@ -1,40 +1,37 @@
 import { useState } from "react"
 
-import { getTasksPomodorosApi } from "services/api/PomodoroApiService";
-import { calculateScaleAndLabel, calculateScaleForAdjustedAvg, truncateString } from "services/helpers/chartHelper";
+import { getProjectCategoriesPomodorosApi } from "services/api/PomodoroApiService";
+import { calculateScaleAndLabel, calculateScaleForAdjustedAvg } from "services/helpers/chartHelper";
+
 import { BarChart } from "components/stats/charts/BarChart";
 import { DoughnutChart } from "components/stats/charts/DoughnutChart";
 
-export const TasksChart = ({ includeCategories, subject, statsSettings, buttonsStates, setButtonsStates }) => {
-    // console.debug('from TasksChart', includeCategories, statsSettings)
+export const ProjectCategoriesChart = ({ includeCategories, subject, statsSettings, buttonsStates, setButtonsStates }) => {
 
     const [chartData, setChartData] = useState({ label: '', labels: [], data: [], colors: [] })
     const [showLoader, setShowLoader] = useState(false);
 
-    function retrieveTasksPomodoros({ startDate, endDate, limit, offset }) {
+    function retrieveProjectCategoriesPomodoros({ startDate, endDate, limit, offset }) {
         setShowLoader(true);
-        // console.debug(startDate, endDate)
-        // console.debug("t", includeCategories)
-
+        // calculate scale and label according to user settings
         let { scale, label } = calculateScaleAndLabel({ limit, ...statsSettings });
 
         if (offset === 0) {
             scale = calculateScaleForAdjustedAvg({ limit, scale, ...statsSettings });
         }
 
-        getTasksPomodorosApi({ startDate, endDate, includeCategories, subject })
+        getProjectCategoriesPomodorosApi({ startDate, endDate, includeCategories, subject })
             .then(response => {
-                // console.debug(response)
                 const updated_data = {
                     labels: [],
                     data: [],
                     colors: [],
-                    label: `Tasks (${label})`
+                    label: `Project Categories (${label})`
                 }
-                response.data.forEach(element => {
+                response.data.forEach((element, i) => {
                     // console.debug(element);
                     updated_data.colors.push(element[2]);
-                    updated_data.labels.push(truncateString(element[3] + ': ' + element[1], 50));
+                    updated_data.labels.push(element[1]);
                     updated_data.data.push(element[0] / scale);
                 });
                 // console.debug(updated_data);
@@ -48,26 +45,26 @@ export const TasksChart = ({ includeCategories, subject, statsSettings, buttonsS
     return (
         <>
             {
-                statsSettings.tasksChartType === 'bar' &&
+                statsSettings.projectCategoriesChartType === 'bar' &&
                 <BarChart
                     chartData={chartData}
-                    retrievePomodoros={retrieveTasksPomodoros}
+                    retrievePomodoros={retrieveProjectCategoriesPomodoros}
                     setButtonsStates={setButtonsStates}
                     buttonsStates={buttonsStates}
                     showLoader={showLoader}
-                    thickness={1}
+                    thickness={3}
                 />
             }
 
             {
-                statsSettings.tasksChartType === 'doughnut' &&
+                statsSettings.projectCategoriesChartType === 'doughnut' &&
                 <DoughnutChart
                     chartData={chartData}
-                    retrievePomodoros={retrieveTasksPomodoros}
+                    retrievePomodoros={retrieveProjectCategoriesPomodoros}
                     setButtonsStates={setButtonsStates}
                     buttonsStates={buttonsStates}
                     showLoader={showLoader}
-                    thickness={1}
+                    thickness={4}
                 />
             }
         </>

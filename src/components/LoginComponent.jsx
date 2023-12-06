@@ -75,8 +75,6 @@ export default function LoginComponent() {
                                     src="hourglass.svg"
                                     alt="hourglass"
                                     height="100%"
-                                    width="100%"
-                                    style={{ margin: "auto", display: "block" }}
                                 />
                             </div>
                         </div>

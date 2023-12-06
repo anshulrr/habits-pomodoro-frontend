@@ -13,6 +13,8 @@ import ListPomodorosComponent from "components/stats/ListPomodorosComponent";
 import CategoryChecklistComponent from "components/stats/CategoryChecklistComponent";
 import StatsSettingsComponent from "components/stats/StatsSettingsComponent";
 import SelectFriendsComponent from "components/stats//SelectFriendsComponent";
+import { CalendarChart } from "./charts/CalendarChart";
+import { ProjectCategoriesChart } from "./charts/ProjectCategoriesChart";
 
 export default function ListStatsComponent() {
 
@@ -31,6 +33,8 @@ export default function ListStatsComponent() {
 
     const [subject, setSubject] = useState(null)
     const [subjects, setSubjects] = useState([])
+
+    const [showLoader, setShowLoader] = useState(true)
 
     const [pomodorosHeight, setPomodorosHeight] = useState(0);
 
@@ -80,6 +84,7 @@ export default function ListStatsComponent() {
                 setCategories(response.data)
                 setReloadCategories(reloadCategories + 1);
                 setReload(prev => prev + 1);
+                setShowLoader(false)
             })
             .catch(error => console.error(error.message))
     }
@@ -139,6 +144,12 @@ export default function ListStatsComponent() {
                                 {includeCategories.length}/{categories.length}
                                 <i className="ms-1 bi bi-link-45deg" />
                             </span>
+                            {
+                                showLoader &&
+                                <span className="loader-container-2" >
+                                    <span className="ms-2 loader-2"></span>
+                                </span>
+                            }
                         </h6>
                         <div className="text-secondary px-1">
                             {
@@ -235,7 +246,28 @@ export default function ListStatsComponent() {
                                 </div>
                             </div>
                             <div className="col-lg-6 px-0">
-                                <div className="p-1 mb-5 chart-card">
+                                <div className="p-1 chart-card">
+                                    <ProjectCategoriesChart
+                                        key={reload}
+                                        includeCategories={includeCategories}
+                                        subject={subject}
+                                        statsSettings={statsSettings}
+                                        buttonsStates={projectsChartButtonsStates}
+                                        setButtonsStates={setProjectsChartBButtonsStates}
+                                    />
+                                </div>
+                            </div>
+                            <div className="col-lg-12 px-0">
+                                <div className="py-1 px-3 chart-card">
+                                    <CalendarChart
+                                        key={subject}
+                                        categories={categories}
+                                        subject={subject}
+                                    />
+                                </div>
+                            </div >
+                            <div className="col-lg-6 px-0 mb-5">
+                                <div className="p-1 chart-card">
                                     <ListPomodorosComponent
                                         key={reload}
                                         includeCategories={includeCategories}
