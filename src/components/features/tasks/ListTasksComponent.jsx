@@ -269,24 +269,26 @@ export default function ListTasksComponent({
                         <div className="my-1">
                             {
                                 completedTasksCount !== 0 &&
-                                <div className="d-flex justify-content-center"
-                                    onClick={() => {
-                                        state.showCompletedTasks = !showCompleted;
-                                        setShowCompleted(!showCompleted);
-                                        navigate(`/`, { state, replace: true })
-                                    }}
-                                    style={{ cursor: "pointer" }}
-                                >
-                                    <span className="badge me-1 text-bg-light">
-                                        Completed
-                                    </span>
-                                    <span className="badge rounded-pill text-bg-secondary">
-                                        {completedTasksCount}
-                                        <i className="ms-1 bi bi-list-ul" />
-                                    </span>
-                                    <div className="text-secondary px-1" >
-                                        {!showCompleted && <i className="bi bi-eye-slash" />}
-                                        {showCompleted && <i className="bi bi-eye" />}
+                                <div className="d-flex justify-content-center">
+                                    <div
+                                        onClick={() => {
+                                            state.showCompletedTasks = !showCompleted;
+                                            setShowCompleted(!showCompleted);
+                                            navigate(`/`, { state, replace: true })
+                                        }}
+                                        style={{ cursor: "pointer" }}
+                                    >
+                                        <span className="badge text-bg-light">
+                                            Completed
+                                            <span className="text-secondary ps-1" >
+                                                {!showCompleted && <i className="bi bi-eye-slash" />}
+                                                {showCompleted && <i className="bi bi-eye" />}
+                                            </span>
+                                        </span>
+                                        <span className="badge rounded-pill text-bg-secondary">
+                                            {completedTasksCount}
+                                            <i className="ms-1 bi bi-list-ul" />
+                                        </span>
                                     </div>
                                 </div>
                             }
@@ -317,24 +319,26 @@ export default function ListTasksComponent({
                         <div className="my-1">
                             {
                                 archivedTasksCount !== 0 &&
-                                <div className="d-flex justify-content-center"
-                                    onClick={() => {
-                                        state.showArchivedTasks = !showArchived;
-                                        setShowArchived(!showArchived);
-                                        navigate(`/`, { state, replace: true })
-                                    }}
-                                    style={{ cursor: "pointer" }}
-                                >
-                                    <span className="badge me-1 text-bg-light">
-                                        Archived
-                                    </span>
-                                    <span className="badge rounded-pill text-bg-secondary">
-                                        {archivedTasksCount}
-                                        <i className="ms-1 bi bi-list-ul" />
-                                    </span>
-                                    <div className="text-secondary px-1" >
-                                        {!showArchived && <i className="bi bi-eye-slash" />}
-                                        {showArchived && <i className="bi bi-eye" />}
+                                <div className="d-flex justify-content-center">
+                                    <div
+                                        onClick={() => {
+                                            state.showArchivedTasks = !showArchived;
+                                            setShowArchived(!showArchived);
+                                            navigate(`/`, { state, replace: true })
+                                        }}
+                                        style={{ cursor: "pointer" }}
+                                    >
+                                        <span className="badge text-bg-light">
+                                            Archived
+                                            <span className="text-secondary ps-1" >
+                                                {!showArchived && <i className="bi bi-eye-slash" />}
+                                                {showArchived && <i className="bi bi-eye" />}
+                                            </span>
+                                        </span>
+                                        <span className="badge rounded-pill text-bg-secondary">
+                                            {archivedTasksCount}
+                                            <i className="ms-1 bi bi-list-ul" />
+                                        </span>
                                     </div>
                                 </div>
                             }
