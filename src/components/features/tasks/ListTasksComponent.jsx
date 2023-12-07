@@ -18,7 +18,8 @@ export default function ListTasksComponent({
     isReversed,
     title,
     tag,
-    setPomodorosListReload
+    setPomodorosListReload,
+    setReloadHome
 }) {
 
     const navigate = useNavigate()
@@ -140,10 +141,8 @@ export default function ListTasksComponent({
         navigate(`/projects/${id}`, { state })
     }
 
-    const refreshAllTaskAndPomodoros = () => {
-        setAllTasksReload(prevReload => prevReload + 1)
-        setPomodorosListReload(prevReload => prevReload + 1)
-        getRunningPomodoro()
+    const refreshAll = () => {
+        setReloadHome(prev => prev + 1)
     }
 
     return (
@@ -320,7 +319,7 @@ export default function ListTasksComponent({
                             pomodoro === null &&
                             <StopwatchComponent message={'Start a new pomodoro?'} />
                         }
-                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => refreshAllTaskAndPomodoros()}>
+                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => refreshAll()}>
                             <i className="bi bi-arrow-clockwise" />
                         </button>
                     </div>

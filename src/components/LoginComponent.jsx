@@ -15,6 +15,8 @@ export default function LoginComponent() {
 
     const navigate = useNavigate();
 
+    const [reloadHome, setReloadHome] = useState(0);
+
     useEffect(
         () => {
             document.title = 'Habits Pomodoro';
@@ -150,7 +152,10 @@ export default function LoginComponent() {
             {
                 // don't load HomeComponent until userSettings is retrieved, to avoid multiple API calls during first time signin
                 authContext.isAuthenticated && authContext.userSettings &&
-                <HomeComponent />
+                <HomeComponent
+                    key={reloadHome}
+                    setReloadHome={setReloadHome}
+                />
             }
         </div >
     )

@@ -13,7 +13,7 @@ import OutsideAlerter from 'services/hooks/OutsideAlerter';
 import { useAuth } from 'services/auth/AuthContext';
 import { isEmpty } from 'services/helpers/helper';
 
-export default function HomeComponent() {
+export default function HomeComponent({ setReloadHome }) {
 
     const { state } = useLocation();
 
@@ -184,6 +184,7 @@ export default function HomeComponent() {
                                     project={project}
                                     tags={tags}
                                     setPomodorosListReload={setPomodorosListReload}
+                                    setReloadHome={setReloadHome}
                                 />
                             }
                             {
@@ -196,6 +197,7 @@ export default function HomeComponent() {
                                     isReversed={isReversed}
                                     title={tasksFilter}
                                     setPomodorosListReload={setPomodorosListReload}
+                                    setReloadHome={setReloadHome}
                                 />
                             }
 
@@ -206,6 +208,7 @@ export default function HomeComponent() {
                                     tags={tags}
                                     tag={tag}
                                     setPomodorosListReload={setPomodorosListReload}
+                                    setReloadHome={setReloadHome}
                                 />
                             }
                         </div>
