@@ -16,8 +16,24 @@ export default function TaskDueDateComponent({
 
     const [dueDate, setDueDate] = useState(task.dueDate ? moment(task.dueDate).toDate() : null);
 
+    const [repeat, setRepeat] = useState(task.repeatDays !== 0)
+    const [repeatDays, setRepeatDays] = useState(task.repeatDays)
+
+    const [error, setError] = useState('')
+
     function createPastPomodoro() {
+        setError('');
+        if (!dueDate) {
+            setError('Select due date')
+            return;
+        }
+        if (dueDate && repeat && (repeatDays === '' || repeatDays < 1)) {
+            setError('Enter positive value')
+            return;
+        }
+
         task.dueDate = dueDate;
+        task.repeatDays = repeat ? repeatDays : 0;
 
         updateTaskApi({ id: task.id, task })
             .then(response => {
@@ -29,26 +45,64 @@ export default function TaskDueDateComponent({
     }
 
     return (
-        <div className="d-flex justify-content-end px-1 py-1">
-            <DatePicker
-                className="form-control form-control-sm"
-                selected={dueDate}
-                dateFormat="dd/MM/yyyy HH:mm"
-                minDate={new Date()}
-                showTimeSelect
-                timeFormat="HH:mm"
-                filterTime={filterPastTime}
-                onFocus={e => e.target.blur()}      // fix for keyboard open on focus on mobile device
-                onSelect={(date) => setDueDate(moment(date).endOf('date').toDate())}
-                onChange={(date) => setDueDate(date)}
-                autoFocus
-            />
-            <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowUpdateDueDate(-1)}>
-                <i className="bi bi-x-lg" />
-            </button>
-            <button className="btn btn-sm btn-outline-success" type="button" onClick={() => createPastPomodoro()}>
-                Set Due Date
-            </button>
+        <div className="row m-0 px-1 py-1">
+            <div className="col-5 px-0 text-end">
+                <DatePicker
+                    className="form-control form-control-sm"
+                    selected={dueDate}
+                    dateFormat="dd/MM/yyyy HH:mm"
+                    minDate={new Date()}
+                    showTimeSelect
+                    timeFormat="HH:mm"
+                    filterTime={filterPastTime}
+                    onFocus={e => e.target.blur()}      // fix for keyboard open on focus on mobile device
+                    onSelect={(date) => setDueDate(moment(date).endOf('date').toDate())}
+                    onChange={(date) => setDueDate(date)}
+                    autoFocus
+                />
+            </div>
+
+            <div className="col-7 px-0 text-end">
+                <div className="input-group input-group-sm justify-content-end">
+                    <label className="input-group-text" htmlFor="repeat">
+                        <i className="bi bi-arrow-repeat" />
+                    </label>
+                    <div className="input-group-text">
+                        <input
+                            type="checkbox"
+                            name="repeat"
+                            id="repeat"
+                            className="form-check-input mt-0"
+                            checked={repeat}
+                            onChange={(e) => {
+                                setRepeat(e.target.checked)
+                                setRepeatDays(1)
+                            }}
+                        />
+                    </div>
+
+                    {
+                        repeat &&
+                        <input
+                            type="number"
+                            name="repeatDays"
+                            className="form-control"
+                            value={repeatDays}
+                            min={1}
+                            placeholder="Days"
+                            onChange={(e) => setRepeatDays(e.target.value)}
+                        />
+                    }
+                    <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowUpdateDueDate(-1)}>
+                        <i className="bi bi-x-lg" />
+                    </button>
+                    <button className="btn btn-sm btn-outline-success" type="button" onClick={() => createPastPomodoro()}>
+                        Save
+                    </button>
+                </div>
+            </div>
+
+            <div className="text-danger small">{error}</div>
         </div>
     )
 }

@@ -76,7 +76,7 @@ export default function PastPomodoroComponent({
             </div>
 
             <div className="col-6 px-0 text-end">
-                <div className="input-group text-end">
+                <div className="input-group justify-content-end">
                     <input
                         type="number"
                         name="minutesElpased"

@@ -221,6 +221,23 @@ export default function ListTasksRowsComponent({
         setShowTaskStats(task.id);
     }
 
+    function markCompleted(task) {
+        if (!window.confirm(`Press OK to mark task as completed and update the due date`)) {
+            return;
+        }
+        if (task.repeatDays === 0) {
+            task.dueDate = null;
+        } else {
+            task.dueDate = moment(task.dueDate).add(task.repeatDays, 'd').toDate();
+        }
+
+        updateTaskApi({ id: task.id, task })
+            .then(() => {
+                setAllTasksReload(prevReload => prevReload + 1)
+            })
+            .catch(error => console.error(error.message))
+    }
+
     function updateOnPageChange(page) {
         // setElementHeight(listElement.current.offsetHeight)
         setCurrentPage(page)
@@ -238,7 +255,7 @@ export default function ListTasksRowsComponent({
         if (task.status === 'current') {
             if (moment().diff(moment(task.dueDate)) > 0) {
                 return "text-danger";
-            } else if (moment().diff(moment(task.dueDate)) > -24 * 60 * 60 * 1000) {
+            } else if (moment(task.dueDate).isSame(new Date(), 'day')) {
                 return "text-primary";
             } else {
                 return "text-secondary";
@@ -262,14 +279,7 @@ export default function ListTasksRowsComponent({
                         task => (
                             <div key={task.id} className={"update-list-row" + (showUpdatePopupId === task.id ? " update-list-row-selected" : "")}>
                                 <div className="d-flex justify-content-start">
-                                    {
-                                        task.status === 'current' &&
-                                        <div className="my-auto ms-2 text-start">
-                                            <button type="button" className="btn btn-sm btn-outline-success px-1 py-0 align-middle" onClick={() => onCreateNewPomodoro(task)}>
-                                                <i className="bi bi-play-circle"></i>
-                                            </button>
-                                        </div>
-                                    }
+
                                     <div className="mx-2 flex-grow-1 text-start update-popup-container">
 
                                         <div className="py-2" onClick={() => setShowUpdatePopupId(task.id)}>
@@ -305,9 +315,16 @@ export default function ListTasksRowsComponent({
 
                                                 {
                                                     task.dueDate &&
-                                                    <span className={generateDateColor(task) + " me-1"}>
+                                                    <span className={generateDateColor(task)} style={{ paddingRight: "0.1rem" }} >
                                                         <i className="bi bi-calendar-check" style={{ paddingRight: "0.1rem" }} />
                                                         {moment(task.dueDate).format((moment(task.dueDate).isSame(new Date(), 'day')) ? 'HH:mm' : 'DD/MM/yyyy')}
+                                                    </span>
+                                                }
+                                                {
+                                                    task.dueDate && task.repeatDays !== 0 &&
+                                                    <span>
+                                                        <i className="bi bi-arrow-repeat" style={{ paddingRight: "0.1rem" }} />
+                                                        {task.repeatDays}
                                                     </span>
                                                 }
 
@@ -354,6 +371,19 @@ export default function ListTasksRowsComponent({
                                                             </button>
                                                         }
                                                         {
+                                                            task.status === 'current' &&
+                                                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateDueDate(task)}>
+                                                                Set Due Date <i className="ps-1 bi bi-calendar-check" />
+                                                            </button>
+                                                        }
+                                                        {
+                                                            task.dueDate &&
+                                                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => markCompleted(task)}>
+                                                                Mark as Completed <i className="bi bi-calendar-check-fill" />
+                                                            </button>
+                                                        }
+                                                        <hr className="my-2" />
+                                                        {
                                                             task.status !== 'current' &&
                                                             < button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateTaskStatus(task, 'current')}>
                                                                 Move to Current <i className="bi bi-check2-circle" />
@@ -363,12 +393,6 @@ export default function ListTasksRowsComponent({
                                                             task.status !== 'archived' &&
                                                             <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateTaskStatus(task, 'archived')}>
                                                                 Move to Archive <i className="bi bi-archive" />
-                                                            </button>
-                                                        }
-                                                        {
-                                                            task.status === 'current' &&
-                                                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateDueDate(task)}>
-                                                                Set Due Date <i className="ps-1 bi bi-calendar-check" />
                                                             </button>
                                                         }
                                                         {
@@ -386,6 +410,14 @@ export default function ListTasksRowsComponent({
                                             </OutsideAlerter>
                                         }
                                     </div>
+                                    {
+                                        task.status === 'current' &&
+                                        <div className="my-auto me-2 text-start">
+                                            <button type="button" className="btn btn-sm btn-outline-success px-1 py-0 align-middle" onClick={() => onCreateNewPomodoro(task)}>
+                                                <i className="bi bi-play-circle-fill"></i>
+                                            </button>
+                                        </div>
+                                    }
                                 </div>
                                 {
                                     task.status === 'current' && showCreatePastPomodoro === task.id &&

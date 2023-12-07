@@ -20,6 +20,9 @@ export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setTask
 
     const [status, setStatus] = useState('current')
 
+    const [repeat, setRepeat] = useState(false)
+    const [repeatDays, setRepeatDays] = useState(0)
+
     const [showLoader, setShowLoader] = useState(true)
 
     useEffect(
@@ -30,13 +33,18 @@ export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setTask
     function retrieveTask() {
         retrieveTaskApi({ id: task.id })
             .then(response => {
-                setDescription(response.data.description)
-                setPomodoroLength(response.data.pomodoroLength)
-                setPriority(response.data.priority)
-                setStatus(response.data.status)
-                if (response.data.dueDate) {
-                    setDueDate(moment(response.data.dueDate).toDate())
+                const data = response.data
+                setDescription(data.description)
+                setPomodoroLength(data.pomodoroLength)
+                setPriority(data.priority)
+                setStatus(data.status)
+                if (data.dueDate) {
+                    setDueDate(moment(data.dueDate).toDate())
                 }
+                if (data.repeatDays !== 0) {
+                    setRepeat(true)
+                }
+                setRepeatDays(data.repeatDays)
                 setShowLoader(false)
             })
             .catch(error => console.error(error.message))
@@ -51,6 +59,7 @@ export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setTask
             priority: values.priority,
             status: values.status,
             dueDate: dueDate,
+            repeatDays: repeat ? repeatDays : 0
         }
 
         updateTaskApi({ id: task.id, task: updated_task })
@@ -73,6 +82,9 @@ export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setTask
         }
         if (values.priority === '' || values.priority < 1) {
             errors.priority = 'Enter positive value'
+        }
+        if (dueDate && repeat && (repeatDays === '' || repeatDays < 1)) {
+            errors.repeatDays = 'Enter positive value'
         }
         // console.debug(values)
         return errors
@@ -127,6 +139,14 @@ export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setTask
                                                     {props.errors.priority && <div className="text-danger small">{props.errors.priority}</div>}
                                                 </div>
                                                 <div className="col-lg-4 mb-3">
+                                                    <label htmlFor="status">Status</label>
+                                                    <Field as="select" className="form-select form-select-sm" id="status" name="status">
+                                                        {/* disabled option with value 0 for dropdown to avoid confusion of initial selection */}
+                                                        <option value="current">current</option>
+                                                        <option value="archived">archived</option>
+                                                    </Field>
+                                                </div>
+                                                <div className="col-lg-4 col-6 mb-3">
                                                     <div>
                                                         <label htmlFor="dueDate">Due Date <i className="bi bi-calendar-check" /></label>
                                                     </div>
@@ -144,14 +164,44 @@ export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setTask
                                                         onChange={(date) => setDueDate(date)}
                                                     />
                                                 </div>
-                                                <div className="col-lg-4 mb-3">
-                                                    <label htmlFor="status">Status</label>
-                                                    <Field as="select" className="form-select form-select-sm" id="status" name="status">
-                                                        {/* disabled option with value 0 for dropdown to avoid confusion of initial selection */}
-                                                        <option value="current">current</option>
-                                                        <option value="archived">archived</option>
-                                                    </Field>
-                                                </div>
+                                                {
+                                                    dueDate &&
+                                                    <div className="col-lg-4 col-6 mb-3">
+                                                        <label htmlFor="repeat">Repeat after completion (days) <i className="bi bi-arrow-repeat" /></label>
+                                                        <div className="input-group input-group-sm">
+
+                                                            <div className="input-group-text">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    name="repeat"
+                                                                    className="form-check-input mt-0"
+                                                                    checked={repeat}
+                                                                    onChange={(e) => {
+                                                                        setRepeat(e.target.checked)
+                                                                        setRepeatDays(1)
+                                                                    }}
+                                                                    id="repeat"
+                                                                />
+                                                            </div>
+
+                                                            {
+                                                                repeat &&
+                                                                <input
+                                                                    type="number"
+                                                                    name="repeatDays"
+                                                                    className="form-control"
+                                                                    value={repeatDays}
+                                                                    min={1}
+                                                                    placeholder="Days"
+                                                                    onChange={(e) => setRepeatDays(e.target.value)}
+                                                                />
+                                                            }
+                                                        </div>
+                                                        <div className="text-danger small">{props.errors.repeatDays}</div>
+                                                    </div>
+                                                }
+
+
                                                 <div className="col-lg-12 mb-3 text-end">
                                                     <button className="me-2 btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowUpdateTaskId(-1)}>Cancel</button>
                                                     <button className="btn btn-sm btn-outline-success" type="submit">Save Task</button>
