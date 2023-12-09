@@ -137,19 +137,6 @@ export default function ListFilteredCommentsComponent({
     return (
         <div className="">
 
-            {
-                showCreateComment &&
-                <div className="row">
-                    <CommentComponent
-                        setComments={setComments}
-                        filterBy={filterBy}
-                        id={id}
-                        title={title}
-                        setShowCreateComment={setShowCreateComment}
-                        setCommentsCount={setCommentsCount}
-                    />
-                </div>
-            }
 
             <div className="row mb-3">
                 <div className="col-lg-12">
@@ -188,6 +175,21 @@ export default function ListFilteredCommentsComponent({
                             }
                         </div>
                     </div>
+
+
+                    {
+                        showCreateComment &&
+                        <div className="row">
+                            <CommentComponent
+                                setComments={setComments}
+                                filterBy={filterBy}
+                                id={id}
+                                title={title}
+                                setShowCreateComment={setShowCreateComment}
+                                setCommentsCount={setCommentsCount}
+                            />
+                        </div>
+                    }
 
                     {
                         commentsCount === 0 &&

@@ -46,7 +46,7 @@ export default function CommentComponent({ setComments, filterBy, id, title, set
 
     return (
         <div className="text-start mb-3">
-            <h6>Enter Comment Details</h6>
+            <p className="small mb-1">Enter Comment Details</p>
             <div>
                 <form onSubmit={handleSubmit}>
                     <div className="row">
