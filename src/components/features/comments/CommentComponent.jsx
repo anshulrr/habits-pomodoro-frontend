@@ -60,7 +60,7 @@ export default function CommentComponent({ setComments, filterBy, id, title, set
                                 <textarea
                                     className="form-control form-control-sm"
                                     name="description"
-                                    rows='5'
+                                    rows={description.split(/\r\n|\r|\n/).length}
                                     value={description}
                                     placeholder="Description"
                                     onChange={(e) => setDescription(e.target.value)}
@@ -69,7 +69,7 @@ export default function CommentComponent({ setComments, filterBy, id, title, set
                             }
                             {
                                 !showInput &&
-                                <div className="small overflow-scroll bg-white border rounded-1 border-2 p-2" style={{ height: "8rem" }}>
+                                <div className="small text-wrap bg-white border rounded-1 border-2 p-2" style={{ minHeight: "8rem" }}>
                                     <ReactMarkdown
                                         children={description}
                                     />
