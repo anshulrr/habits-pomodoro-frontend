@@ -222,9 +222,9 @@ export default function ListTasksRowsComponent({
     }
 
     function markCompleted(task) {
-        if (!window.confirm(`Press OK to mark task as completed and update the due date`)) {
-            return;
-        }
+        // if (!window.confirm(`Press OK to mark task as completed and update the due date`)) {
+        //     return;
+        // }
         if (task.repeatDays === 0) {
             task.dueDate = null;
         } else {
@@ -376,12 +376,6 @@ export default function ListTasksRowsComponent({
                                                                 Set Due Date <i className="ps-1 bi bi-calendar-check" />
                                                             </button>
                                                         }
-                                                        {
-                                                            task.dueDate &&
-                                                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => markCompleted(task)}>
-                                                                Mark as Completed <i className="bi bi-calendar-check-fill" />
-                                                            </button>
-                                                        }
                                                         <hr className="my-2" />
                                                         {
                                                             task.status !== 'current' &&
@@ -410,6 +404,15 @@ export default function ListTasksRowsComponent({
                                             </OutsideAlerter>
                                         }
                                     </div>
+
+                                    {
+                                        task.dueDate &&
+                                        <div className="my-auto me-1 text-start">
+                                            <button type="button" className="btn btn-sm btn-outline-dark px-1 py-0 align-middle" onClick={() => markCompleted(task)}>
+                                                <i className="bi bi-calendar-check-fill" />
+                                            </button>
+                                        </div>
+                                    }
                                     {
                                         task.status === 'current' &&
                                         <div className="my-auto me-2 text-start">
