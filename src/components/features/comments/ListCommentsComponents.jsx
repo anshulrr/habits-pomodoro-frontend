@@ -94,19 +94,16 @@ export default function ListCommentsComponent({
                         </div>
                     }
 
-                    {
-                        (filterBy !== 'user' || includedCategoryIds.length !== 0) &&
-                        <ListFilteredCommentsComponent
-                            key={[includedCategoryIds, filterWithReviseDate]}
-                            filterBy={filterBy}
-                            id={id}
-                            title={title}
-                            projectColor={projectColor}
-                            categoryIds={includedCategoryIds}
-                            filterWithReviseDate={filterWithReviseDate}
-                            tags={tags}
-                        />
-                    }
+                    <ListFilteredCommentsComponent
+                        key={[includedCategoryIds, filterWithReviseDate]}
+                        filterBy={filterBy}
+                        id={id}
+                        title={title}
+                        projectColor={projectColor}
+                        categoryIds={includedCategoryIds}
+                        filterWithReviseDate={filterWithReviseDate}
+                        tags={tags}
+                    />
 
                 </div >
 

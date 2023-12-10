@@ -6,7 +6,7 @@ import moment from 'moment'
 
 import { createCommentApi } from 'services/api/CommentApiService'
 import { truncateParagraph } from 'services/helpers/listsHelper';
-import { filterPastTime } from 'services/helpers/helper';
+import { calculateTextAreaRows, filterPastTime } from 'services/helpers/helper';
 
 export default function CommentComponent({ setComments, filterBy, id, title, setShowCreateComment, setCommentsCount }) {
 
@@ -60,7 +60,7 @@ export default function CommentComponent({ setComments, filterBy, id, title, set
                                 <textarea
                                     className="form-control form-control-sm"
                                     name="description"
-                                    rows={description.split(/\r\n|\r|\n/).length}
+                                    rows={calculateTextAreaRows(description)}
                                     value={description}
                                     placeholder="Description"
                                     onChange={(e) => setDescription(e.target.value)}
