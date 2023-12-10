@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export function timeToDisplay(total_minutes) {
     if (total_minutes < 60) {
         return Math.floor(total_minutes);
@@ -26,4 +28,14 @@ export const truncateParagraph = (para, n = 30) => {
     } else {
         return [para, false];
     }
+}
+
+export const formatDate = (date) => {
+    let format = 'yyyy MMM D, H:mm';
+    if (moment(date).isSame(new Date(), 'day')) {
+        format = 'H:mm';
+    } else if (moment(date).isSame(new Date(), 'year')) {
+        format = 'MMM D, H:mm'
+    }
+    return moment(date).format(format);
 }

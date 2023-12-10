@@ -7,11 +7,11 @@ import moment from "moment";
 import { useAuth } from "services/auth/AuthContext";
 import { retrieveAllCommentsApi, getCommentsCountApi, getCommentsTagsApi } from "services/api/CommentApiService";
 import Pagination from "services/pagination/Pagination"
+import { formatDate, truncateParagraph } from "services/helpers/listsHelper";
 
 import CommentComponent from "./CommentComponent";
 import UpdateCommentComponent from "./UpdateCommentComponent";
 import MapCommentTagsComponent from "../tags/MapCommentTagsComponent";
-import { truncateParagraph } from "services/helpers/listsHelper";
 
 export default function ListFilteredCommentsComponent({
     filterBy,
@@ -245,7 +245,7 @@ export default function ListFilteredCommentsComponent({
                                                     <div className="me-2 fw-normal text-start">
                                                         <span className={generateDateColor(comment)}>
                                                             <i className="bi bi-calendar3-event" style={{ paddingRight: "0.1rem" }} />
-                                                            {moment(comment.reviseDate).format((moment(comment.reviseDate).isSame(new Date(), 'day')) ? 'HH:mm' : 'DD/MM/yyyy')}
+                                                            {formatDate(comment.reviseDate)}
                                                         </span>
                                                     </div>
                                                 }

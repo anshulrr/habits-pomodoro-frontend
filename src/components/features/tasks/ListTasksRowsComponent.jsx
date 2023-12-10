@@ -6,7 +6,7 @@ import moment from "moment";
 import { useAuth } from "services/auth/AuthContext";
 import Pagination from "services/pagination/Pagination";
 import { getTasksTimeElapsedApi, retrieveAllTasksApi, updateTaskApi } from "services/api/TaskApiService";
-import { timeToDisplay } from "services/helpers/listsHelper";
+import { formatDate, timeToDisplay } from "services/helpers/listsHelper";
 import OutsideAlerter from "services/hooks/OutsideAlerter";
 import { getTasksTagsApi } from "services/api/TagApiService";
 
@@ -317,7 +317,7 @@ export default function ListTasksRowsComponent({
                                                     task.dueDate &&
                                                     <span className={generateDateColor(task)} style={{ paddingRight: "0.1rem" }} >
                                                         <i className="bi bi-calendar-check" style={{ paddingRight: "0.1rem" }} />
-                                                        {moment(task.dueDate).format((moment(task.dueDate).isSame(new Date(), 'day')) ? 'HH:mm' : 'DD/MM/yyyy')}
+                                                        {formatDate(task.dueDate)}
                                                     </span>
                                                 }
                                                 {
