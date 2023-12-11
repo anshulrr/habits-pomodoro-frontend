@@ -55,8 +55,7 @@ export const Buttons = ({
             end = date.clone().endOf('day');
             str = date.format('DD MMM');
         } else if (limit === 'weekly') {
-            // substract 1 day first and add it later: to make monday as start of the week
-            const date = moment().add(-1, 'd').add(offset, 'w');
+            const date = moment().add(offset, 'w');
             start = date.clone().startOf('isoWeek');
             end = date.clone().endOf('isoWeek');
             str = start.format('DD MMM') + "-" + end.format('DD MMM');
