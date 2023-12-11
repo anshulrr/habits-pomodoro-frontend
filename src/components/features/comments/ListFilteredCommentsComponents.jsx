@@ -7,7 +7,7 @@ import moment from "moment";
 import { useAuth } from "services/auth/AuthContext";
 import { retrieveAllCommentsApi, getCommentsCountApi, getCommentsTagsApi } from "services/api/CommentApiService";
 import Pagination from "services/pagination/Pagination"
-import { formatDate, truncateParagraph } from "services/helpers/listsHelper";
+import { formatDate, generateDateColor, truncateParagraph } from "services/helpers/listsHelper";
 
 import CommentComponent from "./CommentComponent";
 import UpdateCommentComponent from "./UpdateCommentComponent";
@@ -117,16 +117,6 @@ export default function ListFilteredCommentsComponent({
                 setComments([...map.values()]);
             })
             .catch(error => console.error(error.message))
-    }
-
-    function generateDateColor(comment) {
-        if (moment().diff(moment(comment.reviseDate)) > 0) {
-            return "text-danger";
-        } else if (moment(comment.reviseDate).isSame(new Date(), 'day')) {
-            return "text-primary";
-        } else {
-            return "text-secondary";
-        }
     }
 
     function reloadComments() {

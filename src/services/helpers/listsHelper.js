@@ -39,3 +39,13 @@ export const formatDate = (date) => {
     }
     return moment(date).format(format);
 }
+
+export const generateDateColor = (date) => {
+    if (moment().diff(moment(date)) > 0) {
+        return "text-danger";
+    } else if (moment(date).isSame(new Date(), 'day')) {
+        return "text-primary";
+    } else {
+        return "text-secondary";
+    }
+}

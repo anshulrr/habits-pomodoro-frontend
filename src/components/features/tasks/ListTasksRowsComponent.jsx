@@ -6,7 +6,7 @@ import moment from "moment";
 import { useAuth } from "services/auth/AuthContext";
 import Pagination from "services/pagination/Pagination";
 import { getTasksTimeElapsedApi, retrieveAllTasksApi, updateTaskApi } from "services/api/TaskApiService";
-import { formatDate, timeToDisplay } from "services/helpers/listsHelper";
+import { formatDate, generateDateColor, timeToDisplay } from "services/helpers/listsHelper";
 import OutsideAlerter from "services/hooks/OutsideAlerter";
 import { getTasksTagsApi } from "services/api/TagApiService";
 
@@ -249,20 +249,6 @@ export default function ListTasksRowsComponent({
     function onCreateNewPomodoro(task) {
         // setElementHeight(listElement.current.offsetHeight)
         createNewPomodoro(task, task.project)
-    }
-
-    function generateDateColor(task) {
-        if (task.status === 'current') {
-            if (moment().diff(moment(task.dueDate)) > 0) {
-                return "text-danger";
-            } else if (moment(task.dueDate).isSame(new Date(), 'day')) {
-                return "text-primary";
-            } else {
-                return "text-secondary";
-            }
-        } else {
-            return "text-success";
-        }
     }
 
     return (
