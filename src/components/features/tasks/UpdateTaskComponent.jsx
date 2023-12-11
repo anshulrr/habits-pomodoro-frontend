@@ -164,42 +164,41 @@ export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setTask
                                                         onChange={(date) => setDueDate(date)}
                                                     />
                                                 </div>
-                                                {
-                                                    dueDate &&
-                                                    <div className="col-lg-4 col-6 mb-3">
-                                                        <label htmlFor="repeat">Repeat after completion (days) <i className="bi bi-arrow-repeat" /></label>
-                                                        <div className="input-group input-group-sm">
+                                                <div className="col-lg-4 col-6 mb-3">
+                                                    <label htmlFor="repeat">Repeat after (days) <i className="bi bi-arrow-repeat" /></label>
+                                                    <div className="input-group input-group-sm">
 
-                                                            <div className="input-group-text">
-                                                                <input
-                                                                    type="checkbox"
-                                                                    name="repeat"
-                                                                    className="form-check-input mt-0"
-                                                                    checked={repeat}
-                                                                    onChange={(e) => {
-                                                                        setRepeat(e.target.checked)
-                                                                        setRepeatDays(1)
-                                                                    }}
-                                                                    id="repeat"
-                                                                />
-                                                            </div>
-
-                                                            {
-                                                                repeat &&
-                                                                <input
-                                                                    type="number"
-                                                                    name="repeatDays"
-                                                                    className="form-control"
-                                                                    value={repeatDays}
-                                                                    min={1}
-                                                                    placeholder="Days"
-                                                                    onChange={(e) => setRepeatDays(e.target.value)}
-                                                                />
-                                                            }
+                                                        <div className="input-group-text">
+                                                            <input
+                                                                type="checkbox"
+                                                                name="repeat"
+                                                                id="repeat"
+                                                                className="form-check-input mt-0"
+                                                                checked={repeat}
+                                                                disabled={dueDate === null}
+                                                                onChange={(e) => {
+                                                                    const val = e.target.checked;
+                                                                    setRepeat(val)
+                                                                    setRepeatDays(val ? 1 : 0);
+                                                                }}
+                                                            />
                                                         </div>
-                                                        <div className="text-danger small">{props.errors.repeatDays}</div>
+                                                        <label className="input-group-text" htmlFor="repeat">
+                                                            <i className="bi bi-arrow-repeat" />
+                                                        </label>
+                                                        <input
+                                                            type="number"
+                                                            name="repeatDays"
+                                                            className="form-control"
+                                                            value={repeatDays}
+                                                            min={1}
+                                                            placeholder="Days"
+                                                            disabled={!repeat}
+                                                            onChange={(e) => setRepeatDays(e.target.value)}
+                                                        />
                                                     </div>
-                                                }
+                                                    <div className="text-danger small">{props.errors.repeatDays}</div>
+                                                </div>
 
 
                                                 <div className="col-lg-12 mb-3 text-end">

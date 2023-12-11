@@ -64,9 +64,6 @@ export default function TaskDueDateComponent({
 
             <div className="col-7 px-0 text-end">
                 <div className="input-group input-group-sm justify-content-end">
-                    <label className="input-group-text" htmlFor="repeat">
-                        <i className="bi bi-arrow-repeat" />
-                    </label>
                     <div className="input-group-text">
                         <input
                             type="checkbox"
@@ -74,25 +71,28 @@ export default function TaskDueDateComponent({
                             id="repeat"
                             className="form-check-input mt-0"
                             checked={repeat}
+                            disabled={dueDate === null}
                             onChange={(e) => {
-                                setRepeat(e.target.checked)
-                                setRepeatDays(1)
+                                const val = e.target.checked;
+                                setRepeat(val)
+                                setRepeatDays(val ? 1 : 0);
                             }}
                         />
                     </div>
+                    <label className="input-group-text" htmlFor="repeat">
+                        <i className="bi bi-arrow-repeat" />
+                    </label>
+                    <input
+                        type="number"
+                        name="repeatDays"
+                        className="form-control"
+                        value={repeatDays}
+                        min={1}
+                        placeholder="Days"
+                        disabled={!repeat}
+                        onChange={(e) => setRepeatDays(e.target.value)}
+                    />
 
-                    {
-                        repeat &&
-                        <input
-                            type="number"
-                            name="repeatDays"
-                            className="form-control"
-                            value={repeatDays}
-                            min={1}
-                            placeholder="Days"
-                            onChange={(e) => setRepeatDays(e.target.value)}
-                        />
-                    }
                     <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowUpdateDueDate(-1)}>
                         <i className="bi bi-x-lg" />
                     </button>
