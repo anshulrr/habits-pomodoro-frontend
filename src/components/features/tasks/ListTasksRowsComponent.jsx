@@ -301,7 +301,7 @@ export default function ListTasksRowsComponent({
 
                                                 {
                                                     task.dueDate &&
-                                                    <span className={generateDateColor(task)} style={{ paddingRight: "0.1rem" }} >
+                                                    <span className={generateDateColor(task.dueDate)} style={{ paddingRight: "0.1rem" }} >
                                                         <i className="bi bi-calendar-check" style={{ paddingRight: "0.1rem" }} />
                                                         {formatDate(task.dueDate)}
                                                     </span>

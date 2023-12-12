@@ -233,7 +233,7 @@ export default function ListFilteredCommentsComponent({
                                                 {
                                                     comment.reviseDate &&
                                                     <div className="me-2 fw-normal text-start">
-                                                        <span className={generateDateColor(comment)}>
+                                                        <span className={generateDateColor(comment.reviseDate)}>
                                                             <i className="bi bi-calendar3-event" style={{ paddingRight: "0.1rem" }} />
                                                             {formatDate(comment.reviseDate)}
                                                         </span>
