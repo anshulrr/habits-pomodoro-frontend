@@ -12,6 +12,7 @@ import UserCommentsComponent from './comments/UserCommentsComponent';
 import OutsideAlerter from 'services/hooks/OutsideAlerter';
 import { useAuth } from 'services/auth/AuthContext';
 import { isEmpty } from 'services/helpers/helper';
+import { retrieveAllProjectCategoriesApi } from 'services/api/ProjectCategoryApiService';
 
 export default function HomeComponent({ setReloadHome }) {
 
@@ -43,6 +44,8 @@ export default function HomeComponent({ setReloadHome }) {
     const [pomodorosHeight, setPomodorosHeight] = useState(0);
     const [pomodorosListReload, setPomodorosListReload] = useState(0)
 
+    const [categoryIds, setCategoryIds] = useState([]);
+
     useEffect(
         () => {
             document.title = 'Habits Pomodoro';
@@ -50,6 +53,11 @@ export default function HomeComponent({ setReloadHome }) {
             if (tasksFilter) {
                 fetchTasks(tasksFilter);
             }
+            retrieveAllProjectCategoriesApi(100, 0)
+                .then(response => {
+                    setCategoryIds(response.data.map(c => c.id));
+                })
+                .catch(error => console.error(error.message))
         },
         [] // eslint-disable-line react-hooks/exhaustive-deps
     )
@@ -217,17 +225,20 @@ export default function HomeComponent({ setReloadHome }) {
 
                 <div className="col-lg-4">
                     <div className="mt-3 mb-5 bg-white text-start text-secondary">
-                        <ListPomodorosComponent
-                            key={[pomodorosListReload]}
-                            title={"Today's Pomodoros"}
-                            elementHeight={pomodorosHeight}
-                            setElementHeight={setPomodorosHeight}
-                            setPomodorosListReload={setPomodorosListReload}
-                            setTasksComponentReload={setTasksComponentReload}
-                            tags={tags}
-                            setProjects={setProjects}
-                            setTodaysPomodorosMap={setTodaysPomodorosMap}
-                        />
+                        {
+                            categoryIds.length > 0 &&
+                            <ListPomodorosComponent
+                                key={[pomodorosListReload]}
+                                includeCategories={categoryIds}
+                                title={"Today's Pomodoros"}
+                                elementHeight={pomodorosHeight}
+                                setElementHeight={setPomodorosHeight}
+                                setTasksComponentReload={setTasksComponentReload}
+                                tags={tags}
+                                setProjects={setProjects}
+                                setTodaysPomodorosMap={setTodaysPomodorosMap}
+                            />
+                        }
                     </div >
                 </div >
             </div>

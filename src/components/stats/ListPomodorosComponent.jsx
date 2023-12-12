@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react"
 import moment from "moment"
 
 import { deletePastPomodoroApi, getPomodorosApi } from "services/api/PomodoroApiService";
-import { retrieveAllProjectCategoriesApi } from "services/api/ProjectCategoryApiService";
 import { timeToDisplay } from "services/helpers/listsHelper";
 
 import { Buttons } from "components/stats/charts/Buttons";
@@ -33,7 +32,7 @@ export default function ListPomodorosComponent({
     const [showCommentsId, setShowCommentsId] = useState(-1);
     const [commentsTitle, setCommentsTitle] = useState('')
 
-    const [reload, setReload] = useState(false);
+    const [reload, setReload] = useState(0);
 
     const [showPomodoroUpdateId, setShowPomodoroUpdateId] = useState(-1);
 
@@ -42,16 +41,14 @@ export default function ListPomodorosComponent({
             // console.debug('re-render ListPomodorosComponent')
             async function fetchAPI() {
                 try {
-                    if (!includeCategories) {
+                    if (title === "Today's Pomodoros") {
                         // TODO: decide limit
                         // TODO: find better way of getting all categories
-                        const response = await retrieveAllProjectCategoriesApi(100, 0);
-                        const allCategories = response.data.map(c => c.id);
-                        // console.debug('useEffect', { allCategories, includeCategories })
+                        // console.debug('useEffect', { includeCategories })
                         // initial state
                         const startDate = moment().startOf('day').toISOString();
                         const endDate = moment().startOf('day').add(1, 'd').toISOString();
-                        retrieveTodayPomodoros({ startDate, endDate, allCategories })
+                        retrieveTodayPomodoros({ startDate, endDate })
                     }
                 } catch (error) {
                     console.error(error.message)
@@ -75,11 +72,11 @@ export default function ListPomodorosComponent({
         }
     }
 
-    function retrieveTodayPomodoros({ startDate, endDate, allCategories }) {
+    function retrieveTodayPomodoros({ startDate, endDate }) {
         // console.debug('api call', { allCategories, includeCategories })
         setPomodorosGroup([]);
         setPomodorosCount(-1);
-        getPomodorosApi({ startDate, endDate, includeCategories: allCategories || includeCategories, subject })
+        getPomodorosApi({ startDate, endDate, includeCategories, subject })
             .then(response => {
                 // console.debug(response)
                 response.data.map((x, index) => x.index = response.data.length - index);
@@ -133,8 +130,10 @@ export default function ListPomodorosComponent({
         deletePastPomodoroApi(pomodoro.id)
             .then(response => {
                 // console.debug(response)
-                setReload(!reload);
-                setTasksComponentReload(prev => prev + 1);
+                setReload(prev => prev + 1);
+                if (setTasksComponentReload) {
+                    setTasksComponentReload(prev => prev + 1);
+                }
                 // const total = pomodorosGroup.reduce((acc, curr) => acc + Math.round(curr.timeElapsed / 60), 0);
                 // setTotalTimeElapsed(timeToDisplay(total - pomodoro.timeElapsed / 60));
                 // setPomodorosGroup(pomodorosGroup.filter(p => p.id !== pomodoro.id))
@@ -170,9 +169,10 @@ export default function ListPomodorosComponent({
                 </span>
             </h6>
             {
-                includeCategories &&
+                title === 'Pomodoros' &&
                 <div className="mb-2">
                     <Buttons
+                        key={[reload]}
                         retrievePomodoros={retrieveTodayPomodoros}
                         buttonsStates={buttonsStates}
                         setButtonsStates={setButtonsStates}
