@@ -160,7 +160,7 @@ export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setTask
                                                 </div>
                                                 <div className="col-lg-4 col-6 mb-3">
                                                     <div>
-                                                        <label htmlFor="dueDate">Due Date <i className="bi bi-calendar-check" /></label>
+                                                        <label htmlFor="dueDate">Due Date & Time<i className="bi bi-calendar-check" /></label>
                                                     </div>
                                                     <ReactDatePicker
                                                         className="form-control form-control-sm"

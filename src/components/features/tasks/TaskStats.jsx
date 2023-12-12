@@ -82,6 +82,12 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
                                 endDate={endDate}
                                 values={chartData.data}
                                 showWeekdayLabels={true}
+                                classForValue={(value) => {
+                                    if (!value) {
+                                        return 'color-empty';
+                                    }
+                                    return `color-${task.type}`;
+                                }}
                             />
                         </div >
                     </div >

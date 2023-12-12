@@ -365,7 +365,7 @@ export default function ListTasksRowsComponent({
                                                         {
                                                             task.status === 'current' &&
                                                             <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateDueDate(task)}>
-                                                                Set Due Date <i className="ps-1 bi bi-calendar-check" />
+                                                                Set Due Date & Time <i className="ps-1 bi bi-calendar-check" />
                                                             </button>
                                                         }
                                                         <hr className="my-2" />
