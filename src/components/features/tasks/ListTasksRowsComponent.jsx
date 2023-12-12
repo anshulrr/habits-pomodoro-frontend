@@ -45,7 +45,13 @@ export default function ListTasksRowsComponent({
 
     const PAGESIZE = userSettings.pageTasksCount;
 
-    const [tasks, setTasks] = useState([])
+    const [tasks, setTasks] = useState([]);
+
+    const COLOR_MAP = {
+        'neutral': '',
+        'good': 'text-success',
+        'bad': 'text-danger'
+    }
 
     const [currentPage, setCurrentPage] = useState(
         (status === 'current' && state.currentTasksPage) ||
@@ -269,7 +275,7 @@ export default function ListTasksRowsComponent({
                                     <div className="mx-2 flex-grow-1 text-start update-popup-container">
 
                                         <div className="py-2" onClick={() => setShowUpdatePopupId(task.id)}>
-                                            <div className={(task.status === 'archived' ? "text-secondary" : "") + " description"}>
+                                            <div className={(task.status === 'archived' ? "text-secondary" : "") + " description " + COLOR_MAP[task.type]}>
                                                 {task.description}
                                             </div>
                                             <div className="subscript text-secondary">
