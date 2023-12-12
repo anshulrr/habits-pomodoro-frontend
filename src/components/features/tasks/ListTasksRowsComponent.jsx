@@ -264,7 +264,8 @@ export default function ListTasksRowsComponent({
 
     function updateTasksDueDateColor() {
         setTasks(tasks => tasks.map(task => {
-            task.dueDateColor = generateDueDateColor(task);
+            task.dueDateColor = 'text-' + generateDueDateColor(task);
+            task.dueDateButtonColor = 'btn-outline-' + generateDueDateColor(task);
             return task;
         }))
         // setTimeout to update color every 30 minutes
@@ -286,14 +287,13 @@ export default function ListTasksRowsComponent({
         } else {
             if (moment(date).isSame(new Date(), 'day')) {
                 if (moment().diff(moment(date)) > 0) {
-                    return "text-primary";
+                    return "primary";
                 } else if (task.todaysTimeElapsed > 0) {
-                    return "text-danger";
+                    return "danger";
                 }
-            } else {
-                return "text-secondary";
             }
         }
+        return "secondary";
     }
 
     return (
@@ -439,7 +439,7 @@ export default function ListTasksRowsComponent({
                                     {
                                         task.dueDate &&
                                         <div className="my-auto me-1 text-start">
-                                            <button type="button" className="btn btn-sm btn-outline-dark px-1 py-0 align-middle" onClick={() => markCompleted(task)}>
+                                            <button type="button" className={(task.dueDateButtonColor ? task.dueDateButtonColor : "btn-outline-secondary") + " btn btn-sm px-1 py-0 align-middle"} onClick={() => markCompleted(task)}>
                                                 <i className="bi bi-calendar-check" />
                                             </button>
                                         </div>

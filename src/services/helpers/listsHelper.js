@@ -42,10 +42,10 @@ export const formatDate = (date) => {
 
 export const generateDateColor = (date) => {
     if (moment().diff(moment(date)) > 0) {
-        return "text-danger";
+        return "danger";
     } else if (moment(date).isSame(new Date(), 'day')) {
-        return "text-primary";
+        return "primary";
     } else {
-        return "text-secondary";
+        return "secondary";
     }
 }
