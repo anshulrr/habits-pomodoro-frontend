@@ -152,7 +152,7 @@ export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setTask
                                                 </div>
                                                 <div className="col-lg-4 mb-3">
                                                     <label htmlFor="type">Habit Type</label>
-                                                    <Field as="select" className="form-select form-select-sm" id="type" name="type">
+                                                    <Field as="select" className="form-select form-select-sm" id="type" name="type" onChange={(e) => { setType(e.target.value) }}>
                                                         <option value="neutral">neutral</option>
                                                         <option value="good">good</option>
                                                         <option value="bad">bad</option>
@@ -160,7 +160,7 @@ export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setTask
                                                 </div>
                                                 <div className="col-lg-4 col-6 mb-3">
                                                     <div>
-                                                        <label htmlFor="dueDate">Due Date & Time<i className="bi bi-calendar-check" /></label>
+                                                        <label htmlFor="dueDate">{type === 'bad' ? 'Restrain' : 'Due'} Time <i className="bi bi-calendar-check" /></label>
                                                     </div>
                                                     <ReactDatePicker
                                                         className="form-control form-control-sm"

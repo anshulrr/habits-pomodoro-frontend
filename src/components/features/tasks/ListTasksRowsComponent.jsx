@@ -69,6 +69,8 @@ export default function ListTasksRowsComponent({
     const [showCommentsId, setShowCommentsId] = useState(-1);
     const [commentsTitle, setCommentsTitle] = useState('')
 
+    const [timeoutIdObj, setTimeoutIdObj] = useState({ id: 0 });
+
     useEffect(
         () => {
             const observer = new ResizeObserver(handleResize);
@@ -76,6 +78,8 @@ export default function ListTasksRowsComponent({
             return () => {
                 // Cleanup the observer by unobserving all elements
                 observer.disconnect();
+                // console.debug(timeoutIdObj);
+                clearTimeout(timeoutIdObj.id);
             };
         }, [] // eslint-disable-line react-hooks/exhaustive-deps
     )
@@ -159,6 +163,7 @@ export default function ListTasksRowsComponent({
                     map.get(response.data[i][0]).todaysTimeElapsed = parseInt(response.data[i][1]);
                 }
                 setTasks([...map.values()]);
+                updateTasksDueDateColor();
             })
             .catch(error => console.error(error.message))
     }
@@ -257,6 +262,40 @@ export default function ListTasksRowsComponent({
         createNewPomodoro(task, task.project)
     }
 
+    function updateTasksDueDateColor() {
+        setTasks(tasks => tasks.map(task => {
+            task.dueDateColor = generateDueDateColor(task);
+            return task;
+        }))
+        // setTimeout to update color every 30 minutes
+        const timeRemaining = 3 * 60 - (moment().minutes() % 3) * 60 - moment().seconds();
+        const id = (setTimeout(() => updateTasksDueDateColor(), timeRemaining * 1000))
+        // console.debug(moment().minutes(), timeRemaining);
+        // console.debug(id);
+        // NOTE: primitive data type not working hence using obj
+        setTimeoutIdObj(prev => {
+            prev.id = id;
+            return prev;
+        });
+    }
+
+    const generateDueDateColor = (task) => {
+        const date = task.dueDate;
+        if (task.type !== 'bad') {
+            return generateDateColor(date)
+        } else {
+            if (moment(date).isSame(new Date(), 'day')) {
+                if (moment().diff(moment(date)) > 0) {
+                    return "text-primary";
+                } else if (task.todaysTimeElapsed > 0) {
+                    return "text-danger";
+                }
+            } else {
+                return "text-secondary";
+            }
+        }
+    }
+
     return (
         <>
             {
@@ -307,7 +346,7 @@ export default function ListTasksRowsComponent({
 
                                                 {
                                                     task.dueDate &&
-                                                    <span className={generateDateColor(task.dueDate)} style={{ paddingRight: "0.1rem" }} >
+                                                    <span className={task.dueDateColor} style={{ paddingRight: "0.1rem" }} >
                                                         <i className="bi bi-calendar-check" style={{ paddingRight: "0.1rem" }} />
                                                         {formatDate(task.dueDate)}
                                                     </span>
@@ -365,7 +404,7 @@ export default function ListTasksRowsComponent({
                                                         {
                                                             task.status === 'current' &&
                                                             <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateDueDate(task)}>
-                                                                Set Due Date & Time <i className="ps-1 bi bi-calendar-check" />
+                                                                {task.type === 'bad' ? 'Restrain' : 'Due'} Time <i className="ps-1 bi bi-calendar-check" />
                                                             </button>
                                                         }
                                                         <hr className="my-2" />
@@ -401,7 +440,7 @@ export default function ListTasksRowsComponent({
                                         task.dueDate &&
                                         <div className="my-auto me-1 text-start">
                                             <button type="button" className="btn btn-sm btn-outline-dark px-1 py-0 align-middle" onClick={() => markCompleted(task)}>
-                                                <i className="bi bi-calendar-check-fill" />
+                                                <i className="bi bi-calendar-check" />
                                             </button>
                                         </div>
                                     }
@@ -409,7 +448,7 @@ export default function ListTasksRowsComponent({
                                         task.status === 'current' &&
                                         <div className="my-auto me-2 text-start">
                                             <button type="button" className="btn btn-sm btn-outline-success px-1 py-0 align-middle" onClick={() => onCreateNewPomodoro(task)}>
-                                                <i className="bi bi-play-circle-fill"></i>
+                                                <i className="bi bi-play-circle"></i>
                                             </button>
                                         </div>
                                     }
