@@ -86,3 +86,11 @@
         height: 30vh;
     }
 }
+
+.about-page div {
+    margin-bottom: 8px;
+}
+
+.about-page li {
+    margin-bottom: 8px;
+}
