@@ -20,6 +20,8 @@ export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setTask
 
     const [status, setStatus] = useState('current')
 
+    const [type, setType] = useState('neutral')
+
     const [repeat, setRepeat] = useState(false)
     const [repeatDays, setRepeatDays] = useState(0)
 
@@ -38,6 +40,7 @@ export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setTask
                 setPomodoroLength(data.pomodoroLength)
                 setPriority(data.priority)
                 setStatus(data.status)
+                setType(data.type)
                 if (data.dueDate) {
                     setDueDate(moment(data.dueDate).toDate())
                 }
@@ -58,6 +61,7 @@ export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setTask
             pomodoroLength: values.pomodoroLength,
             priority: values.priority,
             status: values.status,
+            type: values.type,
             dueDate: dueDate,
             repeatDays: repeat ? repeatDays : 0
         }
@@ -111,7 +115,7 @@ export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setTask
                     {
                         !showLoader &&
                         <div>
-                            <Formik initialValues={{ description, pomodoroLength, priority, status, dueDate }}
+                            <Formik initialValues={{ description, pomodoroLength, priority, status, type, dueDate }}
                                 enableReinitialize={true}
                                 onSubmit={onSubmit}
                                 validate={validate}
@@ -146,9 +150,17 @@ export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setTask
                                                         <option value="archived">archived</option>
                                                     </Field>
                                                 </div>
+                                                <div className="col-lg-4 mb-3">
+                                                    <label htmlFor="type">Habit Type</label>
+                                                    <Field as="select" className="form-select form-select-sm" id="type" name="type" onChange={(e) => { setType(e.target.value) }}>
+                                                        <option value="neutral">neutral</option>
+                                                        <option value="good">good</option>
+                                                        <option value="bad">bad</option>
+                                                    </Field>
+                                                </div>
                                                 <div className="col-lg-4 col-6 mb-3">
                                                     <div>
-                                                        <label htmlFor="dueDate">Due Date <i className="bi bi-calendar-check" /></label>
+                                                        <label htmlFor="dueDate">{type === 'bad' ? 'Restrain' : 'Due'} Time <i className="bi bi-calendar-check" /></label>
                                                     </div>
                                                     <ReactDatePicker
                                                         className="form-control form-control-sm"

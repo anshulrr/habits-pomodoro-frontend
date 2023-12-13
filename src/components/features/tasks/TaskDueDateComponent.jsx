@@ -24,7 +24,7 @@ export default function TaskDueDateComponent({
     function createPastPomodoro() {
         setError('');
         if (!dueDate) {
-            setError('Select due date')
+            setError('Select date')
             return;
         }
         if (dueDate && repeat && (repeatDays === '' || repeatDays < 1)) {
