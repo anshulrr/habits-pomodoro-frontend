@@ -63,15 +63,25 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
                         }
                     </h6>
                     <div className="row small">
-                        <div className="col-lg-6">
-                            Total Time Spent
-                            <i className="px-1 bi bi-clock" />
-                            {task.totalTimeElapsed !== undefined ? timeToDisplay(task.totalTimeElapsed / 60) : 0}
+                        <div className="col-4">
+                            Today's Time
+                            <div className="">
+                                <i className="px-1 bi bi-clock-fill" />
+                                {task.todaysTimeElapsed !== undefined ? timeToDisplay(task.todaysTimeElapsed / 60) : 0}
+                            </div>
                         </div>
-                        <div className="col-lg-6">
-                            Today's Time Spent
-                            <i className="px-1 bi bi-clock-fill" />
-                            {task.todaysTimeElapsed !== undefined ? timeToDisplay(task.todaysTimeElapsed / 60) : 0}
+                        <div className="col-4">
+                            Total Time
+                            <div className="">
+                                <i className="px-1 bi bi-clock" />
+                                {task.totalTimeElapsed !== undefined ? timeToDisplay(task.totalTimeElapsed / 60) : 0}
+                            </div>
+                        </div>
+                        <div className="col-4">
+                            Number of Days
+                            <div className="">
+                                # {chartData.data.length}
+                            </div>
                         </div>
                     </div>
 
