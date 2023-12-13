@@ -29,6 +29,14 @@ export default function HeaderComponent() {
                         }
 
                         <div className="d-flex">
+                            <Link className="nav-link" to="/about" state={state}>
+                                <div className={"my-2 mx-2 border-bottom border-1 " + (url.includes("about") ? "text-success border-success" : "text-secondary border-light")}>
+                                    <i className="bi bi-info-circle"></i>
+                                    <div className="button-title">
+                                        About
+                                    </div>
+                                </div>
+                            </Link>
                             {
                                 isAuthenticated &&
                                 <Link className="nav-link" to="/stats" state={state}>
@@ -69,13 +77,14 @@ export default function HeaderComponent() {
 
                         {
                             !isAuthenticated &&
-                            <ul className="navbar-nav">
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/login" state={{}}>
+                            <Link className="nav-link" to="/login" state={{}}>
+                                <div className={"my-2 mx-2 border-bottom border-1 " + (url.includes("login") || url === "/" ? "text-success border-success" : "text-secondary border-light")}>
+                                    <i className="bi bi-box-arrow-in-right"></i>
+                                    <div className="button-title">
                                         Login
-                                    </Link>
-                                </li>
-                            </ul>
+                                    </div>
+                                </div>
+                            </Link>
                         }
                     </div>
                 </div>
