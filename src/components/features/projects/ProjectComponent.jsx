@@ -14,6 +14,7 @@ export default function ProjectComponent() {
     const [color, setColor] = useState('#ffffff')
     const [pomodoroLength, setPomodoroLength] = useState(0)
     const [priority, setPriority] = useState(1)
+    const [status, setStatus] = useState('current')
     const [projectCategories, setProjectCategories] = useState([])
     const [categoriesMap, setCategoriesMap] = useState(new Map())
     const [errors, setErrors] = useState({ color: projectCategoryId === 0 ? 'To select a color, first select a project category' : '' })
@@ -59,6 +60,7 @@ export default function ProjectComponent() {
                 setColor(response.data.color)
                 setPomodoroLength(response.data.pomodoroLength)
                 setPriority(response.data.priority)
+                setStatus(response.data.status)
                 setProjectCategoryId(response.data.projectCategoryId)
                 errors.color = ''
                 setShowLoader(false)
@@ -78,6 +80,7 @@ export default function ProjectComponent() {
             color,
             pomodoroLength,
             priority,
+            status,
             projectCategoryId
         }
 
@@ -222,6 +225,19 @@ export default function ProjectComponent() {
                                     onChange={(e) => setPriority(e.target.value)}
                                 />
                                 <div className="text-danger small">{errors.priority}</div>
+                            </div>
+                            <div className="col-lg-4 mb-3">
+                                <label htmlFor="status">Status</label>
+                                <select
+                                    className="form-select form-select-sm"
+                                    id="status"
+                                    name="status"
+                                    value={status}
+                                    onChange={(e) => setStatus(e.target.value)}
+                                >
+                                    <option value="current">Current</option>
+                                    <option value="archived">Archived</option>
+                                </select>
                             </div>
                             <div className="col-lg-4 mb-3">
                                 <label htmlFor="projectCategoryId">
