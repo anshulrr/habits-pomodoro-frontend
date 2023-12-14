@@ -475,6 +475,7 @@ export default function ListTasksRowsComponent({
                                 {
                                     showUpdateTaskId === task.id &&
                                     <UpdateTaskComponent
+                                        project={project}
                                         task={task}
                                         setShowUpdateTaskId={setShowUpdateTaskId}
                                         setTasksReload={setAllTasksReload}
