@@ -8,7 +8,14 @@ import moment from 'moment'
 import { retrieveTaskApi, updateTaskApi } from 'services/api/TaskApiService'
 import { filterPastTime } from 'services/helpers/helper'
 
-export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setTasksReload }) {
+import { SwitchProjectComponent } from './SwitchProjectComponent'
+
+export default function UpdateTaskComponent({
+    project,
+    task,
+    setShowUpdateTaskId,
+    setTasksReload
+}) {
 
     const [description, setDescription] = useState('')
 
@@ -24,6 +31,9 @@ export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setTask
 
     const [repeat, setRepeat] = useState(false)
     const [repeatDays, setRepeatDays] = useState(0)
+
+    const [projectId, setProjectId] = useState(project.id);
+    const [switchProject, setSwitchProject] = useState(false);
 
     const [showLoader, setShowLoader] = useState(true)
 
@@ -54,6 +64,9 @@ export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setTask
     }
 
     function onSubmit(values) {
+        if (!projectId) {
+            return;
+        }
         // console.debug(values)
         const updated_task = {
             id: task.id,
@@ -63,7 +76,8 @@ export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setTask
             status: values.status,
             type: values.type,
             dueDate: dueDate,
-            repeatDays: repeat ? repeatDays : 0
+            repeatDays: repeat ? repeatDays : 0,
+            projectId: projectId
         }
 
         updateTaskApi({ id: task.id, task: updated_task })
@@ -210,6 +224,26 @@ export default function UpdateTaskComponent({ task, setShowUpdateTaskId, setTask
                                                         />
                                                     </div>
                                                     <div className="text-danger small">{props.errors.repeatDays}</div>
+                                                </div>
+
+                                                {
+                                                    !switchProject &&
+                                                    <div className="col-12">
+                                                        Switch Project
+                                                        <button className="btn btn-sm btn-outline-secondary py-0 px-1 ms-1" type="button" onClick={() => setSwitchProject(true)}>
+                                                            <i className="bi bi-pencil-square"></i>
+                                                        </button>
+                                                    </div>
+                                                }
+
+                                                <div className="col-12 mb-3">
+                                                    {
+                                                        switchProject &&
+                                                        <SwitchProjectComponent
+                                                            projectId={projectId}
+                                                            setProjectId={setProjectId}
+                                                        />
+                                                    }
                                                 </div>
 
 
