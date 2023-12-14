@@ -37,19 +37,20 @@ export const calculateScaleForAdjustedAvg = ({
     enableChartWeeklyAverage,
     chartWeeklyAverage
 }) => {
-    // console.debug({ scale });
+    // console.debug({ scale }, moment().date(), moment().endOf('month').date());
     // assuming starting days of week/month as working day
     if (enableChartAdjustedWeeklyMonthlyAverage) {
         if (limit === 'weekly' &&
             enableChartWeeklyAverage &&
             chartWeeklyAverage > moment().isoWeekday()
         ) {
+            // distributed at the start of the week
             scale = scale / chartWeeklyAverage * moment().isoWeekday();
         } else if (limit === 'monthly' &&
-            enableChartMonthlyAverage &&
-            chartMonthlyAverage > moment().date()
+            enableChartMonthlyAverage
         ) {
-            scale = scale / chartMonthlyAverage * moment().date();
+            // distributed evenly throughout month
+            scale = scale * moment().date() / moment().endOf('month').date();
         }
     }
     // console.debug({ scale });
