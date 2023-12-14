@@ -11,7 +11,6 @@ import { filterPastTime } from 'services/helpers/helper'
 import { SwitchProjectComponent } from './SwitchProjectComponent'
 
 export default function UpdateTaskComponent({
-    project,
     task,
     setShowUpdateTaskId,
     setTasksReload
@@ -32,7 +31,7 @@ export default function UpdateTaskComponent({
     const [repeat, setRepeat] = useState(false)
     const [repeatDays, setRepeatDays] = useState(0)
 
-    const [projectId, setProjectId] = useState(project.id);
+    const [projectId, setProjectId] = useState(task.project.id);
     const [switchProject, setSwitchProject] = useState(false);
 
     const [showLoader, setShowLoader] = useState(true)

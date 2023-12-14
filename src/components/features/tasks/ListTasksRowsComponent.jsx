@@ -307,200 +307,203 @@ export default function ListTasksRowsComponent({
             <div id="tasks-list" ref={listElement}>
                 {
                     tasks.map(
-                        task => (
-                            <div key={task.id} className={"update-list-row" + (showUpdatePopupId === task.id ? " update-list-row-selected" : "")}>
-                                <div className="d-flex justify-content-start">
+                        task => {
+                            // TODO: find better way to handle this
+                            task.projectId = task.project.id;
+                            return (
+                                <div key={task.id} className={"update-list-row" + (showUpdatePopupId === task.id ? " update-list-row-selected" : "")}>
+                                    <div className="d-flex justify-content-start">
 
-                                    <div className="mx-2 flex-grow-1 text-start update-popup-container">
+                                        <div className="mx-2 flex-grow-1 text-start update-popup-container">
 
-                                        <div className="py-2" onClick={() => setShowUpdatePopupId(task.id)}>
-                                            <div className={(task.status === 'archived' ? "text-secondary" : "") + " description " + COLOR_MAP[task.type]}>
-                                                {task.description}
-                                            </div>
-                                            <div className="subscript text-secondary">
-                                                <span className="me-1">
-                                                    <i className="bi bi-arrow-up" />
-                                                    {task.priority}
-                                                </span>
-
-                                                <span className="me-1">
-                                                    <i className="bi bi-hourglass" />
-                                                    {timeToDisplay(task.pomodoroLength || task.project.pomodoroLength || userSettings.pomodoroLength)}
-                                                </span>
-
-                                                {
-                                                    task.totalTimeElapsed !== undefined &&
+                                            <div className="py-2" onClick={() => setShowUpdatePopupId(task.id)}>
+                                                <div className={(task.status === 'archived' ? "text-secondary" : "") + " description " + COLOR_MAP[task.type]}>
+                                                    {task.description}
+                                                </div>
+                                                <div className="subscript text-secondary">
                                                     <span className="me-1">
-                                                        <i className="bi bi-clock" style={{ paddingRight: "0.1rem" }} />
-                                                        {timeToDisplay(task.totalTimeElapsed / 60)}
+                                                        <i className="bi bi-arrow-up" />
+                                                        {task.priority}
                                                     </span>
-                                                }
 
-                                                {
-                                                    task.todaysTimeElapsed !== undefined &&
                                                     <span className="me-1">
-                                                        <i className="bi bi-clock-fill" style={{ paddingRight: "0.1rem" }} />
-                                                        {timeToDisplay(task.todaysTimeElapsed / 60)}
+                                                        <i className="bi bi-hourglass" />
+                                                        {timeToDisplay(task.pomodoroLength || task.project.pomodoroLength || userSettings.pomodoroLength)}
                                                     </span>
-                                                }
 
-                                                {
-                                                    task.dueDate &&
-                                                    <span className={task.dueDateColor} style={{ paddingRight: "0.1rem" }} >
-                                                        <i className="bi bi-calendar-check" style={{ paddingRight: "0.1rem" }} />
-                                                        {formatDate(task.dueDate)}
-                                                    </span>
-                                                }
-                                                {
-                                                    task.dueDate && task.repeatDays !== 0 &&
-                                                    <span>
-                                                        <i className="bi bi-arrow-repeat" style={{ paddingRight: "0.1rem" }} />
-                                                        {task.repeatDays}
-                                                    </span>
-                                                }
-
-                                                <span style={{ float: "right" }}>
                                                     {
-                                                        !project &&
+                                                        task.totalTimeElapsed !== undefined &&
                                                         <span className="me-1">
-                                                            <span style={{ color: task.project.color, paddingRight: "0.1rem" }}>&#9632;</span>
-                                                            {task.project.name}
+                                                            <i className="bi bi-clock" style={{ paddingRight: "0.1rem" }} />
+                                                            {timeToDisplay(task.totalTimeElapsed / 60)}
                                                         </span>
                                                     }
 
                                                     {
-                                                        task.tags && task.tags.length > 0 &&
-                                                        task.tags.map(
-                                                            (tag, tag_index) => (
-                                                                <span key={tag_index} className="me-1">
-                                                                    <i className="bi bi-tag-fill" style={{ color: tag.color, paddingRight: "0.1rem" }} />
-                                                                    {tag.name}
-                                                                </span>
-                                                            )
-                                                        )
+                                                        task.todaysTimeElapsed !== undefined &&
+                                                        <span className="me-1">
+                                                            <i className="bi bi-clock-fill" style={{ paddingRight: "0.1rem" }} />
+                                                            {timeToDisplay(task.todaysTimeElapsed / 60)}
+                                                        </span>
                                                     }
-                                                </span>
+
+                                                    {
+                                                        task.dueDate &&
+                                                        <span className={task.dueDateColor} style={{ paddingRight: "0.1rem" }} >
+                                                            <i className="bi bi-calendar-check" style={{ paddingRight: "0.1rem" }} />
+                                                            {formatDate(task.dueDate)}
+                                                        </span>
+                                                    }
+                                                    {
+                                                        task.dueDate && task.repeatDays !== 0 &&
+                                                        <span>
+                                                            <i className="bi bi-arrow-repeat" style={{ paddingRight: "0.1rem" }} />
+                                                            {task.repeatDays}
+                                                        </span>
+                                                    }
+
+                                                    <span style={{ float: "right" }}>
+                                                        {
+                                                            !project &&
+                                                            <span className="me-1">
+                                                                <span style={{ color: task.project.color, paddingRight: "0.1rem" }}>&#9632;</span>
+                                                                {task.project.name}
+                                                            </span>
+                                                        }
+
+                                                        {
+                                                            task.tags && task.tags.length > 0 &&
+                                                            task.tags.map(
+                                                                (tag, tag_index) => (
+                                                                    <span key={tag_index} className="me-1">
+                                                                        <i className="bi bi-tag-fill" style={{ color: tag.color, paddingRight: "0.1rem" }} />
+                                                                        {tag.name}
+                                                                    </span>
+                                                                )
+                                                            )
+                                                        }
+                                                    </span>
+                                                </div>
                                             </div>
+                                            {
+                                                showUpdatePopupId === task.id &&
+                                                <OutsideAlerter handle={() => setShowUpdatePopupId(-1)}>
+                                                    <span className="">
+                                                        <div className="update-popup">
+                                                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateCommentsPopupData(task)}>
+                                                                Notes <i className="bi bi-chat-right-text" />
+                                                            </button>
+                                                            {
+                                                                task.status === 'current' &&
+                                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onCreatePastPomodoro(task)}>
+                                                                    Add past Pomodoro <i className="bi bi-calendar-plus" />
+                                                                </button>
+                                                            }
+                                                            {
+                                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowUpdateTaskId(task.id)}>
+                                                                    Update Task <i className="bi bi-pencil-square" />
+                                                                </button>
+                                                            }
+                                                            {
+                                                                task.status === 'current' &&
+                                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateDueDate(task)}>
+                                                                    {task.type === 'bad' ? 'Restrain' : 'Due'} Time <i className="ps-1 bi bi-calendar-check" />
+                                                                </button>
+                                                            }
+                                                            <hr className="my-2" />
+                                                            {
+                                                                task.status !== 'current' &&
+                                                                < button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateTaskStatus(task, 'current')}>
+                                                                    Move to Current <i className="bi bi-check2-circle" />
+                                                                </button>
+                                                            }
+                                                            {
+                                                                task.status !== 'archived' &&
+                                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateTaskStatus(task, 'archived')}>
+                                                                    Move to Archive <i className="bi bi-archive" />
+                                                                </button>
+                                                            }
+                                                            {
+                                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onAddTag(task)}>
+                                                                    Map Tags <i className="ps-1 bi bi-tag" />
+                                                                </button>
+                                                            }
+                                                            {
+                                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onClickStats(task)}>
+                                                                    Stats <i className="ps-1 bi bi-graph-up" />
+                                                                </button>
+                                                            }
+                                                        </div>
+                                                    </span>
+                                                </OutsideAlerter>
+                                            }
                                         </div>
+
                                         {
-                                            showUpdatePopupId === task.id &&
-                                            <OutsideAlerter handle={() => setShowUpdatePopupId(-1)}>
-                                                <span className="">
-                                                    <div className="update-popup">
-                                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateCommentsPopupData(task)}>
-                                                            Notes <i className="bi bi-chat-right-text" />
-                                                        </button>
-                                                        {
-                                                            task.status === 'current' &&
-                                                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onCreatePastPomodoro(task)}>
-                                                                Add past Pomodoro <i className="bi bi-calendar-plus" />
-                                                            </button>
-                                                        }
-                                                        {
-                                                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowUpdateTaskId(task.id)}>
-                                                                Update Task <i className="bi bi-pencil-square" />
-                                                            </button>
-                                                        }
-                                                        {
-                                                            task.status === 'current' &&
-                                                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateDueDate(task)}>
-                                                                {task.type === 'bad' ? 'Restrain' : 'Due'} Time <i className="ps-1 bi bi-calendar-check" />
-                                                            </button>
-                                                        }
-                                                        <hr className="my-2" />
-                                                        {
-                                                            task.status !== 'current' &&
-                                                            < button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateTaskStatus(task, 'current')}>
-                                                                Move to Current <i className="bi bi-check2-circle" />
-                                                            </button>
-                                                        }
-                                                        {
-                                                            task.status !== 'archived' &&
-                                                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateTaskStatus(task, 'archived')}>
-                                                                Move to Archive <i className="bi bi-archive" />
-                                                            </button>
-                                                        }
-                                                        {
-                                                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onAddTag(task)}>
-                                                                Map Tags <i className="ps-1 bi bi-tag" />
-                                                            </button>
-                                                        }
-                                                        {
-                                                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onClickStats(task)}>
-                                                                Stats <i className="ps-1 bi bi-graph-up" />
-                                                            </button>
-                                                        }
-                                                    </div>
-                                                </span>
-                                            </OutsideAlerter>
+                                            task.dueDate &&
+                                            <div className="my-auto me-1 text-start">
+                                                <button type="button" className={(task.dueDateButtonColor ? task.dueDateButtonColor : "btn-outline-secondary") + " btn btn-sm px-1 py-0 align-middle"} onClick={() => markCompleted(task)}>
+                                                    <i className="bi bi-calendar-check" />
+                                                </button>
+                                            </div>
+                                        }
+                                        {
+                                            task.status === 'current' &&
+                                            <div className="my-auto me-2 text-start">
+                                                <button type="button" className="btn btn-sm btn-outline-success px-1 py-0 align-middle" onClick={() => onCreateNewPomodoro(task)}>
+                                                    <i className="bi bi-play-circle"></i>
+                                                </button>
+                                            </div>
                                         }
                                     </div>
+                                    {
+                                        task.status === 'current' && showCreatePastPomodoro === task.id &&
+                                        <PastPomodoroComponent
+                                            setShowCreatePastPomodoro={setShowCreatePastPomodoro}
+                                            task={task}
+                                            setPomodorosListReload={setPomodorosListReload}
+                                            setTasksReload={setTasksReload}
+                                        />
+                                    }
 
                                     {
-                                        task.dueDate &&
-                                        <div className="my-auto me-1 text-start">
-                                            <button type="button" className={(task.dueDateButtonColor ? task.dueDateButtonColor : "btn-outline-secondary") + " btn btn-sm px-1 py-0 align-middle"} onClick={() => markCompleted(task)}>
-                                                <i className="bi bi-calendar-check" />
-                                            </button>
-                                        </div>
+                                        showUpdateDueDate === task.id &&
+                                        <TaskDueDateComponent
+                                            setShowUpdateDueDate={setShowUpdateDueDate}
+                                            task={task}
+                                            setTasksReload={setTasksReload}
+                                        />
                                     }
+
                                     {
-                                        task.status === 'current' &&
-                                        <div className="my-auto me-2 text-start">
-                                            <button type="button" className="btn btn-sm btn-outline-success px-1 py-0 align-middle" onClick={() => onCreateNewPomodoro(task)}>
-                                                <i className="bi bi-play-circle"></i>
-                                            </button>
-                                        </div>
+                                        showUpdateTaskId === task.id &&
+                                        <UpdateTaskComponent
+                                            task={task}
+                                            setShowUpdateTaskId={setShowUpdateTaskId}
+                                            setTasksReload={setAllTasksReload}
+                                        />
                                     }
-                                </div>
-                                {
-                                    task.status === 'current' && showCreatePastPomodoro === task.id &&
-                                    <PastPomodoroComponent
-                                        setShowCreatePastPomodoro={setShowCreatePastPomodoro}
-                                        task={task}
-                                        setPomodorosListReload={setPomodorosListReload}
-                                        setTasksReload={setTasksReload}
-                                    />
-                                }
 
-                                {
-                                    showUpdateDueDate === task.id &&
-                                    <TaskDueDateComponent
-                                        setShowUpdateDueDate={setShowUpdateDueDate}
-                                        task={task}
-                                        setTasksReload={setTasksReload}
-                                    />
-                                }
+                                    {
+                                        showMapTags === task.id &&
+                                        <MapTagComponent
+                                            task={task}
+                                            tagsMap={tags}
+                                            setShowMapTags={setShowMapTags}
+                                            setTasksReload={setTasksReload}
+                                        />
+                                    }
 
-                                {
-                                    showUpdateTaskId === task.id &&
-                                    <UpdateTaskComponent
-                                        project={project}
-                                        task={task}
-                                        setShowUpdateTaskId={setShowUpdateTaskId}
-                                        setTasksReload={setAllTasksReload}
-                                    />
-                                }
-
-                                {
-                                    showMapTags === task.id &&
-                                    <MapTagComponent
-                                        task={task}
-                                        tagsMap={tags}
-                                        setShowMapTags={setShowMapTags}
-                                        setTasksReload={setTasksReload}
-                                    />
-                                }
-
-                                {
-                                    showTaskStats === task.id &&
-                                    <TaskStats
-                                        task={task}
-                                        setShowTaskStats={setShowTaskStats}
-                                    />
-                                }
-                            </div >
-                        )
+                                    {
+                                        showTaskStats === task.id &&
+                                        <TaskStats
+                                            task={task}
+                                            setShowTaskStats={setShowTaskStats}
+                                        />
+                                    }
+                                </div >
+                            )
+                        }
                     )
                 }
             </div>
