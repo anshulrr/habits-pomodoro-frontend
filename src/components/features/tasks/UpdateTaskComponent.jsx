@@ -145,9 +145,9 @@ export default function UpdateTaskComponent({
                                                     <ErrorMessage name="description" component="small" className="text-danger small" />
                                                 </div>
                                                 <div className="col-lg-4 mb-3">
-                                                    <label htmlFor="pomodoroLength">Default Pomodoro Length <i className="bi bi-hourglass" /></label>
+                                                    <label htmlFor="pomodoroLength">Default Pomodoro Length (mins) <i className="bi bi-hourglass" /></label>
                                                     <Field type="number" className="form-control form-control-sm" min="0" id="pomodoroLength" name="pomodoroLength" placeholder="Default Pomodoro Length" />
-                                                    <small>(To use project's settings, set length to zero)</small>
+                                                    <small>(To use Project's Default Pomodoro Length, set value to zero)</small>
                                                     {props.errors.pomodoroLength && <div className="text-danger small">{props.errors.pomodoroLength}</div>}
                                                 </div>
                                                 <div className="col-lg-4 mb-3">

@@ -195,7 +195,7 @@ export default function ProjectComponent() {
                                 <div className="text-danger small">{errors.color}</div>
                             </div>
                             <div className="col-lg-4 mb-3">
-                                <label htmlFor="pomodoroLength">Default Pomodoro Length <i className="bi bi-hourglass" /></label>
+                                <label htmlFor="pomodoroLength">Default Pomodoro Length (mins) <i className="bi bi-hourglass" /></label>
                                 <input
                                     type="number"
                                     className="form-control form-control-sm"
@@ -206,7 +206,7 @@ export default function ProjectComponent() {
                                     required
                                     onChange={(e) => setPomodoroLength(e.target.value)}
                                 />
-                                <small>(To use general settings, set length to zero)</small>
+                                <small>(To use General Settings Default Pomodoro Length, set value to zero)</small>
                                 <div className="text-danger small">{errors.pomodoroLength}</div>
                             </div>
                             <div className="col-lg-4 mb-3">
