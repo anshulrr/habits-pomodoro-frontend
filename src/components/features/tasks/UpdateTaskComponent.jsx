@@ -146,29 +146,30 @@ export default function UpdateTaskComponent({
                                                 </div>
                                                 <div className="col-lg-4 mb-3">
                                                     <label htmlFor="pomodoroLength">Default Pomodoro Length (mins) <i className="bi bi-hourglass" /></label>
-                                                    <Field type="number" className="form-control form-control-sm" min="0" id="pomodoroLength" name="pomodoroLength" placeholder="Default Pomodoro Length" />
-                                                    <small>(To use Project's Default Pomodoro Length, set value to zero)</small>
+                                                    <Field type="number" className="form-control form-control-sm" min="0" id="pomodoroLength" name="pomodoroLength" placeholder="Default Pomodoro Length (mins)" />
+                                                    <small>(To use Default Pomodoro Length of the Project, set value to zero)</small>
                                                     {props.errors.pomodoroLength && <div className="text-danger small">{props.errors.pomodoroLength}</div>}
                                                 </div>
                                                 <div className="col-lg-4 mb-3">
-                                                    <label htmlFor="priority">Priority <i className="bi bi-arrow-up" /></label>
-                                                    <Field type="number" className="form-control form-control-sm" min="0" id="priority" name="priority" placeholder="Priority" />
+                                                    <label htmlFor="priority">Order <i className="bi bi-arrow-up" /></label>
+                                                    <Field type="number" className="form-control form-control-sm" min="1" id="priority" name="priority" placeholder="Order" />
+                                                    <small>(Lower numbered tasks appears at the top of the list)</small>
                                                     {props.errors.priority && <div className="text-danger small">{props.errors.priority}</div>}
                                                 </div>
                                                 <div className="col-lg-4 mb-3">
                                                     <label htmlFor="status">Status</label>
                                                     <Field as="select" className="form-select form-select-sm" id="status" name="status">
                                                         {/* disabled option with value 0 for dropdown to avoid confusion of initial selection */}
-                                                        <option value="current">current</option>
-                                                        <option value="archived">archived</option>
+                                                        <option value="current">Current</option>
+                                                        <option value="archived">Archived</option>
                                                     </Field>
                                                 </div>
                                                 <div className="col-lg-4 mb-3">
                                                     <label htmlFor="type">Habit Type</label>
                                                     <Field as="select" className="form-select form-select-sm" id="type" name="type" onChange={(e) => { setType(e.target.value) }}>
-                                                        <option value="neutral">neutral</option>
-                                                        <option value="good">good</option>
-                                                        <option value="bad">bad</option>
+                                                        <option value="neutral">Neutral</option>
+                                                        <option value="good">Good</option>
+                                                        <option value="bad">Bad</option>
                                                     </Field>
                                                 </div>
                                                 <div className="col-lg-4 col-6 mb-3">

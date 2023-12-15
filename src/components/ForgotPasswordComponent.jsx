@@ -51,7 +51,7 @@ export default function ForgotPasswordComponent() {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     autoComplete="email"
-                                    placeholder="email"
+                                    placeholder="Email"
                                     required
                                 />
                             </div>

@@ -56,7 +56,7 @@ export default function UpdateTagComponent({
                                     id="tag"
                                     className="form-control form-control-sm"
                                     value={name}
-                                    placeholder="Name"
+                                    placeholder="Tag Name"
                                     onChange={(e) => setName(e.target.value)}
                                     required
                                     autoFocus
@@ -72,12 +72,12 @@ export default function UpdateTagComponent({
                                     value={color}
                                     name="color"
                                     onChange={(e) => setColor(e.target.value)}
-                                    placeholder="color"
+                                    placeholder="Color"
                                 />
                             </div>
 
                             <div className="col-lg-4 mb-3">
-                                <label htmlFor="priority">Priority <i className="bi bi-arrow-up" /></label>
+                                <label htmlFor="priority">Order <i className="bi bi-arrow-up" /></label>
                                 <input
                                     type="number"
                                     className="form-control form-control-sm"
@@ -86,8 +86,9 @@ export default function UpdateTagComponent({
                                     name="priority"
                                     min="1"
                                     onChange={(e) => setPriority(e.target.value)}
-                                    placeholder="priority"
+                                    placeholder="Order"
                                 />
+                                <small>(Lower numbered tags appears at the top of the list)</small>
                             </div>
 
                             <div className="col-lg-12 mb-3 text-end">

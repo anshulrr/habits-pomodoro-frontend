@@ -15,7 +15,7 @@ export default function ProjectCategoryComponent({
     const [name, setName] = useState('')
     const [statsDefault, setStatsDefault] = useState(false)
     const [visibleToPartners, setVisibleToPartners] = useState(true)
-    const [level, setLevel] = useState('')
+    const [level, setLevel] = useState(1)
     const [color, setColor] = useState('#a1a1a1')
     const [showLoader, setShowLoader] = useState(category !== null)
 
@@ -120,7 +120,7 @@ export default function ProjectCategoryComponent({
 
                             {
                                 category === null &&
-                                <h6> Enter Project Category Details</h6>
+                                <h6>Add New Project Category</h6>
                             }
                             {
                                 category !== null &&
@@ -164,7 +164,7 @@ export default function ProjectCategoryComponent({
                                                                     className="form-control form-control-sm"
                                                                     name="color"
                                                                     id="color"
-                                                                    placeholder="color"
+                                                                    placeholder="Color"
                                                                     required
                                                                 />
                                                             </div>
@@ -173,7 +173,7 @@ export default function ProjectCategoryComponent({
                                                         <div className="col-12 mb-2">
                                                             <div className="input-group input-group-sm">
                                                                 <label className="input-group-text" htmlFor="level">
-                                                                    Priority
+                                                                    Order
                                                                     <i className="ps-1 bi bi-arrow-up" />
                                                                 </label>
                                                                 <Field
@@ -181,10 +181,15 @@ export default function ProjectCategoryComponent({
                                                                     className="form-control form-control-sm"
                                                                     name="level"
                                                                     id="level"
-                                                                    placeholder="Priority Level"
+                                                                    min="1"
+                                                                    placeholder="Order"
                                                                     required
                                                                 />
                                                             </div>
+                                                            <small>
+                                                                <small className="text-secondary">(Lower numbered categories appears at the top of the list)</small>
+                                                            </small>
+
                                                         </div>
 
                                                         <div className="col-12 mb-2">
@@ -199,9 +204,12 @@ export default function ProjectCategoryComponent({
                                                                 </div>
                                                                 <label className="input-group-text" htmlFor="statsDefault">
                                                                     <i className="pe-1 bi bi-graph-up" />
-                                                                    Stats List Default
+                                                                    Stats Default
                                                                 </label>
                                                             </div>
+                                                            <small>
+                                                                <small className="text-secondary">(If selected, by default this category stats will be shown in the stats page at every first visit)</small>
+                                                            </small>
                                                         </div>
 
                                                         <div className="col-12 mb-2">
@@ -219,6 +227,9 @@ export default function ProjectCategoryComponent({
                                                                     Visible to Accountability Partners
                                                                 </label>
                                                             </div>
+                                                            <small>
+                                                                <small className="text-secondary">(If selected, Accountability Partners will have access to the stats of this category)</small>
+                                                            </small>
                                                         </div>
 
                                                         <div className="col-lg-12">

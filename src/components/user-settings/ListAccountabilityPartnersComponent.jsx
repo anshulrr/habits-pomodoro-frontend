@@ -107,7 +107,7 @@ export default function ListAccountabilityPartnersComponent() {
                                                 name="email"
                                                 className="form-control form-control-sm"
                                                 value={email}
-                                                placeholder="email"
+                                                placeholder="Email"
                                                 onChange={(e) => setEmail(e.target.value)}
                                                 required
                                             />

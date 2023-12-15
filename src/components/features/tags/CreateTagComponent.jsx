@@ -46,7 +46,7 @@ export default function CreateTagComponent({
                                     name="tag"
                                     className="form-control form-control-sm"
                                     value={name}
-                                    placeholder="Name"
+                                    placeholder="Tag Name"
                                     onChange={(e) => setName(e.target.value)}
                                     required
                                     autoFocus

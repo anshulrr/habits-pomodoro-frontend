@@ -133,7 +133,7 @@ export default function ProjectComponent() {
             {
                 parseInt(id) === -1 &&
                 <h6>
-                    Enter Project Details
+                    Add New Project
                 </h6>
             }
             {
@@ -186,7 +186,7 @@ export default function ProjectComponent() {
                                     className="form-control form-control-sm"
                                     id="color"
                                     name="color"
-                                    placeholder="color"
+                                    placeholder="Color"
                                     value={color}
                                     required
                                     disabled={projectCategoryId === 0}
@@ -201,26 +201,27 @@ export default function ProjectComponent() {
                                     className="form-control form-control-sm"
                                     min="0" id="pomodoroLength"
                                     name="pomodoroLength"
-                                    placeholder="Default Pomodoro Length"
+                                    placeholder="Default Pomodoro Length (mins)"
                                     value={pomodoroLength}
                                     required
                                     onChange={(e) => setPomodoroLength(e.target.value)}
                                 />
-                                <small>(To use General Settings Default Pomodoro Length, set value to zero)</small>
+                                <small>(To use Default Pomodoro Length of General Settings, set value to zero)</small>
                                 <div className="text-danger small">{errors.pomodoroLength}</div>
                             </div>
                             <div className="col-lg-4 mb-3">
-                                <label htmlFor="priority">Priority <i className="bi bi-arrow-up" /></label>
+                                <label htmlFor="priority">Order <i className="bi bi-arrow-up" /></label>
                                 <input
                                     type="number"
                                     className="form-control form-control-sm"
                                     min="1" id="priority"
                                     name="priority"
-                                    placeholder="Priority"
+                                    placeholder="Order"
                                     value={priority}
                                     required
                                     onChange={(e) => setPriority(e.target.value)}
                                 />
+                                <small>(Lower numbered projects appears at the top of the list)</small>
                                 <div className="text-danger small">{errors.priority}</div>
                             </div>
                             <div className="col-lg-4 mb-3">
