@@ -117,7 +117,9 @@ export default function AboutComponent() {
                                 Update Task’s <span className="fw-bold">Habit Type</span>: neutral, good, bad.
                             </li>
                             <li>
-                                Later on once you have many habits to monitor, you will need easy access to habits and better visualization of stats. For that put them into separate <span className="fw-bold">Projects</span> of different <span className="fw-bold">Project Categories</span>.
+                                Later on once you have many habits to monitor, you will need easy access to habits and better visualization of stats.
+                                For that put them into separate <span className="fw-bold">Projects</span> of different <span className="fw-bold">Project Categories</span>.
+                                You can also group habits by <span className="fw-bold">Tags</span> (daily, imp) for easy access.
                             </li>
                         </ul>
                         <li>
@@ -125,10 +127,10 @@ export default function AboutComponent() {
                         </li>
                         <ul className="ms-2">
                             <li>
-                                For <span className="fst-italic">implementation intention</span> use <span className="fw-bold">Due Time</span> (Also you can use option to repeat after #days)
+                                For <span className="fst-italic">implementation intention</span> use <span className="fw-bold">Due Time</span> (Also you can use option to repeat after #days).
                             </li>
                             <li>
-                                Achieve <span className="fst-italic">Habits Stacking</span> using same Due Time for stacked tasks
+                                To achieve <span className="fst-italic">Habits Stacking</span> set same Due Time for stacked tasks.
                             </li>
                         </ul>
                         <li>
@@ -147,7 +149,7 @@ export default function AboutComponent() {
                                 Set <span className="fw-bold">Restrain Time</span> for a bad habit and stick to it until the time of the day.
                             </li>
                             <li>
-                                Add notes for each violations
+                                Add notes for each violations.
                             </li>
                         </ul>
                     </ol>
@@ -158,7 +160,7 @@ export default function AboutComponent() {
                     </h3>
                     <ol>
                         <li>
-                            <span className="fst-italic">Temptation Bundling</span>: Anticipation of reward
+                            <span className="fst-italic">Temptation Bundling</span>: Anticipation of reward.
                         </li>
                         <ul className="ms-2">
                             <li>
@@ -174,7 +176,7 @@ export default function AboutComponent() {
                             </li>
                         </ul>
                         <li>
-                            <span className="fst-italic">Repulsion Bundling</span>: read books / blogs to reframe
+                            <span className="fst-italic">Repulsion Bundling</span>: read books / blogs to reframe.
                         </li>
                         <ul className="ms-2">
                             <li>
@@ -196,11 +198,11 @@ export default function AboutComponent() {
                         </li>
                         <ul className="ms-2">
                             <li>
-                                <span className="fw-bold">Streak of each task</span>: showing number of days missed
+                                <span className="fw-bold">Streak of each task</span>: showing number of days missed.
                             </li>
                         </ul>
                         <li>
-                            <span className="fst-italic">Decrease friction</span>: for good habits
+                            <span className="fst-italic">Decrease friction</span>: for good habits.
                         </li>
                         <ul className="ms-2">
                             <li>
@@ -208,15 +210,15 @@ export default function AboutComponent() {
                             </li>
                         </ul>
                         <li>
-                            <span className="fst-italic">2 Minute rule</span>: Ritualize the beginning
+                            <span className="fst-italic">2 Minute rule</span>: Ritualize the beginning.
                         </li>
                         <ul className="ms-2">
                             <li>
-                                For new habits <span className="fw-bold">Increase pomodoro length gradually.</span>
+                                For new habits <span className="fw-bold">Increase pomodoro length gradually</span>.
                             </li>
                         </ul>
                         <li>
-                            <span className="fst-italic">Increase friction</span>: for bad habits
+                            <span className="fst-italic">Increase friction</span>: for bad habits.
                         </li>
                         <ul className="ms-2">
                             <li>
@@ -240,11 +242,11 @@ export default function AboutComponent() {
                                 <span className="fw-bold">Detailed and filtered Stats in different time frames</span> of all habits.
                             </li>
                             <li>
-                                <span className="fw-bold">Streak of tasks, projects and categories.</span>
+                                <span className="fw-bold">Streak of tasks, projects and categories</span>.
                             </li>
                         </ul>
                         <li>
-                            <span className="fst-italic">Habit Tracker</span>: Never miss good habits twice / Never repeat bad habits again
+                            <span className="fst-italic">Habit Tracker</span>: Never miss good habits twice / Never repeat bad habits again.
                         </li>
                         <ul className="ms-2">
                             <li>
@@ -256,7 +258,7 @@ export default function AboutComponent() {
                         </li>
                         <ul className="ms-2">
                             <li>
-                                Allow <span className="fw-bold">Accountability Partners</span> to collaborate using shared stats of selected project categories
+                                Allow <span className="fw-bold">Accountability Partners</span> to collaborate using shared stats of selected project categories.
                             </li>
                         </ul>
                     </ol>
@@ -284,7 +286,7 @@ export default function AboutComponent() {
                         To access this version of the app easily you can use the <span className="fw-bold">'Install app'</span> option available in Chrome browser.
                     </div>
                     <div>
-                        Please reach out to us if you have any suggestions <a href="mailto:ansh14j@gmail.com">here</a>.
+                        Please reach out <a href="mailto:ansh14j@gmail.com">here</a> if you have any suggestions or issues.
                     </div>
                 </div>
             </div>
