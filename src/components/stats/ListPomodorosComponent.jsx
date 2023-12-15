@@ -66,7 +66,7 @@ export default function ListPomodorosComponent({
     )
 
     const handleResize = () => {
-        if (listElement.current !== null && listElement.current.offsetHeight !== 0) {
+        if (listElement.current !== null) {
             // console.debug(listElement.current.offsetHeight);
             setElementHeight(listElement.current.offsetHeight);
         }

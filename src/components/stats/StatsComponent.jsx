@@ -267,7 +267,7 @@ export default function ListStatsComponent() {
                                 </div>
                             </div >
                             <div className="col-lg-6 px-0 mb-5">
-                                <div className="p-1 chart-card">
+                                <div className="p-1 chart-card" style={{ height: "70vh", overflowY: "scroll" }}>
                                     <ListPomodorosComponent
                                         key={reload}
                                         includeCategories={includeCategories}
