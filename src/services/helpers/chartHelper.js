@@ -13,7 +13,11 @@ export const calculateScaleAndLabel = ({
     let scale = 1;
     let label = 'mins';
     if (enableChartScale) {
-        label = "scaled " + label;
+        if (parseInt(chartScale) === 60) {
+            label = "hours"
+        } else {
+            label = "scaled " + label;
+        }
         scale *= chartScale;
     }
     // console.debug({ scale });
