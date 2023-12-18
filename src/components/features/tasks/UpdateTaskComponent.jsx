@@ -163,7 +163,7 @@ export default function UpdateTaskComponent({
                                                     {props.errors.pomodoroLength && <div className="text-danger small">{props.errors.pomodoroLength}</div>}
                                                 </div>
                                                 <div className="col-lg-4 mb-3">
-                                                    <label htmlFor="type">Pomodoros Daily Expected Count</label>
+                                                    <label htmlFor="type">Pomodoros Daily Limit (Expected Count)</label>
                                                     <input
                                                         type="number"
                                                         name="dailyLimit"
