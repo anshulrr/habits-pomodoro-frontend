@@ -70,7 +70,7 @@ export default function LoginComponent() {
                                 Habits Pomodoro
                             </h1>
                             <div>
-                                A productivity tracking web app for students and anyone who wants to build good habits and break bad once.
+                                A productivity tracking web app for learners and anyone who wants to build good habits and break bad once.
                             </div>
                             <div className="login-img mt-4">
                                 <img

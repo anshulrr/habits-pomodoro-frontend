@@ -94,3 +94,28 @@
 .about-page li {
     margin-bottom: 8px;
 }
+
+.about-img {
+    width: 60%;
+    margin: auto;
+}
+
+.about-img-2 {
+    width: 80%;
+    margin: auto;
+}
+
+@media only screen and (max-width: 992px) {
+    .about-img {
+        width: 70vw;
+    }
+
+    .about-img-2 {
+        width: 80vw;
+    }
+}
+
+.about-card {
+    background-color: #e9ecef;
+    border-radius: 10px;
+}
