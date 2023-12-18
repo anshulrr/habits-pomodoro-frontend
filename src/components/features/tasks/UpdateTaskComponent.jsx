@@ -36,6 +36,12 @@ export default function UpdateTaskComponent({
 
     const [showLoader, setShowLoader] = useState(true)
 
+    const COLOR_MAP = {
+        'neutral': 'dark',
+        'good': 'success',
+        'bad': 'secondary'
+    }
+
     useEffect(
         () => retrieveTask()
         , []  // eslint-disable-line react-hooks/exhaustive-deps
@@ -166,7 +172,7 @@ export default function UpdateTaskComponent({
                                                 </div>
                                                 <div className="col-lg-4 mb-3">
                                                     <label htmlFor="type">Habit Type</label>
-                                                    <Field as="select" className="form-select form-select-sm" id="type" name="type" onChange={(e) => { setType(e.target.value) }}>
+                                                    <Field as="select" className={"form-select form-select-sm text-" + COLOR_MAP[type]} id="type" name="type" onChange={(e) => { setType(e.target.value) }}>
                                                         <option value="neutral">Neutral</option>
                                                         <option value="good">Good</option>
                                                         <option value="bad">Bad</option>
