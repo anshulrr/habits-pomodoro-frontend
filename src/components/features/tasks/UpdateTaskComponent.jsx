@@ -30,6 +30,7 @@ export default function UpdateTaskComponent({
 
     const [repeat, setRepeat] = useState(false)
     const [repeatDays, setRepeatDays] = useState(0)
+    const [dailyLimit, setDailyLimit] = useState(0)
 
     const [projectId, setProjectId] = useState(task.project.id);
     const [switchProject, setSwitchProject] = useState(false);
@@ -63,6 +64,7 @@ export default function UpdateTaskComponent({
                     setRepeat(true)
                 }
                 setRepeatDays(data.repeatDays)
+                setDailyLimit(data.dailyLimit)
                 setShowLoader(false)
             })
             .catch(error => console.error(error.message))
@@ -82,6 +84,7 @@ export default function UpdateTaskComponent({
             type: values.type,
             dueDate: dueDate,
             repeatDays: repeat ? repeatDays : 0,
+            dailyLimit: dailyLimit,
             projectId: projectId
         }
 
@@ -108,6 +111,9 @@ export default function UpdateTaskComponent({
         }
         if (dueDate && repeat && (repeatDays === '' || repeatDays < 1)) {
             errors.repeatDays = 'Enter positive value'
+        }
+        if (dailyLimit === '' || dailyLimit < 1) {
+            errors.dailyLimit = 'Enter positive value'
         }
         // console.debug(values)
         return errors
@@ -157,18 +163,23 @@ export default function UpdateTaskComponent({
                                                     {props.errors.pomodoroLength && <div className="text-danger small">{props.errors.pomodoroLength}</div>}
                                                 </div>
                                                 <div className="col-lg-4 mb-3">
+                                                    <label htmlFor="type">Pomodoros Daily Expected Count</label>
+                                                    <input
+                                                        type="number"
+                                                        name="dailyLimit"
+                                                        className="form-control form-control-sm"
+                                                        value={dailyLimit}
+                                                        min={1}
+                                                        placeholder="Expected Count"
+                                                        onChange={(e) => setDailyLimit(e.target.value)}
+                                                    />
+                                                    <div className="text-danger small">{props.errors.dailyLimit}</div>
+                                                </div>
+                                                <div className="col-lg-4 mb-3">
                                                     <label htmlFor="priority">Order <i className="bi bi-arrow-up" /></label>
                                                     <Field type="number" className="form-control form-control-sm" min="1" id="priority" name="priority" placeholder="Order" />
                                                     <small>(Lower numbered tasks appears at the top of the list)</small>
                                                     {props.errors.priority && <div className="text-danger small">{props.errors.priority}</div>}
-                                                </div>
-                                                <div className="col-lg-4 mb-3">
-                                                    <label htmlFor="status">Status</label>
-                                                    <Field as="select" className="form-select form-select-sm" id="status" name="status">
-                                                        {/* disabled option with value 0 for dropdown to avoid confusion of initial selection */}
-                                                        <option value="current">Current</option>
-                                                        <option value="archived">Archived</option>
-                                                    </Field>
                                                 </div>
                                                 <div className="col-lg-4 mb-3">
                                                     <label htmlFor="type">Habit Type</label>
@@ -230,6 +241,14 @@ export default function UpdateTaskComponent({
                                                         />
                                                     </div>
                                                     <div className="text-danger small">{props.errors.repeatDays}</div>
+                                                </div>
+                                                <div className="col-lg-4 mb-3">
+                                                    <label htmlFor="status">Status</label>
+                                                    <Field as="select" className="form-select form-select-sm" id="status" name="status">
+                                                        {/* disabled option with value 0 for dropdown to avoid confusion of initial selection */}
+                                                        <option value="current">Current</option>
+                                                        <option value="archived">Archived</option>
+                                                    </Field>
                                                 </div>
 
                                                 {
