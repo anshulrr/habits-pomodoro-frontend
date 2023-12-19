@@ -345,7 +345,9 @@ export default function ListTasksRowsComponent({
 
                                                     {
                                                         task.todaysTimeElapsed !== undefined &&
-                                                        <span className="me-1">
+                                                        <span className={"me-1 " +
+                                                            (task.type === 'bad' && task.todaysTimeElapsed / 60 > (task.pomodoroLength || task.project.pomodoroLength || userSettings.pomodoroLength) * task.dailyLimit ? "text-danger" : "")
+                                                        }>
                                                             <i className="bi bi-clock-fill" style={{ paddingRight: "0.1rem" }} />
                                                             {timeToDisplay(task.todaysTimeElapsed / 60)}
                                                         </span>
