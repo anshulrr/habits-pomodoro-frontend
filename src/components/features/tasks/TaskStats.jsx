@@ -96,7 +96,15 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
                                     if (!value) {
                                         return 'color-empty';
                                     }
-                                    return `color-${task.type}`;
+                                    if (task.type === 'bad') {
+                                        if (value.count > task.pomodoroLength * task.dailyLimit) {
+                                            return `color-${task.type}`;
+                                        } else {
+                                            return `color-neutral`;
+                                        }
+                                    } else {
+                                        return `color-${task.type}`;
+                                    }
                                 }}
                             />
                         </div >

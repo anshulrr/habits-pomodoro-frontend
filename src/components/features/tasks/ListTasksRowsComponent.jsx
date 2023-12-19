@@ -310,6 +310,7 @@ export default function ListTasksRowsComponent({
                         task => {
                             // TODO: find better way to handle this
                             task.projectId = task.project.id;
+                            task.pomodoroLength = task.pomodoroLength || task.project.pomodoroLength || userSettings.pomodoroLength;
                             return (
                                 <div key={task.id} className={"update-list-row" + (showUpdatePopupId === task.id ? " update-list-row-selected" : "")}>
                                     <div className="d-flex justify-content-start">
@@ -332,7 +333,7 @@ export default function ListTasksRowsComponent({
                                                                     </span>
                                                             }
                                                         </span>
-                                                        {timeToDisplay(task.pomodoroLength || task.project.pomodoroLength || userSettings.pomodoroLength)}
+                                                        {timeToDisplay(task.pomodoroLength)}
                                                     </span>
 
                                                     {
@@ -346,7 +347,7 @@ export default function ListTasksRowsComponent({
                                                     {
                                                         task.todaysTimeElapsed !== undefined &&
                                                         <span className={"me-1 " +
-                                                            (task.type === 'bad' && task.todaysTimeElapsed / 60 > (task.pomodoroLength || task.project.pomodoroLength || userSettings.pomodoroLength) * task.dailyLimit ? "text-danger" : "")
+                                                            (task.type === 'bad' && task.todaysTimeElapsed / 60 > (task.pomodoroLength) * task.dailyLimit ? "text-danger" : "")
                                                         }>
                                                             <i className="bi bi-clock-fill" style={{ paddingRight: "0.1rem" }} />
                                                             {timeToDisplay(task.todaysTimeElapsed / 60)}
