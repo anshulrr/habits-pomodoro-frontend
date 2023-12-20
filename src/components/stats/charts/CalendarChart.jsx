@@ -158,7 +158,7 @@ export const CalendarChart = ({ subject, categories }) => {
                     }
                     return {
                         'data-tooltip-id': 'streak-tooltip',
-                        'data-tooltip-content': `${value.date}: ${timeToDisplay(value.count)} mins`
+                        'data-tooltip-content': `${value.date}: ${timeToDisplay(value.count, true)}`
                     };
                 }}
             />

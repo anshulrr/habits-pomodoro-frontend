@@ -70,14 +70,14 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
                             Today's Time
                             <div className="">
                                 <i className="px-1 bi bi-clock-fill" />
-                                {task.todaysTimeElapsed !== undefined ? timeToDisplay(task.todaysTimeElapsed / 60) : 0}
+                                {task.todaysTimeElapsed !== undefined ? timeToDisplay(task.todaysTimeElapsed / 60, true) : 0}
                             </div>
                         </div>
                         <div className="col-4">
                             Total Time
                             <div className="">
                                 <i className="px-1 bi bi-clock" />
-                                {task.totalTimeElapsed !== undefined ? timeToDisplay(task.totalTimeElapsed / 60) : 0}
+                                {task.totalTimeElapsed !== undefined ? timeToDisplay(task.totalTimeElapsed / 60, true) : 0}
                             </div>
                         </div>
                         <div className="col-4">
@@ -119,7 +119,7 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
                                     }
                                     return {
                                         'data-tooltip-id': 'streak-tooltip',
-                                        'data-tooltip-content': `${value.date}: ${timeToDisplay(value.count)} mins`
+                                        'data-tooltip-content': `${value.date}: ${timeToDisplay(value.count, true)}`
                                     };
                                 }}
                             />

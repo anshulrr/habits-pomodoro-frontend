@@ -1,7 +1,7 @@
 import moment from "moment";
 
-export function timeToDisplay(total_minutes) {
-    if (total_minutes < 60) {
+export function timeToDisplay(total_minutes, full = false) {
+    if (!full && total_minutes < 60) {
         return Math.floor(total_minutes);
     }
     const minutes = Math.floor(total_minutes % 60);
