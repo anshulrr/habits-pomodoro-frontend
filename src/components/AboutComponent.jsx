@@ -1,4 +1,28 @@
+import moment from "moment";
+import { DoughnutChart } from "./stats/charts/DoughnutChart";
+import { BarChart } from "./stats/charts/BarChart";
+
 export default function AboutComponent() {
+
+    const chartData = {
+        colors: ['#105b06', '#105b06', '#105b06', '#105b06', '#228B22'],
+        data: [1.1, 0.366, 0.416, 1.66, 1.683],
+        label: "Tasks (hours)",
+        labels: ['General Project: Fictional books', 'General Project: Movies', 'General Project: Non fictional book 2', 'General Project: ddd', 'Project 11: abcd']
+    }
+
+    const projectsChartData = {
+        colors: ['#105b06', '#8B8000', '#228B22'],
+        data: [3.55, 12.383, 1.683],
+        label: "Projects (hours)",
+        labels: ['General Project', "ajay's Project6", 'Project 11'],
+    }
+
+    const buttonsStates = {
+        limit: 'weekly',
+        offset: 0,
+        dateString: moment().format('DD MMM')
+    }
 
     return (
         <div className="container about-page">
@@ -82,7 +106,6 @@ export default function AboutComponent() {
                         </ul>
                     </div>
                 </div>
-
                 <div className="col-lg-6 py-2 my-auto">
                     <div className="about-img-2">
                         <img
@@ -132,7 +155,6 @@ export default function AboutComponent() {
                         </div>
                     </div>
                 </div>
-
                 <div className="col-lg-6 py-2 my-auto order-lg-1">
                     <div className="about-img">
                         <img
@@ -146,7 +168,6 @@ export default function AboutComponent() {
             </div>
 
             <div className="row small my-0">
-
                 <div className="col-lg-6 my-0 text-start my-auto">
                     <div className="about-card px-2 py-1">
 
@@ -200,7 +221,6 @@ export default function AboutComponent() {
                         </ol>
                     </div>
                 </div>
-
                 <div className="col-lg-6 py-2 my-auto">
                     <div className="about-img-2">
                         <img
@@ -214,8 +234,7 @@ export default function AboutComponent() {
             </div>
 
             <div className="row small my-0">
-
-                <div className="col-lg-6 my-0 order-lg-2 text-start my-auto">
+                <div className="col-lg-6 my-0 order-lg-3 text-start my-auto">
                     <div className="about-card px-2 py-1">
 
                         <h3 className="h6 py-2">
@@ -252,18 +271,17 @@ export default function AboutComponent() {
                         </ol>
                     </div>
                 </div>
-
-                <div className="col-lg-6 py-2 my-auto order-lg-1">
-
-                    <div className="about-img">
-                        <img
-                            className="rounded"
-                            src="images/projects-chart.png"
-                            alt="projects-chart"
-                            width="100%"
+                <div className="col-lg-4 offset-lg-1 py-2 my-auto order-lg-1 text-center">
+                    <div className="p-1 chart-card">
+                        <BarChart
+                            chartData={projectsChartData}
+                            buttonsStates={buttonsStates}
+                            thickness={1}
+                            isDummy={true}
                         />
                     </div>
                 </div>
+                <div className="col-lg-1 order-lg-2"></div>
             </div>
 
             <div className="row small my-0">
@@ -310,9 +328,6 @@ export default function AboutComponent() {
                         </ol>
                     </div>
                 </div>
-
-
-
                 <div className="col-lg-6 py-2 my-auto">
                     <div className="about-img-2">
                         <img
@@ -326,8 +341,7 @@ export default function AboutComponent() {
             </div>
 
             <div className="row small my-0">
-
-                <div className="col-lg-6 my-0 order-lg-2 text-start my-auto">
+                <div className="col-lg-6 my-0 order-lg-3 text-start my-auto">
                     <div className="about-card px-2 py-1">
 
                         <h3 className="h6 py-2">
@@ -364,18 +378,17 @@ export default function AboutComponent() {
                         </ol>
                     </div>
                 </div>
-
-                <div className="col-lg-6 py-2 my-auto order-lg-1 text-center">
-
-                    <div className="about-img text-center">
-                        <img
-                            className="rounded"
-                            src="images/tasks-chart.png"
-                            alt="tasks-chart"
-                            width="100%"
+                <div className="col-lg-4 offset-lg-1 py-2 my-auto order-lg-1 text-center">
+                    <div className="p-1 chart-card">
+                        <DoughnutChart
+                            chartData={chartData}
+                            buttonsStates={buttonsStates}
+                            thickness={1}
+                            isDummy={true}
                         />
                     </div>
                 </div>
+                <div className="col-lg-1 order-lg-2"></div>
             </div>
 
             <div className="row small my-0">
@@ -397,9 +410,7 @@ export default function AboutComponent() {
                         </ol>
                     </div>
                 </div>
-
                 <div className="col-lg-6 py-2 my-auto">
-
                     <div className="about-img-2">
                         <img
                             className="rounded"
