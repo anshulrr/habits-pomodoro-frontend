@@ -4,8 +4,12 @@ import moment from 'moment';
 import CalendarHeatmap from 'react-calendar-heatmap';
 import 'react-calendar-heatmap/dist/styles.css';
 
+import { Tooltip } from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css';
+
 import { getStatsPomodorosCountApi } from 'services/api/PomodoroApiService';
 import { retrieveAllProjectsApi } from 'services/api/ProjectApiService';
+import { timeToDisplay } from 'services/helpers/listsHelper';
 
 export const CalendarChart = ({ subject, categories }) => {
 
@@ -65,6 +69,7 @@ export const CalendarChart = ({ subject, categories }) => {
         setProjectId('0');
         if (id === '0') {
             retrieveStatsPomodorosCount('user')
+            setProjects([]);
         } else {
             retrieveStatsPomodorosCount('category', id);
             refreshProjects(id);
@@ -137,7 +142,18 @@ export const CalendarChart = ({ subject, categories }) => {
                 endDate={endDate}
                 values={chartData.data}
                 showWeekdayLabels={true}
+                tooltipDataAttrs={value => {
+                    if (!value || !value.date) {
+                        return null;
+                    }
+                    return {
+                        'data-tooltip-id': 'streak-tooltip',
+                        'data-tooltip-content': `${value.date}: ${timeToDisplay(value.count)} mins`
+                    };
+                }}
             />
+            <Tooltip id="streak-tooltip" />
+
         </div >
     )
 }

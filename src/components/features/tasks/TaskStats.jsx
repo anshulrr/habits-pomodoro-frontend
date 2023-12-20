@@ -5,7 +5,7 @@ import CalendarHeatmap from 'react-calendar-heatmap';
 import 'react-calendar-heatmap/dist/styles.css';
 
 import { Tooltip } from 'react-tooltip';
-// import 'react-tooltip/dist/react-tooltip.css';
+import 'react-tooltip/dist/react-tooltip.css';
 
 import { getStatsPomodorosCountApi } from 'services/api/PomodoroApiService';
 import { timeToDisplay } from 'services/helpers/listsHelper';

@@ -246,7 +246,7 @@ export default function AboutComponent() {
                                     Add reframe reasons to task notes.
                                 </li>
                                 <li>
-                                    Add violations to task notes.
+                                    Set <span className="fw-bold">Daily Pomodoros Limit</span> for a bad habit, then check the days of violations in task stats.
                                 </li>
                             </ul>
                         </ol>
