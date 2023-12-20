@@ -4,6 +4,9 @@ import moment from 'moment';
 import CalendarHeatmap from 'react-calendar-heatmap';
 import 'react-calendar-heatmap/dist/styles.css';
 
+import { Tooltip } from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css';
+
 import { getStatsPomodorosCountApi } from 'services/api/PomodoroApiService';
 import { timeToDisplay } from 'services/helpers/listsHelper';
 
@@ -96,9 +99,27 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
                                     if (!value) {
                                         return 'color-empty';
                                     }
-                                    return `color-${task.type}`;
+                                    if (task.type === 'bad') {
+                                        if (value.count > task.pomodoroLength * task.dailyLimit) {
+                                            return `color-${task.type}`;
+                                        } else {
+                                            return `color-neutral`;
+                                        }
+                                    } else {
+                                        return `color-${task.type}`;
+                                    }
+                                }}
+                                tooltipDataAttrs={value => {
+                                    if (!value || !value.date) {
+                                        return null;
+                                    }
+                                    return {
+                                        'data-tooltip-id': 'streak-tooltip',
+                                        'data-tooltip-content': `${value.date}: ${timeToDisplay(value.count)} mins`
+                                    };
                                 }}
                             />
+                            <Tooltip id="streak-tooltip" />
                         </div >
                     </div >
 

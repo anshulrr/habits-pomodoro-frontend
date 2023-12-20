@@ -310,6 +310,7 @@ export default function ListTasksRowsComponent({
                         task => {
                             // TODO: find better way to handle this
                             task.projectId = task.project.id;
+                            task.pomodoroLength = task.pomodoroLength || task.project.pomodoroLength || userSettings.pomodoroLength;
                             return (
                                 <div key={task.id} className={"update-list-row" + (showUpdatePopupId === task.id ? " update-list-row-selected" : "")}>
                                     <div className="d-flex justify-content-start">
@@ -322,13 +323,17 @@ export default function ListTasksRowsComponent({
                                                 </div>
                                                 <div className="subscript text-secondary">
                                                     <span className="me-1">
-                                                        <i className="bi bi-arrow-up" />
-                                                        {task.priority}
-                                                    </span>
-
-                                                    <span className="me-1">
-                                                        <i className="bi bi-hourglass" />
-                                                        {timeToDisplay(task.pomodoroLength || task.project.pomodoroLength || userSettings.pomodoroLength)}
+                                                        <span>
+                                                            {
+                                                                task.dailyLimit <= 3 ?
+                                                                    [...Array(task.dailyLimit)].map((e, i) => <i className="bi bi-hourglass" key={i} />)
+                                                                    :
+                                                                    <span>
+                                                                        {task.dailyLimit}<i className="bi bi-hourglass" />
+                                                                    </span>
+                                                            }
+                                                        </span>
+                                                        {timeToDisplay(task.pomodoroLength)}
                                                     </span>
 
                                                     {
@@ -341,7 +346,9 @@ export default function ListTasksRowsComponent({
 
                                                     {
                                                         task.todaysTimeElapsed !== undefined &&
-                                                        <span className="me-1">
+                                                        <span className={"me-1 " +
+                                                            (task.type === 'bad' && task.todaysTimeElapsed / 60 > (task.pomodoroLength) * task.dailyLimit ? "text-danger" : "")
+                                                        }>
                                                             <i className="bi bi-clock-fill" style={{ paddingRight: "0.1rem" }} />
                                                             {timeToDisplay(task.todaysTimeElapsed / 60)}
                                                         </span>
