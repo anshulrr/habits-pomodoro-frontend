@@ -142,6 +142,16 @@ export const CalendarChart = ({ subject, categories }) => {
                 endDate={endDate}
                 values={chartData.data}
                 showWeekdayLabels={true}
+                classForValue={(value) => {
+                    if (!value) {
+                        return 'color-empty';
+                    }
+                    // time spent above 12 hours has darkest color
+                    const max = 12 * 60;
+                    let range = Math.round(value.count / max * 10) * 10;
+                    range = range <= 100 ? range : 100;
+                    return `color-good-${range}`;
+                }}
                 tooltipDataAttrs={value => {
                     if (!value || !value.date) {
                         return null;

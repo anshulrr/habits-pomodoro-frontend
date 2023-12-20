@@ -299,15 +299,3 @@
     right: 0;
     cursor: pointer;
 }
-
-.react-calendar-heatmap .color-neutral {
-    fill: rgb(33, 37, 41);
-}
-
-.react-calendar-heatmap .color-bad {
-    fill: rgb(220, 53, 69);
-}
-
-.react-calendar-heatmap .color-good {
-    fill: rgb(25, 135, 84);
-}

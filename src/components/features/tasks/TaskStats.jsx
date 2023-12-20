@@ -99,15 +99,19 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
                                     if (!value) {
                                         return 'color-empty';
                                     }
+                                    let type = task.type;
                                     if (task.type === 'bad') {
                                         if (value.count > task.pomodoroLength * task.dailyLimit) {
-                                            return `color-${task.type}`;
+                                            type = 'bad';
                                         } else {
-                                            return `color-neutral`;
+                                            type = `neutral`;
                                         }
-                                    } else {
-                                        return `color-${task.type}`;
                                     }
+                                    // a task above 6 hours has darkest color
+                                    const max = 6 * 60;
+                                    let range = Math.round(value.count / max * 10) * 10;
+                                    range = range <= 100 ? range : 100;
+                                    return `color-${type}-${range}`;
                                 }}
                                 tooltipDataAttrs={value => {
                                     if (!value || !value.date) {
