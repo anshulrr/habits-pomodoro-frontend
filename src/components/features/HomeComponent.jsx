@@ -226,6 +226,12 @@ export default function HomeComponent({ setReloadHome }) {
                 <div className="col-lg-4">
                     <div className="mt-3 mb-5 bg-white text-start text-secondary">
                         {
+                            categoryIds.length === 0 &&
+                            <span className="loader-container mt-5" >
+                                <span className="loader"></span>
+                            </span>
+                        }
+                        {
                             categoryIds.length > 0 &&
                             <ListPomodorosComponent
                                 key={[pomodorosListReload]}
