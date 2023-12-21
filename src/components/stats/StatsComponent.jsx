@@ -98,7 +98,11 @@ export default function ListStatsComponent() {
 
     return (
         <div className="container pt-3" style={{ backgroundColor: "#f2f3f4" }}>
-
+            <span className="user-comments-icon">
+                <button type="button" className="btn btn-outline-secondary" onClick={() => setReload(prev => prev + 1)}>
+                    <i className="bi bi-arrow-clockwise" />
+                </button>
+            </span>
             <div className="row">
                 {
                     subject != null &&
@@ -203,6 +207,7 @@ export default function ListStatsComponent() {
                             setShowFriendsStats={setShowFriendsStats}
                         />
                     </div>
+
                 </div>
 
                 {

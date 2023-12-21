@@ -107,8 +107,8 @@ export default function HomeComponent({ setReloadHome }) {
 
                     <div className="left-menu-icon">
                         {
-                            <button type="button" className="btn btn-light bg-white border-secondary mx-2" onClick={() => setShowLeftMenu(!showLeftMenu)}>
-                                <i className="px-3 bi bi-list" />
+                            <button type="button" className="btn btn-success" onClick={() => setShowLeftMenu(!showLeftMenu)}>
+                                <i className="px-4 bi bi-list" />
                             </button>
                         }
                     </div>
