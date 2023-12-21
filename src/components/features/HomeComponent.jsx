@@ -106,14 +106,12 @@ export default function HomeComponent({ setReloadHome }) {
                 <div className="col-lg-4 text-start">
 
                     <div className="left-menu-icon">
-                        {
-                            <button type="button" className="btn btn-success" onClick={() => setShowLeftMenu(!showLeftMenu)}>
-                                <i className="px-4 bi bi-list" />
-                            </button>
-                        }
+                        <button type="button" className="btn btn-success" onClick={() => setShowLeftMenu(!showLeftMenu)}>
+                            <i className="px-4 bi bi-list" />
+                        </button>
                     </div>
 
-                    {
+                    <div className="left-menu-container" style={{ visibility: showLeftMenu ? 'visible' : 'hidden' }}>
                         <div className={"left-menu-overlay " + (showLeftMenu ? "left-menu-enter" : "left-menu-exit")} >
                             <div id="outside-alerter-parent">
                                 <OutsideAlerter handle={() => setShowLeftMenu(false)}>
@@ -178,7 +176,7 @@ export default function HomeComponent({ setReloadHome }) {
                                 </OutsideAlerter>
                             </div>
                         </div>
-                    }
+                    </div>
                 </div>
 
                 <div className="col-lg-4" style={{ backgroundColor: "#e9ecef" }}>

@@ -36,6 +36,14 @@
         z-index: 1031;
     }
 
+    .left-menu-container {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        width: 100vw;
+        z-index: 2000;
+    }
+
     .left-menu-overlay {
         position: fixed;
         top: 0;
