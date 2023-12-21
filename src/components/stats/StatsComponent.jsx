@@ -15,6 +15,7 @@ import StatsSettingsComponent from "components/stats/StatsSettingsComponent";
 import SelectFriendsComponent from "components/stats//SelectFriendsComponent";
 import { CalendarChart } from "./charts/CalendarChart";
 import { ProjectCategoriesChart } from "./charts/ProjectCategoriesChart";
+import OutsideAlerter from "services/hooks/OutsideAlerter";
 
 export default function ListStatsComponent() {
 
@@ -24,9 +25,9 @@ export default function ListStatsComponent() {
 
     const [statsSettings, setStatsSettings] = useState({})
 
-    const [showIncludeCategories, setShowIncludeCategories] = useState(window.innerWidth <= 992 ? false : true);
-    const [showStatsSettings, setShowStatsSettings] = useState(window.innerWidth <= 992 ? false : true);
-    const [showFriendsStats, setShowFriendsStats] = useState(window.innerWidth <= 992 ? false : true);
+    const [showIncludeCategories, setShowIncludeCategories] = useState(true);
+    const [showStatsSettings, setShowStatsSettings] = useState(true);
+    const [showFriendsStats, setShowFriendsStats] = useState(true);
 
     const [reload, setReload] = useState(0)
     const [reloadCategories, setReloadCategories] = useState(0)
@@ -35,6 +36,8 @@ export default function ListStatsComponent() {
     const [subjects, setSubjects] = useState([])
 
     const [showLoader, setShowLoader] = useState(true)
+
+    const [showLeftMenu, setShowLeftMenu] = useState(window.innerWidth <= 992 ? false : true);
 
     const [pomodorosHeight, setPomodorosHeight] = useState(0);
 
@@ -97,12 +100,17 @@ export default function ListStatsComponent() {
     }
 
     return (
-        <div className="container pt-3" style={{ backgroundColor: "#f2f3f4" }}>
+        <div className="container pt-1" style={{ backgroundColor: "#f2f3f4" }}>
             <span className="user-comments-icon">
-                <button type="button" className="btn btn-outline-secondary" onClick={() => setReload(prev => prev + 1)}>
+                <button type="button" className="btn btn-secondary" onClick={() => setReload(prev => prev + 1)}>
                     <i className="bi bi-arrow-clockwise" />
                 </button>
             </span>
+            <div className="left-menu-icon">
+                <button type="button" className="btn btn-secondary" onClick={() => setShowLeftMenu(!showLeftMenu)}>
+                    <i className="px-4 bi bi-list" />
+                </button>
+            </div>
             <div className="row">
                 {
                     subject != null &&
@@ -110,102 +118,115 @@ export default function ListStatsComponent() {
                         {subject.email}
                     </div>
                 }
-                <div className="col-lg-4">
-                    <div className="d-flex justify-content-between mb-2"
-                        onClick={() => setShowStatsSettings(!showStatsSettings)}
-                        style={{ cursor: "pointer" }}
-                    >
-                        <h6 className="mb-0">
-                            Settings
-                        </h6>
-                        <div className="text-secondary px-1" >
-                            {
-                                !showStatsSettings &&
-                                <i className="bi bi-eye-slash" />
-                            }
-                            {
-                                showStatsSettings &&
-                                <i className="bi bi-eye" />
-                            }
-                        </div>
-                    </div>
-                    <div style={{ display: showStatsSettings ? "block" : "none" }} >
-                        <StatsSettingsComponent
-                            statsSettings={statsSettings}
-                            setStatsSettings={setStatsSettings}
-                            reload={reload}
-                            setReload={setReload}
-                        />
-                    </div>
+                <div className="col-lg-4 text-start">
 
-                    <div className="d-flex justify-content-between mb-2"
-                        onClick={() => setShowIncludeCategories(!showIncludeCategories)}
-                        style={{ cursor: "pointer" }}
-                    >
-                        <h6 className="mb-0">
-                            Included Project Categories
-                            <span className="ms-1 badge rounded-pill text-bg-secondary">
-                                {includeCategories.length}/{categories.length}
-                                <i className="ms-1 bi bi-link-45deg" />
-                            </span>
-                            {
-                                showLoader &&
-                                <span className="loader-container-2" >
-                                    <span className="ms-2 loader-2"></span>
-                                </span>
-                            }
-                        </h6>
-                        <div className="text-secondary px-1">
-                            {
-                                !showIncludeCategories &&
-                                <i className="bi bi-eye-slash" />
-                            }
-                            {
-                                showIncludeCategories &&
-                                <i className="bi bi-eye" />
-                            }
-                        </div>
-                    </div>
-                    <div style={{ display: showIncludeCategories ? "block" : "none" }} >
-                        <CategoryChecklistComponent
-                            key={reloadCategories}
-                            categories={categories}
-                            setIncludeCategories={setIncludeCategories}
-                            reload={reload}
-                            setReload={setReload}
-                        />
-                    </div>
+                    <div className="left-menu-container" style={{ visibility: showLeftMenu ? 'visible' : 'hidden' }}>
+                        <div className={"left-menu-overlay " + (showLeftMenu ? "left-menu-enter" : "left-menu-exit")} >
+                            <div id="outside-alerter-parent">
+                                <OutsideAlerter handle={() => setShowLeftMenu(false)}>
+                                    <div className="left-menu-popup">
 
-                    <div className="d-flex justify-content-between mb-2"
-                        onClick={() => setShowFriendsStats(!showFriendsStats)}
-                        style={{ cursor: "pointer" }}
-                    >
-                        <h6 className="mb-0">
-                            Friends Stats
-                            <span className="ms-1 badge rounded-pill text-bg-secondary">
-                                {subjects.length}
-                                <i className="ps-1 bi bi-person-fill" />
-                            </span>
-                        </h6>
-                        <div className="text-secondary px-1">
-                            {
-                                !showFriendsStats &&
-                                <i className="bi bi-eye-slash" />
-                            }
-                            {
-                                showFriendsStats &&
-                                <i className="bi bi-eye" />
-                            }
-                        </div>
-                    </div>
+                                        <div className="d-flex justify-content-between mt-3 mb-2"
+                                            onClick={() => setShowStatsSettings(!showStatsSettings)}
+                                            style={{ cursor: "pointer" }}
+                                        >
+                                            <h6 className="mb-0">
+                                                Settings
+                                            </h6>
+                                            <div className="text-secondary px-1" >
+                                                {
+                                                    !showStatsSettings &&
+                                                    <i className="bi bi-eye-slash" />
+                                                }
+                                                {
+                                                    showStatsSettings &&
+                                                    <i className="bi bi-eye" />
+                                                }
+                                            </div>
+                                        </div>
+                                        <div style={{ display: showStatsSettings ? "block" : "none" }} >
+                                            <StatsSettingsComponent
+                                                statsSettings={statsSettings}
+                                                setStatsSettings={setStatsSettings}
+                                                reload={reload}
+                                                setReload={setReload}
+                                            />
+                                        </div>
 
-                    <div style={{ display: showFriendsStats ? "block" : "none" }} >
-                        <SelectFriendsComponent
-                            subjects={subjects}
-                            setSubject={setSubject}
-                            retrieveProjectCategories={retrieveProjectCategories}
-                            setShowFriendsStats={setShowFriendsStats}
-                        />
+                                        <div className="d-flex justify-content-between mb-2"
+                                            onClick={() => setShowIncludeCategories(!showIncludeCategories)}
+                                            style={{ cursor: "pointer" }}
+                                        >
+                                            <h6 className="mb-0">
+                                                Included Project Categories
+                                                <span className="ms-1 badge rounded-pill text-bg-secondary">
+                                                    {includeCategories.length}/{categories.length}
+                                                    <i className="ms-1 bi bi-link-45deg" />
+                                                </span>
+                                                {
+                                                    showLoader &&
+                                                    <span className="loader-container-2" >
+                                                        <span className="ms-2 loader-2"></span>
+                                                    </span>
+                                                }
+                                            </h6>
+                                            <div className="text-secondary px-1">
+                                                {
+                                                    !showIncludeCategories &&
+                                                    <i className="bi bi-eye-slash" />
+                                                }
+                                                {
+                                                    showIncludeCategories &&
+                                                    <i className="bi bi-eye" />
+                                                }
+                                            </div>
+                                        </div>
+                                        <div style={{ display: showIncludeCategories ? "block" : "none" }} >
+                                            <CategoryChecklistComponent
+                                                key={reloadCategories}
+                                                categories={categories}
+                                                setIncludeCategories={setIncludeCategories}
+                                                reload={reload}
+                                                setReload={setReload}
+                                            />
+                                        </div>
+
+                                        <div className="d-flex justify-content-between mb-2"
+                                            onClick={() => setShowFriendsStats(!showFriendsStats)}
+                                            style={{ cursor: "pointer" }}
+                                        >
+                                            <h6 className="mb-0">
+                                                Friends Stats
+                                                <span className="ms-1 badge rounded-pill text-bg-secondary">
+                                                    {subjects.length}
+                                                    <i className="ps-1 bi bi-person-fill" />
+                                                </span>
+                                            </h6>
+                                            <div className="text-secondary px-1">
+                                                {
+                                                    !showFriendsStats &&
+                                                    <i className="bi bi-eye-slash" />
+                                                }
+                                                {
+                                                    showFriendsStats &&
+                                                    <i className="bi bi-eye" />
+                                                }
+                                            </div>
+                                        </div>
+
+                                        <div style={{ display: showFriendsStats ? "block" : "none" }} >
+                                            <SelectFriendsComponent
+                                                subjects={subjects}
+                                                setSubject={setSubject}
+                                                retrieveProjectCategories={retrieveProjectCategories}
+                                                setShowFriendsStats={setShowFriendsStats}
+                                            />
+                                        </div>
+
+                                    </div>
+                                </OutsideAlerter>
+                            </div>
+                        </div>
                     </div>
 
                 </div>

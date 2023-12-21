@@ -35,7 +35,7 @@ export default function HomeComponent({ setReloadHome }) {
     const [tasksFilter, setTasksFilter] = useState((state && state.filters) || (isEmpty(state) && IS_FILTERS_DEFAULT && 'Overdue'));
     const [showTasksFilters, setShowTasksFilters] = useState(true);
 
-    const [showLeftMenu, setShowLeftMenu] = useState(false);
+    const [showLeftMenu, setShowLeftMenu] = useState(window.innerWidth <= 992 ? false : true);
 
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
