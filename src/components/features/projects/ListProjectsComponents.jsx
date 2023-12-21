@@ -99,7 +99,7 @@ export default function ListProjectsComponent({
         setProject(proj);
         // udpate state: to be passed with further navigations
         updateAppStates(proj);
-        setShowLeftMenu(false);
+        // setShowLeftMenu(false);
     }
 
     function updateAppStates(proj) {

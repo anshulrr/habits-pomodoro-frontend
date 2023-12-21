@@ -93,7 +93,7 @@ export default function ListTagsComponent({ setProject, tag, setTag, setAllTags,
         setTag(tg);
         // udpate state: to be passed with further navigations
         updateAppStates(tg);
-        setShowLeftMenu(false);
+        // setShowLeftMenu(false);
     }
 
     function updateAppStates(tg) {

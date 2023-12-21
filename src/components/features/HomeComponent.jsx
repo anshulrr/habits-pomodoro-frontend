@@ -64,7 +64,7 @@ export default function HomeComponent({ setReloadHome }) {
 
     function fetchTasksAndUpdateAppStates(filter) {
         fetchTasks(filter);
-        setShowLeftMenu(false);
+        // setShowLeftMenu(false);
     }
 
     function fetchTasks(filter) {

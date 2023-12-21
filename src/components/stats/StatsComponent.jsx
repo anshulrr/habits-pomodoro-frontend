@@ -114,7 +114,7 @@ export default function ListStatsComponent() {
             <div className="row">
                 {
                     subject != null &&
-                    <div className="alert alert-primary" role="alert">
+                    <div className="alert alert-primary mb-1" role="alert">
                         {subject.email}
                     </div>
                 }
