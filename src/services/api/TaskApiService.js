@@ -14,7 +14,7 @@ export const getTasksCountApi
     }
 
 export const retrieveAllTasksApi
-    = ({ projectId, status, startDate, endDate, limit, offset, tagId }) => {
+    = ({ projectId, status, startDate, endDate, limit, offset, tagId, subject }) => {
         let url = `/tasks?status=${status}&limit=${limit}&offset=${offset}`;
         if (startDate && endDate) {
             url += `&startDate=${startDate}&endDate=${endDate}`;
@@ -22,6 +22,9 @@ export const retrieveAllTasksApi
             url += `&tagId=${tagId}`
         } else {
             url += `&projectId=${projectId}`
+        }
+        if (subject) {
+            url += `&subjectId=${subject.id}`
         }
         return apiClient.get(url)
     }

@@ -10,6 +10,7 @@ import 'react-tooltip/dist/react-tooltip.css';
 import { getStatsPomodorosCountApi } from 'services/api/PomodoroApiService';
 import { retrieveAllProjectsApi } from 'services/api/ProjectApiService';
 import { timeToDisplay } from 'services/helpers/listsHelper';
+import { retrieveAllTasksApi } from 'services/api/TaskApiService';
 
 export const CalendarChart = ({ subject, categories }) => {
 
@@ -18,6 +19,8 @@ export const CalendarChart = ({ subject, categories }) => {
     const [categoryId, setCategoryId] = useState('0');
     const [projectId, setProjectId] = useState('0');
     const [projects, setProjects] = useState([]);
+    const [taskId, setTaskId] = useState('0');
+    const [tasks, setTasks] = useState([]);
     const [chartData, setChartData] = useState({ label: '', labels: [], data: [], colors: [] })
 
     const [showLoader, setShowLoader] = useState(false);
@@ -64,12 +67,31 @@ export const CalendarChart = ({ subject, categories }) => {
             .catch(error => console.error(error.message))
     }
 
+    function refreshTasks(projectId) {
+        setTasks([]);
+
+        retrieveAllTasksApi({ subject, projectId, status: 'current', limit: 100, offset: 0 })
+            .then(response => {
+                // console.debug(response)
+                setTasks(prev => prev.concat(response.data))
+            })
+            .catch(error => console.error(error.message))
+
+        retrieveAllTasksApi({ subject, projectId, status: 'archived', limit: 100, offset: 0 })
+            .then(response => {
+                // console.debug(response)
+                setTasks(prev => prev.concat(response.data))
+            })
+            .catch(error => console.error(error.message))
+    }
+
     function updateCategory(id) {
         setCategoryId(id);
         setProjectId('0');
         if (id === '0') {
             retrieveStatsPomodorosCount('user')
             setProjects([]);
+            setTasks([]);
         } else {
             retrieveStatsPomodorosCount('category', id);
             refreshProjects(id);
@@ -80,8 +102,19 @@ export const CalendarChart = ({ subject, categories }) => {
         setProjectId(id);
         if (id === '0') {
             retrieveStatsPomodorosCount('category', categoryId);
+            setTasks([]);
         } else {
             retrieveStatsPomodorosCount('project', id);
+            refreshTasks(id);
+        }
+    }
+
+    function updateTask(id) {
+        setTaskId(id);
+        if (id === '0') {
+            retrieveStatsPomodorosCount('project', projectId);
+        } else {
+            retrieveStatsPomodorosCount('task', id);
         }
     }
 
@@ -106,7 +139,7 @@ export const CalendarChart = ({ subject, categories }) => {
                         value={categoryId}
                         onChange={(e) => updateCategory(e.target.value)}
                     >
-                        <option value="0">All Categories</option>
+                        <option value="0">Select Category</option>
                         {
                             categories.map(
                                 projectCategory => (
@@ -125,11 +158,30 @@ export const CalendarChart = ({ subject, categories }) => {
                         value={projectId}
                         onChange={(e) => updateProject(e.target.value)}
                     >
-                        <option value="0">All Category Projects</option>
+                        <option value="0">Select Category's Project</option>
                         {
                             projects.map(
                                 project => (
                                     <option key={project.id} value={project.id}>{project.name}</option>
+                                )
+                            )
+                        }
+                    </select>
+                </div>
+
+                <div className="col-12 px-0 mb-1">
+                    <select
+                        className="form-select form-select-sm"
+                        id="task_id"
+                        name="task_id"
+                        value={taskId}
+                        onChange={(e) => updateTask(e.target.value)}
+                    >
+                        <option value="0">Select Project's Task</option>
+                        {
+                            tasks.map(
+                                task => (
+                                    <option key={task.id} value={task.id}>{task.description}</option>
                                 )
                             )
                         }
