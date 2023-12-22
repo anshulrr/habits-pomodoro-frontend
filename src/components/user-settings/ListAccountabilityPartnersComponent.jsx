@@ -96,16 +96,11 @@ export default function ListAccountabilityPartnersComponent() {
                                     <i className="bi bi-plus-circle" />
                                 </button>
                             </div>
-
-                            <div className="alert alert-primary small py-0" role="alert">
-                                <i className="me-2 bi bi-info-circle-fill" />
-                                Accountability Partners will be able to see the stats of all visible project categories
-                            </div>
                         </div>
 
                         {
                             showAddPartner &&
-                            <div className="row px-0">
+                            <div className="row px-0 mb-1">
                                 <div className="col-12 px-0">
                                     <form onSubmit={handleSubmit}>
                                         <div className="input-group text-end">
@@ -131,6 +126,14 @@ export default function ListAccountabilityPartnersComponent() {
                                 </div>
                             </div>
                         }
+
+
+                        <div className="row">
+                            <div className="alert alert-primary small py-0" role="alert">
+                                <i className="me-2 bi bi-info-circle-fill" />
+                                Accountability Partners can see the stats of all visible project categories
+                            </div>
+                        </div>
 
                         <div className="row px-0">
                             <div className="col-12 px-0">

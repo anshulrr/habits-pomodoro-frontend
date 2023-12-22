@@ -52,8 +52,8 @@ export default function CommentComponent({ setComments, filterBy, id, title, set
                     <div className="row">
                         <div className="col-lg-12 mb-2">
                             <div className="input-group">
-                                <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => setShowInput(true)}>Write</button>
-                                <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => setShowInput(false)}>Preview</button>
+                                <button type="button" className={"btn btn-sm btn-outline-secondary " + (showInput ? "active" : "")} onClick={() => setShowInput(true)}>Write</button>
+                                <button type="button" className={"btn btn-sm btn-outline-secondary " + (!showInput ? "active" : "")} onClick={() => setShowInput(false)}>Preview</button>
                             </div>
                             {
                                 showInput &&
