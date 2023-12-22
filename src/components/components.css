@@ -132,3 +132,11 @@
     background-color: #e9ecef;
     border-radius: 10px;
 }
+
+.sticky-menu {
+    position: sticky;
+    /* below top menu */
+    top: 56px;
+    background-color: #ffffff;
+    z-index: 10;
+}

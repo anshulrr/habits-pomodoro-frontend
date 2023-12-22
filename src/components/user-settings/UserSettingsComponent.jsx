@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { putUserSettingsApi } from 'services/api/AuthApiService'
@@ -8,6 +8,10 @@ export default function UserSettingsComponent() {
 
     const navigate = useNavigate()
     const { state } = useLocation();
+
+    const displaySettingsRef = useRef(null);
+    const generalSettingsRef = useRef(null);
+    const statsSettingsRef = useRef(null);
 
     const authContext = useAuth();
 
@@ -169,6 +173,10 @@ export default function UserSettingsComponent() {
         setSuccessMessage('')
     }
 
+    const handleClickToScroll = function (ref) {
+        ref.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+
     if (showLoader) {
         return (
             <div>
@@ -181,359 +189,379 @@ export default function UserSettingsComponent() {
 
     return (
         <div>
-            <h6 className='text-start'>General Settings</h6>
+            <div className="row mb-3" style={{ position: 'sticky', top: '55px', backgroundColor: "#ffffff", zIndex: '10', display: window.innerWidth <= 992 ? "block" : "none" }}>
+                <div className="col-12">
+                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1"} onClick={() => handleClickToScroll(generalSettingsRef)}>
+                        General Settings
+                    </button>
+                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1"} onClick={() => handleClickToScroll(displaySettingsRef)}>
+                        Display Settings
+                    </button>
+                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1"} onClick={() => handleClickToScroll(statsSettingsRef)}>
+                        Stats Settings
+                    </button>
+                </div>
+            </div>
 
-            <div className="row">
-                <div className="col-lg-12">
-                    <div className="input-group input-group-sm mb-2">
-                        <div className="input-group-text">
-                            <input
-                                type="checkbox"
-                                name="enableAutoStartBreak"
-                                className="form-check-input mt-0"
-                                checked={enableAutoStartBreak}
-                                onChange={(e) => handleOnChange(setEnableAutoStartBreak, e.target.checked)}
-                                id="eAutoStartBreak"
-                            />
+            <div ref={generalSettingsRef}>
+                <h6 className='text-start'>General Settings</h6>
+
+                <div className="row">
+                    <div className="col-lg-12">
+                        <div className="input-group input-group-sm mb-2">
+                            <div className="input-group-text">
+                                <input
+                                    type="checkbox"
+                                    name="enableAutoStartBreak"
+                                    className="form-check-input mt-0"
+                                    checked={enableAutoStartBreak}
+                                    onChange={(e) => handleOnChange(setEnableAutoStartBreak, e.target.checked)}
+                                    id="eAutoStartBreak"
+                                />
+                            </div>
+                            <label className="input-group-text" htmlFor="eAutoStartBreak">
+                                Auto Start Break
+                            </label>
                         </div>
-                        <label className="input-group-text" htmlFor="eAutoStartBreak">
-                            Auto Start Break
-                        </label>
+                    </div>
+
+                    <div className="col-lg-12">
+                        <div className="input-group input-group-sm mb-2">
+                            <div className="input-group-text">
+                                <input
+                                    type="checkbox"
+                                    name="enableAutoTimerFullscreen"
+                                    className="form-check-input mt-0"
+                                    checked={enableAutoTimerFullscreen}
+                                    onChange={(e) => handleOnChange(setEnableAutoTimerFullscreen, e.target.checked)}
+                                    id="eAutoTimerFullscreen"
+                                />
+                            </div>
+                            <label className="input-group-text" htmlFor="eAutoTimerFullscreen">
+                                Auto Fullscreen Timer
+                            </label>
+                        </div>
                     </div>
                 </div>
 
-                <div className="col-lg-12">
-                    <div className="input-group input-group-sm mb-2">
-                        <div className="input-group-text">
+                <div className="row">
+                    <div className="col-lg-12">
+                        <div className="input-group input-group-sm mb-2">
+                            <div className="input-group-text">
+                                <input
+                                    type="checkbox"
+                                    name="enableStopwatch"
+                                    className="form-check-input mt-0"
+                                    checked={enableStopwatch}
+                                    onChange={(e) => handleOnChange(setEnableStopwatch, e.target.checked)}
+                                    id="eStopwatch"
+                                />
+                            </div>
+                            <label className="input-group-text" htmlFor="eStopwatch">
+                                Enable Stopwatch after a break
+                            </label>
+                        </div>
+                    </div>
+
+                    <div className="col-lg-12">
+                        <div className="input-group input-group-sm mb-2">
+                            <div className="input-group-text">
+                                <input
+                                    type="checkbox"
+                                    name="enableStopwatchAudio"
+                                    className="form-check-input mt-0"
+                                    checked={enableStopwatchAudio}
+                                    onChange={(e) => handleOnChange(setEnableStopwatchAudio, e.target.checked)}
+                                    id="eStopwatchAudio"
+                                />
+                            </div>
+                            <label className="input-group-text" htmlFor="eStopwatchAudio">
+                                Enable Stopwatch Audio after a break
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="row">
+
+                    <div className="col-lg-12">
+                        <div className="input-group input-group-sm mb-2">
+                            <label className="input-group-text" htmlFor="pomodoroLength">
+                                Default Pomodoro Length (mins)
+                            </label>
                             <input
-                                type="checkbox"
-                                name="enableAutoTimerFullscreen"
-                                className="form-check-input mt-0"
-                                checked={enableAutoTimerFullscreen}
-                                onChange={(e) => handleOnChange(setEnableAutoTimerFullscreen, e.target.checked)}
-                                id="eAutoTimerFullscreen"
+                                type="number"
+                                name="pomodoroLength"
+                                className="form-control"
+                                value={pomodoroLength}
+                                min={1}
+                                placeholder="Default Pomodoro Length"
+                                onChange={(e) => handleOnChange(setPomodoroLength, e.target.value)}
+                                id="pomodoroLength"
                             />
                         </div>
-                        <label className="input-group-text" htmlFor="eAutoTimerFullscreen">
-                            Auto Fullscreen Timer
-                        </label>
+                    </div>
+
+                    <div className="col-lg-12">
+                        <div className="input-group input-group-sm mb-2">
+                            <label className="input-group-text" htmlFor="breakLength">
+                                Break Length (mins)
+                            </label>
+                            <input
+                                type="number"
+                                name="breakLength"
+                                className="form-control"
+                                value={breakLength}
+                                min={0}
+                                placeholder="Default Break Length"
+                                onChange={(e) => handleOnChange(setBreakLength, e.target.value)}
+                                id="breakLength"
+                            />
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div ref={displaySettingsRef}>
+                <h6 className='text-start mt-2'>Display Settings</h6>
+
+                <div className="row">
+
+                    <div className="col-lg-12">
+                        <div className="input-group input-group-sm mb-2">
+                            <label className="input-group-text" htmlFor="pageProjectsCount">
+                                Number of projects in a page
+                            </label>
+                            <input
+                                type="number"
+                                name="pageProjectsCount"
+                                className="form-control"
+                                value={pageProjectsCount}
+                                min={1}
+                                placeholder="Default Number of Projects"
+                                onChange={(e) => handleOnChange(setPageProjectsCount, e.target.value)}
+                                id="pageProjectsCount"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="col-lg-12">
+                        <div className="input-group input-group-sm mb-2">
+                            <label className="input-group-text" htmlFor="pageTasksCount">
+                                Number of tasks in a page
+                            </label>
+                            <input
+                                type="number"
+                                name="pageTasksCount"
+                                className="form-control"
+                                value={pageTasksCount}
+                                min={1}
+                                placeholder="Default Number of Tasks"
+                                onChange={(e) => handleOnChange(setPageTasksCount, e.target.value)}
+                                id="pageTasksCount"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="col-lg-12">
+                        <div className="input-group input-group-sm mb-2">
+                            <label className="input-group-text" htmlFor="pageCommentsCount">
+                                Number of notes in a page
+                            </label>
+                            <input
+                                type="number"
+                                name="pageCommentsCount"
+                                className="form-control"
+                                value={pageCommentsCount}
+                                min={1}
+                                placeholder="Default Number of Notes"
+                                onChange={(e) => handleOnChange(setPageCommentsCount, e.target.value)}
+                                id="pageCommentsCount"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="col-lg-12">
+                        <div className="input-group input-group-sm mb-2">
+                            <label className="input-group-text" htmlFor="homePageDefaultList">
+                                Home Page Default List
+                            </label>
+                            <select
+                                className="form-select form-select-sm"
+                                name="home-page-default-list"
+                                onChange={(e) => handleOnChange(setHomePageDefaultList, e.target.value)}
+                                value={homePageDefaultList}   // using react's value instead of defaultValue to handle it with state variable
+                                id="homePageDefaultList"
+                            >
+                                <option value="projects">Projects</option>
+                                <option value="filters">Filters</option>
+                                <option value="tags">Tags</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div className="row">
-                <div className="col-lg-12">
-                    <div className="input-group input-group-sm mb-2">
-                        <div className="input-group-text">
+            <div ref={statsSettingsRef}>
+                <h6 className='text-start mt-2'>Stats Settings</h6>
+
+                <div className="row">
+
+                    <div className="col-lg-12">
+                        <div className="input-group input-group-sm mb-2">
+                            <div className="input-group-text">
+                                <input
+                                    type="checkbox"
+                                    name="enableChartScale"
+                                    className="form-check-input mt-0"
+                                    checked={enableChartScale}
+                                    onChange={(e) => handleOnChange(setEnableChartScale, e.target.checked)}
+                                    id="eChartScale"
+                                />
+                            </div>
+                            <label className="input-group-text" htmlFor="eChartScale">
+                                Enable Chart Scale (mins)
+                            </label>
                             <input
-                                type="checkbox"
-                                name="enableStopwatch"
-                                className="form-check-input mt-0"
-                                checked={enableStopwatch}
-                                onChange={(e) => handleOnChange(setEnableStopwatch, e.target.checked)}
-                                id="eStopwatch"
+                                type="number"
+                                name="chartScale"
+                                className="form-control"
+                                value={chartScale}
+                                min={1}
+                                placeholder="Chart Scale"
+                                onChange={(e) => handleOnChange(setChartScale, e.target.value)}
                             />
                         </div>
-                        <label className="input-group-text" htmlFor="eStopwatch">
-                            Enable Stopwatch after a break
-                        </label>
                     </div>
-                </div>
 
-                <div className="col-lg-12">
-                    <div className="input-group input-group-sm mb-2">
-                        <div className="input-group-text">
+                    <div className="col-lg-12">
+                        <div className="input-group input-group-sm mb-2">
+                            <div className="input-group-text">
+                                <input
+                                    type="checkbox"
+                                    name="enableChartWeeklyAverage"
+                                    className="form-check-input mt-0"
+                                    checked={enableChartWeeklyAverage}
+                                    onChange={(e) => handleOnChange(setEnableChartWeeklyAverage, e.target.checked)}
+                                    id="eChartWeeklyAverage"
+                                />
+                            </div>
+                            <label className="input-group-text" htmlFor="eChartWeeklyAverage">
+                                Enable Chart Weekly Avg (days)
+                            </label>
                             <input
-                                type="checkbox"
-                                name="enableStopwatchAudio"
-                                className="form-check-input mt-0"
-                                checked={enableStopwatchAudio}
-                                onChange={(e) => handleOnChange(setEnableStopwatchAudio, e.target.checked)}
-                                id="eStopwatchAudio"
+                                type="number"
+                                name="chartWeeklyAverage"
+                                className="form-control"
+                                value={chartWeeklyAverage}
+                                min={1}
+                                placeholder="Chart Weekly Average"
+                                onChange={(e) => handleOnChange(setChartWeeklyAverage, e.target.value)}
                             />
                         </div>
-                        <label className="input-group-text" htmlFor="eStopwatchAudio">
-                            Enable Stopwatch Audio after a break
-                        </label>
                     </div>
-                </div>
-            </div>
 
-            <div className="row">
-
-                <div className="col-lg-12">
-                    <div className="input-group input-group-sm mb-2">
-                        <label className="input-group-text" htmlFor="pomodoroLength">
-                            Default Pomodoro Length (mins)
-                        </label>
-                        <input
-                            type="number"
-                            name="pomodoroLength"
-                            className="form-control"
-                            value={pomodoroLength}
-                            min={1}
-                            placeholder="Default Pomodoro Length"
-                            onChange={(e) => handleOnChange(setPomodoroLength, e.target.value)}
-                            id="pomodoroLength"
-                        />
-                    </div>
-                </div>
-
-                <div className="col-lg-12">
-                    <div className="input-group input-group-sm mb-2">
-                        <label className="input-group-text" htmlFor="breakLength">
-                            Break Length (mins)
-                        </label>
-                        <input
-                            type="number"
-                            name="breakLength"
-                            className="form-control"
-                            value={breakLength}
-                            min={0}
-                            placeholder="Default Break Length"
-                            onChange={(e) => handleOnChange(setBreakLength, e.target.value)}
-                            id="breakLength"
-                        />
-                    </div>
-                </div>
-
-            </div>
-
-            <h6 className='text-start mt-2'>Display Settings</h6>
-
-            <div className="row">
-
-                <div className="col-lg-12">
-                    <div className="input-group input-group-sm mb-2">
-                        <label className="input-group-text" htmlFor="pageProjectsCount">
-                            Number of projects in a page
-                        </label>
-                        <input
-                            type="number"
-                            name="pageProjectsCount"
-                            className="form-control"
-                            value={pageProjectsCount}
-                            min={1}
-                            placeholder="Default Number of Projects"
-                            onChange={(e) => handleOnChange(setPageProjectsCount, e.target.value)}
-                            id="pageProjectsCount"
-                        />
-                    </div>
-                </div>
-
-                <div className="col-lg-12">
-                    <div className="input-group input-group-sm mb-2">
-                        <label className="input-group-text" htmlFor="pageTasksCount">
-                            Number of tasks in a page
-                        </label>
-                        <input
-                            type="number"
-                            name="pageTasksCount"
-                            className="form-control"
-                            value={pageTasksCount}
-                            min={1}
-                            placeholder="Default Number of Tasks"
-                            onChange={(e) => handleOnChange(setPageTasksCount, e.target.value)}
-                            id="pageTasksCount"
-                        />
-                    </div>
-                </div>
-
-                <div className="col-lg-12">
-                    <div className="input-group input-group-sm mb-2">
-                        <label className="input-group-text" htmlFor="pageCommentsCount">
-                            Number of notes in a page
-                        </label>
-                        <input
-                            type="number"
-                            name="pageCommentsCount"
-                            className="form-control"
-                            value={pageCommentsCount}
-                            min={1}
-                            placeholder="Default Number of Notes"
-                            onChange={(e) => handleOnChange(setPageCommentsCount, e.target.value)}
-                            id="pageCommentsCount"
-                        />
-                    </div>
-                </div>
-
-                <div className="col-lg-12">
-                    <div className="input-group input-group-sm mb-2">
-                        <label className="input-group-text" htmlFor="homePageDefaultList">
-                            Home Page Default List
-                        </label>
-                        <select
-                            className="form-select form-select-sm"
-                            name="home-page-default-list"
-                            onChange={(e) => handleOnChange(setHomePageDefaultList, e.target.value)}
-                            value={homePageDefaultList}   // using react's value instead of defaultValue to handle it with state variable
-                            id="homePageDefaultList"
-                        >
-                            <option value="projects">Projects</option>
-                            <option value="filters">Filters</option>
-                            <option value="tags">Tags</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <h6 className='text-start mt-2'>Stats Settings</h6>
-
-            <div className="row">
-
-                <div className="col-lg-12">
-                    <div className="input-group input-group-sm mb-2">
-                        <div className="input-group-text">
+                    <div className="col-lg-12">
+                        <div className="input-group input-group-sm mb-2">
+                            <div className="input-group-text">
+                                <input
+                                    type="checkbox"
+                                    name="enableChartMonthlyAverage"
+                                    className="form-check-input mt-0"
+                                    checked={enableChartMonthlyAverage}
+                                    onChange={(e) => handleOnChange(setEnableChartMonthlyAverage, e.target.checked)}
+                                    id="eChartMonthlyAverage"
+                                />
+                            </div>
+                            <label className="input-group-text" htmlFor="eChartMonthlyAverage">
+                                Enable Chart Monthly Avg (days)
+                            </label>
                             <input
-                                type="checkbox"
-                                name="enableChartScale"
-                                className="form-check-input mt-0"
-                                checked={enableChartScale}
-                                onChange={(e) => handleOnChange(setEnableChartScale, e.target.checked)}
-                                id="eChartScale"
+                                type="number"
+                                name="chartMonthlyAverage"
+                                className="form-control"
+                                value={chartMonthlyAverage}
+                                min={1}
+                                placeholder="Chart Monthly Average"
+                                onChange={(e) => handleOnChange(setChartMonthlyAverage, e.target.value)}
                             />
                         </div>
-                        <label className="input-group-text" htmlFor="eChartScale">
-                            Enable Chart Scale (mins)
-                        </label>
-                        <input
-                            type="number"
-                            name="chartScale"
-                            className="form-control"
-                            value={chartScale}
-                            min={1}
-                            placeholder="Chart Scale"
-                            onChange={(e) => handleOnChange(setChartScale, e.target.value)}
-                        />
                     </div>
-                </div>
 
-                <div className="col-lg-12">
-                    <div className="input-group input-group-sm mb-2">
-                        <div className="input-group-text">
-                            <input
-                                type="checkbox"
-                                name="enableChartWeeklyAverage"
-                                className="form-check-input mt-0"
-                                checked={enableChartWeeklyAverage}
-                                onChange={(e) => handleOnChange(setEnableChartWeeklyAverage, e.target.checked)}
-                                id="eChartWeeklyAverage"
-                            />
+                    <div className="col-lg-12">
+                        <div className="input-group input-group-sm mb-2">
+                            <div className="input-group-text">
+                                <input
+                                    type="checkbox"
+                                    name="enableChartAdjustedWeeklyMonthlyAverage"
+                                    className="form-check-input mt-0"
+                                    checked={enableChartAdjustedWeeklyMonthlyAverage}
+                                    onChange={(e) => handleOnChange(setEnableChartAdjustedWeeklyMonthlyAverage, e.target.checked)}
+                                    id="eChartAdjustedWeeklyMonthlyAverage"
+                                />
+                            </div>
+                            <label className="input-group-text" htmlFor="eChartAdjustedWeeklyMonthlyAverage">
+                                Enable Adjusted Avg for current W/M
+                            </label>
                         </div>
-                        <label className="input-group-text" htmlFor="eChartWeeklyAverage">
-                            Enable Chart Weekly Avg (days)
-                        </label>
-                        <input
-                            type="number"
-                            name="chartWeeklyAverage"
-                            className="form-control"
-                            value={chartWeeklyAverage}
-                            min={1}
-                            placeholder="Chart Weekly Average"
-                            onChange={(e) => handleOnChange(setChartWeeklyAverage, e.target.value)}
-                        />
                     </div>
-                </div>
 
-                <div className="col-lg-12">
-                    <div className="input-group input-group-sm mb-2">
-                        <div className="input-group-text">
-                            <input
-                                type="checkbox"
-                                name="enableChartMonthlyAverage"
-                                className="form-check-input mt-0"
-                                checked={enableChartMonthlyAverage}
-                                onChange={(e) => handleOnChange(setEnableChartMonthlyAverage, e.target.checked)}
-                                id="eChartMonthlyAverage"
-                            />
+                    <div className="col-lg-12">
+                        <div className="input-group input-group-sm mb-2">
+                            <label className="input-group-text" htmlFor="projectCategoriesChartType">
+                                Project Categories Chart Type
+                            </label>
+                            <select
+                                className="form-select form-select-sm"
+                                name="projects-categories-chart-type"
+                                onChange={(e) => handleOnChange(setProjectCategoriesChartType, e.target.value)}
+                                value={projectCategoriesChartType}   // using react's value instead of defaultValue to handle it with state variable
+                                id="projectCategoriesChartType"
+                            >
+                                <option value="bar">Bar</option>
+                                <option value="doughnut">Doughnut</option>
+                            </select>
                         </div>
-                        <label className="input-group-text" htmlFor="eChartMonthlyAverage">
-                            Enable Chart Monthly Avg (days)
-                        </label>
-                        <input
-                            type="number"
-                            name="chartMonthlyAverage"
-                            className="form-control"
-                            value={chartMonthlyAverage}
-                            min={1}
-                            placeholder="Chart Monthly Average"
-                            onChange={(e) => handleOnChange(setChartMonthlyAverage, e.target.value)}
-                        />
                     </div>
-                </div>
 
-                <div className="col-lg-12">
-                    <div className="input-group input-group-sm mb-2">
-                        <div className="input-group-text">
-                            <input
-                                type="checkbox"
-                                name="enableChartAdjustedWeeklyMonthlyAverage"
-                                className="form-check-input mt-0"
-                                checked={enableChartAdjustedWeeklyMonthlyAverage}
-                                onChange={(e) => handleOnChange(setEnableChartAdjustedWeeklyMonthlyAverage, e.target.checked)}
-                                id="eChartAdjustedWeeklyMonthlyAverage"
-                            />
+                    <div className="col-lg-12">
+                        <div className="input-group input-group-sm mb-2">
+                            <label className="input-group-text" htmlFor="projectsChartType">
+                                Projects Chart Type
+                            </label>
+                            <select
+                                className="form-select form-select-sm"
+                                name="projects-chart-type"
+                                onChange={(e) => handleOnChange(setProjectsChartType, e.target.value)}
+                                value={projectsChartType}   // using react's value instead of defaultValue to handle it with state variable
+                                id="projectsChartType"
+                            >
+                                <option value="bar">Bar</option>
+                                <option value="doughnut">Doughnut</option>
+                            </select>
                         </div>
-                        <label className="input-group-text" htmlFor="eChartAdjustedWeeklyMonthlyAverage">
-                            Enable Adjusted Avg for current W/M
-                        </label>
                     </div>
-                </div>
 
-                <div className="col-lg-12">
-                    <div className="input-group input-group-sm mb-2">
-                        <label className="input-group-text" htmlFor="projectCategoriesChartType">
-                            Project Categories Chart Type
-                        </label>
-                        <select
-                            className="form-select form-select-sm"
-                            name="projects-categories-chart-type"
-                            onChange={(e) => handleOnChange(setProjectCategoriesChartType, e.target.value)}
-                            value={projectCategoriesChartType}   // using react's value instead of defaultValue to handle it with state variable
-                            id="projectCategoriesChartType"
-                        >
-                            <option value="bar">Bar</option>
-                            <option value="doughnut">Doughnut</option>
-                        </select>
+                    <div className="col-lg-12">
+                        <div className="input-group input-group-sm mb-2">
+                            <label className="input-group-text" htmlFor="tasksChartType">
+                                Tasks Chart Type
+                            </label>
+                            <select
+                                className="form-select form-select-sm"
+                                name="tasks-chart-type"
+                                onChange={(e) => handleOnChange(setTasksChartType, e.target.value)}
+                                value={tasksChartType}
+                                id="tasksChartType"
+                            >
+                                <option value="bar">Bar</option>
+                                <option value="doughnut">Doughnut</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
 
-                <div className="col-lg-12">
-                    <div className="input-group input-group-sm mb-2">
-                        <label className="input-group-text" htmlFor="projectsChartType">
-                            Projects Chart Type
-                        </label>
-                        <select
-                            className="form-select form-select-sm"
-                            name="projects-chart-type"
-                            onChange={(e) => handleOnChange(setProjectsChartType, e.target.value)}
-                            value={projectsChartType}   // using react's value instead of defaultValue to handle it with state variable
-                            id="projectsChartType"
-                        >
-                            <option value="bar">Bar</option>
-                            <option value="doughnut">Doughnut</option>
-                        </select>
-                    </div>
                 </div>
-
-                <div className="col-lg-12">
-                    <div className="input-group input-group-sm mb-2">
-                        <label className="input-group-text" htmlFor="tasksChartType">
-                            Tasks Chart Type
-                        </label>
-                        <select
-                            className="form-select form-select-sm"
-                            name="tasks-chart-type"
-                            onChange={(e) => handleOnChange(setTasksChartType, e.target.value)}
-                            value={tasksChartType}
-                            id="tasksChartType"
-                        >
-                            <option value="bar">Bar</option>
-                            <option value="doughnut">Doughnut</option>
-                        </select>
-                    </div>
-                </div>
-
             </div>
 
             <div className="row mt-2">
