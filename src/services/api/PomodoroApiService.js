@@ -80,3 +80,9 @@ export const getStatsPomodorosCountApi
             return apiClient.get(url + `&subjectId=${subject.id}`)
         }
     }
+
+export const getTaskPomodorosApi
+    = (task_id, limit, offset) => apiClient.get(`/stats/task-pomodoros?taskId=${task_id}&limit=${limit}&offset=${offset}`)
+
+export const getTaskPomodorosCountApi
+    = (task_id) => apiClient.get(`/stats/task-pomodoros/count?taskId=${task_id}`)

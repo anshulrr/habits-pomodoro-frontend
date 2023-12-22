@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import moment from 'moment';
 
 import CalendarHeatmap from 'react-calendar-heatmap';
@@ -7,8 +7,9 @@ import 'react-calendar-heatmap/dist/styles.css';
 import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 
-import { getStatsPomodorosCountApi } from 'services/api/PomodoroApiService';
+import { getStatsPomodorosCountApi, getTaskPomodorosApi, getTaskPomodorosCountApi } from 'services/api/PomodoroApiService';
 import { timeToDisplay } from 'services/helpers/listsHelper';
+import Pagination from 'services/pagination/Pagination';
 
 export const TaskStats = ({ task, setShowTaskStats }) => {
 
@@ -16,13 +17,26 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
     const [endDate, setEndDate] = useState(moment().toISOString());
     const [chartData, setChartData] = useState({ data: [] })
 
+    const PAGESIZE = 10
+    const [pomodorosCount, setPomodorosCount] = useState(0)
+    const [pomodoros, setPomodoros] = useState([])
+    const [currentPage, setCurrentPage] = useState(1)
+    const listElement = useRef(null);
+
     const [showLoader, setShowLoader] = useState(true)
 
     useEffect(
         () => {
             retrieveStatsPomodorosCount('task', task.id)
-        },
-        [] // eslint-disable-line react-hooks/exhaustive-deps
+            retrieveTaskPomodorosCount()
+            retrieveTaskPomodoros()
+        }, [] // eslint-disable-line react-hooks/exhaustive-deps
+    )
+
+    useEffect(
+        () => {
+            retrieveTaskPomodoros()
+        }, [currentPage] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
     const retrieveStatsPomodorosCount = (type, typeId) => {
@@ -45,6 +59,23 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
             .catch(error => console.error(error.message))
     }
 
+    const retrieveTaskPomodorosCount = () => {
+        getTaskPomodorosCountApi(task.id)
+            .then(response => {
+                setPomodorosCount(response.data);
+            })
+            .catch(error => console.error(error.message))
+    }
+
+    const retrieveTaskPomodoros = () => {
+        setPomodoros([])
+        getTaskPomodorosApi(task.id, PAGESIZE, (currentPage - 1) * PAGESIZE)
+            .then(response => {
+                setPomodoros(response.data);
+            })
+            .catch(error => console.error(error.message))
+    }
+
     return (
 
         <div className="task-overlay">
@@ -55,16 +86,20 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
 
                 <div className="container my-5">
 
-                    <h6 className="text-start">
-                        <i className="me-1 bi bi-list-ul" />
-                        {task.description}
-                        {
-                            showLoader &&
-                            <span className="loader-container-2" >
-                                <span className="ms-2 loader-2"></span>
-                            </span>
-                        }
-                    </h6>
+                    <div className="row">
+                        <div className="col-12">
+                            <h6 className="text-start">
+                                <i className="me-1 bi bi-list-ul" />
+                                {task.description}
+                                {
+                                    showLoader &&
+                                    <span className="loader-container-2" >
+                                        <span className="ms-2 loader-2"></span>
+                                    </span>
+                                }
+                            </h6>
+                        </div>
+                    </div>
                     <div className="row small">
                         <div className="col-4">
                             Today's Time
@@ -88,44 +123,117 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
                         </div>
                     </div>
 
-                    <div className="col-lg-12 px-0 mt-2">
-                        <div className="p-1 chart-card">
-                            <CalendarHeatmap
-                                startDate={startDate}
-                                endDate={endDate}
-                                values={chartData.data}
-                                showWeekdayLabels={true}
-                                classForValue={(value) => {
-                                    if (!value) {
-                                        return 'color-empty';
-                                    }
-                                    let type = task.type;
-                                    if (task.type === 'bad') {
-                                        if (value.count > task.pomodoroLength * task.dailyLimit) {
-                                            type = 'bad';
-                                        } else {
-                                            type = `neutral`;
+                    <div className="row mt-2">
+                        <div className="col-12">
+                            <div className="p-1 chart-card">
+                                <CalendarHeatmap
+                                    startDate={startDate}
+                                    endDate={endDate}
+                                    values={chartData.data}
+                                    showWeekdayLabels={true}
+                                    classForValue={(value) => {
+                                        if (!value) {
+                                            return 'color-empty';
                                         }
-                                    }
-                                    // a task above 6 hours has darkest color
-                                    const max = 6 * 60;
-                                    let range = Math.round(value.count / max * 10) * 10;
-                                    range = range <= 100 ? range : 100;
-                                    return `color-${type}-${range}`;
-                                }}
-                                tooltipDataAttrs={value => {
-                                    if (!value || !value.date) {
-                                        return null;
-                                    }
-                                    return {
-                                        'data-tooltip-id': 'streak-tooltip',
-                                        'data-tooltip-content': `${value.date}: ${timeToDisplay(value.count, true)}`
-                                    };
-                                }}
-                            />
-                            <Tooltip id="streak-tooltip" />
+                                        let type = task.type;
+                                        if (task.type === 'bad') {
+                                            if (value.count > task.pomodoroLength * task.dailyLimit) {
+                                                type = 'bad';
+                                            } else {
+                                                type = `neutral`;
+                                            }
+                                        }
+                                        // a task above 6 hours has darkest color
+                                        const max = 6 * 60;
+                                        let range = Math.round(value.count / max * 10) * 10;
+                                        range = range <= 100 ? range : 100;
+                                        return `color-${type}-${range}`;
+                                    }}
+                                    tooltipDataAttrs={value => {
+                                        if (!value || !value.date) {
+                                            return null;
+                                        }
+                                        return {
+                                            'data-tooltip-id': 'streak-tooltip',
+                                            'data-tooltip-content': `${value.date}: ${timeToDisplay(value.count, true)}`
+                                        };
+                                    }}
+                                />
+                                <Tooltip id="streak-tooltip" />
+                            </div >
                         </div >
                     </div >
+
+                    <div className="row small text-secondary m-2">
+                        <div className="col-lg-4 offset-lg-4">
+                            <div className="row small text-start border-bottom">
+                                <div className="col-12">
+                                    <h6>
+                                        <span>
+                                            Pomodoros
+                                        </span>
+                                        <span className="ms-1 badge rounded-pill text-bg-secondary">
+                                            {pomodorosCount}
+                                            <i className="ms-1 bi bi-hourglass" />
+                                        </span>
+                                    </h6>
+                                </div>
+                            </div>
+
+                            {
+                                pomodorosCount !== 0 && pomodoros.length === 0 &&
+                                <div className="loader-container" style={{ height: listElement.current ? listElement.current.offsetHeight : 0 }}>
+                                    <div className="loader"></div>
+                                </div>
+                            }
+
+                            <div id="pomodoros-list" ref={listElement}>
+                                {
+                                    pomodoros.map(
+                                        pomodoro => (
+                                            <div
+                                                key={pomodoro.id}
+                                                className="px-1 row pomodoro-list-row"
+                                            >
+                                                <div className="col-4 text-start">
+                                                    <span className="me-1 small">{moment.utc(pomodoro.endTime).local().format('YYYY MMM DD')}</span>
+                                                </div>
+                                                <div className="col-4 text-end">
+                                                    <span className="me-1 small">
+                                                        {
+                                                            pomodoro.status !== 'past' &&
+                                                            <span>
+                                                                {moment.utc(pomodoro.startTime).local().format('H:mm')}-
+                                                            </span>
+                                                        }
+                                                        <span>
+                                                            {moment.utc(pomodoro.endTime).local().format('H:mm')}
+                                                        </span>
+                                                    </span>
+                                                </div>
+                                                <div className="col-4 text-end">
+                                                    <span className="small">
+                                                        <i className="bi bi-clock-fill" style={{ paddingRight: "0.1rem" }} />
+                                                        <span style={{ fontVariantNumeric: "tabular-nums" }}>
+                                                            {timeToDisplay(Math.round(pomodoro.timeElapsed / 60))}
+                                                        </span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        )
+                                    )
+                                }
+                            </div>
+
+                            <Pagination
+                                className="pagination-bar mt-3"
+                                currentPage={currentPage}
+                                totalCount={pomodorosCount}
+                                pageSize={PAGESIZE}
+                                onPageChange={page => setCurrentPage(page)}
+                            />
+                        </div>
+                    </div>
 
                 </div >
             </div >
