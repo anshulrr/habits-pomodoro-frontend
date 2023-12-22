@@ -8,7 +8,7 @@ import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 
 import { getStatsPomodorosCountApi, getTaskPomodorosApi, getTaskPomodorosCountApi } from 'services/api/PomodoroApiService';
-import { timeToDisplay } from 'services/helpers/listsHelper';
+import { formatDate, timeToDisplay } from 'services/helpers/listsHelper';
 import Pagination from 'services/pagination/Pagination';
 
 export const TaskStats = ({ task, setShowTaskStats }) => {
@@ -17,13 +17,19 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
     const [endDate, setEndDate] = useState(moment().toISOString());
     const [chartData, setChartData] = useState({ data: [] })
 
-    const PAGESIZE = 10
+    const PAGESIZE = 7
     const [pomodorosCount, setPomodorosCount] = useState(0)
     const [pomodoros, setPomodoros] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
     const listElement = useRef(null);
 
     const [showLoader, setShowLoader] = useState(true)
+
+    const COLOR_MAP = {
+        'neutral': 'dark',
+        'good': 'success',
+        'bad': 'secondary'
+    }
 
     useEffect(
         () => {
@@ -76,6 +82,30 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
             .catch(error => console.error(error.message))
     }
 
+    const generateTimeColor = (pomodoro) => {
+        // return if dueDate is null or if dueDate doesn't repeat
+        if (task.repeatDays === 0) {
+            return 'text-secondary';
+        }
+        const endTime = moment.utc(pomodoro.endTime).local();
+        const dueTime = moment.utc(task.dueDate).local();
+        if (task.type === 'bad') {
+            // TODO: decide seperation of due time and restain time with habit type
+            if (endTime.hours() < dueTime.hours() || (endTime.hours() === dueTime.hours() && endTime.minutes() < dueTime.minutes())) {
+                return 'text-secondary';
+            } else {
+                return 'text-dark';
+            }
+        } else {
+            if (endTime.hours() > dueTime.hours() || (endTime.hours() === dueTime.hours() && endTime.minutes() > dueTime.minutes())) {
+                return 'text-danger';
+            } else {
+                return 'text-success';
+            }
+        }
+        // return 'text-secondary';
+    }
+
     return (
 
         <div className="task-overlay">
@@ -88,7 +118,7 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
 
                     <div className="row">
                         <div className="col-12">
-                            <h6 className="text-start">
+                            <h6 className={"text-start text-" + COLOR_MAP[task.type]}>
                                 <i className="me-1 bi bi-list-ul" />
                                 {task.description}
                                 {
@@ -166,7 +196,7 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
 
                     <div className="row small text-secondary m-2">
                         <div className="col-lg-4 offset-lg-4">
-                            <div className="row small text-start border-bottom">
+                            <div className="row small text-start">
                                 <div className="col-12">
                                     <h6>
                                         <span>
@@ -177,6 +207,35 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
                                             <i className="ms-1 bi bi-hourglass" />
                                         </span>
                                     </h6>
+                                </div>
+                                <div className="col-12 border text-center">
+                                    <span className="me-1">
+                                        <span>
+                                            {
+                                                task.dailyLimit <= 3 ?
+                                                    [...Array(task.dailyLimit)].map((e, i) => <i className="bi bi-hourglass" key={i} />)
+                                                    :
+                                                    <span>
+                                                        {task.dailyLimit}<i className="bi bi-hourglass" />
+                                                    </span>
+                                            }
+                                        </span>
+                                        {timeToDisplay(task.pomodoroLength)}
+                                    </span>
+                                    {
+                                        task.dueDate &&
+                                        <span style={{ paddingRight: "0.1rem" }} >
+                                            <i className="bi bi-calendar-check" style={{ paddingRight: "0.1rem" }} />
+                                            {formatDate(task.dueDate)}
+                                        </span>
+                                    }
+                                    {
+                                        task.dueDate && task.repeatDays !== 0 &&
+                                        <span>
+                                            <i className="bi bi-arrow-repeat" style={{ paddingRight: "0.1rem" }} />
+                                            {task.repeatDays}
+                                        </span>
+                                    }
                                 </div>
                             </div>
 
@@ -199,7 +258,7 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
                                                     <span className="me-1 small">{moment.utc(pomodoro.endTime).local().format('YYYY MMM DD')}</span>
                                                 </div>
                                                 <div className="col-4 text-end">
-                                                    <span className="me-1 small">
+                                                    <span className={"me-1 small " + generateTimeColor(pomodoro)}>
                                                         {
                                                             pomodoro.status !== 'past' &&
                                                             <span>
@@ -226,7 +285,7 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
                             </div>
 
                             <Pagination
-                                className="pagination-bar mt-3"
+                                className="pagination-bar pagination-scroll mb-0 ps-0"
                                 currentPage={currentPage}
                                 totalCount={pomodorosCount}
                                 pageSize={PAGESIZE}

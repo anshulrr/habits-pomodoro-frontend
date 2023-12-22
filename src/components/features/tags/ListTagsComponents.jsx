@@ -225,7 +225,7 @@ export default function ListTagsComponent({ setProject, tag, setTag, setAllTags,
                         </div>
 
                         <Pagination
-                            className="pagination-bar mb-0 ps-0"
+                            className="pagination-bar pagination-scroll mb-0 ps-0"
                             currentPage={currentPage}
                             totalCount={tagsCount}
                             pageSize={PAGESIZE}

@@ -140,3 +140,8 @@
     background-color: #ffffff;
     z-index: 10;
 }
+
+.pagination-scroll {
+    max-width: 90vw;
+    overflow: scroll;
+}

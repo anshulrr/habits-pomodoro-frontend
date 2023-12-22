@@ -516,7 +516,7 @@ export default function ListTasksRowsComponent({
             </div>
 
             <Pagination
-                className="pagination-bar ps-0"
+                className="pagination-bar pagination-scroll ps-0"
                 currentPage={currentPage}
                 totalCount={tasksCount}
                 pageSize={PAGESIZE}
