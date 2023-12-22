@@ -299,7 +299,7 @@ export default function UserSettingsComponent() {
 
             </div>
 
-            <h6 className='text-start'>Display Settings</h6>
+            <h6 className='text-start mt-2'>Display Settings</h6>
 
             <div className="row">
 
@@ -377,7 +377,7 @@ export default function UserSettingsComponent() {
                 </div>
             </div>
 
-            <h6 className='text-start'>Stats Settings</h6>
+            <h6 className='text-start mt-2'>Stats Settings</h6>
 
             <div className="row">
 
@@ -536,10 +536,12 @@ export default function UserSettingsComponent() {
 
             </div>
 
-            <div className="col-lg-12 text-end">
-                <button className="btn btn-sm btn-outline-success" type="button" onClick={saveSettings}>Save</button>
-                <div className="text-danger"><small>{errorMessage}</small></div>
-                <div className="text-success"><small>{successMessage}</small></div>
+            <div className="row mt-2">
+                <div className="col-lg-12 text-end">
+                    <button className="btn btn-sm btn-outline-success" type="button" onClick={saveSettings}>Save</button>
+                    <div className="text-danger"><small>{errorMessage}</small></div>
+                    <div className="text-success"><small>{successMessage}</small></div>
+                </div>
             </div>
         </div>
 

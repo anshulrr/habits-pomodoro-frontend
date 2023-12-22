@@ -158,13 +158,13 @@ export default function ListAccountabilityPartnersComponent() {
                                 partner => (
                                     <div key={partner.id} className="row border-bottom my-1">
                                         {/* todo: decide better solution for maxWidth */}
-                                        <div className="col-8 ps-1 text-start">
+                                        <div className="col-8 ps-1 py-1 text-start">
                                             <small>
                                                 {partner.email}&nbsp;
                                             </small>
                                         </div>
                                         <div className="col-4 pe-0 text-end">
-                                            <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => removeAccountabilityPartner(partner)}>
+                                            <button className="btn btn-sm btn-outline-secondary py-0 px-1" type="button" onClick={() => removeAccountabilityPartner(partner)}>
                                                 Remove
                                             </button>
                                         </div>
@@ -178,7 +178,7 @@ export default function ListAccountabilityPartnersComponent() {
                             subjects.map(
                                 subject => (
                                     <div key={subject.id} className="row border-bottom my-1">
-                                        <div className="col-12 ps-1 pb-2 text-start">
+                                        <div className="col-12 ps-1 py-1 text-start">
                                             <small>
                                                 {subject.email}&nbsp;
                                             </small>
