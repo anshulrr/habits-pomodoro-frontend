@@ -120,7 +120,7 @@ export default function ListStatsComponent() {
                 }
                 <div className="col-lg-4 text-start">
 
-                    <div className="left-menu-container" style={{ visibility: showLeftMenu ? 'visible' : 'hidden' }}>
+                    <div className={showLeftMenu ? "left-menu-container" : ""}>
                         <div className={"left-menu-overlay " + (showLeftMenu ? "left-menu-enter" : "left-menu-exit")} >
                             <div id="outside-alerter-parent">
                                 <OutsideAlerter handle={() => setShowLeftMenu(false)}>
