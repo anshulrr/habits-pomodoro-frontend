@@ -51,8 +51,13 @@
         z-index: 2000;
         background-color: #ffffff;
 
-        transition: 0.2s linear;
-        -webkit-transition: 0.2s linear;
+        /* gmail's left menu transition */
+        -webkit-transition-duration: .15s;
+        transition-duration: .15s;
+        -webkit-transition-property: left, right, box-shadow;
+        transition-property: left, right, box-shadow;
+        -webkit-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .left-menu-popup {
