@@ -100,7 +100,7 @@ export default function ListStatsComponent() {
     }
 
     return (
-        <div className="container pt-1" style={{ backgroundColor: "#f2f3f4" }}>
+        <div className="container" style={{ backgroundColor: "#f2f3f4" }}>
             <span className="user-comments-icon">
                 <button type="button" className="btn btn-secondary" onClick={() => setReload(prev => prev + 1)}>
                     <i className="bi bi-arrow-clockwise" />
@@ -111,13 +111,19 @@ export default function ListStatsComponent() {
                     <i className="px-4 bi bi-list" />
                 </button>
             </div>
-            <div className="row">
-                {
-                    subject != null &&
-                    <div className="alert alert-primary mb-1" role="alert">
-                        {subject.email}
+            {
+                subject != null &&
+                <div className="sticky-menu" style={{ backgroundColor: "unset" }}>
+                    <div className="row px-0">
+                        <div className="col-12 px-0">
+                            <div className="alert alert-primary mb-0 py-1" role="alert">
+                                {subject.email}
+                            </div>
+                        </div>
                     </div>
-                }
+                </div>
+            }
+            <div className="row pt-1">
                 <div className="col-lg-4 text-start">
 
                     <div className={showLeftMenu ? "left-menu-container" : ""}>
@@ -286,7 +292,8 @@ export default function ListStatsComponent() {
                             <div className="col-lg-12 px-0">
                                 <div className="py-1 px-3 chart-card">
                                     <CalendarChart
-                                        key={subject}
+                                        key={reload}
+                                        includeCategories={includeCategories}
                                         categories={categories}
                                         subject={subject}
                                     />

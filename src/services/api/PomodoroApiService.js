@@ -72,13 +72,16 @@ export const getTotalPomodorosApi
     }
 
 export const getStatsPomodorosCountApi
-    = ({ startDate, endDate, subject, type, typeId }) => {
-        const url = `/stats/pomodoros-count?startDate=${startDate}&endDate=${endDate}&timezone=${to}&type=${type}&typeId=${typeId}`;
-        if (!subject) {
-            return apiClient.get(url);
-        } else {
-            return apiClient.get(url + `&subjectId=${subject.id}`)
+    = ({ startDate, endDate, subject, type, typeId, includeCategories }) => {
+        let url = `/stats/pomodoros-count?startDate=${startDate}&endDate=${endDate}&timezone=${to}&type=${type}&typeId=${typeId}`;
+        if (type === 'user') {
+            url += `&include_categories=${includeCategories}`;
         }
+        if (subject) {
+            url += `&subjectId=${subject.id}`;
+        }
+        return apiClient.get(url);
+
     }
 
 export const getTaskPomodorosApi

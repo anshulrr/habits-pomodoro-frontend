@@ -12,11 +12,12 @@ import { retrieveAllProjectsApi } from 'services/api/ProjectApiService';
 import { timeToDisplay } from 'services/helpers/listsHelper';
 import { retrieveAllTasksApi } from 'services/api/TaskApiService';
 
-export const CalendarChart = ({ subject, categories }) => {
+export const CalendarChart = ({ subject, categories, includeCategories }) => {
 
     const [startDate, setStartDate] = useState(moment().add(window.innerWidth <= 992 ? -0.5 : -1, 'y').toISOString());
     const [endDate, setEndDate] = useState(moment().toISOString());
     const [categoryId, setCategoryId] = useState('0');
+    const [updatedCategories, setUpdatedCategories] = useState([]);
     const [projectId, setProjectId] = useState('0');
     const [projects, setProjects] = useState([]);
     const [taskId, setTaskId] = useState('0');
@@ -27,16 +28,29 @@ export const CalendarChart = ({ subject, categories }) => {
 
     useEffect(
         () => {
+            updateIncludedCategories()
             retrieveStatsPomodorosCount('user')
         },
         [] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
+    const updateIncludedCategories = () => {
+        const localUpdatedCategories = [];
+        for (const id of includeCategories) {
+            for (const category of categories) {
+                if (category.id === id) {
+                    localUpdatedCategories.push(category);
+                }
+            }
+        }
+        setUpdatedCategories(localUpdatedCategories);
+    }
+
     const retrieveStatsPomodorosCount = (type, typeId = 0) => {
         setShowLoader(true);
         setStartDate(startDate);
         setEndDate(endDate);
-        getStatsPomodorosCountApi({ startDate, endDate, type, typeId, subject })
+        getStatsPomodorosCountApi({ startDate, endDate, type, typeId, subject, includeCategories })
             .then(response => {
                 const updated_data = {
                     data: [],
@@ -74,13 +88,13 @@ export const CalendarChart = ({ subject, categories }) => {
             .then(response => {
                 // console.debug(response)
                 setTasks(prev => prev.concat(response.data))
-            })
-            .catch(error => console.error(error.message))
 
-        retrieveAllTasksApi({ subject, projectId, status: 'archived', limit: 100, offset: 0 })
-            .then(response => {
-                // console.debug(response)
-                setTasks(prev => prev.concat(response.data))
+                retrieveAllTasksApi({ subject, projectId, status: 'archived', limit: 100, offset: 0 })
+                    .then(response => {
+                        // console.debug(response)
+                        setTasks(prev => prev.concat(response.data))
+                    })
+                    .catch(error => console.error(error.message))
             })
             .catch(error => console.error(error.message))
     }
@@ -141,7 +155,7 @@ export const CalendarChart = ({ subject, categories }) => {
                     >
                         <option value="0">Select Category</option>
                         {
-                            categories.map(
+                            updatedCategories.map(
                                 projectCategory => (
                                     <option key={projectCategory.id} value={projectCategory.id}>{projectCategory.name}</option>
                                 )
