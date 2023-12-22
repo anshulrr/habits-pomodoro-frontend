@@ -1,22 +1,33 @@
 import { useEffect, useState } from "react"
 
-import { addAccountabilityPartnerssApi, removeAccountabilityPartnerssApi, retrieveAccountabilityPartnerssApi } from "services/api/AccountabilityPartnerApiService";
+import { addAccountabilityPartnerssApi, removeAccountabilityPartnerssApi, retrieveAccountabilityPartnerssApi, retrieveAccountabilitySubjectsApi } from "services/api/AccountabilityPartnerApiService";
 
 export default function ListAccountabilityPartnersComponent() {
 
     const [partners, setPartners] = useState([])
+    const [subjects, setSubjects] = useState([])
     const [email, setEmail] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
 
     const [showAddPartner, setShowAddPartner] = useState(false)
+
+    const [showSubjects, setShowSubjects] = useState(false)
 
     const [showLoader, setShowLoader] = useState(true)
 
     useEffect(
         () => {
             refreshPartners()
+            retrieveAccountabilitySubjects()
         }, [] // eslint-disable-line react-hooks/exhaustive-deps
     )
+
+    function retrieveAccountabilitySubjects() {
+        retrieveAccountabilitySubjectsApi()
+            .then(response => {
+                setSubjects(response.data);
+            })
+    }
 
     function refreshPartners() {
         setShowLoader(true)
@@ -72,10 +83,6 @@ export default function ListAccountabilityPartnersComponent() {
                             <div className="col-10 text-start px-0">
                                 <h6>
                                     Accountability Partners
-                                    <span className="ms-1 badge rounded-pill text-bg-secondary">
-                                        {partners.length}
-                                        <i className="ps-1 bi bi-person-fill" />
-                                    </span>
                                     {
                                         showLoader &&
                                         <span className="loader-container-2" >
@@ -124,7 +131,29 @@ export default function ListAccountabilityPartnersComponent() {
                                 </div>
                             </div>
                         }
+
+                        <div className="row px-0">
+                            <div className="col-12 px-0">
+                                <div className="input-group">
+                                    <button type="button" className={"btn btn-sm btn-outline-secondary " + (!showSubjects ? "active" : "")} onClick={() => setShowSubjects(false)}>
+                                        Partners
+                                        <span className="ms-1 badge rounded-pill text-bg-dark">
+                                            {partners.length}
+                                            <i className="ps-1 bi bi-person-fill" />
+                                        </span>
+                                    </button>
+                                    <button type="button" className={"btn btn-sm btn-outline-secondary " + (showSubjects ? "active" : "")} onClick={() => setShowSubjects(true)}>
+                                        Mentees
+                                        <span className="ms-1 badge rounded-pill text-bg-dark">
+                                            {subjects.length}
+                                            <i className="ps-1 bi bi-person-fill" />
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                         {
+                            !showSubjects &&
                             partners.map(
                                 partner => (
                                     <div key={partner.id} className="row border-bottom my-1">
@@ -138,6 +167,21 @@ export default function ListAccountabilityPartnersComponent() {
                                             <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => removeAccountabilityPartner(partner)}>
                                                 Remove
                                             </button>
+                                        </div>
+                                    </div>
+                                )
+                            )
+                        }
+
+                        {
+                            showSubjects &&
+                            subjects.map(
+                                subject => (
+                                    <div key={subject.id} className="row border-bottom my-1">
+                                        <div className="col-12 ps-1 pb-2 text-start">
+                                            <small>
+                                                {subject.email}&nbsp;
+                                            </small>
                                         </div>
                                     </div>
                                 )

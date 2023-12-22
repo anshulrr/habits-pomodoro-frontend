@@ -41,7 +41,7 @@ export default function SelectFriendsComponent({
                         value={subjectId}
                         id="subjectId"
                     >
-                        <option value="0" disabled>Select a Friend</option>
+                        <option value="0" disabled>Select a Mentee</option>
                         {
                             subjects.map(
                                 subject => (

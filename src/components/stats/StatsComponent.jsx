@@ -196,7 +196,7 @@ export default function ListStatsComponent() {
                                             style={{ cursor: "pointer" }}
                                         >
                                             <h6 className="mb-0">
-                                                Friends Stats
+                                                Mentees Stats
                                                 <span className="ms-1 badge rounded-pill text-bg-secondary">
                                                     {subjects.length}
                                                     <i className="ps-1 bi bi-person-fill" />
