@@ -1,28 +1,8 @@
-import moment from "moment";
 import { DoughnutChart } from "./stats/charts/DoughnutChart";
 import { BarChart } from "./stats/charts/BarChart";
+import { buttonsStates, projectsChartData, tasksChartData, tasksList1, tasksList2 } from "services/helpers/aboutPageHelper";
 
 export default function AboutComponent() {
-
-    const chartData = {
-        colors: ['#105b06', '#105b06', '#105b06', '#105b06', '#228B22'],
-        data: [1.1, 0.366, 0.416, 1.66, 1.683],
-        label: "Tasks (hours)",
-        labels: ['General Project: Fictional books', 'General Project: Movies', 'General Project: Non fictional book 2', 'General Project: ddd', 'Project 11: abcd']
-    }
-
-    const projectsChartData = {
-        colors: ['#105b06', '#8B8000', '#228B22'],
-        data: [3.55, 12.383, 1.683],
-        label: "Projects (hours)",
-        labels: ['General Project', "ajay's Project6", 'Project 11'],
-    }
-
-    const buttonsStates = {
-        limit: 'weekly',
-        offset: 0,
-        dateString: moment().format('DD MMM')
-    }
 
     return (
         <div className="container about-page">
@@ -107,13 +87,17 @@ export default function AboutComponent() {
                     </div>
                 </div>
                 <div className="col-lg-6 py-2 my-auto">
-                    <div className="about-img-2">
+                    {/* <div className="about-img-2">
                         <img
                             className="rounded"
                             src="images/tasks-list-1.png"
                             alt="tasks-list-1"
                             width="100%"
                         />
+                    </div> */}
+
+                    <div className="px-2 mx-4 rounded" style={{ backgroundColor: "rgb(233, 236, 239)" }}>
+                        <div className="content" dangerouslySetInnerHTML={{ __html: tasksList1 }}></div>
                     </div>
                 </div>
             </div>
@@ -156,13 +140,18 @@ export default function AboutComponent() {
                     </div>
                 </div>
                 <div className="col-lg-6 py-2 my-auto order-lg-1">
-                    <div className="about-img">
+                    {/* <div className="about-img-2">
                         <img
                             className="rounded"
-                            src="images/total-chart.png"
-                            alt="total-chart"
+                            src="images/tasks-list-2.png"
+                            alt="tasks-list-2"
                             width="100%"
                         />
+                    </div> */}
+
+                    <div className="px-2 mx-4 rounded" style={{ backgroundColor: "rgb(233, 236, 239)" }}>
+                        <div className="content" dangerouslySetInnerHTML={{ __html: tasksList2 }}>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -225,8 +214,8 @@ export default function AboutComponent() {
                     <div className="about-img-2">
                         <img
                             className="rounded"
-                            src="images/tasks-list-2.png"
-                            alt="tasks-list-2"
+                            src="images/total-chart.png"
+                            alt="total-chart"
                             width="100%"
                         />
                     </div>
@@ -272,7 +261,7 @@ export default function AboutComponent() {
                     </div>
                 </div>
                 <div className="col-lg-4 offset-lg-1 py-2 my-auto order-lg-1 text-center">
-                    <div className="p-1 chart-card">
+                    <div className="my-1 mx-4 px-2 chart-card">
                         <BarChart
                             chartData={projectsChartData}
                             buttonsStates={buttonsStates}
@@ -379,9 +368,9 @@ export default function AboutComponent() {
                     </div>
                 </div>
                 <div className="col-lg-4 offset-lg-1 py-2 my-auto order-lg-1 text-center">
-                    <div className="p-1 chart-card">
+                    <div className="my-1 mx-4 px-2 chart-card">
                         <DoughnutChart
-                            chartData={chartData}
+                            chartData={tasksChartData}
                             buttonsStates={buttonsStates}
                             thickness={1}
                             isDummy={true}
@@ -423,8 +412,8 @@ export default function AboutComponent() {
             </div>
             <div className="row small my-0">
                 <div className="col-lg-12 py-2">
-                    <div>
-                        To access this version of the app easily, you can use the <span className="fw-bold">'Install app'</span> option available in Chrome browser.
+                    <div className="alert alert-primary mb-0 py-1" role="alert">
+                        <i className="bi bi-info-circle" /> To access this version of the app easily, you can use the <span className="fw-bold">'Install app'</span> option available in Chrome browser.
                     </div>
                     <div>
                         Please reach out <a href="mailto:ansh14j@gmail.com">here</a> if you have any suggestions or issues.

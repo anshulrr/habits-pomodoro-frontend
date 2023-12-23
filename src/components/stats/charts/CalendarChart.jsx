@@ -105,11 +105,11 @@ export const CalendarChart = ({ subject, categories, includeCategories }) => {
         if (id === '0') {
             retrieveStatsPomodorosCount('user')
             setProjects([]);
-            setTasks([]);
         } else {
             retrieveStatsPomodorosCount('category', id);
             refreshProjects(id);
         }
+        setTasks([]);
     }
 
     function updateProject(id) {

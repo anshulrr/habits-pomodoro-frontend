@@ -118,6 +118,15 @@
     margin: auto;
 }
 
+.about-page .content div {
+    margin-bottom: 0;
+}
+
+.about-page .content * {
+    cursor: default !important;
+    pointer-events: none !important;
+}
+
 @media only screen and (max-width: 992px) {
     .about-img {
         width: 70vw;
