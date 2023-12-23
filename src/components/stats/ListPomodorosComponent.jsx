@@ -252,7 +252,7 @@ export default function ListPomodorosComponent({
                                                             </span>
 
                                                             {
-                                                                showPomodoroUpdateId === pomodoro.id &&
+                                                                !subject && showPomodoroUpdateId === pomodoro.id &&
                                                                 <OutsideAlerter handle={() => setShowPomodoroUpdateId(-1)}>
                                                                     <span className="">
                                                                         <div className="update-popup pomodoro-list-popup">
