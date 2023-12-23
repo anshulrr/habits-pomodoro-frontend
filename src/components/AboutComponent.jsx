@@ -1,6 +1,6 @@
 import { DoughnutChart } from "./stats/charts/DoughnutChart";
 import { BarChart } from "./stats/charts/BarChart";
-import { buttonsStates, projectsChartData, tasksChartData, tasksList1, tasksList2 } from "services/helpers/aboutPageHelper";
+import { buttonsStates, projectsChartData, streakChart, taskStats, tasksChartData, tasksList1, tasksList2 } from "services/helpers/aboutPageHelper";
 
 export default function AboutComponent() {
 
@@ -161,7 +161,7 @@ export default function AboutComponent() {
                     <div className="about-card px-2 py-1">
 
                         <h3 className="h6 py-2">
-                            Make it obvious
+                            Make It Obvious
                         </h3>
                         <ol>
                             <li>
@@ -227,7 +227,7 @@ export default function AboutComponent() {
                     <div className="about-card px-2 py-1">
 
                         <h3 className="h6 py-2">
-                            Make it attractive
+                            Make It Attractive
                         </h3>
                         <ol>
                             <li>
@@ -278,7 +278,7 @@ export default function AboutComponent() {
                     <div className="about-card px-2 py-1">
 
                         <h3 className="h6 py-2">
-                            Make it easy
+                            Make It Easy
                         </h3>
                         <ol>
                             <li>
@@ -318,13 +318,17 @@ export default function AboutComponent() {
                     </div>
                 </div>
                 <div className="col-lg-6 py-2 my-auto">
-                    <div className="about-img-2">
+                    {/* <div className="about-img-2">
                         <img
                             className="rounded"
                             src="images/task-stats.png"
                             alt="task-stats"
                             width="100%"
                         />
+                    </div> */}
+
+                    <div className="px-2 mx-2 rounded">
+                        <div className="content" dangerouslySetInnerHTML={{ __html: taskStats }}></div>
                     </div>
                 </div>
             </div>
@@ -334,7 +338,7 @@ export default function AboutComponent() {
                     <div className="about-card px-2 py-1">
 
                         <h3 className="h6 py-2">
-                            Make it satisfying
+                            Make It Satisfying
                         </h3>
                         <ol>
                             <li>
@@ -400,19 +404,23 @@ export default function AboutComponent() {
                     </div>
                 </div>
                 <div className="col-lg-6 py-2 my-auto">
-                    <div className="about-img-2">
+                    {/* <div className="about-img-2">
                         <img
                             className="rounded"
                             src="images/streak-chart.png"
                             alt="streak-chart"
                             width="100%"
                         />
+                    </div> */}
+
+                    <div className="px-2 mx-2 rounded">
+                        <div className="content" dangerouslySetInnerHTML={{ __html: streakChart }}></div>
                     </div>
                 </div>
             </div>
             <div className="row small my-0">
-                <div className="col-lg-12 py-2">
-                    <div className="alert alert-primary mb-0 py-1" role="alert">
+                <div className="col-lg-12 pb-2">
+                    <div className="alert alert-primary py-1" role="alert">
                         <i className="bi bi-info-circle" /> To access this version of the app easily, you can use the <span className="fw-bold">'Install app'</span> option available in Chrome browser.
                     </div>
                     <div>
