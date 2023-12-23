@@ -1,6 +1,14 @@
+import { buttonsStates, projectsChartData, streakChart, taskStats, tasksChartData, tasksList1, tasksList2, totalChartData } from "services/helpers/aboutPageHelper";
+
 import { DoughnutChart } from "./stats/charts/DoughnutChart";
 import { BarChart } from "./stats/charts/BarChart";
-import { buttonsStates, projectsChartData, streakChart, taskStats, tasksChartData, tasksList1, tasksList2 } from "services/helpers/aboutPageHelper";
+import { Bar } from "react-chartjs-2"
+import { CategoryScale } from 'chart.js'
+import Chart from 'chart.js/auto'
+import annotationPlugin from "chartjs-plugin-annotation";
+Chart.register(CategoryScale)
+Chart.register(annotationPlugin);
+
 
 export default function AboutComponent() {
 
@@ -211,13 +219,72 @@ export default function AboutComponent() {
                     </div>
                 </div>
                 <div className="col-lg-6 py-2 my-auto">
-                    <div className="about-img-2">
+                    {/* <div className="about-img-2">
                         <img
                             className="rounded"
                             src="images/total-chart.png"
                             alt="total-chart"
                             width="100%"
                         />
+                    </div> */}
+
+                    <div className="my-1 mx-4 px-2 chart-card content">
+                        <h6>
+                            Total (avg hours)
+                        </h6>
+                        <div className="container">
+                            {
+                                <div>
+                                    <button type="button" className="btn btn-sm btn-outline-secondary ">Daily</button>
+                                    <button type="button" className="btn btn-sm btn-outline-secondary active">Weekly</button>
+                                    <button type="button" className="btn btn-sm btn-outline-secondary ">Monthly</button>
+                                </div>
+                            }
+                            <div className="row">
+                                <div className="col-3">
+                                    <i className="btn btn-sm btn-outline-secondary py-0 px-1 lh-sm bi bi-arrow-left"></i>
+                                </div>
+                                <div className="col-6">
+                                </div>
+                                <div className="col-3">
+                                    <i className="btn btn-sm btn-outline-secondary py-0 px-1 lh-sm bi bi-arrow-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="chart-container">
+                            <Bar
+                                data={
+                                    {
+                                        labels: totalChartData.labels,
+                                        // datasets is an array of objects where each object represents a set of data to display corresponding to the labels above. for brevity, we'll keep it at one object
+                                        datasets: totalChartData.datasets
+                                    }
+
+                                }
+                                options={{
+                                    responsive: true,
+                                    maintainAspectRatio: true,
+                                    aspectRatio: 0.75,
+                                    plugins: {
+                                        legend: {
+                                            display: true,
+                                            position: 'top',
+                                            labels: {
+                                                boxWidth: 10
+                                            }
+                                        }
+                                    },
+                                    scales: {
+                                        x: {
+                                            stacked: true
+                                        },
+                                        y: {
+                                            stacked: true
+                                        }
+                                    }
+                                }}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -261,7 +328,7 @@ export default function AboutComponent() {
                     </div>
                 </div>
                 <div className="col-lg-4 offset-lg-1 py-2 my-auto order-lg-1 text-center">
-                    <div className="my-1 mx-4 px-2 chart-card">
+                    <div className="my-1 mx-4 px-2 chart-card content">
                         <BarChart
                             chartData={projectsChartData}
                             buttonsStates={buttonsStates}
@@ -372,7 +439,7 @@ export default function AboutComponent() {
                     </div>
                 </div>
                 <div className="col-lg-4 offset-lg-1 py-2 my-auto order-lg-1 text-center">
-                    <div className="my-1 mx-4 px-2 chart-card">
+                    <div className="my-1 mx-4 px-2 chart-card content">
                         <DoughnutChart
                             chartData={tasksChartData}
                             buttonsStates={buttonsStates}
