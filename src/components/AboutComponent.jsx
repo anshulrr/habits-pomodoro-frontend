@@ -95,7 +95,7 @@ export default function AboutComponent() {
                     </div>
                 </div>
                 <div className="col-lg-6 py-2 my-auto">
-                    <div className="px-2 mx-4 rounded" style={{ backgroundColor: "rgb(233, 236, 239)" }}>
+                    <div className="px-2 mx-2 rounded" style={{ backgroundColor: "rgb(233, 236, 239)" }}>
                         <div className="content" dangerouslySetInnerHTML={{ __html: tasksList1 }}></div>
                     </div>
                 </div>
@@ -139,7 +139,7 @@ export default function AboutComponent() {
                     </div>
                 </div>
                 <div className="col-lg-6 py-2 my-auto order-lg-1">
-                    <div className="px-2 mx-4 rounded" style={{ backgroundColor: "rgb(233, 236, 239)" }}>
+                    <div className="px-2 mx-2 rounded" style={{ backgroundColor: "rgb(233, 236, 239)" }}>
                         <div className="content" dangerouslySetInnerHTML={{ __html: tasksList2 }}>
                         </div>
                     </div>
@@ -201,7 +201,7 @@ export default function AboutComponent() {
                     </div>
                 </div>
                 <div className="col-lg-6 py-2 my-auto">
-                    <div className="my-1 mx-4 px-2 chart-card content">
+                    <div className="my-1 mx-2 py-1 chart-card content">
                         <h6>
                             Total (avg hours)
                         </h6>
@@ -299,7 +299,7 @@ export default function AboutComponent() {
                     </div>
                 </div>
                 <div className="col-lg-4 offset-lg-1 py-2 my-auto order-lg-1 text-center">
-                    <div className="my-1 mx-4 px-2 chart-card content">
+                    <div className="my-1 mx-2 py-1 chart-card content">
                         <BarChart
                             chartData={projectsChartData}
                             buttonsStates={buttonsStates}
@@ -356,7 +356,7 @@ export default function AboutComponent() {
                     </div>
                 </div>
                 <div className="col-lg-6 py-2 my-auto">
-                    <div className="px-2 mx-2 rounded">
+                    <div className="mx-2 rounded">
                         <div className="content" dangerouslySetInnerHTML={{ __html: taskStats }}></div>
                     </div>
                 </div>
@@ -401,7 +401,7 @@ export default function AboutComponent() {
                     </div>
                 </div>
                 <div className="col-lg-4 offset-lg-1 py-2 my-auto order-lg-1 text-center">
-                    <div className="my-1 mx-4 px-2 chart-card content">
+                    <div className="my-1 mx-2 py-1 chart-card content">
                         <DoughnutChart
                             chartData={tasksChartData}
                             buttonsStates={buttonsStates}
@@ -433,7 +433,7 @@ export default function AboutComponent() {
                     </div>
                 </div>
                 <div className="col-lg-6 py-2 my-auto">
-                    <div className="px-2 mx-2 rounded">
+                    <div className="mx-2 rounded">
                         <div className="content" dangerouslySetInnerHTML={{ __html: streakChart }}></div>
                     </div>
                 </div>

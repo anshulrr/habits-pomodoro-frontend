@@ -8,7 +8,7 @@ export default function CategoryChecklistComponent({
 
     const [checkedState, setCheckedState] = useState(categories.map(c => c.statsDefault));
 
-    const [level, setLevel] = useState(0);
+    const [level, setLevel] = useState(1);
 
     const [errorMessage, setErrorMessage] = useState("");
 

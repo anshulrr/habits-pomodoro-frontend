@@ -124,7 +124,7 @@ export const tasksList2 = `
             <div class="col-lg-12 py-3">
                 <div class="d-flex justify-content-between">
                     <h6><span><i class="bi bi-tag-fill me-1" style="color: rgb(137, 224, 112);"></i>daily</span><span
-                            class="ms-1 badge rounded-pill text-bg-secondary">30<i class="ms-1 bi bi-list-ul"></i></span>
+                            class="ms-1 badge rounded-pill text-bg-secondary">18<i class="ms-1 bi bi-list-ul"></i></span>
                     </h6>
                     <div></div>
                 </div>
@@ -273,10 +273,9 @@ export const tasksList2 = `
                             <div class="arrow left"></div>
                         </li>
                         <li class="pagination-item">1</li>
-                        <li class="pagination-item dots">…</li>
+                        <li class="pagination-item selected">2</li>
+                        <li class="pagination-item">3</li>
                         <li class="pagination-item">4</li>
-                        <li class="pagination-item selected">5</li>
-                        <li class="pagination-item">6</li>
                         <li class="pagination-item">
                             <div class="arrow right"></div>
                         </li>
