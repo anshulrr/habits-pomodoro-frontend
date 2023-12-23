@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 
-import { Formik, Form, ErrorMessage, Field } from 'formik'
 import ReactDatePicker from 'react-datepicker'
 
 import moment from 'moment'
@@ -17,20 +16,17 @@ export default function UpdateTaskComponent({
 }) {
 
     const [description, setDescription] = useState('')
-
     const [pomodoroLength, setPomodoroLength] = useState(0)    // todo: get this from user settings
-
     const [priority, setPriority] = useState(1)
-
     const [dueDate, setDueDate] = useState(null)
-
     const [status, setStatus] = useState('current')
-
     const [type, setType] = useState('neutral')
 
     const [repeat, setRepeat] = useState(false)
     const [repeatDays, setRepeatDays] = useState(0)
     const [dailyLimit, setDailyLimit] = useState(0)
+
+    const [errors, setErrors] = useState({})
 
     const [projectId, setProjectId] = useState(task.project.id);
     const [switchProject, setSwitchProject] = useState(false);
@@ -70,23 +66,28 @@ export default function UpdateTaskComponent({
             .catch(error => console.error(error.message))
     }
 
-    function onSubmit(values) {
-        if (!projectId) {
-            return;
-        }
+    function onSubmit(error) {
+        error.preventDefault();
+
         // console.debug(values)
         const updated_task = {
             id: task.id,
-            description: values.description,
-            pomodoroLength: values.pomodoroLength,
-            priority: values.priority,
-            status: values.status,
-            type: values.type,
-            dueDate: dueDate,
+            description,
+            pomodoroLength,
+            priority,
+            status,
+            type,
+            dueDate,
             repeatDays: repeat ? repeatDays : 0,
-            dailyLimit: dailyLimit,
-            projectId: projectId
+            dailyLimit,
+            projectId
         }
+
+        if (!validate(updated_task)) {
+            return;
+        }
+
+        console.log(updated_task);
 
         updateTaskApi({ id: task.id, task: updated_task })
             .then(response => {
@@ -98,25 +99,35 @@ export default function UpdateTaskComponent({
             .catch(error => console.error(error.message))
     }
 
-    function validate(values) {
+    function validate(task) {
         let errors = {}
-        if (values.description.length < 2) {
+        let validated = true;
+        if (task.description.length < 2) {
             errors.description = 'Enter atleast 2 characters'
+            validated = false;
         }
-        if (values.pomodoroLength === '' || values.pomodoroLength < 0) {
+        if (task.pomodoroLength === '' || task.pomodoroLength < 0) {
             errors.pomodoroLength = 'Enter zero or positive value'
+            validated = false;
         }
-        if (values.priority === '' || values.priority < 1) {
+        if (task.priority === '' || task.priority < 1) {
             errors.priority = 'Enter positive value'
+            validated = false;
         }
         if (dueDate && repeat && (repeatDays === '' || repeatDays < 1)) {
             errors.repeatDays = 'Enter positive value'
+            validated = false;
         }
         if (dailyLimit === '' || dailyLimit < 1) {
             errors.dailyLimit = 'Enter positive value'
+            validated = false;
         }
-        // console.debug(values)
-        return errors
+        if (!task.projectId) {
+            validated = false;
+        }
+        setErrors(errors);
+        // console.debug(errors)
+        return validated;
     }
 
     return (
@@ -140,147 +151,176 @@ export default function UpdateTaskComponent({
                     {
                         !showLoader &&
                         <div>
-                            <Formik initialValues={{ description, pomodoroLength, priority, status, type, dueDate }}
-                                enableReinitialize={true}
-                                onSubmit={onSubmit}
-                                validate={validate}
-                                validateOnChange={false}
-                                validateOnBlur={false}
-                            >
-                                {
-                                    (props) => (
-                                        <Form>
-                                            <div className="row small text-start text-secondary">
-                                                <div className="col-lg-12 mb-3">
-                                                    <label htmlFor="description">Task Description</label>
-                                                    <Field type="text" className="form-control form-control-sm" id="description" name="description" placeholder="Description" />
-                                                    <ErrorMessage name="description" component="small" className="text-danger small" />
-                                                </div>
-                                                <div className="col-lg-4 mb-3">
-                                                    <label htmlFor="pomodoroLength">Default Pomodoro Length (mins) <i className="bi bi-hourglass" /></label>
-                                                    <Field type="number" className="form-control form-control-sm" min="0" id="pomodoroLength" name="pomodoroLength" placeholder="Default Pomodoro Length (mins)" />
-                                                    <small>(To use Default Pomodoro Length of the Project, set value to zero)</small>
-                                                    {props.errors.pomodoroLength && <div className="text-danger small">{props.errors.pomodoroLength}</div>}
-                                                </div>
-                                                <div className="col-lg-4 mb-3">
-                                                    <label htmlFor="type">Pomodoros Daily Limit (Expected Count)</label>
-                                                    <input
-                                                        type="number"
-                                                        name="dailyLimit"
-                                                        className="form-control form-control-sm"
-                                                        value={dailyLimit}
-                                                        min={1}
-                                                        placeholder="Expected Count"
-                                                        onChange={(e) => setDailyLimit(e.target.value)}
-                                                    />
-                                                    <div className="text-danger small">{props.errors.dailyLimit}</div>
-                                                </div>
-                                                <div className="col-lg-4 mb-3">
-                                                    <label htmlFor="priority">Order <i className="bi bi-arrow-up" /></label>
-                                                    <Field type="number" className="form-control form-control-sm" min="1" id="priority" name="priority" placeholder="Order" />
-                                                    <small>(Lower numbered tasks appears at the top of the list)</small>
-                                                    {props.errors.priority && <div className="text-danger small">{props.errors.priority}</div>}
-                                                </div>
-                                                <div className="col-lg-4 mb-3">
-                                                    <label htmlFor="type">Habit Type</label>
-                                                    <Field as="select" className={"form-select form-select-sm text-" + COLOR_MAP[type]} id="type" name="type" onChange={(e) => { setType(e.target.value) }}>
-                                                        <option value="neutral">Neutral</option>
-                                                        <option value="good">Good</option>
-                                                        <option value="bad">Bad</option>
-                                                    </Field>
-                                                </div>
-                                                <div className="col-lg-4 col-6 mb-3">
-                                                    <div>
-                                                        <label htmlFor="dueDate">{type === 'bad' ? 'Restrain' : 'Due'} Time <i className="bi bi-calendar-check" /></label>
-                                                    </div>
-                                                    <ReactDatePicker
-                                                        className="form-control form-control-sm"
-                                                        id="dueDate"
-                                                        selected={dueDate}
-                                                        dateFormat="dd/MM/yyyy HH:mm"
-                                                        minDate={new Date()}
-                                                        showTimeSelect
-                                                        timeFormat="HH:mm"
-                                                        filterTime={filterPastTime}
-                                                        onFocus={e => e.target.blur()}      // fix for keyboard open on focus on mobile devide
-                                                        onSelect={(date) => setDueDate(moment(date).endOf('date').toDate())}
-                                                        onChange={(date) => setDueDate(date)}
-                                                    />
-                                                </div>
-                                                <div className="col-lg-4 col-6 mb-3">
-                                                    <label htmlFor="repeat">Repeat after (days) <i className="bi bi-arrow-repeat" /></label>
-                                                    <div className="input-group input-group-sm">
+                            <form onSubmit={onSubmit}>
+                                <div className="row small text-start text-secondary">
+                                    <div className="col-lg-12 mb-3">
+                                        <label htmlFor="description">Task Description</label>
+                                        <input
+                                            type="text"
+                                            className="form-control form-control-sm"
+                                            id="description"
+                                            name="description"
+                                            placeholder="Description"
+                                            value={description}
+                                            onChange={(e) => setDescription(e.target.value)}
+                                        />
+                                        <div className="text-danger small">{errors.description}</div>
+                                    </div>
+                                    <div className="col-lg-4 mb-3">
+                                        <label htmlFor="pomodoroLength">Default Pomodoro Length (mins) <i className="bi bi-hourglass" /></label>
+                                        <input
+                                            type="number"
+                                            className="form-control form-control-sm"
+                                            min="0"
+                                            id="pomodoroLength"
+                                            name="pomodoroLength"
+                                            placeholder="Default Pomodoro Length (mins)"
+                                            required
+                                            value={pomodoroLength}
+                                            onChange={(e) => setPomodoroLength(e.target.value)}
+                                        />
+                                        <small>(To use Default Pomodoro Length of the Project, set value to zero)</small>
+                                        <div className="text-danger small">{errors.pomodoroLength}</div>
+                                    </div>
+                                    <div className="col-lg-4 mb-3">
+                                        <label htmlFor="type">Pomodoros Daily Limit (Expected Count)</label>
+                                        <input
+                                            type="number"
+                                            name="dailyLimit"
+                                            className="form-control form-control-sm"
+                                            min={1}
+                                            placeholder="Expected Count"
+                                            required
+                                            value={dailyLimit}
+                                            onChange={(e) => setDailyLimit(e.target.value)}
+                                        />
+                                        <div className="text-danger small">{errors.dailyLimit}</div>
+                                    </div>
+                                    <div className="col-lg-4 mb-3">
+                                        <label htmlFor="priority">Order <i className="bi bi-arrow-up" /></label>
+                                        <input
+                                            type="number"
+                                            className="form-control form-control-sm"
+                                            min="1"
+                                            id="priority"
+                                            name="priority"
+                                            placeholder="Order"
+                                            required
+                                            value={priority}
+                                            onChange={(e) => setPriority(e.target.value)}
+                                        />
+                                        <small>(Lower numbered tasks appears at the top of the list)</small>
+                                        <div className="text-danger small">{errors.priority}</div>
+                                    </div>
+                                    <div className="col-lg-4 mb-3">
+                                        <label htmlFor="type">Habit Type</label>
+                                        <select
+                                            className={"form-select form-select-sm text-" + COLOR_MAP[type]}
+                                            id="type"
+                                            name="type"
+                                            value={type}
+                                            onChange={(e) => { setType(e.target.value) }}
+                                        >
+                                            <option value="neutral">Neutral</option>
+                                            <option value="good">Good</option>
+                                            <option value="bad">Bad</option>
+                                        </select>
+                                    </div>
+                                    <div className="col-lg-4 col-6 mb-3">
+                                        <div>
+                                            <label htmlFor="dueDate">{type === 'bad' ? 'Restrain' : 'Due'} Time <i className="bi bi-calendar-check" /></label>
+                                        </div>
+                                        <ReactDatePicker
+                                            className="form-control form-control-sm"
+                                            id="dueDate"
+                                            selected={dueDate}
+                                            dateFormat="dd/MM/yyyy HH:mm"
+                                            minDate={new Date()}
+                                            showTimeSelect
+                                            timeFormat="HH:mm"
+                                            filterTime={filterPastTime}
+                                            onFocus={e => e.target.blur()}      // fix for keyboard open on focus on mobile devide
+                                            onSelect={(date) => setDueDate(moment(date).endOf('date').toDate())}
+                                            onChange={(date) => setDueDate(date)}
+                                        />
+                                    </div>
+                                    <div className="col-lg-4 col-6 mb-3">
+                                        <label htmlFor="repeat">Repeat after (days) <i className="bi bi-arrow-repeat" /></label>
+                                        <div className="input-group input-group-sm">
 
-                                                        <div className="input-group-text">
-                                                            <input
-                                                                type="checkbox"
-                                                                name="repeat"
-                                                                id="repeat"
-                                                                className="form-check-input mt-0"
-                                                                checked={repeat}
-                                                                disabled={dueDate === null}
-                                                                onChange={(e) => {
-                                                                    const val = e.target.checked;
-                                                                    setRepeat(val)
-                                                                    setRepeatDays(val ? 1 : 0);
-                                                                }}
-                                                            />
-                                                        </div>
-                                                        <label className="input-group-text" htmlFor="repeat">
-                                                            <i className="bi bi-arrow-repeat" />
-                                                        </label>
-                                                        <input
-                                                            type="number"
-                                                            name="repeatDays"
-                                                            className="form-control"
-                                                            value={repeatDays}
-                                                            min={1}
-                                                            placeholder="Days"
-                                                            disabled={!repeat}
-                                                            onChange={(e) => setRepeatDays(e.target.value)}
-                                                        />
-                                                    </div>
-                                                    <div className="text-danger small">{props.errors.repeatDays}</div>
-                                                </div>
-                                                <div className="col-lg-4 mb-3">
-                                                    <label htmlFor="status">Status</label>
-                                                    <Field as="select" className="form-select form-select-sm" id="status" name="status">
-                                                        {/* disabled option with value 0 for dropdown to avoid confusion of initial selection */}
-                                                        <option value="current">Current</option>
-                                                        <option value="archived">Archived</option>
-                                                    </Field>
-                                                </div>
-
-                                                {
-                                                    !switchProject &&
-                                                    <div className="col-12">
-                                                        Switch Project
-                                                        <button className="btn btn-sm btn-outline-secondary py-0 px-1 ms-1" type="button" onClick={() => setSwitchProject(true)}>
-                                                            <i className="bi bi-pencil-square"></i>
-                                                        </button>
-                                                    </div>
-                                                }
-
-                                                <div className="col-12 mb-3">
-                                                    {
-                                                        switchProject &&
-                                                        <SwitchProjectComponent
-                                                            projectId={projectId}
-                                                            setProjectId={setProjectId}
-                                                        />
-                                                    }
-                                                </div>
-
-
-                                                <div className="col-lg-12 mb-3 text-end">
-                                                    <button className="me-2 btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowUpdateTaskId(-1)}>Cancel</button>
-                                                    <button className="btn btn-sm btn-outline-success" type="submit">Save Task</button>
-                                                </div>
+                                            <div className="input-group-text">
+                                                <input
+                                                    type="checkbox"
+                                                    name="repeat"
+                                                    id="repeat"
+                                                    className="form-check-input mt-0"
+                                                    checked={repeat}
+                                                    disabled={dueDate === null}
+                                                    onChange={(e) => {
+                                                        const val = e.target.checked;
+                                                        setRepeat(val)
+                                                        setRepeatDays(val ? 1 : 0);
+                                                    }}
+                                                />
                                             </div>
-                                        </Form>
-                                    )
-                                }
-                            </Formik>
+                                            <label className="input-group-text" htmlFor="repeat">
+                                                <i className="bi bi-arrow-repeat" />
+                                            </label>
+                                            <input
+                                                type="number"
+                                                name="repeatDays"
+                                                className="form-control"
+                                                value={repeatDays}
+                                                min={1}
+                                                placeholder="Days"
+                                                disabled={!repeat}
+                                                onChange={(e) => setRepeatDays(e.target.value)}
+                                            />
+                                        </div>
+                                        <div className="text-danger small">{errors.repeatDays}</div>
+                                    </div>
+                                    <div className="col-lg-4 mb-3">
+                                        <label htmlFor="status">Status</label>
+                                        <select
+                                            className="form-select form-select-sm"
+                                            id="status"
+                                            name="status"
+                                            value={status}
+                                            onChange={(e) => setStatus(e.target.value)}
+                                        >
+                                            {/* disabled option with value 0 for dropdown to avoid confusion of initial selection */}
+                                            <option value="current">Current</option>
+                                            <option value="archived">Archived</option>
+                                        </select>
+                                    </div>
+
+                                    {
+                                        !switchProject &&
+                                        <div className="col-12">
+                                            Switch Project
+                                            <button className="btn btn-sm btn-outline-secondary py-0 px-1 ms-1" type="button" onClick={() => setSwitchProject(true)}>
+                                                <i className="bi bi-pencil-square"></i>
+                                            </button>
+                                        </div>
+                                    }
+
+                                    <div className="col-12 mb-3">
+                                        {
+                                            switchProject &&
+                                            <SwitchProjectComponent
+                                                projectId={projectId}
+                                                setProjectId={setProjectId}
+                                            />
+                                        }
+                                    </div>
+
+
+                                    <div className="col-lg-12 mb-3 text-end">
+                                        <button className="me-2 btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowUpdateTaskId(-1)}>Cancel</button>
+                                        <button className="btn btn-sm btn-outline-success" type="submit">Save Task</button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     }
                 </div>

@@ -199,7 +199,8 @@ export default function ProjectComponent() {
                                 <input
                                     type="number"
                                     className="form-control form-control-sm"
-                                    min="0" id="pomodoroLength"
+                                    min="0"
+                                    id="pomodoroLength"
                                     name="pomodoroLength"
                                     placeholder="Default Pomodoro Length (mins)"
                                     value={pomodoroLength}

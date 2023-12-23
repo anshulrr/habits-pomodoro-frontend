@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react'
 
-import { Formik, ErrorMessage, Field } from 'formik'
-
 import { createProjectCategoryApi, retrieveProjectCategoryApi, updateProjectCategoryApi } from 'services/api/ProjectCategoryApiService'
 
 export default function ProjectCategoryComponent({
@@ -17,9 +15,10 @@ export default function ProjectCategoryComponent({
     const [visibleToPartners, setVisibleToPartners] = useState(true)
     const [level, setLevel] = useState(1)
     const [color, setColor] = useState('#a1a1a1')
-    const [showLoader, setShowLoader] = useState(category !== null)
 
-    // const [errorMessage, setErrorMessage] = useState('')
+    const [errors, setErrors] = useState({})
+
+    const [showLoader, setShowLoader] = useState(category !== null)
 
     useEffect(
         () => {
@@ -45,16 +44,21 @@ export default function ProjectCategoryComponent({
             .catch(error => console.error(error.message))
     }
 
-    function onSubmit(values) {
+    function onSubmit(error) {
+        error.preventDefault();
         // console.debug({ name, description, projectCategoryId, level, pomodoroLength })
         // setErrorMessage("")
         const project_category = {
             id: category?.id,
-            name: values.name,
-            statsDefault: values.statsDefault,
-            visibleToPartners: values.visibleToPartners,
-            level: values.level,
-            color: values.color
+            name,
+            statsDefault,
+            visibleToPartners,
+            level,
+            color
+        }
+
+        if (!validate(project_category)) {
+            return;
         }
 
         if (category === null) {
@@ -95,12 +99,15 @@ export default function ProjectCategoryComponent({
         }
     }
 
-    function validate(values) {
+    function validate(category) {
         let errors = {}
-        if (values.name.length < 2) {
+        let validated = true;
+        if (category.name.length < 2) {
             errors.name = 'Enter atleast 2 characters'
+            validated = false;
         }
-        return errors
+        setErrors(errors);
+        return validated;
     }
 
     return (
@@ -138,127 +145,131 @@ export default function ProjectCategoryComponent({
                             {
                                 !showLoader &&
                                 <div>
-                                    <Formik initialValues={{ name, level, color, statsDefault, visibleToPartners }}
-                                        enableReinitialize={true}
-                                        onSubmit={onSubmit}
-                                        validate={validate}
-                                        validateOnChange={false}
-                                        validateOnBlur={false}
-                                    >
-                                        {
-                                            ({ errors, handleSubmit }) => (
-                                                <form onSubmit={handleSubmit}>
-                                                    <div className="row">
-                                                        <div className="col-12 mb-2">
-                                                            <Field type="text" className="form-control form-control-sm" name="name" placeholder="Project Category Name" required />
-                                                            <ErrorMessage name="name" component="div" className="small text-danger" />
-                                                        </div>
+                                    <form onSubmit={onSubmit}>
+                                        <div className="row">
+                                            <div className="col-12 mb-2">
+                                                <input
+                                                    type="text"
+                                                    className="form-control form-control-sm"
+                                                    name="name"
+                                                    placeholder="Project Category Name"
+                                                    required
+                                                    value={name}
+                                                    onChange={(e) => setName(e.target.value)}
+                                                />
+                                                <div className="text-danger small">{errors.name}</div>
+                                            </div>
 
-                                                        <div className="col-12 mb-2">
-                                                            <div className="input-group input-group-sm">
-                                                                <label className="input-group-text" htmlFor="color">
-                                                                    Category Color
-                                                                </label>
-                                                                <Field
-                                                                    type="color"
-                                                                    className="form-control form-control-sm"
-                                                                    name="color"
-                                                                    id="color"
-                                                                    placeholder="Color"
-                                                                    required
-                                                                />
-                                                            </div>
-                                                        </div>
+                                            <div className="col-12 mb-2">
+                                                <div className="input-group input-group-sm">
+                                                    <label className="input-group-text" htmlFor="color">
+                                                        Category Color
+                                                    </label>
+                                                    <input
+                                                        type="color"
+                                                        className="form-control form-control-sm"
+                                                        name="color"
+                                                        id="color"
+                                                        placeholder="Color"
+                                                        required
+                                                        value={color}
+                                                        onChange={(e) => setColor(e.target.value)}
+                                                    />
+                                                </div>
+                                            </div>
 
-                                                        <div className="col-12 mb-2">
-                                                            <div className="input-group input-group-sm">
-                                                                <label className="input-group-text" htmlFor="level">
-                                                                    Order
-                                                                    <i className="ps-1 bi bi-arrow-up" />
-                                                                </label>
-                                                                <Field
-                                                                    type="number"
-                                                                    className="form-control form-control-sm"
-                                                                    name="level"
-                                                                    id="level"
-                                                                    min="1"
-                                                                    placeholder="Order"
-                                                                    required
-                                                                />
-                                                            </div>
-                                                            <small>
-                                                                <small className="text-secondary">(Lower numbered categories appears at the top of the list)</small>
-                                                            </small>
+                                            <div className="col-12 mb-2">
+                                                <div className="input-group input-group-sm">
+                                                    <label className="input-group-text" htmlFor="level">
+                                                        Order
+                                                        <i className="ps-1 bi bi-arrow-up" />
+                                                    </label>
+                                                    <input
+                                                        type="number"
+                                                        className="form-control form-control-sm"
+                                                        name="level"
+                                                        id="level"
+                                                        min="1"
+                                                        placeholder="Order"
+                                                        required
+                                                        value={level}
+                                                        onChange={(e) => setLevel(e.target.value)}
+                                                    />
+                                                </div>
+                                                <small>
+                                                    <small className="text-secondary">(Lower numbered categories appears at the top of the list)</small>
+                                                </small>
 
-                                                        </div>
+                                            </div>
 
-                                                        <div className="col-12 mb-2">
-                                                            <div className="input-group input-group-sm">
-                                                                <div className="input-group-text">
-                                                                    <Field
-                                                                        type="checkbox"
-                                                                        className="form-check-input"
-                                                                        name="statsDefault"
-                                                                        id="statsDefault"
-                                                                    />
-                                                                </div>
-                                                                <label className="input-group-text" htmlFor="statsDefault">
-                                                                    <i className="pe-1 bi bi-graph-up" />
-                                                                    Stats Default
-                                                                </label>
-                                                            </div>
-                                                            <small>
-                                                                <small className="text-secondary">(If selected, by default this category stats will be shown in the stats page at every first visit)</small>
-                                                            </small>
-                                                        </div>
-
-                                                        <div className="col-12 mb-2">
-                                                            <div className="input-group input-group-sm">
-                                                                <div className="input-group-text">
-                                                                    <Field
-                                                                        type="checkbox"
-                                                                        className="form-check-input"
-                                                                        name="visibleToPartners"
-                                                                        id="visibleToPartners"
-                                                                    />
-                                                                </div>
-                                                                <label className="input-group-text" htmlFor="visibleToPartners">
-                                                                    <i className="pe-1 bi bi-person-fill" />
-                                                                    Visible to Accountability Partners
-                                                                </label>
-                                                            </div>
-                                                            <small>
-                                                                <small className="text-secondary">(If selected, Accountability Partners will have access to the stats of this category)</small>
-                                                            </small>
-                                                        </div>
-
-                                                        <div className="col-lg-12">
-                                                            {
-                                                                category &&
-                                                                <span>
-                                                                    <button className="me-2 btn btn-sm btn-outline-secondary" type="button" onClick={() => setCategory(null)}>Cancel</button>
-                                                                    <button className="btn btn-sm btn-outline-success" type="submit">Update Project Category</button>
-                                                                </span>
-                                                            }
-                                                            {
-                                                                !category &&
-                                                                <span>
-                                                                    <button className="me-2 btn btn-sm btn-outline-secondary" type="button" onClick={() => setNewCategory(false)}>Cancel</button>
-                                                                    <button className="btn btn-sm btn-outline-success" type="submit">Create Project Category</button>
-                                                                </span>
-                                                            }
-                                                        </div>
+                                            <div className="col-12 mb-2">
+                                                <div className="input-group input-group-sm">
+                                                    <div className="input-group-text">
+                                                        <input
+                                                            type="checkbox"
+                                                            className="form-check-input"
+                                                            name="statsDefault"
+                                                            id="statsDefault"
+                                                            checked={statsDefault}
+                                                            onChange={(e) => setStatsDefault(e.target.checked)}
+                                                        />
                                                     </div>
-                                                </form>
-                                            )
-                                        }
-                                    </Formik>
+                                                    <label className="input-group-text" htmlFor="statsDefault">
+                                                        <i className="pe-1 bi bi-graph-up" />
+                                                        Stats Default
+                                                    </label>
+                                                </div>
+                                                <small>
+                                                    <small className="text-secondary">(If selected, by default this category stats will be shown in the stats page at every first visit)</small>
+                                                </small>
+                                            </div>
+
+                                            <div className="col-12 mb-2">
+                                                <div className="input-group input-group-sm">
+                                                    <div className="input-group-text">
+                                                        <input
+                                                            type="checkbox"
+                                                            className="form-check-input"
+                                                            name="visibleToPartners"
+                                                            id="visibleToPartners"
+                                                            checked={visibleToPartners}
+                                                            onChange={(e) => setVisibleToPartners(e.target.checked)}
+                                                        />
+                                                    </div>
+                                                    <label className="input-group-text" htmlFor="visibleToPartners">
+                                                        <i className="pe-1 bi bi-person-fill" />
+                                                        Visible to Accountability Partners
+                                                    </label>
+                                                </div>
+                                                <small>
+                                                    <small className="text-secondary">(If selected, Accountability Partners will have access to the stats of this category)</small>
+                                                </small>
+                                            </div>
+
+                                            <div className="col-lg-12">
+                                                {
+                                                    category &&
+                                                    <span>
+                                                        <button className="me-2 btn btn-sm btn-outline-secondary" type="button" onClick={() => setCategory(null)}>Cancel</button>
+                                                        <button className="btn btn-sm btn-outline-success" type="submit">Update Project Category</button>
+                                                    </span>
+                                                }
+                                                {
+                                                    !category &&
+                                                    <span>
+                                                        <button className="me-2 btn btn-sm btn-outline-secondary" type="button" onClick={() => setNewCategory(false)}>Cancel</button>
+                                                        <button className="btn btn-sm btn-outline-success" type="submit">Create Project Category</button>
+                                                    </span>
+                                                }
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                             }
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
