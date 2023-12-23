@@ -189,7 +189,7 @@ export default function UserSettingsComponent() {
 
     return (
         <div>
-            <div className="row mb-3" style={{ position: 'sticky', top: '55px', backgroundColor: "#ffffff", zIndex: '10', display: window.innerWidth <= 992 ? "block" : "none" }}>
+            <div className="row mb-3 sticky-menu" style={{ display: window.innerWidth <= 992 ? "block" : "none" }}>
                 <div className="col-12">
                     <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1"} onClick={() => handleClickToScroll(generalSettingsRef)}>
                         General Settings

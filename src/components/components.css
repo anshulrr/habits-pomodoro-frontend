@@ -138,7 +138,8 @@
     /* below top menu */
     top: 56px;
     background-color: #ffffff;
-    z-index: 10;
+    /* behind any popups */
+    z-index: 5;
 }
 
 .pagination-scroll {
