@@ -95,15 +95,6 @@ export default function AboutComponent() {
                     </div>
                 </div>
                 <div className="col-lg-6 py-2 my-auto">
-                    {/* <div className="about-img-2">
-                        <img
-                            className="rounded"
-                            src="images/tasks-list-1.png"
-                            alt="tasks-list-1"
-                            width="100%"
-                        />
-                    </div> */}
-
                     <div className="px-2 mx-4 rounded" style={{ backgroundColor: "rgb(233, 236, 239)" }}>
                         <div className="content" dangerouslySetInnerHTML={{ __html: tasksList1 }}></div>
                     </div>
@@ -148,15 +139,6 @@ export default function AboutComponent() {
                     </div>
                 </div>
                 <div className="col-lg-6 py-2 my-auto order-lg-1">
-                    {/* <div className="about-img-2">
-                        <img
-                            className="rounded"
-                            src="images/tasks-list-2.png"
-                            alt="tasks-list-2"
-                            width="100%"
-                        />
-                    </div> */}
-
                     <div className="px-2 mx-4 rounded" style={{ backgroundColor: "rgb(233, 236, 239)" }}>
                         <div className="content" dangerouslySetInnerHTML={{ __html: tasksList2 }}>
                         </div>
@@ -219,15 +201,6 @@ export default function AboutComponent() {
                     </div>
                 </div>
                 <div className="col-lg-6 py-2 my-auto">
-                    {/* <div className="about-img-2">
-                        <img
-                            className="rounded"
-                            src="images/total-chart.png"
-                            alt="total-chart"
-                            width="100%"
-                        />
-                    </div> */}
-
                     <div className="my-1 mx-4 px-2 chart-card content">
                         <h6>
                             Total (avg hours)
@@ -256,10 +229,8 @@ export default function AboutComponent() {
                                 data={
                                     {
                                         labels: totalChartData.labels,
-                                        // datasets is an array of objects where each object represents a set of data to display corresponding to the labels above. for brevity, we'll keep it at one object
                                         datasets: totalChartData.datasets
                                     }
-
                                 }
                                 options={{
                                     responsive: true,
@@ -332,7 +303,7 @@ export default function AboutComponent() {
                         <BarChart
                             chartData={projectsChartData}
                             buttonsStates={buttonsStates}
-                            thickness={1}
+                            thickness={2}
                             isDummy={true}
                         />
                     </div>
@@ -385,15 +356,6 @@ export default function AboutComponent() {
                     </div>
                 </div>
                 <div className="col-lg-6 py-2 my-auto">
-                    {/* <div className="about-img-2">
-                        <img
-                            className="rounded"
-                            src="images/task-stats.png"
-                            alt="task-stats"
-                            width="100%"
-                        />
-                    </div> */}
-
                     <div className="px-2 mx-2 rounded">
                         <div className="content" dangerouslySetInnerHTML={{ __html: taskStats }}></div>
                     </div>
@@ -471,15 +433,6 @@ export default function AboutComponent() {
                     </div>
                 </div>
                 <div className="col-lg-6 py-2 my-auto">
-                    {/* <div className="about-img-2">
-                        <img
-                            className="rounded"
-                            src="images/streak-chart.png"
-                            alt="streak-chart"
-                            width="100%"
-                        />
-                    </div> */}
-
                     <div className="px-2 mx-2 rounded">
                         <div className="content" dangerouslySetInnerHTML={{ __html: streakChart }}></div>
                     </div>

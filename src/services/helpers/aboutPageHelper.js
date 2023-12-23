@@ -306,12 +306,12 @@ export const streakChart = `
                         name="project_category_id">
                         <option value="0">Select Category</option>
                         <option value="1">Learning</option>
-                        <option value="53">Hobbies</option>
+                        <option value="53" selected>Hobbies</option>
                     </select></div>
                 <div class="col-6 px-0 mb-1"><select class="form-select form-select-sm" id="project_id" name="project_id">
                         <option value="0">Select Category's Project</option>
                         <option value="253">Gappe</option>
-                        <option value="162">Non Fictional Content</option>
+                        <option value="162" selected>Non Fictional Content</option>
                         <option value="161">Nature</option>
                         <option value="159">Fictional Books</option>
                         <option value="160">Entertainment</option>
@@ -328,7 +328,7 @@ export const streakChart = `
                         <option value="265">YouTube subscription</option>
                         <option value="4405">Non fictional movies old</option>
                         <option value="3704">Atomic Habits revision</option>
-                        <option value="4352">Elon Musk by Ashlee Vance</option>
+                        <option value="4352" selected>Elon Musk by Ashlee Vance</option>
                     </select></div>
             </div><svg class="react-calendar-heatmap" viewBox="0 0 326 120">
                 <g transform="translate(30, 0)" class="react-calendar-heatmap-month-labels"><text x="11" y="10"
