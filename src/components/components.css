@@ -154,10 +154,6 @@
 
 /* fix for sticky menu: scrolling to behind top menu bars  */
 * {
-    scroll-margin-top: 83px;
-}
-
-.about-page * {
     scroll-margin-top: 108px;
 }
 

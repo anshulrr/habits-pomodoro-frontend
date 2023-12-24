@@ -41,7 +41,6 @@ export default function ListStatsComponent() {
 
     const [pomodorosHeight, setPomodorosHeight] = useState(0);
 
-    const stickyMenuRef = useRef(null);
     const part1Ref = useRef(null);
     const part2Ref = useRef(null);
     const part3Ref = useRef(null);
@@ -112,9 +111,9 @@ export default function ListStatsComponent() {
     }
 
     return (
-        <div className="container" style={{ backgroundColor: "#f2f3f4", scrollMarginTop: `${56 + stickyMenuRef?.current?.offsetHeight}px` }}>
+        <div className="container" style={{ backgroundColor: "#f2f3f4" }}>
 
-            <div ref={stickyMenuRef} className="row sticky-menu" style={{ display: window.innerWidth <= 992 ? "block" : "none" }}>
+            <div className="row sticky-menu" style={{ display: window.innerWidth <= 992 ? "block" : "none" }}>
                 <div className="col-12">
                     <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1"} onClick={() => handleClickToScroll(part1Ref)}>
                         Total
