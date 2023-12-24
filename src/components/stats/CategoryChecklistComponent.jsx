@@ -12,7 +12,7 @@ export default function CategoryChecklistComponent({
 
     const [errorMessage, setErrorMessage] = useState("");
 
-    const message = "Click on Fetch to update";
+    const message = "Click on Fetch to update Stats";
 
     const handleOnChange = (position) => {
         // console.debug('handle: ', checkedState)
@@ -99,7 +99,7 @@ export default function CategoryChecklistComponent({
                 })}
             </div>
 
-            <div className="text-danger"><small>{errorMessage}</small></div>
+            {errorMessage && <div className="alert alert-danger mb-0 py-0 px-2 text-end"><small>{errorMessage}</small></div>}
 
             <div className="input-group my-2 justify-content-end">
                 <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => selectUpto()}>Upto</button>

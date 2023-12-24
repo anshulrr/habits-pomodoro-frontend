@@ -77,13 +77,13 @@ export default function SignupComponent() {
                                 placeholder="Confirm password"
                                 required
                             />
-                            <div className="mb-3 text-danger"><small>{errorMessage}</small></div>
+                            {errorMessage && <div className="alert alert-danger mb-2 py-0 px-2 text-center"><small>{errorMessage}</small></div>}
                             <button
                                 type="submit"
                                 className="btn btn-sm btn-outline-success mb-3"
                                 name="changePassword"
                             >Sign up</button>
-                            <div className="mb-3 text-success"><small>{successMessage}</small></div>
+                            {successMessage && <div className="alert alert-success mt-2 mb-0 py-0 px-2 text-end"><small>{successMessage}</small></div>}
                         </div>
                     </div>
                 </div>

@@ -566,9 +566,9 @@ export default function UserSettingsComponent() {
 
             <div className="row mt-2">
                 <div className="col-lg-12 text-end">
+                    {errorMessage && <div className="alert alert-danger mb-1 py-0 px-2 text-end"><small>{errorMessage}</small></div>}
                     <button className="btn btn-sm btn-outline-success" type="button" onClick={saveSettings}>Save</button>
-                    <div className="text-danger"><small>{errorMessage}</small></div>
-                    <div className="text-success"><small>{successMessage}</small></div>
+                    {successMessage && <div className="alert alert-success mt-1 mb-0 py-0 px-2 text-end"><small>{successMessage}</small></div>}
                 </div>
             </div>
         </div>

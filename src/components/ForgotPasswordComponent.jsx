@@ -55,7 +55,7 @@ export default function ForgotPasswordComponent() {
                                     required
                                 />
                             </div>
-                            <div className="mb-3 text-danger"><small>{errorMessage}</small></div>
+                            {errorMessage && <div className="alert alert-danger mb-2 py-0 px-2 text-center"><small>{errorMessage}</small></div>}
                             <div className="mb-3">
                                 <button
                                     type="submit"
@@ -63,7 +63,7 @@ export default function ForgotPasswordComponent() {
                                     name="forgot-password"
                                 >Get an email to reset password</button>
                             </div>
-                            <div className="mb-3 text-success"><small>{successMessage}</small></div>
+                            {successMessage && <div className="alert alert-success mt-2 mb-0 py-0 px-2 text-end"><small>{successMessage}</small></div>}
                         </div>
                     </div>
                 </div>
