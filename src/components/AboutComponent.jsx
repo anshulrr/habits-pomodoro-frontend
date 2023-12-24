@@ -43,9 +43,9 @@ export default function AboutComponent() {
 
     const generateActive = (ref) => {
         if (ref?.current?.offsetTop < scrollPosition + 108 + 100 && ref?.current?.offsetTop + ref?.current?.offsetHeight > scrollPosition + 108 + 100) {
-            return 'active';
+            return 'btn-secondary';
         }
-        return '';
+        return 'btn-light border';
     }
 
     return (
@@ -140,22 +140,22 @@ export default function AboutComponent() {
 
             <div className="row mb-3 sticky-menu" style={{ display: window.innerWidth <= 992 ? "block" : "none" }}>
                 <div className="col-12">
-                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1 " + generateActive(part1Ref)} onClick={() => handleClickToScroll(part1Ref)}>
+                    <button type="button" className={"btn btn-sm py-0 px-1 " + generateActive(part1Ref)} onClick={() => handleClickToScroll(part1Ref)}>
                         Introduction
                     </button>
-                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1 " + generateActive(part2Ref)} onClick={() => handleClickToScroll(part2Ref)}>
+                    <button type="button" className={"btn btn-sm py-0 px-1 " + generateActive(part2Ref)} onClick={() => handleClickToScroll(part2Ref)}>
                         Make It Obvious
                     </button>
-                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1 " + generateActive(part3Ref)} onClick={() => handleClickToScroll(part3Ref)}>
+                    <button type="button" className={"btn btn-sm py-0 px-1 " + generateActive(part3Ref)} onClick={() => handleClickToScroll(part3Ref)}>
                         Make It Attractive
                     </button>
-                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1 " + generateActive(part4Ref)} onClick={() => handleClickToScroll(part4Ref)}>
+                    <button type="button" className={"btn btn-sm py-0 px-1 " + generateActive(part4Ref)} onClick={() => handleClickToScroll(part4Ref)}>
                         Make It Easy
                     </button>
-                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1 " + generateActive(part5Ref)} onClick={() => handleClickToScroll(part5Ref)}>
+                    <button type="button" className={"btn btn-sm py-0 px-1 " + generateActive(part5Ref)} onClick={() => handleClickToScroll(part5Ref)}>
                         Make It Satisfying
                     </button>
-                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1 " + generateActive(part6Ref)} onClick={() => handleClickToScroll(part6Ref)}>
+                    <button type="button" className={"btn btn-sm py-0 px-1 " + generateActive(part6Ref)} onClick={() => handleClickToScroll(part6Ref)}>
                         Advancded Tactics
                     </button>
                 </div>

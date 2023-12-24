@@ -102,14 +102,22 @@ export default function ListStatsComponent() {
             })
     }
 
-    const handleClickToScroll = function (ref) {
-        ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }
-
     return (
         <div className="container" style={{ backgroundColor: "#f2f3f4" }}>
 
-            <div className="row sticky-menu" style={{ display: window.innerWidth <= 992 ? "block" : "none" }}>
+            {
+                subject != null &&
+                <div className="sticky-menu" style={{ backgroundColor: "unset" }}>
+                    <div className="row px-0">
+                        <div className="col-12 px-0">
+                            <div className="alert alert-primary mb-0 py-1" role="alert">
+                                {subject.email}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div className="row sub-menu" style={{ display: window.innerWidth <= 992 ? "block" : "none" }}>
                 <div className="col-12">
                     <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1 " + (showAll ? "active" : "")} onClick={() => setShowAll(true)}>
                         Show All
@@ -145,18 +153,7 @@ export default function ListStatsComponent() {
                     <i className="px-4 bi bi-list" />
                 </button>
             </div>
-            {
-                subject != null &&
-                <div className="sticky-menu" style={{ backgroundColor: "unset" }}>
-                    <div className="row px-0">
-                        <div className="col-12 px-0">
-                            <div className="alert alert-primary mb-0 py-1" role="alert">
-                                {subject.email}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
+
             <div className="row pt-1">
                 <div className="col-lg-4 text-start">
 

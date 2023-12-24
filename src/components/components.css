@@ -152,6 +152,10 @@
     z-index: 5;
 }
 
+.sub-menu {
+    background-color: #f2f3f4;
+}
+
 /* fix for sticky menu: scrolling to behind top menu bars  */
 * {
     scroll-margin-top: 108px;

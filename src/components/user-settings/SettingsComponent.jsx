@@ -32,7 +32,7 @@ export default function SettingsComponent() {
 
     return (
         <div className="container">
-            <div className="row py-3" style={{ display: window.innerWidth <= 992 ? "block" : "none" }}>
+            <div className="row sub-menu pb-1" style={{ display: window.innerWidth <= 992 ? "block" : "none" }}>
                 <div className="col-12">
                     <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1 " + (showAll ? "active" : "")} onClick={() => setShowAll(true)}>
                         Show All
