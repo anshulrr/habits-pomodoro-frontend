@@ -41,13 +41,6 @@ export default function ListStatsComponent() {
 
     const [pomodorosHeight, setPomodorosHeight] = useState(0);
 
-    const part1Ref = useRef(null);
-    const part2Ref = useRef(null);
-    const part3Ref = useRef(null);
-    const part4Ref = useRef(null);
-    const part5Ref = useRef(null);
-    const part6Ref = useRef(null);
-
     const [tasksChartButtonsStates, setTasksChartBButtonsStates] = useState({
         limit: 'daily',
         offset: 0,
@@ -71,6 +64,9 @@ export default function ListStatsComponent() {
         offset: 0,
         dateString: moment().format('DD MMM')
     })
+
+    const [subPage, setSubPage] = useState('')
+    const [showAll, setShowAll] = useState(true)
 
     // for first time load
     useEffect(
@@ -115,22 +111,25 @@ export default function ListStatsComponent() {
 
             <div className="row sticky-menu" style={{ display: window.innerWidth <= 992 ? "block" : "none" }}>
                 <div className="col-12">
-                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1"} onClick={() => handleClickToScroll(part1Ref)}>
+                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1 " + (showAll ? "active" : "")} onClick={() => setShowAll(true)}>
+                        Show All
+                    </button>
+                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1 " + (subPage === "total" && !showAll ? "active" : "")} onClick={() => { setSubPage("total"); setShowAll(false) }}>
                         Total
                     </button>
-                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1"} onClick={() => handleClickToScroll(part2Ref)}>
+                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1 " + (subPage === "projects" && !showAll ? "active" : "")} onClick={() => { setSubPage("projects"); setShowAll(false) }}>
                         Projects
                     </button>
-                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1"} onClick={() => handleClickToScroll(part3Ref)}>
+                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1 " + (subPage === "tasks" && !showAll ? "active" : "")} onClick={() => { setSubPage("tasks"); setShowAll(false) }}>
                         Tasks
                     </button>
-                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1"} onClick={() => handleClickToScroll(part4Ref)}>
+                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1 " + (subPage === "categories" && !showAll ? "active" : "")} onClick={() => { setSubPage("categories"); setShowAll(false) }}>
                         Project Categories
                     </button>
-                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1"} onClick={() => handleClickToScroll(part5Ref)}>
+                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1 " + (subPage === "streak" && !showAll ? "active" : "")} onClick={() => { setSubPage("streak"); setShowAll(false) }}>
                         Daily Streak
                     </button>
-                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1"} onClick={() => handleClickToScroll(part6Ref)}>
+                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1 " + (subPage === "pomodoros" && !showAll ? "active" : "")} onClick={() => { setSubPage("pomodoros"); setShowAll(false) }}>
                         Pomodoros List
                     </button>
                 </div>
@@ -276,7 +275,7 @@ export default function ListStatsComponent() {
                     includeCategories.length !== 0 && Object.keys(statsSettings).length !== 0 &&
                     <div className="col-lg-8">
                         <div className="row">
-                            <div ref={part1Ref} className="col-lg-6 px-0">
+                            <div className="col-lg-6 px-0" style={{ display: subPage === "total" || showAll ? "block" : "none" }}>
                                 <div className="p-1 chart-card">
                                     <TotalChart
                                         key={reload}
@@ -288,7 +287,7 @@ export default function ListStatsComponent() {
                                     />
                                 </div>
                             </div>
-                            <div ref={part2Ref} className="col-lg-6 px-0">
+                            <div className="col-lg-6 px-0" style={{ display: subPage === "projects" || showAll ? "block" : "none" }}>
                                 <div className="p-1 chart-card">
                                     <ProjectsDistributionChart
                                         key={reload}
@@ -300,7 +299,7 @@ export default function ListStatsComponent() {
                                     />
                                 </div>
                             </div>
-                            <div ref={part3Ref} className="col-lg-6 px-0">
+                            <div className="col-lg-6 px-0" style={{ display: subPage === "tasks" || showAll ? "block" : "none" }}>
                                 <div className="p-1 chart-card">
                                     <TasksChart
                                         key={reload}
@@ -312,7 +311,7 @@ export default function ListStatsComponent() {
                                     />
                                 </div>
                             </div>
-                            <div ref={part4Ref} className="col-lg-6 px-0">
+                            <div className="col-lg-6 px-0" style={{ display: subPage === "categories" || showAll ? "block" : "none" }}>
                                 <div className="p-1 chart-card">
                                     <ProjectCategoriesChart
                                         key={reload}
@@ -324,7 +323,7 @@ export default function ListStatsComponent() {
                                     />
                                 </div>
                             </div>
-                            <div ref={part5Ref} className="col-lg-12 px-0">
+                            <div className="col-lg-12 px-0" style={{ display: subPage === "streak" || showAll ? "block" : "none" }}>
                                 <div className="py-1 px-3 chart-card">
                                     <CalendarChart
                                         key={reload}
@@ -334,7 +333,7 @@ export default function ListStatsComponent() {
                                     />
                                 </div>
                             </div >
-                            <div ref={part6Ref} className="col-lg-6 px-0 mb-5">
+                            <div className="col-lg-6 px-0" style={{ display: subPage === "pomodoros" || showAll ? "block" : "none" }}>
                                 <div className="p-1 chart-card" style={{ height: "70vh", overflowY: "scroll" }}>
                                     <ListPomodorosComponent
                                         key={reload}
