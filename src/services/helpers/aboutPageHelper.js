@@ -1617,7 +1617,7 @@ export const taskStats = `
             </div>
         </div>
         <div class="row small text-secondary m-2">
-            <div class="col-lg-4 offset-lg-4">
+            <div class="col-12">
                 <div class="row small text-start">
                     <div class="col-12">
                         <h6><span>Pomodoros</span><span class="ms-1 badge rounded-pill text-bg-secondary">27<i
