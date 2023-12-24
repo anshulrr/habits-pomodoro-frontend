@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import moment from "moment"
 
@@ -40,6 +40,14 @@ export default function ListStatsComponent() {
     const [showLeftMenu, setShowLeftMenu] = useState(window.innerWidth <= 992 ? false : true);
 
     const [pomodorosHeight, setPomodorosHeight] = useState(0);
+
+    const stickyMenuRef = useRef(null);
+    const part1Ref = useRef(null);
+    const part2Ref = useRef(null);
+    const part3Ref = useRef(null);
+    const part4Ref = useRef(null);
+    const part5Ref = useRef(null);
+    const part6Ref = useRef(null);
 
     const [tasksChartButtonsStates, setTasksChartBButtonsStates] = useState({
         limit: 'daily',
@@ -99,8 +107,36 @@ export default function ListStatsComponent() {
             })
     }
 
+    const handleClickToScroll = function (ref) {
+        ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+
     return (
-        <div className="container" style={{ backgroundColor: "#f2f3f4" }}>
+        <div className="container" style={{ backgroundColor: "#f2f3f4", scrollMarginTop: `${56 + stickyMenuRef?.current?.offsetHeight}px` }}>
+
+            <div ref={stickyMenuRef} className="row sticky-menu" style={{ display: window.innerWidth <= 992 ? "block" : "none" }}>
+                <div className="col-12">
+                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1"} onClick={() => handleClickToScroll(part1Ref)}>
+                        Total
+                    </button>
+                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1"} onClick={() => handleClickToScroll(part2Ref)}>
+                        Projects
+                    </button>
+                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1"} onClick={() => handleClickToScroll(part3Ref)}>
+                        Tasks
+                    </button>
+                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1"} onClick={() => handleClickToScroll(part4Ref)}>
+                        Project Categories
+                    </button>
+                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1"} onClick={() => handleClickToScroll(part5Ref)}>
+                        Daily Streak
+                    </button>
+                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1"} onClick={() => handleClickToScroll(part6Ref)}>
+                        Pomodoros List
+                    </button>
+                </div>
+            </div>
+
             <span className="user-comments-icon">
                 <button type="button" className="btn btn-secondary" onClick={() => setReload(prev => prev + 1)}>
                     <i className="bi bi-arrow-clockwise" />
@@ -241,7 +277,7 @@ export default function ListStatsComponent() {
                     includeCategories.length !== 0 && Object.keys(statsSettings).length !== 0 &&
                     <div className="col-lg-8">
                         <div className="row">
-                            <div className="col-lg-6 px-0">
+                            <div ref={part1Ref} className="col-lg-6 px-0">
                                 <div className="p-1 chart-card">
                                     <TotalChart
                                         key={reload}
@@ -253,7 +289,7 @@ export default function ListStatsComponent() {
                                     />
                                 </div>
                             </div>
-                            <div className="col-lg-6 px-0">
+                            <div ref={part2Ref} className="col-lg-6 px-0">
                                 <div className="p-1 chart-card">
                                     <ProjectsDistributionChart
                                         key={reload}
@@ -265,7 +301,7 @@ export default function ListStatsComponent() {
                                     />
                                 </div>
                             </div>
-                            <div className="col-lg-6 px-0">
+                            <div ref={part3Ref} className="col-lg-6 px-0">
                                 <div className="p-1 chart-card">
                                     <TasksChart
                                         key={reload}
@@ -277,7 +313,7 @@ export default function ListStatsComponent() {
                                     />
                                 </div>
                             </div>
-                            <div className="col-lg-6 px-0">
+                            <div ref={part4Ref} className="col-lg-6 px-0">
                                 <div className="p-1 chart-card">
                                     <ProjectCategoriesChart
                                         key={reload}
@@ -289,7 +325,7 @@ export default function ListStatsComponent() {
                                     />
                                 </div>
                             </div>
-                            <div className="col-lg-12 px-0">
+                            <div ref={part5Ref} className="col-lg-12 px-0">
                                 <div className="py-1 px-3 chart-card">
                                     <CalendarChart
                                         key={reload}
@@ -299,7 +335,7 @@ export default function ListStatsComponent() {
                                     />
                                 </div>
                             </div >
-                            <div className="col-lg-6 px-0 mb-5">
+                            <div ref={part6Ref} className="col-lg-6 px-0 mb-5">
                                 <div className="p-1 chart-card" style={{ height: "70vh", overflowY: "scroll" }}>
                                     <ListPomodorosComponent
                                         key={reload}
