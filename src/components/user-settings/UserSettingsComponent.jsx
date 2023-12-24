@@ -174,7 +174,7 @@ export default function UserSettingsComponent() {
     }
 
     const handleClickToScroll = function (ref) {
-        ref.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
 
     if (showLoader) {

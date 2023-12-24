@@ -1,5 +1,6 @@
 import { buttonsStates, projectsChartData, streakChart, taskStats, tasksChartData, tasksList1, tasksList2, totalChartData } from "services/helpers/aboutPageHelper";
 
+import { useRef } from "react";
 import { DoughnutChart } from "./stats/charts/DoughnutChart";
 import { BarChart } from "./stats/charts/BarChart";
 import { Bar } from "react-chartjs-2"
@@ -11,6 +12,17 @@ Chart.register(annotationPlugin);
 
 
 export default function AboutComponent() {
+
+    const part1Ref = useRef(null);
+    const part2Ref = useRef(null);
+    const part3Ref = useRef(null);
+    const part4Ref = useRef(null);
+    const part5Ref = useRef(null);
+    const part6Ref = useRef(null);
+
+    const handleClickToScroll = function (ref) {
+        ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
 
     return (
         <div className="container about-page">
@@ -101,7 +113,30 @@ export default function AboutComponent() {
                 </div>
             </div>
 
-            <div className="row small my-0">
+
+            <div className="row mb-3 sticky-menu" style={{ display: window.innerWidth <= 992 ? "block" : "none" }}>
+                <div className="col-12">
+                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1"} onClick={() => handleClickToScroll(part1Ref)}>
+                        Introduction
+                    </button>
+                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1"} onClick={() => handleClickToScroll(part2Ref)}>
+                        Make It Obvious
+                    </button>
+                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1"} onClick={() => handleClickToScroll(part3Ref)}>
+                        Make It Attractive
+                    </button>
+                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1"} onClick={() => handleClickToScroll(part4Ref)}>
+                        Make It Easy
+                    </button>
+                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1"} onClick={() => handleClickToScroll(part5Ref)}>
+                        Make It Satisfying
+                    </button>
+                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1"} onClick={() => handleClickToScroll(part6Ref)}>
+                        Advancded Tactics
+                    </button>
+                </div>
+            </div>
+            <div ref={part1Ref} className="row small my-0">
                 <div className="col-lg-6 my-0 order-lg-3 text-start my-auto">
                     <div className="about-card px-2 py-1">
                         <h2 className="h5 py-2">
@@ -147,7 +182,7 @@ export default function AboutComponent() {
                 <div className="col-lg-1 order-lg-2"></div>
             </div>
 
-            <div className="row small my-0">
+            <div ref={part2Ref} className="row small my-0">
                 <div className="col-lg-6 my-0 text-start my-auto">
                     <div className="about-card px-2 py-1">
 
@@ -261,7 +296,7 @@ export default function AboutComponent() {
                 </div>
             </div>
 
-            <div className="row small my-0">
+            <div ref={part3Ref} className="row small my-0">
                 <div className="col-lg-6 my-0 order-lg-3 text-start my-auto">
                     <div className="about-card px-2 py-1">
 
@@ -312,7 +347,7 @@ export default function AboutComponent() {
                 <div className="col-lg-1 order-lg-2"></div>
             </div>
 
-            <div className="row small my-0">
+            <div ref={part4Ref} className="row small my-0">
                 <div className="col-lg-6 my-0 text-start my-auto">
                     <div className="about-card px-2 py-1">
 
@@ -363,7 +398,7 @@ export default function AboutComponent() {
                 </div>
             </div>
 
-            <div className="row small my-0">
+            <div ref={part5Ref} className="row small my-0">
                 <div className="col-lg-6 my-0 order-lg-3 text-start my-auto">
                     <div className="about-card px-2 py-1">
 
@@ -439,7 +474,7 @@ export default function AboutComponent() {
                     </div>
                 </div>
             </div>
-            <div className="row small my-0">
+            <div ref={part6Ref} className="row small my-0">
                 <div className="col-lg-12 pb-2">
                     <div className="alert alert-primary py-1" role="alert">
                         <i className="bi bi-info-circle" /> To access this version of the app easily, you can use the <span className="fw-bold">'Install app'</span> option available in Chrome browser.
