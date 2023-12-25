@@ -16,6 +16,8 @@ export default function UpdateCommentComponent({ setComments, id, setShowUpdateC
     const [showInput, setShowInput] = useState(true)
     const [showLoader, setShowLoader] = useState(true)
 
+    const [errorMessage, setErrorMessage] = useState('')
+
     useEffect(
         () => retrieveComment()
         , []  // eslint-disable-line react-hooks/exhaustive-deps
@@ -78,7 +80,10 @@ export default function UpdateCommentComponent({ setComments, id, setShowUpdateC
                                 rows={calculateTextAreaRows(description)}
                                 value={description}
                                 placeholder="Description"
-                                onChange={(e) => setDescription(e.target.value)}
+                                onChange={(e) => {
+                                    setDescription(e.target.value);
+                                    setErrorMessage("Click on Update to save");
+                                }}
                                 required
                             />
                         }
@@ -121,6 +126,9 @@ export default function UpdateCommentComponent({ setComments, id, setShowUpdateC
                                 onClick={() => setShowUpdateComment(-1)}
                             >Cancel</button>
                         </div>
+                    </div>
+                    <div className="col-lg-12">
+                        {errorMessage && <div className="alert alert-danger mt-1 mb-0 py-0 text-end"><small>{errorMessage}</small></div>}
                     </div>
                 </div>
             </form>
