@@ -62,7 +62,10 @@ export default function ListCommentsComponent({
                         filterBy === 'user' &&
                         <div className="row mb-2">
                             <div className="col-lg-4 text-start text-secondary mb-2">
-                                <div className="d-flex justify-content-between">
+                                <div className="d-flex justify-content-between"
+                                    onClick={() => setShowIncludeCategories(!showIncludeCategories)}
+                                    style={{ cursor: "pointer" }}
+                                >
                                     <div className="text-secondary small">
                                         Included Project Categories
                                         <span className="ms-1 badge rounded-pill text-bg-secondary">
@@ -70,8 +73,15 @@ export default function ListCommentsComponent({
                                             <i className="ms-1 bi bi-link-45deg" />
                                         </span>
                                     </div>
-                                    <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowIncludeCategories(!showIncludeCategories)}>
-                                        <i className="bi bi-pencil-square" />
+                                    <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1">
+                                        {
+                                            !showIncludeCategories &&
+                                            <i className="bi bi-eye-slash" />
+                                        }
+                                        {
+                                            showIncludeCategories &&
+                                            <i className="bi bi-eye" />
+                                        }
                                     </button>
                                 </div>
                                 <div className="small" style={{ display: showIncludeCategories ? "block" : "none" }} >

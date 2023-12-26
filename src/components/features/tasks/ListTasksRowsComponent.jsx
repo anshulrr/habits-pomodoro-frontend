@@ -402,32 +402,33 @@ export default function ListTasksRowsComponent({
                                                             </button>
                                                             {
                                                                 task.status === 'current' &&
-                                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onCreatePastPomodoro(task)}>
-                                                                    Add past Pomodoro <i className="bi bi-calendar-plus" />
-                                                                </button>
-                                                            }
-                                                            {
-                                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowUpdateTaskId(task.id)}>
-                                                                    Update Task <i className="bi bi-pencil-square" />
+                                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateDueDate(task)}>
+                                                                    {task.type === 'bad' ? 'Restrain' : 'Due'} Time <i className="ps-1 bi bi-calendar-check" />
                                                                 </button>
                                                             }
                                                             {
                                                                 task.status === 'current' &&
-                                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateDueDate(task)}>
-                                                                    {task.type === 'bad' ? 'Restrain' : 'Due'} Time <i className="ps-1 bi bi-calendar-check" />
+                                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onCreatePastPomodoro(task)}>
+                                                                    Add Past Pomodoro
                                                                 </button>
                                                             }
                                                             <hr className="my-2" />
                                                             {
                                                                 task.status !== 'current' &&
                                                                 < button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateTaskStatus(task, 'current')}>
-                                                                    Move to Current <i className="bi bi-check2-circle" />
+                                                                    Move to Current
                                                                 </button>
                                                             }
                                                             {
                                                                 task.status !== 'archived' &&
                                                                 <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateTaskStatus(task, 'archived')}>
-                                                                    Move to Archive <i className="bi bi-archive" />
+                                                                    Move to Archive
+                                                                </button>
+                                                            }
+
+                                                            {
+                                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowUpdateTaskId(task.id)}>
+                                                                    Update Task <i className="bi bi-pencil-square" />
                                                                 </button>
                                                             }
                                                             {

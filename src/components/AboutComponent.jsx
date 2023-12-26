@@ -138,8 +138,8 @@ export default function AboutComponent() {
             </div>
 
 
-            <div className="row mb-3 sticky-menu" style={{ display: window.innerWidth <= 992 ? "block" : "none" }}>
-                <div className="col-12">
+            <div className="row mb-3 sticky-menu sub-menu">
+                <div className="col-12 mb-0">
                     <button type="button" className={"btn btn-sm py-0 px-1 " + generateActive(part1Ref)} onClick={() => handleClickToScroll(part1Ref)}>
                         Introduction
                     </button>

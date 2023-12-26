@@ -189,15 +189,15 @@ export default function UserSettingsComponent() {
 
     return (
         <div>
-            <div className="row mb-3 sticky-menu" style={{ display: window.innerWidth <= 992 ? "block" : "none" }}>
+            <div className="row mb-3 sticky-menu sub-menu" style={{ display: window.innerWidth <= 992 ? "block" : "none" }}>
                 <div className="col-12">
-                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1"} onClick={() => handleClickToScroll(generalSettingsRef)}>
+                    <button type="button" className={"btn btn-sm btn-light border py-0 px-1"} onClick={() => handleClickToScroll(generalSettingsRef)}>
                         General Settings
                     </button>
-                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1"} onClick={() => handleClickToScroll(displaySettingsRef)}>
+                    <button type="button" className={"btn btn-sm btn-light border py-0 px-1"} onClick={() => handleClickToScroll(displaySettingsRef)}>
                         Display Settings
                     </button>
-                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1"} onClick={() => handleClickToScroll(statsSettingsRef)}>
+                    <button type="button" className={"btn btn-sm btn-light border py-0 px-1"} onClick={() => handleClickToScroll(statsSettingsRef)}>
                         Stats Settings
                     </button>
                 </div>

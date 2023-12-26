@@ -8,8 +8,6 @@ export default function CategoryChecklistComponent({
 
     const [checkedState, setCheckedState] = useState(categories.map(c => c.statsDefault));
 
-    const [level, setLevel] = useState(1);
-
     const [errorMessage, setErrorMessage] = useState("");
 
     const message = "Click on Fetch to view Stats of selected Categories";
@@ -56,16 +54,6 @@ export default function CategoryChecklistComponent({
         setErrorMessage(message)
     }
 
-    function selectUpto() {
-        setCheckedState(categories.map(c => c.level <= level));
-        setErrorMessage(message)
-    }
-
-    function selectAbove() {
-        setCheckedState(categories.map(c => c.level >= level));
-        setErrorMessage(message)
-    }
-
     return (
         <div className="mb-3">
             <div className="text-start">
@@ -101,13 +89,14 @@ export default function CategoryChecklistComponent({
 
             {errorMessage && <div className="alert alert-info mb-0 py-0 px-2 text-center"><small>{errorMessage}</small></div>}
 
-            <div className="input-group my-2 justify-content-end">
-                <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => selectUpto()}>Upto</button>
-                <input type="number" className="form-control form-control-sm" name="level" value={level} placeholder="Order" onChange={(e) => setLevel(e.target.value)} />
-                <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => selectAbove()}>Above</button>
-                <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => selectAll()}>All</button>
-                <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => selectNone()}>None</button>
-                <button className="btn btn-sm btn-outline-success" type="button" onClick={fetchSelected}>Fetch</button>
+            <div className="d-flex my-2 justify-content-between">
+                <div>
+                    <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => selectAll()}>Select All</button>
+                    <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => selectNone()}>Remove All</button>
+                </div>
+                <div>
+                    <button className="btn btn-sm btn-outline-success ms-2" type="button" onClick={fetchSelected}>Fetch</button>
+                </div>
             </div>
 
         </div>
