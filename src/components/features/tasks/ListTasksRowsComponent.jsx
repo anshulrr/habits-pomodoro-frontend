@@ -403,12 +403,7 @@ export default function ListTasksRowsComponent({
                                                             {
                                                                 task.status === 'current' &&
                                                                 <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onCreatePastPomodoro(task)}>
-                                                                    Add past Pomodoro <i className="bi bi-calendar-plus" />
-                                                                </button>
-                                                            }
-                                                            {
-                                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowUpdateTaskId(task.id)}>
-                                                                    Update Task <i className="bi bi-pencil-square" />
+                                                                    Add Past Pomodoro <i className="bi bi-calendar-plus" />
                                                                 </button>
                                                             }
                                                             {
@@ -418,6 +413,11 @@ export default function ListTasksRowsComponent({
                                                                 </button>
                                                             }
                                                             <hr className="my-2" />
+                                                            {
+                                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowUpdateTaskId(task.id)}>
+                                                                    Update Task <i className="bi bi-pencil-square" />
+                                                                </button>
+                                                            }
                                                             {
                                                                 task.status !== 'current' &&
                                                                 < button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateTaskStatus(task, 'current')}>
@@ -444,6 +444,25 @@ export default function ListTasksRowsComponent({
                                                     </span>
                                                 </OutsideAlerter>
                                             }
+
+                                            {
+                                                task.status === 'current' && showCreatePastPomodoro === task.id &&
+                                                <PastPomodoroComponent
+                                                    setShowCreatePastPomodoro={setShowCreatePastPomodoro}
+                                                    task={task}
+                                                    setPomodorosListReload={setPomodorosListReload}
+                                                    setTasksReload={setTasksReload}
+                                                />
+                                            }
+
+                                            {
+                                                showUpdateDueDate === task.id &&
+                                                <TaskDueDateComponent
+                                                    setShowUpdateDueDate={setShowUpdateDueDate}
+                                                    task={task}
+                                                    setTasksReload={setTasksReload}
+                                                />
+                                            }
                                         </div>
 
                                         {
@@ -463,24 +482,6 @@ export default function ListTasksRowsComponent({
                                             </div>
                                         }
                                     </div>
-                                    {
-                                        task.status === 'current' && showCreatePastPomodoro === task.id &&
-                                        <PastPomodoroComponent
-                                            setShowCreatePastPomodoro={setShowCreatePastPomodoro}
-                                            task={task}
-                                            setPomodorosListReload={setPomodorosListReload}
-                                            setTasksReload={setTasksReload}
-                                        />
-                                    }
-
-                                    {
-                                        showUpdateDueDate === task.id &&
-                                        <TaskDueDateComponent
-                                            setShowUpdateDueDate={setShowUpdateDueDate}
-                                            task={task}
-                                            setTasksReload={setTasksReload}
-                                        />
-                                    }
 
                                     {
                                         showUpdateTaskId === task.id &&

@@ -166,3 +166,11 @@
     max-width: 90vw;
     overflow: scroll;
 }
+
+/* .toast-message {
+    position: fixed;
+    left: 0;
+    bottom: 5px;
+    display: block;
+    z-index: 1031;
+} */

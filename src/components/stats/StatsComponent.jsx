@@ -78,6 +78,12 @@ export default function ListStatsComponent() {
         }, []   // eslint-disable-line react-hooks/exhaustive-deps
     )
 
+    // useEffect(
+    //     () => {
+    //         setShowLeftMenu(false)
+    //     }, [reload]
+    // )
+
     function retrieveProjectCategories(subject) {
         // TODO: better implementation for limit
         retrieveAllProjectCategoriesApi(100, 0, subject)
