@@ -12,7 +12,7 @@ export default function SelectFriendsComponent({
 
     function handleOnChange(fun, val) {
         fun(val)
-        setErrorMessage("Click on Fetch to update Stats")
+        setErrorMessage("Click on Fetch to view Categories and Stats of selected Mentee")
     }
 
     function updateStats() {
@@ -57,7 +57,7 @@ export default function SelectFriendsComponent({
 
 
             <div className="col-lg-12">
-                {errorMessage && <div className="alert alert-danger mb-0 py-0 px-2 text-end"><small>{errorMessage}</small></div>}
+                {errorMessage && <div className="alert alert-info mb-0 py-0 px-2 text-center"><small>{errorMessage}</small></div>}
                 <div className="mt-2 text-end">
                     <button className="btn btn-sm btn-outline-success" type="button" onClick={updateStats}>Fetch</button>
                 </div>

@@ -116,7 +116,7 @@ export default function CommentComponent({ setComments, filterBy, id, title, set
                             </div>
                         </div>
                         <div className="col-lg-12">
-                            {errorMessage && <div className="alert alert-danger mt-1 mb-0 py-0 text-end"><small>{errorMessage}</small></div>}
+                            {errorMessage && <div className="alert alert-info mt-1 mb-0 py-0 text-center"><small>{errorMessage}</small></div>}
                         </div>
                     </div>
                 </form>
