@@ -15,6 +15,8 @@ export default function CommentComponent({ setComments, filterBy, id, title, set
 
     const [showInput, setShowInput] = useState(true)
 
+    const [errorMessage, setErrorMessage] = useState('')
+
     function handleSubmit(error) {
         error.preventDefault();
 
@@ -52,29 +54,35 @@ export default function CommentComponent({ setComments, filterBy, id, title, set
                     <div className="row">
                         <div className="col-lg-12 mb-2">
                             <div className="input-group">
-                                <button type="button" className={"btn btn-sm btn-outline-secondary " + (showInput ? "active" : "")} onClick={() => setShowInput(true)}>Write</button>
+                                <button type="button" className={"btn btn-sm btn-outline-secondary " + (showInput ? "active" : "")} onClick={() => setShowInput(true)}>
+                                    <label htmlFor="createTextArea">
+                                        Write
+                                    </label>
+                                </button>
                                 <button type="button" className={"btn btn-sm btn-outline-secondary " + (!showInput ? "active" : "")} onClick={() => setShowInput(false)}>Preview</button>
                             </div>
-                            {
-                                showInput &&
-                                <textarea
-                                    className="form-control form-control-sm"
-                                    name="description"
-                                    rows={calculateTextAreaRows(description)}
-                                    value={description}
-                                    placeholder="Description"
-                                    onChange={(e) => setDescription(e.target.value)}
-                                    required
+                            <textarea
+                                id="createTextArea"
+                                className="form-control form-control-sm"
+                                name="description"
+                                rows={calculateTextAreaRows(description)}
+                                value={description}
+                                placeholder="Description"
+                                onChange={(e) => {
+                                    setDescription(e.target.value);
+                                    setErrorMessage("Click on Save to create note");
+                                }}
+                                required
+                                autoFocus
+                                style={{ display: showInput ? 'block' : 'none' }}
+                            />
+                            <div
+                                className="small text-wrap bg-white border rounded-1 border-2 p-2"
+                                style={{ display: !showInput ? 'block' : 'none', minHeight: "8rem" }}>
+                                <ReactMarkdown
+                                    children={description}
                                 />
-                            }
-                            {
-                                !showInput &&
-                                <div className="small text-wrap bg-white border rounded-1 border-2 p-2" style={{ minHeight: "8rem" }}>
-                                    <ReactMarkdown
-                                        children={description}
-                                    />
-                                </div>
-                            }
+                            </div>
                         </div>
                         <div className="d-flex justify-content-end">
                             <label htmlFor="reviseDate" className="text-secondary my-auto small">
@@ -95,17 +103,20 @@ export default function CommentComponent({ setComments, filterBy, id, title, set
                             />
                             <div>
                                 <button
+                                    type="button"
+                                    className="btn btn-sm btn-outline-secondary ms-1"
+                                    onClick={() => setShowCreateComment(false)}
+                                ><i className="bi bi-x-lg" /></button>
+                            </div>
+                            <div>
+                                <button
                                     type="submit"
                                     className="btn btn-sm btn-outline-success ms-1"
                                 >Save</button>
                             </div>
-                            <div>
-                                <button
-                                    type="button"
-                                    className="btn btn-sm btn-outline-secondary ms-1"
-                                    onClick={() => setShowCreateComment(false)}
-                                >Cancel</button>
-                            </div>
+                        </div>
+                        <div className="col-lg-12">
+                            {errorMessage && <div className="alert alert-danger mt-1 mb-0 py-0 text-end"><small>{errorMessage}</small></div>}
                         </div>
                     </div>
                 </form>

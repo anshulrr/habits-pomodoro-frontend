@@ -168,7 +168,7 @@ export default function ListStatsComponent() {
                                             style={{ cursor: "pointer" }}
                                         >
                                             <h6 className="mb-0">
-                                                Settings
+                                                Stats Settings
                                             </h6>
                                             <div className="text-secondary px-1" >
                                                 {

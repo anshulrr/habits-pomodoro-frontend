@@ -63,7 +63,11 @@ export default function UpdateCommentComponent({ setComments, id, setShowUpdateC
                 <div className="row">
                     <div className="col-lg-12 mb-2">
                         <div className="input-group">
-                            <button type="button" className={"btn btn-sm btn-outline-secondary " + (showInput ? "active" : "")} onClick={() => setShowInput(true)}>Write</button>
+                            <button type="button" className={"btn btn-sm btn-outline-secondary " + (showInput ? "active" : "")} onClick={() => setShowInput(true)}>
+                                <label htmlFor="updateTextArea">
+                                    Write
+                                </label>
+                            </button>
                             <button type="button" className={"btn btn-sm btn-outline-secondary " + (!showInput ? "active" : "")} onClick={() => setShowInput(false)}>Preview</button>
                             {
                                 showLoader &&
@@ -72,29 +76,28 @@ export default function UpdateCommentComponent({ setComments, id, setShowUpdateC
                                 </span>
                             }
                         </div>
-                        {
-                            showInput &&
-                            <textarea
-                                className="form-control form-control-sm"
-                                name="description"
-                                rows={calculateTextAreaRows(description)}
-                                value={description}
-                                placeholder="Description"
-                                onChange={(e) => {
-                                    setDescription(e.target.value);
-                                    setErrorMessage("Click on Update to save");
-                                }}
-                                required
+                        <textarea
+                            id="updateTextArea"
+                            className="form-control form-control-sm"
+                            name="description"
+                            rows={calculateTextAreaRows(description)}
+                            value={description}
+                            placeholder="Description"
+                            onChange={(e) => {
+                                setDescription(e.target.value);
+                                setErrorMessage("Click on Update to save");
+                            }}
+                            required
+                            autoFocus
+                            style={{ display: showInput ? 'block' : 'none' }}
+                        />
+                        <div
+                            className="small text-wrap bg-white border rounded-1 border-2 p-2"
+                            style={{ display: !showInput ? 'block' : 'none', minHeight: "8rem" }}>
+                            <ReactMarkdown
+                                children={description}
                             />
-                        }
-                        {
-                            !showInput &&
-                            <div className="small text-wrap bg-white border rounded-1 border-2 p-2" style={{ minHeight: "8rem" }}>
-                                <ReactMarkdown
-                                    children={description}
-                                />
-                            </div>
-                        }
+                        </div>
                     </div>
                     <div className="d-flex justify-content-end">
                         <label htmlFor="reviseDate" className="text-secondary my-auto small">
@@ -115,16 +118,16 @@ export default function UpdateCommentComponent({ setComments, id, setShowUpdateC
                         />
                         <div>
                             <button
-                                type="submit"
-                                className="btn btn-sm btn-outline-success ms-1"
-                            >Update</button>
-                        </div>
-                        <div>
-                            <button
                                 type="button"
                                 className="btn btn-sm btn-outline-secondary ms-1"
                                 onClick={() => setShowUpdateComment(-1)}
-                            >Cancel</button>
+                            ><i className="bi bi-x-lg" /></button>
+                        </div>
+                        <div>
+                            <button
+                                type="submit"
+                                className="btn btn-sm btn-outline-success ms-1"
+                            >Update</button>
                         </div>
                     </div>
                     <div className="col-lg-12">

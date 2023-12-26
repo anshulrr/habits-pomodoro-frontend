@@ -34,7 +34,7 @@ export default function ListFilteredCommentsComponent({
     const [comments, setComments] = useState([])
 
     const [showCreateComment, setShowCreateComment] = useState(false)
-    const [showUpdateComment, setShowUpdateComment] = useState(false)
+    const [showUpdateComment, setShowUpdateComment] = useState(-1)
     const [showMapTags, setShowMapTags] = useState(-1);
 
     const [showMoreId, setShowMoreId] = useState(-1);
@@ -263,9 +263,12 @@ export default function ListFilteredCommentsComponent({
                                                     <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowMapTags(comment.id)}>
                                                         <i className="bi bi-tags" />
                                                     </button>
-                                                    <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 ms-1" style={{ marginRight: "2px" }} onClick={() => setShowUpdateComment(comment.id)}>
-                                                        <i className="bi bi-pencil-square"></i>
-                                                    </button>
+                                                    {
+                                                        showUpdateComment === -1 &&
+                                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 ms-1" style={{ marginRight: "2px" }} onClick={() => setShowUpdateComment(comment.id)}>
+                                                            <i className="bi bi-pencil-square"></i>
+                                                        </button>
+                                                    }
                                                 </div>
                                             }
                                         </div>
