@@ -118,6 +118,15 @@
     margin: auto;
 }
 
+.about-page .content div {
+    margin-bottom: 0;
+}
+
+.about-page .content * {
+    cursor: default !important;
+    pointer-events: none !important;
+}
+
 @media only screen and (max-width: 992px) {
     .about-img {
         width: 70vw;
@@ -133,6 +142,7 @@
     border-radius: 10px;
 }
 
+/* sticky menu for easy scroll to content */
 .sticky-menu {
     position: sticky;
     /* below top menu */
@@ -142,6 +152,16 @@
     z-index: 5;
 }
 
+.sub-menu {
+    background-color: #f2f3f4;
+}
+
+/* fix for sticky menu: scrolling to behind top menu bars  */
+* {
+    scroll-margin-top: 108px;
+}
+
+/* fix for high number of pages */
 .pagination-scroll {
     max-width: 90vw;
     overflow: scroll;

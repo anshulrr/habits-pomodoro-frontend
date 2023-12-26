@@ -1,4 +1,52 @@
+import { buttonsStates, projectsChartData, streakChart, taskStats, tasksChartData, tasksList1, tasksList2, totalChartData } from "services/helpers/aboutPageHelper";
+
+import { useEffect, useRef, useState } from "react";
+import { DoughnutChart } from "./stats/charts/DoughnutChart";
+import { BarChart } from "./stats/charts/BarChart";
+import { Bar } from "react-chartjs-2"
+import { CategoryScale } from 'chart.js'
+import Chart from 'chart.js/auto'
+import annotationPlugin from "chartjs-plugin-annotation";
+Chart.register(CategoryScale)
+Chart.register(annotationPlugin);
+
+
 export default function AboutComponent() {
+
+    const part1Ref = useRef(null);
+    const part2Ref = useRef(null);
+    const part3Ref = useRef(null);
+    const part4Ref = useRef(null);
+    const part5Ref = useRef(null);
+    const part6Ref = useRef(null);
+
+    const [scrollPosition, setScrollPosition] = useState(0);
+    const handleScroll = () => {
+        const position = window.scrollY;
+        // console.debug(position)
+        setScrollPosition(position);
+    };
+
+    // for first time load
+    useEffect(
+        () => {
+            window.addEventListener('scroll', handleScroll, { passive: true });
+            return () => {
+                window.removeEventListener('scroll', handleScroll);
+            };
+        }, []   // eslint-disable-line react-hooks/exhaustive-deps
+    )
+
+    const handleClickToScroll = function (ref) {
+        ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+
+    const generateActive = (ref) => {
+        if (ref?.current?.offsetTop < scrollPosition + 108 + 100 && ref?.current?.offsetTop + ref?.current?.offsetHeight > scrollPosition + 108 + 100) {
+            return 'btn-secondary';
+        }
+        return 'btn-light border';
+    }
 
     return (
         <div className="container about-page">
@@ -82,21 +130,38 @@ export default function AboutComponent() {
                         </ul>
                     </div>
                 </div>
-
-                <div className="col-lg-6 py-2 my-auto">
-                    <div className="about-img-2">
-                        <img
-                            className="rounded"
-                            src="images/tasks-list-1.png"
-                            alt="tasks-list-1"
-                            width="100%"
-                        />
+                <div className="col-lg-4 offset-lg-1 py-2 my-auto">
+                    <div className="px-2 mx-2 rounded" style={{ backgroundColor: "rgb(233, 236, 239)" }}>
+                        <div className="content" dangerouslySetInnerHTML={{ __html: tasksList1 }}></div>
                     </div>
                 </div>
             </div>
 
-            <div className="row small my-0">
-                <div className="col-lg-6 my-0 order-lg-2 text-start my-auto">
+
+            <div className="row mb-3 sticky-menu" style={{ display: window.innerWidth <= 992 ? "block" : "none" }}>
+                <div className="col-12">
+                    <button type="button" className={"btn btn-sm py-0 px-1 " + generateActive(part1Ref)} onClick={() => handleClickToScroll(part1Ref)}>
+                        Introduction
+                    </button>
+                    <button type="button" className={"btn btn-sm py-0 px-1 " + generateActive(part2Ref)} onClick={() => handleClickToScroll(part2Ref)}>
+                        Make It Obvious
+                    </button>
+                    <button type="button" className={"btn btn-sm py-0 px-1 " + generateActive(part3Ref)} onClick={() => handleClickToScroll(part3Ref)}>
+                        Make It Attractive
+                    </button>
+                    <button type="button" className={"btn btn-sm py-0 px-1 " + generateActive(part4Ref)} onClick={() => handleClickToScroll(part4Ref)}>
+                        Make It Easy
+                    </button>
+                    <button type="button" className={"btn btn-sm py-0 px-1 " + generateActive(part5Ref)} onClick={() => handleClickToScroll(part5Ref)}>
+                        Make It Satisfying
+                    </button>
+                    <button type="button" className={"btn btn-sm py-0 px-1 " + generateActive(part6Ref)} onClick={() => handleClickToScroll(part6Ref)}>
+                        Advancded Tactics
+                    </button>
+                </div>
+            </div>
+            <div ref={part1Ref} className="row small my-0">
+                <div className="col-lg-6 my-0 order-lg-3 text-start my-auto">
                     <div className="about-card px-2 py-1">
                         <h2 className="h5 py-2">
                             More Features
@@ -132,26 +197,21 @@ export default function AboutComponent() {
                         </div>
                     </div>
                 </div>
-
-                <div className="col-lg-6 py-2 my-auto order-lg-1">
-                    <div className="about-img">
-                        <img
-                            className="rounded"
-                            src="images/total-chart.png"
-                            alt="total-chart"
-                            width="100%"
-                        />
+                <div className="col-lg-4 offset-lg-1 py-2 my-auto order-lg-1">
+                    <div className="px-2 mx-2 rounded" style={{ backgroundColor: "rgb(233, 236, 239)" }}>
+                        <div className="content" dangerouslySetInnerHTML={{ __html: tasksList2 }}>
+                        </div>
                     </div>
                 </div>
+                <div className="col-lg-1 order-lg-2"></div>
             </div>
 
-            <div className="row small my-0">
-
+            <div ref={part2Ref} className="row small my-0">
                 <div className="col-lg-6 my-0 text-start my-auto">
                     <div className="about-card px-2 py-1">
 
                         <h3 className="h6 py-2">
-                            Make it obvious
+                            Make It Obvious
                         </h3>
                         <ol>
                             <li>
@@ -200,26 +260,72 @@ export default function AboutComponent() {
                         </ol>
                     </div>
                 </div>
-
-                <div className="col-lg-6 py-2 my-auto">
-                    <div className="about-img-2">
-                        <img
-                            className="rounded"
-                            src="images/tasks-list-2.png"
-                            alt="tasks-list-2"
-                            width="100%"
-                        />
+                <div className="col-lg-4 offset-lg-1 py-2 my-auto">
+                    <div className="my-1 mx-2 py-1 chart-card content">
+                        <h6>
+                            Total (avg hours)
+                        </h6>
+                        <div className="container">
+                            {
+                                <div>
+                                    <button type="button" className="btn btn-sm btn-outline-secondary ">Daily</button>
+                                    <button type="button" className="btn btn-sm btn-outline-secondary active">Weekly</button>
+                                    <button type="button" className="btn btn-sm btn-outline-secondary ">Monthly</button>
+                                </div>
+                            }
+                            <div className="row">
+                                <div className="col-3">
+                                    <i className="btn btn-sm btn-outline-secondary py-0 px-1 lh-sm bi bi-arrow-left"></i>
+                                </div>
+                                <div className="col-6">
+                                </div>
+                                <div className="col-3">
+                                    <i className="btn btn-sm btn-outline-secondary py-0 px-1 lh-sm bi bi-arrow-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="chart-container">
+                            <Bar
+                                data={
+                                    {
+                                        labels: totalChartData.labels,
+                                        datasets: totalChartData.datasets
+                                    }
+                                }
+                                options={{
+                                    responsive: true,
+                                    maintainAspectRatio: true,
+                                    aspectRatio: 0.75,
+                                    plugins: {
+                                        legend: {
+                                            display: true,
+                                            position: 'top',
+                                            labels: {
+                                                boxWidth: 10
+                                            }
+                                        }
+                                    },
+                                    scales: {
+                                        x: {
+                                            stacked: true
+                                        },
+                                        y: {
+                                            stacked: true
+                                        }
+                                    }
+                                }}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div className="row small my-0">
-
-                <div className="col-lg-6 my-0 order-lg-2 text-start my-auto">
+            <div ref={part3Ref} className="row small my-0">
+                <div className="col-lg-6 my-0 order-lg-3 text-start my-auto">
                     <div className="about-card px-2 py-1">
 
                         <h3 className="h6 py-2">
-                            Make it attractive
+                            Make It Attractive
                         </h3>
                         <ol>
                             <li>
@@ -252,26 +358,25 @@ export default function AboutComponent() {
                         </ol>
                     </div>
                 </div>
-
-                <div className="col-lg-6 py-2 my-auto order-lg-1">
-
-                    <div className="about-img">
-                        <img
-                            className="rounded"
-                            src="images/projects-chart.png"
-                            alt="projects-chart"
-                            width="100%"
+                <div className="col-lg-4 offset-lg-1 py-2 my-auto order-lg-1 text-center">
+                    <div className="my-1 mx-2 py-1 chart-card content">
+                        <BarChart
+                            chartData={projectsChartData}
+                            buttonsStates={buttonsStates}
+                            thickness={2}
+                            isDummy={true}
                         />
                     </div>
                 </div>
+                <div className="col-lg-1 order-lg-2"></div>
             </div>
 
-            <div className="row small my-0">
+            <div ref={part4Ref} className="row small my-0">
                 <div className="col-lg-6 my-0 text-start my-auto">
                     <div className="about-card px-2 py-1">
 
                         <h3 className="h6 py-2">
-                            Make it easy
+                            Make It Easy
                         </h3>
                         <ol>
                             <li>
@@ -310,28 +415,19 @@ export default function AboutComponent() {
                         </ol>
                     </div>
                 </div>
-
-
-
-                <div className="col-lg-6 py-2 my-auto">
-                    <div className="about-img-2">
-                        <img
-                            className="rounded"
-                            src="images/task-stats.png"
-                            alt="task-stats"
-                            width="100%"
-                        />
+                <div className="col-lg-4 offset-lg-1 py-2 my-auto">
+                    <div className="mx-2 rounded">
+                        <div className="content" dangerouslySetInnerHTML={{ __html: taskStats }}></div>
                     </div>
                 </div>
             </div>
 
-            <div className="row small my-0">
-
-                <div className="col-lg-6 my-0 order-lg-2 text-start my-auto">
+            <div ref={part5Ref} className="row small my-0">
+                <div className="col-lg-6 my-0 order-lg-3 text-start my-auto">
                     <div className="about-card px-2 py-1">
 
                         <h3 className="h6 py-2">
-                            Make it satisfying
+                            Make It Satisfying
                         </h3>
                         <ol>
                             <li>
@@ -364,21 +460,20 @@ export default function AboutComponent() {
                         </ol>
                     </div>
                 </div>
-
-                <div className="col-lg-6 py-2 my-auto order-lg-1 text-center">
-
-                    <div className="about-img text-center">
-                        <img
-                            className="rounded"
-                            src="images/tasks-chart.png"
-                            alt="tasks-chart"
-                            width="100%"
+                <div className="col-lg-4 offset-lg-1 py-2 my-auto order-lg-1 text-center">
+                    <div className="my-1 mx-2 py-1 chart-card content">
+                        <DoughnutChart
+                            chartData={tasksChartData}
+                            buttonsStates={buttonsStates}
+                            thickness={1}
+                            isDummy={true}
                         />
                     </div>
                 </div>
+                <div className="col-lg-1 order-lg-2"></div>
             </div>
 
-            <div className="row small my-0">
+            <div ref={part6Ref} className="row small my-0">
                 <div className="col-lg-6 my-0 text-start my-auto">
                     <div className="about-card px-2 py-1">
                         <h3 className="h6 py-2">
@@ -397,23 +492,16 @@ export default function AboutComponent() {
                         </ol>
                     </div>
                 </div>
-
-                <div className="col-lg-6 py-2 my-auto">
-
-                    <div className="about-img-2">
-                        <img
-                            className="rounded"
-                            src="images/streak-chart.png"
-                            alt="streak-chart"
-                            width="100%"
-                        />
+                <div className="col-lg-4 offset-lg-1 py-2 my-auto">
+                    <div className="mx-2 rounded">
+                        <div className="content" dangerouslySetInnerHTML={{ __html: streakChart }}></div>
                     </div>
                 </div>
             </div>
             <div className="row small my-0">
-                <div className="col-lg-12 py-2">
-                    <div>
-                        To access this version of the app easily, you can use the <span className="fw-bold">'Install app'</span> option available in Chrome browser.
+                <div className="col-lg-12 pb-2">
+                    <div className="alert alert-primary py-1" role="alert">
+                        <i className="bi bi-info-circle" /> To access this version of the app easily, you can use the <span className="fw-bold">'Install app'</span> option available in Chrome browser.
                     </div>
                     <div>
                         Please reach out <a href="mailto:ansh14j@gmail.com">here</a> if you have any suggestions or issues.

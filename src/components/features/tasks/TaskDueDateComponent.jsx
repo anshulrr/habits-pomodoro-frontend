@@ -101,8 +101,7 @@ export default function TaskDueDateComponent({
                     </button>
                 </div>
             </div>
-
-            <div className="text-danger small">{error}</div>
+            {error && <div className="alert alert-danger mt-1 mb-0 py-0 px-2 text-center"><small>{error}</small></div>}
         </div>
     )
 }

@@ -6,7 +6,8 @@ export const Buttons = ({
     buttonsStates,
     setButtonsStates,
     showDateString = true,
-    showLimit = true
+    showLimit = true,
+    isDummy = false
 }) => {
 
     const [limit, setLimit] = useState(buttonsStates.limit)
@@ -22,6 +23,9 @@ export const Buttons = ({
         () => {
             // update dates for component re render with updated limit and offset
             const { start, end } = updateDates(limit, offset)
+            if (isDummy) {
+                return;
+            }
             retrievePomodoros({ startDate: start, endDate: end, limit, offset })
             setButtonsStates({
                 limit: limit,
@@ -32,11 +36,17 @@ export const Buttons = ({
     )
 
     function updateOffset(val) {
+        if (isDummy) {
+            return;
+        }
         updateDates(limit, offset + val)
         setOffset(offset + val);
     }
 
     function updateLimit(val) {
+        if (isDummy) {
+            return;
+        }
         // console.debug('updating limit')
         updateDates(val, 0)
         setLimit(val);

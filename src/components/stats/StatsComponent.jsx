@@ -65,6 +65,9 @@ export default function ListStatsComponent() {
         dateString: moment().format('DD MMM')
     })
 
+    const [subPage, setSubPage] = useState('')
+    const [showAll, setShowAll] = useState(true)
+
     // for first time load
     useEffect(
         () => {
@@ -101,16 +104,7 @@ export default function ListStatsComponent() {
 
     return (
         <div className="container" style={{ backgroundColor: "#f2f3f4" }}>
-            <span className="user-comments-icon">
-                <button type="button" className="btn btn-secondary" onClick={() => setReload(prev => prev + 1)}>
-                    <i className="bi bi-arrow-clockwise" />
-                </button>
-            </span>
-            <div className="left-menu-icon">
-                <button type="button" className="btn btn-secondary" onClick={() => setShowLeftMenu(!showLeftMenu)}>
-                    <i className="px-4 bi bi-list" />
-                </button>
-            </div>
+
             {
                 subject != null &&
                 <div className="sticky-menu" style={{ backgroundColor: "unset" }}>
@@ -123,6 +117,43 @@ export default function ListStatsComponent() {
                     </div>
                 </div>
             }
+            <div className="row sub-menu" style={{ display: window.innerWidth <= 992 ? "block" : "none" }}>
+                <div className="col-12">
+                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1 " + (showAll ? "active" : "")} onClick={() => setShowAll(true)}>
+                        Show All
+                    </button>
+                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1 " + (subPage === "total" && !showAll ? "active" : "")} onClick={() => { setSubPage("total"); setShowAll(false) }}>
+                        Total
+                    </button>
+                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1 " + (subPage === "projects" && !showAll ? "active" : "")} onClick={() => { setSubPage("projects"); setShowAll(false) }}>
+                        Projects
+                    </button>
+                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1 " + (subPage === "tasks" && !showAll ? "active" : "")} onClick={() => { setSubPage("tasks"); setShowAll(false) }}>
+                        Tasks
+                    </button>
+                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1 " + (subPage === "categories" && !showAll ? "active" : "")} onClick={() => { setSubPage("categories"); setShowAll(false) }}>
+                        Project Categories
+                    </button>
+                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1 " + (subPage === "streak" && !showAll ? "active" : "")} onClick={() => { setSubPage("streak"); setShowAll(false) }}>
+                        Daily Streak
+                    </button>
+                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1 " + (subPage === "pomodoros" && !showAll ? "active" : "")} onClick={() => { setSubPage("pomodoros"); setShowAll(false) }}>
+                        Pomodoros List
+                    </button>
+                </div>
+            </div>
+
+            <span className="user-comments-icon">
+                <button type="button" className="btn btn-secondary" onClick={() => setReload(prev => prev + 1)}>
+                    <i className="bi bi-arrow-clockwise" />
+                </button>
+            </span>
+            <div className="left-menu-icon">
+                <button type="button" className="btn btn-secondary" onClick={() => setShowLeftMenu(!showLeftMenu)}>
+                    <i className="px-4 bi bi-list" />
+                </button>
+            </div>
+
             <div className="row pt-1">
                 <div className="col-lg-4 text-start">
 
@@ -137,7 +168,7 @@ export default function ListStatsComponent() {
                                             style={{ cursor: "pointer" }}
                                         >
                                             <h6 className="mb-0">
-                                                Settings
+                                                Stats Settings
                                             </h6>
                                             <div className="text-secondary px-1" >
                                                 {
@@ -241,7 +272,7 @@ export default function ListStatsComponent() {
                     includeCategories.length !== 0 && Object.keys(statsSettings).length !== 0 &&
                     <div className="col-lg-8">
                         <div className="row">
-                            <div className="col-lg-6 px-0">
+                            <div className="col-lg-6 px-0" style={{ display: subPage === "total" || showAll ? "block" : "none" }}>
                                 <div className="p-1 chart-card">
                                     <TotalChart
                                         key={reload}
@@ -253,7 +284,7 @@ export default function ListStatsComponent() {
                                     />
                                 </div>
                             </div>
-                            <div className="col-lg-6 px-0">
+                            <div className="col-lg-6 px-0" style={{ display: subPage === "projects" || showAll ? "block" : "none" }}>
                                 <div className="p-1 chart-card">
                                     <ProjectsDistributionChart
                                         key={reload}
@@ -265,7 +296,7 @@ export default function ListStatsComponent() {
                                     />
                                 </div>
                             </div>
-                            <div className="col-lg-6 px-0">
+                            <div className="col-lg-6 px-0" style={{ display: subPage === "tasks" || showAll ? "block" : "none" }}>
                                 <div className="p-1 chart-card">
                                     <TasksChart
                                         key={reload}
@@ -277,7 +308,7 @@ export default function ListStatsComponent() {
                                     />
                                 </div>
                             </div>
-                            <div className="col-lg-6 px-0">
+                            <div className="col-lg-6 px-0" style={{ display: subPage === "categories" || showAll ? "block" : "none" }}>
                                 <div className="p-1 chart-card">
                                     <ProjectCategoriesChart
                                         key={reload}
@@ -289,7 +320,7 @@ export default function ListStatsComponent() {
                                     />
                                 </div>
                             </div>
-                            <div className="col-lg-12 px-0">
+                            <div className="col-lg-12 px-0" style={{ display: subPage === "streak" || showAll ? "block" : "none" }}>
                                 <div className="py-1 px-3 chart-card">
                                     <CalendarChart
                                         key={reload}
@@ -299,7 +330,7 @@ export default function ListStatsComponent() {
                                     />
                                 </div>
                             </div >
-                            <div className="col-lg-6 px-0 mb-5">
+                            <div className="col-lg-6 px-0" style={{ display: subPage === "pomodoros" || showAll ? "block" : "none" }}>
                                 <div className="p-1 chart-card" style={{ height: "70vh", overflowY: "scroll" }}>
                                     <ListPomodorosComponent
                                         key={reload}

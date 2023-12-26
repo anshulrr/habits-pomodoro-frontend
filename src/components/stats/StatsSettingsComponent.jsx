@@ -55,7 +55,7 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
 
     function handleOnChange(fun, val) {
         fun(val)
-        setErrorMessage("Click on Fetch to update stats")
+        setErrorMessage("Click on Fetch to update Stats")
     }
 
     function isValidated() {
@@ -233,9 +233,9 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
                 </div>
             </div>
 
-            <div className="text-danger"><small>{errorMessage}</small></div>
 
             <div className="col-lg-12">
+                {errorMessage && <div className="alert alert-danger mb-0 py-0 px-2 text-end"><small>{errorMessage}</small></div>}
                 <div className="mt-2 text-end">
                     <button className="btn btn-sm btn-outline-success" type="button" onClick={updateSettings}>Fetch</button>
                 </div>

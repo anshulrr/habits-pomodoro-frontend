@@ -117,7 +117,7 @@ export default function LoginComponent() {
                                             name="login"
                                         >Sign in</button>
                                     </div>
-                                    <div className="text-danger"><small>{errorMessage}</small></div>
+                                    {errorMessage && <div className="alert alert-danger my-2 py-0 px-2 text-center"><small>{errorMessage}</small></div>}
                                     <div className="mb-3 text-center">
                                         <button
                                             type="button"

@@ -89,7 +89,7 @@ export default function ChangePasswordComponent({ setShowChangePassword }) {
                                                     placeholder="Confirm password"
                                                     required
                                                 />
-                                                <div className="mb-2 text-danger"><small>{errorMessage}</small></div>
+                                                {errorMessage && <div className="alert alert-danger mb-2 py-0 px-2 text-center"><small>{errorMessage}</small></div>}
 
                                                 <div className="text-end">
                                                     <button className="me-2 btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowChangePassword(false)}>Cancel</button>
@@ -99,7 +99,7 @@ export default function ChangePasswordComponent({ setShowChangePassword }) {
                                                         name="changePassword"
                                                     >Change Password</button>
                                                 </div>
-                                                <div className="text-success"><small>{successMessage}</small></div>
+                                                {successMessage && <div className="alert alert-success mt-2 mb-0 py-0 px-2 text-end"><small>{successMessage}</small></div>}
                                             </div>
                                         </div>
                                     </div>

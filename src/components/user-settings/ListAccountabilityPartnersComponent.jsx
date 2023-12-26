@@ -121,7 +121,7 @@ export default function ListAccountabilityPartnersComponent() {
                                             </button>
                                         </div>
                                     </form>
-                                    <div className="text-danger text-start"><small>{errorMessage}</small></div>
+                                    {errorMessage && <div className="alert alert-danger mt-1 mb-0 py-0 px-2 text-center"><small>{errorMessage}</small></div>}
 
                                 </div>
                             </div>

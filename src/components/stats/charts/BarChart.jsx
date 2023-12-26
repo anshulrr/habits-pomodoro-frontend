@@ -11,7 +11,8 @@ export const BarChart = ({
     buttonsStates,
     setButtonsStates,
     showLoader,
-    thickness
+    thickness,
+    isDummy
 }) => {
 
     return (
@@ -27,6 +28,7 @@ export const BarChart = ({
                 retrievePomodoros={retrievePomodoros}
                 buttonsStates={buttonsStates}
                 setButtonsStates={setButtonsStates}
+                isDummy={isDummy}
             />
 
             <div className="chart-container">
