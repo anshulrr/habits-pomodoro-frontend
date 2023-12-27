@@ -148,12 +148,17 @@
     /* below top menu */
     top: 56px;
     background-color: #ffffff;
+    padding-bottom: 2px;
     /* behind any popups */
     z-index: 5;
 }
 
 .sub-menu {
+    /* padding-top: 2px; */
+    padding-bottom: 2px;
     background-color: #f2f3f4;
+    border-top: 1px solid rgb(222, 226, 230);
+    border-bottom: 1px solid rgb(222, 226, 230);
 }
 
 /* fix for sticky menu: scrolling to behind top menu bars  */

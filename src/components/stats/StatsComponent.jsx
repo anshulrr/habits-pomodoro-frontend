@@ -154,7 +154,7 @@ export default function ListStatsComponent() {
                 </button>
             </div>
 
-            <div className="row pt-1">
+            <div className="row">
                 <div className="col-lg-4 text-start">
 
                     <div className={showLeftMenu ? "left-menu-container" : ""}>
