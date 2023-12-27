@@ -147,6 +147,13 @@ export default function ListCommentsComponent({
 
                     </div>
                 }
+
+                {
+                    !tags &&
+                    <span className="loader-container mt-5">
+                        <span className="loader"></span>
+                    </span>
+                }
                 {
                     tags &&
                     <div className={"mt-3 col-lg-8 " + (filterBy !== 'user' || title === "All Notes" ? "offset-lg-2" : "")} style={{ backgroundColor: "#e9ecef" }}>

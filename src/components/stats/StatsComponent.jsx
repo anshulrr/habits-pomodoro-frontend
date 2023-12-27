@@ -268,6 +268,12 @@ export default function ListStatsComponent() {
                 </div>
 
                 {
+                    !(includeCategories.length !== 0 && Object.keys(statsSettings).length !== 0) &&
+                    <span className="loader-container mt-5">
+                        <span className="loader"></span>
+                    </span>
+                }
+                {
                     includeCategories.length !== 0 && Object.keys(statsSettings).length !== 0 &&
                     <div className="col-lg-8">
                         <div className="row">
