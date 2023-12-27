@@ -38,6 +38,12 @@ export default function ListCommentsComponent({
         }, [] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
+    useEffect(
+        () => {
+            setShowLeftMenu(false);
+        }, [filterWithReviseDate, reload]
+    )
+
     function retrieveProjectCategories() {
         retrieveAllProjectCategoriesApi(100, 0)
             .then(response => {

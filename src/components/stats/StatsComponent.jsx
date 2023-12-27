@@ -78,6 +78,13 @@ export default function ListStatsComponent() {
         }, []   // eslint-disable-line react-hooks/exhaustive-deps
     )
 
+
+    useEffect(
+        () => {
+            setShowLeftMenu(false)
+        }, [reload]
+    )
+
     function retrieveProjectCategories(subject) {
         // TODO: better implementation for limit
         retrieveAllProjectCategoriesApi(100, 0, subject)
@@ -227,7 +234,7 @@ export default function ListStatsComponent() {
                                             />
                                         </div>
 
-                                        <div className="d-flex justify-content-between mb-2"
+                                        <div className="d-flex justify-content-between mb-2 alert alert-primary p-1"
                                             onClick={() => setShowFriendsStats(!showFriendsStats)}
                                             style={{ cursor: "pointer" }}
                                         >
