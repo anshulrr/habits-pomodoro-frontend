@@ -166,3 +166,11 @@
     max-width: 90vw;
     overflow: scroll;
 }
+
+/* fixed refresh icon */
+.refresh-icon {
+    position: fixed;
+    right: 16px;
+    bottom: 5px;
+    z-index: 1031;
+}

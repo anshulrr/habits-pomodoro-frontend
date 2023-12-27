@@ -143,14 +143,14 @@ export default function ListStatsComponent() {
                 </div>
             </div>
 
-            <span className="user-comments-icon">
-                <button type="button" className="btn btn-secondary" onClick={() => setReload(prev => prev + 1)}>
+            <span className="refresh-icon">
+                <button type="button" className="btn btn-outline-secondary" onClick={() => setReload(prev => prev + 1)}>
                     <i className="bi bi-arrow-clockwise" />
                 </button>
             </span>
             <div className="left-menu-icon">
                 <button type="button" className="btn btn-secondary" onClick={() => setShowLeftMenu(!showLeftMenu)}>
-                    <i className="px-4 bi bi-list" />
+                    Stats Filters <i className="bi bi-list" />
                 </button>
             </div>
 
@@ -223,7 +223,6 @@ export default function ListStatsComponent() {
                                                 key={reloadCategories}
                                                 categories={categories}
                                                 setIncludeCategories={setIncludeCategories}
-                                                reload={reload}
                                                 setReload={setReload}
                                             />
                                         </div>

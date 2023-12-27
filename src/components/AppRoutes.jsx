@@ -19,6 +19,7 @@ import SignupComponent from 'components/SignupComponent'
 import ForgotPasswordComponent from 'components/ForgotPasswordComponent'
 import FooterComponent from 'components/FooterComponent'
 import AboutComponent from 'components/AboutComponent'
+import ListCommentsComponent from './features/comments/ListCommentsComponents'
 
 function AuthenticatedRoute({ children }) {
     const authContext = useAuth()
@@ -56,6 +57,13 @@ export default function AppRoutes() {
 
                         <Route path='/about' element={
                             <AboutComponent />
+                        } />
+
+
+                        <Route path='/notes' element={
+                            <AuthenticatedRoute>
+                                <ListCommentsComponent />
+                            </AuthenticatedRoute>
                         } />
 
                         <Route path='/stats' element={

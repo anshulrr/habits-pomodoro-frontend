@@ -8,7 +8,7 @@ import ListTasksRowsComponent from "components/features/tasks/ListTasksRowsCompo
 import CreateTaskComponent from "components/features/tasks/CreateTaskComponent";
 import PomodoroComponent from "components/features/pomodoros/PomodoroComponent";
 import StopwatchComponent from "components/features/pomodoros/StopwatchComponent";
-import ListCommentsComponent from "components/features/comments/ListCommentsComponents";
+import ListCommentsPopupComponent from "components/features/comments/ListCommentsPopupComponent";
 
 export default function ListTasksComponent({
     project,
@@ -19,7 +19,6 @@ export default function ListTasksComponent({
     title,
     tag,
     setPomodorosListReload,
-    setReloadHome
 }) {
 
     const navigate = useNavigate()
@@ -141,10 +140,6 @@ export default function ListTasksComponent({
         navigate(`/projects/${id}`, { state })
     }
 
-    const refreshAll = () => {
-        setReloadHome(prev => prev + 1)
-    }
-
     return (
         <div className="">
             <div className="row">
@@ -208,13 +203,12 @@ export default function ListTasksComponent({
 
                     {
                         showProjectCommentsId !== -1 &&
-                        <ListCommentsComponent
+                        <ListCommentsPopupComponent
                             filterBy={'project'}
                             id={showProjectCommentsId}
                             title={project.name}
                             projectColor={project.color}
                             setShowCommentsId={setShowProjectCommentsId}
-                            tags={tags}
                         />
                     }
 
@@ -319,9 +313,6 @@ export default function ListTasksComponent({
                             pomodoro === null &&
                             <StopwatchComponent message={'Start a new pomodoro?'} />
                         }
-                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => refreshAll()}>
-                            <i className="bi bi-arrow-clockwise" />
-                        </button>
                     </div>
 
                     {
@@ -333,7 +324,6 @@ export default function ListTasksComponent({
                             createNewPomodoro={createNewPomodoro}
                             setTasksMessage={setMessage}
                             setPomodorosListReload={setPomodorosListReload}
-                            tags={tags}
                         ></PomodoroComponent>
                     }
                 </div>
