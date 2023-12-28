@@ -303,15 +303,10 @@ export default function ListTasksComponent({
                         </div>
                     </div >
 
-                    <div className="d-flex justify-content-between mt-3">
+                    <div className="d-flex justify-content-around">
                         {
-                            pomodoro !== null &&
-                            <small className="text-danger">{message} </small>
-                        }
-
-                        {
-                            pomodoro === null &&
-                            <StopwatchComponent message={'Start a new pomodoro?'} />
+                            pomodoro !== null && message &&
+                            <div className="alert alert-danger mt-3 mb-1 py-0 px-2 small">{message}</div>
                         }
                     </div>
 

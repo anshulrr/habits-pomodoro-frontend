@@ -70,6 +70,7 @@ export default function AuthProvider({ children }) {
 
         // console.debug('adding interceptors. Old interceptors: ', requestInterceptor, responseInterceptor);
         // remove old interceptors before adding new one
+        // console.debug("ejecting if present", requestInterceptor)
         apiClient.interceptors.request.eject(requestInterceptor)
         apiClient.interceptors.response.eject(responseInterceptor)
         // console.debug('ejected interceptors')
@@ -90,6 +91,7 @@ export default function AuthProvider({ children }) {
             }
         )
 
+        // console.debug("setting", myRequestInterceptor)
         setRequestInterceptor(myRequestInterceptor);
 
         const myResponseInterceptor = apiClient.interceptors.response.use(function (response) {
@@ -117,6 +119,7 @@ export default function AuthProvider({ children }) {
 
     async function logout() {
         // remove old interceptors, otherwise app will be able to make calls until page refresh
+        // console.debug("ejecting", requestInterceptor)
         apiClient.interceptors.request.eject(requestInterceptor)
         apiClient.interceptors.response.eject(responseInterceptor)
 
