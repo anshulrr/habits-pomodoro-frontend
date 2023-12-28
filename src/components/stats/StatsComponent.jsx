@@ -242,14 +242,16 @@ export default function ListStatsComponent() {
                                             onClick={() => setShowFriendsStats(!showFriendsStats)}
                                             style={{ cursor: "pointer" }}
                                         >
-                                            <h6 className="mb-0">
-                                                Mentees Stats
-                                                <span className="ms-1 badge rounded-pill text-bg-secondary">
+                                            <div className="d-flex dustify-content-start my-auto">
+                                                <h6 className="mb-0">
+                                                    Mentees Stats
+                                                </h6>
+                                                <div className="ms-1 badge rounded-pill text-bg-secondary">
                                                     {subjects.length}
                                                     <i className="ps-1 bi bi-person-fill" />
-                                                </span>
-                                            </h6>
-                                            <div className="text-secondary px-1">
+                                                </div>
+                                            </div>
+                                            <div className="text-secondary px-1 my-auto">
                                                 {
                                                     !showFriendsStats &&
                                                     <i className="bi bi-eye-slash" />
