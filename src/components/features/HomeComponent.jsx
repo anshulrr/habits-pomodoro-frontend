@@ -12,7 +12,6 @@ import OutsideAlerter from 'services/hooks/OutsideAlerter';
 import { useAuth } from 'services/auth/AuthContext';
 import { isEmpty } from 'services/helpers/helper';
 import { retrieveAllProjectCategoriesApi } from 'services/api/ProjectCategoryApiService';
-import UserCommentsComponent from './comments/UserCommentsComponent';
 
 export default function HomeComponent({ setReloadHome }) {
 
@@ -249,9 +248,6 @@ export default function HomeComponent({ setReloadHome }) {
                 </div >
             </div>
 
-            <UserCommentsComponent
-                tags={tags}
-            />
         </div >
     )
 }

@@ -7,7 +7,6 @@ import { getTasksCountApi } from "services/api/TaskApiService";
 import ListTasksRowsComponent from "components/features/tasks/ListTasksRowsComponent";
 import CreateTaskComponent from "components/features/tasks/CreateTaskComponent";
 import PomodoroComponent from "components/features/pomodoros/PomodoroComponent";
-import StopwatchComponent from "components/features/pomodoros/StopwatchComponent";
 import ListCommentsPopupComponent from "components/features/comments/ListCommentsPopupComponent";
 
 export default function ListTasksComponent({
