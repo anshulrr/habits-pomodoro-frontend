@@ -54,8 +54,8 @@ export default function ListTasksRowsComponent({
     }
 
     const [currentPage, setCurrentPage] = useState(
-        (status === 'current' && state.currentTasksPage) ||
-        (status === 'archived' && state.currentArchivedTasksPage) ||
+        (status === 'current' && state?.currentTasksPage) ||
+        (status === 'archived' && state?.currentArchivedTasksPage) ||
         1
     )
 
