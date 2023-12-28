@@ -129,7 +129,7 @@ export default function ListAccountabilityPartnersComponent() {
 
 
                         <div className="row">
-                            <div className="alert alert-primary small py-0" role="alert">
+                            <div className="alert alert-primary small py-0 mb-2" role="alert">
                                 <i className="me-2 bi bi-info-circle-fill" />
                                 Accountability Partners can see the stats of all visible project categories
                             </div>
@@ -155,40 +155,53 @@ export default function ListAccountabilityPartnersComponent() {
                                 </div>
                             </div>
                         </div>
+
                         {
                             !showSubjects &&
-                            partners.map(
-                                partner => (
-                                    <div key={partner.id} className="row border-bottom my-1">
-                                        {/* todo: decide better solution for maxWidth */}
-                                        <div className="col-8 ps-1 py-1 text-start">
-                                            <small>
-                                                {partner.email}&nbsp;
-                                            </small>
-                                        </div>
-                                        <div className="col-4 pe-0 text-end">
-                                            <button className="btn btn-sm btn-outline-secondary py-0 px-1" type="button" onClick={() => removeAccountabilityPartner(partner)}>
-                                                Remove
-                                            </button>
-                                        </div>
-                                    </div>
-                                )
-                            )
+                            <div className="row border rounded my-1">
+                                <div className="col-12">
+                                    {
+                                        partners.map(
+                                            partner => (
+                                                <div key={partner.id} className="row border-bottom">
+                                                    {/* todo: decide better solution for maxWidth */}
+                                                    <div className="col-8 ps-1 py-1 text-start">
+                                                        <small>
+                                                            {partner.email}&nbsp;
+                                                        </small>
+                                                    </div>
+                                                    <div className="col-4 pe-1 text-end my-auto">
+                                                        <button className="btn btn-sm btn-outline-secondary py-0 px-1" type="button" onClick={() => removeAccountabilityPartner(partner)}>
+                                                            Remove
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            )
+                                        )
+                                    }
+                                </div>
+                            </div>
                         }
 
                         {
                             showSubjects &&
-                            subjects.map(
-                                subject => (
-                                    <div key={subject.id} className="row border-bottom my-1">
-                                        <div className="col-12 ps-1 py-1 text-start">
-                                            <small>
-                                                {subject.email}&nbsp;
-                                            </small>
-                                        </div>
-                                    </div>
-                                )
-                            )
+                            <div className="row border rounded my-1">
+                                <div className="col-12">
+                                    {
+                                        subjects.map(
+                                            subject => (
+                                                <div key={subject.id} className="row border-bottom">
+                                                    <div className="col-12 ps-1 py-1 text-start">
+                                                        <small>
+                                                            {subject.email}&nbsp;
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            )
+                                        )
+                                    }
+                                </div>
+                            </div>
                         }
                     </div>
                 </div>

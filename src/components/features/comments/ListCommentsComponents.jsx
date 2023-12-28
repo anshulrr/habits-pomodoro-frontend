@@ -74,7 +74,7 @@ export default function ListCommentsComponent({
     }
 
     return (
-        <div className="container bg-white" style={{ backgroundColor: "#e9ecef" }}>
+        <div className="comments-list container bg-white" style={{ backgroundColor: "#e9ecef" }}>
             <div className="row">
                 {
                     filterBy === 'user' && title !== "All Notes" &&

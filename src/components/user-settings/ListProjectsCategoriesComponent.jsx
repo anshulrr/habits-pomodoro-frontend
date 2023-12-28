@@ -88,54 +88,56 @@ export default function ListProjectCategoriesComponent() {
                                 </button>
                             </div>
                         </div>
-                        <small>
-                            <div className="row py-1 fw-bold border-top">
-                                <div className="col-9 px-0 text-start">
-                                    Category Name
+                        <div className="row small border rounded">
+                            <div className="col-12">
+                                <div className="row py-1 fw-bold">
+                                    <div className="col-9 ps-1 pe-0 text-start">
+                                        Category Name
+                                    </div>
+                                    <div className="col-1 ps-0 pe-1 text-end">
+                                        <i className="bi bi-arrow-up" />
+                                    </div>
+                                    <div className="col-1 ps-0 pe-1 text-end">
+                                        <i className="bi bi-graph-up" />
+                                    </div>
+                                    <div className="col-1 ps-0 pe-1 text-end">
+                                        <i className="bi bi-person-fill" />
+                                    </div>
                                 </div>
-                                <div className="col-1 px-0 text-end">
-                                    <i className="bi bi-arrow-up" />
-                                </div>
-                                <div className="col-1 px-0 text-end">
-                                    <i className="bi bi-graph-up" />
-                                </div>
-                                <div className="col-1 px-0 text-end">
-                                    <i className="bi bi-person-fill" />
-                                </div>
-                            </div>
-                            {
-                                categories.map(
-                                    cat => (
-                                        <div
-                                            key={cat.id}
-                                            className={(category && cat.id === category.id ? "list-selected " : "") + "row py-1 list-row"}
-                                            onClick={() => updateProjectCategory(cat)}
-                                        >
-                                            {/* todo: decide better solution for maxWidth */}
-                                            <div className="col-9 px-0 text-truncate text-start">
-                                                <span style={{ color: cat.color }}>
-                                                    <i className="me-1 bi bi-link-45deg" />
-                                                </span>
-                                                <span>{cat.name}</span>
+                                {
+                                    categories.map(
+                                        cat => (
+                                            <div
+                                                key={cat.id}
+                                                className={(category && cat.id === category.id ? "list-selected " : "") + "row py-1 list-row"}
+                                                onClick={() => updateProjectCategory(cat)}
+                                            >
+                                                {/* todo: decide better solution for maxWidth */}
+                                                <div className="col-9 ps-1 pe-0 text-truncate text-start">
+                                                    <span style={{ color: cat.color }}>
+                                                        <i className="me-1 bi bi-link-45deg" />
+                                                    </span>
+                                                    <span>{cat.name}</span>
+                                                </div>
+                                                <div className="col-1 ps-0 pe-1 text-secondary text-end">
+                                                    {cat.level}&nbsp;
+                                                </div>
+                                                <div className="col-1 ps-0 pe-1 text-secondary text-end">
+                                                    <span>
+                                                        <input className="form-check-input" type="checkbox" checked={cat.statsDefault} disabled />
+                                                    </span>
+                                                </div>
+                                                <div className="col-1 ps-0 pe-1 text-secondary text-end">
+                                                    <span>
+                                                        <input className="ms-1 form-check-input" type="checkbox" checked={cat.visibleToPartners} disabled />
+                                                    </span>
+                                                </div>
                                             </div>
-                                            <div className="col-1 px-0 text-secondary text-end">
-                                                {cat.level}&nbsp;
-                                            </div>
-                                            <div className="col-1 px-0 text-secondary text-end">
-                                                <span>
-                                                    <input className="form-check-input" type="checkbox" checked={cat.statsDefault} disabled />
-                                                </span>
-                                            </div>
-                                            <div className="col-1 px-0 text-secondary text-end">
-                                                <span>
-                                                    <input className="ms-1 form-check-input" type="checkbox" checked={cat.visibleToPartners} disabled />
-                                                </span>
-                                            </div>
-                                        </div>
+                                        )
                                     )
-                                )
-                            }
-                        </small>
+                                }
+                            </div>
+                        </div>
                         <Pagination
                             className="pagination-bar pagination-scroll mb-0 ps-0"
                             currentPage={currentPage}
