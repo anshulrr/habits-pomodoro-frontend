@@ -74,7 +74,7 @@ export default function ListCommentsComponent({
     }
 
     return (
-        <div className="container" style={{ backgroundColor: "#e9ecef" }}>
+        <div className="container bg-white" style={{ backgroundColor: "#e9ecef" }}>
             <div className="row">
                 {
                     filterBy === 'user' && title !== "All Notes" &&
@@ -96,8 +96,8 @@ export default function ListCommentsComponent({
                                     <OutsideAlerter handle={() => setShowLeftMenu(false)}>
                                         <div className="left-menu-popup">
 
-                                            <div className="row mb-2 mt-3">
-                                                <div className="col-12 text-start mb-2">
+                                            <div className="mb-2 mt-3">
+                                                <div className="text-start mb-2">
 
                                                     <div className="d-flex justify-content-between mb-2"
                                                         onClick={() => setShowIncludeCategories(!showIncludeCategories)}
@@ -136,7 +136,10 @@ export default function ListCommentsComponent({
                                                         />
                                                     </div>
                                                 </div>
-                                                <div className="col-12 text-end">
+
+                                                <hr className="mb-3" />
+
+                                                <div className="text-end">
                                                     <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setFilterWithReviseDate(!filterWithReviseDate)}>
                                                         {!filterWithReviseDate && "Filter notes with revise date"}
                                                         {filterWithReviseDate && "Fetch all notes"}
@@ -162,7 +165,7 @@ export default function ListCommentsComponent({
                 }
                 {
                     tags &&
-                    <div className={"mt-3 col-lg-8 " + (filterBy !== 'user' || title === "All Notes" ? "offset-lg-2" : "")} style={{ backgroundColor: "#e9ecef" }}>
+                    <div className={"pt-3 col-lg-8 " + (filterBy !== 'user' || title === "All Notes" ? "offset-lg-2" : "")} style={{ backgroundColor: "#e9ecef" }}>
                         <ListFilteredCommentsComponent
                             key={[filterWithReviseDate, reload]}
                             filterBy={filterBy}

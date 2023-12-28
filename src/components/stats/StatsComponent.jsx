@@ -110,7 +110,7 @@ export default function ListStatsComponent() {
     }
 
     return (
-        <div className="container" style={{ backgroundColor: "#f2f3f4" }}>
+        <div className="container">
 
             {
                 subject != null &&
@@ -197,6 +197,8 @@ export default function ListStatsComponent() {
                                             />
                                         </div>
 
+                                        <hr className="mb-3" />
+
                                         <div className="d-flex justify-content-between mb-2"
                                             onClick={() => setShowIncludeCategories(!showIncludeCategories)}
                                             style={{ cursor: "pointer" }}
@@ -233,6 +235,8 @@ export default function ListStatsComponent() {
                                                 setReload={setReload}
                                             />
                                         </div>
+
+                                        <hr className="mb-3" />
 
                                         <div className="d-flex justify-content-between mb-2 alert alert-primary p-1"
                                             onClick={() => setShowFriendsStats(!showFriendsStats)}

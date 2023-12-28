@@ -56,38 +56,33 @@ export default function CategoryChecklistComponent({
 
     return (
         <div className="mb-3">
-            <div className="text-start">
-                {categories.map(({ name, level, color }, index) => {
+            <div className="list-group">
+                {categories.map(({ name, color }, index) => {
                     return (
-                        <div key={index} className="form-check">
-                            <input
-                                type="checkbox"
-                                className="form-check-input"
-                                id={`custom-checkbox-${index}`}
-                                name={name}
-                                value={name}
-                                checked={checkedState[index]}
-                                onChange={() => handleOnChange(index)}
-                            />
-                            <small>
-                                <div className="row">
-                                    <div className="col-10">
-                                        <span style={{ color: color }}>
-                                            <i className="me-1 bi bi-link-45deg" />
-                                        </span>
-                                        <label className="form-check-label" htmlFor={`custom-checkbox-${index}`}>{name}</label>
-                                    </div>
-                                    <div className="col-2 text-end text-secondary">
-                                        {level}
-                                    </div>
-                                </div>
-                            </small>
-                        </div>
+                        <li key={index} className="list-group-item py-1 px-2">
+                            <div className="form-check">
+                                <input
+                                    type="checkbox"
+                                    className="form-check-input"
+                                    id={`custom-checkbox-${index}`}
+                                    name={name}
+                                    value={name}
+                                    checked={checkedState[index]}
+                                    onChange={() => handleOnChange(index)}
+                                />
+                                <label className="form-check-label small stretched-link" htmlFor={`custom-checkbox-${index}`}>
+                                    <span style={{ color: color }}>
+                                        <i className="me-1 bi bi-link-45deg" />
+                                    </span>
+                                    {name}
+                                </label>
+                            </div>
+                        </li>
                     );
                 })}
             </div>
 
-            {errorMessage && <div className="alert alert-info mb-0 py-0 px-2 text-center"><small>{errorMessage}</small></div>}
+            {errorMessage && <div className="alert alert-info mt-2 mb-0 py-0 px-2 text-center"><small>{errorMessage}</small></div>}
 
             <div className="d-flex my-2 justify-content-between">
                 <div>
