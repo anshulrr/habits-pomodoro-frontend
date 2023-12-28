@@ -4,8 +4,7 @@ import { createProjectCategoryApi, retrieveProjectCategoryApi, updateProjectCate
 
 export default function ProjectCategoryComponent({
     category,
-    categories,
-    setCategories,
+    setReload,
     setCategory,
     setNewCategory
 }) {
@@ -65,10 +64,7 @@ export default function ProjectCategoryComponent({
             createProjectCategoryApi(project_category)
                 .then(response => {
                     // console.debug(response)
-                    setCategories([
-                        response.data,
-                        ...categories
-                    ])
+                    setReload(prev => prev + 1)
                     setNewCategory(false)
                 })
                 .catch(error => {
@@ -81,13 +77,7 @@ export default function ProjectCategoryComponent({
             updateProjectCategoryApi(category.id, project_category)
                 .then(response => {
                     // console.debug(response)
-                    setCategories(categories.map((c) => {
-                        if (category.id === c.id) {
-                            return response.data;
-                        } else {
-                            return c;
-                        }
-                    }));
+                    setReload(prev => prev + 1)
                     setCategory(null)
                 })
                 .catch(error => {

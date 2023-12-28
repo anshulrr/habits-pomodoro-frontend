@@ -19,15 +19,17 @@ export default function ListProjectCategoriesComponent() {
 
     const [showLoader, setShowLoader] = useState(true)
 
+    const [reload, setReload] = useState(0)
+
     useEffect(
         () => getProjectCategoriesCount(),
-        []
+        [reload]
     )
 
     useEffect(
         () => {
             refreshProjectCategories()
-        }, [currentPage] // eslint-disable-line react-hooks/exhaustive-deps
+        }, [currentPage, reload] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
     function refreshProjectCategories() {
@@ -88,7 +90,7 @@ export default function ListProjectCategoriesComponent() {
                         </div>
                         <small>
                             <div className="row py-1 fw-bold border-top">
-                                <div className="col-9 text-start">
+                                <div className="col-9 px-0 text-start">
                                     Category Name
                                 </div>
                                 <div className="col-1 px-0 text-end">
@@ -110,7 +112,7 @@ export default function ListProjectCategoriesComponent() {
                                             onClick={() => updateProjectCategory(cat)}
                                         >
                                             {/* todo: decide better solution for maxWidth */}
-                                            <div className="col-9 text-truncate text-start">
+                                            <div className="col-9 px-0 text-truncate text-start">
                                                 <span style={{ color: cat.color }}>
                                                     <i className="me-1 bi bi-link-45deg" />
                                                 </span>
@@ -149,10 +151,9 @@ export default function ListProjectCategoriesComponent() {
                         <ProjectCategoryComponent
                             key={category}
                             category={category}
-                            categories={categories}
-                            setCategories={setCategories}
                             setCategory={setCategory}
                             setNewCategory={setNewCategory}
+                            setReload={setReload}
                         />
                     }
                 </div>
