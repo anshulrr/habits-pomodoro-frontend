@@ -5,7 +5,7 @@ import { deletePastPomodoroApi, getPomodorosApi } from "services/api/PomodoroApi
 import { timeToDisplay } from "services/helpers/listsHelper";
 
 import { Buttons } from "components/stats/charts/Buttons";
-import ListCommentsComponent from "components/features/comments/ListCommentsComponents";
+import ListCommentsPopupComponent from "components/features/comments/ListCommentsPopupComponent";
 import OutsideAlerter from "services/hooks/OutsideAlerter";
 
 export default function ListPomodorosComponent({
@@ -16,7 +16,6 @@ export default function ListPomodorosComponent({
     title = "Pomodoros",
     elementHeight,
     setElementHeight,
-    tags,
     setTodaysPomodorosMap,
     setProjects,
     setTasksComponentReload
@@ -286,12 +285,11 @@ export default function ListPomodorosComponent({
             {
                 showCommentsId !== -1 &&
                 <div className="text-body">
-                    <ListCommentsComponent
+                    <ListCommentsPopupComponent
                         filterBy={'task'}
                         id={showCommentsId}
                         title={commentsTitle}
                         setShowCommentsId={setShowCommentsId}
-                        tags={tags}
                     />
                 </div>
             }

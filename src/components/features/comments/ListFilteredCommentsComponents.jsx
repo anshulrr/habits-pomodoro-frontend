@@ -153,14 +153,15 @@ export default function ListFilteredCommentsComponent({
                         </h6>
                         <div>
                             {
-                                !showCreateComment &&
-                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowCreateComment(true)}>
-                                    <i className="bi bi-plus-circle"></i>
+                                title === "All Notes" &&
+                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 me-1" onClick={() => reloadComments()}>
+                                    <i className="bi bi-arrow-clockwise" />
                                 </button>
                             }
                             {
-                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 ms-1" onClick={() => reloadComments()}>
-                                    <i className="bi bi-arrow-clockwise" />
+                                !showCreateComment &&
+                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowCreateComment(true)}>
+                                    <i className="bi bi-plus-circle"></i>
                                 </button>
                             }
                         </div>

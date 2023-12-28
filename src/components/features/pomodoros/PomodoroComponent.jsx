@@ -6,7 +6,7 @@ import { updatePomodoroApi } from 'services/api/PomodoroApiService';
 import { generateInitialTimer, calculateTimeRemaining, generateTimer } from 'services/helpers/timerHelper';
 
 import BreakTimerComponent from 'components/features/pomodoros/BreakTimerComponent';
-import ListCommentsComponent from 'components/features/comments/ListCommentsComponents';
+import ListCommentsPopupComponent from '../comments/ListCommentsPopupComponent';
 
 export default function PomodoroComponent({
     pomodoro,
@@ -14,8 +14,7 @@ export default function PomodoroComponent({
     setPomodoroStatus,
     createNewPomodoro,
     setTasksMessage,
-    setPomodorosListReload,
-    tags
+    setPomodorosListReload
 }) {
     const authContext = useAuth()
     const userSettings = authContext.userSettings
@@ -257,12 +256,11 @@ export default function PomodoroComponent({
 
             {
                 showCommentsId !== -1 &&
-                <ListCommentsComponent
+                <ListCommentsPopupComponent
                     filterBy={'task'}
                     id={showCommentsId}
                     title={commentsTitle}
                     setShowCommentsId={setShowCommentsId}
-                    tags={tags}
                 />
             }
         </div >

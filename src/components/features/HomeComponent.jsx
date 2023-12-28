@@ -7,12 +7,12 @@ import ListProjectsComponent from 'components/features/projects/ListProjectsComp
 import ListTasksComponent from 'components/features/tasks/ListTasksComponent';
 import ListPomodorosComponent from 'components/stats/ListPomodorosComponent';
 import ListTagsComponent from 'components/features/tags/ListTagsComponents';
-import UserCommentsComponent from './comments/UserCommentsComponent';
 
 import OutsideAlerter from 'services/hooks/OutsideAlerter';
 import { useAuth } from 'services/auth/AuthContext';
 import { isEmpty } from 'services/helpers/helper';
 import { retrieveAllProjectCategoriesApi } from 'services/api/ProjectCategoryApiService';
+import UserCommentsComponent from './comments/UserCommentsComponent';
 
 export default function HomeComponent({ setReloadHome }) {
 
@@ -105,6 +105,12 @@ export default function HomeComponent({ setReloadHome }) {
             <div className="row border-bottom border-2">
                 <div className="col-lg-4 text-start">
 
+                    <span className="refresh-icon">
+                        <button type="button" className="btn btn-outline-secondary" onClick={() => setReloadHome(prev => prev + 1)}>
+                            <i className="bi bi-arrow-clockwise" />
+                        </button>
+                    </span>
+
                     <div className="left-menu-icon">
                         <button type="button" className="btn btn-success" onClick={() => setShowLeftMenu(!showLeftMenu)}>
                             <i className="px-4 bi bi-list" />
@@ -190,7 +196,6 @@ export default function HomeComponent({ setReloadHome }) {
                                     project={project}
                                     tags={tags}
                                     setPomodorosListReload={setPomodorosListReload}
-                                    setReloadHome={setReloadHome}
                                 />
                             }
                             {
@@ -203,7 +208,6 @@ export default function HomeComponent({ setReloadHome }) {
                                     isReversed={isReversed}
                                     title={tasksFilter}
                                     setPomodorosListReload={setPomodorosListReload}
-                                    setReloadHome={setReloadHome}
                                 />
                             }
 
@@ -214,7 +218,6 @@ export default function HomeComponent({ setReloadHome }) {
                                     tags={tags}
                                     tag={tag}
                                     setPomodorosListReload={setPomodorosListReload}
-                                    setReloadHome={setReloadHome}
                                 />
                             }
                         </div>
@@ -238,7 +241,6 @@ export default function HomeComponent({ setReloadHome }) {
                                 elementHeight={pomodorosHeight}
                                 setElementHeight={setPomodorosHeight}
                                 setTasksComponentReload={setTasksComponentReload}
-                                tags={tags}
                                 setProjects={setProjects}
                                 setTodaysPomodorosMap={setTodaysPomodorosMap}
                             />
@@ -250,7 +252,6 @@ export default function HomeComponent({ setReloadHome }) {
             <UserCommentsComponent
                 tags={tags}
             />
-
         </div >
     )
 }

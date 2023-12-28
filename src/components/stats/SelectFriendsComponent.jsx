@@ -8,14 +8,13 @@ export default function SelectFriendsComponent({
 }) {
 
     const [subjectId, setSubjectId] = useState('0')
-    const [errorMessage, setErrorMessage] = useState('')
 
     function handleOnChange(fun, val) {
         fun(val)
-        setErrorMessage("Click on Fetch to view Categories and Stats of selected Mentee")
+        updateStats(val)
     }
 
-    function updateStats() {
+    function updateStats(subjectId) {
         // to reload chart components
         document.title = "Friend's Stats";
         const sub = subjects.find((x) => x.id === parseInt(subjectId));
@@ -26,8 +25,6 @@ export default function SelectFriendsComponent({
             setShowFriendsStats(false);
             document.title = "Stats";
         }
-
-        setErrorMessage('')
     }
 
     return (
@@ -54,14 +51,6 @@ export default function SelectFriendsComponent({
                 </div>
             </div>
 
-
-
-            <div className="col-lg-12">
-                {errorMessage && <div className="alert alert-info mb-0 py-0 px-2 text-center"><small>{errorMessage}</small></div>}
-                <div className="mt-2 text-end">
-                    <button className="btn btn-sm btn-outline-success" type="button" onClick={updateStats}>Fetch</button>
-                </div>
-            </div>
         </div>
     )
 }

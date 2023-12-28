@@ -78,6 +78,13 @@ export default function ListStatsComponent() {
         }, []   // eslint-disable-line react-hooks/exhaustive-deps
     )
 
+
+    useEffect(
+        () => {
+            setShowLeftMenu(false)
+        }, [reload]
+    )
+
     function retrieveProjectCategories(subject) {
         // TODO: better implementation for limit
         retrieveAllProjectCategoriesApi(100, 0, subject)
@@ -143,18 +150,18 @@ export default function ListStatsComponent() {
                 </div>
             </div>
 
-            <span className="user-comments-icon">
-                <button type="button" className="btn btn-secondary" onClick={() => setReload(prev => prev + 1)}>
+            <span className="refresh-icon">
+                <button type="button" className="btn btn-outline-secondary" onClick={() => setReload(prev => prev + 1)}>
                     <i className="bi bi-arrow-clockwise" />
                 </button>
             </span>
             <div className="left-menu-icon">
                 <button type="button" className="btn btn-secondary" onClick={() => setShowLeftMenu(!showLeftMenu)}>
-                    <i className="px-4 bi bi-list" />
+                    Stats Filters <i className="bi bi-list" />
                 </button>
             </div>
 
-            <div className="row pt-1">
+            <div className="row">
                 <div className="col-lg-4 text-start">
 
                     <div className={showLeftMenu ? "left-menu-container" : ""}>
@@ -223,12 +230,11 @@ export default function ListStatsComponent() {
                                                 key={reloadCategories}
                                                 categories={categories}
                                                 setIncludeCategories={setIncludeCategories}
-                                                reload={reload}
                                                 setReload={setReload}
                                             />
                                         </div>
 
-                                        <div className="d-flex justify-content-between mb-2"
+                                        <div className="d-flex justify-content-between mb-2 alert alert-primary p-1"
                                             onClick={() => setShowFriendsStats(!showFriendsStats)}
                                             style={{ cursor: "pointer" }}
                                         >
@@ -268,6 +274,12 @@ export default function ListStatsComponent() {
 
                 </div>
 
+                {
+                    !(includeCategories.length !== 0 && Object.keys(statsSettings).length !== 0) &&
+                    <span className="loader-container mt-5">
+                        <span className="loader"></span>
+                    </span>
+                }
                 {
                     includeCategories.length !== 0 && Object.keys(statsSettings).length !== 0 &&
                     <div className="col-lg-8">

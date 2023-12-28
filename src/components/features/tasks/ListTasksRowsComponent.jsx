@@ -11,7 +11,7 @@ import OutsideAlerter from "services/hooks/OutsideAlerter";
 import { getTasksTagsApi } from "services/api/TagApiService";
 
 import PastPomodoroComponent from "components/features/tasks/PastPomodoroComponent";
-import ListCommentsComponent from "components/features/comments/ListCommentsComponents";
+import ListCommentsPopupComponent from "components/features/comments/ListCommentsPopupComponent";
 import UpdateTaskComponent from "components/features/tasks/UpdateTaskComponent";
 import TaskDueDateComponent from "components/features/tasks/TaskDueDateComponent";
 import MapTagComponent from "components/features/tags/MapTagComponent";
@@ -54,8 +54,8 @@ export default function ListTasksRowsComponent({
     }
 
     const [currentPage, setCurrentPage] = useState(
-        (status === 'current' && state.currentTasksPage) ||
-        (status === 'archived' && state.currentArchivedTasksPage) ||
+        (status === 'current' && state?.currentTasksPage) ||
+        (status === 'archived' && state?.currentArchivedTasksPage) ||
         1
     )
 
@@ -526,12 +526,11 @@ export default function ListTasksRowsComponent({
 
             {
                 showCommentsId !== -1 &&
-                <ListCommentsComponent
+                <ListCommentsPopupComponent
                     filterBy={'task'}
                     id={showCommentsId}
                     title={commentsTitle}
                     setShowCommentsId={setShowCommentsId}
-                    tags={tags}
                 />
             }
         </>
