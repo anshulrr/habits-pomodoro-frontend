@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
+import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { createProjectApi, retrieveProjectApi, updateProjectApi } from 'services/api/ProjectApiService'
 import { retrieveAllProjectCategoriesApi } from "services/api/ProjectCategoryApiService";
+import { calculateTextAreaRows } from 'services/helpers/helper';
 
 export default function ProjectComponent() {
 
@@ -18,6 +20,8 @@ export default function ProjectComponent() {
     const [categoriesMap, setCategoriesMap] = useState(new Map())
     const [errors, setErrors] = useState({ color: projectCategoryId === 0 ? 'To select a color, first select a project category' : '' })
     const [showLoader, setShowLoader] = useState(parseInt(id) !== -1)
+
+    const [showInput, setShowInput] = useState(true)
 
     const navigate = useNavigate()
     const { state } = useLocation();
@@ -167,17 +171,35 @@ export default function ProjectComponent() {
                                 />
                                 <div className="text-danger"><small>{errors.name}</small></div>
                             </div>
-                            <div className="col-lg-8 mb-3">
-                                <label htmlFor="description">Description</label>
-                                <input
-                                    type="text"
-                                    className="form-control form-control-sm"
-                                    id="description"
-                                    name="description"
-                                    placeholder="Description"
-                                    value={description}
-                                    onChange={(e) => setDescription(e.target.value)}
-                                />
+                            <div className="col-lg-4 mb-3">
+                                <label htmlFor="projectCategoryId">
+                                    Project Category
+                                    <i className="ms-1 bi bi-link-45deg" style={{ color: categoriesMap.has(projectCategoryId) ? categoriesMap.get(projectCategoryId).color : '#818181' }} />
+                                </label>
+                                <select
+                                    className="form-select form-select-sm"
+                                    id="projectCategoryId"
+                                    name="projectCategoryId"
+                                    value={projectCategoryId}
+                                    onChange={(e) => {
+                                        const id = parseInt(e.target.value);
+                                        setProjectCategoryId(id)
+                                        setColor(categoriesMap.get(id).color)
+                                        errors.color = '';
+                                    }}
+                                >
+                                    {/* disabled option with value 0 for dropdown to avoid confusion of initial selection */}
+                                    <option value="0" disabled>Select a Category</option>
+                                    {
+                                        projectCategories.map(
+                                            projectCategory => (
+                                                <option key={projectCategory.id} value={projectCategory.id}>{projectCategory.name}</option>
+                                            )
+                                        )
+                                    }
+                                </select>
+                                <div className="text-danger small">{errors.projectCategoryId}</div>
+                                {/* <ErrorMessage name="projectCategoryId" component="div" className="text-danger small" /> */}
                             </div>
                             <div className="col-lg-4 mb-3">
                                 <label htmlFor="color">Project Color</label>
@@ -194,6 +216,37 @@ export default function ProjectComponent() {
                                 />
                                 <div className="text-danger small">{errors.color}</div>
                             </div>
+
+                            <div className="col-lg-12 mb-3">
+                                <div className="input-group">
+                                    <button type="button" className={"btn btn-sm btn-outline-secondary " + (showInput ? "active" : "")} onClick={() => setShowInput(true)}>
+                                        <label htmlFor="description">
+                                            Write
+                                        </label>
+                                    </button>
+                                    <button type="button" className={"btn btn-sm btn-outline-secondary " + (!showInput ? "active" : "")} onClick={() => setShowInput(false)}>Preview</button>
+                                </div>
+                                <textarea
+                                    id="description"
+                                    className="form-control form-control-sm"
+                                    name="description"
+                                    rows={description ? calculateTextAreaRows(description) : 5}
+                                    value={description}
+                                    placeholder="Description"
+                                    onChange={(e) => {
+                                        setDescription(e.target.value);
+                                    }}
+                                    style={{ display: showInput ? 'block' : 'none' }}
+                                />
+                                <div
+                                    className="text-wrap bg-white border rounded-1 border-2 p-2 comments-list text-dark"
+                                    style={{ display: !showInput ? 'block' : 'none', minHeight: "8rem" }}>
+                                    <ReactMarkdown
+                                        children={description}
+                                    />
+                                </div>
+                            </div>
+
                             <div className="col-lg-4 mb-3">
                                 <label htmlFor="pomodoroLength">Default Pomodoro Length (mins) <i className="bi bi-hourglass" /></label>
                                 <input
@@ -224,36 +277,6 @@ export default function ProjectComponent() {
                                 />
                                 <small>(Lower numbered projects appears at the top of the list)</small>
                                 <div className="text-danger small">{errors.priority}</div>
-                            </div>
-                            <div className="col-lg-4 mb-3">
-                                <label htmlFor="projectCategoryId">
-                                    Project Category
-                                    <i className="ms-1 bi bi-link-45deg" style={{ color: categoriesMap.has(projectCategoryId) ? categoriesMap.get(projectCategoryId).color : '#818181' }} />
-                                </label>
-                                <select
-                                    className="form-select form-select-sm"
-                                    id="projectCategoryId"
-                                    name="projectCategoryId"
-                                    value={projectCategoryId}
-                                    onChange={(e) => {
-                                        const id = parseInt(e.target.value);
-                                        setProjectCategoryId(id)
-                                        setColor(categoriesMap.get(id).color)
-                                        errors.color = '';
-                                    }}
-                                >
-                                    {/* disabled option with value 0 for dropdown to avoid confusion of initial selection */}
-                                    <option value="0" disabled>Select a Category</option>
-                                    {
-                                        projectCategories.map(
-                                            projectCategory => (
-                                                <option key={projectCategory.id} value={projectCategory.id}>{projectCategory.name}</option>
-                                            )
-                                        )
-                                    }
-                                </select>
-                                <div className="text-danger small">{errors.projectCategoryId}</div>
-                                {/* <ErrorMessage name="projectCategoryId" component="div" className="text-danger small" /> */}
                             </div>
                             <div className="col-lg-12 mb-3 text-end">
                                 <button className="me-2 btn btn-sm btn-outline-secondary" type="button" onClick={() => navigate(-1, { state })}>Cancel</button>

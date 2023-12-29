@@ -18,6 +18,7 @@ export default function ListFilteredCommentsComponent({
     id,
     title,
     projectColor,
+    project,
     categoryIds,
     filterWithReviseDate,
     tags
@@ -169,6 +170,21 @@ export default function ListFilteredCommentsComponent({
 
 
                     {
+                        (filterBy === 'project' && project.description &&
+                            <div className="text-start mb-3">
+                                <div className="small text-secondary">
+                                    Project Description
+                                </div>
+                                <div className="border rounded text-wrap px-2 py-1 small comments-list-card">
+                                    <ReactMarkdown
+                                        children={project.description}
+                                    />
+                                </div>
+                            </div>
+                        )
+                    }
+
+                    {
                         showCreateComment &&
                         <div className="row">
                             <CommentComponent
@@ -192,7 +208,7 @@ export default function ListFilteredCommentsComponent({
 
                     {
                         commentsCount !== 0 && comments.length === 0 &&
-                        <div className="loader-container" style={{ height: elementHeight }}>
+                        <div className="loader-container" style={{ height: elementHeight, backgroundColor: "#e9ecef" }}>
                             <div className="loader"></div>
                         </div>
                     }

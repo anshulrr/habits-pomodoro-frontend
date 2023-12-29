@@ -101,7 +101,7 @@ export const tasksList1 = `
                             <div class="d-flex justify-content-start">
                                 <div class="mx-2 flex-grow-1 text-start update-popup-container">
                                     <div class="py-2">
-                                        <div class="description text-dark">The Wheel of Time</div>
+                                        <div class="description text-dark">The Three Body Problem</div>
                                         <div class="subscript text-secondary"><span class="me-1"><span><i
                                                         class="bi bi-hourglass"></i></span>25</span><span class="me-1"><i
                                                     class="bi bi-clock" style="padding-right: 0.1rem;"></i>25</span><span
@@ -243,7 +243,7 @@ export const tasksList2 = `
                             <div class="d-flex justify-content-start">
                                 <div class="mx-2 flex-grow-1 text-start update-popup-container">
                                     <div class="py-2">
-                                        <div class="description text-secondary">The Wheel of Time</div>
+                                        <div class="description text-secondary">The Three Body Problem</div>
                                         <div class="subscript text-secondary"><span class="me-1"><span><i
                                                         class="bi bi-hourglass"></i></span>30</span><span class="me-1"><i
                                                     class="bi bi-clock" style="padding-right: 0.1rem;"></i>14:50</span><span

@@ -5,6 +5,7 @@ export default function ListCommentsPopupComponent({
     id,
     title,
     projectColor,
+    project,
     setShowCommentsId,
 }) {
 
@@ -21,6 +22,7 @@ export default function ListCommentsPopupComponent({
                         id={id}
                         title={title}
                         projectColor={projectColor}
+                        project={project}
                     />
                 </div >
 

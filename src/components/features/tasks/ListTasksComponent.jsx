@@ -207,6 +207,7 @@ export default function ListTasksComponent({
                             id={showProjectCommentsId}
                             title={project.name}
                             projectColor={project.color}
+                            project={project}
                             setShowCommentsId={setShowProjectCommentsId}
                         />
                     }

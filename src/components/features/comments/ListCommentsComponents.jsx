@@ -11,7 +11,8 @@ export default function ListCommentsComponent({
     filterBy = 'user',
     id,
     title = 'Notes',
-    projectColor
+    projectColor,
+    project
 }) {
     const ALL_TAGS_PAGESIZE = 1000;
     const [tags, setTags] = useState(null);
@@ -74,11 +75,11 @@ export default function ListCommentsComponent({
     }
 
     return (
-        <div className="comments-list container bg-white" style={{ backgroundColor: "#e9ecef" }}>
+        <div className="comments-list container" style={{ backgroundColor: "#e9ecef" }}>
             <div className="row">
                 {
                     filterBy === 'user' && title !== "All Notes" &&
-                    < div className="col-lg-4 px-0 text-start">
+                    <div className="col-lg-4 px-0 text-start bg-white">
                         <span className="refresh-icon">
                             <button type="button" className="btn btn-outline-secondary" onClick={() => setReload(prev => prev + 1)}>
                                 <i className="bi bi-arrow-clockwise" />
@@ -160,7 +161,7 @@ export default function ListCommentsComponent({
 
                 {
                     !tags &&
-                    <span className="loader-container mt-5">
+                    <span className="loader-container col-lg-8 mt-5" style={{ backgroundColor: "#e9ecef" }}>
                         <span className="loader"></span>
                     </span>
                 }
@@ -173,6 +174,7 @@ export default function ListCommentsComponent({
                             id={id}
                             title={title}
                             projectColor={projectColor}
+                            project={project}
                             categoryIds={includedCategoryIds}
                             filterWithReviseDate={filterWithReviseDate}
                             tags={tags}
