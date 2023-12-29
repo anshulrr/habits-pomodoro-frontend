@@ -78,7 +78,7 @@ export default function ListCommentsComponent({
             <div className="row">
                 {
                     filterBy === 'user' && title !== "All Notes" &&
-                    < div className="col-lg-4 text-start">
+                    < div className="col-lg-4 px-0 text-start">
                         <span className="refresh-icon">
                             <button type="button" className="btn btn-outline-secondary" onClick={() => setReload(prev => prev + 1)}>
                                 <i className="bi bi-arrow-clockwise" />
@@ -96,48 +96,48 @@ export default function ListCommentsComponent({
                                     <OutsideAlerter handle={() => setShowLeftMenu(false)}>
                                         <div className="left-menu-popup">
 
-                                            <div className="mb-2 mt-3">
-                                                <div className="text-start mb-2">
+                                            <div className="mt-1 px-2 py-2 border-bottom">
 
-                                                    <div className="d-flex justify-content-between mb-2"
-                                                        onClick={() => setShowIncludeCategories(!showIncludeCategories)}
-                                                        style={{ cursor: "pointer" }}
-                                                    >
-                                                        <h6 className="mb-0">
-                                                            Included Project Categories
-                                                            <span className="ms-1 badge rounded-pill text-bg-secondary">
-                                                                {includedCategoryIds.length}/{categories.length}
-                                                                <i className="ms-1 bi bi-link-45deg" />
+                                                <div className="d-flex justify-content-between mb-2"
+                                                    onClick={() => setShowIncludeCategories(!showIncludeCategories)}
+                                                    style={{ cursor: "pointer" }}
+                                                >
+                                                    <h6 className="mb-0">
+                                                        Included Project Categories
+                                                        <span className="ms-1 badge rounded-pill text-bg-secondary">
+                                                            {includedCategoryIds.length}/{categories.length}
+                                                            <i className="ms-1 bi bi-link-45deg" />
+                                                        </span>
+                                                        {
+                                                            showLoader &&
+                                                            <span className="loader-container-2" >
+                                                                <span className="ms-2 loader-2"></span>
                                                             </span>
-                                                            {
-                                                                showLoader &&
-                                                                <span className="loader-container-2" >
-                                                                    <span className="ms-2 loader-2"></span>
-                                                                </span>
-                                                            }
-                                                        </h6>
-                                                        <div className="text-secondary px-1">
-                                                            {
-                                                                !showIncludeCategories &&
-                                                                <i className="bi bi-eye-slash" />
-                                                            }
-                                                            {
-                                                                showIncludeCategories &&
-                                                                <i className="bi bi-eye" />
-                                                            }
-                                                        </div>
-                                                    </div>
-                                                    <div className="" style={{ display: showIncludeCategories ? "block" : "none" }} >
-                                                        <CategoryChecklistComponent
-                                                            key={categories}
-                                                            categories={categories}
-                                                            setIncludeCategories={setIncludedCategoryIds}
-                                                            setReload={setReload}
-                                                        />
+                                                        }
+                                                    </h6>
+                                                    <div className="text-secondary px-1">
+                                                        {
+                                                            !showIncludeCategories &&
+                                                            <i className="bi bi-eye-slash" />
+                                                        }
+                                                        {
+                                                            showIncludeCategories &&
+                                                            <i className="bi bi-eye" />
+                                                        }
                                                     </div>
                                                 </div>
+                                                <div className="" style={{ display: showIncludeCategories ? "block" : "none" }} >
+                                                    <CategoryChecklistComponent
+                                                        key={categories}
+                                                        categories={categories}
+                                                        setIncludeCategories={setIncludedCategoryIds}
+                                                        setReload={setReload}
+                                                    />
+                                                </div>
 
-                                                <hr className="mb-3" />
+                                            </div>
+
+                                            <div className="px-2 py-2 border-bottom">
 
                                                 <div className="text-end">
                                                     <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setFilterWithReviseDate(!filterWithReviseDate)}>
@@ -145,6 +145,7 @@ export default function ListCommentsComponent({
                                                         {filterWithReviseDate && "Fetch all notes"}
                                                     </button>
                                                 </div>
+
                                             </div>
 
 

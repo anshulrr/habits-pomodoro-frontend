@@ -28,9 +28,9 @@ export default function SelectFriendsComponent({
     }
 
     return (
-        <div className="row mb-3">
-            <div className="col-lg-12">
-                <div className="input-group input-group-sm mb-2">
+        <div className="row">
+            <div className="col-lg-12 mt-2">
+                <div className="input-group input-group-sm">
                     <select
                         className="form-select form-select-sm"
                         name="subject-id"

@@ -55,8 +55,8 @@ export default function CategoryChecklistComponent({
     }
 
     return (
-        <div className="mb-3">
-            <div className="list-group">
+        <div className="">
+            <div className="list-group mt-2">
                 {categories.map(({ name, color }, index) => {
                     return (
                         <li key={index} className="list-group-item py-1 px-2">
@@ -84,7 +84,7 @@ export default function CategoryChecklistComponent({
 
             {errorMessage && <div className="alert alert-info mt-2 mb-0 py-0 px-2 text-center"><small>{errorMessage}</small></div>}
 
-            <div className="d-flex my-2 justify-content-between">
+            <div className="d-flex mt-2 justify-content-between">
                 <div>
                     <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => selectAll()}>Select All</button>
                     <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => selectNone()}>Remove All</button>
