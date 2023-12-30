@@ -5,8 +5,12 @@ import { getStatsPomodorosCountApi } from 'services/api/PomodoroApiService';
 import { retrieveAllProjectsApi } from 'services/api/ProjectApiService';
 import { retrieveAllTasksApi } from 'services/api/TaskApiService';
 import { CalendarChart } from './CalendarChart';
+import { useAuth } from 'services/auth/AuthContext';
 
 export const StreakChart = ({ subject, categories, includeCategories }) => {
+
+    const authContext = useAuth();
+    const userSettings = authContext.userSettings;
 
     const [startDate, setStartDate] = useState(moment().add(window.innerWidth <= 992 ? -0.5 : -1, 'y').toISOString());
     const [endDate, setEndDate] = useState(moment().toISOString());
@@ -14,8 +18,10 @@ export const StreakChart = ({ subject, categories, includeCategories }) => {
     const [updatedCategories, setUpdatedCategories] = useState([]);
     const [projectId, setProjectId] = useState('0');
     const [projects, setProjects] = useState([]);
+    const [projectsMap, setProjectsMap] = useState({});
     const [taskId, setTaskId] = useState('0');
     const [tasks, setTasks] = useState([]);
+    const [tasksMap, setTasksMap] = useState(null);
     const [chartData, setChartData] = useState({ label: '', labels: [], data: [], colors: [] })
     const [reloadData, setReloadData] = useState({ dataType: 'user', dataTypeId: '0' });
 
@@ -75,7 +81,11 @@ export const StreakChart = ({ subject, categories, includeCategories }) => {
         retrieveAllProjectsApi({ categoryId, subject })
             .then(response => {
                 // console.debug(response)
-                setProjects(response.data)
+                setProjects(response.data);
+                setProjectsMap(new Map(response.data.map(project => {
+                    project.pomodoroLength = project.pomodoroLength || userSettings.pomodoroLength;
+                    return [project.id, project];
+                })))
             })
             .catch(error => console.error(error.message))
     }
@@ -85,12 +95,18 @@ export const StreakChart = ({ subject, categories, includeCategories }) => {
         retrieveAllTasksApi({ subject, projectId, status: 'current', limit: 100, offset: 0 })
             .then(response => {
                 // console.debug(response)
-                setTasks(prev => prev.concat(response.data))
+                const localTasks1 = response.data;
+                setTasks(response.data);
 
                 retrieveAllTasksApi({ subject, projectId, status: 'archived', limit: 100, offset: 0 })
                     .then(response => {
                         // console.debug(response)
-                        setTasks(prev => prev.concat(response.data))
+                        const localTasks2 = localTasks1.concat(response.data);
+                        setTasks(localTasks2);
+                        setTasksMap(new Map(localTasks2.map(task => {
+                            task.pomodoroLength = task.pomodoroLength || projectsMap.get(task.project.id).pomodoroLength;
+                            return [task.id, task];
+                        })))
                     })
                     .catch(error => console.error(error.message))
             })
@@ -208,8 +224,8 @@ export const StreakChart = ({ subject, categories, includeCategories }) => {
                 startDate={startDate}
                 endDate={endDate}
                 reloadData={reloadData}
-                tasks={tasks}
-                projects={projects}
+                tasksMap={tasksMap}
+                projectsMap={projectsMap}
                 showLoader={showLoader}
             />
 

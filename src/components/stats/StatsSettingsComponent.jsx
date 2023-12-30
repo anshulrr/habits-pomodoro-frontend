@@ -235,7 +235,7 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
 
 
             <div className="col-lg-12">
-                {errorMessage && <div className="alert alert-info mb-0 py-0 px-2 text-center"><small>{errorMessage}</small></div>}
+                {errorMessage && <div className="alert alert-info mb-2 py-0 px-2 text-center"><small>{errorMessage}</small></div>}
                 <div className="text-end">
                     <button className="btn btn-sm btn-outline-success" type="button" onClick={updateSettings}>Fetch</button>
                 </div>

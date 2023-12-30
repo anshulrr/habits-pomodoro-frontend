@@ -10,18 +10,16 @@ export const CalendarChart = ({ chartData,
     startDate,
     endDate,
     reloadData,
-    tasks,
-    projects,
+    tasksMap,
+    projectsMap,
     showLoader
 }) => {
 
-    function checkType(elements, hours, value) {
-        let element;
-        for (const t of elements) {
-            if (t.id === reloadData.dataTypeId) {
-                element = t;
-            }
-        }
+    // console.debug(tasksMap, projectsMap)
+
+    function checkType(elementsMap, hours, value) {
+        let element = elementsMap.get(reloadData.dataTypeId);
+
         let type = element.type;
         if (element.type === 'bad') {
             if (value.count > element.pomodoroLength * element.dailyLimit) {
@@ -50,11 +48,11 @@ export const CalendarChart = ({ chartData,
                     }
 
                     if (reloadData.dataType === 'task' && reloadData.dataTypeId !== 0) {
-                        return checkType(tasks, 6, value);
+                        return checkType(tasksMap, 6, value);
                     }
 
                     if (reloadData.dataType === 'project' && reloadData.dataTypeId !== 0) {
-                        return checkType(projects, 9, value);
+                        return checkType(projectsMap, 9, value);
                     }
 
                     // time spent above 12 hours has darkest color
