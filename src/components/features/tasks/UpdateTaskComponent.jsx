@@ -6,6 +6,7 @@ import moment from 'moment'
 
 import { retrieveTaskApi, updateTaskApi } from 'services/api/TaskApiService'
 import { filterPastTime } from 'services/helpers/helper'
+import { COLOR_MAP } from 'services/helpers/listsHelper'
 
 import { SwitchProjectComponent } from './SwitchProjectComponent'
 
@@ -24,7 +25,7 @@ export default function UpdateTaskComponent({
 
     const [repeat, setRepeat] = useState(false)
     const [repeatDays, setRepeatDays] = useState(0)
-    const [dailyLimit, setDailyLimit] = useState(0)
+    const [dailyLimit, setDailyLimit] = useState(1)
 
     const [errors, setErrors] = useState({})
 
@@ -32,12 +33,6 @@ export default function UpdateTaskComponent({
     const [switchProject, setSwitchProject] = useState(false);
 
     const [showLoader, setShowLoader] = useState(true)
-
-    const COLOR_MAP = {
-        'neutral': 'dark',
-        'good': 'success',
-        'bad': 'secondary'
-    }
 
     useEffect(
         () => retrieveTask()
@@ -87,8 +82,6 @@ export default function UpdateTaskComponent({
             return;
         }
 
-        console.log(updated_task);
-
         updateTaskApi({ id: task.id, task: updated_task })
             .then(response => {
                 // console.debug(response)
@@ -118,8 +111,8 @@ export default function UpdateTaskComponent({
             errors.repeatDays = 'Enter positive value'
             validated = false;
         }
-        if (dailyLimit === '' || dailyLimit < 1) {
-            errors.dailyLimit = 'Enter positive value'
+        if (dailyLimit === '' || dailyLimit < 0) {
+            errors.dailyLimit = 'Enter zero or positive value'
             validated = false;
         }
         if (!task.projectId) {
@@ -138,8 +131,7 @@ export default function UpdateTaskComponent({
                 </div>
                 <div className="container mt-3">
                     <h6>
-                        <span className="me-1" style={{ color: task.project.color }}>&#9632;</span>
-                        {task.project.name}
+                        Update Task Details
                         {
                             showLoader &&
                             <span className="loader-container-2" >
@@ -167,6 +159,20 @@ export default function UpdateTaskComponent({
                                         <div className="text-danger small">{errors.description}</div>
                                     </div>
                                     <div className="col-lg-4 mb-3">
+                                        <label htmlFor="type">Habit Type</label>
+                                        <select
+                                            className={"form-select form-select-sm text-" + COLOR_MAP[type]}
+                                            id="type"
+                                            name="type"
+                                            value={type}
+                                            onChange={(e) => { setType(e.target.value) }}
+                                        >
+                                            <option value="neutral">Neutral</option>
+                                            <option value="good">Good</option>
+                                            <option value="bad">Bad</option>
+                                        </select>
+                                    </div>
+                                    <div className="col-lg-4 mb-3">
                                         <label htmlFor="pomodoroLength">Default Pomodoro Length (mins) <i className="bi bi-hourglass" /></label>
                                         <input
                                             type="number"
@@ -188,7 +194,7 @@ export default function UpdateTaskComponent({
                                             type="number"
                                             name="dailyLimit"
                                             className="form-control form-control-sm"
-                                            min={1}
+                                            min={0}
                                             placeholder="Expected Count"
                                             required
                                             value={dailyLimit}
@@ -211,20 +217,6 @@ export default function UpdateTaskComponent({
                                         />
                                         <small>(Lower numbered tasks appears at the top of the list)</small>
                                         <div className="text-danger small">{errors.priority}</div>
-                                    </div>
-                                    <div className="col-lg-4 mb-3">
-                                        <label htmlFor="type">Habit Type</label>
-                                        <select
-                                            className={"form-select form-select-sm text-" + COLOR_MAP[type]}
-                                            id="type"
-                                            name="type"
-                                            value={type}
-                                            onChange={(e) => { setType(e.target.value) }}
-                                        >
-                                            <option value="neutral">Neutral</option>
-                                            <option value="good">Good</option>
-                                            <option value="bad">Bad</option>
-                                        </select>
                                     </div>
                                     <div className="col-lg-4 col-6 mb-3">
                                         <div>

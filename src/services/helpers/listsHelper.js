@@ -49,3 +49,9 @@ export const generateDateColor = (date) => {
         return "secondary";
     }
 }
+
+export const COLOR_MAP = {
+    'neutral': 'dark',
+    'good': 'success',
+    'bad': 'secondary'
+}

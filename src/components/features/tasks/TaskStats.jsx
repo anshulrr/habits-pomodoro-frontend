@@ -8,7 +8,7 @@ import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 
 import { getStatsPomodorosCountApi, getTaskPomodorosApi, getTaskPomodorosCountApi } from 'services/api/PomodoroApiService';
-import { formatDate, timeToDisplay } from 'services/helpers/listsHelper';
+import { COLOR_MAP, formatDate, timeToDisplay } from 'services/helpers/listsHelper';
 import Pagination from 'services/pagination/Pagination';
 
 export const TaskStats = ({ task, setShowTaskStats }) => {
@@ -24,12 +24,6 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
     const listElement = useRef(null);
 
     const [showLoader, setShowLoader] = useState(true)
-
-    const COLOR_MAP = {
-        'neutral': 'dark',
-        'good': 'success',
-        'bad': 'secondary'
-    }
 
     useEffect(
         () => {

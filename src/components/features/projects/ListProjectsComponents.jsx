@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { retrieveAllProjectsApi, getProjectsCountApi } from "services/api/ProjectApiService";
 import Pagination from "services/pagination/Pagination"
 import { useAuth } from "services/auth/AuthContext";
-import { timeToDisplay, truncateString } from "services/helpers/listsHelper";
+import { COLOR_MAP, timeToDisplay, truncateString } from "services/helpers/listsHelper";
 import { isEmpty } from "services/helpers/helper";
 
 export default function ListProjectsComponent({
@@ -164,46 +164,56 @@ export default function ListProjectsComponent({
                         <div id="projects-list" ref={projectsListElement}>
                             {
                                 projects.map(
-                                    proj => (
-                                        <div
-                                            key={proj.id}
-                                            className={(project && proj.id === project.id ? "list-selected " : "") + "row py-2 list-row"}
-                                            onClick={() => onUpdateProject(proj)}
-                                        >
-                                            {/* todo: decide better solution for maxWidth */}
-                                            <div className="col-8 text-truncate text-start">
-                                                {/* <Link to={"/projects/" + proj.id + "/tasks"} state={{ proj }}>{proj.name}</Link> */}
-                                                <span style={{ color: proj.color }}>&#9632; </span>
-                                                <span className="project-name">
-                                                    {proj.name}
-                                                </span>
-                                            </div>
-                                            <div className="col-4 ps-0 subscript text-secondary text-truncate text-end">
-
-                                                {
-                                                    proj.timeElapsed &&
-                                                    <span className="">
-                                                        <i className="bi bi-clock-fill" style={{ paddingRight: "0.1rem" }} />
-                                                        <span style={{ fontVariantNumeric: "tabular-nums" }}>
-                                                            {timeToDisplay(Math.round(proj.timeElapsed / 60))}
-                                                        </span>
+                                    proj => {
+                                        proj.pomodoroLength = proj.pomodoroLength || userSettings.pomodoroLength;
+                                        return (
+                                            <div
+                                                key={proj.id}
+                                                className={(project && proj.id === project.id ? "list-selected " : "") + "row py-2 list-row"}
+                                                onClick={() => onUpdateProject(proj)}
+                                            >
+                                                {/* todo: decide better solution for maxWidth */}
+                                                <div className="col-8 text-truncate text-start">
+                                                    {/* <Link to={"/projects/" + proj.id + "/tasks"} state={{ proj }}>{proj.name}</Link> */}
+                                                    <span style={{ color: proj.color }}>&#9632; </span>
+                                                    <span className={"project-name text-" + COLOR_MAP[proj.type]}>
+                                                        {proj.name}
                                                     </span>
-                                                }
-                                                <span className="">
-                                                    <i className="ps-1 bi bi-link-45deg" style={{ paddingRight: '0.1rem', color: proj.categoryColor }} />
-                                                    {truncateString(proj.category, 8)}
-                                                </span>
-                                                <span className="">
-                                                    <i className="ps-1 bi bi-arrow-up" />
-                                                    {proj.priority}
-                                                </span>
-                                                <span className="">
-                                                    <i className="ps-1 bi bi-hourglass" />
-                                                    {proj.pomodoroLength || userSettings.pomodoroLength}
-                                                </span>
+                                                </div>
+                                                <div className="col-4 ps-0 subscript text-secondary text-truncate text-end">
+
+                                                    {
+                                                        proj.timeElapsed &&
+                                                        <span className={
+                                                            (proj.type === 'bad' && proj.timeElapsed / 60 > (proj.pomodoroLength) * proj.dailyLimit ? "text-danger" : "")
+                                                        }>
+                                                            <i className="bi bi-clock-fill" style={{ paddingRight: "0.1rem" }} />
+                                                            <span style={{ fontVariantNumeric: "tabular-nums" }}>
+                                                                {timeToDisplay(Math.round(proj.timeElapsed / 60))}
+                                                            </span>
+                                                        </span>
+                                                    }
+                                                    <span className="">
+                                                        <i className="ps-1 bi bi-link-45deg" style={{ paddingRight: '0.1rem', color: proj.categoryColor }} />
+                                                        {truncateString(proj.category, 8)}
+                                                    </span>
+                                                    <span className="ps-1">
+                                                        <span>
+                                                            {
+                                                                proj.dailyLimit <= 1 ?
+                                                                    [...Array(proj.dailyLimit)].map((e, i) => <i className="bi bi-hourglass" key={i} />)
+                                                                    :
+                                                                    <span>
+                                                                        {proj.dailyLimit}<i className="bi bi-hourglass" />
+                                                                    </span>
+                                                            }
+                                                        </span>
+                                                        {proj.dailyLimit !== 0 && timeToDisplay(proj.pomodoroLength)}
+                                                    </span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    )
+                                        )
+                                    }
                                 )
                             }
                         </div>

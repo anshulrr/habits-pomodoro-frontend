@@ -5,6 +5,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { createProjectApi, retrieveProjectApi, updateProjectApi } from 'services/api/ProjectApiService'
 import { retrieveAllProjectCategoriesApi } from "services/api/ProjectCategoryApiService";
 import { calculateTextAreaRows } from 'services/helpers/helper';
+import { COLOR_MAP } from 'services/helpers/listsHelper';
 
 export default function ProjectComponent() {
 
@@ -16,6 +17,9 @@ export default function ProjectComponent() {
     const [color, setColor] = useState('#ffffff')
     const [pomodoroLength, setPomodoroLength] = useState(0)
     const [priority, setPriority] = useState(1)
+    const [type, setType] = useState('neutral')
+    const [dailyLimit, setDailyLimit] = useState(1)
+
     const [projectCategories, setProjectCategories] = useState([])
     const [categoriesMap, setCategoriesMap] = useState(new Map())
     const [errors, setErrors] = useState({ color: projectCategoryId === 0 ? 'To select a color, first select a project category' : '' })
@@ -63,6 +67,8 @@ export default function ProjectComponent() {
                 setColor(response.data.color)
                 setPomodoroLength(response.data.pomodoroLength)
                 setPriority(response.data.priority)
+                setType(response.data.type)
+                setDailyLimit(response.data.dailyLimit)
                 setProjectCategoryId(response.data.projectCategoryId)
                 errors.color = ''
                 setShowLoader(false)
@@ -82,6 +88,8 @@ export default function ProjectComponent() {
             color,
             pomodoroLength,
             priority,
+            type,
+            dailyLimit,
             projectCategoryId
         }
 
@@ -124,6 +132,10 @@ export default function ProjectComponent() {
         }
         if (project.priority === '' || project.priority < 1) {
             errors.priority = 'Enter positive value'
+            result = false;
+        }
+        if (project.dailyLimit === '' || project.dailyLimit < 0) {
+            errors.dailyLimit = 'Enter zero or positive value'
             result = false;
         }
         setErrors(errors);
@@ -217,6 +229,68 @@ export default function ProjectComponent() {
                                 <div className="text-danger small">{errors.color}</div>
                             </div>
 
+                            <div className="col-lg-4 mb-3">
+                                <label htmlFor="type">Habit Type</label>
+                                <select
+                                    className={"form-select form-select-sm text-" + COLOR_MAP[type]}
+                                    id="type"
+                                    name="type"
+                                    value={type}
+                                    onChange={(e) => { setType(e.target.value) }}
+                                >
+                                    <option value="neutral">Neutral</option>
+                                    <option value="good">Good</option>
+                                    <option value="bad">Bad</option>
+                                </select>
+                            </div>
+
+                            <div className="col-lg-4 mb-3">
+                                <label htmlFor="pomodoroLength">Default Pomodoro Length (mins) <i className="bi bi-hourglass" /></label>
+                                <input
+                                    type="number"
+                                    className="form-control form-control-sm"
+                                    min="0"
+                                    id="pomodoroLength"
+                                    name="pomodoroLength"
+                                    placeholder="Default Pomodoro Length (mins)"
+                                    value={pomodoroLength}
+                                    required
+                                    onChange={(e) => setPomodoroLength(e.target.value)}
+                                />
+                                <small>(To use Default Pomodoro Length of General Settings, set value to zero)</small>
+                                <div className="text-danger small">{errors.pomodoroLength}</div>
+                            </div>
+                            <div className="col-lg-4 mb-3">
+                                <label htmlFor="type">Pomodoros Daily Limit (Expected Count)</label>
+                                <input
+                                    type="number"
+                                    name="dailyLimit"
+                                    className="form-control form-control-sm"
+                                    min={0}
+                                    placeholder="Expected Count"
+                                    required
+                                    value={dailyLimit}
+                                    onChange={(e) => setDailyLimit(e.target.value)}
+                                />
+                                <div className="text-danger small">{errors.dailyLimit}</div>
+                            </div>
+                            <div className="col-lg-4 mb-3">
+                                <label htmlFor="priority">Order <i className="bi bi-arrow-up" /></label>
+                                <input
+                                    type="number"
+                                    className="form-control form-control-sm"
+                                    min="1" id="priority"
+                                    name="priority"
+                                    placeholder="Order"
+                                    value={priority}
+                                    required
+                                    onChange={(e) => setPriority(e.target.value)}
+                                />
+                                <small>(Lower numbered projects appears at the top of the list)</small>
+                                <div className="text-danger small">{errors.priority}</div>
+                            </div>
+
+
                             <div className="col-lg-12 mb-3">
                                 <div className="input-group">
                                     <button type="button" className={"btn btn-sm btn-outline-secondary " + (showInput ? "active" : "")} onClick={() => setShowInput(true)}>
@@ -245,38 +319,6 @@ export default function ProjectComponent() {
                                         children={description}
                                     />
                                 </div>
-                            </div>
-
-                            <div className="col-lg-4 mb-3">
-                                <label htmlFor="pomodoroLength">Default Pomodoro Length (mins) <i className="bi bi-hourglass" /></label>
-                                <input
-                                    type="number"
-                                    className="form-control form-control-sm"
-                                    min="0"
-                                    id="pomodoroLength"
-                                    name="pomodoroLength"
-                                    placeholder="Default Pomodoro Length (mins)"
-                                    value={pomodoroLength}
-                                    required
-                                    onChange={(e) => setPomodoroLength(e.target.value)}
-                                />
-                                <small>(To use Default Pomodoro Length of General Settings, set value to zero)</small>
-                                <div className="text-danger small">{errors.pomodoroLength}</div>
-                            </div>
-                            <div className="col-lg-4 mb-3">
-                                <label htmlFor="priority">Order <i className="bi bi-arrow-up" /></label>
-                                <input
-                                    type="number"
-                                    className="form-control form-control-sm"
-                                    min="1" id="priority"
-                                    name="priority"
-                                    placeholder="Order"
-                                    value={priority}
-                                    required
-                                    onChange={(e) => setPriority(e.target.value)}
-                                />
-                                <small>(Lower numbered projects appears at the top of the list)</small>
-                                <div className="text-danger small">{errors.priority}</div>
                             </div>
                             <div className="col-lg-12 mb-3 text-end">
                                 <button className="me-2 btn btn-sm btn-outline-secondary" type="button" onClick={() => navigate(-1, { state })}>Cancel</button>

@@ -6,7 +6,7 @@ import moment from "moment";
 import { useAuth } from "services/auth/AuthContext";
 import Pagination from "services/pagination/Pagination";
 import { getTasksTimeElapsedApi, retrieveAllTasksApi, updateTaskApi } from "services/api/TaskApiService";
-import { formatDate, generateDateColor, timeToDisplay } from "services/helpers/listsHelper";
+import { COLOR_MAP, formatDate, generateDateColor, timeToDisplay } from "services/helpers/listsHelper";
 import OutsideAlerter from "services/hooks/OutsideAlerter";
 import { getTasksTagsApi } from "services/api/TagApiService";
 
@@ -46,12 +46,6 @@ export default function ListTasksRowsComponent({
     const PAGESIZE = userSettings.pageTasksCount;
 
     const [tasks, setTasks] = useState([]);
-
-    const COLOR_MAP = {
-        'neutral': 'dark',
-        'good': 'success',
-        'bad': 'secondary'
-    }
 
     const [currentPage, setCurrentPage] = useState(
         (status === 'current' && state?.currentTasksPage) ||
@@ -333,7 +327,7 @@ export default function ListTasksRowsComponent({
                                                                     </span>
                                                             }
                                                         </span>
-                                                        {timeToDisplay(task.pomodoroLength)}
+                                                        {task.dailyLimit !== 0 && timeToDisplay(task.pomodoroLength)}
                                                     </span>
 
                                                     {
