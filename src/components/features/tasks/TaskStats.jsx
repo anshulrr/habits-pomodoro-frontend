@@ -167,6 +167,13 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
                                                 type = `neutral`;
                                             }
                                         }
+                                        if (task.type === 'good') {
+                                            if (value.count >= task.pomodoroLength * task.dailyLimit) {
+                                                type = 'good';
+                                            } else {
+                                                type = `neutral`;
+                                            }
+                                        }
                                         // a task above 6 hours has darkest color
                                         const max = 6 * 60;
                                         let range = Math.round(value.count / max * 10) * 10;

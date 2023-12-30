@@ -189,7 +189,7 @@ export default function UpdateTaskComponent({
                                         <div className="text-danger small">{errors.pomodoroLength}</div>
                                     </div>
                                     <div className="col-lg-4 mb-3">
-                                        <label htmlFor="type">Pomodoros Daily Limit (Expected Count)</label>
+                                        <label htmlFor="type">Pomodoros Count (Expected Minimum / Daily Limit)</label>
                                         <input
                                             type="number"
                                             name="dailyLimit"
@@ -201,22 +201,6 @@ export default function UpdateTaskComponent({
                                             onChange={(e) => setDailyLimit(e.target.value)}
                                         />
                                         <div className="text-danger small">{errors.dailyLimit}</div>
-                                    </div>
-                                    <div className="col-lg-4 mb-3">
-                                        <label htmlFor="priority">Order <i className="bi bi-arrow-up" /></label>
-                                        <input
-                                            type="number"
-                                            className="form-control form-control-sm"
-                                            min="1"
-                                            id="priority"
-                                            name="priority"
-                                            placeholder="Order"
-                                            required
-                                            value={priority}
-                                            onChange={(e) => setPriority(e.target.value)}
-                                        />
-                                        <small>(Lower numbered tasks appears at the top of the list)</small>
-                                        <div className="text-danger small">{errors.priority}</div>
                                     </div>
                                     <div className="col-lg-4 col-6 mb-3">
                                         <div>
@@ -270,6 +254,22 @@ export default function UpdateTaskComponent({
                                             />
                                         </div>
                                         <div className="text-danger small">{errors.repeatDays}</div>
+                                    </div>
+                                    <div className="col-lg-4 mb-3">
+                                        <label htmlFor="priority">Order <i className="bi bi-arrow-up" /></label>
+                                        <input
+                                            type="number"
+                                            className="form-control form-control-sm"
+                                            min="1"
+                                            id="priority"
+                                            name="priority"
+                                            placeholder="Order"
+                                            required
+                                            value={priority}
+                                            onChange={(e) => setPriority(e.target.value)}
+                                        />
+                                        <small>(Lower numbered tasks appears at the top of the list)</small>
+                                        <div className="text-danger small">{errors.priority}</div>
                                     </div>
                                     <div className="col-lg-4 mb-3">
                                         <label htmlFor="status">Status</label>

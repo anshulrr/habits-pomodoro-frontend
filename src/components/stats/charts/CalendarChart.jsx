@@ -28,6 +28,13 @@ export const CalendarChart = ({ chartData,
                 type = `neutral`;
             }
         }
+        if (element.type === 'good') {
+            if (value.count >= element.pomodoroLength * element.dailyLimit) {
+                type = 'good';
+            } else {
+                type = `neutral`;
+            }
+        }
         // above specified hours has darkest color
         const max = hours * 60;
         let range = Math.round(value.count / max * 10) * 10;

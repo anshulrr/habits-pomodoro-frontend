@@ -261,7 +261,7 @@ export default function ProjectComponent() {
                                 <div className="text-danger small">{errors.pomodoroLength}</div>
                             </div>
                             <div className="col-lg-4 mb-3">
-                                <label htmlFor="type">Pomodoros Daily Limit (Expected Count)</label>
+                                <label htmlFor="type">Pomodoros Count (Expected Minimum / Daily Limit)</label>
                                 <input
                                     type="number"
                                     name="dailyLimit"
