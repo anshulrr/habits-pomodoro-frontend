@@ -1,222 +1,67 @@
-import { useEffect, useState } from 'react';
-import moment from 'moment';
-
 import CalendarHeatmap from 'react-calendar-heatmap';
 import 'react-calendar-heatmap/dist/styles.css';
 
 import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 
-import { getStatsPomodorosCountApi } from 'services/api/PomodoroApiService';
-import { retrieveAllProjectsApi } from 'services/api/ProjectApiService';
 import { timeToDisplay } from 'services/helpers/listsHelper';
-import { retrieveAllTasksApi } from 'services/api/TaskApiService';
 
-export const CalendarChart = ({ subject, categories, includeCategories }) => {
+export const CalendarChart = ({ chartData,
+    startDate,
+    endDate,
+    reloadData,
+    tasks,
+    projects,
+    showLoader
+}) => {
 
-    const [startDate, setStartDate] = useState(moment().add(window.innerWidth <= 992 ? -0.5 : -1, 'y').toISOString());
-    const [endDate, setEndDate] = useState(moment().toISOString());
-    const [categoryId, setCategoryId] = useState('0');
-    const [updatedCategories, setUpdatedCategories] = useState([]);
-    const [projectId, setProjectId] = useState('0');
-    const [projects, setProjects] = useState([]);
-    const [taskId, setTaskId] = useState('0');
-    const [tasks, setTasks] = useState([]);
-    const [chartData, setChartData] = useState({ label: '', labels: [], data: [], colors: [] })
-
-    const [showLoader, setShowLoader] = useState(false);
-
-    useEffect(
-        () => {
-            updateIncludedCategories()
-            retrieveStatsPomodorosCount('user')
-        },
-        [] // eslint-disable-line react-hooks/exhaustive-deps
-    )
-
-    const updateIncludedCategories = () => {
-        const localUpdatedCategories = [];
-        for (const id of includeCategories) {
-            for (const category of categories) {
-                if (category.id === id) {
-                    localUpdatedCategories.push(category);
-                }
+    function checkType(elements, hours, value) {
+        let element;
+        for (const t of elements) {
+            if (t.id === reloadData.dataTypeId) {
+                element = t;
             }
         }
-        setUpdatedCategories(localUpdatedCategories);
-    }
-
-    const retrieveStatsPomodorosCount = (type, typeId = 0) => {
-        setShowLoader(true);
-        setStartDate(startDate);
-        setEndDate(endDate);
-        getStatsPomodorosCountApi({ startDate, endDate, type, typeId, subject, includeCategories })
-            .then(response => {
-                const updated_data = {
-                    data: [],
-                    // label: `Project Categories (${label})`
-                }
-                response.data.forEach((element, i) => {
-                    // console.debug(element);
-                    updated_data.data.push({
-                        date: element[1],
-                        count: element[0]
-                    })
-                });
-                // console.debug(updated_data);
-                setChartData(updated_data)
-                // console.debug("retrieved updated data: ", chartData);
-                setShowLoader(false);
-            })
-            .catch(error => console.error(error.message))
-    }
-
-    function refreshProjects(categoryId) {
-        setProjects([]);
-        retrieveAllProjectsApi({ categoryId, subject })
-            .then(response => {
-                // console.debug(response)
-                setProjects(response.data)
-            })
-            .catch(error => console.error(error.message))
-    }
-
-    function refreshTasks(projectId) {
-        setTasks([]);
-
-        retrieveAllTasksApi({ subject, projectId, status: 'current', limit: 100, offset: 0 })
-            .then(response => {
-                // console.debug(response)
-                setTasks(prev => prev.concat(response.data))
-
-                retrieveAllTasksApi({ subject, projectId, status: 'archived', limit: 100, offset: 0 })
-                    .then(response => {
-                        // console.debug(response)
-                        setTasks(prev => prev.concat(response.data))
-                    })
-                    .catch(error => console.error(error.message))
-            })
-            .catch(error => console.error(error.message))
-    }
-
-    function updateCategory(id) {
-        setCategoryId(id);
-        setProjectId('0');
-        if (id === '0') {
-            retrieveStatsPomodorosCount('user')
-            setProjects([]);
-        } else {
-            retrieveStatsPomodorosCount('category', id);
-            refreshProjects(id);
+        let type = element.type;
+        if (element.type === 'bad') {
+            if (value.count > element.pomodoroLength * element.dailyLimit) {
+                type = 'bad';
+            } else {
+                type = `neutral`;
+            }
         }
-        setTasks([]);
-    }
-
-    function updateProject(id) {
-        setProjectId(id);
-        if (id === '0') {
-            retrieveStatsPomodorosCount('category', categoryId);
-            setTasks([]);
-        } else {
-            retrieveStatsPomodorosCount('project', id);
-            refreshTasks(id);
-        }
-    }
-
-    function updateTask(id) {
-        setTaskId(id);
-        if (id === '0') {
-            retrieveStatsPomodorosCount('project', projectId);
-        } else {
-            retrieveStatsPomodorosCount('task', id);
-        }
+        // above specified hours has darkest color
+        const max = hours * 60;
+        let range = Math.round(value.count / max * 10) * 10;
+        range = range <= 100 ? range : 100;
+        return `color-${type}-${range}`;
     }
 
     return (
         <div>
-
-            <div className="row">
-                <div className="col-lg-12 mb-1">
-                    <h6 className='mb-0'>
-                        Daily Streak<wbr />
-                        <span className="loader-container-2" >
-                            <span className="ms-1 loader-2" style={{ display: showLoader ? "inline" : "none" }}></span>
-                        </span>
-                    </h6>
-                </div>
-
-                <div className="col-6 px-0 mb-1">
-                    <select
-                        className="form-select form-select-sm"
-                        id="project_category_id"
-                        name="project_category_id"
-                        value={categoryId}
-                        onChange={(e) => updateCategory(e.target.value)}
-                    >
-                        <option value="0">Select Category</option>
-                        {
-                            updatedCategories.map(
-                                projectCategory => (
-                                    <option key={projectCategory.id} value={projectCategory.id}>{projectCategory.name}</option>
-                                )
-                            )
-                        }
-                    </select>
-                </div>
-
-                <div className="col-6 px-0 mb-1">
-                    <select
-                        className="form-select form-select-sm"
-                        id="project_id"
-                        name="project_id"
-                        value={projectId}
-                        onChange={(e) => updateProject(e.target.value)}
-                    >
-                        <option value="0">Select Category's Project</option>
-                        {
-                            projects.map(
-                                project => (
-                                    <option key={project.id} value={project.id}>{project.name}</option>
-                                )
-                            )
-                        }
-                    </select>
-                </div>
-
-                <div className="col-12 px-0 mb-1">
-                    <select
-                        className="form-select form-select-sm"
-                        id="task_id"
-                        name="task_id"
-                        value={taskId}
-                        onChange={(e) => updateTask(e.target.value)}
-                    >
-                        <option value="0">Select Project's Task</option>
-                        {
-                            tasks.map(
-                                task => (
-                                    <option key={task.id} value={task.id}>{task.description}</option>
-                                )
-                            )
-                        }
-                    </select>
-                </div>
-            </div>
-
             <CalendarHeatmap
                 startDate={startDate}
                 endDate={endDate}
                 values={chartData.data}
                 showWeekdayLabels={true}
                 classForValue={(value) => {
-                    if (!value) {
+                    if (showLoader || !value) {
                         return 'color-empty';
                     }
+
+                    if (reloadData.dataType === 'task' && reloadData.dataTypeId !== 0) {
+                        return checkType(tasks, 6, value);
+                    }
+
+                    if (reloadData.dataType === 'project' && reloadData.dataTypeId !== 0) {
+                        return checkType(projects, 9, value);
+                    }
+
                     // time spent above 12 hours has darkest color
                     const max = 12 * 60;
                     let range = Math.round(value.count / max * 10) * 10;
                     range = range <= 100 ? range : 100;
-                    return `color-good-${range}`;
+                    return `color-neutral-${range}`;
                 }}
                 tooltipDataAttrs={value => {
                     if (!value || !value.date) {

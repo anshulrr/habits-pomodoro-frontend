@@ -12,9 +12,9 @@ import ListPomodorosComponent from "components/stats/ListPomodorosComponent";
 
 import CategoryChecklistComponent from "components/stats/CategoryChecklistComponent";
 import StatsSettingsComponent from "components/stats/StatsSettingsComponent";
-import SelectFriendsComponent from "components/stats//SelectFriendsComponent";
-import { CalendarChart } from "./charts/CalendarChart";
-import { ProjectCategoriesChart } from "./charts/ProjectCategoriesChart";
+import SelectFriendsComponent from "components/stats/SelectFriendsComponent";
+import { StreakChart } from "components/stats/charts/StreakChart";
+import { ProjectCategoriesChart } from "components/stats/charts/ProjectCategoriesChart";
 import OutsideAlerter from "services/hooks/OutsideAlerter";
 
 export default function ListStatsComponent() {
@@ -346,7 +346,7 @@ export default function ListStatsComponent() {
                             </div>
                             <div className="col-lg-12 px-0" style={{ display: subPage === "streak" || showAll ? "block" : "none" }}>
                                 <div className="py-1 px-3 chart-card">
-                                    <CalendarChart
+                                    <StreakChart
                                         key={reload}
                                         includeCategories={includeCategories}
                                         categories={categories}
