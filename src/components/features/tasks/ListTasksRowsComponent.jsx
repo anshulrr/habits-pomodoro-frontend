@@ -392,7 +392,7 @@ export default function ListTasksRowsComponent({
                                                     <span className="">
                                                         <div className="update-popup">
                                                             <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateCommentsPopupData(task)}>
-                                                                Notes <i className="bi bi-chat-right-text" />
+                                                                Notes <i className="bi bi-journal-text" />
                                                             </button>
                                                             {
                                                                 task.status === 'current' &&

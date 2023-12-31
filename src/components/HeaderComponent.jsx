@@ -42,7 +42,7 @@ export default function HeaderComponent() {
                                 isAuthenticated &&
                                 <Link className="nav-link" to="/notes" state={state}>
                                     <div className={"my-2 mx-2 border-bottom border-1 " + (url.includes("notes") ? "text-success border-success" : "text-secondary border-light")}>
-                                        <i className="bi bi-chat-right-text"></i>
+                                        <i className="bi bi-journal-text"></i>
                                         <div className="button-title">
                                             Notes
                                         </div>

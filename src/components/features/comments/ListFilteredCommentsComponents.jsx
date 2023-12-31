@@ -148,7 +148,7 @@ export default function ListFilteredCommentsComponent({
                                 commentsCount !== -1 &&
                                 <span className="ms-1 badge rounded-pill text-bg-secondary">
                                     {commentsCount}
-                                    <i className="ms-1 bi bi-chat-right-text" />
+                                    <i className="ms-1 bi bi-journal-text" />
                                 </span>
                             }
                         </h6>

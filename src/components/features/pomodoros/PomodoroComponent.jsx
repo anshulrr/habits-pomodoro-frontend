@@ -217,7 +217,7 @@ export default function PomodoroComponent({
                         </span>
                         {pomodoro.task.description}
                         <button type="button" className="btn btn-sm btn-outline-secondary ms-1 py-0 px-1" onClick={() => updateCommentsData(pomodoro)}>
-                            <i className="bi bi-chat-right-text" />
+                            <i className="bi bi-journal-text" />
                         </button>
                     </h5>
                     <div className="fullscreen-button">

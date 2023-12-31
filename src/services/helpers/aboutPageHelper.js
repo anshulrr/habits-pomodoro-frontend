@@ -28,7 +28,7 @@ export const tasksList1 = `
                             type="button" class="btn btn-sm btn-outline-secondary py-0 px-1 ms-1"><i
                                 class="bi bi-pencil-square"></i></button><button type="button"
                             class="btn btn-sm btn-outline-secondary py-0 px-1 ms-1"><i
-                                class="bi bi-chat-right-text"></i></button><span
+                                class="bi bi-journal-text"></i></button><span
                             class="ms-1 badge rounded-pill text-bg-secondary">5<i class="ms-1 bi bi-list-ul"></i></span></h6>
                     <div><button type="button" class="btn btn-sm btn-outline-secondary py-0 px-1 mb-2"><i
                                 class="bi bi-plus-circle"></i></button></div>

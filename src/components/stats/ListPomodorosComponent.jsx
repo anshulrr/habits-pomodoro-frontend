@@ -256,7 +256,7 @@ export default function ListPomodorosComponent({
                                                                     <span className="">
                                                                         <div className="update-popup pomodoro-list-popup">
                                                                             <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2 lh-sm" onClick={() => updateCommentsData(pomodoro)}>
-                                                                                Notes <i className="align-middle bi bi-chat-right-text" />
+                                                                                Notes <i className="align-middle bi bi-journal-text" />
                                                                             </button>
                                                                             {
                                                                                 pomodoro.status === 'past' &&

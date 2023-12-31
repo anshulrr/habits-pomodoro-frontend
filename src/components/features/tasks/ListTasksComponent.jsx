@@ -179,7 +179,7 @@ export default function ListTasksComponent({
                             {
                                 project &&
                                 <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 ms-1" onClick={() => setShowProjectCommentsId(project.id)}>
-                                    <i className="bi bi-chat-right-text" />
+                                    <i className="bi bi-journal-text" />
                                 </button>
                             }
                             {
