@@ -8,14 +8,14 @@ importScripts('https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js')
 // your app's Firebase config object.
 // https://firebase.google.com/docs/web/setup#config-object
 firebase.initializeApp({
-    apiKey: "AIzaSyDSjMRn5lGRPw0YFQsGfVNzzvgSrX9nEGI",
-    authDomain: "habits-pomodoro.firebaseapp.com",
-    databaseURL: "https://habits-pomodoro.firebaseio.com",
-    projectId: "habits-pomodoro",
-    storageBucket: "habits-pomodoro.appspot.com",
-    messagingSenderId: "531554405931",
-    appId: "1:531554405931:web:c2c250a146ac2396d8646e",
-    measurementId: "G-4HXN4P76XT"
+    apiKey: "AIzaSyDVGCBzniosB6A5fUkV96B2iKSSi-eZnJ8",
+    authDomain: "my-project-for-oauth2-3e8ab.firebaseapp.com",
+    // databaseURL: "http://my-project-for-oauth2-3e8ab.firebaseio.com",
+    projectId: "my-project-for-oauth2-3e8ab",
+    storageBucket: "my-project-for-oauth2-3e8ab.appspot.com",
+    messagingSenderId: "920538009802",
+    appId: "1:920538009802:web:5d94ecc06494720124a433",
+    measurementId: "G-L29JR13JHR"
 });
 
 // Retrieve an instance of Firebase Messaging so that it can handle background
@@ -30,7 +30,7 @@ messaging.onBackgroundMessage((payload) => {
     // Customize notification here
     const notificationTitle = 'Background Message Title';
     const notificationOptions = {
-        body: 'Background Message body.',
+        body: payload.notification.body,
         icon: '/logo192.png'
     };
 
