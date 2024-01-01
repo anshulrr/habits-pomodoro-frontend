@@ -29,27 +29,12 @@ export const tasksList1 = `
                                 class="bi bi-pencil-square"></i></button><button type="button"
                             class="btn btn-sm btn-outline-secondary py-0 px-1 ms-1"><i
                                 class="bi bi-journal-text"></i></button><span
-                            class="ms-1 badge rounded-pill text-bg-secondary">5<i class="ms-1 bi bi-list-ul"></i></span></h6>
+                            class="ms-1 badge rounded-pill text-bg-secondary">4<i class="ms-1 bi bi-list-ul"></i></span></h6>
                     <div><button type="button" class="btn btn-sm btn-outline-secondary py-0 px-1 mb-2"><i
                                 class="bi bi-plus-circle"></i></button></div>
                 </div>
                 <div class="">
                     <div id="tasks-list">
-                        <div class="update-list-row">
-                            <div class="d-flex justify-content-start">
-                                <div class="mx-2 flex-grow-1 text-start update-popup-container">
-                                    <div class="py-2">
-                                        <div class="description text-dark">Meditation</div>
-                                        <div class="subscript text-secondary"><span class="me-1"><span><i
-                                                        class="bi bi-hourglass"></i></span>25</span><span
-                                                style="float: right;"></span></div>
-                                    </div>
-                                </div>
-                                <div class="my-auto me-2 text-start"><button type="button"
-                                        class="btn btn-sm btn-outline-dark px-1 py-0 align-middle"><i
-                                            class="bi bi-play-circle"></i></button></div>
-                            </div>
-                        </div>
                         <div class="update-list-row">
                             <div class="d-flex justify-content-start">
                                 <div class="mx-2 flex-grow-1 text-start update-popup-container">

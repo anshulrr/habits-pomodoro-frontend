@@ -32,6 +32,15 @@ export const BarChart = ({
             />
 
             <div className="chart-container">
+                {
+                    chartData.labels.length === 0 &&
+                    <div className="chart-empty">
+                        <div className="alert alert-light text-center small mb-0">
+                            <i className="pe-1 bi bi-clipboard-data" />
+                            Nothing to display
+                        </div>
+                    </div>
+                }
                 <Bar
                     data={
                         {
