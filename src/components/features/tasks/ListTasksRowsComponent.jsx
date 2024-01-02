@@ -258,8 +258,9 @@ export default function ListTasksRowsComponent({
 
     function updateTasksDueDateColor() {
         setTasks(tasks => tasks.map(task => {
-            task.dueDateColor = 'text-' + generateDueDateColor(task);
-            task.dueDateButtonColor = 'btn-outline-' + generateDueDateColor(task);
+            const color = generateDueDateColor(task);
+            task.dueDateColor = 'text-' + color;
+            task.dueDateButtonColor = 'btn-outline-' + color;
             return task;
         }))
         // setTimeout to update color every 30 minutes
@@ -288,6 +289,19 @@ export default function ListTasksRowsComponent({
             }
         }
         return "secondary";
+    }
+
+    const generateTimeElapsedColor = (task) => {
+        if (task.type === 'bad') {
+            if (task.todaysTimeElapsed / 60 > (task.pomodoroLength) * task.dailyLimit) {
+                return "text-danger";
+            }
+        } else if (task.type === 'good') {
+            if (task.todaysTimeElapsed / 60 >= (task.pomodoroLength) * task.dailyLimit) {
+                return "text-success";
+            }
+        }
+        return "";
     }
 
     return (
@@ -319,15 +333,15 @@ export default function ListTasksRowsComponent({
                                                     <span className="me-1">
                                                         <span>
                                                             {
-                                                                task.dailyLimit <= 3 ?
-                                                                    [...Array(task.dailyLimit)].map((e, i) => <i className="bi bi-hourglass" key={i} />)
-                                                                    :
+                                                                (task.dailyLimit === 0 || task.dailyLimit > 3) ?
                                                                     <span>
                                                                         {task.dailyLimit}<i className="bi bi-hourglass" />
                                                                     </span>
+                                                                    :
+                                                                    [...Array(task.dailyLimit)].map((e, i) => <i className="bi bi-hourglass" key={i} />)
                                                             }
                                                         </span>
-                                                        {task.dailyLimit !== 0 && timeToDisplay(task.pomodoroLength)}
+                                                        {timeToDisplay(task.pomodoroLength)}
                                                     </span>
 
                                                     {
@@ -340,9 +354,7 @@ export default function ListTasksRowsComponent({
 
                                                     {
                                                         task.todaysTimeElapsed !== undefined &&
-                                                        <span className={"me-1 " +
-                                                            (task.type === 'bad' && task.todaysTimeElapsed / 60 > (task.pomodoroLength) * task.dailyLimit ? "text-danger" : "")
-                                                        }>
+                                                        <span className={"me-1 " + generateTimeElapsedColor(task)}>
                                                             <i className="bi bi-clock-fill" style={{ paddingRight: "0.1rem" }} />
                                                             {timeToDisplay(task.todaysTimeElapsed / 60)}
                                                         </span>
@@ -351,7 +363,7 @@ export default function ListTasksRowsComponent({
                                                     {
                                                         task.dueDate &&
                                                         <span className={task.dueDateColor} style={{ paddingRight: "0.1rem" }} >
-                                                            <i className="bi bi-calendar-check" style={{ paddingRight: "0.1rem" }} />
+                                                            <i className={task.type === 'bad' ? "bi bi-calendar-x" : "bi bi-calendar-check"} style={{ paddingRight: "0.1rem" }} />
                                                             {formatDate(task.dueDate)}
                                                         </span>
                                                     }
@@ -397,7 +409,7 @@ export default function ListTasksRowsComponent({
                                                             {
                                                                 task.status === 'current' &&
                                                                 <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateDueDate(task)}>
-                                                                    {task.type === 'bad' ? 'Restrain' : 'Due'} Time <i className="ps-1 bi bi-calendar-check" />
+                                                                    {task.type === 'bad' ? 'Restrain' : 'Due'} Time <i className={task.type === 'bad' ? "ps-1 bi bi-calendar-x" : "ps-1 bi bi-calendar-check"} />
                                                                 </button>
                                                             }
                                                             {
@@ -445,7 +457,7 @@ export default function ListTasksRowsComponent({
                                             task.dueDate &&
                                             <div className="my-auto me-1 text-start">
                                                 <button type="button" className={(task.dueDateButtonColor ? task.dueDateButtonColor : "btn-outline-secondary") + " btn btn-sm px-1 py-0 align-middle"} onClick={() => markCompleted(task)}>
-                                                    <i className="bi bi-calendar-check" />
+                                                    <i className={task.type === 'bad' ? "bi bi-calendar-x" : "bi bi-calendar-check"} />
                                                 </button>
                                             </div>
                                         }

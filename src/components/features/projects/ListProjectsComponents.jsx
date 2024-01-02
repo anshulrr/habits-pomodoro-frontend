@@ -118,6 +118,19 @@ export default function ListProjectsComponent({
         navigate('/', { state: local_state, replace: true });
     }
 
+    const generateTimeElapsedColor = (project) => {
+        if (project.type === 'bad') {
+            if (project.timeElapsed / 60 > (project.pomodoroLength) * project.dailyLimit) {
+                return "text-danger";
+            }
+        } else if (project.type === 'good') {
+            if (project.timeElapsed / 60 >= (project.pomodoroLength) * project.dailyLimit) {
+                return "text-success";
+            }
+        }
+        return "";
+    }
+
     return (
         <div className="mt-3 mb-3">
             {/* {message && <div className="alert alert-warning">{message}</div>} */}
@@ -184,9 +197,7 @@ export default function ListProjectsComponent({
 
                                                     {
                                                         proj.timeElapsed &&
-                                                        <span className={
-                                                            (proj.type === 'bad' && proj.timeElapsed / 60 > (proj.pomodoroLength) * proj.dailyLimit ? "text-danger" : "")
-                                                        }>
+                                                        <span className={generateTimeElapsedColor(proj)}>
                                                             <i className="bi bi-clock-fill" style={{ paddingRight: "0.1rem" }} />
                                                             <span style={{ fontVariantNumeric: "tabular-nums" }}>
                                                                 {timeToDisplay(Math.round(proj.timeElapsed / 60))}
@@ -199,16 +210,9 @@ export default function ListProjectsComponent({
                                                     </span>
                                                     <span className="ps-1">
                                                         <span>
-                                                            {
-                                                                proj.dailyLimit <= 1 ?
-                                                                    [...Array(proj.dailyLimit)].map((e, i) => <i className="bi bi-hourglass" key={i} />)
-                                                                    :
-                                                                    <span>
-                                                                        {proj.dailyLimit}<i className="bi bi-hourglass" />
-                                                                    </span>
-                                                            }
+                                                            {proj.dailyLimit !== 1 && proj.dailyLimit}<i className="bi bi-hourglass" />
                                                         </span>
-                                                        {proj.dailyLimit !== 0 && timeToDisplay(proj.pomodoroLength)}
+                                                        {timeToDisplay(proj.pomodoroLength)}
                                                     </span>
                                                 </div>
                                             </div>

@@ -149,7 +149,7 @@ export const tasksList2 = `
                                         <div class="subscript text-secondary"><span class="me-1"><span><i
                                                         class="bi bi-hourglass"></i></span>50</span><span class="me-1"><i
                                                     class="bi bi-clock" style="padding-right: 0.1rem;"></i>23:05</span><span
-                                                class="me-1 "><i class="bi bi-clock-fill"
+                                                class="me-1 text-success"><i class="bi bi-clock-fill"
                                                     style="padding-right: 0.1rem;"></i>50</span><span class="text-secondary"
                                                 style="padding-right: 0.1rem;"><i class="bi bi-calendar-check"
                                                     style="padding-right: 0.1rem;"></i>Dec 25, 8:00</span><span><i
@@ -233,7 +233,7 @@ export const tasksList2 = `
                                                         class="bi bi-hourglass"></i></span>30</span><span class="me-1"><i
                                                     class="bi bi-clock" style="padding-right: 0.1rem;"></i>14:50</span><span
                                                 class="text-secondary" style="padding-right: 0.1rem;"><i
-                                                    class="bi bi-calendar-check"
+                                                    class="bi bi-calendar-x"
                                                     style="padding-right: 0.1rem;"></i>19:30</span><span><i
                                                     class="bi bi-arrow-repeat"
                                                     style="padding-right: 0.1rem;"></i>1</span><span
@@ -246,7 +246,7 @@ export const tasksList2 = `
                                 </div>
                                 <div class="my-auto me-1 text-start"><button type="button"
                                         class="btn-outline-secondary btn btn-sm px-1 py-0 align-middle"><i
-                                            class="bi bi-calendar-check"></i></button></div>
+                                            class="bi bi-calendar-x"></i></button></div>
                                 <div class="my-auto me-2 text-start"><button type="button"
                                         class="btn btn-sm btn-outline-secondary px-1 py-0 align-middle"><i
                                             class="bi bi-play-circle"></i></button></div>
@@ -292,7 +292,7 @@ export const streakChart = `
                         <option value="1">Learning</option>
                         <option value="53" selected>Hobbies</option>
                     </select></div>
-                <div class="col-6 px-0 mb-1"><select class="form-select form-select-sm" id="project_id" name="project_id">
+                <div class="col-6 px-0 mb-1"><select class="form-select form-select-sm text-success" id="project_id" name="project_id">
                         <option value="0">Select Category's Project</option>
                         <option value="253">Gappe</option>
                         <option value="162" selected>Non Fictional Content</option>
@@ -300,7 +300,7 @@ export const streakChart = `
                         <option value="159">Fictional Books</option>
                         <option value="160">Entertainment</option>
                     </select></div>
-                <div class="col-12 px-0 mb-1"><select class="form-select form-select-sm" id="task_id" name="task_id">
+                <div class="col-12 px-0 mb-1"><select class="form-select form-select-sm text-success" id="task_id" name="task_id">
                         <option value="0">Select Project's Task</option>
                         <option value="5356">Thinking fast and slow by Daniel Kahneman</option>
                         <option value="4753">Tennis videos</option>
@@ -821,53 +821,53 @@ export const streakChart = `
                         <rect width="10" height="10" x="0" y="22" class="color-empty">
                             <title></title>
                         </rect>
-                        <rect width="10" height="10" x="0" y="33" class="color-good-0" data-tooltip-id="streak-tooltip"
-                            data-tooltip-content="2023-11-22: 0:25">
+                        <rect width="10" height="10" x="0" y="33" class="color-good-10"
+                            data-tooltip-id="streak-tooltip" data-tooltip-content="2023-11-22: 0:25">
                             <title></title>
                         </rect>
                         <rect width="10" height="10" x="0" y="44" class="color-empty">
                             <title></title>
                         </rect>
-                        <rect width="10" height="10" x="0" y="55" class="color-good-0" data-tooltip-id="streak-tooltip"
-                            data-tooltip-content="2023-11-24: 0:10">
+                        <rect width="10" height="10" x="0" y="55" class="color-neutral-0"
+                            data-tooltip-id="streak-tooltip" data-tooltip-content="2023-11-24: 0:10">
                             <title></title>
                         </rect>
-                        <rect width="10" height="10" x="0" y="66" class="color-good-0" data-tooltip-id="streak-tooltip"
-                            data-tooltip-content="2023-11-25: 0:12">
+                        <rect width="10" height="10" x="0" y="66" class="color-neutral-0"
+                            data-tooltip-id="streak-tooltip" data-tooltip-content="2023-11-25: 0:12">
                             <title></title>
                         </rect>
                     </g>
                     <g transform="translate(253, 0)" class="react-calendar-heatmap-week">
-                        <rect width="10" height="10" x="0" y="0" class="color-good-10" data-tooltip-id="streak-tooltip"
-                            data-tooltip-content="2023-11-26: 1:05">
+                        <rect width="10" height="10" x="0" y="0" class="color-good-20"
+                            data-tooltip-id="streak-tooltip" data-tooltip-content="2023-11-26: 1:05">
                             <title></title>
                         </rect>
-                        <rect width="10" height="10" x="0" y="11" class="color-good-0" data-tooltip-id="streak-tooltip"
-                            data-tooltip-content="2023-11-27: 0:05">
+                        <rect width="10" height="10" x="0" y="11" class="color-neutral-0"
+                            data-tooltip-id="streak-tooltip" data-tooltip-content="2023-11-27: 0:05">
                             <title></title>
                         </rect>
-                        <rect width="10" height="10" x="0" y="22" class="color-good-10" data-tooltip-id="streak-tooltip"
-                            data-tooltip-content="2023-11-28: 1:40">
+                        <rect width="10" height="10" x="0" y="22" class="color-good-30"
+                            data-tooltip-id="streak-tooltip" data-tooltip-content="2023-11-28: 1:40">
                             <title></title>
                         </rect>
                         <rect width="10" height="10" x="0" y="33" class="color-empty">
                             <title></title>
                         </rect>
-                        <rect width="10" height="10" x="0" y="44" class="color-good-0" data-tooltip-id="streak-tooltip"
-                            data-tooltip-content="2023-11-30: 0:25">
+                        <rect width="10" height="10" x="0" y="44" class="color-good-10"
+                            data-tooltip-id="streak-tooltip" data-tooltip-content="2023-11-30: 0:25">
                             <title></title>
                         </rect>
                         <rect width="10" height="10" x="0" y="55" class="color-empty">
                             <title></title>
                         </rect>
-                        <rect width="10" height="10" x="0" y="66" class="color-good-10" data-tooltip-id="streak-tooltip"
-                            data-tooltip-content="2023-12-02: 1:40">
+                        <rect width="10" height="10" x="0" y="66" class="color-good-30"
+                            data-tooltip-id="streak-tooltip" data-tooltip-content="2023-12-02: 1:40">
                             <title></title>
                         </rect>
                     </g>
                     <g transform="translate(264, 0)" class="react-calendar-heatmap-week">
-                        <rect width="10" height="10" x="0" y="0" class="color-good-0" data-tooltip-id="streak-tooltip"
-                            data-tooltip-content="2023-12-03: 0:10">
+                        <rect width="10" height="10" x="0" y="0" class="color-neutral-0"
+                            data-tooltip-id="streak-tooltip" data-tooltip-content="2023-12-03: 0:10">
                             <title></title>
                         </rect>
                         <rect width="10" height="10" x="0" y="11" class="color-empty">
@@ -879,21 +879,21 @@ export const streakChart = `
                         <rect width="10" height="10" x="0" y="33" class="color-empty">
                             <title></title>
                         </rect>
-                        <rect width="10" height="10" x="0" y="44" class="color-good-0" data-tooltip-id="streak-tooltip"
-                            data-tooltip-content="2023-12-07: 0:10">
+                        <rect width="10" height="10" x="0" y="44" class="color-neutral-0"
+                            data-tooltip-id="streak-tooltip" data-tooltip-content="2023-12-07: 0:10">
                             <title></title>
                         </rect>
                         <rect width="10" height="10" x="0" y="55" class="color-empty">
                             <title></title>
                         </rect>
-                        <rect width="10" height="10" x="0" y="66" class="color-good-10" data-tooltip-id="streak-tooltip"
-                            data-tooltip-content="2023-12-09: 1:15">
+                        <rect width="10" height="10" x="0" y="66" class="color-good-20"
+                            data-tooltip-id="streak-tooltip" data-tooltip-content="2023-12-09: 1:15">
                             <title></title>
                         </rect>
                     </g>
                     <g transform="translate(275, 0)" class="react-calendar-heatmap-week">
-                        <rect width="10" height="10" x="0" y="0" class="color-good-10" data-tooltip-id="streak-tooltip"
-                            data-tooltip-content="2023-12-10: 1:15">
+                        <rect width="10" height="10" x="0" y="0" class="color-good-20"
+                            data-tooltip-id="streak-tooltip" data-tooltip-content="2023-12-10: 1:15">
                             <title></title>
                         </rect>
                         <rect width="10" height="10" x="0" y="11" class="color-empty">
@@ -905,8 +905,8 @@ export const streakChart = `
                         <rect width="10" height="10" x="0" y="33" class="color-empty">
                             <title></title>
                         </rect>
-                        <rect width="10" height="10" x="0" y="44" class="color-good-10" data-tooltip-id="streak-tooltip"
-                            data-tooltip-content="2023-12-14: 0:40">
+                        <rect width="10" height="10" x="0" y="44" class="color-good-10"
+                            data-tooltip-id="streak-tooltip" data-tooltip-content="2023-12-14: 0:40">
                             <title></title>
                         </rect>
                         <rect width="10" height="10" x="0" y="55" class="color-empty">
@@ -917,8 +917,8 @@ export const streakChart = `
                         </rect>
                     </g>
                     <g transform="translate(286, 0)" class="react-calendar-heatmap-week">
-                        <rect width="10" height="10" x="0" y="0" class="color-good-0" data-tooltip-id="streak-tooltip"
-                            data-tooltip-content="2023-12-17: 0:25">
+                        <rect width="10" height="10" x="0" y="0" class="color-good-10"
+                            data-tooltip-id="streak-tooltip" data-tooltip-content="2023-12-17: 0:25">
                             <title></title>
                         </rect>
                         <rect width="10" height="10" x="0" y="11" class="color-empty">
@@ -1481,11 +1481,11 @@ export const taskStats = `
                                 <rect width="10" height="10" x="0" y="44" class="color-empty">
                                     <title></title>
                                 </rect>
-                                <rect width="10" height="10" x="0" y="55" class="color-good-0"
+                                <rect width="10" height="10" x="0" y="55" class="color-neutral-0"
                                     data-tooltip-id="streak-tooltip" data-tooltip-content="2023-11-24: 0:10">
                                     <title></title>
                                 </rect>
-                                <rect width="10" height="10" x="0" y="66" class="color-good-0"
+                                <rect width="10" height="10" x="0" y="66" class="color-neutral-0"
                                     data-tooltip-id="streak-tooltip" data-tooltip-content="2023-11-25: 0:12">
                                     <title></title>
                                 </rect>
@@ -1495,7 +1495,7 @@ export const taskStats = `
                                     data-tooltip-id="streak-tooltip" data-tooltip-content="2023-11-26: 1:05">
                                     <title></title>
                                 </rect>
-                                <rect width="10" height="10" x="0" y="11" class="color-good-0"
+                                <rect width="10" height="10" x="0" y="11" class="color-neutral-0"
                                     data-tooltip-id="streak-tooltip" data-tooltip-content="2023-11-27: 0:05">
                                     <title></title>
                                 </rect>
@@ -1519,7 +1519,7 @@ export const taskStats = `
                                 </rect>
                             </g>
                             <g transform="translate(264, 0)" class="react-calendar-heatmap-week">
-                                <rect width="10" height="10" x="0" y="0" class="color-good-0"
+                                <rect width="10" height="10" x="0" y="0" class="color-neutral-0"
                                     data-tooltip-id="streak-tooltip" data-tooltip-content="2023-12-03: 0:10">
                                     <title></title>
                                 </rect>
@@ -1532,7 +1532,7 @@ export const taskStats = `
                                 <rect width="10" height="10" x="0" y="33" class="color-empty">
                                     <title></title>
                                 </rect>
-                                <rect width="10" height="10" x="0" y="44" class="color-good-0"
+                                <rect width="10" height="10" x="0" y="44" class="color-neutral-0"
                                     data-tooltip-id="streak-tooltip" data-tooltip-content="2023-12-07: 0:10">
                                     <title></title>
                                 </rect>
@@ -1601,7 +1601,7 @@ export const taskStats = `
                     </svg></div>
             </div>
         </div>
-        <div class="row small text-secondary m-2">
+        <div class="row small text-dark m-2">
             <div class="col-12">
                 <div class="row small text-start">
                     <div class="col-12">

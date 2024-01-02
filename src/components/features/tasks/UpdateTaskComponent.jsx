@@ -204,7 +204,7 @@ export default function UpdateTaskComponent({
                                     </div>
                                     <div className="col-lg-4 col-6 mb-3">
                                         <div>
-                                            <label htmlFor="dueDate">{type === 'bad' ? 'Restrain' : 'Due'} Time <i className="bi bi-calendar-check" /></label>
+                                            <label htmlFor="dueDate">{type === 'bad' ? 'Restrain' : 'Due'} Time <i className={type === 'bad' ? "bi bi-calendar-x" : "bi bi-calendar-check"} /></label>
                                         </div>
                                         <ReactDatePicker
                                             className="form-control form-control-sm"

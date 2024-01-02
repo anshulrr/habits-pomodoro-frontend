@@ -79,25 +79,31 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
     const generateTimeColor = (pomodoro) => {
         // return if dueDate is null or if dueDate doesn't repeat
         if (task.repeatDays === 0) {
-            return 'text-secondary';
+            return 'text-dark';
         }
         const endTime = moment.utc(pomodoro.endTime).local();
         const dueTime = moment.utc(task.dueDate).local();
         if (task.type === 'bad') {
             // TODO: decide seperation of due time and restain time with habit type
             if (endTime.hours() < dueTime.hours() || (endTime.hours() === dueTime.hours() && endTime.minutes() < dueTime.minutes())) {
-                return 'text-secondary';
+                return 'text-danger';
             } else {
-                return 'text-dark';
+                return 'text-success';
             }
-        } else {
+        } else if (task.type === 'good') {
             if (endTime.hours() > dueTime.hours() || (endTime.hours() === dueTime.hours() && endTime.minutes() > dueTime.minutes())) {
                 return 'text-danger';
             } else {
                 return 'text-success';
             }
+        } else if (task.type === 'neutral') {
+            if (endTime.hours() < dueTime.hours() || (endTime.hours() === dueTime.hours() && endTime.minutes() < dueTime.minutes())) {
+                return 'text-dark';
+            } else {
+                return 'text-secondary';
+            }
         }
-        // return 'text-secondary';
+        return 'text-secondary';
     }
 
     return (
@@ -195,7 +201,7 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
                         </div >
                     </div >
 
-                    <div className="row small text-secondary m-2">
+                    <div className="row small text-dark m-2">
                         <div className="col-lg-4 offset-lg-4">
                             <div className="row small text-start">
                                 <div className="col-12">
@@ -213,12 +219,12 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
                                     <span className="me-1">
                                         <span>
                                             {
-                                                task.dailyLimit <= 3 ?
-                                                    [...Array(task.dailyLimit)].map((e, i) => <i className="bi bi-hourglass" key={i} />)
-                                                    :
+                                                (task.dailyLimit === 0 || task.dailyLimit > 3) ?
                                                     <span>
                                                         {task.dailyLimit}<i className="bi bi-hourglass" />
                                                     </span>
+                                                    :
+                                                    [...Array(task.dailyLimit)].map((e, i) => <i className="bi bi-hourglass" key={i} />)
                                             }
                                         </span>
                                         {timeToDisplay(task.pomodoroLength)}
@@ -226,7 +232,7 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
                                     {
                                         task.dueDate &&
                                         <span style={{ paddingRight: "0.1rem" }} >
-                                            <i className="bi bi-calendar-check" style={{ paddingRight: "0.1rem" }} />
+                                            <i className={task.type === 'bad' ? "bi bi-calendar-x" : "bi bi-calendar-check"} style={{ paddingRight: "0.1rem" }} />
                                             {formatDate(task.dueDate)}
                                         </span>
                                     }
