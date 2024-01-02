@@ -114,6 +114,10 @@
     border-radius: 0px;
 }
 
+.pomodoro-list-row-selected .update-popup-container {
+    cursor: default;
+}
+
 .pomodoro-list-popup {
     top: 1rem;
     width: 8rem;

@@ -268,9 +268,9 @@ export default function AboutComponent() {
                         <div className="container">
                             {
                                 <div>
-                                    <button type="button" className="btn btn-sm btn-outline-secondary ">Daily</button>
-                                    <button type="button" className="btn btn-sm btn-outline-secondary active">Weekly</button>
-                                    <button type="button" className="btn btn-sm btn-outline-secondary ">Monthly</button>
+                                    <button type="button" className="btn btn-sm py-0 px-1 btn-outline-secondary ">Daily</button>
+                                    <button type="button" className="btn btn-sm py-0 px-1 btn-outline-secondary active">Weekly</button>
+                                    <button type="button" className="btn btn-sm py-0 px-1 btn-outline-secondary ">Monthly</button>
                                 </div>
                             }
                             <div className="row">

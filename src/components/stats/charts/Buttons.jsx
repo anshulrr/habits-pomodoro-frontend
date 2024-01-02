@@ -90,9 +90,9 @@ export const Buttons = ({
             {
                 showLimit &&
                 <div>
-                    <button type="button" className={"btn btn-sm btn-outline-secondary " + (limit === "daily" ? "active" : "")} onClick={() => updateLimit('daily')}>Daily</button>
-                    <button type="button" className={"btn btn-sm btn-outline-secondary " + (limit === "weekly" ? "active" : "")} onClick={() => updateLimit('weekly')}>Weekly</button>
-                    <button type="button" className={"btn btn-sm btn-outline-secondary " + (limit === "monthly" ? "active" : "")} onClick={() => updateLimit('monthly')}>Monthly</button>
+                    <button type="button" className={"btn btn-sm py-0 px-1 btn-outline-secondary " + (limit === "daily" ? "active" : "")} onClick={() => updateLimit('daily')}>Daily</button>
+                    <button type="button" className={"btn btn-sm py-0 px-1 btn-outline-secondary " + (limit === "weekly" ? "active" : "")} onClick={() => updateLimit('weekly')}>Weekly</button>
+                    <button type="button" className={"btn btn-sm py-0 px-1 btn-outline-secondary " + (limit === "monthly" ? "active" : "")} onClick={() => updateLimit('monthly')}>Monthly</button>
                 </div>
             }
 

@@ -218,9 +218,9 @@ export default function ListPomodorosComponent({
                                             (pomodoro) => (
                                                 <div key={pomodoro.id}
                                                     className={"update-list-row pomodoro-list-row" + (showPomodoroUpdateId === pomodoro.id ? " pomodoro-list-row-selected" : "")}
-                                                    onClick={() => setShowPomodoroUpdateId(pomodoro.id)} >
+                                                    onClick={() => !subject && setShowPomodoroUpdateId(pomodoro.id)} >
                                                     <div className="mx-2 d-flex text-start small text-secondary">
-                                                        <div className="flex-grow-1 update-popup-container">
+                                                        <div className={"flex-grow-1 " + (!subject ? "update-popup-container" : "")}>
                                                             <span>
                                                                 {pomodoro.index}. {pomodoro.task}
                                                             </span>
@@ -251,7 +251,7 @@ export default function ListPomodorosComponent({
                                                             </span>
 
                                                             {
-                                                                !subject && showPomodoroUpdateId === pomodoro.id &&
+                                                                showPomodoroUpdateId === pomodoro.id &&
                                                                 <OutsideAlerter handle={() => setShowPomodoroUpdateId(-1)}>
                                                                     <span className="">
                                                                         <div className="update-popup pomodoro-list-popup">
