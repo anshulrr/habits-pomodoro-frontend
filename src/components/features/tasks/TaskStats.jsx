@@ -118,8 +118,8 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
 
                     <div className="row">
                         <div className="col-12">
-                            <h6 className={"text-start text-" + COLOR_MAP[task.type]}>
-                                <i className="me-1 bi bi-list-ul" />
+                            <h6 className="text-start">
+                                <i className={"me-1 bi bi-list-ul text-" + COLOR_MAP[task.type]} />
                                 {task.description}
                                 {
                                     showLoader &&

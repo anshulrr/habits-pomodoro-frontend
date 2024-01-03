@@ -197,8 +197,11 @@ export default function ListProjectsComponent({
 
                                                     {
                                                         proj.timeElapsed &&
-                                                        <span className={generateTimeElapsedColor(proj)}>
-                                                            <i className="bi bi-clock-fill" style={{ paddingRight: "0.1rem" }} />
+                                                        <span>
+
+                                                            <span className={generateTimeElapsedColor(proj)}>
+                                                                <i className="bi bi-clock-fill" style={{ paddingRight: "0.1rem" }} />
+                                                            </span>
                                                             <span style={{ fontVariantNumeric: "tabular-nums" }}>
                                                                 {timeToDisplay(Math.round(proj.timeElapsed / 60))}
                                                             </span>

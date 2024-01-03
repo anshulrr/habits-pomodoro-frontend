@@ -159,9 +159,12 @@ export default function UpdateTaskComponent({
                                         <div className="text-danger small">{errors.description}</div>
                                     </div>
                                     <div className="col-lg-4 mb-3">
-                                        <label htmlFor="type">Habit Type</label>
+                                        <label htmlFor="type">
+                                            Habit Type
+                                            <i className={"ms-1 bi bi-list-ul text-" + COLOR_MAP[type]} />
+                                        </label>
                                         <select
-                                            className={"form-select form-select-sm text-" + COLOR_MAP[type]}
+                                            className="form-select form-select-sm"
                                             id="type"
                                             name="type"
                                             value={type}

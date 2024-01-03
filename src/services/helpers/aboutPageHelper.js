@@ -122,8 +122,8 @@ export const tasksList2 = `
                                         <div class="description text-dark">Meditation </div>
                                         <div class="subscript text-secondary"><span class="me-1"><span><i
                                                         class="bi bi-hourglass"></i></span>25</span><span
-                                                class="text-danger" style="padding-right: 0.1rem;"><i
-                                                    class="bi bi-calendar-check" style="padding-right: 0.1rem;"></i>Dec 21,
+                                                class="" style="padding-right: 0.1rem;"><i
+                                                    class="bi bi-calendar-check text-danger" style="padding-right: 0.1rem;"></i>Dec 21,
                                                 12:00</span><span><i class="bi bi-arrow-repeat"
                                                     style="padding-right: 0.1rem;"></i>2</span><span
                                                 style="float: right;"><span class="me-1"><span
@@ -145,11 +145,11 @@ export const tasksList2 = `
                             <div class="d-flex justify-content-start">
                                 <div class="mx-2 flex-grow-1 text-start update-popup-container">
                                     <div class="py-2">
-                                        <div class="description text-success">Tennis</div>
+                                        <div class="description">Tennis</div>
                                         <div class="subscript text-secondary"><span class="me-1"><span><i
                                                         class="bi bi-hourglass"></i></span>50</span><span class="me-1"><i
                                                     class="bi bi-clock" style="padding-right: 0.1rem;"></i>23:05</span><span
-                                                class="me-1 text-success"><i class="bi bi-clock-fill"
+                                                class="me-1"><i class="bi bi-clock-fill text-success"
                                                     style="padding-right: 0.1rem;"></i>50</span><span class="text-secondary"
                                                 style="padding-right: 0.1rem;"><i class="bi bi-calendar-check"
                                                     style="padding-right: 0.1rem;"></i>Dec 25, 8:00</span><span><i
@@ -201,12 +201,12 @@ export const tasksList2 = `
                             <div class="d-flex justify-content-start">
                                 <div class="mx-2 flex-grow-1 text-start update-popup-container">
                                     <div class="py-2">
-                                        <div class="description text-success">Elon Musk by Ashlee Vance</div>
+                                        <div class="description">Elon Musk by Ashlee Vance</div>
                                         <div class="subscript text-secondary"><span class="me-1"><span><i
                                                         class="bi bi-hourglass"></i></span>10</span><span class="me-1"><i
                                                     class="bi bi-clock" style="padding-right: 0.1rem;"></i>40</span><span
-                                                class="text-danger" style="padding-right: 0.1rem;"><i
-                                                    class="bi bi-calendar-check" style="padding-right: 0.1rem;"></i>Dec 21,
+                                                class="" style="padding-right: 0.1rem;"><i
+                                                    class="bi bi-calendar-check text-danger" style="padding-right: 0.1rem;"></i>Dec 21,
                                                 19:00</span><span><i class="bi bi-arrow-repeat"
                                                     style="padding-right: 0.1rem;"></i>1</span><span
                                                 style="float: right;"><span class="me-1"><span
@@ -228,7 +228,7 @@ export const tasksList2 = `
                             <div class="d-flex justify-content-start">
                                 <div class="mx-2 flex-grow-1 text-start update-popup-container">
                                     <div class="py-2">
-                                        <div class="description text-secondary">The Three Body Problem</div>
+                                        <div class="description">The Three Body Problem</div>
                                         <div class="subscript text-secondary"><span class="me-1"><span><i
                                                         class="bi bi-hourglass"></i></span>30</span><span class="me-1"><i
                                                     class="bi bi-clock" style="padding-right: 0.1rem;"></i>14:50</span><span
@@ -292,7 +292,7 @@ export const streakChart = `
                         <option value="1">Learning</option>
                         <option value="53" selected>Hobbies</option>
                     </select></div>
-                <div class="col-6 px-0 mb-1"><select class="form-select form-select-sm text-success" id="project_id" name="project_id">
+                <div class="col-6 px-0 mb-1"><select class="form-select form-select-sm" id="project_id" name="project_id">
                         <option value="0">Select Category's Project</option>
                         <option value="253">Gappe</option>
                         <option value="162" selected>Non Fictional Content</option>
@@ -300,7 +300,7 @@ export const streakChart = `
                         <option value="159">Fictional Books</option>
                         <option value="160">Entertainment</option>
                     </select></div>
-                <div class="col-12 px-0 mb-1"><select class="form-select form-select-sm text-success" id="task_id" name="task_id">
+                <div class="col-12 px-0 mb-1"><select class="form-select form-select-sm" id="task_id" name="task_id">
                         <option value="0">Select Project's Task</option>
                         <option value="5356">Thinking fast and slow by Daniel Kahneman</option>
                         <option value="4753">Tennis videos</option>
@@ -954,7 +954,7 @@ export const taskStats = `
     <div class="container my-1">
         <div class="row">
             <div class="col-12">
-                <h6 class="text-start text-success"><i class="me-1 bi bi-list-ul"></i>Elon Musk by Ashlee Vance</h6>
+                <h6 class="text-start"><i class="me-1 bi bi-list-ul"></i>Elon Musk by Ashlee Vance</h6>
             </div>
         </div>
         <div class="row small">

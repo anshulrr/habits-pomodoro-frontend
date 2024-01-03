@@ -326,7 +326,7 @@ export default function ListTasksRowsComponent({
                                         <div className="mx-2 flex-grow-1 text-start update-popup-container">
 
                                             <div className="py-2" onClick={() => setShowUpdatePopupId(task.id)}>
-                                                <div className={"description text-" + COLOR_MAP[task.type]}>
+                                                <div className="description">
                                                     {task.description}
                                                 </div>
                                                 <div className="subscript text-secondary">
@@ -354,16 +354,20 @@ export default function ListTasksRowsComponent({
 
                                                     {
                                                         task.todaysTimeElapsed !== undefined &&
-                                                        <span className={"me-1 " + generateTimeElapsedColor(task)}>
-                                                            <i className="bi bi-clock-fill" style={{ paddingRight: "0.1rem" }} />
+                                                        <span className="me-1">
+                                                            <span className={generateTimeElapsedColor(task)}>
+                                                                <i className="bi bi-clock-fill" style={{ paddingRight: "0.1rem" }} />
+                                                            </span>
                                                             {timeToDisplay(task.todaysTimeElapsed / 60)}
                                                         </span>
                                                     }
 
                                                     {
                                                         task.dueDate &&
-                                                        <span className={task.dueDateColor} style={{ paddingRight: "0.1rem" }} >
-                                                            <i className={task.type === 'bad' ? "bi bi-calendar-x" : "bi bi-calendar-check"} style={{ paddingRight: "0.1rem" }} />
+                                                        <span style={{ paddingRight: "0.1rem" }} >
+                                                            <span className={task.dueDateColor}>
+                                                                <i className={task.type === 'bad' ? "bi bi-calendar-x" : "bi bi-calendar-check"} style={{ paddingRight: "0.1rem" }} />
+                                                            </span>
                                                             {formatDate(task.dueDate)}
                                                         </span>
                                                     }
@@ -383,7 +387,8 @@ export default function ListTasksRowsComponent({
                                                                 {task.project.name}
                                                             </span>
                                                         }
-
+                                                    </span>
+                                                    <span style={{ float: "right" }}>
                                                         {
                                                             task.tags && task.tags.length > 0 &&
                                                             task.tags.map(

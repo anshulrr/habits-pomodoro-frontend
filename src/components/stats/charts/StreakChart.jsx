@@ -6,7 +6,6 @@ import { retrieveAllProjectsApi } from 'services/api/ProjectApiService';
 import { retrieveAllTasksApi } from 'services/api/TaskApiService';
 import { CalendarChart } from './CalendarChart';
 import { useAuth } from 'services/auth/AuthContext';
-import { COLOR_MAP } from 'services/helpers/listsHelper';
 
 export const StreakChart = ({ subject, categories, includeCategories }) => {
 
@@ -183,7 +182,7 @@ export const StreakChart = ({ subject, categories, includeCategories }) => {
 
                 <div className="col-6 px-0 mb-1">
                     <select
-                        className={"form-select form-select-sm" + " text-" + COLOR_MAP[projectsMap?.get(parseInt(projectId))?.type]}
+                        className="form-select form-select-sm"
                         id="project_id"
                         name="project_id"
                         value={projectId}
@@ -202,7 +201,7 @@ export const StreakChart = ({ subject, categories, includeCategories }) => {
 
                 <div className="col-12 px-0 mb-1">
                     <select
-                        className={"form-select form-select-sm" + " text-" + COLOR_MAP[tasksMap?.get(parseInt(taskId))?.type]}
+                        className="form-select form-select-sm"
                         id="task_id"
                         name="task_id"
                         value={taskId}
