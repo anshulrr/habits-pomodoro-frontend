@@ -1,14 +1,18 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
+
 import {
     getAuth,
     GoogleAuthProvider
 } from 'firebase/auth';
+
 import {
     getMessaging,
-    getToken,
-    onMessage
 } from "firebase/messaging";
+
+import {
+    getFirestore,
+} from "firebase/firestore";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -29,31 +33,16 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
+// Initialize auth
 const auth = getAuth(app);
 
 const provider = new GoogleAuthProvider();
 provider.addScope("https://www.googleapis.com/auth/userinfo.email")
 
+// Initialize messaging
 const messaging = getMessaging(app);
-getToken(messaging, { vapidKey: process.env.REACT_APP_FIREBASE_MESSAGING })
-    .then((currentToken) => {
-        if (currentToken) {
-            // Send the token to your server and update the UI if necessary
-            console.log('got the token', { currentToken });
-            // ...
-        } else {
-            // Show permission request UI
-            console.log('No registration token available. Request permission to generate one.');
-            // ...
-        }
-    }).catch((err) => {
-        console.log('An error occurred while retrieving token. ', err);
-        // ...
-    });
 
-onMessage(messaging, (payload) => {
-    console.log('Message received. ', payload);
-    // ...
-});
+// Initialize firestore
+const db = getFirestore(app);
 
-export { auth, provider, messaging };
+export { auth, provider, messaging, db };

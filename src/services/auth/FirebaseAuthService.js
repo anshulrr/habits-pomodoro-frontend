@@ -1,4 +1,3 @@
-import { auth, provider } from "../firebaseConfig";
 import {
     signInWithPopup,
     createUserWithEmailAndPassword,
@@ -10,6 +9,9 @@ import {
     onAuthStateChanged,
     AuthErrorCodes
 } from 'firebase/auth';
+
+import { auth, provider } from "../firebaseConfig";
+import { getAndStoreToken } from "../FirebaseMessageService";
 
 const registerUser = async (email, password) => {
     try {
@@ -102,6 +104,7 @@ const subscribeToAuthChanges = async ({
                 email: user.email,
                 photoURL: user.photoURL,
             });
+            getAndStoreToken(user.uid)
         } else {
             setAuthenticated(false)
             setUser(null)
