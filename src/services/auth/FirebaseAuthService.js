@@ -94,7 +94,7 @@ const subscribeToAuthChanges = async ({
     setUser
 }) => {
     await onAuthStateChanged(auth, (user) => {
-        console.debug('state changed', user);
+        // console.debug('state changed', user);
         setFirebaseAuthLoaded(true);
         if (user !== null && user.emailVerified) {
             setAuthenticated(true);
