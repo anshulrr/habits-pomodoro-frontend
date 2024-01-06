@@ -94,7 +94,7 @@ const subscribeToAuthChanges = async ({
     setUser
 }) => {
     await onAuthStateChanged(auth, (user) => {
-        // console.debug('state changed', user);
+        console.debug('state changed', user);
         setFirebaseAuthLoaded(true);
         if (user !== null && user.emailVerified) {
             setAuthenticated(true);
@@ -103,7 +103,9 @@ const subscribeToAuthChanges = async ({
                 displayName: user.displayName,
                 email: user.email,
                 photoURL: user.photoURL,
+                uid: user.uid,
             });
+            // set firebase notification to enabled
             getAndStoreToken(user.uid)
         } else {
             setAuthenticated(false)

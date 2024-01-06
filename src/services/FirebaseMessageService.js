@@ -8,9 +8,7 @@ export const getAndStoreToken = (userId) => {
         .then((currentToken) => {
             if (currentToken) {
                 // Send the token to your server and update the UI if necessary
-                console.log('got the token', { currentToken });
-                // storeToken(currentToken);
-                // const userId = user.id;
+                // console.log('got the token', { currentToken });
                 storeToken(userId, currentToken);
                 // ...
             } else {

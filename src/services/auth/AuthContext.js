@@ -6,6 +6,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { getUserSettingsApi } from "../api/AuthApiService";
 import { apiClient } from "../api/ApiClient";
 import FirebaseAuthService from "./FirebaseAuthService";
+import { disableToken } from "services/FirebaseFirestoreService";
 
 const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext)
@@ -61,6 +62,10 @@ export default function AuthProvider({ children }) {
     }
 
     function updateUserSettings(data) {
+        // create deviceId for firebase firestore
+        if (!localStorage.getItem('deviceId')) {
+            localStorage.setItem('deviceId', crypto.randomUUID());
+        }
         localStorage.setItem('habits_pomodoro', JSON.stringify(data));
         setUserSettings(data);
     }
@@ -127,10 +132,15 @@ export default function AuthProvider({ children }) {
         localStorage.removeItem('habits_pomodoro')
         setUserSettings(null)
 
+        // set firebase notifications to disabled
+        if (user) {
+            await disableToken(user.uid);
+        }
+
         // sign out from firebase: removes data from firebaseLocalStorageDb
         try {
             await FirebaseAuthService.signOutUser();
-            // console.debug("signed out successfully")
+            console.debug("signed out successfully")
             // console.debug('logging out ' + user)
         } catch (error) {
             console.error(error);
