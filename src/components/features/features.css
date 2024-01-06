@@ -10,7 +10,7 @@
 
 /* change color if list row is selected */
 .list-selected {
-    background-color: #0dcaf0;
+    background-color: #e9ecef;
     pointer-events: none;
 }
 

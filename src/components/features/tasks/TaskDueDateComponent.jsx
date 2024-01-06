@@ -21,7 +21,9 @@ export default function TaskDueDateComponent({
 
     const [error, setError] = useState('')
 
-    function createPastPomodoro() {
+    function handleSubmit(error) {
+        error.preventDefault();
+
         setError('');
         if (!dueDate) {
             setError('Select date')
@@ -32,6 +34,10 @@ export default function TaskDueDateComponent({
             return;
         }
 
+        updateDueDate();
+    }
+
+    function updateDueDate() {
         task.dueDate = dueDate;
         task.repeatDays = repeat ? repeatDays : 0;
 
@@ -45,63 +51,67 @@ export default function TaskDueDateComponent({
     }
 
     return (
-        <div className="row m-0 px-1 py-1">
-            <div className="col-5 px-0 text-end">
-                <DatePicker
-                    className="form-control form-control-sm"
-                    selected={dueDate}
-                    dateFormat="dd/MM/yyyy HH:mm"
-                    minDate={new Date()}
-                    showTimeSelect
-                    timeFormat="HH:mm"
-                    filterTime={filterPastTime}
-                    onFocus={e => e.target.blur()}      // fix for keyboard open on focus on mobile device
-                    onSelect={(date) => setDueDate(moment(date).endOf('date').toDate())}
-                    onChange={(date) => setDueDate(date)}
-                    autoFocus
-                />
-            </div>
-
-            <div className="col-7 px-0 text-end">
-                <div className="input-group input-group-sm justify-content-end">
-                    <div className="input-group-text">
-                        <input
-                            type="checkbox"
-                            name="repeat"
-                            id="repeat"
-                            className="form-check-input mt-0"
-                            checked={repeat}
-                            disabled={dueDate === null}
-                            onChange={(e) => {
-                                const val = e.target.checked;
-                                setRepeat(val)
-                                setRepeatDays(val ? 1 : 0);
-                            }}
-                        />
-                    </div>
-                    <label className="input-group-text" htmlFor="repeat">
-                        <i className="bi bi-arrow-repeat" />
-                    </label>
-                    <input
-                        type="number"
-                        name="repeatDays"
-                        className="form-control"
-                        value={repeatDays}
-                        min={1}
-                        placeholder="Days"
-                        disabled={!repeat}
-                        onChange={(e) => setRepeatDays(e.target.value)}
+        <form onSubmit={handleSubmit}>
+            <div className="row m-0 px-1 py-1">
+                <div className="col-5 px-0 text-end">
+                    <DatePicker
+                        className="form-control form-control-sm"
+                        selected={dueDate}
+                        dateFormat="dd/MM/yyyy HH:mm"
+                        minDate={new Date()}
+                        showTimeSelect
+                        timeFormat="HH:mm"
+                        filterTime={filterPastTime}
+                        onFocus={e => e.target.blur()}      // fix for keyboard open on focus on mobile device
+                        onSelect={(date) => setDueDate(moment(date).endOf('date').toDate())}
+                        onChange={(date) => setDueDate(date)}
+                        autoFocus
+                        required
                     />
-
-                    <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowUpdateDueDate(-1)}>
-                        <i className="bi bi-x-lg" />
-                    </button>
-                    <button className="btn btn-sm btn-outline-success" type="button" onClick={() => createPastPomodoro()}>
-                        Save
-                    </button>
                 </div>
+
+                <div className="col-7 px-0 text-end">
+                    <div className="input-group input-group-sm justify-content-end">
+                        <div className="input-group-text">
+                            <input
+                                type="checkbox"
+                                name="repeat"
+                                id="repeat"
+                                className="form-check-input mt-0"
+                                checked={repeat}
+                                disabled={dueDate === null}
+                                onChange={(e) => {
+                                    const val = e.target.checked;
+                                    setRepeat(val)
+                                    setRepeatDays(val ? 1 : 0);
+                                }}
+                            />
+                        </div>
+                        <label className="input-group-text" htmlFor="repeat">
+                            <i className="bi bi-arrow-repeat" />
+                        </label>
+                        <input
+                            type="number"
+                            name="repeatDays"
+                            className="form-control"
+                            value={repeatDays}
+                            min={1}
+                            placeholder="Days"
+                            disabled={!repeat}
+                            onChange={(e) => setRepeatDays(e.target.value)}
+                            required
+                        />
+
+                        <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowUpdateDueDate(-1)}>
+                            <i className="bi bi-x-lg" />
+                        </button>
+                        <button className="btn btn-sm btn-outline-success" type="submit">
+                            Save
+                        </button>
+                    </div>
+                </div>
+                {error && <div className="alert alert-danger mt-1 mb-0 py-0 px-2 text-center"><small>{error}</small></div>}
             </div>
-            {error && <div className="alert alert-danger mt-1 mb-0 py-0 px-2 text-center"><small>{error}</small></div>}
-        </div>
+        </form>
     )
 }

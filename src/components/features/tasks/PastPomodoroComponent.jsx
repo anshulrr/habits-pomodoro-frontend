@@ -17,19 +17,22 @@ export default function PastPomodoroComponent({
     const authContext = useAuth()
     const userSettings = authContext.userSettings
 
-    const [errorMessage, setErrorMessage] = useState('')
-
     const [date, setDate] = useState(moment().toDate())
 
     const [minutesElapsed, setMinutesElapsed] = useState(task.pomodoroLength || task.project.pomodoroLength || userSettings.pomodoroLength)
 
     function handleOnChange(fun, val) {
-        setErrorMessage('')
-        if (val === '' || val <= 0 || val > (task.pomodoroLength || task.project.pomodoroLength || userSettings.pomodoroLength)) {
-            setErrorMessage("mintues for past pomodoro must be less than task settings")
+        fun(val)
+    }
+
+    function handleSubmit(error) {
+        error.preventDefault();
+
+        if (minutesElapsed === '' || minutesElapsed <= 0 || minutesElapsed > (task.pomodoroLength || task.project.pomodoroLength || userSettings.pomodoroLength)) {
+            return;
         }
 
-        fun(val)
+        createPastPomodoro();
     }
 
     function createPastPomodoro() {
@@ -59,42 +62,45 @@ export default function PastPomodoroComponent({
     };
 
     return (
-        <div className="row m-0 px-1 py-1">
-            <div className="col-6 px-0 text-end">
-                <DatePicker
-                    className="form-control form-control-sm"
-                    selected={date}
-                    dateFormat="dd/MM/yyyy HH:mm"
-                    maxDate={new Date()}
-                    showTimeSelect
-                    timeFormat="HH:mm"
-                    filterTime={filterFutureTime}
-                    onFocus={e => e.target.blur()}      // fix for keyboard open on focus on mobile device
-                    onChange={(date) => setDate(date)}
-                    autoFocus
-                />
-            </div>
-
-            <div className="col-6 px-0 text-end">
-                <div className="input-group justify-content-end">
-                    <input
-                        type="number"
-                        name="minutesElpased"
+        <form onSubmit={handleSubmit}>
+            <div className="row m-0 px-1 py-1">
+                <div className="col-6 px-0 text-end">
+                    <DatePicker
                         className="form-control form-control-sm"
-                        value={minutesElapsed}
-                        min={1}
-                        placeholder="Past Pomodoro Minutes"
-                        onChange={(e) => handleOnChange(setMinutesElapsed, e.target.value)}
+                        selected={date}
+                        dateFormat="dd/MM/yyyy HH:mm"
+                        maxDate={new Date()}
+                        showTimeSelect
+                        timeFormat="HH:mm"
+                        filterTime={filterFutureTime}
+                        onFocus={e => e.target.blur()}      // fix for keyboard open on focus on mobile device
+                        onChange={(date) => setDate(date)}
+                        autoFocus
                     />
-                    <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowCreatePastPomodoro(-1)}>
-                        <i className="bi bi-x-lg" />
-                    </button>
-                    <button className="btn btn-sm btn-outline-success" type="button" onClick={() => createPastPomodoro()}>
-                        Save
-                    </button>
+                </div>
+
+                <div className="col-6 px-0 text-end">
+                    <div className="input-group justify-content-end">
+                        <input
+                            type="number"
+                            name="minutesElpased"
+                            className="form-control form-control-sm"
+                            value={minutesElapsed}
+                            min={1}
+                            max={task.pomodoroLength || task.project.pomodoroLength || userSettings.pomodoroLength}
+                            required
+                            placeholder="Past Pomodoro Minutes"
+                            onChange={(e) => handleOnChange(setMinutesElapsed, e.target.value)}
+                        />
+                        <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowCreatePastPomodoro(-1)}>
+                            <i className="bi bi-x-lg" />
+                        </button>
+                        <button className="btn btn-sm btn-outline-success" type="submit">
+                            Save
+                        </button>
+                    </div>
                 </div>
             </div>
-            {errorMessage && <div className="alert alert-danger mt-1 mb-0 py-0 px-2 text-center"><small>{errorMessage}</small></div>}
-        </div>
+        </form>
     )
 }
