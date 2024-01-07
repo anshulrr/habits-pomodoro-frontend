@@ -29,11 +29,15 @@ messaging.onBackgroundMessage((payload) => {
     // const time = date.getHours() + ":" + date.getMinutes();
     const time = date.toTimeString().split(' ')[0].slice(0, 5);
 
-    const notificationTitle = "Task due at " + time;
+    const notificationTitle = "A task is due by " + time;
     const notificationOptions = {
         body: payload.data.body,
         icon: '/logo192.png',
     };
 
     self.registration.showNotification(notificationTitle, notificationOptions);
+});
+
+self.addEventListener("notificationclick", (event) => {
+    event.notification.close();  // Android needs explicit close.
 });
