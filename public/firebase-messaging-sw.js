@@ -18,8 +18,7 @@ firebase.initializeApp({
     measurementId: "G-4HXN4P76XT"
 });
 
-// Retrieve an instance of Firebase Messaging so that it can handle background
-// messages.
+// Retrieve an instance of Firebase Messaging so that it can handle background messages.
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
@@ -29,7 +28,7 @@ messaging.onBackgroundMessage((payload) => {
     // const time = date.getHours() + ":" + date.getMinutes();
     const time = date.toTimeString().split(' ')[0].slice(0, 5);
 
-    const notificationTitle = "A task is due by " + time;
+    const notificationTitle = "Due by " + time;
     const notificationOptions = {
         body: payload.data.body,
         icon: '/logo192.png',

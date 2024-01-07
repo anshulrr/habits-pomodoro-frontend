@@ -1,5 +1,6 @@
 import { getToken, onMessage } from "firebase/messaging";
 import { storeToken } from "./FirebaseFirestoreService";
+import { toast } from 'react-toastify';
 
 const { messaging } = require("./firebaseConfig");
 
@@ -23,7 +24,24 @@ export const getAndStoreNotificationsToken = (userId) => {
 }
 
 onMessage(messaging, (payload) => {
-    console.log('Message received. ', payload);
+    // console.log('Message received. ', payload);
     // show toast message
-    // ...
+
+    const timestamp = parseInt(payload.data.title);
+    const date = new Date(timestamp);
+    const time = date.toTimeString().split(' ')[0].slice(0, 5);
+
+    const notificationTitle = "Due by " + time;
+
+    toast.info(
+        <div>
+            <small>
+                <b>
+                    {notificationTitle}
+                </b>
+                <br />
+                {payload.data.body}
+            </small>
+        </div>
+    )
 });
