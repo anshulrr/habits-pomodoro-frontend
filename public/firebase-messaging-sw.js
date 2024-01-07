@@ -32,6 +32,7 @@ messaging.onBackgroundMessage((payload) => {
     const notificationOptions = {
         body: payload.data.body,
         icon: '/logo192.png',
+        data: { url: 'https://habitspomodoro.in/' },
     };
 
     self.registration.showNotification(notificationTitle, notificationOptions);
@@ -39,4 +40,21 @@ messaging.onBackgroundMessage((payload) => {
 
 self.addEventListener("notificationclick", (event) => {
     event.notification.close();  // Android needs explicit close.
+
+    event.waitUntil(
+        clients.matchAll({ includeUncontrolled: true, type: 'window' }).then(windowClients => {
+            // Check if there is already a window/tab open with the target URL
+            for (var i = 0; i < windowClients.length; i++) {
+                var client = windowClients[i];
+                // If so, just focus it.
+                if (client.url === event.notification.data.url && 'focus' in client) {
+                    return client.focus();
+                }
+            }
+            // If not, then open the target URL in a new window/tab.
+            if (clients.openWindow) {
+                return clients.openWindow(event.notification.data.url);
+            }
+        })
+    );
 });
