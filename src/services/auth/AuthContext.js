@@ -28,6 +28,11 @@ export default function AuthProvider({ children }) {
             // to set interceptors after page refresh
             FirebaseAuthService.subscribeToAuthChanges({ setFirebaseAuthLoaded, setAuthenticated, addInterceptors, setUser });
 
+            // create deviceId for firebase firestore
+            if (!localStorage.getItem('deviceId')) {
+                localStorage.setItem('deviceId', crypto.randomUUID());
+            }
+
             const storageSettings = JSON.parse(localStorage.getItem('habits_pomodoro'));
             if (storageSettings) {
                 setUserSettings(storageSettings);
@@ -62,10 +67,6 @@ export default function AuthProvider({ children }) {
     }
 
     function updateUserSettings(data) {
-        // create deviceId for firebase firestore
-        if (!localStorage.getItem('deviceId')) {
-            localStorage.setItem('deviceId', crypto.randomUUID());
-        }
         localStorage.setItem('habits_pomodoro', JSON.stringify(data));
         setUserSettings(data);
     }
@@ -140,7 +141,7 @@ export default function AuthProvider({ children }) {
         // sign out from firebase: removes data from firebaseLocalStorageDb
         try {
             await FirebaseAuthService.signOutUser();
-            console.debug("signed out successfully")
+            // console.debug("signed out successfully")
             // console.debug('logging out ' + user)
         } catch (error) {
             console.error(error);

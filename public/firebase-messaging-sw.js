@@ -23,12 +23,7 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
-    console.log(
-        '[firebase-messaging-sw.js] Received background message ',
-        payload
-    );
     // Customize notification here
-
     const timestamp = parseInt(payload.data.title);
     const date = new Date(timestamp);
     // const time = date.getHours() + ":" + date.getMinutes();
