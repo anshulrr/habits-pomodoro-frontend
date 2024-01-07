@@ -32,12 +32,12 @@ messaging.onBackgroundMessage((payload) => {
     const timestamp = parseInt(payload.data.title);
     const date = new Date(timestamp);
     // const time = date.getHours() + ":" + date.getMinutes();
-    const time = date.toTimeString().split(' ')[0];
+    const time = date.toTimeString().split(' ')[0].slice(0, 5);
 
     const notificationTitle = "Task due at " + time;
     const notificationOptions = {
         body: payload.data.body,
-        icon: '/logo192.png'
+        icon: '/logo192.png',
     };
 
     self.registration.showNotification(notificationTitle, notificationOptions);

@@ -3,7 +3,7 @@ import { storeToken } from "./FirebaseFirestoreService";
 
 const { messaging } = require("./firebaseConfig");
 
-export const getAndStoreToken = (userId) => {
+export const getAndStoreNotificationsToken = (userId) => {
     getToken(messaging, { vapidKey: process.env.REACT_APP_FIREBASE_MESSAGING })
         .then((currentToken) => {
             if (currentToken) {
@@ -24,5 +24,6 @@ export const getAndStoreToken = (userId) => {
 
 onMessage(messaging, (payload) => {
     console.log('Message received. ', payload);
+    // show toast message
     // ...
 });

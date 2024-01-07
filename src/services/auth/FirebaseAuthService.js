@@ -11,7 +11,7 @@ import {
 } from 'firebase/auth';
 
 import { auth, provider } from "../firebaseConfig";
-import { getAndStoreToken } from "../FirebaseMessageService";
+import { getAndStoreNotificationsToken } from "../FirebaseMessageService";
 
 const registerUser = async (email, password) => {
     try {
@@ -106,7 +106,7 @@ const subscribeToAuthChanges = async ({
                 uid: user.uid,
             });
             // set firebase notification to enabled
-            getAndStoreToken(user.uid)
+            getAndStoreNotificationsToken(user.uid)
         } else {
             setAuthenticated(false)
             setUser(null)

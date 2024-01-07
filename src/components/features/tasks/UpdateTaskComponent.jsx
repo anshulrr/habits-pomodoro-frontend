@@ -27,6 +27,8 @@ export default function UpdateTaskComponent({
     const [repeatDays, setRepeatDays] = useState(0)
     const [dailyLimit, setDailyLimit] = useState(1)
 
+    const [enableNotifications, setEnableNotifications] = useState(false)
+
     const [errors, setErrors] = useState({})
 
     const [projectId, setProjectId] = useState(task.project.id);
@@ -56,6 +58,7 @@ export default function UpdateTaskComponent({
                 }
                 setRepeatDays(data.repeatDays)
                 setDailyLimit(data.dailyLimit)
+                setEnableNotifications(data.enableNotifications)
                 setShowLoader(false)
             })
             .catch(error => console.error(error.message))
@@ -75,6 +78,7 @@ export default function UpdateTaskComponent({
             dueDate,
             repeatDays: repeat ? repeatDays : 0,
             dailyLimit,
+            enableNotifications,
             projectId
         }
 
@@ -168,7 +172,13 @@ export default function UpdateTaskComponent({
                                             id="type"
                                             name="type"
                                             value={type}
-                                            onChange={(e) => { setType(e.target.value) }}
+                                            onChange={(e) => {
+                                                const type = e.target.value;
+                                                setType(type);
+                                                if (type === 'bad') {
+                                                    setEnableNotifications(false);
+                                                }
+                                            }}
                                         >
                                             <option value="neutral">Neutral</option>
                                             <option value="good">Good</option>
@@ -257,6 +267,27 @@ export default function UpdateTaskComponent({
                                             />
                                         </div>
                                         <div className="text-danger small">{errors.repeatDays}</div>
+                                    </div>
+                                    <div className="col-lg-4 mb-3">
+                                        <label htmlFor="eNotifications">
+                                            Enable Notification for Due Time <i className="bi bi-bell"></i>
+                                        </label>
+                                        <div className="input-group input-group-sm mb-2">
+                                            <div className="input-group-text">
+                                                <input
+                                                    type="checkbox"
+                                                    name="enableNotifications"
+                                                    className="form-check-input mt-0"
+                                                    disabled={dueDate === null || type === 'bad'}
+                                                    checked={enableNotifications}
+                                                    onChange={(e) => setEnableNotifications(e.target.checked)}
+                                                    id="eNotifications"
+                                                />
+                                            </div>
+                                            <label className="input-group-text" htmlFor="eNotifications">
+                                                <i className="bi bi-bell"></i>
+                                            </label>
+                                        </div>
                                     </div>
                                     <div className="col-lg-4 mb-3">
                                         <label htmlFor="priority">Order <i className="bi bi-arrow-up" /></label>
