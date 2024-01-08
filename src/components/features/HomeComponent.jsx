@@ -12,6 +12,8 @@ import OutsideAlerter from 'services/hooks/OutsideAlerter';
 import { useAuth } from 'services/auth/AuthContext';
 import { isEmpty } from 'services/helpers/helper';
 import { retrieveAllProjectCategoriesApi } from 'services/api/ProjectCategoryApiService';
+import { toast } from 'react-toastify';
+import { getTasksCountApi } from 'services/api/TaskApiService';
 
 export default function HomeComponent({ setReloadHome }) {
 
@@ -52,14 +54,32 @@ export default function HomeComponent({ setReloadHome }) {
             if (tasksFilter) {
                 fetchTasks(tasksFilter);
             }
+
             retrieveAllProjectCategoriesApi(100, 0)
                 .then(response => {
                     setCategoryIds(response.data.map(c => c.id));
                 })
                 .catch(error => console.error(error.message))
+
+            retrieveOverdewTasksCount();
         },
         [] // eslint-disable-line react-hooks/exhaustive-deps
     )
+
+    function retrieveOverdewTasksCount() {
+        const taskData = {
+            status: 'current',
+            startDate: moment().add(-10, 'y').toISOString(),
+            endDate: moment().toISOString()
+        }
+        getTasksCountApi(taskData)
+            .then(response => {
+                if (response.data > 0) {
+                    toast.error(`Overdue Tasks: ${response.data}`, { autoClose: 2 * 1000, position: "bottom-left" });
+                }
+            })
+            .catch(error => console.error(error.message))
+    }
 
     function fetchTasksAndUpdateAppStates(filter) {
         fetchTasks(filter);

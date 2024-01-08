@@ -35,6 +35,7 @@ export default function UserSettingsComponent() {
     const [projectsChartType, setProjectsChartType] = useState('')
     const [projectCategoriesChartType, setProjectCategoriesChartType] = useState('')
     const [homePageDefaultList, setHomePageDefaultList] = useState('')
+    const [enableNotifications, setEnableNotifications] = useState('')
 
     const [errorMessage, setErrorMessage] = useState('')
     const [successMessage, setSuccessMessage] = useState('')
@@ -67,6 +68,7 @@ export default function UserSettingsComponent() {
             setProjectsChartType(userSettings.projectsChartType || "bar")
             setProjectCategoriesChartType(userSettings.projectCategoriesChartType || "bar")
             setHomePageDefaultList(userSettings.homePageDefaultList || "projects")
+            setEnableNotifications(userSettings.enableNotifications)
         }
 
         fetchAndSetSettings();
@@ -102,7 +104,8 @@ export default function UserSettingsComponent() {
             tasksChartType,
             projectsChartType,
             projectCategoriesChartType,
-            homePageDefaultList
+            homePageDefaultList,
+            enableNotifications
         }
         // console.debug(request_settings);
 
@@ -319,6 +322,24 @@ export default function UserSettingsComponent() {
                             />
                         </div>
                     </div>
+
+                    {/* <div className="col-lg-12">
+                        <div className="input-group input-group-sm mb-2">
+                            <div className="input-group-text">
+                                <input
+                                    type="checkbox"
+                                    name="enableNotifications"
+                                    className="form-check-input mt-0"
+                                    checked={enableNotifications}
+                                    onChange={(e) => handleOnChange(setEnableNotifications, e.target.checked)}
+                                    id="eNotifications"
+                                />
+                            </div>
+                            <label className="input-group-text" htmlFor="eNotifications">
+                                Enable Notifications
+                            </label>
+                        </div>
+                    </div> */}
 
                 </div>
             </div>

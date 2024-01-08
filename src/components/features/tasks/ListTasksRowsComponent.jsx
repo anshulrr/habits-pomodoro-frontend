@@ -232,6 +232,7 @@ export default function ListTasksRowsComponent({
         // }
         if (task.repeatDays === 0) {
             task.dueDate = null;
+            task.enableNotifications = false;
         } else {
             task.dueDate = moment(task.dueDate).add(task.repeatDays, 'd').toDate();
         }
@@ -373,9 +374,16 @@ export default function ListTasksRowsComponent({
                                                     }
                                                     {
                                                         task.dueDate && task.repeatDays !== 0 &&
-                                                        <span>
+                                                        <span style={{ paddingRight: "0.1rem" }} >
                                                             <i className="bi bi-arrow-repeat" style={{ paddingRight: "0.1rem" }} />
                                                             {task.repeatDays}
+                                                        </span>
+                                                    }
+
+                                                    {
+                                                        task.dueDate && task.enableNotifications &&
+                                                        <span>
+                                                            <i className="bi bi-bell" style={{ paddingRight: "0.1rem" }} />
                                                         </span>
                                                     }
 
