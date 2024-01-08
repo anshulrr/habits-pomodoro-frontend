@@ -68,7 +68,7 @@ export default function PastPomodoroComponent({
                     <DatePicker
                         className="form-control form-control-sm"
                         selected={date}
-                        dateFormat="dd/MM/yyyy HH:mm"
+                        dateFormat="d MMM HH:mm"
                         maxDate={new Date()}
                         showTimeSelect
                         timeFormat="HH:mm"

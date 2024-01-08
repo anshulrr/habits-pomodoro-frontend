@@ -19,6 +19,8 @@ export default function TaskDueDateComponent({
     const [repeat, setRepeat] = useState(task.repeatDays !== 0)
     const [repeatDays, setRepeatDays] = useState(task.repeatDays)
 
+    const [enableNotifications, setEnableNotifications] = useState(task.enableNotifications)
+
     const [error, setError] = useState('')
 
     function handleSubmit(error) {
@@ -40,6 +42,7 @@ export default function TaskDueDateComponent({
     function updateDueDate() {
         task.dueDate = dueDate;
         task.repeatDays = repeat ? repeatDays : 0;
+        task.enableNotifications = enableNotifications;
 
         updateTaskApi({ id: task.id, task })
             .then(response => {
@@ -53,11 +56,11 @@ export default function TaskDueDateComponent({
     return (
         <form onSubmit={handleSubmit}>
             <div className="row m-0 px-1 py-1">
-                <div className="col-5 px-0 text-end">
+                <div className="col-4 px-0 text-end">
                     <DatePicker
                         className="form-control form-control-sm"
                         selected={dueDate}
-                        dateFormat="dd/MM/yyyy HH:mm"
+                        dateFormat="d MMM HH:mm"
                         minDate={new Date()}
                         showTimeSelect
                         timeFormat="HH:mm"
@@ -70,9 +73,9 @@ export default function TaskDueDateComponent({
                     />
                 </div>
 
-                <div className="col-7 px-0 text-end">
+                <div className="col-8 px-0 text-end">
                     <div className="input-group input-group-sm justify-content-end">
-                        <div className="input-group-text">
+                        <div className="input-group-text px-1">
                             <input
                                 type="checkbox"
                                 name="repeat"
@@ -86,10 +89,10 @@ export default function TaskDueDateComponent({
                                     setRepeatDays(val ? 1 : 0);
                                 }}
                             />
+                            <label className="my-auto lh-1" htmlFor="repeat">
+                                <i className="ms-1 bi bi-arrow-repeat" />
+                            </label>
                         </div>
-                        <label className="input-group-text" htmlFor="repeat">
-                            <i className="bi bi-arrow-repeat" />
-                        </label>
                         <input
                             type="number"
                             name="repeatDays"
@@ -101,6 +104,24 @@ export default function TaskDueDateComponent({
                             onChange={(e) => setRepeatDays(e.target.value)}
                             required
                         />
+
+                        {
+                            task.type !== 'bad' &&
+                            <div className="input-group-text px-1">
+                                <input
+                                    type="checkbox"
+                                    name="eNotifications"
+                                    className="form-check-input mt-0"
+                                    disabled={dueDate === null}
+                                    checked={enableNotifications}
+                                    onChange={(e) => setEnableNotifications(e.target.checked)}
+                                    id="eNotifications"
+                                />
+                                <label className="my-auto lh-1" htmlFor="eNotifications">
+                                    <i className="ms-1 bi bi-bell" />
+                                </label>
+                            </div>
+                        }
 
                         <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowUpdateDueDate(-1)}>
                             <i className="bi bi-x-lg" />

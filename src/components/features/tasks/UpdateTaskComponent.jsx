@@ -223,7 +223,7 @@ export default function UpdateTaskComponent({
                                             className="form-control form-control-sm"
                                             id="dueDate"
                                             selected={dueDate}
-                                            dateFormat="dd/MM/yyyy HH:mm"
+                                            dateFormat="dd MMM yyyy HH:mm"
                                             minDate={new Date()}
                                             showTimeSelect
                                             timeFormat="HH:mm"
@@ -237,11 +237,11 @@ export default function UpdateTaskComponent({
                                         <label htmlFor="repeat">Repeat after (days) <i className="bi bi-arrow-repeat" /></label>
                                         <div className="input-group input-group-sm">
 
-                                            <div className="input-group-text">
+                                            <div className="input-group-text px-1">
                                                 <input
                                                     type="checkbox"
                                                     name="repeat"
-                                                    id="repeat"
+                                                    id="repeatDueDate"
                                                     className="form-check-input mt-0"
                                                     checked={repeat}
                                                     disabled={dueDate === null}
@@ -251,10 +251,10 @@ export default function UpdateTaskComponent({
                                                         setRepeatDays(val ? 1 : 0);
                                                     }}
                                                 />
+                                                <label className="lh-1 my-auto" htmlFor="repeatDueDate">
+                                                    <i className="ms-1 bi bi-arrow-repeat" />
+                                                </label>
                                             </div>
-                                            <label className="input-group-text" htmlFor="repeat">
-                                                <i className="bi bi-arrow-repeat" />
-                                            </label>
                                             <input
                                                 type="number"
                                                 name="repeatDays"
@@ -269,11 +269,11 @@ export default function UpdateTaskComponent({
                                         <div className="text-danger small">{errors.repeatDays}</div>
                                     </div>
                                     <div className="col-lg-4 mb-3">
-                                        <label htmlFor="eNotifications">
+                                        <label htmlFor="enableNotifications">
                                             Enable Notification for Due Time <i className="bi bi-bell"></i>
                                         </label>
                                         <div className="input-group input-group-sm mb-2">
-                                            <div className="input-group-text">
+                                            <div className="input-group-text px-1">
                                                 <input
                                                     type="checkbox"
                                                     name="enableNotifications"
@@ -281,12 +281,12 @@ export default function UpdateTaskComponent({
                                                     disabled={dueDate === null || type === 'bad'}
                                                     checked={enableNotifications}
                                                     onChange={(e) => setEnableNotifications(e.target.checked)}
-                                                    id="eNotifications"
+                                                    id="enableNotifications"
                                                 />
+                                                <label className="" htmlFor="enableNotifications">
+                                                    <i className="ms-1 bi bi-bell"></i>
+                                                </label>
                                             </div>
-                                            <label className="input-group-text" htmlFor="eNotifications">
-                                                <i className="bi bi-bell"></i>
-                                            </label>
                                         </div>
                                     </div>
                                     <div className="col-lg-4 mb-3">
