@@ -70,7 +70,7 @@ export default function TaskDueDateComponent({
                                 <div className="row px-1 py-1 small text-secondary text-start">
                                     <div className="col-lg-4 col-6 text-start mb-3">
                                         <div>
-                                            <label htmlFor="dueDate">{task.type === 'bad' ? 'Restrain' : 'Due'} Time <i className={task.type === 'bad' ? "bi bi-calendar-x" : "bi bi-calendar-check"} /></label>
+                                            <label htmlFor="dueDate">{task.type === 'bad' ? 'Restrain until' : 'Due by'} <i className={task.type === 'bad' ? "bi bi-calendar-x" : "bi bi-calendar-check"} /></label>
                                         </div>
                                         <DatePicker
                                             className="form-control form-control-sm"

@@ -103,7 +103,7 @@ export default function MapTagComponent({
 
                                 <div className="small text-secondary text-start mb-2">
                                     <div>
-                                        Map Tags
+                                        Add Tags
                                         {
                                             tagsCount !== -1 &&
                                             <span className="ms-1 badge rounded-pill text-bg-secondary">

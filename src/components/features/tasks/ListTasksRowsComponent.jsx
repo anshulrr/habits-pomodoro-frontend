@@ -422,7 +422,7 @@ export default function ListTasksRowsComponent({
                                                             {
                                                                 task.status === 'current' &&
                                                                 <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateDueDate(task)}>
-                                                                    {task.type === 'bad' ? 'Restrain' : 'Due'} Time <i className={task.type === 'bad' ? "ps-1 bi bi-calendar-x" : "ps-1 bi bi-calendar-check"} />
+                                                                    Add {task.type === 'bad' ? 'Restrain' : 'Due'} Time <i className={task.type === 'bad' ? "ps-1 bi bi-calendar-x" : "ps-1 bi bi-calendar-check"} />
                                                                 </button>
                                                             }
                                                             {
@@ -452,7 +452,7 @@ export default function ListTasksRowsComponent({
                                                             }
                                                             {
                                                                 <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onAddTag(task)}>
-                                                                    Map Tags <i className="ps-1 bi bi-tag" />
+                                                                    Add Tags <i className="ps-1 bi bi-tag" />
                                                                 </button>
                                                             }
                                                             {
