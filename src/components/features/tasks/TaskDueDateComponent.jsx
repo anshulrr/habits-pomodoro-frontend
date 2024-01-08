@@ -58,10 +58,10 @@ export default function TaskDueDateComponent({
                 <div className="task-close-popup m-2">
                     <i className="p-1 bi bi-x-lg" onClick={() => setShowUpdateDueDate(-1)}></i>
                 </div>
-                <div className="container my-3">
+                <div className="container my-4">
                     <div className="">
                         <div className="">
-                            <h6 className="ms-2 text-center">
+                            <h6 className="text-center">
                                 <i className="me-1 bi bi-list-ul" />
                                 {task.description}
                             </h6>

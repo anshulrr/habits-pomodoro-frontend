@@ -140,7 +140,7 @@ export default function HomeComponent({ setReloadHome }) {
                         <div className={"left-menu-overlay " + (showLeftMenu ? "left-menu-enter" : "left-menu-exit")} >
                             <div id="outside-alerter-parent">
                                 <OutsideAlerter handle={() => setShowLeftMenu(false)}>
-                                    <div className="left-menu-popup px-2">
+                                    <div className="left-menu-popup px-3">
 
                                         <ListProjectsComponent
                                             projects={projects}

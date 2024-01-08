@@ -168,7 +168,7 @@ export default function ListStatsComponent() {
                         <div className={"left-menu-overlay " + (showLeftMenu ? "left-menu-enter" : "left-menu-exit")} >
                             <div id="outside-alerter-parent">
                                 <OutsideAlerter handle={() => setShowLeftMenu(false)}>
-                                    <div className="left-menu-popup">
+                                    <div className="left-menu-popup px-1">
 
                                         <div className="mt-1 px-2 py-2 border-bottom">
                                             <div className="d-flex justify-content-between"

@@ -131,7 +131,7 @@ export default function UpdateTaskComponent({
                 <div className="task-close-popup m-2">
                     <i className="p-1 bi bi-x-lg" onClick={() => setShowUpdateTaskId(-1)}></i>
                 </div>
-                <div className="container mt-3">
+                <div className="container mt-4">
                     <h6>
                         Update Task Details
                         {

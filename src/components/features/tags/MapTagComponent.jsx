@@ -91,10 +91,10 @@ export default function MapTagComponent({
                     <i className="p-1 bi bi-x-lg" onClick={() => setShowMapTags(-1)}></i>
                 </div>
 
-                <div className="container my-3">
+                <div className="container mt-4">
 
                     <div className="row mb-3">
-                        <h6 className="ms-2 text-center">
+                        <h6 className="text-center">
                             <i className="me-1 bi bi-list-ul" />
                             {task.description}
                         </h6>
@@ -127,7 +127,7 @@ export default function MapTagComponent({
                                     </div>
                                 }
 
-                                <div id="tags-list" className="text-start">
+                                <div id="tags-list" className="text-start mb-3">
                                     {
                                         tags.map(
                                             (tag, index) => {
@@ -155,7 +155,7 @@ export default function MapTagComponent({
                                     }
                                 </div>
 
-                                <div className="text-end mt-3">
+                                <div className="text-end">
                                     <button className="btn btn-sm btn-outline-secondary me-1" type="button" onClick={() => setShowMapTags(-1)}>
                                         Cancel
                                     </button>

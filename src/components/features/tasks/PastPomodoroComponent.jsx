@@ -67,18 +67,18 @@ export default function PastPomodoroComponent({
                 <div className="task-close-popup m-2">
                     <i className="p-1 bi bi-x-lg" onClick={() => setShowCreatePastPomodoro(-1)}></i>
                 </div>
-                <div className="container my-3">
+                <div className="container my-4">
                     <div className="">
                         <div className="">
-                            <h6 className="ms-2 text-center">
+                            <h6 className="text-center">
                                 <i className="me-1 bi bi-list-ul" />
                                 {task.description}
                             </h6>
                             <form onSubmit={handleSubmit}>
                                 <div className="row px-1 py-1 small text-secondary">
-                                    <div className="col-lg-4 text-start mb-3">
+                                    <div className="col-6 text-start mb-3">
                                         <div>
-                                            <label htmlFor="endTime">Add Past Pomodoro (End Time)</label>
+                                            <label htmlFor="endTime">Pomodoro End Time</label>
                                         </div>
 
                                         <DatePicker
@@ -96,7 +96,7 @@ export default function PastPomodoroComponent({
                                         />
                                     </div>
 
-                                    <div className="col-lg-4 text-start mb-3">
+                                    <div className="col-6 text-start mb-3">
                                         <div>
                                             <label htmlFor="timeSpend">Time Spent (mins) <i className="bi bi-hourglass" /></label>
                                         </div>

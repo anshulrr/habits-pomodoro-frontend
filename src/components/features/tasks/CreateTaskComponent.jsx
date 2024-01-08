@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { createTaskApi } from 'services/api/TaskApiService';
 
-export default function CreateTaskComponent({ setShowCreateTask, project, setTasksReload, setTasksCount }) {
+export default function CreateTaskComponent({ project, setTasksReload, setTasksCount }) {
 
     const navigate = useNavigate()
     const { state } = useLocation()
@@ -24,8 +24,8 @@ export default function CreateTaskComponent({ setShowCreateTask, project, setTas
             .then(response => {
                 // console.debug(response)
                 setTasksReload(prev => prev + 1);
-                setShowCreateTask(false)
                 setTasksCount(prev => prev + 1)
+                setDescription('')
                 updateAppState()
             })
             .catch(error => console.error(error.message))
@@ -49,15 +49,11 @@ export default function CreateTaskComponent({ setShowCreateTask, project, setTas
                                     name="task"
                                     className="form-control form-control-sm"
                                     value={description}
-                                    placeholder="Task Description"
+                                    placeholder="Add New Task"
                                     onChange={(e) => setDescription(e.target.value)}
                                     required
-                                    autoFocus
                                 />
-                                <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowCreateTask(false)}>
-                                    <i className="align-middle bi bi-x-lg" />
-                                </button>
-                                <button className="btn btn-sm btn-outline-success" type="submit">
+                                <button className="btn btn-sm btn-outline-secondary" type="submit">
                                     <i className="align-middle bi bi-plus-circle" />
                                 </button>
                             </div>

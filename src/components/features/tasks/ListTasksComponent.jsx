@@ -42,7 +42,7 @@ export default function ListTasksComponent({
 
     const [message, setMessage] = useState('')
 
-    const [showCreateTask, setShowCreateTask] = useState(false)
+    const [showCreateTask, setShowCreateTask] = useState(true)
 
     const [showProjectCommentsId, setShowProjectCommentsId] = useState(-1);
 
