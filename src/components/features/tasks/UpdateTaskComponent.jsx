@@ -223,7 +223,7 @@ export default function UpdateTaskComponent({
                                             className="form-control form-control-sm"
                                             id="dueDate"
                                             selected={dueDate}
-                                            dateFormat="dd MMM yyyy HH:mm"
+                                            dateFormat="yyyy MMM dd, HH:mm"
                                             minDate={new Date()}
                                             showTimeSelect
                                             timeFormat="HH:mm"

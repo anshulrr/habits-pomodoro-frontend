@@ -68,7 +68,7 @@ export default function PastPomodoroComponent({
                     <DatePicker
                         className="form-control form-control-sm"
                         selected={date}
-                        dateFormat="d MMM HH:mm"
+                        dateFormat="yyyy MMM d, HH:mm"
                         maxDate={new Date()}
                         showTimeSelect
                         timeFormat="HH:mm"
@@ -79,26 +79,26 @@ export default function PastPomodoroComponent({
                     />
                 </div>
 
-                <div className="col-6 px-0 text-end">
-                    <div className="input-group justify-content-end">
-                        <input
-                            type="number"
-                            name="minutesElpased"
-                            className="form-control form-control-sm"
-                            value={minutesElapsed}
-                            min={1}
-                            max={task.pomodoroLength || task.project.pomodoroLength || userSettings.pomodoroLength}
-                            required
-                            placeholder="Past Pomodoro Minutes"
-                            onChange={(e) => handleOnChange(setMinutesElapsed, e.target.value)}
-                        />
-                        <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowCreatePastPomodoro(-1)}>
-                            <i className="bi bi-x-lg" />
-                        </button>
-                        <button className="btn btn-sm btn-outline-success" type="submit">
-                            Save
-                        </button>
-                    </div>
+                <div className="col-3 px-0 text-end">
+                    <input
+                        type="number"
+                        name="minutesElpased"
+                        className="form-control form-control-sm"
+                        value={minutesElapsed}
+                        min={1}
+                        max={task.pomodoroLength || task.project.pomodoroLength || userSettings.pomodoroLength}
+                        required
+                        placeholder="Past Pomodoro Minutes"
+                        onChange={(e) => handleOnChange(setMinutesElapsed, e.target.value)}
+                    />
+                </div>
+                <div className="col-3 px-0 text-end">
+                    <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowCreatePastPomodoro(-1)}>
+                        <i className="bi bi-x-lg" />
+                    </button>
+                    <button className="btn btn-sm btn-outline-success" type="submit">
+                        Save
+                    </button>
                 </div>
             </div>
         </form>

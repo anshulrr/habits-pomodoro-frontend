@@ -56,11 +56,11 @@ export default function TaskDueDateComponent({
     return (
         <form onSubmit={handleSubmit}>
             <div className="row m-0 px-1 py-1">
-                <div className="col-4 px-0 text-end">
+                <div className="col-6 px-0 text-start">
                     <DatePicker
                         className="form-control form-control-sm"
                         selected={dueDate}
-                        dateFormat="d MMM HH:mm"
+                        dateFormat="yyyy MMM d, HH:mm"
                         minDate={new Date()}
                         showTimeSelect
                         timeFormat="HH:mm"
@@ -73,7 +73,29 @@ export default function TaskDueDateComponent({
                     />
                 </div>
 
-                <div className="col-8 px-0 text-end">
+                <div className="col-2 px-0 text-center">
+                    <div className="input-group input-group-sm justify-content-center">
+                        {
+                            task.type !== 'bad' &&
+                            <div className="input-group-text px-1">
+                                <input
+                                    type="checkbox"
+                                    name="eNotifications"
+                                    className="form-check-input mt-0"
+                                    disabled={dueDate === null}
+                                    checked={enableNotifications}
+                                    onChange={(e) => setEnableNotifications(e.target.checked)}
+                                    id="eNotifications"
+                                />
+                                <label className="" htmlFor="eNotifications">
+                                    <i className="ms-1 bi bi-bell" />
+                                </label>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div className="col-4 px-0 text-end">
                     <div className="input-group input-group-sm justify-content-end">
                         <div className="input-group-text px-1">
                             <input
@@ -104,32 +126,15 @@ export default function TaskDueDateComponent({
                             onChange={(e) => setRepeatDays(e.target.value)}
                             required
                         />
-
-                        {
-                            task.type !== 'bad' &&
-                            <div className="input-group-text px-1">
-                                <input
-                                    type="checkbox"
-                                    name="eNotifications"
-                                    className="form-check-input mt-0"
-                                    disabled={dueDate === null}
-                                    checked={enableNotifications}
-                                    onChange={(e) => setEnableNotifications(e.target.checked)}
-                                    id="eNotifications"
-                                />
-                                <label className="my-auto lh-1" htmlFor="eNotifications">
-                                    <i className="ms-1 bi bi-bell" />
-                                </label>
-                            </div>
-                        }
-
-                        <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowUpdateDueDate(-1)}>
-                            <i className="bi bi-x-lg" />
-                        </button>
-                        <button className="btn btn-sm btn-outline-success" type="submit">
-                            Save
-                        </button>
                     </div>
+                </div>
+                <div className="col-12 px-0 text-end">
+                    <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowUpdateDueDate(-1)}>
+                        <i className="bi bi-x-lg" />
+                    </button>
+                    <button className="btn btn-sm btn-outline-success" type="submit">
+                        Save
+                    </button>
                 </div>
                 {error && <div className="alert alert-danger mt-1 mb-0 py-0 px-2 text-center"><small>{error}</small></div>}
             </div>
