@@ -15,6 +15,8 @@ export default function MapTagComponent({
 
     const [checkedState, setCheckedState] = useState([]);
 
+    const [mappedTagsCount, setMappedTagsCount] = useState(-1);
+
     useEffect(
         () => {
             refreshTags();
@@ -45,12 +47,15 @@ export default function MapTagComponent({
         retrieveTaskApi({ id: task.id })
             .then(response => {
                 // using Map for easy access and update
+                let count = 0;
                 for (let j = 0; j < response.data.tags.length; j++) {
                     tagsMap.get(response.data.tags[j].id).selected = true;
+                    count++;
                 }
                 tags = [...tagsMap.values()];
 
                 setCheckedState(tags.map(tag => tag.selected));
+                setMappedTagsCount(count);
             })
             .catch(error => console.error(error.message))
     }
@@ -86,27 +91,32 @@ export default function MapTagComponent({
                     <i className="p-1 bi bi-x-lg" onClick={() => setShowMapTags(-1)}></i>
                 </div>
 
-                <div className="container my-5">
+                <div className="container my-3">
 
                     <div className="row mb-3">
+                        <h6 className="ms-2 text-center">
+                            <i className="me-1 bi bi-list-ul" />
+                            {task.description}
+                        </h6>
                         <div className="col-lg-4 offset-lg-4">
-                            <h6 className="ms-2 text-start">
-                                <i className="me-1 bi bi-list-ul" />
-                                {task.description}
-                            </h6>
                             <div className="border rounded p-3 mx-2">
 
-                                <div className="d-flex justify-content-between">
-                                    <h6>
-                                        Tags
+                                <div className="small text-secondary text-start mb-2">
+                                    <div>
+                                        Map Tags
                                         {
                                             tagsCount !== -1 &&
                                             <span className="ms-1 badge rounded-pill text-bg-secondary">
+                                                {mappedTagsCount !== -1 &&
+                                                    <span>
+                                                        {mappedTagsCount}/
+                                                    </span>
+                                                }
                                                 {tagsCount}
                                                 <i className="ms-1 bi bi-tags-fill" />
                                             </span>
                                         }
-                                    </h6>
+                                    </div>
                                 </div>
 
                                 {
@@ -149,7 +159,7 @@ export default function MapTagComponent({
                                     <button className="btn btn-sm btn-outline-secondary me-1" type="button" onClick={() => setShowMapTags(-1)}>
                                         Cancel
                                     </button>
-                                    <button className="btn btn-sm btn-outline-success" type="button" onClick={() => mapTags()}>Map Tags</button>
+                                    <button className="btn btn-sm btn-outline-success" type="button" onClick={() => mapTags()}>Save</button>
                                 </div>
                             </div>
                         </div>

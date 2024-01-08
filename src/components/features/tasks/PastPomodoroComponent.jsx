@@ -62,45 +62,71 @@ export default function PastPomodoroComponent({
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div className="row m-0 px-1 py-1">
-                <div className="col-6 px-0 text-end">
-                    <DatePicker
-                        className="form-control form-control-sm"
-                        selected={date}
-                        dateFormat="yyyy MMM d, HH:mm"
-                        maxDate={new Date()}
-                        showTimeSelect
-                        timeFormat="HH:mm"
-                        filterTime={filterFutureTime}
-                        onFocus={e => e.target.blur()}      // fix for keyboard open on focus on mobile device
-                        onChange={(date) => setDate(date)}
-                        autoFocus
-                    />
+        <div className="task-overlay">
+            <div className="task-popup">
+                <div className="task-close-popup m-2">
+                    <i className="p-1 bi bi-x-lg" onClick={() => setShowCreatePastPomodoro(-1)}></i>
                 </div>
+                <div className="container my-3">
+                    <div className="">
+                        <div className="">
+                            <h6 className="ms-2 text-center">
+                                <i className="me-1 bi bi-list-ul" />
+                                {task.description}
+                            </h6>
+                            <form onSubmit={handleSubmit}>
+                                <div className="row px-1 py-1 small text-secondary">
+                                    <div className="col-lg-4 text-start mb-3">
+                                        <div>
+                                            <label htmlFor="endTime">Add Past Pomodoro (End Time)</label>
+                                        </div>
 
-                <div className="col-3 px-0 text-end">
-                    <input
-                        type="number"
-                        name="minutesElpased"
-                        className="form-control form-control-sm"
-                        value={minutesElapsed}
-                        min={1}
-                        max={task.pomodoroLength || task.project.pomodoroLength || userSettings.pomodoroLength}
-                        required
-                        placeholder="Past Pomodoro Minutes"
-                        onChange={(e) => handleOnChange(setMinutesElapsed, e.target.value)}
-                    />
-                </div>
-                <div className="col-3 px-0 text-end">
-                    <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowCreatePastPomodoro(-1)}>
-                        <i className="bi bi-x-lg" />
-                    </button>
-                    <button className="btn btn-sm btn-outline-success" type="submit">
-                        Save
-                    </button>
+                                        <DatePicker
+                                            className="form-control form-control-sm"
+                                            id="endTime"
+                                            selected={date}
+                                            dateFormat="yyyy MMM d, HH:mm"
+                                            maxDate={new Date()}
+                                            showTimeSelect
+                                            timeFormat="HH:mm"
+                                            filterTime={filterFutureTime}
+                                            onFocus={e => e.target.blur()}      // fix for keyboard open on focus on mobile device
+                                            onChange={(date) => setDate(date)}
+                                            autoFocus
+                                        />
+                                    </div>
+
+                                    <div className="col-lg-4 text-start mb-3">
+                                        <div>
+                                            <label htmlFor="timeSpend">Time Spent (mins) <i className="bi bi-hourglass" /></label>
+                                        </div>
+                                        <input
+                                            type="number"
+                                            name="minutesElpased"
+                                            className="form-control form-control-sm"
+                                            value={minutesElapsed}
+                                            min={1}
+                                            max={task.pomodoroLength || task.project.pomodoroLength || userSettings.pomodoroLength}
+                                            required
+                                            placeholder="Past Pomodoro Minutes"
+                                            onChange={(e) => handleOnChange(setMinutesElapsed, e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="col-12 text-end">
+                                        <button className="me-2 btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowCreatePastPomodoro(-1)}>
+                                            Cancel
+                                        </button>
+                                        <button className="btn btn-sm btn-outline-success" type="submit">
+                                            Save
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </form>
+        </div>
+
     )
 }

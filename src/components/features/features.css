@@ -304,3 +304,7 @@
     right: 0;
     cursor: pointer;
 }
+
+.small-popup {
+    height: fit-content;
+}

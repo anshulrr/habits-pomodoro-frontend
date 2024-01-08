@@ -186,7 +186,7 @@ export default function UpdateTaskComponent({
                                         </select>
                                     </div>
                                     <div className="col-lg-4 mb-3">
-                                        <label htmlFor="pomodoroLength">Default Pomodoro Length (mins) <i className="bi bi-hourglass" /></label>
+                                        <label htmlFor="pomodoroLength">Pomodoro Length (mins) <i className="bi bi-hourglass" /></label>
                                         <input
                                             type="number"
                                             className="form-control form-control-sm"
@@ -217,11 +217,11 @@ export default function UpdateTaskComponent({
                                     </div>
                                     <div className="col-lg-4 col-6 mb-3">
                                         <div>
-                                            <label htmlFor="dueDate">{type === 'bad' ? 'Restrain' : 'Due'} Time <i className={type === 'bad' ? "bi bi-calendar-x" : "bi bi-calendar-check"} /></label>
+                                            <label htmlFor="updateDueDate">{type === 'bad' ? 'Restrain' : 'Due'} Time <i className={type === 'bad' ? "bi bi-calendar-x" : "bi bi-calendar-check"} /></label>
                                         </div>
                                         <ReactDatePicker
                                             className="form-control form-control-sm"
-                                            id="dueDate"
+                                            id="updateDueDate"
                                             selected={dueDate}
                                             dateFormat="yyyy MMM dd, HH:mm"
                                             minDate={new Date()}
@@ -234,7 +234,7 @@ export default function UpdateTaskComponent({
                                         />
                                     </div>
                                     <div className="col-lg-4 col-6 mb-3">
-                                        <label htmlFor="repeat">Repeat after (days) <i className="bi bi-arrow-repeat" /></label>
+                                        <label htmlFor="repeatDueDate">Repeat after (days) <i className="bi bi-arrow-repeat" /></label>
                                         <div className="input-group input-group-sm">
 
                                             <div className="input-group-text px-1">

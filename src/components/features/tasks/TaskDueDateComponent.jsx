@@ -54,90 +54,116 @@ export default function TaskDueDateComponent({
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div className="row m-0 px-1 py-1">
-                <div className="col-6 px-0 text-start">
-                    <DatePicker
-                        className="form-control form-control-sm"
-                        selected={dueDate}
-                        dateFormat="yyyy MMM d, HH:mm"
-                        minDate={new Date()}
-                        showTimeSelect
-                        timeFormat="HH:mm"
-                        filterTime={filterPastTime}
-                        onFocus={e => e.target.blur()}      // fix for keyboard open on focus on mobile device
-                        onSelect={(date) => setDueDate(moment(date).endOf('date').toDate())}
-                        onChange={(date) => setDueDate(date)}
-                        autoFocus
-                        required
-                    />
+        <div className="task-overlay">
+            <div className="task-popup">
+                <div className="task-close-popup m-2">
+                    <i className="p-1 bi bi-x-lg" onClick={() => setShowUpdateDueDate(-1)}></i>
                 </div>
+                <div className="container my-3">
+                    <div className="">
+                        <div className="">
+                            <h6 className="ms-2 text-center">
+                                <i className="me-1 bi bi-list-ul" />
+                                {task.description}
+                            </h6>
+                            <form onSubmit={handleSubmit}>
+                                <div className="row px-1 py-1 small text-secondary text-start">
+                                    <div className="col-lg-4 col-6 text-start mb-3">
+                                        <div>
+                                            <label htmlFor="dueDate">{task.type === 'bad' ? 'Restrain' : 'Due'} Time <i className={task.type === 'bad' ? "bi bi-calendar-x" : "bi bi-calendar-check"} /></label>
+                                        </div>
+                                        <DatePicker
+                                            className="form-control form-control-sm"
+                                            selected={dueDate}
+                                            dateFormat="yyyy MMM d, HH:mm"
+                                            minDate={new Date()}
+                                            showTimeSelect
+                                            timeFormat="HH:mm"
+                                            filterTime={filterPastTime}
+                                            onFocus={e => e.target.blur()}      // fix for keyboard open on focus on mobile device
+                                            onSelect={(date) => setDueDate(moment(date).endOf('date').toDate())}
+                                            onChange={(date) => setDueDate(date)}
+                                            autoFocus
+                                            required
+                                        />
+                                    </div>
 
-                <div className="col-2 px-0 text-center">
-                    <div className="input-group input-group-sm justify-content-center">
-                        {
-                            task.type !== 'bad' &&
-                            <div className="input-group-text px-1">
-                                <input
-                                    type="checkbox"
-                                    name="eNotifications"
-                                    className="form-check-input mt-0"
-                                    disabled={dueDate === null}
-                                    checked={enableNotifications}
-                                    onChange={(e) => setEnableNotifications(e.target.checked)}
-                                    id="eNotifications"
-                                />
-                                <label className="" htmlFor="eNotifications">
-                                    <i className="ms-1 bi bi-bell" />
-                                </label>
-                            </div>
-                        }
-                    </div>
-                </div>
+                                    <div className="col-lg-4 col-6 text-start mb-3">
+                                        <label htmlFor="repeat">Repeat after (days) <i className="bi bi-arrow-repeat" /></label>
+                                        <div className="input-group input-group-sm justify-content-start">
+                                            <div className="input-group-text px-1">
+                                                <input
+                                                    type="checkbox"
+                                                    name="repeat"
+                                                    id="repeat"
+                                                    className="form-check-input mt-0"
+                                                    checked={repeat}
+                                                    disabled={dueDate === null}
+                                                    onChange={(e) => {
+                                                        const val = e.target.checked;
+                                                        setRepeat(val)
+                                                        setRepeatDays(val ? 1 : 0);
+                                                    }}
+                                                />
+                                                <label className="my-auto lh-1" htmlFor="repeat">
+                                                    <i className="ms-1 bi bi-arrow-repeat" />
+                                                </label>
+                                            </div>
+                                            <input
+                                                type="number"
+                                                name="repeatDays"
+                                                className="form-control"
+                                                value={repeatDays}
+                                                min={1}
+                                                placeholder="Days"
+                                                disabled={!repeat}
+                                                onChange={(e) => setRepeatDays(e.target.value)}
+                                                required
+                                            />
+                                        </div>
+                                    </div>
 
-                <div className="col-4 px-0 text-end">
-                    <div className="input-group input-group-sm justify-content-end">
-                        <div className="input-group-text px-1">
-                            <input
-                                type="checkbox"
-                                name="repeat"
-                                id="repeat"
-                                className="form-check-input mt-0"
-                                checked={repeat}
-                                disabled={dueDate === null}
-                                onChange={(e) => {
-                                    const val = e.target.checked;
-                                    setRepeat(val)
-                                    setRepeatDays(val ? 1 : 0);
-                                }}
-                            />
-                            <label className="my-auto lh-1" htmlFor="repeat">
-                                <i className="ms-1 bi bi-arrow-repeat" />
-                            </label>
+
+                                    {
+                                        task.type !== 'bad' &&
+                                        <div className="col-lg-4 text-start mb-3">
+                                            <label htmlFor="enableNotifications">
+                                                Enable Notification for Due Time <i className="bi bi-bell"></i>
+                                            </label>
+                                            <div className="input-group input-group-sm justify-content-start">
+
+                                                <div className="input-group-text px-1">
+                                                    <input
+                                                        type="checkbox"
+                                                        name="eNotifications"
+                                                        className="form-check-input mt-0"
+                                                        disabled={dueDate === null}
+                                                        checked={enableNotifications}
+                                                        onChange={(e) => setEnableNotifications(e.target.checked)}
+                                                        id="eNotifications"
+                                                    />
+                                                    <label className="" htmlFor="eNotifications">
+                                                        <i className="ms-1 bi bi-bell" />
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    <div className="col-12 text-end">
+                                        <button className="me-2 btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowUpdateDueDate(-1)}>
+                                            Cancel
+                                        </button>
+                                        <button className="btn btn-sm btn-outline-success" type="submit">
+                                            Save
+                                        </button>
+                                    </div>
+                                    {error && <div className="alert alert-danger mt-1 mb-0 py-0 px-2 text-center"><small>{error}</small></div>}
+                                </div>
+                            </form>
                         </div>
-                        <input
-                            type="number"
-                            name="repeatDays"
-                            className="form-control"
-                            value={repeatDays}
-                            min={1}
-                            placeholder="Days"
-                            disabled={!repeat}
-                            onChange={(e) => setRepeatDays(e.target.value)}
-                            required
-                        />
                     </div>
                 </div>
-                <div className="col-12 px-0 text-end">
-                    <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setShowUpdateDueDate(-1)}>
-                        <i className="bi bi-x-lg" />
-                    </button>
-                    <button className="btn btn-sm btn-outline-success" type="submit">
-                        Save
-                    </button>
-                </div>
-                {error && <div className="alert alert-danger mt-1 mb-0 py-0 px-2 text-center"><small>{error}</small></div>}
             </div>
-        </form>
+        </div>
     )
 }
