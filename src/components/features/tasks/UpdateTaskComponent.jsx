@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react'
 
-import ReactDatePicker from 'react-datepicker'
-
 import moment from 'moment'
 
 import { retrieveTaskApi, updateTaskApi } from 'services/api/TaskApiService'
-import { filterPastTime } from 'services/helpers/helper'
 import { COLOR_MAP } from 'services/helpers/listsHelper'
 
 import { SwitchProjectComponent } from './SwitchProjectComponent'
+import DueDateInputComponent from './DueDateInputComponent'
 
 export default function UpdateTaskComponent({
     task,
@@ -215,80 +213,24 @@ export default function UpdateTaskComponent({
                                         />
                                         <div className="text-danger small">{errors.dailyLimit}</div>
                                     </div>
-                                    <div className="col-lg-4 col-6 mb-3">
-                                        <div>
-                                            <label htmlFor="updateDueDate">{type === 'bad' ? 'Restrain untill' : 'Due by'} <i className={type === 'bad' ? "bi bi-calendar-x" : "bi bi-calendar-check"} /></label>
-                                        </div>
-                                        <ReactDatePicker
-                                            className="form-control form-control-sm"
-                                            id="updateDueDate"
-                                            selected={dueDate}
-                                            dateFormat="yyyy MMM dd, HH:mm"
-                                            minDate={new Date()}
-                                            showTimeSelect
-                                            timeFormat="HH:mm"
-                                            filterTime={filterPastTime}
-                                            onFocus={e => e.target.blur()}      // fix for keyboard open on focus on mobile devide
-                                            onSelect={(date) => setDueDate(moment(date).endOf('date').toDate())}
-                                            onChange={(date) => setDueDate(date)}
-                                        />
-                                    </div>
-                                    <div className="col-lg-4 col-6 mb-3">
-                                        <label htmlFor="repeatDueDate">Repeat after (days) <i className="bi bi-arrow-repeat" /></label>
-                                        <div className="input-group input-group-sm">
+                                </div>
 
-                                            <div className="input-group-text px-1">
-                                                <input
-                                                    type="checkbox"
-                                                    name="repeat"
-                                                    id="repeatDueDate"
-                                                    className="form-check-input mt-0"
-                                                    checked={repeat}
-                                                    disabled={dueDate === null}
-                                                    onChange={(e) => {
-                                                        const val = e.target.checked;
-                                                        setRepeat(val)
-                                                        setRepeatDays(val ? 1 : 0);
-                                                    }}
-                                                />
-                                                <label className="lh-1 my-auto" htmlFor="repeatDueDate">
-                                                    <i className="ms-1 bi bi-arrow-repeat" />
-                                                </label>
-                                            </div>
-                                            <input
-                                                type="number"
-                                                name="repeatDays"
-                                                className="form-control"
-                                                value={repeatDays}
-                                                min={1}
-                                                placeholder="Days"
-                                                disabled={!repeat}
-                                                onChange={(e) => setRepeatDays(e.target.value)}
-                                            />
-                                        </div>
-                                        <div className="text-danger small">{errors.repeatDays}</div>
-                                    </div>
-                                    <div className="col-lg-4 mb-3">
-                                        <label htmlFor="enableNotifications">
-                                            Enable Notification for Due Time <i className="bi bi-bell"></i>
-                                        </label>
-                                        <div className="input-group input-group-sm mb-2">
-                                            <div className="input-group-text px-1">
-                                                <input
-                                                    type="checkbox"
-                                                    name="enableNotifications"
-                                                    className="form-check-input mt-0"
-                                                    disabled={dueDate === null || type === 'bad'}
-                                                    checked={enableNotifications}
-                                                    onChange={(e) => setEnableNotifications(e.target.checked)}
-                                                    id="enableNotifications"
-                                                />
-                                                <label className="" htmlFor="enableNotifications">
-                                                    <i className="ms-1 bi bi-bell"></i>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <DueDateInputComponent
+                                    type={type}
+                                    dueDate={dueDate}
+                                    setDueDate={setDueDate}
+                                    repeat={repeat}
+                                    setRepeat={setRepeat}
+                                    repeatDays={repeatDays}
+                                    setRepeatDays={setRepeatDays}
+                                    enableNotifications={enableNotifications}
+                                    setEnableNotifications={setEnableNotifications}
+                                    autofocus={false}
+                                    required={false}
+                                    updatePopup={2}
+                                />
+
+                                <div className="row small text-secondary text-start">
                                     <div className="col-lg-4 mb-3">
                                         <label htmlFor="priority">Order <i className="bi bi-arrow-up" /></label>
                                         <input
