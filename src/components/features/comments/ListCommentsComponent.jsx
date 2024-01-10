@@ -6,6 +6,7 @@ import CategoryChecklistComponent from "components/stats/CategoryChecklistCompon
 import ListFilteredCommentsComponent from "./ListFilteredCommentsComponents"
 import OutsideAlerter from "services/hooks/OutsideAlerter"
 import { retrieveAllTagsApi } from "services/api/TagApiService"
+import { CommentsFilterComponent } from "./CommentsFilterComponent"
 
 export default function ListCommentsComponent({
     filterBy = 'user',
@@ -22,6 +23,9 @@ export default function ListCommentsComponent({
     const [reload, setReload] = useState(0)
 
     const [filterWithReviseDate, setFilterWithReviseDate] = useState(false)
+
+    const [filterType, setFilterType] = useState(filterBy);
+    const [filterTypeId, setFilterTypeId] = useState(-1);
 
     const [showLoader, setShowLoader] = useState(true)
 
@@ -146,6 +150,16 @@ export default function ListCommentsComponent({
 
                                             </div>
 
+                                            <div className="px-2 py-2 border-bottom">
+                                                <CommentsFilterComponent
+                                                    key={categories}
+                                                    categories={categories}
+                                                    includeCategories={includedCategoryIds}
+                                                    setFilterType={setFilterType}
+                                                    setFilterTypeId={setFilterTypeId}
+                                                    setReload={setReload}
+                                                />
+                                            </div>
 
                                         </div >
                                     </OutsideAlerter>
@@ -167,8 +181,8 @@ export default function ListCommentsComponent({
                     <div className={"pt-3 col-lg-8 " + (filterBy !== 'user' ? "offset-lg-2" : "")} style={{ backgroundColor: "#e9ecef" }}>
                         <ListFilteredCommentsComponent
                             key={[filterWithReviseDate, reload]}
-                            filterBy={filterBy}
-                            id={id}
+                            filterBy={filterType}
+                            id={filterTypeId}
                             categoryIds={includedCategoryIds}
                             filterWithReviseDate={filterWithReviseDate}
                             tags={tags}

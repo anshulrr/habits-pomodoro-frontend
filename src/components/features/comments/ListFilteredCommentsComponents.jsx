@@ -93,6 +93,7 @@ export default function ListFilteredCommentsComponent({
     }
 
     function getCommentsCount() {
+        console.log({ filterBy, id, categoryIds, filterWithReviseDate })
         getCommentsCountApi({ filterBy, id, categoryIds, filterWithReviseDate })
             .then(response => {
                 setCommentsCount(response.data)

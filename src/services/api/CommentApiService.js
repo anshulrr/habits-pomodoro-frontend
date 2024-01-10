@@ -13,6 +13,8 @@ export const retrieveAllCommentsApi
     = ({ limit, offset, filterBy, id, categoryIds, filterWithReviseDate }) => {
         if (filterBy === 'user')
             return apiClient.get(`/comments?limit=${limit}&offset=${offset}&categoryIds=${categoryIds}&filterWithReviseDate=${filterWithReviseDate}`)
+        else if (filterBy === 'category')
+            return apiClient.get(`project-categories/${id}/comments?limit=${limit}&offset=${offset}`)
         else if (filterBy === 'project')
             return apiClient.get(`projects/${id}/comments?limit=${limit}&offset=${offset}`)
         else if (filterBy === 'task')
@@ -23,6 +25,8 @@ export const getCommentsCountApi
     = ({ filterBy, id, categoryIds, filterWithReviseDate }) => {
         if (filterBy === 'user')
             return apiClient.get(`/comments/count?categoryIds=${categoryIds}&filterWithReviseDate=${filterWithReviseDate}`)
+        else if (filterBy === 'category')
+            return apiClient.get(`project-categories/${id}/comments/count`)
         else if (filterBy === 'project')
             return apiClient.get(`projects/${id}/comments/count`)
         else if (filterBy === 'task')
