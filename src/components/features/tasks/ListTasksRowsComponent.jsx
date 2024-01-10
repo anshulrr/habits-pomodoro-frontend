@@ -11,7 +11,7 @@ import OutsideAlerter from "services/hooks/OutsideAlerter";
 import { getTasksTagsApi } from "services/api/TagApiService";
 
 import PastPomodoroComponent from "components/features/tasks/PastPomodoroComponent";
-import ListCommentsPopupComponent from "components/features/comments/ListCommentsPopupComponent";
+import ListCommentsComponent from "components/features/comments/ListCommentsComponent";
 import UpdateTaskComponent from "components/features/tasks/UpdateTaskComponent";
 import TaskDueDateComponent from "components/features/tasks/TaskDueDateComponent";
 import MapTagComponent from "components/features/tags/MapTagComponent";
@@ -61,7 +61,6 @@ export default function ListTasksRowsComponent({
     const [showUpdateTaskId, setShowUpdateTaskId] = useState(-1)
 
     const [showCommentsId, setShowCommentsId] = useState(-1);
-    const [commentsTitle, setCommentsTitle] = useState('')
 
     const [timeoutIdObj, setTimeoutIdObj] = useState({ id: 0 });
 
@@ -180,7 +179,6 @@ export default function ListTasksRowsComponent({
 
     function updateCommentsPopupData(task) {
         setShowCommentsId(task.id)
-        setCommentsTitle(task.description)
     }
 
     function onUpdateTaskStatus(task, status) {
@@ -545,12 +543,19 @@ export default function ListTasksRowsComponent({
 
             {
                 showCommentsId !== -1 &&
-                <ListCommentsPopupComponent
-                    filterBy={'task'}
-                    id={showCommentsId}
-                    title={commentsTitle}
-                    setShowCommentsId={setShowCommentsId}
-                />
+                <div className="comments-overlay">
+                    <div className="comments-popup">
+                        <div className="close-popup m-2">
+                            <i className="p-1 bi bi-x-lg" onClick={() => setShowCommentsId(-1)}></i>
+                        </div>
+                        <div className="container mt-4">
+                            <ListCommentsComponent
+                                filterBy={'task'}
+                                id={showCommentsId}
+                            />
+                        </div >
+                    </div>
+                </div>
             }
         </>
     )

@@ -7,7 +7,8 @@ import { getTasksCountApi } from "services/api/TaskApiService";
 import ListTasksRowsComponent from "components/features/tasks/ListTasksRowsComponent";
 import CreateTaskComponent from "components/features/tasks/CreateTaskComponent";
 import PomodoroComponent from "components/features/pomodoros/PomodoroComponent";
-import ListCommentsPopupComponent from "components/features/comments/ListCommentsPopupComponent";
+import ListCommentsComponent from "components/features/comments/ListCommentsComponent";
+import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 
 export default function ListTasksComponent({
     project,
@@ -202,14 +203,33 @@ export default function ListTasksComponent({
 
                     {
                         showProjectCommentsId !== -1 &&
-                        <ListCommentsPopupComponent
-                            filterBy={'project'}
-                            id={showProjectCommentsId}
-                            title={project.name}
-                            projectColor={project.color}
-                            project={project}
-                            setShowCommentsId={setShowProjectCommentsId}
-                        />
+                        <div className="comments-overlay">
+                            <div className="comments-popup">
+                                <div className="close-popup m-2">
+                                    <i className="p-1 bi bi-x-lg" onClick={() => setShowProjectCommentsId(-1)}></i>
+                                </div>
+                                <div className="container mt-4">
+                                    {
+                                        (project.description &&
+                                            <div className="text-start">
+                                                <div className="small text-secondary">
+                                                    Project Description
+                                                </div>
+                                                <div className="border rounded text-wrap px-2 py-1 small comments-list-card comments-markdown">
+                                                    <ReactMarkdown
+                                                        children={project.description}
+                                                    />
+                                                </div>
+                                            </div>
+                                        )
+                                    }
+                                    <ListCommentsComponent
+                                        filterBy={'project'}
+                                        id={showProjectCommentsId}
+                                    />
+                                </div >
+                            </div>
+                        </div>
                     }
 
                     {

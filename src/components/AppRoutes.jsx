@@ -19,7 +19,7 @@ import SignupComponent from 'components/SignupComponent'
 import ForgotPasswordComponent from 'components/ForgotPasswordComponent'
 import FooterComponent from 'components/FooterComponent'
 import AboutComponent from 'components/AboutComponent'
-import ListCommentsComponent from './features/comments/ListCommentsComponents'
+import ListCommentsComponent from './features/comments/ListCommentsComponent'
 
 function AuthenticatedRoute({ children }) {
     const authContext = useAuth()

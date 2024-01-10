@@ -10,9 +10,6 @@ import { retrieveAllTagsApi } from "services/api/TagApiService"
 export default function ListCommentsComponent({
     filterBy = 'user',
     id,
-    title = 'Notes',
-    projectColor,
-    project
 }) {
     const ALL_TAGS_PAGESIZE = 1000;
     const [tags, setTags] = useState(null);
@@ -75,10 +72,10 @@ export default function ListCommentsComponent({
     }
 
     return (
-        <div className="comments-list container" style={{ backgroundColor: "#e9ecef" }}>
+        <div className={"comments-list " + (filterBy === 'user' ? 'container' : '')} style={{ backgroundColor: "#e9ecef" }}>
             <div className="row">
                 {
-                    filterBy === 'user' && title !== "All Notes" &&
+                    filterBy === 'user' &&
                     <div className="col-lg-4 px-0 text-start bg-white">
                         <span className="refresh-icon">
                             <button type="button" className="btn btn-outline-secondary" onClick={() => setReload(prev => prev + 1)}>
@@ -167,14 +164,11 @@ export default function ListCommentsComponent({
                 }
                 {
                     tags &&
-                    <div className={"pt-3 col-lg-8 " + (filterBy !== 'user' || title === "All Notes" ? "offset-lg-2" : "")} style={{ backgroundColor: "#e9ecef" }}>
+                    <div className={"pt-3 col-lg-8 " + (filterBy !== 'user' ? "offset-lg-2" : "")} style={{ backgroundColor: "#e9ecef" }}>
                         <ListFilteredCommentsComponent
                             key={[filterWithReviseDate, reload]}
                             filterBy={filterBy}
                             id={id}
-                            title={title}
-                            projectColor={projectColor}
-                            project={project}
                             categoryIds={includedCategoryIds}
                             filterWithReviseDate={filterWithReviseDate}
                             tags={tags}

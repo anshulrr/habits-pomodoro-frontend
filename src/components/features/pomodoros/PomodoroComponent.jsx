@@ -6,7 +6,7 @@ import { updatePomodoroApi } from 'services/api/PomodoroApiService';
 import { generateInitialTimer, calculateTimeRemaining, generateTimer } from 'services/helpers/timerHelper';
 
 import BreakTimerComponent from 'components/features/pomodoros/BreakTimerComponent';
-import ListCommentsPopupComponent from '../comments/ListCommentsPopupComponent';
+import ListCommentsComponent from '../comments/ListCommentsComponent';
 
 export default function PomodoroComponent({
     pomodoro,
@@ -27,7 +27,6 @@ export default function PomodoroComponent({
     const [openPomodoroPopup, setOpenPomodorosPopup] = useState(userSettings.enableAutoTimerFullscreen ? true : false)
 
     const [showCommentsId, setShowCommentsId] = useState(-1);
-    const [commentsTitle, setCommentsTitle] = useState('')
 
     const [status, setStatus] = useState(pomodoro.status)
 
@@ -189,10 +188,6 @@ export default function PomodoroComponent({
     function updateCommentsData(pomodoro) {
         setShowCommentsId(pomodoro.task.id)
 
-        setCommentsTitle(
-            pomodoro.task.description
-        )
-
         // minimise popup to footer
         setOpenPomodorosPopup(false)
     }
@@ -256,12 +251,19 @@ export default function PomodoroComponent({
 
             {
                 showCommentsId !== -1 &&
-                <ListCommentsPopupComponent
-                    filterBy={'task'}
-                    id={showCommentsId}
-                    title={commentsTitle}
-                    setShowCommentsId={setShowCommentsId}
-                />
+                <div className="comments-overlay">
+                    <div className="comments-popup">
+                        <div className="close-popup m-2">
+                            <i className="p-1 bi bi-x-lg" onClick={() => setShowCommentsId(-1)}></i>
+                        </div>
+                        <div className="mt-4">
+                            <ListCommentsComponent
+                                filterBy={'task'}
+                                id={showCommentsId}
+                            />
+                        </div >
+                    </div>
+                </div>
             }
         </div >
     )

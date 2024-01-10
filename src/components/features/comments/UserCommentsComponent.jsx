@@ -1,7 +1,5 @@
 import { useState } from 'react';
 
-import ListCommentsPopupComponent from './ListCommentsPopupComponent';
-
 export default function UserCommentsComponent() {
     const [showComments, setShowComments] = useState(-1);
 
@@ -14,11 +12,23 @@ export default function UserCommentsComponent() {
             </span>
             {
                 <span className="user-comments-overlay" style={{ display: (showComments === 1 ? "block" : "none") }} >
-                    <ListCommentsPopupComponent
-                        filterBy={'user'}
-                        setShowCommentsId={setShowComments}
-                        title={'All Notes'}
-                    />
+
+                    <div className="comments-overlay">
+                        <div className="comments-popup">
+                            <div className="close-popup m-2">
+                                <i className="p-1 bi bi-x-lg" onClick={() => setShowComments(-1)}></i>
+                            </div>
+
+                            <div className="container mt-4">
+                                <ListCommentsComponent
+                                    filterBy={'user'}
+                                    id={id}
+                                    project={project}
+                                />
+                            </div >
+
+                        </div>
+                    </div>
                 </span>
             }
         </div>

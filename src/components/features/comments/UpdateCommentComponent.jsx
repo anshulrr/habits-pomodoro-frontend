@@ -9,7 +9,7 @@ import { truncateParagraph } from 'services/helpers/listsHelper';
 import { calculateTextAreaRows, filterPastTime } from 'services/helpers/helper';
 import InsertLinkComponent from './InsertLinkComponent';
 
-export default function UpdateCommentComponent({ setComments, id, setShowUpdateComment }) {
+export default function UpdateCommentComponent({ id, setShowUpdateComment, reloadComments }) {
 
     const [description, setDescription] = useState('')
     const [reviseDate, setReviseDate] = useState(null)
@@ -47,14 +47,7 @@ export default function UpdateCommentComponent({ setComments, id, setShowUpdateC
         updateCommentApi({ comment, id })
             .then(response => {
                 // console.debug(response)
-                setComments(comments => comments.map(comment => {
-                    if (comment.id === id) {
-                        comment.description = response.data.description;
-                        comment.reviseDate = response.data.reviseDate;
-                        [comment.truncated_description, comment.truncated] = truncateParagraph(response.data.description);
-                    }
-                    return comment;
-                }))
+                reloadComments()
                 setShowUpdateComment(-1)
             })
             .catch(error => console.error(error.message))
