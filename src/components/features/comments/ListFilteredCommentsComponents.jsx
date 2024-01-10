@@ -175,7 +175,7 @@ export default function ListFilteredCommentsComponent({
                                 <div className="small text-secondary">
                                     Project Description
                                 </div>
-                                <div className="border rounded text-wrap px-2 py-1 small comments-list-card">
+                                <div className="border rounded text-wrap px-2 py-1 small comments-list-card comments-markdown">
                                     <ReactMarkdown
                                         children={project.description}
                                     />
@@ -293,7 +293,7 @@ export default function ListFilteredCommentsComponent({
                                         {
                                             showUpdateComment !== comment.id &&
                                             <div className="text-truncate text-start mb-3">
-                                                <div className="border rounded text-wrap px-2 py-1 small comments-list-card">
+                                                <div className="border rounded text-wrap px-2 py-1 small comments-list-card comments-markdown">
                                                     <ReactMarkdown
                                                         children={showMoreId === comment.id ? comment.description : comment.truncated_description}
                                                     />

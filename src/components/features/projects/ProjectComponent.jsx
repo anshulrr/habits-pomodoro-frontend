@@ -313,7 +313,7 @@ export default function ProjectComponent() {
                                     style={{ display: showInput ? 'block' : 'none' }}
                                 />
                                 <div
-                                    className="text-wrap bg-white border rounded-1 border-2 p-2 comments-list text-dark"
+                                    className="text-wrap bg-white border rounded-1 border-2 p-2 comments-markdown text-dark"
                                     style={{ display: !showInput ? 'block' : 'none', minHeight: "8rem" }}>
                                     <ReactMarkdown
                                         children={description}

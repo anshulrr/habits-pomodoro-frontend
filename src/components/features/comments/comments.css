@@ -29,10 +29,10 @@
 }
 
 /* needed for elements inside markup data */
-.comments-list p,
-.comments-list ul,
-.comments-list ol,
-.comments-list pre {
+.comments-markdown p,
+.comments-markdown ul,
+.comments-markdown ol,
+.comments-markdown pre {
     margin-bottom: 0;
 }
 
