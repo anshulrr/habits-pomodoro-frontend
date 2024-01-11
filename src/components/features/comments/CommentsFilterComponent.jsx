@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { retrieveAllProjectsApi } from 'services/api/ProjectApiService';
 import { retrieveAllTasksApi } from 'services/api/TaskApiService';
 
-export const CommentsFilterComponent = ({ categories, includeCategories, setFilterType, setFilterTypeId, setReload }) => {
+export const CommentsFilterComponent = ({ categories, includeCategories, setFilterType, setFilterTypeId, setReload, setFilterWithReviseDate }) => {
 
     const TASKS_COUNT = 100;
 
@@ -15,12 +15,13 @@ export const CommentsFilterComponent = ({ categories, includeCategories, setFilt
     const [tasks, setTasks] = useState([]);
     const [reloadData, setReloadData] = useState({ dataType: 'user', dataTypeId: '0' });
 
+    const [errorMessage, setErrorMessage] = useState("");
+
     const [showLoader, setShowLoader] = useState(false);
 
     useEffect(
         () => {
             updateIncludedCategories()
-            updateDataType('user')
         },
         [] // eslint-disable-line react-hooks/exhaustive-deps
     )
@@ -42,12 +43,20 @@ export const CommentsFilterComponent = ({ categories, includeCategories, setFilt
             dataType,
             dataTypeId
         })
+        setErrorMessage(
+            "Click on Fetch for "
+            + (dataType !== 'user' ? dataType.charAt(0).toUpperCase() + dataType.slice(1) : '')
+            + (dataType === 'user' ? 'All' : '')
+            + " Notes"
+        );
     }
 
     function fetchFilteredComments() {
         setReload(prev => prev + 1)
         setFilterType(reloadData.dataType)
         setFilterTypeId(reloadData.dataTypeId)
+        setFilterWithReviseDate(false)
+        setErrorMessage('')
     }
 
     function refreshProjects(categoryId) {
@@ -124,7 +133,7 @@ export const CommentsFilterComponent = ({ categories, includeCategories, setFilt
             <div className="row">
                 <div className="col-lg-12 mb-1">
                     <h6 className='mb-0'>
-                        Filter Comments
+                        Filter Notes
                         <span className="loader-container-2" >
                             <span className="ms-1 loader-2" style={{ display: showLoader ? "inline" : "none" }}></span>
                         </span>
@@ -189,6 +198,7 @@ export const CommentsFilterComponent = ({ categories, includeCategories, setFilt
                 </div>
 
                 <div className="col-12 text-end">
+                    {errorMessage && <div className="alert alert-info mb-1 mb-0 py-0 px-2 text-center"><small>{errorMessage}</small></div>}
                     <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => fetchFilteredComments()}>
                         Fetch
                     </button>

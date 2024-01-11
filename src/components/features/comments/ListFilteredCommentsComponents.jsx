@@ -138,7 +138,16 @@ export default function ListFilteredCommentsComponent({
 
                     <div className="d-flex justify-content-between">
                         <h6>
-                            {filterBy.charAt(0).toUpperCase() + filterBy.slice(1)} Notes
+                            {
+                                filterBy !== 'user' && filterBy.charAt(0).toUpperCase() + filterBy.slice(1)
+                            }
+                            {
+                                filterBy === 'user' && 'All'
+                            }
+                            &nbsp;Notes
+                            {
+                                filterWithReviseDate && " with revise date"
+                            }
                             {
                                 commentsCount !== -1 &&
                                 <span className="ms-1 badge rounded-pill text-bg-secondary">

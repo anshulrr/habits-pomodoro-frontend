@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 
 import { retrieveAllProjectCategoriesApi } from "services/api/ProjectCategoryApiService"
 
-import CategoryChecklistComponent from "components/stats/CategoryChecklistComponent"
 import ListFilteredCommentsComponent from "./ListFilteredCommentsComponents"
 import OutsideAlerter from "services/hooks/OutsideAlerter"
 import { retrieveAllTagsApi } from "services/api/TagApiService"
@@ -18,16 +17,12 @@ export default function ListCommentsComponent({
     const [categories, setCategories] = useState([])
     const [includedCategoryIds, setIncludedCategoryIds] = useState([])
 
-    const [showIncludeCategories, setShowIncludeCategories] = useState(true)
-
     const [reload, setReload] = useState(0)
 
     const [filterWithReviseDate, setFilterWithReviseDate] = useState(false)
 
     const [filterType, setFilterType] = useState(filterBy);
-    const [filterTypeId, setFilterTypeId] = useState(-1);
-
-    const [showLoader, setShowLoader] = useState(true)
+    const [filterTypeId, setFilterTypeId] = useState(id);
 
     const [showLeftMenu, setShowLeftMenu] = useState(window.innerWidth <= 992 ? false : true);
 
@@ -61,7 +56,6 @@ export default function ListCommentsComponent({
                     .map(c => c.id)
                 );
                 setReload(prev => prev + 1)
-                setShowLoader(false)
             })
             .catch(error => console.error(error.message))
     }
@@ -98,68 +92,29 @@ export default function ListCommentsComponent({
                                     <OutsideAlerter handle={() => setShowLeftMenu(false)}>
                                         <div className="left-menu-popup px-1">
 
-                                            <div className="mt-1 px-2 py-2 border-bottom">
-
-                                                <div className="d-flex justify-content-between mb-2"
-                                                    onClick={() => setShowIncludeCategories(!showIncludeCategories)}
-                                                    style={{ cursor: "pointer" }}
-                                                >
-                                                    <h6 className="mb-0">
-                                                        Included Project Categories
-                                                        <span className="ms-1 badge rounded-pill text-bg-secondary">
-                                                            {includedCategoryIds.length}/{categories.length}
-                                                            <i className="ms-1 bi bi-link-45deg" />
-                                                        </span>
-                                                        {
-                                                            showLoader &&
-                                                            <span className="loader-container-2" >
-                                                                <span className="ms-2 loader-2"></span>
-                                                            </span>
-                                                        }
-                                                    </h6>
-                                                    <div className="text-secondary px-1">
-                                                        {
-                                                            !showIncludeCategories &&
-                                                            <i className="bi bi-eye-slash" />
-                                                        }
-                                                        {
-                                                            showIncludeCategories &&
-                                                            <i className="bi bi-eye" />
-                                                        }
-                                                    </div>
-                                                </div>
-                                                <div className="" style={{ display: showIncludeCategories ? "block" : "none" }} >
-                                                    <CategoryChecklistComponent
-                                                        key={categories}
-                                                        categories={categories}
-                                                        setIncludeCategories={setIncludedCategoryIds}
-                                                        setReload={setReload}
-                                                    />
-                                                </div>
-
-                                            </div>
-
-                                            <div className="px-2 py-2 border-bottom">
-
-                                                <div className="text-end">
-                                                    <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setFilterWithReviseDate(!filterWithReviseDate)}>
-                                                        {!filterWithReviseDate && "Filter notes with revise date"}
-                                                        {filterWithReviseDate && "Fetch all notes"}
-                                                    </button>
-                                                </div>
-
-                                            </div>
-
-                                            <div className="px-2 py-2 border-bottom">
+                                            <div className="px-2 pt-3 pb-1 border-bottom">
                                                 <CommentsFilterComponent
-                                                    key={categories}
+                                                    key={[categories]}
                                                     categories={categories}
                                                     includeCategories={includedCategoryIds}
                                                     setFilterType={setFilterType}
                                                     setFilterTypeId={setFilterTypeId}
                                                     setReload={setReload}
+                                                    setFilterWithReviseDate={setFilterWithReviseDate}
                                                 />
                                             </div>
+
+                                            {
+                                                filterType === 'user' &&
+                                                < div className="px-2 py-1 border-bottom">
+                                                    <div className="text-start">
+                                                        <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setFilterWithReviseDate(!filterWithReviseDate)}>
+                                                            {!filterWithReviseDate && "Filter all notes with revise date"}
+                                                            {filterWithReviseDate && "Fetch all notes"}
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            }
 
                                         </div >
                                     </OutsideAlerter>
@@ -189,7 +144,7 @@ export default function ListCommentsComponent({
                         />
                     </div >
                 }
-            </div>
+            </div >
         </div >
     )
 }
