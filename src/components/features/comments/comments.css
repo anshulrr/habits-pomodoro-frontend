@@ -11,8 +11,8 @@
 
 .comments-popup {
     position: fixed;
-    top: 66px;
-    bottom: 66px;
+    top: 68px;
+    bottom: 60px;
     left: 0;
     right: 0;
     /* height: 84vh; */
@@ -26,13 +26,14 @@
     position: fixed;
     right: 0;
     cursor: pointer;
+    z-index: 1;
 }
 
 /* needed for elements inside markup data */
-.comments-list p,
-.comments-list ul,
-.comments-list ol,
-.comments-list pre {
+.comments-markdown p,
+.comments-markdown ul,
+.comments-markdown ol,
+.comments-markdown pre {
     margin-bottom: 0;
 }
 
@@ -52,13 +53,11 @@
 }
 
 /* for comments list */
-.comments-list-update {
-    display: none;
-}
-
-.comments-list-row:hover .comments-list-update {
-    display: inline;
+.comments-list-update-icon {
+    display: inilne;
     position: absolute;
+    top: 4px;
+    cursor: pointer;
 }
 
 .comments-subscript {
@@ -67,4 +66,33 @@
 
 .comments-list-card {
     background-color: #ffffff;
+}
+
+.comments-update-popup-container {
+    position: relative;
+}
+
+.comments-update-popup {
+    display: block;
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    z-index: 8;
+    width: 10rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background-color: #ffffff;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.comments-update-popup button {
+    display: inline-block;
+    margin: 0.2rem 0 0.2rem 0;
+    width: 100%;
+    text-align: right;
+}
+
+.comments-update-popup button i {
+    vertical-align: middle !important;
 }

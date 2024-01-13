@@ -8,21 +8,22 @@ import { useAuth } from "services/auth/AuthContext";
 import { retrieveAllCommentsApi, getCommentsCountApi, getCommentsTagsApi } from "services/api/CommentApiService";
 import Pagination from "services/pagination/Pagination"
 import { formatDate, generateDateColor, truncateParagraph } from "services/helpers/listsHelper";
+import OutsideAlerter from "services/hooks/OutsideAlerter";
 
 import CommentComponent from "./CommentComponent";
 import UpdateCommentComponent from "./UpdateCommentComponent";
 import MapCommentTagsComponent from "../tags/MapCommentTagsComponent";
+import { useLocation } from "react-router-dom";
 
 export default function ListFilteredCommentsComponent({
     filterBy,
     id,
-    title,
-    projectColor,
-    project,
     categoryIds,
     filterWithReviseDate,
     tags
 }) {
+
+    const { pathname: url } = useLocation();
 
     const authContext = useAuth()
     const userSettings = authContext.userSettings
@@ -37,6 +38,8 @@ export default function ListFilteredCommentsComponent({
     const [showCreateComment, setShowCreateComment] = useState(false)
     const [showUpdateComment, setShowUpdateComment] = useState(-1)
     const [showMapTags, setShowMapTags] = useState(-1);
+
+    const [showUpdatePopupId, setShowUpdatePopupId] = useState(-1);
 
     const [showMoreId, setShowMoreId] = useState(-1);
 
@@ -90,6 +93,7 @@ export default function ListFilteredCommentsComponent({
     }
 
     function getCommentsCount() {
+        console.log({ filterBy, id, categoryIds, filterWithReviseDate })
         getCommentsCountApi({ filterBy, id, categoryIds, filterWithReviseDate })
             .then(response => {
                 setCommentsCount(response.data)
@@ -135,15 +139,15 @@ export default function ListFilteredCommentsComponent({
                     <div className="d-flex justify-content-between">
                         <h6>
                             {
-                                (filterBy === 'project' &&
-                                    <span className="me-1" style={{ color: projectColor }}>&#9632;</span>
-                                ) ||
-                                (filterBy === 'task' &&
-                                    <i className="me-1 bi bi-list-ul" />
-                                )
-
+                                filterBy !== 'user' && filterBy.charAt(0).toUpperCase() + filterBy.slice(1)
                             }
-                            {title}
+                            {
+                                filterBy === 'user' && 'All'
+                            }
+                            &nbsp;Notes
+                            {
+                                filterWithReviseDate && " with revise date"
+                            }
                             {
                                 commentsCount !== -1 &&
                                 <span className="ms-1 badge rounded-pill text-bg-secondary">
@@ -154,7 +158,7 @@ export default function ListFilteredCommentsComponent({
                         </h6>
                         <div>
                             {
-                                title === "All Notes" &&
+                                url.includes("stats") &&
                                 <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 me-1" onClick={() => reloadComments()}>
                                     <i className="bi bi-arrow-clockwise" />
                                 </button>
@@ -170,30 +174,13 @@ export default function ListFilteredCommentsComponent({
 
 
                     {
-                        (filterBy === 'project' && project.description &&
-                            <div className="text-start mb-3">
-                                <div className="small text-secondary">
-                                    Project Description
-                                </div>
-                                <div className="border rounded text-wrap px-2 py-1 small comments-list-card">
-                                    <ReactMarkdown
-                                        children={project.description}
-                                    />
-                                </div>
-                            </div>
-                        )
-                    }
-
-                    {
                         showCreateComment &&
                         <div className="row">
                             <CommentComponent
-                                setComments={setComments}
                                 filterBy={filterBy}
                                 id={id}
-                                title={title}
                                 setShowCreateComment={setShowCreateComment}
-                                setCommentsCount={setCommentsCount}
+                                reloadComments={reloadComments}
                             />
                         </div>
                     }
@@ -273,27 +260,39 @@ export default function ListFilteredCommentsComponent({
                                             </div>
                                         </div>
 
-                                        <div className="d-flex justify-content-end">
+                                        <div className="comments-update-popup-container">
+
+                                            <div className="d-flex justify-content-end">
+                                                {
+                                                    showUpdatePopupId !== comment.id &&
+                                                    <div className="comments-list-update-icon">
+                                                        <div className="text-secondary py-0 px-1" onClick={() => setShowUpdatePopupId(comment.id)}>
+                                                            <i className="bi bi-three-dots-vertical" />
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+
                                             {
-                                                showUpdateComment !== comment.id &&
-                                                <div className="comments-list-update">
-                                                    <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={() => setShowMapTags(comment.id)}>
-                                                        <i className="bi bi-tags" />
-                                                    </button>
-                                                    {
-                                                        showUpdateComment === -1 &&
-                                                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 ms-1" style={{ marginRight: "2px" }} onClick={() => setShowUpdateComment(comment.id)}>
-                                                            <i className="bi bi-pencil-square"></i>
-                                                        </button>
-                                                    }
+                                                showUpdatePopupId === comment.id &&
+                                                <div> {/*extra div required for click on popup container */}
+                                                    <OutsideAlerter handle={() => setShowUpdatePopupId(-1)}>
+                                                        <span className="">
+                                                            <div className="comments-update-popup text-end">
+                                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowUpdateComment(comment.id)}>
+                                                                    Update Note <i className="bi bi-pencil-square"></i>
+                                                                </button>
+                                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowMapTags(comment.id)}>
+                                                                    Add Tags <i className="bi bi-tags" />
+                                                                </button>
+                                                            </div>
+                                                        </span>
+                                                    </OutsideAlerter>
                                                 </div>
                                             }
-                                        </div>
 
-                                        {
-                                            showUpdateComment !== comment.id &&
                                             <div className="text-truncate text-start mb-3">
-                                                <div className="border rounded text-wrap px-2 py-1 small comments-list-card">
+                                                <div className="border rounded text-wrap px-2 py-1 small comments-list-card comments-markdown">
                                                     <ReactMarkdown
                                                         children={showMoreId === comment.id ? comment.description : comment.truncated_description}
                                                     />
@@ -316,19 +315,17 @@ export default function ListFilteredCommentsComponent({
                                                         </div>
                                                     }
                                                 </div>
-
                                             </div>
-                                        }
+
+                                        </div>
 
                                         {
                                             showUpdateComment === comment.id &&
-                                            <div className="text-truncate text-start mb-3">
-                                                <UpdateCommentComponent
-                                                    setComments={setComments}
-                                                    id={comment.id}
-                                                    setShowUpdateComment={setShowUpdateComment}
-                                                />
-                                            </div>
+                                            <UpdateCommentComponent
+                                                id={comment.id}
+                                                setShowUpdateComment={setShowUpdateComment}
+                                                reloadComments={reloadComments}
+                                            />
                                         }
 
                                         {

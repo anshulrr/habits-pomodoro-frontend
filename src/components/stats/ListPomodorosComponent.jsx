@@ -5,7 +5,7 @@ import { deletePastPomodoroApi, getPomodorosApi } from "services/api/PomodoroApi
 import { timeToDisplay } from "services/helpers/listsHelper";
 
 import { Buttons } from "components/stats/charts/Buttons";
-import ListCommentsPopupComponent from "components/features/comments/ListCommentsPopupComponent";
+import ListCommentsComponent from "components/features/comments/ListCommentsComponent";
 import OutsideAlerter from "services/hooks/OutsideAlerter";
 
 export default function ListPomodorosComponent({
@@ -29,7 +29,6 @@ export default function ListPomodorosComponent({
     const [totalTimeElapsed, setTotalTimeElapsed] = useState('0');
 
     const [showCommentsId, setShowCommentsId] = useState(-1);
-    const [commentsTitle, setCommentsTitle] = useState('')
 
     const [reload, setReload] = useState(0);
 
@@ -142,9 +141,6 @@ export default function ListPomodorosComponent({
 
     function updateCommentsData(pomodoro) {
         setShowCommentsId(pomodoro.taskId)
-        setCommentsTitle(
-            pomodoro.task
-        )
     }
 
     const groupBy = function (arr, key) {
@@ -285,12 +281,19 @@ export default function ListPomodorosComponent({
             {
                 showCommentsId !== -1 &&
                 <div className="text-body">
-                    <ListCommentsPopupComponent
-                        filterBy={'task'}
-                        id={showCommentsId}
-                        title={commentsTitle}
-                        setShowCommentsId={setShowCommentsId}
-                    />
+                    <div className="comments-overlay">
+                        <div className="comments-popup">
+                            <div className="close-popup m-2">
+                                <i className="p-1 bi bi-x-lg" onClick={() => setShowCommentsId(-1)}></i>
+                            </div>
+                            <div className="container mt-4">
+                                <ListCommentsComponent
+                                    filterBy={'task'}
+                                    id={showCommentsId}
+                                />
+                            </div >
+                        </div>
+                    </div>
                 </div>
             }
         </div>
