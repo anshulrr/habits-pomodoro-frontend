@@ -15,6 +15,7 @@ export default function ListTasksComponent({
     tags,
     startDate,
     endDate,
+    searchTaskString,
     isReversed,
     title,
     tag,
@@ -71,9 +72,11 @@ export default function ListTasksComponent({
             taskData.projectId = project.id;
         } else if (tag) {
             taskData.tagId = tag.id;
-        } else {
+        } else if (startDate) {
             taskData.startDate = startDate;
             taskData.endDate = endDate;
+        } else {
+            taskData.searchTaskString = searchTaskString;
         }
         getTasksCountApi(taskData)
             .then(response => {
@@ -165,9 +168,16 @@ export default function ListTasksComponent({
                                 </span>
                             }
                             {
-                                !project && !tag &&
+                                !project && !tag && startDate &&
                                 <span>
                                     <i className={(title === "Overdue" ? "text-danger " : "") + "px-1 bi bi-calendar-check"} />
+                                    {title} Tasks
+                                </span>
+                            }
+                            {
+                                !project && !tag && !startDate &&
+                                <span>
+                                    <i className="px-1 bi bi-search" />
                                     {title} Tasks
                                 </span>
                             }
@@ -268,6 +278,7 @@ export default function ListTasksComponent({
                                 setElementHeight={setCurrentTasksHeight}
                                 startDate={startDate}
                                 endDate={endDate}
+                                searchTaskString={searchTaskString}
                                 isReversed={isReversed}
                             />
                         }
@@ -316,6 +327,7 @@ export default function ListTasksComponent({
                                         setElementHeight={setArchivedTasksHeight}
                                         startDate={startDate}
                                         endDate={endDate}
+                                        searchTaskString={searchTaskString}
                                         isReversed={isReversed}
                                     />
                                 </div>

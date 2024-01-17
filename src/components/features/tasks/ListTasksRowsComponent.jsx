@@ -31,6 +31,7 @@ export default function ListTasksRowsComponent({
     setElementHeight,
     startDate,
     endDate,
+    searchTaskString,
     isReversed
 }) {
     const navigate = useNavigate()
@@ -101,9 +102,11 @@ export default function ListTasksRowsComponent({
             taskData.projectId = project.id;
         } else if (tag) {
             taskData.tagId = tag.id;
-        } else {
+        } else if (startDate) {
             taskData.startDate = startDate;
             taskData.endDate = endDate;
+        } else {
+            taskData.searchTaskString = searchTaskString;
         }
         retrieveAllTasksApi(taskData)
             .then(response => {

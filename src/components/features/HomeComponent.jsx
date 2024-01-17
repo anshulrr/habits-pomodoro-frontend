@@ -14,6 +14,7 @@ import { isEmpty } from 'services/helpers/helper';
 import { retrieveAllProjectCategoriesApi } from 'services/api/ProjectCategoryApiService';
 import { toast } from 'react-toastify';
 import { getTasksCountApi } from 'services/api/TaskApiService';
+import SearchTaskComponent from './tasks/SearchTaskComponent';
 
 export default function HomeComponent({ setReloadHome }) {
 
@@ -34,6 +35,7 @@ export default function HomeComponent({ setReloadHome }) {
     const [tasksComponentReload, setTasksComponentReload] = useState(0)
 
     const [tasksFilter, setTasksFilter] = useState((state && state.filters) || (isEmpty(state) && IS_FILTERS_DEFAULT && 'Overdue'));
+    const [searchTaskString, setSearchTaskString] = useState((state && state.searchTaskString) || '')
 
     const [showLeftMenu, setShowLeftMenu] = useState(window.innerWidth <= 992 ? false : true);
 
@@ -98,8 +100,12 @@ export default function HomeComponent({ setReloadHome }) {
             setReversed(false);
             setStartDate(moment().add(-10, 'y').toISOString());
             setEndDate(moment().toISOString());
+        } else if (filter === 'Searched') {
+            setStartDate(null)
+            setEndDate(null)
         }
         updateAppStates(filter);
+        setTasksComponentReload(prev => prev + 1);
     }
 
     function updateAppStates(filter) {
@@ -114,6 +120,7 @@ export default function HomeComponent({ setReloadHome }) {
         local_state.currentTasksPage = 1;
         local_state.currentArchivedTasksPage = 1;
         local_state.showArchivedTasks = false;
+        local_state.searchTaskString = searchTaskString;
         // for page refresh: set it right away
         navigate('/', { state: local_state, replace: true });
     }
@@ -170,16 +177,25 @@ export default function HomeComponent({ setReloadHome }) {
                                             </div>
                                             {
                                                 <div>
-                                                    <div className={(!project && !tag && tasksFilter === "Overdue" ? "list-selected " : "") + "py-1 small row list-row"} onClick={() => fetchTasksAndUpdateAppStates('Overdue')}>
+                                                    <div className={(!project && !tag && tasksFilter === "Overdue" ? "list-selected " : "") + "py-2 small row list-row"} onClick={() => fetchTasksAndUpdateAppStates('Overdue')}>
                                                         <div className="col-12">
                                                             <i className="pe-1 bi bi-calendar-check text-danger" />
                                                             Overdue
                                                         </div>
                                                     </div>
-                                                    <div className={(!project && !tag && tasksFilter === "Upcoming" ? "list-selected " : "") + "py-1 small row list-row"} onClick={() => fetchTasksAndUpdateAppStates('Upcoming')}>
+                                                    <div className={(!project && !tag && tasksFilter === "Upcoming" ? "list-selected " : "") + "py-2 small row list-row"} onClick={() => fetchTasksAndUpdateAppStates('Upcoming')}>
                                                         <div className="col-12">
                                                             <i className="pe-1 bi bi-calendar-check" />
                                                             Upcoming
+                                                        </div>
+                                                    </div>
+                                                    <div className={(!project && !tag && tasksFilter === "Searched" ? "list-selected " : "") + "py-2 small row list-row"} >
+                                                        <div className="col-12" style={{ pointerEvents: 'all' }}>
+                                                            <SearchTaskComponent
+                                                                searchTaskString={searchTaskString}
+                                                                setSearchTaskString={setSearchTaskString}
+                                                                fetchTasksAndUpdateAppStates={fetchTasksAndUpdateAppStates}
+                                                            />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -209,10 +225,11 @@ export default function HomeComponent({ setReloadHome }) {
                             {
                                 !project && !tag && tasksFilter &&
                                 <ListTasksComponent
-                                    key={[startDate, endDate, tasksComponentReload]}
+                                    key={[tasksComponentReload]}
                                     tags={tags}
                                     startDate={startDate}
                                     endDate={endDate}
+                                    searchTaskString={searchTaskString}
                                     isReversed={isReversed}
                                     title={tasksFilter}
                                     setPomodorosListReload={setPomodorosListReload}
