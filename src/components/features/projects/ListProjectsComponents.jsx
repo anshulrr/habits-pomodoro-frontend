@@ -22,8 +22,6 @@ export default function ListProjectsComponent({
     const navigate = useNavigate()
     const { state } = useLocation();
 
-    const [showProjects, setShowProjects] = useState(true);
-
     const projectsListElement = useRef(null);
 
     // for first time login default value is needed
@@ -146,33 +144,18 @@ export default function ListProjectsComponent({
                         </span>
                     </h6>
                     <div className="input-group justify-content-end">
-                        {
-                            showProjects &&
-                            <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={addNewProject}>
-                                <i className="bi bi-plus-circle" ></i>
-                            </button>
-                        }
-
-                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={() => setShowProjects(!showProjects)}>
-                            {
-                                !showProjects &&
-                                <i className="bi bi-eye-slash" />
-                            }
-                            {
-                                showProjects &&
-                                <i className="bi bi-eye" />
-                            }
+                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={addNewProject}>
+                            <i className="bi bi-plus-circle" ></i>
                         </button>
                     </div>
                 </div>
                 {
-                    showProjects && projects.length === 0 &&
+                    projects.length === 0 &&
                     <div className="loader-container" style={{ height: projectsListElement.current ? projectsListElement.current.offsetHeight : 0 }}>
                         <div className="loader"></div>
                     </div>
                 }
                 {
-                    showProjects &&
                     <div>
                         <div id="projects-list" ref={projectsListElement}>
                             {

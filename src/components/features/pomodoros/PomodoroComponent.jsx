@@ -256,7 +256,7 @@ export default function PomodoroComponent({
                         <div className="close-popup m-2">
                             <i className="p-1 bi bi-x-lg" onClick={() => setShowCommentsId(-1)}></i>
                         </div>
-                        <div className="mt-4">
+                        <div className="container mt-4">
                             <ListCommentsComponent
                                 filterBy={'task'}
                                 id={showCommentsId}

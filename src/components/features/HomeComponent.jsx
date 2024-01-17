@@ -34,7 +34,6 @@ export default function HomeComponent({ setReloadHome }) {
     const [tasksComponentReload, setTasksComponentReload] = useState(0)
 
     const [tasksFilter, setTasksFilter] = useState((state && state.filters) || (isEmpty(state) && IS_FILTERS_DEFAULT && 'Overdue'));
-    const [showTasksFilters, setShowTasksFilters] = useState(true);
 
     const [showLeftMenu, setShowLeftMenu] = useState(window.innerWidth <= 992 ? false : true);
 
@@ -153,23 +152,23 @@ export default function HomeComponent({ setReloadHome }) {
                                         />
 
                                         <div className="mb-3">
+                                            <ListTagsComponent
+                                                setProject={setProject}
+                                                tag={tag}
+                                                setTag={setTag}
+                                                setAllTags={setTags}
+                                                setTasksComponentReload={setTasksComponentReload}
+                                                setShowLeftMenu={setShowLeftMenu}
+                                            />
+                                        </div>
+
+                                        <div className="mb-3">
                                             <div className="d-flex justify-content-between">
                                                 <h6>
                                                     Tasks Filters
                                                 </h6>
-                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={() => setShowTasksFilters(!showTasksFilters)}>
-                                                    {
-                                                        !showTasksFilters &&
-                                                        <i className="bi bi-eye-slash" />
-                                                    }
-                                                    {
-                                                        showTasksFilters &&
-                                                        <i className="bi bi-eye" />
-                                                    }
-                                                </button>
                                             </div>
                                             {
-                                                showTasksFilters &&
                                                 <div>
                                                     <div className={(!project && !tag && tasksFilter === "Overdue" ? "list-selected " : "") + "py-1 small row list-row"} onClick={() => fetchTasksAndUpdateAppStates('Overdue')}>
                                                         <div className="col-12">
@@ -187,16 +186,6 @@ export default function HomeComponent({ setReloadHome }) {
                                             }
                                         </div>
 
-                                        <div className="mb-3">
-                                            <ListTagsComponent
-                                                setProject={setProject}
-                                                tag={tag}
-                                                setTag={setTag}
-                                                setAllTags={setTags}
-                                                setTasksComponentReload={setTasksComponentReload}
-                                                setShowLeftMenu={setShowLeftMenu}
-                                            />
-                                        </div>
                                     </div>
                                 </OutsideAlerter>
                             </div>

@@ -172,18 +172,6 @@ export default function ListTasksComponent({
                                 </span>
                             }
                             {
-                                project &&
-                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 ms-1" onClick={() => updateProject(project.id)}>
-                                    <i className="bi bi-pencil-square" />
-                                </button>
-                            }
-                            {
-                                project &&
-                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 ms-1" onClick={() => setShowProjectCommentsId(project.id)}>
-                                    <i className="bi bi-journal-text" />
-                                </button>
-                            }
-                            {
                                 tasksCount !== -1 &&
                                 <span className="ms-1 badge rounded-pill text-bg-secondary">
                                     {tasksCount}
@@ -196,6 +184,18 @@ export default function ListTasksComponent({
                                 project && !showCreateTask &&
                                 <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={() => setShowCreateTask(!showCreateTask)}>
                                     <i className="bi bi-plus-circle" />
+                                </button>
+                            }
+                            {
+                                project &&
+                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 ms-1" onClick={() => updateProject(project.id)}>
+                                    <i className="bi bi-pencil-square" />
+                                </button>
+                            }
+                            {
+                                project &&
+                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 ms-1" onClick={() => setShowProjectCommentsId(project.id)}>
+                                    <i className="bi bi-journal-text" />
                                 </button>
                             }
                         </div>
@@ -287,8 +287,8 @@ export default function ListTasksComponent({
                                         <span className="badge text-bg-light">
                                             Archived
                                             <span className="text-secondary ps-1" >
-                                                {!showArchived && <i className="bi bi-eye-slash" />}
-                                                {showArchived && <i className="bi bi-eye" />}
+                                                {!showArchived && <i className="bi bi-chevron-down" />}
+                                                {showArchived && <i className="bi bi-chevron-left" />}
                                             </span>
                                         </span>
                                         <span className="badge rounded-pill text-bg-secondary">

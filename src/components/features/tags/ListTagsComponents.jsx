@@ -27,8 +27,6 @@ export default function ListTagsComponent({ setProject, tag, setTag, setAllTags,
     const [tagsCount, setTagsCount] = useState(-1)
     const [tags, setTags] = useState([])
 
-    const [showTags, setShowTags] = useState(true);
-
     const [showCreateTag, setShowCreateTag] = useState(false)
     const [showUpdateTag, setShowUpdateTag] = useState(-1)
 
@@ -131,29 +129,19 @@ export default function ListTagsComponent({ setProject, tag, setTag, setAllTags,
                             </span>
                         }
                     </h6>
-                    <div className="input-group justify-content-end">
+                    <div className="">
                         {
-                            showTags && !showCreateTag &&
+                            !showCreateTag &&
                             <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={() => setShowCreateTag(true)}>
                                 <i className="bi bi-plus-circle" />
                             </button>
                         }
-                        <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={() => setShowTags(!showTags)}>
-                            {
-                                !showTags &&
-                                <i className="bi bi-eye-slash" />
-                            }
-                            {
-                                showTags &&
-                                <i className="bi bi-eye" />
-                            }
-                        </button>
                     </div>
 
                 </div>
 
                 {
-                    showTags && showCreateTag &&
+                    showCreateTag &&
                     <div className="row">
                         <CreateTagComponent
                             setTags={setTags}
@@ -164,20 +152,19 @@ export default function ListTagsComponent({ setProject, tag, setTag, setAllTags,
                     </div>
                 }
                 {
-                    showTags && tagsCount === 0 &&
+                    tagsCount === 0 &&
                     <div className="alert alert-light py-1 mt-1 small text-center">
                         <i className="pe-1 bi bi-clipboard-data" />
                         Nothing to display
                     </div>
                 }
                 {
-                    showTags && tagsCount !== 0 && tags.length === 0 &&
+                    tagsCount !== 0 && tags.length === 0 &&
                     <div className="loader-container" style={{ height: tagsListElement.current ? tagsListElement.current.offsetHeight : 0 }}>
                         <div className="loader"></div>
                     </div>
                 }
                 {
-                    showTags &&
                     <div>
                         <div id="tags-list" ref={tagsListElement}>
                             {

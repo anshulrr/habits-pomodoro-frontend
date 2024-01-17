@@ -4,7 +4,6 @@ export default function SelectFriendsComponent({
     subjects,
     setSubject,
     retrieveProjectCategories,
-    setShowFriendsStats
 }) {
 
     const [subjectId, setSubjectId] = useState('0')
@@ -22,7 +21,6 @@ export default function SelectFriendsComponent({
         retrieveProjectCategories(sub);
 
         if (parseInt(subjectId) === -1) {
-            setShowFriendsStats(false);
             document.title = "Stats";
         }
     }

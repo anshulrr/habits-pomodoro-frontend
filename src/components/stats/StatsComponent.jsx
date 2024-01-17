@@ -26,7 +26,6 @@ export default function ListStatsComponent() {
     const [statsSettings, setStatsSettings] = useState({})
 
     const [showIncludeCategories, setShowIncludeCategories] = useState(true);
-    const [showStatsSettings, setShowStatsSettings] = useState(true);
     const [showFriendsStats, setShowFriendsStats] = useState(true);
 
     const [reload, setReload] = useState(0)
@@ -171,25 +170,12 @@ export default function ListStatsComponent() {
                                     <div className="left-menu-popup px-1">
 
                                         <div className="mt-1 px-2 py-2 border-bottom">
-                                            <div className="d-flex justify-content-between"
-                                                onClick={() => setShowStatsSettings(!showStatsSettings)}
-                                                style={{ cursor: "pointer" }}
-                                            >
+                                            <div className="d-flex justify-content-between">
                                                 <h6 className="mb-0">
                                                     Stats Settings
                                                 </h6>
-                                                <div className="text-secondary px-1" >
-                                                    {
-                                                        !showStatsSettings &&
-                                                        <i className="bi bi-eye-slash" />
-                                                    }
-                                                    {
-                                                        showStatsSettings &&
-                                                        <i className="bi bi-eye" />
-                                                    }
-                                                </div>
                                             </div>
-                                            <div style={{ display: showStatsSettings ? "block" : "none" }} >
+                                            <div>
                                                 <StatsSettingsComponent
                                                     statsSettings={statsSettings}
                                                     setStatsSettings={setStatsSettings}
@@ -201,10 +187,7 @@ export default function ListStatsComponent() {
 
                                         <div className="px-2 py-2 border-bottom">
 
-                                            <div className="d-flex justify-content-between"
-                                                onClick={() => setShowIncludeCategories(!showIncludeCategories)}
-                                                style={{ cursor: "pointer" }}
-                                            >
+                                            <div className="d-flex justify-content-between">
                                                 <h6 className="mb-0">
                                                     Included Project Categories
                                                     <span className="ms-1 badge rounded-pill text-bg-secondary">
@@ -218,16 +201,6 @@ export default function ListStatsComponent() {
                                                         </span>
                                                     }
                                                 </h6>
-                                                <div className="text-secondary px-1">
-                                                    {
-                                                        !showIncludeCategories &&
-                                                        <i className="bi bi-eye-slash" />
-                                                    }
-                                                    {
-                                                        showIncludeCategories &&
-                                                        <i className="bi bi-eye" />
-                                                    }
-                                                </div>
                                             </div>
                                             <div style={{ display: showIncludeCategories ? "block" : "none" }} >
                                                 <CategoryChecklistComponent
@@ -242,10 +215,7 @@ export default function ListStatsComponent() {
 
                                         <div className="px-2 py-2 border-bottom" style={{ backgroundColor: "rgb(207, 226, 255)" }}>
 
-                                            <div className="d-flex justify-content-between"
-                                                onClick={() => setShowFriendsStats(!showFriendsStats)}
-                                                style={{ cursor: "pointer" }}
-                                            >
+                                            <div className="d-flex justify-content-between">
                                                 <div className="d-flex dustify-content-start my-auto">
                                                     <h6 className="mb-0">
                                                         Mentees Stats
@@ -255,24 +225,13 @@ export default function ListStatsComponent() {
                                                         <i className="ps-1 bi bi-person-fill" />
                                                     </div>
                                                 </div>
-                                                <div className="text-secondary px-1 my-auto">
-                                                    {
-                                                        !showFriendsStats &&
-                                                        <i className="bi bi-eye-slash" />
-                                                    }
-                                                    {
-                                                        showFriendsStats &&
-                                                        <i className="bi bi-eye" />
-                                                    }
-                                                </div>
                                             </div>
 
-                                            <div style={{ display: showFriendsStats ? "block" : "none" }} >
+                                            <div>
                                                 <SelectFriendsComponent
                                                     subjects={subjects}
                                                     setSubject={setSubject}
                                                     retrieveProjectCategories={retrieveProjectCategories}
-                                                    setShowFriendsStats={setShowFriendsStats}
                                                 />
                                             </div>
                                         </div>
