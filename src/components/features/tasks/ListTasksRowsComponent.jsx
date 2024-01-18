@@ -21,6 +21,7 @@ export default function ListTasksRowsComponent({
     project,
     tag,
     tags,
+    projects,
     status,
     tasksCount,
     createNewPomodoro,
@@ -111,15 +112,13 @@ export default function ListTasksRowsComponent({
         retrieveAllTasksApi(taskData)
             .then(response => {
                 // console.debug(response)
-                if (isReversed) {
-                    setTasks(response.data.toReversed())
-                } else {
-                    setTasks(response.data)
-                }
+                // update project data in tasks list
+                const updated_tasks = updateProjectData(response.data);
+                setTasks(updated_tasks)
                 // retrieve task data today's time elapsed, total time elapsed and tags
-                const taskIds = response.data.map(task => task.id);
+                const taskIds = updated_tasks.map(task => task.id);
 
-                const map = new Map(response.data.map(task => {
+                const map = new Map(updated_tasks.map(task => {
                     task.tags = [];
                     // task.todaysTimeElapsed = 0;
                     // task.totalTimeElapsed = 0;
@@ -131,6 +130,14 @@ export default function ListTasksRowsComponent({
                 getTasksTags(taskIds, map);
             })
             .catch(error => console.error(error.message))
+    }
+
+    function updateProjectData(tasks) {
+        const projectsMap = new Map(projects.map(project => [project.id, project]));
+        for (const i in tasks) {
+            tasks[i].project = projectsMap.get(tasks[i].projectId);
+        }
+        return tasks;
     }
 
     function getTasksTags(taskIds, map) {

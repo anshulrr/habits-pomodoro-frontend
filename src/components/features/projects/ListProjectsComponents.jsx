@@ -26,11 +26,13 @@ export default function ListProjectsComponent({
 
     // for first time login default value is needed
     const PAGESIZE = userSettings.pageProjectsCount || 5;
+    const ALL_PAGESIZE = 1000;
 
     // for first time login default value is needed
     const IS_PROJECTS_DEFAULT = isEmpty(userSettings) || userSettings.homePageDefaultList === 'projects';
 
     const [projectsCount, setProjectsCount] = useState(0)
+    const [displayProjects, setDisplayProjects] = useState([]);
 
     // state might not be preset (eg. opening url in a new tab)
     // const [project, setProject] = useState(state && state.project)
@@ -39,6 +41,7 @@ export default function ListProjectsComponent({
     useEffect(
         () => {
             getProjectsCount()
+            refreshProjects()
         },
         [] // eslint-disable-line react-hooks/exhaustive-deps
     )
@@ -46,13 +49,16 @@ export default function ListProjectsComponent({
     useEffect(
         () => {
             // console.debug('re-render ListProjectsComponents')
-            refreshProjects()
-        }, [currentPage] // eslint-disable-line react-hooks/exhaustive-deps
+            const firstPageIndex = (currentPage - 1) * PAGESIZE;
+            const lastPageIndex = firstPageIndex + PAGESIZE;
+            setDisplayProjects(projects.slice(firstPageIndex, lastPageIndex))
+
+        }, [projects, currentPage] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
     function refreshProjects() {
         setProjects([]);
-        retrieveAllProjectsApi({ limit: PAGESIZE, offset: (currentPage - 1) * PAGESIZE })
+        retrieveAllProjectsApi({ limit: ALL_PAGESIZE, offset: 0 })
             .then(response => {
                 // console.debug(response)
                 const projectsList = response.data;
@@ -159,7 +165,7 @@ export default function ListProjectsComponent({
                     <div>
                         <div id="projects-list" ref={projectsListElement}>
                             {
-                                projects.map(
+                                displayProjects.map(
                                     proj => {
                                         proj.pomodoroLength = proj.pomodoroLength || userSettings.pomodoroLength;
                                         return (

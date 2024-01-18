@@ -12,6 +12,7 @@ import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 
 export default function ListTasksComponent({
     project,
+    projects,
     tags,
     startDate,
     endDate,
@@ -270,6 +271,7 @@ export default function ListTasksComponent({
                                 project={project}
                                 tag={tag}
                                 tags={tags}
+                                projects={projects}
                                 createNewPomodoro={createNewPomodoro}
                                 setPomodorosListReload={setPomodorosListReload}
                                 setTasksReload={setCurrentTasksReload}
@@ -320,6 +322,7 @@ export default function ListTasksComponent({
                                         project={project}
                                         tag={tag}
                                         tags={tags}
+                                        projects={projects}
                                         createNewPomodoro={createNewPomodoro}
                                         setTasksReload={setArchivedTasksReload}
                                         setAllTasksReload={setAllTasksReload}

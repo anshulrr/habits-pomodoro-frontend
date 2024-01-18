@@ -219,6 +219,7 @@ export default function HomeComponent({ setReloadHome }) {
                                     key={[project.id, tag, tasksComponentReload]}
                                     project={project}
                                     tags={tags}
+                                    projects={projects}
                                     setPomodorosListReload={setPomodorosListReload}
                                 />
                             }
@@ -226,6 +227,7 @@ export default function HomeComponent({ setReloadHome }) {
                                 !project && !tag && tasksFilter &&
                                 <ListTasksComponent
                                     key={[tasksComponentReload]}
+                                    projects={projects}
                                     tags={tags}
                                     startDate={startDate}
                                     endDate={endDate}
@@ -240,6 +242,7 @@ export default function HomeComponent({ setReloadHome }) {
                                 !project && tag &&
                                 <ListTasksComponent
                                     key={[project, tag.id, tasksComponentReload]}
+                                    projects={projects}
                                     tags={tags}
                                     tag={tag}
                                     setPomodorosListReload={setPomodorosListReload}
