@@ -1,8 +1,6 @@
-import { useState } from "react";
-
 export default function SearchTaskComponent({
-    searchTaskString,
-    setSearchTaskString,
+    searchString,
+    setSearchString,
     fetchTasksAndUpdateAppStates
 }) {
 
@@ -24,9 +22,9 @@ export default function SearchTaskComponent({
                                     type="text"
                                     name="search task"
                                     className="form-control form-control-sm"
-                                    value={searchTaskString}
+                                    value={searchString}
                                     placeholder="Search Task"
-                                    onChange={(e) => setSearchTaskString(e.target.value)}
+                                    onChange={(e) => setSearchString(e.target.value)}
                                     required
                                 />
 

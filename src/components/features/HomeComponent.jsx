@@ -35,7 +35,7 @@ export default function HomeComponent({ setReloadHome }) {
     const [tasksComponentReload, setTasksComponentReload] = useState(0)
 
     const [tasksFilter, setTasksFilter] = useState((state && state.filters) || (isEmpty(state) && IS_FILTERS_DEFAULT && 'Overdue'));
-    const [searchTaskString, setSearchTaskString] = useState((state && state.searchTaskString) || '')
+    const [searchString, setSearchString] = useState((state && state.searchString) || '')
 
     const [showLeftMenu, setShowLeftMenu] = useState(window.innerWidth <= 992 ? false : true);
 
@@ -120,7 +120,7 @@ export default function HomeComponent({ setReloadHome }) {
         local_state.currentTasksPage = 1;
         local_state.currentArchivedTasksPage = 1;
         local_state.showArchivedTasks = false;
-        local_state.searchTaskString = searchTaskString;
+        local_state.searchString = searchString;
         // for page refresh: set it right away
         navigate('/', { state: local_state, replace: true });
     }
@@ -193,8 +193,8 @@ export default function HomeComponent({ setReloadHome }) {
                                                         <div className={(!project && !tag && tasksFilter === "Searched" ? "list-selected " : "") + "py-2 small row list-row"} >
                                                             <div className="col-12" style={{ pointerEvents: 'all' }}>
                                                                 <SearchTaskComponent
-                                                                    searchTaskString={searchTaskString}
-                                                                    setSearchTaskString={setSearchTaskString}
+                                                                    searchString={searchString}
+                                                                    setSearchString={setSearchString}
                                                                     fetchTasksAndUpdateAppStates={fetchTasksAndUpdateAppStates}
                                                                 />
                                                             </div>
@@ -234,7 +234,7 @@ export default function HomeComponent({ setReloadHome }) {
                                     tags={tags}
                                     startDate={startDate}
                                     endDate={endDate}
-                                    searchTaskString={searchTaskString}
+                                    searchString={searchString}
                                     isReversed={isReversed}
                                     title={tasksFilter}
                                     setPomodorosListReload={setPomodorosListReload}

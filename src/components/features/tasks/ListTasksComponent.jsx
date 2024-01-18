@@ -16,7 +16,7 @@ export default function ListTasksComponent({
     tags,
     startDate,
     endDate,
-    searchTaskString,
+    searchString,
     isReversed,
     title,
     tag,
@@ -77,7 +77,7 @@ export default function ListTasksComponent({
             taskData.startDate = startDate;
             taskData.endDate = endDate;
         } else {
-            taskData.searchTaskString = searchTaskString;
+            taskData.searchString = searchString;
         }
         getTasksCountApi(taskData)
             .then(response => {
@@ -280,7 +280,7 @@ export default function ListTasksComponent({
                                 setElementHeight={setCurrentTasksHeight}
                                 startDate={startDate}
                                 endDate={endDate}
-                                searchTaskString={searchTaskString}
+                                searchString={searchString}
                                 isReversed={isReversed}
                             />
                         }
@@ -330,7 +330,7 @@ export default function ListTasksComponent({
                                         setElementHeight={setArchivedTasksHeight}
                                         startDate={startDate}
                                         endDate={endDate}
-                                        searchTaskString={searchTaskString}
+                                        searchString={searchString}
                                         isReversed={isReversed}
                                     />
                                 </div>
