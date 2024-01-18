@@ -190,10 +190,13 @@ export default function ListStatsComponent() {
                                             <div className="d-flex justify-content-between">
                                                 <h6 className="mb-0">
                                                     Included Project Categories
-                                                    <span className="ms-1 badge rounded-pill text-bg-secondary">
-                                                        {includeCategories.length}/{categories.length}
-                                                        <i className="ms-1 bi bi-link-45deg" />
-                                                    </span>
+                                                    {
+                                                        categories.length !== 0 &&
+                                                        <span className="ms-1 badge rounded-pill text-bg-secondary">
+                                                            {includeCategories.length}/{categories.length}
+                                                            <i className="ms-1 bi bi-link-45deg" />
+                                                        </span>
+                                                    }
                                                     {
                                                         showLoader &&
                                                         <span className="loader-container-2" >
@@ -220,10 +223,13 @@ export default function ListStatsComponent() {
                                                     <h6 className="mb-0">
                                                         Mentees Stats
                                                     </h6>
-                                                    <div className="ms-1 badge rounded-pill text-bg-secondary">
-                                                        {subjects.length}
-                                                        <i className="ps-1 bi bi-person-fill" />
-                                                    </div>
+                                                    {
+                                                        subjects.length !== 0 &&
+                                                        <div className="ms-1 badge rounded-pill text-bg-secondary">
+                                                            {subjects.length}
+                                                            <i className="ps-1 bi bi-person-fill" />
+                                                        </div>
+                                                    }
                                                 </div>
                                             </div>
 

@@ -211,7 +211,6 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
                                         </span>
                                         <span className="ms-1 badge rounded-pill text-bg-secondary">
                                             {pomodorosCount}
-                                            <i className="ms-1 bi bi-hourglass" />
                                         </span>
                                     </h6>
                                 </div>

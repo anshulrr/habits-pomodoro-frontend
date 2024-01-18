@@ -159,8 +159,8 @@ export default function ListPomodorosComponent({
                     {title}
                 </span>
                 <span className="ms-1 badge rounded-pill text-bg-secondary">
+                    <i className="me-1 bi bi-clock" />
                     {totalTimeElapsed}
-                    <i className="ms-1 bi bi-clock" />
                 </span>
             </h6>
             {
@@ -200,12 +200,12 @@ export default function ListPomodorosComponent({
                                     {
                                         timeSlots.length > 0 &&
                                         <div className="small text-end pomodoro-list-time-slot">
-                                            <div className="small badge rounded-pill text-bg-secondary fw-normal">
-                                                {timeToDisplay(Math.round(timeSlots.totalTimeElapsed))}
-                                                <i className="ms-1 bi bi-clock" />
-                                            </div>
                                             <div className="ms-1 small badge rounded-pill text-bg-secondary fw-normal">
                                                 {timeSlots.length > 0 ? ((8 - 1 - index) * 3) + ":00 - " + ((8 - index) * 3) + ":00" : ""}
+                                            </div>
+                                            <div className="small badge rounded-pill text-bg-secondary fw-normal">
+                                                <i className="me-1 bi bi-clock" />
+                                                {timeToDisplay(Math.round(timeSlots.totalTimeElapsed))}
                                             </div>
                                         </div>
                                     }
