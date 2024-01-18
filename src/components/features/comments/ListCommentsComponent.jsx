@@ -90,9 +90,9 @@ export default function ListCommentsComponent({
                             <div className={"left-menu-overlay " + (showLeftMenu ? "left-menu-enter" : "left-menu-exit")} >
                                 <div id="outside-alerter-parent">
                                     <OutsideAlerter handle={() => setShowLeftMenu(false)}>
-                                        <div className="left-menu-popup px-1">
+                                        <div className="left-menu-popup">
 
-                                            <div className="px-2 pt-3 pb-1 border-bottom">
+                                            <div className="container pt-3 pb-1 border-bottom">
                                                 <CommentsFilterComponent
                                                     key={[categories]}
                                                     categories={categories}
@@ -106,7 +106,7 @@ export default function ListCommentsComponent({
 
                                             {
                                                 filterType === 'user' &&
-                                                < div className="px-2 py-1 border-bottom">
+                                                < div className="container py-2 border-bottom">
                                                     <div className="text-start">
                                                         <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setFilterWithReviseDate(!filterWithReviseDate)}>
                                                             {!filterWithReviseDate && "Filter all notes with revise date"}

@@ -146,60 +146,63 @@ export default function HomeComponent({ setReloadHome }) {
                         <div className={"left-menu-overlay " + (showLeftMenu ? "left-menu-enter" : "left-menu-exit")} >
                             <div id="outside-alerter-parent">
                                 <OutsideAlerter handle={() => setShowLeftMenu(false)}>
-                                    <div className="left-menu-popup px-3">
+                                    <div className="left-menu-popup">
 
-                                        <ListProjectsComponent
-                                            projects={projects}
-                                            setProjects={setProjects}
-                                            project={project}
-                                            setProject={setProject}
-                                            setTag={setTag}
-                                            setShowLeftMenu={setShowLeftMenu}
-                                            todaysPomodorosMap={todaysPomodorosMap}
-                                        />
-
-                                        <div className="mb-3">
-                                            <ListTagsComponent
+                                        <div className="container">
+                                            <ListProjectsComponent
+                                                projects={projects}
+                                                setProjects={setProjects}
+                                                project={project}
                                                 setProject={setProject}
-                                                tag={tag}
                                                 setTag={setTag}
-                                                setAllTags={setTags}
-                                                setTasksComponentReload={setTasksComponentReload}
                                                 setShowLeftMenu={setShowLeftMenu}
+                                                todaysPomodorosMap={todaysPomodorosMap}
                                             />
-                                        </div>
 
-                                        <div className="mb-3">
-                                            <div className="d-flex justify-content-between">
-                                                <h6>
-                                                    Tasks Filters
-                                                </h6>
+                                            <div className="mb-3">
+                                                <ListTagsComponent
+                                                    setProject={setProject}
+                                                    tag={tag}
+                                                    setTag={setTag}
+                                                    setAllTags={setTags}
+                                                    setTasksComponentReload={setTasksComponentReload}
+                                                    setShowLeftMenu={setShowLeftMenu}
+                                                />
                                             </div>
-                                            {
-                                                <div>
-                                                    <div className={(!project && !tag && tasksFilter === "Overdue" ? "list-selected " : "") + "py-2 small row list-row"} onClick={() => fetchTasksAndUpdateAppStates('Overdue')}>
-                                                        <div className="col-12">
-                                                            <i className="pe-1 bi bi-calendar-check text-danger" />
-                                                            Overdue
-                                                        </div>
-                                                    </div>
-                                                    <div className={(!project && !tag && tasksFilter === "Upcoming" ? "list-selected " : "") + "py-2 small row list-row"} onClick={() => fetchTasksAndUpdateAppStates('Upcoming')}>
-                                                        <div className="col-12">
-                                                            <i className="pe-1 bi bi-calendar-check" />
-                                                            Upcoming
-                                                        </div>
-                                                    </div>
-                                                    <div className={(!project && !tag && tasksFilter === "Searched" ? "list-selected " : "") + "py-2 small row list-row"} >
-                                                        <div className="col-12" style={{ pointerEvents: 'all' }}>
-                                                            <SearchTaskComponent
-                                                                searchTaskString={searchTaskString}
-                                                                setSearchTaskString={setSearchTaskString}
-                                                                fetchTasksAndUpdateAppStates={fetchTasksAndUpdateAppStates}
-                                                            />
-                                                        </div>
-                                                    </div>
+
+                                            <div className="mb-3">
+                                                <div className="d-flex justify-content-between">
+                                                    <h6>
+                                                        Tasks Filters
+                                                    </h6>
                                                 </div>
-                                            }
+                                                {
+                                                    <div>
+                                                        <div className={(!project && !tag && tasksFilter === "Overdue" ? "list-selected " : "") + "py-2 small row list-row"} onClick={() => fetchTasksAndUpdateAppStates('Overdue')}>
+                                                            <div className="col-12">
+                                                                <i className="pe-1 bi bi-calendar-check text-danger" />
+                                                                Overdue
+                                                            </div>
+                                                        </div>
+                                                        <div className={(!project && !tag && tasksFilter === "Upcoming" ? "list-selected " : "") + "py-2 small row list-row"} onClick={() => fetchTasksAndUpdateAppStates('Upcoming')}>
+                                                            <div className="col-12">
+                                                                <i className="pe-1 bi bi-calendar-check" />
+                                                                Upcoming
+                                                            </div>
+                                                        </div>
+                                                        <div className={(!project && !tag && tasksFilter === "Searched" ? "list-selected " : "") + "py-2 small row list-row"} >
+                                                            <div className="col-12" style={{ pointerEvents: 'all' }}>
+                                                                <SearchTaskComponent
+                                                                    searchTaskString={searchTaskString}
+                                                                    setSearchTaskString={setSearchTaskString}
+                                                                    fetchTasksAndUpdateAppStates={fetchTasksAndUpdateAppStates}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+
                                         </div>
 
                                     </div>

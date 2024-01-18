@@ -189,14 +189,6 @@ export default function ListTasksComponent({
                                     <i className="ms-1 bi bi-list-ul" />
                                 </span>
                             }
-                        </h6>
-                        <div>
-                            {
-                                project && !showCreateTask &&
-                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={() => setShowCreateTask(!showCreateTask)}>
-                                    <i className="bi bi-plus-circle" />
-                                </button>
-                            }
                             {
                                 project &&
                                 <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 ms-1" onClick={() => updateProject(project.id)}>
@@ -207,6 +199,14 @@ export default function ListTasksComponent({
                                 project &&
                                 <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 ms-1" onClick={() => setShowProjectCommentsId(project.id)}>
                                     <i className="bi bi-journal-text" />
+                                </button>
+                            }
+                        </h6>
+                        <div>
+                            {
+                                project && !showCreateTask &&
+                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={() => setShowCreateTask(!showCreateTask)}>
+                                    <i className="bi bi-plus-circle" />
                                 </button>
                             }
                         </div>

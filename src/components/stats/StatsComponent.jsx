@@ -167,15 +167,15 @@ export default function ListStatsComponent() {
                         <div className={"left-menu-overlay " + (showLeftMenu ? "left-menu-enter" : "left-menu-exit")} >
                             <div id="outside-alerter-parent">
                                 <OutsideAlerter handle={() => setShowLeftMenu(false)}>
-                                    <div className="left-menu-popup px-1">
+                                    <div className="left-menu-popup">
 
-                                        <div className="mt-1 px-2 py-2 border-bottom">
+                                        <div className="container mt-1 py-2 border-bottom">
                                             <div className="d-flex justify-content-between">
                                                 <h6 className="mb-0">
                                                     Stats Settings
                                                 </h6>
                                             </div>
-                                            <div>
+                                            <div className="">
                                                 <StatsSettingsComponent
                                                     statsSettings={statsSettings}
                                                     setStatsSettings={setStatsSettings}
@@ -185,7 +185,7 @@ export default function ListStatsComponent() {
                                             </div>
                                         </div>
 
-                                        <div className="px-2 py-2 border-bottom">
+                                        <div className="container py-2 border-bottom">
 
                                             <div className="d-flex justify-content-between">
                                                 <h6 className="mb-0">
@@ -216,7 +216,7 @@ export default function ListStatsComponent() {
                                         </div>
 
 
-                                        <div className="px-2 py-2 border-bottom" style={{ backgroundColor: "rgb(207, 226, 255)" }}>
+                                        <div className="container py-2 border-bottom" style={{ backgroundColor: "rgb(207, 226, 255)" }}>
 
                                             <div className="d-flex justify-content-between">
                                                 <div className="d-flex dustify-content-start my-auto">
