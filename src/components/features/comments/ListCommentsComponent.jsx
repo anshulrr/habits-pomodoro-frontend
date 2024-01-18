@@ -6,6 +6,7 @@ import ListFilteredCommentsComponent from "./ListFilteredCommentsComponents"
 import OutsideAlerter from "services/hooks/OutsideAlerter"
 import { retrieveAllTagsApi } from "services/api/TagApiService"
 import { CommentsFilterComponent } from "./CommentsFilterComponent"
+import SearchCommentComponent from "./SearchCommentComponent"
 
 export default function ListCommentsComponent({
     filterBy = 'user',
@@ -20,6 +21,8 @@ export default function ListCommentsComponent({
     const [reload, setReload] = useState(0)
 
     const [filterWithReviseDate, setFilterWithReviseDate] = useState(false)
+    const [showSearched, setShowSearched] = useState(false)
+    const [searchString, setSearchString] = useState('')
 
     const [filterType, setFilterType] = useState(filterBy);
     const [filterTypeId, setFilterTypeId] = useState(id);
@@ -69,6 +72,22 @@ export default function ListCommentsComponent({
             .catch(error => console.error(error.message))
     }
 
+    function resetFiltersAndReload(type) {
+        if (type === 'fetch') {
+            setShowSearched(false);
+            setSearchString('');
+            setFilterWithReviseDate(false);
+        } else if (type === 'revise') {
+            setShowSearched(false);
+            setSearchString('');
+            setFilterWithReviseDate(!filterWithReviseDate);
+        } else if (type === 'search') {
+            setFilterWithReviseDate(false);
+            setShowSearched(true);
+        }
+        setReload(prev => prev + 1);
+    }
+
     return (
         <div className={"comments-list " + (filterBy === 'user' ? 'container' : '')} style={{ backgroundColor: "#e9ecef" }}>
             <div className="row">
@@ -99,19 +118,34 @@ export default function ListCommentsComponent({
                                                     includeCategories={includedCategoryIds}
                                                     setFilterType={setFilterType}
                                                     setFilterTypeId={setFilterTypeId}
-                                                    setReload={setReload}
-                                                    setFilterWithReviseDate={setFilterWithReviseDate}
+                                                    resetFiltersAndReload={resetFiltersAndReload}
                                                 />
                                             </div>
 
                                             {
                                                 filterType === 'user' &&
-                                                < div className="container py-2 border-bottom">
-                                                    <div className="text-start">
-                                                        <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => setFilterWithReviseDate(!filterWithReviseDate)}>
-                                                            {!filterWithReviseDate && "Filter all notes with revise date"}
-                                                            {filterWithReviseDate && "Fetch all notes"}
-                                                        </button>
+                                                <div>
+                                                    <div className="container py-1 border-bottom">
+                                                        <div className="row">
+                                                            <div className="col-12">
+                                                                <div className="text-end">
+                                                                    <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => {
+                                                                        resetFiltersAndReload("revise")
+                                                                    }}>
+                                                                        {!filterWithReviseDate && "Filter All Notes with Revise Date"}
+                                                                        {filterWithReviseDate && "Fetch All Notes"}
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="container py-1 border-bottom">
+                                                        <SearchCommentComponent
+                                                            searchString={searchString}
+                                                            setSearchString={setSearchString}
+                                                            resetFiltersAndReload={resetFiltersAndReload}
+                                                        />
                                                     </div>
                                                 </div>
                                             }
@@ -122,7 +156,7 @@ export default function ListCommentsComponent({
                             </div>
                         </div>
 
-                    </div>
+                    </div >
                 }
 
                 {
@@ -135,11 +169,13 @@ export default function ListCommentsComponent({
                     tags &&
                     <div className={"pt-3 col-lg-8 " + (filterBy !== 'user' ? "offset-lg-2" : "")} style={{ backgroundColor: "#e9ecef" }}>
                         <ListFilteredCommentsComponent
-                            key={[filterWithReviseDate, reload]}
+                            key={[reload]}
                             filterBy={filterType}
                             id={filterTypeId}
                             categoryIds={includedCategoryIds}
                             filterWithReviseDate={filterWithReviseDate}
+                            searchString={searchString}
+                            showSearched={showSearched}
                             tags={tags}
                         />
                     </div >

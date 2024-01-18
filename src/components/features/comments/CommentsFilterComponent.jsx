@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { retrieveAllProjectsApi } from 'services/api/ProjectApiService';
 import { retrieveAllTasksApi } from 'services/api/TaskApiService';
 
-export const CommentsFilterComponent = ({ categories, includeCategories, setFilterType, setFilterTypeId, setReload, setFilterWithReviseDate }) => {
+export const CommentsFilterComponent = ({ categories, includeCategories, setFilterType, setFilterTypeId, resetFiltersAndReload }) => {
 
     const TASKS_COUNT = 100;
 
@@ -52,10 +52,9 @@ export const CommentsFilterComponent = ({ categories, includeCategories, setFilt
     }
 
     function fetchFilteredComments() {
-        setReload(prev => prev + 1)
+        resetFiltersAndReload('fetch')
         setFilterType(reloadData.dataType)
         setFilterTypeId(reloadData.dataTypeId)
-        setFilterWithReviseDate(false)
         setErrorMessage('')
     }
 
@@ -200,7 +199,12 @@ export const CommentsFilterComponent = ({ categories, includeCategories, setFilt
                 <div className="col-12 text-end">
                     {errorMessage && <div className="alert alert-info mb-1 mb-0 py-0 px-2 text-center"><small>{errorMessage}</small></div>}
                     <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => fetchFilteredComments()}>
-                        Fetch
+                        Fetch&nbsp;
+                        <span>
+                            {reloadData.dataType !== 'user' && reloadData.dataType.charAt(0).toUpperCase() + reloadData.dataType.slice(1)}
+                            {reloadData.dataType === 'user' && 'All'}
+                        </span>
+                        &nbsp;Notes
                     </button>
                 </div>
             </div>
