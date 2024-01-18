@@ -6,7 +6,7 @@ export const getTasksCountApi
         if (startDate && endDate) {
             url += `&startDate=${startDate}&endDate=${endDate}`;
         } else if (searchTaskString) {
-            url += `&searchedTaskString=${searchTaskString}`;
+            url += `&searchedTaskString=${searchTaskString.toLowerCase()}`;
         } else if (tagId) {
             url += `&tagId=${tagId}`
         } else {
@@ -21,7 +21,7 @@ export const retrieveAllTasksApi
         if (startDate && endDate) {
             url += `&startDate=${startDate}&endDate=${endDate}`;
         } else if (searchTaskString) {
-            url += `&searchedTaskString=${searchTaskString}`;
+            url += `&searchedTaskString=${searchTaskString.toLowerCase()}`;
         } else if (tagId) {
             url += `&tagId=${tagId}`
         } else {
