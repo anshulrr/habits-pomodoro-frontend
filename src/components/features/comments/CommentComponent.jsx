@@ -53,7 +53,9 @@ export default function CommentComponent({ filterBy, id, setShowCreateComment, r
                             />
                         }
                         <div>
-                            <p className="small pt-1 mb-1 text-secondary">Add a new note</p>
+                            <p className="small pt-1 mb-1 text-secondary">
+                                {`Add ${filterBy !== 'user' ? (filterBy.charAt(0).toUpperCase() + filterBy.slice(1) + ' ') : ''}Note`}
+                            </p>
                             <form onSubmit={handleSubmit}>
                                 <div className="row">
                                     <div className="col-6">
@@ -83,7 +85,7 @@ export default function CommentComponent({ filterBy, id, setShowCreateComment, r
                                             name="description"
                                             rows={calculateTextAreaRows(description)}
                                             value={description}
-                                            placeholder="Add note"
+                                            placeholder={`Add ${filterBy !== 'user' ? (filterBy.charAt(0).toUpperCase() + filterBy.slice(1) + ' ') : ''}Note`}
                                             onChange={(e) => {
                                                 setDescription(e.target.value);
                                                 setErrorMessage("Click on Save to create note");

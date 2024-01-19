@@ -45,8 +45,7 @@ export const CommentsFilterComponent = ({ categories, includeCategories, setFilt
         })
         setErrorMessage(
             "Click on Fetch for "
-            + (dataType !== 'user' ? dataType.charAt(0).toUpperCase() + dataType.slice(1) : '')
-            + (dataType === 'user' ? 'All' : '')
+            + (dataType !== 'user' ? dataType.charAt(0).toUpperCase() + dataType.slice(1) : 'All')
             + " Notes"
         );
     }
@@ -147,7 +146,7 @@ export const CommentsFilterComponent = ({ categories, includeCategories, setFilt
                         value={categoryId}
                         onChange={(e) => updateCategory(e.target.value)}
                     >
-                        <option value="0">Select Category</option>
+                        <option value="0">All Notes</option>
                         {
                             updatedCategories.map(
                                 projectCategory => (
@@ -166,7 +165,7 @@ export const CommentsFilterComponent = ({ categories, includeCategories, setFilt
                         value={projectId}
                         onChange={(e) => updateProject(e.target.value)}
                     >
-                        <option value="0">Select Category's Project</option>
+                        <option value="0">All Selected Category Notes</option>
                         {
                             projects.map(
                                 project => (
@@ -185,7 +184,7 @@ export const CommentsFilterComponent = ({ categories, includeCategories, setFilt
                         value={taskId}
                         onChange={(e) => updateTask(e.target.value)}
                     >
-                        <option value="0">Select Project's Task</option>
+                        <option value="0">All Selected Project Notes</option>
                         {
                             tasks.map(
                                 task => (

@@ -37,6 +37,8 @@ export const createCommentApi
     = ({ filterBy, comment, id }) => {
         if (filterBy === 'user')
             return apiClient.post(`comments`, comment)
+        else if (filterBy === 'category')
+            return apiClient.post(`project-categories/${id}/comments`, comment)
         else if (filterBy === 'project')
             return apiClient.post(`projects/${id}/comments`, comment)
         else if (filterBy === 'task')
