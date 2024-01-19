@@ -25,9 +25,6 @@ export default function ListStatsComponent() {
 
     const [statsSettings, setStatsSettings] = useState({})
 
-    const [showIncludeCategories, setShowIncludeCategories] = useState(true);
-    const [showFriendsStats, setShowFriendsStats] = useState(true);
-
     const [reload, setReload] = useState(0)
     const [reloadCategories, setReloadCategories] = useState(0)
 
@@ -205,7 +202,7 @@ export default function ListStatsComponent() {
                                                     }
                                                 </h6>
                                             </div>
-                                            <div style={{ display: showIncludeCategories ? "block" : "none" }} >
+                                            <div>
                                                 <CategoryChecklistComponent
                                                     key={reloadCategories}
                                                     categories={categories}

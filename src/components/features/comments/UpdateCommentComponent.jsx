@@ -5,7 +5,6 @@ import DatePicker from "react-datepicker";
 import moment from 'moment';
 
 import { retrieveCommentApi, updateCommentApi } from 'services/api/CommentApiService'
-import { truncateParagraph } from 'services/helpers/listsHelper';
 import { calculateTextAreaRows, filterPastTime } from 'services/helpers/helper';
 import InsertLinkComponent from './InsertLinkComponent';
 
