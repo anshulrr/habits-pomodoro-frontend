@@ -6,6 +6,7 @@ import UserSettingsComponent from 'components/user-settings/UserSettingsComponen
 
 import { useAuth } from 'services/auth/AuthContext';
 import ListAccountabilityPartnersComponent from './ListAccountabilityPartnersComponent';
+import FooterComponent from 'components/FooterComponent';
 
 export default function SettingsComponent() {
 
@@ -92,6 +93,8 @@ export default function SettingsComponent() {
                 </div>
 
             </div>
+
+            <FooterComponent />
         </div >
     )
 }

@@ -7,6 +7,7 @@ import OutsideAlerter from "services/hooks/OutsideAlerter"
 import { retrieveAllTagsApi } from "services/api/TagApiService"
 import { CommentsFilterComponent } from "./CommentsFilterComponent"
 import SearchCommentComponent from "./SearchCommentComponent"
+import FooterComponent from "components/FooterComponent"
 
 export default function ListCommentsComponent({
     filterBy = 'user',
@@ -94,16 +95,6 @@ export default function ListCommentsComponent({
                 {
                     filterBy === 'user' &&
                     <div className="col-lg-4 px-0 text-start bg-white">
-                        <span className="refresh-icon">
-                            <button type="button" className="btn btn-outline-secondary" onClick={() => setReload(prev => prev + 1)}>
-                                <i className="bi bi-arrow-clockwise" />
-                            </button>
-                        </span>
-                        <div className="left-menu-icon">
-                            <button type="button" className="btn btn-secondary" onClick={() => setShowLeftMenu(!showLeftMenu)}>
-                                Notes Filters <i className="bi bi-list" />
-                            </button>
-                        </div>
 
                         <div className={showLeftMenu ? "left-menu-container" : ""}>
                             <div className={"left-menu-overlay " + (showLeftMenu ? "left-menu-enter" : "left-menu-exit")} >
@@ -181,6 +172,13 @@ export default function ListCommentsComponent({
                     </div >
                 }
             </div >
+
+            <FooterComponent
+                setShowLeftMenu={setShowLeftMenu}
+                setReload={setReload}
+                title={"Notes Filters"}
+                isEmpty={false}
+            />
         </div >
     )
 }

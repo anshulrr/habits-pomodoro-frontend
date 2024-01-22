@@ -17,7 +17,6 @@ import ProjectComponent from 'components/features/projects/ProjectComponent'
 import SettingsComponent from 'components/user-settings/SettingsComponent'
 import SignupComponent from 'components/SignupComponent'
 import ForgotPasswordComponent from 'components/ForgotPasswordComponent'
-import FooterComponent from 'components/FooterComponent'
 import AboutComponent from 'components/AboutComponent'
 import ListCommentsComponent from './features/comments/ListCommentsComponent'
 
@@ -81,7 +80,6 @@ export default function AppRoutes() {
                         <Route path='*' element={<ErrorComponent />} />
                     </Routes>
 
-                    <FooterComponent />
                 </BrowserRouter>
             </AuthProvider>
 

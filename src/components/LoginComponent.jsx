@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from 'services/auth/AuthContext'
 import HomeComponent from 'components/features/HomeComponent'
 import FirebaseAuthService from 'services/auth/FirebaseAuthService'
+import FooterComponent from './FooterComponent'
 
 export default function LoginComponent() {
 
@@ -63,90 +64,93 @@ export default function LoginComponent() {
         <div>
             {
                 !authContext.isAuthenticated &&
-                <div className="container">
-                    <div className="row mt-3">
-                        <div className="col-lg-6">
-                            <h1 className="h3">
-                                Habits Pomodoro
-                            </h1>
-                            <div>
-                                A productivity tracking web app for learners and anyone who wants to build good habits and break bad once.
+                <div>
+                    <div className="container">
+                        <div className="row mt-3">
+                            <div className="col-lg-6">
+                                <h1 className="h3">
+                                    Habits Pomodoro
+                                </h1>
+                                <div>
+                                    A productivity tracking web app for learners and anyone who wants to build good habits and break bad once.
+                                </div>
+                                <div className="login-img mt-4">
+                                    <img
+                                        src="hourglass.svg"
+                                        alt="hourglass"
+                                        height="100%"
+                                    />
+                                </div>
                             </div>
-                            <div className="login-img mt-4">
-                                <img
-                                    src="hourglass.svg"
-                                    alt="hourglass"
-                                    height="100%"
-                                />
+                            <div className="col-lg-4 offset-lg-1">
+                                <div className="Login pt-3">
+                                    <h2 className="h5 p-3">
+                                        Login to Get Started
+                                    </h2>
+                                    <form className="LoginForm" onSubmit={handleSubmit}>
+                                        <div className="mb-3">
+                                            <input
+                                                type="email"
+                                                name="email"    // for suggestions
+                                                className="form-control form-control-sm"
+                                                value={email}
+                                                onChange={(e) => setEmail(e.target.value)}
+                                                autoComplete="email" // for password managers
+                                                placeholder="Email"
+                                                required
+                                            />
+                                        </div>
+                                        <div className="mb-3">
+                                            <input
+                                                type="password"
+                                                name="password"
+                                                className="form-control form-control-sm"
+                                                value={password}
+                                                onChange={(e) => setPassword(e.target.value)}
+                                                autoComplete="current-password"
+                                                placeholder='Password'
+                                                required
+                                            />
+                                        </div>
+                                        <div className="mb-3">
+                                            <button
+                                                type="submit"
+                                                className="btn btn-sm btn-outline-success"
+                                                name="login"
+                                            >Sign in</button>
+                                        </div>
+                                        {errorMessage && <div className="alert alert-danger my-2 py-0 px-2 text-center"><small>{errorMessage}</small></div>}
+                                        <div className="mb-3 text-center">
+                                            <button
+                                                type="button"
+                                                className="btn btn-sm btn-link"
+                                                name="forgot-password"
+                                                onClick={() => navigate('/forgot-password')}
+                                            >Forgot Password?</button>
+                                            <button
+                                                type="button"
+                                                className="btn btn-sm btn-link"
+                                                name="signup"
+                                                onClick={() => navigate('/signup')}
+                                            >New user? Register here</button>
+                                        </div>
+                                        <div className="text-center mb-3">
+                                            <div className="separator">or</div>
+                                        </div>
+                                    </form>
+                                    <input
+                                        type="image"
+                                        style={{ height: '50px', imageRendering: '-webkit-optimize-contrast', padding: '0' }}
+                                        src="btn_google_signin_dark_normal_web@2x.png"
+                                        alt="User profile picture"
+                                        onClick={signInWithGoogle}
+                                    />
+                                </div>
                             </div>
                         </div>
-                        <div className="col-lg-4 offset-lg-1">
-                            <div className="Login pt-3">
-                                <h2 className="h5 p-3">
-                                    Login to Get Started
-                                </h2>
-                                <form className="LoginForm" onSubmit={handleSubmit}>
-                                    <div className="mb-3">
-                                        <input
-                                            type="email"
-                                            name="email"    // for suggestions
-                                            className="form-control form-control-sm"
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
-                                            autoComplete="email" // for password managers
-                                            placeholder="Email"
-                                            required
-                                        />
-                                    </div>
-                                    <div className="mb-3">
-                                        <input
-                                            type="password"
-                                            name="password"
-                                            className="form-control form-control-sm"
-                                            value={password}
-                                            onChange={(e) => setPassword(e.target.value)}
-                                            autoComplete="current-password"
-                                            placeholder='Password'
-                                            required
-                                        />
-                                    </div>
-                                    <div className="mb-3">
-                                        <button
-                                            type="submit"
-                                            className="btn btn-sm btn-outline-success"
-                                            name="login"
-                                        >Sign in</button>
-                                    </div>
-                                    {errorMessage && <div className="alert alert-danger my-2 py-0 px-2 text-center"><small>{errorMessage}</small></div>}
-                                    <div className="mb-3 text-center">
-                                        <button
-                                            type="button"
-                                            className="btn btn-sm btn-link"
-                                            name="forgot-password"
-                                            onClick={() => navigate('/forgot-password')}
-                                        >Forgot Password?</button>
-                                        <button
-                                            type="button"
-                                            className="btn btn-sm btn-link"
-                                            name="signup"
-                                            onClick={() => navigate('/signup')}
-                                        >New user? Register here</button>
-                                    </div>
-                                    <div className="text-center mb-3">
-                                        <div className="separator">or</div>
-                                    </div>
-                                </form>
-                                <input
-                                    type="image"
-                                    style={{ height: '50px', imageRendering: '-webkit-optimize-contrast', padding: '0' }}
-                                    src="btn_google_signin_dark_normal_web@2x.png"
-                                    alt="User profile picture"
-                                    onClick={signInWithGoogle}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div >
+                    </div >
+                    <FooterComponent />
+                </div>
             }
 
             {

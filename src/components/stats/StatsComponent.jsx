@@ -16,6 +16,7 @@ import SelectFriendsComponent from "components/stats/SelectFriendsComponent";
 import { StreakChart } from "components/stats/charts/StreakChart";
 import { ProjectCategoriesChart } from "components/stats/charts/ProjectCategoriesChart";
 import OutsideAlerter from "services/hooks/OutsideAlerter";
+import FooterComponent from "components/FooterComponent";
 
 export default function ListStatsComponent() {
 
@@ -146,16 +147,6 @@ export default function ListStatsComponent() {
                 </div>
             </div>
 
-            <span className="refresh-icon">
-                <button type="button" className="btn btn-outline-secondary" onClick={() => setReload(prev => prev + 1)}>
-                    <i className="bi bi-arrow-clockwise" />
-                </button>
-            </span>
-            <div className="left-menu-icon">
-                <button type="button" className="btn btn-secondary" onClick={() => setShowLeftMenu(!showLeftMenu)}>
-                    Stats Filters <i className="bi bi-list" />
-                </button>
-            </div>
 
             <div className="row">
                 <div className="col-lg-4 px-0 text-start">
@@ -334,6 +325,14 @@ export default function ListStatsComponent() {
                 }
 
             </div >
+
+            <FooterComponent
+                setShowLeftMenu={setShowLeftMenu}
+                setReload={setReload}
+                title={"Stats Filters"}
+                isEmpty={false}
+            />
+
         </div >
     )
 }

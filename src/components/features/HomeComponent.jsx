@@ -15,6 +15,7 @@ import { retrieveAllProjectCategoriesApi } from 'services/api/ProjectCategoryApi
 import { toast } from 'react-toastify';
 import { getTasksCountApi } from 'services/api/TaskApiService';
 import SearchTaskComponent from './tasks/SearchTaskComponent';
+import FooterComponent from 'components/FooterComponent';
 
 export default function HomeComponent({ setReloadHome }) {
 
@@ -129,18 +130,6 @@ export default function HomeComponent({ setReloadHome }) {
         <div className="container">
             <div className="row border-bottom border-2">
                 <div className="col-lg-4 px-0 text-start">
-
-                    <span className="refresh-icon">
-                        <button type="button" className="btn btn-outline-secondary" onClick={() => setReloadHome(prev => prev + 1)}>
-                            <i className="bi bi-arrow-clockwise" />
-                        </button>
-                    </span>
-
-                    <div className="left-menu-icon">
-                        <button type="button" className="btn btn-success" onClick={() => setShowLeftMenu(!showLeftMenu)}>
-                            <i className="px-4 bi bi-list" />
-                        </button>
-                    </div>
 
                     <div className={showLeftMenu ? "left-menu-container" : ""}>
                         <div className={"left-menu-overlay " + (showLeftMenu ? "left-menu-enter" : "left-menu-exit")} >
@@ -279,6 +268,13 @@ export default function HomeComponent({ setReloadHome }) {
                     </div >
                 </div >
             </div>
+
+            <FooterComponent
+                setShowLeftMenu={setShowLeftMenu}
+                setReload={setReloadHome}
+                title={"Tasks Filters"}
+                isEmpty={false}
+            />
 
         </div >
     )
