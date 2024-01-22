@@ -12,9 +12,11 @@ import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 
 export default function ListTasksComponent({
     project,
+    projects,
     tags,
     startDate,
     endDate,
+    searchString,
     isReversed,
     title,
     tag,
@@ -71,9 +73,11 @@ export default function ListTasksComponent({
             taskData.projectId = project.id;
         } else if (tag) {
             taskData.tagId = tag.id;
-        } else {
+        } else if (startDate) {
             taskData.startDate = startDate;
             taskData.endDate = endDate;
+        } else {
+            taskData.searchString = searchString;
         }
         getTasksCountApi(taskData)
             .then(response => {
@@ -165,9 +169,16 @@ export default function ListTasksComponent({
                                 </span>
                             }
                             {
-                                !project && !tag &&
+                                !project && !tag && startDate &&
                                 <span>
                                     <i className={(title === "Overdue" ? "text-danger " : "") + "px-1 bi bi-calendar-check"} />
+                                    {title} Tasks
+                                </span>
+                            }
+                            {
+                                !project && !tag && !startDate &&
+                                <span>
+                                    <i className="px-1 bi bi-search" />
                                     {title} Tasks
                                 </span>
                             }
@@ -177,14 +188,6 @@ export default function ListTasksComponent({
                                     {tasksCount}
                                     <i className="ms-1 bi bi-list-ul" />
                                 </span>
-                            }
-                        </h6>
-                        <div>
-                            {
-                                project && !showCreateTask &&
-                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={() => setShowCreateTask(!showCreateTask)}>
-                                    <i className="bi bi-plus-circle" />
-                                </button>
                             }
                             {
                                 project &&
@@ -196,6 +199,14 @@ export default function ListTasksComponent({
                                 project &&
                                 <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 ms-1" onClick={() => setShowProjectCommentsId(project.id)}>
                                     <i className="bi bi-journal-text" />
+                                </button>
+                            }
+                        </h6>
+                        <div>
+                            {
+                                project && !showCreateTask &&
+                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={() => setShowCreateTask(!showCreateTask)}>
+                                    <i className="bi bi-plus-circle" />
                                 </button>
                             }
                         </div>
@@ -260,6 +271,7 @@ export default function ListTasksComponent({
                                 project={project}
                                 tag={tag}
                                 tags={tags}
+                                projects={projects}
                                 createNewPomodoro={createNewPomodoro}
                                 setPomodorosListReload={setPomodorosListReload}
                                 setTasksReload={setCurrentTasksReload}
@@ -268,6 +280,7 @@ export default function ListTasksComponent({
                                 setElementHeight={setCurrentTasksHeight}
                                 startDate={startDate}
                                 endDate={endDate}
+                                searchString={searchString}
                                 isReversed={isReversed}
                             />
                         }
@@ -309,6 +322,7 @@ export default function ListTasksComponent({
                                         project={project}
                                         tag={tag}
                                         tags={tags}
+                                        projects={projects}
                                         createNewPomodoro={createNewPomodoro}
                                         setTasksReload={setArchivedTasksReload}
                                         setAllTasksReload={setAllTasksReload}
@@ -316,6 +330,7 @@ export default function ListTasksComponent({
                                         setElementHeight={setArchivedTasksHeight}
                                         startDate={startDate}
                                         endDate={endDate}
+                                        searchString={searchString}
                                         isReversed={isReversed}
                                     />
                                 </div>

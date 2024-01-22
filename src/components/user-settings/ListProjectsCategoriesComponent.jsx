@@ -11,7 +11,7 @@ export default function ListProjectCategoriesComponent() {
 
     const [currentPage, setCurrentPage] = useState(1)
 
-    const [categoriesCount, setCategoriesCount] = useState(0)
+    const [categoriesCount, setCategoriesCount] = useState(-1)
     const [categories, setCategories] = useState([])
     const [category, setCategory] = useState(null)
 
@@ -70,10 +70,13 @@ export default function ListProjectCategoriesComponent() {
                             <div className="col-10 text-start px-0">
                                 <h6>
                                     Project Categories
-                                    <span className="ms-1 badge rounded-pill text-bg-secondary">
-                                        {categoriesCount}
-                                        <i className="ms-1 bi bi-link-45deg" />
-                                    </span>
+                                    {
+                                        categoriesCount !== -1 &&
+                                        <span className="ms-1 badge rounded-pill text-bg-secondary">
+                                            {categoriesCount}
+                                            <i className="ms-1 bi bi-link-45deg" />
+                                        </span>
+                                    }
                                     {
                                         showLoader &&
                                         <span className="loader-container-2" >

@@ -104,7 +104,7 @@ export const StreakChart = ({ subject, categories, includeCategories }) => {
                         const localTasks2 = localTasks1.concat(response.data);
                         setTasks(localTasks2);
                         setTasksMap(new Map(localTasks2.map(task => {
-                            task.pomodoroLength = task.pomodoroLength || projectsMap.get(task.project.id).pomodoroLength;
+                            task.pomodoroLength = task.pomodoroLength || projectsMap.get(task.projectId).pomodoroLength;
                             return [task.id, task];
                         })))
                     })

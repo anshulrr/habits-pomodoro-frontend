@@ -20,7 +20,9 @@ export default function ListFilteredCommentsComponent({
     id,
     categoryIds,
     filterWithReviseDate,
-    tags
+    searchString,
+    showSearched,
+    tags,
 }) {
 
     const { pathname: url } = useLocation();
@@ -75,7 +77,7 @@ export default function ListFilteredCommentsComponent({
 
     function refreshComments() {
         setComments([]);
-        retrieveAllCommentsApi({ limit: PAGESIZE, offset: (currentPage - 1) * PAGESIZE, filterBy, id, categoryIds, filterWithReviseDate })
+        retrieveAllCommentsApi({ limit: PAGESIZE, offset: (currentPage - 1) * PAGESIZE, filterBy, id, categoryIds, filterWithReviseDate, searchString })
             .then(response => {
                 // console.debug(response)
                 const truncated_comments = truncateComments(response.data);
@@ -94,7 +96,7 @@ export default function ListFilteredCommentsComponent({
 
     function getCommentsCount() {
         // console.log({ filterBy, id, categoryIds, filterWithReviseDate })
-        getCommentsCountApi({ filterBy, id, categoryIds, filterWithReviseDate })
+        getCommentsCountApi({ filterBy, id, categoryIds, filterWithReviseDate, searchString })
             .then(response => {
                 setCommentsCount(response.data)
             })
@@ -146,7 +148,20 @@ export default function ListFilteredCommentsComponent({
                             }
                             &nbsp;Notes
                             {
-                                filterWithReviseDate && " with revise date"
+                                !showSearched && filterWithReviseDate &&
+                                <span>
+                                    &nbsp;with
+                                    <i className="px-1 bi bi-calendar3-event" />
+                                    Revise Date
+                                </span>
+                            }
+                            {
+                                showSearched &&
+                                <span>
+                                    &nbsp;with
+                                    <i className="px-1 bi bi-search" />
+                                    Searched Text
+                                </span>
                             }
                             {
                                 commentsCount !== -1 &&

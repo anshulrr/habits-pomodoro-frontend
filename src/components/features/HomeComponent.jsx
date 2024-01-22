@@ -14,6 +14,7 @@ import { isEmpty } from 'services/helpers/helper';
 import { retrieveAllProjectCategoriesApi } from 'services/api/ProjectCategoryApiService';
 import { toast } from 'react-toastify';
 import { getTasksCountApi } from 'services/api/TaskApiService';
+import SearchTaskComponent from './tasks/SearchTaskComponent';
 
 export default function HomeComponent({ setReloadHome }) {
 
@@ -34,6 +35,7 @@ export default function HomeComponent({ setReloadHome }) {
     const [tasksComponentReload, setTasksComponentReload] = useState(0)
 
     const [tasksFilter, setTasksFilter] = useState((state && state.filters) || (isEmpty(state) && IS_FILTERS_DEFAULT && 'Overdue'));
+    const [searchString, setSearchString] = useState((state && state.searchString) || '')
 
     const [showLeftMenu, setShowLeftMenu] = useState(window.innerWidth <= 992 ? false : true);
 
@@ -98,8 +100,12 @@ export default function HomeComponent({ setReloadHome }) {
             setReversed(false);
             setStartDate(moment().add(-10, 'y').toISOString());
             setEndDate(moment().toISOString());
+        } else if (filter === 'Searched') {
+            setStartDate(null)
+            setEndDate(null)
         }
         updateAppStates(filter);
+        setTasksComponentReload(prev => prev + 1);
     }
 
     function updateAppStates(filter) {
@@ -114,6 +120,7 @@ export default function HomeComponent({ setReloadHome }) {
         local_state.currentTasksPage = 1;
         local_state.currentArchivedTasksPage = 1;
         local_state.showArchivedTasks = false;
+        local_state.searchString = searchString;
         // for page refresh: set it right away
         navigate('/', { state: local_state, replace: true });
     }
@@ -139,51 +146,63 @@ export default function HomeComponent({ setReloadHome }) {
                         <div className={"left-menu-overlay " + (showLeftMenu ? "left-menu-enter" : "left-menu-exit")} >
                             <div id="outside-alerter-parent">
                                 <OutsideAlerter handle={() => setShowLeftMenu(false)}>
-                                    <div className="left-menu-popup px-3">
+                                    <div className="left-menu-popup">
 
-                                        <ListProjectsComponent
-                                            projects={projects}
-                                            setProjects={setProjects}
-                                            project={project}
-                                            setProject={setProject}
-                                            setTag={setTag}
-                                            setShowLeftMenu={setShowLeftMenu}
-                                            todaysPomodorosMap={todaysPomodorosMap}
-                                        />
-
-                                        <div className="mb-3">
-                                            <ListTagsComponent
+                                        <div className="container">
+                                            <ListProjectsComponent
+                                                projects={projects}
+                                                setProjects={setProjects}
+                                                project={project}
                                                 setProject={setProject}
-                                                tag={tag}
                                                 setTag={setTag}
-                                                setAllTags={setTags}
-                                                setTasksComponentReload={setTasksComponentReload}
                                                 setShowLeftMenu={setShowLeftMenu}
+                                                todaysPomodorosMap={todaysPomodorosMap}
                                             />
-                                        </div>
 
-                                        <div className="mb-3">
-                                            <div className="d-flex justify-content-between">
-                                                <h6>
-                                                    Tasks Filters
-                                                </h6>
+                                            <div className="mb-3">
+                                                <ListTagsComponent
+                                                    setProject={setProject}
+                                                    tag={tag}
+                                                    setTag={setTag}
+                                                    setAllTags={setTags}
+                                                    setTasksComponentReload={setTasksComponentReload}
+                                                    setShowLeftMenu={setShowLeftMenu}
+                                                />
                                             </div>
-                                            {
-                                                <div>
-                                                    <div className={(!project && !tag && tasksFilter === "Overdue" ? "list-selected " : "") + "py-1 small row list-row"} onClick={() => fetchTasksAndUpdateAppStates('Overdue')}>
-                                                        <div className="col-12">
-                                                            <i className="pe-1 bi bi-calendar-check text-danger" />
-                                                            Overdue
-                                                        </div>
-                                                    </div>
-                                                    <div className={(!project && !tag && tasksFilter === "Upcoming" ? "list-selected " : "") + "py-1 small row list-row"} onClick={() => fetchTasksAndUpdateAppStates('Upcoming')}>
-                                                        <div className="col-12">
-                                                            <i className="pe-1 bi bi-calendar-check" />
-                                                            Upcoming
-                                                        </div>
-                                                    </div>
+
+                                            <div className="mb-3">
+                                                <div className="d-flex justify-content-between">
+                                                    <h6>
+                                                        Tasks Filters
+                                                    </h6>
                                                 </div>
-                                            }
+                                                {
+                                                    <div>
+                                                        <div className={(!project && !tag && tasksFilter === "Overdue" ? "list-selected " : "") + "py-2 small row list-row"} onClick={() => fetchTasksAndUpdateAppStates('Overdue')}>
+                                                            <div className="col-12">
+                                                                <i className="pe-1 bi bi-calendar-check text-danger" />
+                                                                Overdue
+                                                            </div>
+                                                        </div>
+                                                        <div className={(!project && !tag && tasksFilter === "Upcoming" ? "list-selected " : "") + "py-2 small row list-row"} onClick={() => fetchTasksAndUpdateAppStates('Upcoming')}>
+                                                            <div className="col-12">
+                                                                <i className="pe-1 bi bi-calendar-check" />
+                                                                Upcoming
+                                                            </div>
+                                                        </div>
+                                                        <div className={(!project && !tag && tasksFilter === "Searched" ? "list-selected " : "") + "py-2 small row list-row"} >
+                                                            <div className="col-12" style={{ pointerEvents: 'all' }}>
+                                                                <SearchTaskComponent
+                                                                    searchString={searchString}
+                                                                    setSearchString={setSearchString}
+                                                                    fetchTasksAndUpdateAppStates={fetchTasksAndUpdateAppStates}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+
                                         </div>
 
                                     </div>
@@ -203,16 +222,19 @@ export default function HomeComponent({ setReloadHome }) {
                                     key={[project.id, tag, tasksComponentReload]}
                                     project={project}
                                     tags={tags}
+                                    projects={projects}
                                     setPomodorosListReload={setPomodorosListReload}
                                 />
                             }
                             {
                                 !project && !tag && tasksFilter &&
                                 <ListTasksComponent
-                                    key={[startDate, endDate, tasksComponentReload]}
+                                    key={[tasksComponentReload]}
+                                    projects={projects}
                                     tags={tags}
                                     startDate={startDate}
                                     endDate={endDate}
+                                    searchString={searchString}
                                     isReversed={isReversed}
                                     title={tasksFilter}
                                     setPomodorosListReload={setPomodorosListReload}
@@ -223,6 +245,7 @@ export default function HomeComponent({ setReloadHome }) {
                                 !project && tag &&
                                 <ListTasksComponent
                                     key={[project, tag.id, tasksComponentReload]}
+                                    projects={projects}
                                     tags={tags}
                                     tag={tag}
                                     setPomodorosListReload={setPomodorosListReload}

@@ -10,9 +10,9 @@ import { apiClient } from "./ApiClient";
 //     = (comment) => apiClient.post(`comments`, comment)
 
 export const retrieveAllCommentsApi
-    = ({ limit, offset, filterBy, id, categoryIds, filterWithReviseDate }) => {
+    = ({ limit, offset, filterBy, id, categoryIds, filterWithReviseDate, searchString }) => {
         if (filterBy === 'user')
-            return apiClient.get(`/comments?limit=${limit}&offset=${offset}&categoryIds=${categoryIds}&filterWithReviseDate=${filterWithReviseDate}`)
+            return apiClient.get(`/comments?limit=${limit}&offset=${offset}&categoryIds=${categoryIds}&filterWithReviseDate=${filterWithReviseDate}&searchString=${searchString}`)
         else if (filterBy === 'category')
             return apiClient.get(`project-categories/${id}/comments?limit=${limit}&offset=${offset}`)
         else if (filterBy === 'project')
@@ -22,9 +22,9 @@ export const retrieveAllCommentsApi
     }
 
 export const getCommentsCountApi
-    = ({ filterBy, id, categoryIds, filterWithReviseDate }) => {
+    = ({ filterBy, id, categoryIds, filterWithReviseDate, searchString }) => {
         if (filterBy === 'user')
-            return apiClient.get(`/comments/count?categoryIds=${categoryIds}&filterWithReviseDate=${filterWithReviseDate}`)
+            return apiClient.get(`/comments/count?categoryIds=${categoryIds}&filterWithReviseDate=${filterWithReviseDate}&searchString=${searchString}`)
         else if (filterBy === 'category')
             return apiClient.get(`project-categories/${id}/comments/count`)
         else if (filterBy === 'project')
@@ -37,6 +37,8 @@ export const createCommentApi
     = ({ filterBy, comment, id }) => {
         if (filterBy === 'user')
             return apiClient.post(`comments`, comment)
+        else if (filterBy === 'category')
+            return apiClient.post(`project-categories/${id}/comments`, comment)
         else if (filterBy === 'project')
             return apiClient.post(`projects/${id}/comments`, comment)
         else if (filterBy === 'task')

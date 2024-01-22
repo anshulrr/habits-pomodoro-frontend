@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { retrieveAllProjectsApi } from 'services/api/ProjectApiService';
 import { retrieveAllTasksApi } from 'services/api/TaskApiService';
 
-export const CommentsFilterComponent = ({ categories, includeCategories, setFilterType, setFilterTypeId, setReload, setFilterWithReviseDate }) => {
+export const CommentsFilterComponent = ({ categories, includeCategories, setFilterType, setFilterTypeId, resetFiltersAndReload }) => {
 
     const TASKS_COUNT = 100;
 
@@ -45,17 +45,15 @@ export const CommentsFilterComponent = ({ categories, includeCategories, setFilt
         })
         setErrorMessage(
             "Click on Fetch for "
-            + (dataType !== 'user' ? dataType.charAt(0).toUpperCase() + dataType.slice(1) : '')
-            + (dataType === 'user' ? 'All' : '')
+            + (dataType !== 'user' ? dataType.charAt(0).toUpperCase() + dataType.slice(1) : 'All')
             + " Notes"
         );
     }
 
     function fetchFilteredComments() {
-        setReload(prev => prev + 1)
+        resetFiltersAndReload('fetch')
         setFilterType(reloadData.dataType)
         setFilterTypeId(reloadData.dataTypeId)
-        setFilterWithReviseDate(false)
         setErrorMessage('')
     }
 
@@ -148,7 +146,7 @@ export const CommentsFilterComponent = ({ categories, includeCategories, setFilt
                         value={categoryId}
                         onChange={(e) => updateCategory(e.target.value)}
                     >
-                        <option value="0">Select Category</option>
+                        <option value="0">All Notes</option>
                         {
                             updatedCategories.map(
                                 projectCategory => (
@@ -167,7 +165,7 @@ export const CommentsFilterComponent = ({ categories, includeCategories, setFilt
                         value={projectId}
                         onChange={(e) => updateProject(e.target.value)}
                     >
-                        <option value="0">Select Category's Project</option>
+                        <option value="0">All Selected Category Notes</option>
                         {
                             projects.map(
                                 project => (
@@ -186,7 +184,7 @@ export const CommentsFilterComponent = ({ categories, includeCategories, setFilt
                         value={taskId}
                         onChange={(e) => updateTask(e.target.value)}
                     >
-                        <option value="0">Select Project's Task</option>
+                        <option value="0">All Selected Project Notes</option>
                         {
                             tasks.map(
                                 task => (
@@ -200,7 +198,12 @@ export const CommentsFilterComponent = ({ categories, includeCategories, setFilt
                 <div className="col-12 text-end">
                     {errorMessage && <div className="alert alert-info mb-1 mb-0 py-0 px-2 text-center"><small>{errorMessage}</small></div>}
                     <button className="btn btn-sm btn-outline-secondary" type="button" onClick={() => fetchFilteredComments()}>
-                        Fetch
+                        Fetch&nbsp;
+                        <span>
+                            {reloadData.dataType !== 'user' && reloadData.dataType.charAt(0).toUpperCase() + reloadData.dataType.slice(1)}
+                            {reloadData.dataType === 'user' && 'All'}
+                        </span>
+                        &nbsp;Notes
                     </button>
                 </div>
             </div>

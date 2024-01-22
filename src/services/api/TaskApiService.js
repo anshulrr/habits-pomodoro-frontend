@@ -1,10 +1,12 @@
 import { apiClient } from "./ApiClient";
 
 export const getTasksCountApi
-    = ({ projectId, status, startDate, endDate, tagId }) => {
+    = ({ projectId, status, startDate, searchString, endDate, tagId }) => {
         let url = `/tasks/count?status=${status}`;
         if (startDate && endDate) {
             url += `&startDate=${startDate}&endDate=${endDate}`;
+        } else if (searchString) {
+            url += `&searchString=${searchString.toLowerCase()}`;
         } else if (tagId) {
             url += `&tagId=${tagId}`
         } else {
@@ -14,10 +16,12 @@ export const getTasksCountApi
     }
 
 export const retrieveAllTasksApi
-    = ({ projectId, status, startDate, endDate, limit, offset, tagId, subject }) => {
+    = ({ projectId, status, startDate, endDate, searchString, limit, offset, tagId, subject }) => {
         let url = `/tasks?status=${status}&limit=${limit}&offset=${offset}`;
         if (startDate && endDate) {
             url += `&startDate=${startDate}&endDate=${endDate}`;
+        } else if (searchString) {
+            url += `&searchString=${searchString.toLowerCase()}`;
         } else if (tagId) {
             url += `&tagId=${tagId}`
         } else {

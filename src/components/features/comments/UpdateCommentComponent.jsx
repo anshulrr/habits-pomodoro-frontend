@@ -5,7 +5,6 @@ import DatePicker from "react-datepicker";
 import moment from 'moment';
 
 import { retrieveCommentApi, updateCommentApi } from 'services/api/CommentApiService'
-import { truncateParagraph } from 'services/helpers/listsHelper';
 import { calculateTextAreaRows, filterPastTime } from 'services/helpers/helper';
 import InsertLinkComponent from './InsertLinkComponent';
 
@@ -68,7 +67,7 @@ export default function UpdateCommentComponent({ id, setShowUpdateComment, reloa
                                 setShowInsertLink={setShowInsertLink}
                             />
                         }
-                        <p className="small pt-1 mb-1 text-secondary">Update note</p>
+                        <p className="small pt-1 mb-1 text-secondary">Update Note</p>
                         <form onSubmit={handleSubmit}>
                             <div className="row">
                                 <div className="col-6">
@@ -101,7 +100,7 @@ export default function UpdateCommentComponent({ id, setShowUpdateComment, reloa
                                         name="description"
                                         rows={calculateTextAreaRows(description)}
                                         value={description}
-                                        placeholder="Update note"
+                                        placeholder="Update Note"
                                         onChange={(e) => {
                                             setDescription(e.target.value);
                                             setErrorMessage("Click on Update to save");

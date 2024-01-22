@@ -25,9 +25,6 @@ export default function ListStatsComponent() {
 
     const [statsSettings, setStatsSettings] = useState({})
 
-    const [showIncludeCategories, setShowIncludeCategories] = useState(true);
-    const [showFriendsStats, setShowFriendsStats] = useState(true);
-
     const [reload, setReload] = useState(0)
     const [reloadCategories, setReloadCategories] = useState(0)
 
@@ -167,15 +164,15 @@ export default function ListStatsComponent() {
                         <div className={"left-menu-overlay " + (showLeftMenu ? "left-menu-enter" : "left-menu-exit")} >
                             <div id="outside-alerter-parent">
                                 <OutsideAlerter handle={() => setShowLeftMenu(false)}>
-                                    <div className="left-menu-popup px-1">
+                                    <div className="left-menu-popup">
 
-                                        <div className="mt-1 px-2 py-2 border-bottom">
+                                        <div className="container mt-1 py-2 border-bottom">
                                             <div className="d-flex justify-content-between">
                                                 <h6 className="mb-0">
                                                     Stats Settings
                                                 </h6>
                                             </div>
-                                            <div>
+                                            <div className="">
                                                 <StatsSettingsComponent
                                                     statsSettings={statsSettings}
                                                     setStatsSettings={setStatsSettings}
@@ -185,15 +182,18 @@ export default function ListStatsComponent() {
                                             </div>
                                         </div>
 
-                                        <div className="px-2 py-2 border-bottom">
+                                        <div className="container py-2 border-bottom">
 
                                             <div className="d-flex justify-content-between">
                                                 <h6 className="mb-0">
                                                     Included Project Categories
-                                                    <span className="ms-1 badge rounded-pill text-bg-secondary">
-                                                        {includeCategories.length}/{categories.length}
-                                                        <i className="ms-1 bi bi-link-45deg" />
-                                                    </span>
+                                                    {
+                                                        categories.length !== 0 &&
+                                                        <span className="ms-1 badge rounded-pill text-bg-secondary">
+                                                            {includeCategories.length}/{categories.length}
+                                                            <i className="ms-1 bi bi-link-45deg" />
+                                                        </span>
+                                                    }
                                                     {
                                                         showLoader &&
                                                         <span className="loader-container-2" >
@@ -202,7 +202,7 @@ export default function ListStatsComponent() {
                                                     }
                                                 </h6>
                                             </div>
-                                            <div style={{ display: showIncludeCategories ? "block" : "none" }} >
+                                            <div>
                                                 <CategoryChecklistComponent
                                                     key={reloadCategories}
                                                     categories={categories}
@@ -213,17 +213,20 @@ export default function ListStatsComponent() {
                                         </div>
 
 
-                                        <div className="px-2 py-2 border-bottom" style={{ backgroundColor: "rgb(207, 226, 255)" }}>
+                                        <div className="container py-2 border-bottom" style={{ backgroundColor: "rgb(207, 226, 255)" }}>
 
                                             <div className="d-flex justify-content-between">
                                                 <div className="d-flex dustify-content-start my-auto">
                                                     <h6 className="mb-0">
                                                         Mentees Stats
                                                     </h6>
-                                                    <div className="ms-1 badge rounded-pill text-bg-secondary">
-                                                        {subjects.length}
-                                                        <i className="ps-1 bi bi-person-fill" />
-                                                    </div>
+                                                    {
+                                                        subjects.length !== 0 &&
+                                                        <div className="ms-1 badge rounded-pill text-bg-secondary">
+                                                            {subjects.length}
+                                                            <i className="ps-1 bi bi-person-fill" />
+                                                        </div>
+                                                    }
                                                 </div>
                                             </div>
 

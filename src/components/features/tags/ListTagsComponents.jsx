@@ -115,7 +115,7 @@ export default function ListTagsComponent({ setProject, tag, setTag, setAllTags,
             {/* {message && <div className="alert alert-warning">{message}</div>} */}
             <div>
                 <div className="d-flex justify-content-between">
-                    <h6 className="d-flex justify-content-start">
+                    <h6>
                         <span>
                             Tags
                         </span>
@@ -129,7 +129,7 @@ export default function ListTagsComponent({ setProject, tag, setTag, setAllTags,
                             </span>
                         }
                     </h6>
-                    <div className="">
+                    <div>
                         {
                             !showCreateTag &&
                             <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 mb-2" onClick={() => setShowCreateTag(true)}>
@@ -212,7 +212,7 @@ export default function ListTagsComponent({ setProject, tag, setTag, setAllTags,
                         </div>
 
                         <Pagination
-                            className="pagination-bar pagination-scroll mb-0 ps-0"
+                            className="pagination-bar pagination-scroll mt-1 mb-0 ps-0"
                             currentPage={currentPage}
                             totalCount={tagsCount}
                             pageSize={PAGESIZE}
