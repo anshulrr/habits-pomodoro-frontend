@@ -7,7 +7,9 @@ import {
     sendPasswordResetEmail,
     signOut,
     onAuthStateChanged,
-    AuthErrorCodes
+    AuthErrorCodes,
+    signInWithPhoneNumber,
+    RecaptchaVerifier
 } from 'firebase/auth';
 
 import { auth, provider } from "../firebaseConfig";
@@ -83,6 +85,60 @@ const signInWithGoogle = async () => {
     }
 };
 
+
+
+let appVerifier;
+
+const signInWithPhone = async (phoneNumber, setShowOtpInput) => {
+
+    console.log("initiated")
+
+    window.recaptchaVerifier = await new RecaptchaVerifier(auth, 'recaptcha-container', {
+        'size': 'normal',
+        'callback': (response) => {
+            // reCAPTCHA solved, allow signInWithPhoneNumber.
+            // ...
+            console.log("reacaptch response", response)
+            setShowOtpInput(true)
+        },
+        'expired-callback': () => {
+            // Response expired. Ask user to solve reCAPTCHA again.
+            // ...
+        }
+    });
+
+
+    appVerifier = window.recaptchaVerifier;
+
+    try {
+
+        const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, appVerifier)
+        // SMS sent. Prompt user to type the code from the message, then sign the
+        // user in with confirmationResult.confirm(code).
+        window.confirmationResult = confirmationResult;
+        console.log({ confirmationResult })
+    }
+
+    catch (error) {
+        // Error; SMS not sent
+        // ...
+        console.log("SMS not sent", error);
+    }
+    return;
+}
+const verifyOtp = async (code) => {
+    // const code = 654321; // User input
+    try {
+        const result = await window.confirmationResult.confirm(code);
+        const user = result.user;
+        console.log({ user });
+        return user;
+    } catch (error) {
+        // User couldn't sign in (bad verification code?)
+        console.error(error);
+    }
+}
+
 const getRefreshedToken = async () => {
     return await auth.currentUser.getIdToken(/* forceRefresh */ true);
 }
@@ -93,10 +149,11 @@ const subscribeToAuthChanges = async ({
     addInterceptors,
     setUser
 }) => {
+    console.log("subscribing to auth change")
     await onAuthStateChanged(auth, (user) => {
-        // console.debug('state changed', user);
+        console.debug('state changed', user);
         setFirebaseAuthLoaded(true);
-        if (user !== null && user.emailVerified) {
+        if (user !== null) {
             setAuthenticated(true);
             addInterceptors(user.accessToken);
             setUser({
@@ -106,7 +163,7 @@ const subscribeToAuthChanges = async ({
                 uid: user.uid,
             });
             // set firebase notification to enabled
-            getAndStoreNotificationsToken(user.uid)
+            // getAndStoreNotificationsToken(user.uid)
         } else {
             setAuthenticated(false)
             setUser(null)
@@ -123,6 +180,8 @@ const FirebaseAuthService = {
     signInWithGoogle,
     getRefreshedToken,
     subscribeToAuthChanges,
+    signInWithPhone,
+    verifyOtp
 };
 
 export default FirebaseAuthService;

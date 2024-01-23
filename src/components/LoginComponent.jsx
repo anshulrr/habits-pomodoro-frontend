@@ -12,6 +12,10 @@ export default function LoginComponent() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
+    const [phone, setPhone] = useState('')
+    const [showOtpInput, setShowOtpInput] = useState(false)
+    const [otp, setOtp] = useState('')
+
     const [errorMessage, setErrorMessage] = useState('')
 
     const navigate = useNavigate();
@@ -46,6 +50,37 @@ export default function LoginComponent() {
             }
         } catch (error) {
             setErrorMessage("Authentication Failed. Please check your credentials");
+        }
+    }
+
+    async function handlePhoneNumberSubmit(error) {
+        error.preventDefault();
+
+        try {
+            const response = await FirebaseAuthService.signInWithPhone(phone, setShowOtpInput)
+        } catch (error) {
+            setErrorMessage("Authentication Failed. Please check your credentials 1");
+        }
+    }
+
+    async function handleOtpSubmit(error) {
+        error.preventDefault();
+
+        try {
+            const user = await FirebaseAuthService.verifyOtp(otp)
+            console.debug("otp", user);
+            if (user) {
+                await authContext.getUserSettings();
+                // navigate(`/welcome/${email}`);
+                navigate(`/`, { state: {} });
+            } else {
+                // FirebaseAuthService.signOutUser();
+                setErrorMessage("Please click on the verfication link sent to your email")
+            }
+
+        } catch (error) {
+            console.log(error)
+            setErrorMessage("Authentication Failed. Please check your credentials 2");
         }
     }
 
@@ -145,6 +180,53 @@ export default function LoginComponent() {
                                         alt="User profile picture"
                                         onClick={signInWithGoogle}
                                     />
+
+                                    {
+                                        !showOtpInput &&
+                                        <form onSubmit={handlePhoneNumberSubmit}>
+                                            <input
+                                                type="tel"
+                                                name="phone"
+                                                id="phone"
+                                                placeholder='Enter Phone Number'
+                                                onChange={(e) => setPhone(e.target.value)}
+                                            />
+
+                                            <div id="recaptcha-container">
+
+                                            </div>
+
+                                            <div className="mb-3">
+                                                <button
+                                                    type="submit"
+                                                    className="btn btn-sm btn-outline-success"
+                                                    name="login-phone"
+                                                >Sign in with Phone Number</button>
+                                            </div>
+                                        </form>
+                                    }
+
+                                    {
+                                        showOtpInput &&
+                                        <form onSubmit={handleOtpSubmit}>
+
+                                            <input
+                                                type="text"
+                                                name="otp"
+                                                id="otp"
+                                                placeholder='Enter Otp'
+                                                onChange={(e) => setOtp(e.target.value)}
+                                            />
+
+                                            <div className="mb-3">
+                                                <button
+                                                    type="submit"
+                                                    className="btn btn-sm btn-success"
+                                                    name="login-otp"
+                                                >Confirm Otp</button>
+                                            </div>
+                                        </form>
+                                    }
                                 </div>
                             </div>
                         </div>
