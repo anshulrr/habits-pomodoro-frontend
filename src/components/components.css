@@ -175,6 +175,14 @@
     z-index: 1031;
 }
 
+.user-icon {
+    background-color: #d7d7fd;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    width: 40px;
+    font-size: 24px;
+}
+
 .header-shadow {
     box-shadow: 0 4px 13px -3px rgba(0, 0, 0, 0.10196);
 }

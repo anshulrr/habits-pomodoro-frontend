@@ -72,17 +72,28 @@ export default function HeaderComponent() {
                                 </Link>
                             }
                             {
-                                isAuthenticated && user.photoURL &&
-                                <div className="text-center" style={{ paddingTop: "8px" }}>
-                                    <img
-                                        src={user.photoURL}
-                                        style={{ borderRadius: "50%" }}
-                                        width="40rem"
-                                        height="40rem"
-                                        className={"border-light-subtle border border-1"}
-                                        alt={user.displayName}
-                                    // referrerPolicy='no-referrer'
-                                    />
+                                isAuthenticated &&
+                                <div>
+                                    {
+                                        user.photoURL &&
+                                        <div className="text-center" style={{ paddingTop: "8px" }}>
+                                            <img
+                                                src={user.photoURL}
+                                                style={{ borderRadius: "50%" }}
+                                                width="40rem"
+                                                height="40rem"
+                                                className={"border-light-subtle border border-1"}
+                                                alt={user.displayName}
+                                            // referrerPolicy='no-referrer'
+                                            />
+                                        </div>
+                                    }
+                                    {
+                                        !user.photoURL &&
+                                        <div className="text-center text-secondary border border-light-subtle rounded rounded-circle user-icon">
+                                            <i className="bi bi-person"></i>
+                                        </div>
+                                    }
                                 </div>
                             }
                         </div>
