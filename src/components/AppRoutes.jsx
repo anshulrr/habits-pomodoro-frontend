@@ -19,6 +19,7 @@ import SignupComponent from 'components/SignupComponent'
 import ForgotPasswordComponent from 'components/ForgotPasswordComponent'
 import AboutComponent from 'components/AboutComponent'
 import ListCommentsComponent from './features/comments/ListCommentsComponent'
+import ProfileComponent from './user-settings/ProfileComponent'
 
 function AuthenticatedRoute({ children }) {
     const authContext = useAuth()
@@ -74,6 +75,13 @@ export default function AppRoutes() {
                         <Route path='/settings' element={
                             <AuthenticatedRoute>
                                 <SettingsComponent />
+                            </AuthenticatedRoute>
+                        } />
+
+
+                        <Route path='/profile' element={
+                            <AuthenticatedRoute>
+                                <ProfileComponent />
                             </AuthenticatedRoute>
                         } />
 

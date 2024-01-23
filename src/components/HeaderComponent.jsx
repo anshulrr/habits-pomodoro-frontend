@@ -73,7 +73,7 @@ export default function HeaderComponent() {
                             }
                             {
                                 isAuthenticated &&
-                                <div>
+                                <Link className="nav-link" to="/profile" state={state}>
                                     {
                                         user.photoURL &&
                                         <div className="text-center" style={{ paddingTop: "8px" }}>
@@ -94,7 +94,7 @@ export default function HeaderComponent() {
                                             <i className="bi bi-person"></i>
                                         </div>
                                     }
-                                </div>
+                                </Link>
                             }
                         </div>
 
