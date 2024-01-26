@@ -32,6 +32,14 @@
         display: block;
     }
 
+    .left-menu-icon i {
+        height: 24px;
+        width: 24px;
+        background-color: #e8e5e5;
+        border-radius: 50%;
+        display: inline-block;
+    }
+
     .left-menu-container {
         position: fixed;
         top: 0;
