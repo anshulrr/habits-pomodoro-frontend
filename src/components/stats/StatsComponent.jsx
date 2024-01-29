@@ -17,6 +17,7 @@ import { StreakChart } from "components/stats/charts/StreakChart";
 import { ProjectCategoriesChart } from "components/stats/charts/ProjectCategoriesChart";
 import OutsideAlerter from "services/hooks/OutsideAlerter";
 import FooterComponent from "components/FooterComponent";
+import { getRunningPomodoroApi } from "services/api/PomodoroApiService";
 
 export default function ListStatsComponent() {
 
@@ -70,6 +71,7 @@ export default function ListStatsComponent() {
         () => {
             // console.debug('re-render StatsComponent')
             document.title = 'Stats';
+            getRunningPomodoroApi();    // update running pomodoro data on page reload
             retrieveProjectCategories();
             retrieveAccountabilitySubjects();
         }, []   // eslint-disable-line react-hooks/exhaustive-deps
@@ -78,7 +80,11 @@ export default function ListStatsComponent() {
 
     useEffect(
         () => {
-            setShowLeftMenu(false)
+            setShowLeftMenu(false);
+            // update running pomodoro data: 
+            // NOTE: will reflect in stats only in second reload
+            // TODO: find better solution
+            getRunningPomodoroApi();
         }, [reload]
     )
 
