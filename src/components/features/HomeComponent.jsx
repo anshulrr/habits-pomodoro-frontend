@@ -16,6 +16,7 @@ import { toast } from 'react-toastify';
 import { getTasksCountApi } from 'services/api/TaskApiService';
 import SearchTaskComponent from './tasks/SearchTaskComponent';
 import FooterComponent from 'components/FooterComponent';
+import { getRunningPomodoroApi } from 'services/api/PomodoroApiService';
 
 export default function HomeComponent({ setReloadHome }) {
 
@@ -44,6 +45,8 @@ export default function HomeComponent({ setReloadHome }) {
     const [endDate, setEndDate] = useState(null);
     const [isReversed, setReversed] = useState(false);
 
+    const [pomodoro, setPomodoro] = useState(null)
+
     const [pomodorosHeight, setPomodorosHeight] = useState(0);
     const [pomodorosListReload, setPomodorosListReload] = useState(0)
 
@@ -64,9 +67,31 @@ export default function HomeComponent({ setReloadHome }) {
                 .catch(error => console.error(error.message))
 
             retrieveOverdewTasksCount();
+
+            getRunningPomodoro()
         },
         [] // eslint-disable-line react-hooks/exhaustive-deps
     )
+
+    const getRunningPomodoro = () => {
+        // first unload the timer component
+        setPomodoro(null);
+        getRunningPomodoroApi()
+            .then(response => {
+                // console.debug(response)
+                if (response.status !== 204) {
+                    const running_pomodoro = response.data;
+                    running_pomodoro.task = response.data.task;
+                    running_pomodoro.task.project = response.data.project;
+                    setPomodoro(running_pomodoro);
+                }
+                // to handle completion of old pomodoro, update pomodoro list now
+                setPomodorosListReload(prev => prev + 1);
+            })
+            .catch(error => {
+                console.error(error.message)
+            })
+    }
 
     function retrieveOverdewTasksCount() {
         const taskData = {
@@ -213,6 +238,8 @@ export default function HomeComponent({ setReloadHome }) {
                                     tags={tags}
                                     projects={projects}
                                     setPomodorosListReload={setPomodorosListReload}
+                                    pomodoro={pomodoro}
+                                    setPomodoro={setPomodoro}
                                 />
                             }
                             {
@@ -227,6 +254,8 @@ export default function HomeComponent({ setReloadHome }) {
                                     isReversed={isReversed}
                                     title={tasksFilter}
                                     setPomodorosListReload={setPomodorosListReload}
+                                    pomodoro={pomodoro}
+                                    setPomodoro={setPomodoro}
                                 />
                             }
 
@@ -238,6 +267,8 @@ export default function HomeComponent({ setReloadHome }) {
                                     tags={tags}
                                     tag={tag}
                                     setPomodorosListReload={setPomodorosListReload}
+                                    pomodoro={pomodoro}
+                                    setPomodoro={setPomodoro}
                                 />
                             }
                         </div>
@@ -253,7 +284,7 @@ export default function HomeComponent({ setReloadHome }) {
                             </span>
                         }
                         {
-                            categoryIds.length > 0 &&
+                            categoryIds.length > 0 && pomodorosListReload !== 0 &&
                             <ListPomodorosComponent
                                 key={[pomodorosListReload]}
                                 includeCategories={categoryIds}

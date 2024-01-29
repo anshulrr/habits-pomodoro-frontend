@@ -21,6 +21,8 @@ export default function ListTasksComponent({
     title,
     tag,
     setPomodorosListReload,
+    pomodoro,
+    setPomodoro
 }) {
 
     const navigate = useNavigate()
@@ -34,8 +36,6 @@ export default function ListTasksComponent({
 
     const [archivedTasksCount, setArchivedTasksCount] = useState(0)
     const [showArchived, setShowArchived] = useState(false)
-
-    const [pomodoro, setPomodoro] = useState(null)
 
     const [pomodoroStatus, setPomodoroStatus] = useState(null)
 
@@ -59,9 +59,6 @@ export default function ListTasksComponent({
             // console.debug('re-render ListTasksComponents')
             getTasksCount('current', setTasksCount)
             getTasksCount('archived', setArchivedTasksCount)
-            if (pomodoro === null) {
-                getRunningPomodoro()
-            }
         }, [project, allTasksReload] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
@@ -116,27 +113,6 @@ export default function ListTasksComponent({
                     setMessage('Please finish the already running pomodoro');
                     // getRunningPomodoro();    // atomation is a bit confusing for user
                 }
-            })
-    }
-
-    const getRunningPomodoro = () => {
-        // first unload the timer component
-        setPomodoro(null);
-        getRunningPomodoroApi()
-            .then(response => {
-                // console.debug(response)
-                if (response.status === 204) {
-                    setMessage('No running pomodoro');
-                    return;
-                }
-                const running_pomodoro = response.data;
-                running_pomodoro.task = response.data.task;
-                running_pomodoro.task.project = response.data.project;
-                setPomodoro(running_pomodoro);
-                setMessage('');
-            })
-            .catch(error => {
-                console.error(error.message)
             })
     }
 
