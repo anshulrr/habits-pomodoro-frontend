@@ -254,12 +254,9 @@ export default function ListPomodorosComponent({
                                                                             <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2 lh-sm" onClick={() => updateCommentsData(pomodoro)}>
                                                                                 Notes <i className="align-middle bi bi-journal-text" />
                                                                             </button>
-                                                                            {
-                                                                                pomodoro.status === 'past' &&
-                                                                                <button type="button" className="btn btn-sm btn-outline-danger py-0 px-2 lh-sm" onClick={() => deleltePastPomodoro(pomodoro)}>
-                                                                                    Delete <i className="align-middle bi bi-trash" />
-                                                                                </button>
-                                                                            }
+                                                                            <button type="button" className="btn btn-sm btn-outline-danger py-0 px-2 lh-sm" onClick={() => deleltePastPomodoro(pomodoro)}>
+                                                                                Delete <i className="align-middle bi bi-trash" />
+                                                                            </button>
 
                                                                         </div>
                                                                     </span>
