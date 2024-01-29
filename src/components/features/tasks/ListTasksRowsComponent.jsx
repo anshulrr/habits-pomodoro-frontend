@@ -326,7 +326,6 @@ export default function ListTasksRowsComponent({
                     tasks.map(
                         task => {
                             // TODO: find better way to handle this
-                            task.projectId = task.project.id;
                             task.pomodoroLength = task.pomodoroLength || task.project.pomodoroLength || userSettings.pomodoroLength;
                             return (
                                 <div key={task.id} className={"update-list-row" + (showUpdatePopupId === task.id ? " update-list-row-selected" : "")}>

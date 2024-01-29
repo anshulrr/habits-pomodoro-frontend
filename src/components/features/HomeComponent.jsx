@@ -228,7 +228,7 @@ export default function HomeComponent({ setReloadHome }) {
 
                 <div className="col-lg-4" style={{ backgroundColor: "#e9ecef" }}>
                     {
-                        tags !== null &&
+                        tags !== null && projects.length !== 0 &&
                         <div>
                             {
                                 project &&
