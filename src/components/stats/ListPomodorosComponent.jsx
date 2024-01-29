@@ -146,7 +146,11 @@ export default function ListPomodorosComponent({
     const groupBy = function (arr, key) {
         return arr.reduce(function (result, x) {
             // console.debug(x);
-            let index = Math.floor(moment(x[key]).format('H') / 3);
+            const time = moment(x[key]);
+            let index = Math.floor(time.format('H') / 3);
+            if (time.format('H') % 3 === 0 && time.format('m') === '0') {
+                index--;
+            }
             (result[index]).push(x);
             return result;
         }, [[], [], [], [], [], [], [], []]);
