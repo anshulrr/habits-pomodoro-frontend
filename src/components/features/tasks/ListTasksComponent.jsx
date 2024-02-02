@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { createPomodoroApi, getRunningPomodoroApi } from "services/api/PomodoroApiService";
+import { createPomodoroApi } from "services/api/PomodoroApiService";
 import { getTasksCountApi } from "services/api/TaskApiService";
 
 import ListTasksRowsComponent from "components/features/tasks/ListTasksRowsComponent";
