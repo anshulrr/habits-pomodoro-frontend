@@ -73,6 +73,14 @@ export default function HomeComponent({ setReloadHome }) {
         [] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
+    // fix for pomodoro component: should reload with updated data
+    useEffect(
+        () => {
+            getRunningPomodoro()
+        },
+        [project, tag, tasksComponentReload]
+    )
+
     const getRunningPomodoro = () => {
         // first unload the timer component
         setPomodoro(null);

@@ -12,7 +12,7 @@ export default function HeaderComponent() {
 
     return (
         <header style={{ paddingTop: "56px" }}>
-            <nav className="fixed-top header-shadow bg-light border-bottom border-1">
+            <nav className="fixed-top header-shadow bg-light border-bottom border-2">
                 <div className="container">
                     <div className="d-flex justify-content-between header-menu">
 
