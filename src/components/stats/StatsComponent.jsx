@@ -313,7 +313,7 @@ export default function ListStatsComponent() {
                                     />
                                 </div>
                             </div >
-                            <div className="col-lg-6 px-0" style={{ display: subPage === "pomodoros" || showAll ? "block" : "none" }}>
+                            <div className="col-lg-6 px-0 mb-3" style={{ display: subPage === "pomodoros" || showAll ? "block" : "none" }}>
                                 <div className="p-1 chart-card" style={{ height: "70vh", overflowY: "scroll" }}>
                                     <ListPomodorosComponent
                                         key={reload}

@@ -54,6 +54,7 @@
     margin-top: 4px;
     margin-bottom: 4px;
     border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
 
 .update-list-row-selected {
@@ -107,6 +108,7 @@
     margin-top: 0px;
     margin-bottom: 0px;
     border-radius: 0px;
+    box-shadow: none;
 }
 
 .pomodoro-list-row-selected {
