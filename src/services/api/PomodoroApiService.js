@@ -1,26 +1,22 @@
 import { apiClient } from "./ApiClient";
 
 export const createPomodoroApi
-    = (pomodoro, task_id) => apiClient.post(`/pomodoros?task_id=${task_id}`, pomodoro)
+    = (pomodoro, task_id) => apiClient.post(`/pomodoros?taskId=${task_id}`, pomodoro)
 
 export const createPastPomodoroApi
-    = (pomodoro, task_id) => apiClient.post(`/pomodoros/past?task_id=${task_id}`, pomodoro)
+    = (pomodoro, task_id) => apiClient.post(`/pomodoros/past?taskId=${task_id}`, pomodoro)
 
 export const deletePastPomodoroApi
     = (pomodoro_id) => apiClient.delete(`/pomodoros/${pomodoro_id}`)
 
-// export const updatePomodoroApi
-//     = (id, pomodoro) => apiClient.put(`/pomodoros/${id}`, pomodoro)
+const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-const to = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-// passing data as params
 export const updatePomodoroApi
     = (id, pomodoro) => apiClient.put(`/pomodoros/${id}`, pomodoro)
 
 export const getPomodorosApi
     = ({ startDate, endDate, includeCategories, subject }) => {
-        const url = `/pomodoros?startDate=${startDate}&endDate=${endDate}&include_categories=${includeCategories}`;
+        const url = `/pomodoros?startDate=${startDate}&endDate=${endDate}&categoryIds=${includeCategories}`;
         if (!subject) {
             return apiClient.get(url);
         } else {
@@ -33,7 +29,7 @@ export const getRunningPomodoroApi
 
 export const getTasksPomodorosApi
     = ({ startDate, endDate, includeCategories, subject }) => {
-        const url = `/stats/tasks-time?startDate=${startDate}&endDate=${endDate}&include_categories=${includeCategories}`;
+        const url = `/stats/tasks-time?startDate=${startDate}&endDate=${endDate}&categoryIds=${includeCategories}`;
         if (!subject) {
             return apiClient.get(url);
         } else {
@@ -43,7 +39,7 @@ export const getTasksPomodorosApi
 
 export const getProjectsPomodorosApi
     = ({ startDate, endDate, includeCategories, subject }) => {
-        const url = `/stats/projects-time?startDate=${startDate}&endDate=${endDate}&include_categories=${includeCategories}`;
+        const url = `/stats/projects-time?startDate=${startDate}&endDate=${endDate}&categoryIds=${includeCategories}`;
         if (!subject) {
             return apiClient.get(url)
         } else {
@@ -53,7 +49,7 @@ export const getProjectsPomodorosApi
 
 export const getProjectCategoriesPomodorosApi
     = ({ startDate, endDate, includeCategories, subject }) => {
-        const url = `/stats/project-categories-time?startDate=${startDate}&endDate=${endDate}&include_categories=${includeCategories}`;
+        const url = `/stats/project-categories-time?startDate=${startDate}&endDate=${endDate}&categoryIds=${includeCategories}`;
         if (!subject) {
             return apiClient.get(url)
         } else {
@@ -63,7 +59,7 @@ export const getProjectCategoriesPomodorosApi
 
 export const getTotalPomodorosApi
     = ({ limit, startDate, endDate, includeCategories, subject }) => {
-        const url = `/stats/total-time?limit=${limit}&startDate=${startDate}&endDate=${endDate}&include_categories=${includeCategories}&timezone=${to}`;
+        const url = `/stats/total-time?limit=${limit}&startDate=${startDate}&endDate=${endDate}&categoryIds=${includeCategories}&timezone=${timezone}`;
         if (!subject) {
             return apiClient.get(url);
         } else {
@@ -73,9 +69,9 @@ export const getTotalPomodorosApi
 
 export const getStatsPomodorosCountApi
     = ({ startDate, endDate, subject, type, typeId, includeCategories }) => {
-        let url = `/stats/pomodoros-count?startDate=${startDate}&endDate=${endDate}&timezone=${to}&type=${type}&typeId=${typeId}`;
+        let url = `/stats/pomodoros-count?startDate=${startDate}&endDate=${endDate}&timezone=${timezone}&type=${type}&typeId=${typeId}`;
         if (type === 'user') {
-            url += `&include_categories=${includeCategories}`;
+            url += `&categoryIds=${includeCategories}`;
         }
         if (subject) {
             url += `&subjectId=${subject.id}`;
