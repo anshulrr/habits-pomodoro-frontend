@@ -148,9 +148,11 @@ export default function ListPomodorosComponent({
             // console.debug(x);
             const time = moment(x[key]);
             let index = Math.floor(time.format('H') / 3);
-            if (time.format('H') % 3 === 0 && time.format('m') === '0') {
-                index--;
-            }
+            // if (time.format('H') % 3 === 0 && time.format('m') === '0') {
+            //     // console.log(index);
+            //     // edge case: 00:00
+            //     // index--;
+            // }
             (result[index]).push(x);
             return result;
         }, [[], [], [], [], [], [], [], []]);
