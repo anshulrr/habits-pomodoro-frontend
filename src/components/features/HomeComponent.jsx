@@ -161,7 +161,7 @@ export default function HomeComponent({ setReloadHome }) {
 
     return (
         <div className="container">
-            <div className="row border-bottom border-2">
+            <div className="row">
                 <div className="col-lg-4 px-0 text-start">
 
                     <div className={showLeftMenu ? "left-menu-container" : ""}>
@@ -234,7 +234,7 @@ export default function HomeComponent({ setReloadHome }) {
                     </div>
                 </div>
 
-                <div className="col-lg-4" style={{ backgroundColor: "#e9ecef" }}>
+                <div className="col-lg-4 full-screen-height" style={{ backgroundColor: "#e9ecef" }}>
                     {
                         tags !== null && projects.length !== 0 &&
                         <div>
@@ -284,7 +284,7 @@ export default function HomeComponent({ setReloadHome }) {
                 </div>
 
                 <div className="col-lg-4">
-                    <div className="mt-3 mb-5 bg-white text-start text-secondary" style={{ minHeight: "50vh" }}>
+                    <div className="mt-3 mb-5 bg-white text-start text-secondary" style={{ minHeight: "30vh" }}>
                         {
                             categoryIds.length === 0 &&
                             <span className="loader-container mt-5" >

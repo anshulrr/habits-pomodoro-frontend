@@ -30,6 +30,7 @@
 
     .left-menu-icon {
         display: block;
+        cursor: pointer;
     }
 
     .left-menu-icon i {
@@ -193,4 +194,10 @@
 
 .footer-empty {
     height: 54px;
+}
+
+@media only screen and (min-width: 992px) {
+    .full-screen-height {
+        min-height: 100vh;
+    }
 }
