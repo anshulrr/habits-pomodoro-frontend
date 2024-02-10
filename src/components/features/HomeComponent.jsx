@@ -284,7 +284,7 @@ export default function HomeComponent({ setReloadHome }) {
                 </div>
 
                 <div className="col-lg-4">
-                    <div className="mt-3 mb-5 bg-white text-start text-secondary">
+                    <div className="mt-3 mb-5 bg-white text-start text-secondary" style={{ minHeight: "50vh" }}>
                         {
                             categoryIds.length === 0 &&
                             <span className="loader-container mt-5" >
@@ -303,6 +303,7 @@ export default function HomeComponent({ setReloadHome }) {
                                 setProjects={setProjects}
                                 setTodaysPomodorosMap={setTodaysPomodorosMap}
                             />
+
                         }
                     </div >
                 </div >

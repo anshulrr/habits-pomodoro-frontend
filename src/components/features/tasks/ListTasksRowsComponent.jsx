@@ -442,15 +442,15 @@ export default function ListTasksRowsComponent({
                                                             <hr className="my-2" />
                                                             {
                                                                 task.dueDate &&
-                                                                <button type="button" className={(task.dueDateButtonColor ? task.dueDateButtonColor : "btn-outline-secondary") + " btn btn-sm px-2 py-0 align-middle my-auto"} onClick={() => markCompleted(task)}>
-                                                                    Mark Completed <i className={task.type === 'bad' ? "bi bi-calendar-x" : "bi bi-calendar-check"} />
+                                                                <button type="button" className={(task.dueDateButtonColor ? task.dueDateButtonColor : "btn-outline-secondary") + " btn btn-sm px-2 py-0 align-middle"} onClick={() => markCompleted(task)}>
+                                                                    Mark Completed <i className={`lh-1 ${task.type === 'bad' ? "bi bi-calendar-x" : "bi bi-calendar-check"}`} />
                                                                 </button>
                                                             }
 
                                                             {
                                                                 task.status === 'current' &&
-                                                                <button type="button" className={`btn btn-sm btn-outline-${COLOR_MAP[task.type]} px-2 py-0 align-middle my-auto`} onClick={() => onCreateNewPomodoro(task)}>
-                                                                    Start Pomodoro <i className="bi bi-play-circle"></i>
+                                                                <button type="button" className={`btn btn-sm btn-outline-${COLOR_MAP[task.type]} px-2 py-0 align-middle`} onClick={() => onCreateNewPomodoro(task)}>
+                                                                    Start Pomodoro <i className="lh-1 bi bi-play-circle"></i>
                                                                 </button>
                                                             }
 
