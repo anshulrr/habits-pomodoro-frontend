@@ -231,7 +231,7 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
                                     {
                                         task.dueDate &&
                                         <span style={{ paddingRight: "0.1rem" }} >
-                                            <i className={task.type === 'bad' ? "bi bi-calendar-x" : "bi bi-calendar-check"} style={{ paddingRight: "0.1rem" }} />
+                                            <i className={"bi bi-calendar2-event"} style={{ paddingRight: "0.1rem" }} />
                                             {formatDate(task.dueDate)}
                                         </span>
                                     }

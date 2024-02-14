@@ -374,7 +374,7 @@ export default function ListTasksRowsComponent({
                                                         task.dueDate &&
                                                         <span style={{ paddingRight: "0.1rem" }} >
                                                             <span className={task.dueDateColor}>
-                                                                <i className={task.type === 'bad' ? "bi bi-calendar-x" : "bi bi-calendar-check"} style={{ paddingRight: "0.1rem" }} />
+                                                                <i className={"bi bi-calendar2-event"} style={{ paddingRight: "0.1rem" }} />
                                                             </span>
                                                             {formatDate(task.dueDate)}
                                                         </span>
@@ -429,7 +429,7 @@ export default function ListTasksRowsComponent({
                                                             {
                                                                 task.status === 'current' &&
                                                                 <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onUpdateDueDate(task)}>
-                                                                    Add {task.type === 'bad' ? 'Restrain' : 'Due'} Time <i className={task.type === 'bad' ? "ps-1 bi bi-calendar-x" : "ps-1 bi bi-calendar-check"} />
+                                                                    Add {task.type === 'bad' ? 'Restrain' : 'Due'} Time <i className={"ps-1 bi bi-calendar2-event"} />
                                                                 </button>
                                                             }
                                                             {
@@ -443,7 +443,7 @@ export default function ListTasksRowsComponent({
                                                             {
                                                                 task.dueDate &&
                                                                 <button type="button" className={(task.dueDateButtonColor ? task.dueDateButtonColor : "btn-outline-secondary") + " btn btn-sm px-2 py-0 align-middle"} onClick={() => markCompleted(task)}>
-                                                                    Mark Completed <i className={`lh-1 ${task.type === 'bad' ? "bi bi-calendar-x" : "bi bi-calendar-check"}`} />
+                                                                    Mark Completed <i className={`lh-1 bi bi-calendar2-check`} />
                                                                 </button>
                                                             }
 
@@ -493,7 +493,7 @@ export default function ListTasksRowsComponent({
                                             task.dueDate &&
                                             <div className="my-auto me-1 text-start">
                                                 <button type="button" className={(task.dueDateButtonColor ? task.dueDateButtonColor : "btn-outline-secondary") + " btn btn-sm px-1 py-0 align-middle"} onClick={() => markCompleted(task)}>
-                                                    <i className={task.type === 'bad' ? "bi bi-calendar-x" : "bi bi-calendar-check"} />
+                                                    <i className={"bi bi-calendar2-check"} />
                                                 </button>
                                             </div>
                                         }

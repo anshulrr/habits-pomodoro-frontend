@@ -87,11 +87,7 @@ export default function AboutComponent() {
                             </h2>
                             <ul className="text-start">
                                 <li>
-                                    To <span className="fw-bold">add a task</span> of the habit you want to monitor use
-                                    <button type="button" className="btn btn-sm btn-outline-secondary px-1 py-0 mx-1 align-middle">
-                                        <i className="bi bi-plus-circle"></i>
-                                    </button>
-                                    button.
+                                    <span className="fw-bold">Add a task</span> of the habit you want to monitor.
                                 </li>
                                 <li>
                                     <div>
@@ -110,7 +106,7 @@ export default function AboutComponent() {
                                             To <span className="fw-bold">add old entry</span> use
                                         </span>
                                         <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2 me-1">
-                                            Add past Pomodoro <i className="bi bi-calendar-plus" />
+                                            Add past Pomodoro
                                         </button>
                                         from task popup list, and specify 'End Time' & 'Time Spent'.
                                     </div>

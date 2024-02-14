@@ -123,7 +123,7 @@ export const tasksList2 = `
                                         <div class="subscript text-secondary"><span class="me-1"><span><i
                                                         class="bi bi-hourglass"></i></span>25</span><span
                                                 class="" style="padding-right: 0.1rem;"><i
-                                                    class="bi bi-calendar-check text-danger" style="padding-right: 0.1rem;"></i>Dec 21,
+                                                    class="bi bi-calendar2-event text-danger" style="padding-right: 0.1rem;"></i>Dec 21,
                                                 12:00</span><span><i class="bi bi-arrow-repeat"
                                                     style="padding-right: 0.1rem;"></i>2</span><span
                                                 style="float: right;"><span class="me-1"><span
@@ -135,7 +135,7 @@ export const tasksList2 = `
                                 </div>
                                 <div class="my-auto me-1 text-start"><button type="button"
                                         class="btn-outline-danger btn btn-sm px-1 py-0 align-middle"><i
-                                            class="bi bi-calendar-check"></i></button></div>
+                                            class="bi bi-calendar2-check"></i></button></div>
                                 <div class="my-auto me-2 text-start"><button type="button"
                                         class="btn btn-sm btn-outline-dark px-1 py-0 align-middle"><i
                                             class="bi bi-play-circle"></i></button></div>
@@ -151,7 +151,7 @@ export const tasksList2 = `
                                                     class="bi bi-clock" style="padding-right: 0.1rem;"></i>23:05</span><span
                                                 class="me-1"><i class="bi bi-clock-fill text-success"
                                                     style="padding-right: 0.1rem;"></i>50</span><span class="text-secondary"
-                                                style="padding-right: 0.1rem;"><i class="bi bi-calendar-check"
+                                                style="padding-right: 0.1rem;"><i class="bi bi-calendar2-event"
                                                     style="padding-right: 0.1rem;"></i>Dec 25, 8:00</span><span><i
                                                     class="bi bi-arrow-repeat"
                                                     style="padding-right: 0.1rem;"></i>2</span><span
@@ -164,7 +164,7 @@ export const tasksList2 = `
                                 </div>
                                 <div class="my-auto me-1 text-start"><button type="button"
                                         class="btn-outline-secondary btn btn-sm px-1 py-0 align-middle"><i
-                                            class="bi bi-calendar-check"></i></button></div>
+                                            class="bi bi-calendar2-check"></i></button></div>
                                 <div class="my-auto me-2 text-start"><button type="button"
                                         class="btn btn-sm btn-outline-success px-1 py-0 align-middle"><i
                                             class="bi bi-play-circle"></i></button></div>
@@ -179,7 +179,7 @@ export const tasksList2 = `
                                                         class="bi bi-hourglass"></i></span>10</span><span class="me-1"><i
                                                     class="bi bi-clock" style="padding-right: 0.1rem;"></i>6:41</span><span
                                                 class="text-secondary" style="padding-right: 0.1rem;"><i
-                                                    class="bi bi-calendar-check" style="padding-right: 0.1rem;"></i>Dec 25,
+                                                    class="bi bi-calendar2-event" style="padding-right: 0.1rem;"></i>Dec 25,
                                                 6:30</span><span><i class="bi bi-arrow-repeat"
                                                     style="padding-right: 0.1rem;"></i>2</span><span
                                                 style="float: right;"><span class="me-1"><span
@@ -191,7 +191,7 @@ export const tasksList2 = `
                                 </div>
                                 <div class="my-auto me-1 text-start"><button type="button"
                                         class="btn-outline-secondary btn btn-sm px-1 py-0 align-middle"><i
-                                            class="bi bi-calendar-check"></i></button></div>
+                                            class="bi bi-calendar2-check"></i></button></div>
                                 <div class="my-auto me-2 text-start"><button type="button"
                                         class="btn btn-sm btn-outline-dark px-1 py-0 align-middle"><i
                                             class="bi bi-play-circle"></i></button></div>
@@ -206,7 +206,7 @@ export const tasksList2 = `
                                                         class="bi bi-hourglass"></i></span>10</span><span class="me-1"><i
                                                     class="bi bi-clock" style="padding-right: 0.1rem;"></i>40</span><span
                                                 class="" style="padding-right: 0.1rem;"><i
-                                                    class="bi bi-calendar-check text-danger" style="padding-right: 0.1rem;"></i>Dec 21,
+                                                    class="bi bi-calendar2-event text-danger" style="padding-right: 0.1rem;"></i>Dec 21,
                                                 19:00</span><span><i class="bi bi-arrow-repeat"
                                                     style="padding-right: 0.1rem;"></i>1</span><span
                                                 style="float: right;"><span class="me-1"><span
@@ -218,7 +218,7 @@ export const tasksList2 = `
                                 </div>
                                 <div class="my-auto me-1 text-start"><button type="button"
                                         class="btn-outline-danger btn btn-sm px-1 py-0 align-middle"><i
-                                            class="bi bi-calendar-check"></i></button></div>
+                                            class="bi bi-calendar2-check"></i></button></div>
                                 <div class="my-auto me-2 text-start"><button type="button"
                                         class="btn btn-sm btn-outline-success px-1 py-0 align-middle"><i
                                             class="bi bi-play-circle"></i></button></div>
@@ -233,7 +233,7 @@ export const tasksList2 = `
                                                         class="bi bi-hourglass"></i></span>30</span><span class="me-1"><i
                                                     class="bi bi-clock" style="padding-right: 0.1rem;"></i>14:50</span><span
                                                 class="text-secondary" style="padding-right: 0.1rem;"><i
-                                                    class="bi bi-calendar-x"
+                                                    class="bi bi-calendar2-event"
                                                     style="padding-right: 0.1rem;"></i>19:30</span><span><i
                                                     class="bi bi-arrow-repeat"
                                                     style="padding-right: 0.1rem;"></i>1</span><span
@@ -246,7 +246,7 @@ export const tasksList2 = `
                                 </div>
                                 <div class="my-auto me-1 text-start"><button type="button"
                                         class="btn-outline-secondary btn btn-sm px-1 py-0 align-middle"><i
-                                            class="bi bi-calendar-x"></i></button></div>
+                                            class="bi bi-calendar2-check"></i></button></div>
                                 <div class="my-auto me-2 text-start"><button type="button"
                                         class="btn btn-sm btn-outline-secondary px-1 py-0 align-middle"><i
                                             class="bi bi-play-circle"></i></button></div>
@@ -1610,7 +1610,7 @@ export const taskStats = `
                     </div>
                     <div class="col-12 border text-center"><span class="me-1"><span><i
                                     class="bi bi-hourglass"></i></span>25</span><span style="padding-right: 0.1rem;"><i
-                                class="bi bi-calendar-check" style="padding-right: 0.1rem;"></i>21:30</span><span><i
+                                class="bi bi-calendar2-event" style="padding-right: 0.1rem;"></i>21:30</span><span><i
                                 class="bi bi-arrow-repeat" style="padding-right: 0.1rem;"></i>1</span></div>
                 </div>
                 <div id="pomodoros-list">

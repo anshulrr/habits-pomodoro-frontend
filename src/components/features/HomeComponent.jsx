@@ -202,13 +202,13 @@ export default function HomeComponent({ setReloadHome }) {
                                                     <div>
                                                         <div className={(!project && !tag && tasksFilter === "Overdue" ? "list-selected " : "") + "py-2 small row list-row"} onClick={() => fetchTasksAndUpdateAppStates('Overdue')}>
                                                             <div className="col-12">
-                                                                <i className="pe-1 bi bi-calendar-check text-danger" />
+                                                                <i className="pe-1 bi bi-calendar2-event text-danger" />
                                                                 Overdue
                                                             </div>
                                                         </div>
                                                         <div className={(!project && !tag && tasksFilter === "Upcoming" ? "list-selected " : "") + "py-2 small row list-row"} onClick={() => fetchTasksAndUpdateAppStates('Upcoming')}>
                                                             <div className="col-12">
-                                                                <i className="pe-1 bi bi-calendar-check" />
+                                                                <i className="pe-1 bi bi-calendar2-event" />
                                                                 Upcoming
                                                             </div>
                                                         </div>

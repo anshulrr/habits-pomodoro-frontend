@@ -147,7 +147,7 @@ export default function ListTasksComponent({
                             {
                                 !project && !tag && startDate &&
                                 <span>
-                                    <i className={(title === "Overdue" ? "text-danger " : "") + "px-1 bi bi-calendar-check"} />
+                                    <i className={(title === "Overdue" ? "text-danger " : "") + "px-1 bi bi-calendar2-event"} />
                                     {title} Tasks
                                 </span>
                             }

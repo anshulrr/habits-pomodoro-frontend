@@ -21,7 +21,7 @@ export default function DueDateInputComponent({
         <div className="row small text-secondary text-start">
             <div className="col-lg-4 col-6 mb-3">
                 <div>
-                    <label htmlFor={"DueDate" + popupNumber}>{type === 'bad' ? 'Restrain until' : 'Due by'} <i className={type === 'bad' ? "bi bi-calendar-x" : "bi bi-calendar-check"} /></label>
+                    <label htmlFor={"DueDate" + popupNumber}>{type === 'bad' ? 'Restrain until' : 'Due by'} <i className={type === 'bad' ? "bi bi-calendar2-x" : "bi bi-calendar2-event"} /></label>
                 </div>
                 <ReactDatePicker
                     className="form-control form-control-sm"
