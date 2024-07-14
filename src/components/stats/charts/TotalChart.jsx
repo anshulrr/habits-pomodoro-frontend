@@ -13,6 +13,7 @@ import annotationPlugin from "chartjs-plugin-annotation";
 Chart.register(CategoryScale)
 Chart.register(annotationPlugin);
 
+const X_COUNT = 12;
 const DAILY_GOAL = 16;
 const DAILY_THRESHOLD = 14;
 const POMODORO_LENGTH = 25;
@@ -56,7 +57,7 @@ export const TotalChart = ({ includeCategories, subject, statsSettings, buttonsS
                     const dataset = {
                         label: key,
                         backgroundColor: response.data[key].color,
-                        data: new Array(15).fill(0),
+                        data: new Array(X_COUNT).fill(0),
                         level: response.data[key].level, // for sort order
                         priority: response.data[key].priority, // for sort order
                         maxBarThickness: 6 * 3,
@@ -65,27 +66,27 @@ export const TotalChart = ({ includeCategories, subject, statsSettings, buttonsS
                         for (const val of response.data[key].dataArr) {
                             // console.debug(val.index, moment().add(-val.index + 1, 'd').format('DD'));
                             // todo: find cleaner solution for mapping data to labels
-                            const date_index = 15 - moment().add(-val.index + 1, 'd').add(15 * offset, 'd').format('DD');
+                            const date_index = X_COUNT - moment().add(-val.index + 1, 'd').add(X_COUNT * offset, 'd').format('DD');
                             dataset.data[date_index] = val.timeElapsed / scale;
                         }
                     } else if (limit === 'weekly') {
                         for (const val of response.data[key].dataArr) {
                             // console.debug(val, val.timeElapsed, moment().format('W'));
-                            const date_index = 15 - moment().add(-val.index + 1, 'W').add(15 * offset, 'W').format('W');
+                            const date_index = X_COUNT - moment().add(-val.index + 1, 'W').add(X_COUNT * offset, 'W').format('W');
 
                             let adjusted_scale = scale;
-                            if (offset === 0 && date_index === 14) {
+                            if (offset === 0 && date_index === (X_COUNT - 1)) {
                                 adjusted_scale = calculateScaleForAdjustedAvg({ limit, scale, ...statsSettings });
                             }
                             dataset.data[date_index] = val.timeElapsed / adjusted_scale;
                         }
                     } else if (limit === 'monthly') {
                         for (const val of response.data[key].dataArr) {
-                            const date = moment().add(-val.index + 1, 'M').add(15 * offset, 'M');
-                            const date_index = 15 - (date.format('M'));
+                            const date = moment().add(-val.index + 1, 'M').add(X_COUNT * offset, 'M');
+                            const date_index = X_COUNT - (date.format('M'));
 
                             let adjusted_scale = scale;
-                            if (offset === 0 && date_index === 14) {
+                            if (offset === 0 && date_index === (X_COUNT - 1)) {
                                 adjusted_scale = calculateScaleForAdjustedAvg({ limit, scale, ...statsSettings });
                             }
                             dataset.data[date_index] = val.timeElapsed / adjusted_scale;
@@ -108,19 +109,19 @@ export const TotalChart = ({ includeCategories, subject, statsSettings, buttonsS
         let startDate, endDate;
 
         if (limit === 'daily') {
-            const date = moment().startOf('day').add(-14 + 15 * offset, 'd');
+            const date = moment().startOf('day').add(-(X_COUNT - 1) + X_COUNT * offset, 'd');
             startDate = date.toISOString();
-            endDate = date.clone().endOf('day').add(14, 'd').toISOString();
+            endDate = date.clone().endOf('day').add((X_COUNT - 1), 'd').toISOString();
             // console.debug(startDate, endDate);
         } else if (limit === 'weekly') {
-            const date = moment().startOf('isoWeek').add(-14 + 15 * offset, 'w');
+            const date = moment().startOf('isoWeek').add(-(X_COUNT - 1) + X_COUNT * offset, 'w');
             startDate = date.toISOString();
-            endDate = date.clone().endOf('isoWeek').add(14, 'w').toISOString();
+            endDate = date.clone().endOf('isoWeek').add((X_COUNT - 1), 'w').toISOString();
             // console.debug(startDate, endDate);
         } else if (limit === 'monthly') {
-            const date = moment().startOf('month').add(-14 + 15 * offset, 'M');
+            const date = moment().startOf('month').add(-(X_COUNT - 1) + X_COUNT * offset, 'M');
             startDate = date.toISOString();
-            endDate = date.clone().add(14, 'M').endOf('month').toISOString();
+            endDate = date.clone().add((X_COUNT - 1), 'M').endOf('month').toISOString();
             // note: end of the month should be calculated in the end: as it changes every month
             // console.debug(startDate, endDate);
         }
@@ -144,32 +145,32 @@ export const TotalChart = ({ includeCategories, subject, statsSettings, buttonsS
     function updateLabels({ limit, offset }) {
         const labels = [];
         if (limit === 'daily') {
-            for (let i = 0; i < 15; i++) {
+            for (let i = 0; i < X_COUNT; i++) {
                 const str = moment()
-                    .add(15 * offset, 'd')
-                    .add(-14 + i, 'd')
+                    .add(X_COUNT * offset, 'd')
+                    .add(-(X_COUNT - 1) + i, 'd')
                     .format('DD MMM')
                 labels.push(str)
             }
         } else if (limit === 'weekly') {
-            for (let i = 0; i < 15; i++) {
+            for (let i = 0; i < X_COUNT; i++) {
                 const str = moment()
                     .startOf('isoWeek')
-                    .add(15 * offset, 'w')
-                    .add(i - 14, 'w')
+                    .add(X_COUNT * offset, 'w')
+                    .add(i - (X_COUNT - 1), 'w')
                     .format('DD MMM')
                     + "-" + moment()
                         .endOf('isoWeek')
-                        .add(15 * offset, 'w')
-                        .add(i - 14, 'w')
+                        .add(X_COUNT * offset, 'w')
+                        .add(i - (X_COUNT - 1), 'w')
                         .format('DD MMM')
                 labels.push(str);
             }
         } else if (limit === 'monthly') {
-            for (let i = 0; i < 15; i++) {
+            for (let i = 0; i < X_COUNT; i++) {
                 const str = moment()
-                    .add(15 * offset, 'M')
-                    .add(i - 14, 'M')
+                    .add(X_COUNT * offset, 'M')
+                    .add(i - (X_COUNT - 1), 'M')
                     .format('MMM YY')
                 labels.push(str);
             }
