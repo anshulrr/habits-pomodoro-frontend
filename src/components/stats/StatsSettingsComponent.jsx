@@ -13,6 +13,8 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
     const [chartWeeklyAverage, setChartWeeklyAverage] = useState(userSettings.chartWeeklyAverage)
     const [enableChartMonthlyAverage, setEnableChartMonthlyAverage] = useState(userSettings.enableChartMonthlyAverage)
     const [chartMonthlyAverage, setChartMonthlyAverage] = useState(userSettings.chartMonthlyAverage)
+    const [enableChartYearlyAverage, setEnableChartYearlyAverage] = useState(userSettings.enableChartYearlyAverage)
+    const [chartYearlyAverage, setChartYearlyAverage] = useState(userSettings.chartYearlyAverage)
     const [enableChartAdjustedWeeklyMonthlyAverage, setEnableChartAdjustedWeeklyMonthlyAverage] = useState(userSettings.enableChartAdjustedWeeklyMonthlyAverage)
     const [tasksChartType, setTasksChartType] = useState(userSettings.tasksChartType || "doughnut")
     const [projectsChartType, setProjectsChartType] = useState(userSettings.projectsChartType || "bar")
@@ -39,6 +41,8 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
             chartWeeklyAverage,
             enableChartMonthlyAverage,
             chartMonthlyAverage,
+            enableChartYearlyAverage,
+            chartYearlyAverage,
             enableChartAdjustedWeeklyMonthlyAverage,
             tasksChartType,
             projectsChartType,
@@ -63,8 +67,8 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
         if (chartScale === '' || chartScale < 1) {
             setErrorMessage('Chart Scale must be greater than 0');
         }
-        else if (chartWeeklyAverage === '' || chartWeeklyAverage < 1) {
-            setErrorMessage('Chart Weekly Average must be greater than 0');
+        else if (chartYearlyAverage === '' || chartYearlyAverage < 1) {
+            setErrorMessage('Chart Yearly Average must be greater than 0');
         }
         else if (chartMonthlyAverage === '' || chartMonthlyAverage < 1) {
             setErrorMessage('Chart Monthly Average must be greater than 0');
@@ -156,6 +160,34 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
                         min={1}
                         placeholder="Chart Monthly Average"
                         onChange={(e) => handleOnChange(setChartMonthlyAverage, e.target.value)}
+                        required
+                    />
+                </div>
+            </div>
+
+            <div className="col-lg-12">
+                <div className="input-group input-group-sm mb-2">
+                    <div className="input-group-text">
+                        <input
+                            type="checkbox"
+                            name="enableChartYearlyAverage"
+                            className="form-check-input mt-0"
+                            checked={enableChartYearlyAverage}
+                            onChange={(e) => handleOnChange(setEnableChartYearlyAverage, e.target.checked)}
+                            id="eChartYearlyAverage"
+                        />
+                    </div>
+                    <label className="input-group-text" htmlFor="eChartYearlyAverage">
+                        Enable Yearly Avg (days)
+                    </label>
+                    <input
+                        type="number"
+                        name="chartYearlyAverage"
+                        className="form-control"
+                        value={chartYearlyAverage}
+                        min={1}
+                        placeholder="Chart Yearly Average"
+                        onChange={(e) => handleOnChange(setChartYearlyAverage, e.target.value)}
                         required
                     />
                 </div>
