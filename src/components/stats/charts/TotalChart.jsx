@@ -91,6 +91,14 @@ export const TotalChart = ({ includeCategories, subject, statsSettings, buttonsS
                             }
                             dataset.data[date_index] = val.timeElapsed / adjusted_scale;
                         }
+                    } else if (limit === 'yearly') {
+                        for (const val of response.data[key].dataArr) {
+                            const date_count = moment().add(-val.index + 1, 'years').add(X_COUNT * offset, 'years').format('y');
+                            const date_index = X_COUNT - date_count;
+                            // console.debug({ val, date_count, date_index });
+
+                            dataset.data[date_index] = val.timeElapsed / scale;
+                        }
                     }
                     // console.debug(dataset);
                     localDatasets.push(dataset);
@@ -123,6 +131,11 @@ export const TotalChart = ({ includeCategories, subject, statsSettings, buttonsS
             startDate = date.toISOString();
             endDate = date.clone().add((X_COUNT - 1), 'M').endOf('month').toISOString();
             // note: end of the month should be calculated in the end: as it changes every month
+            // console.debug(startDate, endDate);
+        } else if (limit === 'yearly') {
+            const date = moment().startOf('year').add(-(X_COUNT - 1) + X_COUNT * offset, 'Y');
+            startDate = date.toISOString();
+            endDate = date.clone().add((X_COUNT - 1), 'Y').endOf('year').toISOString();
             // console.debug(startDate, endDate);
         }
 
@@ -172,6 +185,14 @@ export const TotalChart = ({ includeCategories, subject, statsSettings, buttonsS
                     .add(X_COUNT * offset, 'M')
                     .add(i - (X_COUNT - 1), 'M')
                     .format('MMM YY')
+                labels.push(str);
+            }
+        } else if (limit === 'yearly') {
+            for (let i = 0; i < X_COUNT; i++) {
+                const str = moment()
+                    .add(X_COUNT * offset, 'Y')
+                    .add(i - (X_COUNT - 1), 'Y')
+                    .format('YYYY')
                 labels.push(str);
             }
         }

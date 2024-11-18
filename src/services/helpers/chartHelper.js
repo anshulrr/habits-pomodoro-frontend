@@ -4,10 +4,12 @@ export const calculateScaleAndLabel = ({
     limit,
     enableChartScale,
     chartScale,
+    enableChartWeeklyAverage,
+    chartWeeklyAverage,
     enableChartMonthlyAverage,
     chartMonthlyAverage,
-    enableChartWeeklyAverage,
-    chartWeeklyAverage
+    enableChartYearlyAverage,
+    chartYearlyAverage
 }) => {
 
     let scale = 1;
@@ -27,6 +29,9 @@ export const calculateScaleAndLabel = ({
     } else if (limit === 'weekly' && enableChartWeeklyAverage) {
         label = "avg " + label;
         scale *= chartWeeklyAverage;
+    } else if (limit === 'yearly' && enableChartYearlyAverage) {
+        label = "avg " + label;
+        scale *= chartYearlyAverage;
     }
     // console.debug({ scale, label });
     return { scale, label };
@@ -36,10 +41,12 @@ export const calculateScaleForAdjustedAvg = ({
     limit,
     scale,
     enableChartAdjustedWeeklyMonthlyAverage,
+    enableChartWeeklyAverage,
+    chartWeeklyAverage,
     enableChartMonthlyAverage,
     chartMonthlyAverage,
-    enableChartWeeklyAverage,
-    chartWeeklyAverage
+    enableChartYearlyAverage,
+    chartYearlyAverage
 }) => {
     // console.debug({ scale }, moment().date(), moment().endOf('month').date());
     // assuming starting days of week/month as working day
@@ -55,6 +62,11 @@ export const calculateScaleForAdjustedAvg = ({
         ) {
             // distributed evenly throughout month
             scale = scale * moment().date() / moment().endOf('month').date();
+        } else if (limit === 'yearly' &&
+            enableChartYearlyAverage
+        ) {
+            // distributed evenly throughout year
+            scale = scale * moment().dayOfYear() / moment().endOf('year').dayOfYear();
         }
     }
     // console.debug({ scale });

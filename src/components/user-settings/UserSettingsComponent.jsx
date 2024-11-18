@@ -21,6 +21,8 @@ export default function UserSettingsComponent() {
     const [chartWeeklyAverage, setChartWeeklyAverage] = useState('')
     const [enableChartMonthlyAverage, setEnableChartMonthlyAverage] = useState('')
     const [chartMonthlyAverage, setChartMonthlyAverage] = useState('')
+    const [enableChartYearlyAverage, setEnableChartYearlyAverage] = useState('')
+    const [chartYearlyAverage, setChartYearlyAverage] = useState('')
     const [enableChartAdjustedWeeklyMonthlyAverage, setEnableChartAdjustedWeeklyMonthlyAverage] = useState('')
     const [pomodoroLength, setPomodoroLength] = useState('')
     const [breakLength, setBreakLength] = useState('')
@@ -54,6 +56,8 @@ export default function UserSettingsComponent() {
             setChartWeeklyAverage(userSettings.chartWeeklyAverage)
             setEnableChartMonthlyAverage(userSettings.enableChartMonthlyAverage)
             setChartMonthlyAverage(userSettings.chartMonthlyAverage)
+            setEnableChartYearlyAverage(userSettings.enableChartYearlyAverage)
+            setChartYearlyAverage(userSettings.chartYearlyAverage)
             setEnableChartAdjustedWeeklyMonthlyAverage(userSettings.enableChartAdjustedWeeklyMonthlyAverage)
             setPomodoroLength(userSettings.pomodoroLength)
             setBreakLength(userSettings.breakLength)
@@ -91,6 +95,8 @@ export default function UserSettingsComponent() {
             chartWeeklyAverage,
             enableChartMonthlyAverage,
             chartMonthlyAverage,
+            enableChartYearlyAverage,
+            chartYearlyAverage,
             enableChartAdjustedWeeklyMonthlyAverage,
             pomodoroLength,
             breakLength,
@@ -149,6 +155,9 @@ export default function UserSettingsComponent() {
         }
         else if (chartMonthlyAverage === '' || chartMonthlyAverage < 1) {
             setErrorMessage('Chart Monthly Average must be greater than 0');
+        }
+        else if (chartYearlyAverage === '' || chartYearlyAverage < 1) {
+            setErrorMessage('Chart Yearly Average must be greater than 0');
         }
         else if (pomodoroLength === '' || pomodoroLength < 1) {
             setErrorMessage('Pomodoro Length must be greater than 0');
@@ -506,6 +515,33 @@ export default function UserSettingsComponent() {
                                 min={1}
                                 placeholder="Chart Monthly Average"
                                 onChange={(e) => handleOnChange(setChartMonthlyAverage, e.target.value)}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="col-lg-12">
+                        <div className="input-group input-group-sm mb-2">
+                            <div className="input-group-text">
+                                <input
+                                    type="checkbox"
+                                    name="enableChartYearlyAverage"
+                                    className="form-check-input mt-0"
+                                    checked={enableChartYearlyAverage}
+                                    onChange={(e) => handleOnChange(setEnableChartYearlyAverage, e.target.checked)}
+                                    id="eChartYearlyAverage"
+                                />
+                            </div>
+                            <label className="input-group-text" htmlFor="eChartYearlyAverage">
+                                Enable Chart Yearly Avg (days)
+                            </label>
+                            <input
+                                type="number"
+                                name="chartYearlyAverage"
+                                className="form-control"
+                                value={chartYearlyAverage}
+                                min={1}
+                                placeholder="Chart Yearly Average"
+                                onChange={(e) => handleOnChange(setChartYearlyAverage, e.target.value)}
                             />
                         </div>
                     </div>
