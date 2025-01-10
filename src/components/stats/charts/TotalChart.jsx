@@ -97,7 +97,11 @@ export const TotalChart = ({ includeCategories, subject, statsSettings, buttonsS
                             const date_index = X_COUNT - date_count;
                             // console.debug({ val, date_count, date_index });
 
-                            dataset.data[date_index] = val.timeElapsed / scale;
+                            let adjusted_scale = scale;
+                            if (offset === 0 && date_index === (X_COUNT - 1)) {
+                                adjusted_scale = calculateScaleForAdjustedAvg({ limit, scale, ...statsSettings });
+                            }
+                            dataset.data[date_index] = val.timeElapsed / adjusted_scale;
                         }
                     }
                     // console.debug(dataset);
