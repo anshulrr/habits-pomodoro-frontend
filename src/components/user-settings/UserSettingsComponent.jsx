@@ -559,7 +559,7 @@ export default function UserSettingsComponent() {
                                 />
                             </div>
                             <label className="input-group-text" htmlFor="eChartAdjustedWeeklyMonthlyAverage">
-                                Enable Adjusted Avg for current W/M
+                                Enable Adjusted Avg for current W/M/Y
                             </label>
                         </div>
                     </div>
