@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import moment from 'moment';
 
 import { getStatsPomodorosCountApi } from 'services/api/PomodoroApiService';
@@ -7,13 +7,11 @@ import { retrieveAllTasksApi } from 'services/api/TaskApiService';
 import { CalendarChart } from './CalendarChart';
 import { useAuth } from 'services/auth/AuthContext';
 
-export const StreakChart = ({ subject, categories, includeCategories }) => {
+export const StreakChart = ({ subject, categories, includeCategories, buttonsStates, setButtonsStates }) => {
 
     const authContext = useAuth();
     const userSettings = authContext.userSettings;
 
-    const [startDate, setStartDate] = useState(moment().add(window.innerWidth <= 992 ? -0.5 : -1, 'y').toISOString());
-    const [endDate, setEndDate] = useState(moment().toISOString());
     const [categoryId, setCategoryId] = useState('0');
     const [updatedCategories, setUpdatedCategories] = useState([]);
     const [projectId, setProjectId] = useState('0');
@@ -27,12 +25,27 @@ export const StreakChart = ({ subject, categories, includeCategories }) => {
 
     const [showLoader, setShowLoader] = useState(false);
 
+    const [dataType, setDataType] = useState('user');
+    const [dataTypeId, setDataTypeId] = useState('0');
+    const isMounted = useRef(false);
+
     useEffect(
         () => {
             updateIncludedCategories()
-            retrieveStatsPomodorosCount('user')
         },
         [] // eslint-disable-line react-hooks/exhaustive-deps
+    )
+
+    useEffect(
+        () => {
+            // Skip the effect on the initial render
+            if (!isMounted.current) {
+                isMounted.current = true;
+                return;
+            }
+            retrieveStatsPomodorosCount(buttonsStates);
+        },
+        [dataType, dataTypeId]
     )
 
     const updateIncludedCategories = () => {
@@ -47,10 +60,8 @@ export const StreakChart = ({ subject, categories, includeCategories }) => {
         setUpdatedCategories(localUpdatedCategories);
     }
 
-    const retrieveStatsPomodorosCount = (dataType, dataTypeId = 0) => {
+    const retrieveStatsPomodorosCount = ({ startDate, endDate }) => {
         setShowLoader(true);
-        setStartDate(startDate);
-        setEndDate(endDate);
         getStatsPomodorosCountApi({ startDate, endDate, type: dataType, typeId: dataTypeId, subject, includeCategories })
             .then(response => {
                 const updated_data = {
@@ -118,10 +129,11 @@ export const StreakChart = ({ subject, categories, includeCategories }) => {
         setProjectId('0');
         setTaskId('0');
         if (id === '0') {
-            retrieveStatsPomodorosCount('user')
+            setDataType('user');
             setProjects([]);
         } else {
-            retrieveStatsPomodorosCount('category', id);
+            setDataType('category');
+            setDataTypeId(id);
             refreshProjects(id);
         }
         setTasks([]);
@@ -131,10 +143,12 @@ export const StreakChart = ({ subject, categories, includeCategories }) => {
         setProjectId(id);
         setTaskId('0');
         if (id === '0') {
-            retrieveStatsPomodorosCount('category', categoryId);
+            setDataType('category');
+            setDataTypeId(categoryId);
             setTasks([]);
         } else {
-            retrieveStatsPomodorosCount('project', id);
+            setDataType('project');
+            setDataTypeId(id);
             refreshTasks(id);
         }
     }
@@ -142,9 +156,11 @@ export const StreakChart = ({ subject, categories, includeCategories }) => {
     function updateTask(id) {
         setTaskId(id);
         if (id === '0') {
-            retrieveStatsPomodorosCount('project', projectId);
+            setDataType('project');
+            setDataTypeId(projectId);
         } else {
-            retrieveStatsPomodorosCount('task', id);
+            setDataType('task');
+            setDataTypeId(id);
         }
     }
 
@@ -221,12 +237,13 @@ export const StreakChart = ({ subject, categories, includeCategories }) => {
 
             <CalendarChart
                 chartData={chartData}
-                startDate={startDate}
-                endDate={endDate}
                 reloadData={reloadData}
                 tasksMap={tasksMap}
                 projectsMap={projectsMap}
                 showLoader={showLoader}
+                buttonsStates={buttonsStates}
+                setButtonsStates={setButtonsStates}
+                retrievePomodoros={retrieveStatsPomodorosCount}
             />
 
         </div >

@@ -28,6 +28,8 @@ export const Buttons = ({
             }
             retrievePomodoros({ startDate: start, endDate: end, limit, offset })
             setButtonsStates({
+                startDate: start,   // used by streak chart
+                endDate: end,
                 limit: limit,
                 offset: offset,
                 dateString: dateString

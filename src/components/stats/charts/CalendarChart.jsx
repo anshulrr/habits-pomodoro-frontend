@@ -6,13 +6,16 @@ import 'react-tooltip/dist/react-tooltip.css';
 
 import { timeToDisplay } from 'services/helpers/listsHelper';
 
+import { Buttons } from "components/stats/charts/Buttons";
+
 export const CalendarChart = ({ chartData,
-    startDate,
-    endDate,
     reloadData,
     tasksMap,
     projectsMap,
-    showLoader
+    showLoader,
+    retrievePomodoros,
+    buttonsStates,
+    setButtonsStates,
 }) => {
 
     // console.debug(tasksMap, projectsMap)
@@ -44,9 +47,16 @@ export const CalendarChart = ({ chartData,
 
     return (
         <div>
+            <Buttons
+                retrievePomodoros={retrievePomodoros}
+                buttonsStates={buttonsStates}
+                setButtonsStates={setButtonsStates}
+                showLimit={false}
+            />
+
             <CalendarHeatmap
-                startDate={startDate}
-                endDate={endDate}
+                startDate={buttonsStates.startDate}
+                endDate={buttonsStates.endDate}
                 values={chartData.data}
                 showWeekdayLabels={true}
                 classForValue={(value) => {
