@@ -28,7 +28,7 @@ export default function PastPomodoroComponent({
     function handleSubmit(error) {
         error.preventDefault();
 
-        if (minutesElapsed === '' || minutesElapsed <= 0 || minutesElapsed > (task.pomodoroLength || task.project.pomodoroLength || userSettings.pomodoroLength)) {
+        if (minutesElapsed === '' || minutesElapsed <= 0) {
             return;
         }
 
@@ -106,7 +106,6 @@ export default function PastPomodoroComponent({
                                             className="form-control form-control-sm"
                                             value={minutesElapsed}
                                             min={1}
-                                            max={task.pomodoroLength || task.project.pomodoroLength || userSettings.pomodoroLength}
                                             required
                                             placeholder="Past Pomodoro Minutes"
                                             onChange={(e) => handleOnChange(setMinutesElapsed, e.target.value)}
