@@ -11,10 +11,12 @@ import { getStatsPomodorosCountApi, getTaskPomodorosApi, getTaskPomodorosCountAp
 import { COLOR_MAP, formatDate, timeToDisplay } from 'services/helpers/listsHelper';
 import Pagination from 'services/pagination/Pagination';
 
+import { Buttons } from "components/stats/charts/Buttons";
+
 export const TaskStats = ({ task, setShowTaskStats }) => {
 
-    const [startDate, setStartDate] = useState(moment().add(window.innerWidth <= 992 ? -0.5 : -1, 'y').toISOString());
-    const [endDate, setEndDate] = useState(moment().toISOString());
+    // const [startDate, setStartDate] = useState(moment().add(window.innerWidth <= 992 ? -0.5 : -1, 'y').toISOString());
+    // const [endDate, setEndDate] = useState(moment().toISOString());
     const [chartData, setChartData] = useState({ data: [] })
 
     const PAGESIZE = 7
@@ -25,9 +27,17 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
 
     const [showLoader, setShowLoader] = useState(true)
 
+    const [streakButtonsStates, setStreakButtonsStates] = useState({
+        startDate: moment().startOf('year').toISOString(),
+        endDate: moment().endOf('year').toISOString(),
+        limit: 'yearly',
+        offset: 0,
+        dateString: moment().format('DD MMM')
+    })
+
     useEffect(
         () => {
-            retrieveStatsPomodorosCount('task', task.id)
+            // retrieveStatsPomodorosCount('task', task.id)
             retrieveTaskPomodorosCount()
             retrieveTaskPomodoros()
         }, [] // eslint-disable-line react-hooks/exhaustive-deps
@@ -39,9 +49,10 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
         }, [currentPage] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
-    const retrieveStatsPomodorosCount = (type, typeId) => {
-        setStartDate(startDate);
-        setEndDate(endDate);
+    const retrieveStatsPomodorosCount = ({ startDate, endDate }) => {
+        // setStartDate(startDate);
+        // setEndDate(endDate);
+        const type = 'task', typeId = task.id;
         getStatsPomodorosCountApi({ startDate, endDate, type, typeId })
             .then(response => {
                 const updated_data = {
@@ -156,9 +167,15 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
                     <div className="row mt-2">
                         <div className="col-12">
                             <div className="p-1 chart-card">
+                                <Buttons
+                                    retrievePomodoros={retrieveStatsPomodorosCount}
+                                    buttonsStates={streakButtonsStates}
+                                    setButtonsStates={setStreakButtonsStates}
+                                    showLimit={false}
+                                />
                                 <CalendarHeatmap
-                                    startDate={startDate}
-                                    endDate={endDate}
+                                    startDate={streakButtonsStates.startDate}
+                                    endDate={streakButtonsStates.endDate}
                                     values={chartData.data}
                                     showWeekdayLabels={true}
                                     classForValue={(value) => {

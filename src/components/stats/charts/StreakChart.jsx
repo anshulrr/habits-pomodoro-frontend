@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef } from 'react';
-import moment from 'moment';
 
 import { getStatsPomodorosCountApi } from 'services/api/PomodoroApiService';
 import { retrieveAllProjectsApi } from 'services/api/ProjectApiService';
