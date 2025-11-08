@@ -79,25 +79,22 @@ export const StreakButtons = ({
                 <button type="button" className={"btn btn-sm py-0 px-1 btn-outline-secondary " + (limit === "yearly" ? "active" : "")} onClick={() => updateLimit('yearly')}>Yearly</button>
             </div>
 
-            <div className="row">
-                <div className="col-3">
-                    {
-                        limit === 'yearly' &&
+            {
+                limit === 'yearly' &&
+                <div className="row">
+                    <div className="col-3">
                         <i className="btn btn-sm btn-outline-secondary py-0 px-1 lh-sm bi bi-arrow-left" onClick={() => updateOffset(offset - 1)}></i>
-                    }
-                </div>
-                <div className="col-6">
-                    <small>
-                        {dateString}
-                    </small>
-                </div>
-                <div className="col-3">
-                    {
-                        limit === 'yearly' &&
+                    </div>
+                    <div className="col-6">
+                        <small>
+                            {dateString}
+                        </small>
+                    </div>
+                    <div className="col-3">
                         <i className={"btn btn-sm btn-outline-secondary py-0 px-1 lh-sm bi bi-arrow-right" + (offset === 0 ? " disabled" : "")} onClick={() => updateOffset(offset + 1)}></i>
-                    }
+                    </div>
                 </div>
-            </div>
+            }
         </div>
     )
 }

@@ -313,27 +313,19 @@ export const streakChart = `
                     <div><button type="button"
                             class="btn btn-sm py-0 px-1 btn-outline-secondary active">Current</button><button type="button"
                             class="btn btn-sm py-0 px-1 btn-outline-secondary ">Yearly</button></div>
-                    <div class="row">
-                        <div class="col-3"></div>
-                        <div class="col-6"><small>Current</small></div>
-                        <div class="col-3"></div>
-                    </div>
-                </div><svg class="react-calendar-heatmap" viewBox="0 0 612 120">
+                </div><svg class="react-calendar-heatmap" viewBox="0 0 326 120">
                     <g transform="translate(30, 0)" class="react-calendar-heatmap-month-labels"><text x="33" y="10"
-                            class="react-calendar-heatmap-month-label">Dec</text><text x="88" y="10"
-                            class="react-calendar-heatmap-month-label">Jan</text><text x="132" y="10"
-                            class="react-calendar-heatmap-month-label">Feb</text><text x="176" y="10"
-                            class="react-calendar-heatmap-month-label">Mar</text><text x="231" y="10"
-                            class="react-calendar-heatmap-month-label">Apr</text><text x="275" y="10"
-                            class="react-calendar-heatmap-month-label">May</text><text x="319" y="10"
-                            class="react-calendar-heatmap-month-label">Jun</text><text x="374" y="10"
-                            class="react-calendar-heatmap-month-label">Jul</text><text x="418" y="10"
-                            class="react-calendar-heatmap-month-label">Aug</text><text x="473" y="10"
-                            class="react-calendar-heatmap-month-label">Sep</text><text x="517" y="10"
-                            class="react-calendar-heatmap-month-label">Oct</text><text x="561" y="10"
+                            class="react-calendar-heatmap-month-label">Jun</text><text x="88" y="10"
+                            class="react-calendar-heatmap-month-label">Jul</text><text x="132" y="10"
+                            class="react-calendar-heatmap-month-label">Aug</text><text x="187" y="10"
+                            class="react-calendar-heatmap-month-label">Sep</text><text x="231" y="10"
+                            class="react-calendar-heatmap-month-label">Oct</text><text x="275" y="10"
                             class="react-calendar-heatmap-month-label">Nov</text></g>
                     <g transform="translate(30, 14)" class="react-calendar-heatmap-all-weeks">
                         <g transform="translate(0, 0)" class="react-calendar-heatmap-week">
+                            <rect width="10" height="10" x="0" y="55" class="color-empty">
+                                <title></title>
+                            </rect>
                             <rect width="10" height="10" x="0" y="66" class="color-empty">
                                 <title></title>
                             </rect>
@@ -426,14 +418,12 @@ export const streakChart = `
                             <rect width="10" height="10" x="0" y="55" class="color-empty">
                                 <title></title>
                             </rect>
-                            <rect width="10" height="10" x="0" y="66" class="color-good-0" data-tooltip-id="streak-tooltip"
-                                data-tooltip-content="2024-12-07: 0:10">
+                            <rect width="10" height="10" x="0" y="66" class="color-empty">
                                 <title></title>
                             </rect>
                         </g>
                         <g transform="translate(55, 0)" class="react-calendar-heatmap-week">
-                            <rect width="10" height="10" x="0" y="0" class="color-good-0" data-tooltip-id="streak-tooltip"
-                                data-tooltip-content="2024-12-08: 0:10">
+                            <rect width="10" height="10" x="0" y="0" class="color-empty">
                                 <title></title>
                             </rect>
                             <rect width="10" height="10" x="0" y="11" class="color-empty">
@@ -462,15 +452,13 @@ export const streakChart = `
                             <rect width="10" height="10" x="0" y="11" class="color-empty">
                                 <title></title>
                             </rect>
-                            <rect width="10" height="10" x="0" y="22" class="color-good-10" data-tooltip-id="streak-tooltip"
-                                data-tooltip-content="2024-12-17: 0:30">
+                            <rect width="10" height="10" x="0" y="22" class="color-empty">
                                 <title></title>
                             </rect>
                             <rect width="10" height="10" x="0" y="33" class="color-empty">
                                 <title></title>
                             </rect>
-                            <rect width="10" height="10" x="0" y="44" class="color-good-10" data-tooltip-id="streak-tooltip"
-                                data-tooltip-content="2024-12-19: 0:30">
+                            <rect width="10" height="10" x="0" y="44" class="color-empty">
                                 <title></title>
                             </rect>
                             <rect width="10" height="10" x="0" y="55" class="color-empty">
@@ -487,12 +475,10 @@ export const streakChart = `
                             <rect width="10" height="10" x="0" y="11" class="color-empty">
                                 <title></title>
                             </rect>
-                            <rect width="10" height="10" x="0" y="22" class="color-good-10" data-tooltip-id="streak-tooltip"
-                                data-tooltip-content="2024-12-24: 0:40">
+                            <rect width="10" height="10" x="0" y="22" class="color-empty">
                                 <title></title>
                             </rect>
-                            <rect width="10" height="10" x="0" y="33" class="color-good-0" data-tooltip-id="streak-tooltip"
-                                data-tooltip-content="2024-12-25: 0:10">
+                            <rect width="10" height="10" x="0" y="33" class="color-empty">
                                 <title></title>
                             </rect>
                             <rect width="10" height="10" x="0" y="44" class="color-empty">
@@ -604,7 +590,8 @@ export const streakChart = `
                             <rect width="10" height="10" x="0" y="11" class="color-empty">
                                 <title></title>
                             </rect>
-                            <rect width="10" height="10" x="0" y="22" class="color-empty">
+                            <rect width="10" height="10" x="0" y="22" class="color-good-0" data-tooltip-id="streak-tooltip"
+                                data-tooltip-content="2025-07-29: 0:10">
                                 <title></title>
                             </rect>
                             <rect width="10" height="10" x="0" y="33" class="color-empty">
@@ -656,33 +643,40 @@ export const streakChart = `
                             <rect width="10" height="10" x="0" y="33" class="color-empty">
                                 <title></title>
                             </rect>
-                            <rect width="10" height="10" x="0" y="44" class="color-empty">
+                            <rect width="10" height="10" x="0" y="44" class="color-good-0" data-tooltip-id="streak-tooltip"
+                                data-tooltip-content="2025-08-14: 0:10">
                                 <title></title>
                             </rect>
                             <rect width="10" height="10" x="0" y="55" class="color-empty">
                                 <title></title>
                             </rect>
-                            <rect width="10" height="10" x="0" y="66" class="color-empty">
+                            <rect width="10" height="10" x="0" y="66" class="color-good-10" data-tooltip-id="streak-tooltip"
+                                data-tooltip-content="2025-08-16: 0:30">
                                 <title></title>
                             </rect>
                         </g>
                         <g transform="translate(165, 0)" class="react-calendar-heatmap-week">
-                            <rect width="10" height="10" x="0" y="0" class="color-empty">
+                            <rect width="10" height="10" x="0" y="0" class="color-good-10" data-tooltip-id="streak-tooltip"
+                                data-tooltip-content="2025-08-17: 0:30">
                                 <title></title>
                             </rect>
-                            <rect width="10" height="10" x="0" y="11" class="color-empty">
+                            <rect width="10" height="10" x="0" y="11" class="color-good-10" data-tooltip-id="streak-tooltip"
+                                data-tooltip-content="2025-08-18: 0:30">
                                 <title></title>
                             </rect>
                             <rect width="10" height="10" x="0" y="22" class="color-empty">
                                 <title></title>
                             </rect>
-                            <rect width="10" height="10" x="0" y="33" class="color-empty">
+                            <rect width="10" height="10" x="0" y="33" class="color-neutral-0"
+                                data-tooltip-id="streak-tooltip" data-tooltip-content="2025-08-20: 0:05">
                                 <title></title>
                             </rect>
-                            <rect width="10" height="10" x="0" y="44" class="color-empty">
+                            <rect width="10" height="10" x="0" y="44" class="color-neutral-0"
+                                data-tooltip-id="streak-tooltip" data-tooltip-content="2025-08-21: 0:08">
                                 <title></title>
                             </rect>
-                            <rect width="10" height="10" x="0" y="55" class="color-empty">
+                            <rect width="10" height="10" x="0" y="55" class="color-neutral-0"
+                                data-tooltip-id="streak-tooltip" data-tooltip-content="2025-08-22: 0:07">
                                 <title></title>
                             </rect>
                             <rect width="10" height="10" x="0" y="66" class="color-empty">
@@ -693,13 +687,16 @@ export const streakChart = `
                             <rect width="10" height="10" x="0" y="0" class="color-empty">
                                 <title></title>
                             </rect>
-                            <rect width="10" height="10" x="0" y="11" class="color-empty">
+                            <rect width="10" height="10" x="0" y="11" class="color-good-10" data-tooltip-id="streak-tooltip"
+                                data-tooltip-content="2025-08-25: 0:40">
                                 <title></title>
                             </rect>
-                            <rect width="10" height="10" x="0" y="22" class="color-empty">
+                            <rect width="10" height="10" x="0" y="22" class="color-good-0" data-tooltip-id="streak-tooltip"
+                                data-tooltip-content="2025-08-26: 0:15">
                                 <title></title>
                             </rect>
-                            <rect width="10" height="10" x="0" y="33" class="color-empty">
+                            <rect width="10" height="10" x="0" y="33" class="color-good-10" data-tooltip-id="streak-tooltip"
+                                data-tooltip-content="2025-08-27: 0:20">
                                 <title></title>
                             </rect>
                             <rect width="10" height="10" x="0" y="44" class="color-empty">
@@ -708,21 +705,26 @@ export const streakChart = `
                             <rect width="10" height="10" x="0" y="55" class="color-empty">
                                 <title></title>
                             </rect>
-                            <rect width="10" height="10" x="0" y="66" class="color-empty">
+                            <rect width="10" height="10" x="0" y="66" class="color-good-10" data-tooltip-id="streak-tooltip"
+                                data-tooltip-content="2025-08-30: 0:20">
                                 <title></title>
                             </rect>
                         </g>
                         <g transform="translate(187, 0)" class="react-calendar-heatmap-week">
-                            <rect width="10" height="10" x="0" y="0" class="color-empty">
+                            <rect width="10" height="10" x="0" y="0" class="color-good-0" data-tooltip-id="streak-tooltip"
+                                data-tooltip-content="2025-08-31: 0:10">
                                 <title></title>
                             </rect>
-                            <rect width="10" height="10" x="0" y="11" class="color-empty">
+                            <rect width="10" height="10" x="0" y="11" class="color-good-0" data-tooltip-id="streak-tooltip"
+                                data-tooltip-content="2025-09-01: 0:10">
                                 <title></title>
                             </rect>
-                            <rect width="10" height="10" x="0" y="22" class="color-empty">
+                            <rect width="10" height="10" x="0" y="22" class="color-good-0" data-tooltip-id="streak-tooltip"
+                                data-tooltip-content="2025-09-02: 0:15">
                                 <title></title>
                             </rect>
-                            <rect width="10" height="10" x="0" y="33" class="color-empty">
+                            <rect width="10" height="10" x="0" y="33" class="color-good-10" data-tooltip-id="streak-tooltip"
+                                data-tooltip-content="2025-09-03: 0:30">
                                 <title></title>
                             </rect>
                             <rect width="10" height="10" x="0" y="44" class="color-empty">
@@ -736,13 +738,16 @@ export const streakChart = `
                             </rect>
                         </g>
                         <g transform="translate(198, 0)" class="react-calendar-heatmap-week">
-                            <rect width="10" height="10" x="0" y="0" class="color-empty">
+                            <rect width="10" height="10" x="0" y="0" class="color-neutral-0"
+                                data-tooltip-id="streak-tooltip" data-tooltip-content="2025-09-07: 0:05">
                                 <title></title>
                             </rect>
-                            <rect width="10" height="10" x="0" y="11" class="color-empty">
+                            <rect width="10" height="10" x="0" y="11" class="color-neutral-0"
+                                data-tooltip-id="streak-tooltip" data-tooltip-content="2025-09-08: 0:05">
                                 <title></title>
                             </rect>
-                            <rect width="10" height="10" x="0" y="22" class="color-empty">
+                            <rect width="10" height="10" x="0" y="22" class="color-good-0" data-tooltip-id="streak-tooltip"
+                                data-tooltip-content="2025-09-09: 0:10">
                                 <title></title>
                             </rect>
                             <rect width="10" height="10" x="0" y="33" class="color-empty">
@@ -883,8 +888,7 @@ export const streakChart = `
                             <rect width="10" height="10" x="0" y="22" class="color-empty">
                                 <title></title>
                             </rect>
-                            <rect width="10" height="10" x="0" y="33" class="color-good-10" data-tooltip-id="streak-tooltip"
-                                data-tooltip-content="2025-04-23: 0:30">
+                            <rect width="10" height="10" x="0" y="33" class="color-empty">
                                 <title></title>
                             </rect>
                             <rect width="10" height="10" x="0" y="44" class="color-empty">
@@ -893,629 +897,11 @@ export const streakChart = `
                             <rect width="10" height="10" x="0" y="55" class="color-empty">
                                 <title></title>
                             </rect>
-                            <rect width="10" height="10" x="0" y="66" class="color-good-10" data-tooltip-id="streak-tooltip"
-                                data-tooltip-content="2025-04-26: 0:30">
+                            <rect width="10" height="10" x="0" y="66" class="color-empty">
                                 <title></title>
                             </rect>
                         </g>
                         <g transform="translate(275, 0)" class="react-calendar-heatmap-week">
-                            <rect width="10" height="10" x="0" y="0" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="11" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="22" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="33" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="44" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="55" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="66" class="color-empty">
-                                <title></title>
-                            </rect>
-                        </g>
-                        <g transform="translate(286, 0)" class="react-calendar-heatmap-week">
-                            <rect width="10" height="10" x="0" y="0" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="11" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="22" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="33" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="44" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="55" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="66" class="color-empty">
-                                <title></title>
-                            </rect>
-                        </g>
-                        <g transform="translate(297, 0)" class="react-calendar-heatmap-week">
-                            <rect width="10" height="10" x="0" y="0" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="11" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="22" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="33" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="44" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="55" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="66" class="color-empty">
-                                <title></title>
-                            </rect>
-                        </g>
-                        <g transform="translate(308, 0)" class="react-calendar-heatmap-week">
-                            <rect width="10" height="10" x="0" y="0" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="11" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="22" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="33" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="44" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="55" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="66" class="color-empty">
-                                <title></title>
-                            </rect>
-                        </g>
-                        <g transform="translate(319, 0)" class="react-calendar-heatmap-week">
-                            <rect width="10" height="10" x="0" y="0" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="11" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="22" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="33" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="44" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="55" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="66" class="color-empty">
-                                <title></title>
-                            </rect>
-                        </g>
-                        <g transform="translate(330, 0)" class="react-calendar-heatmap-week">
-                            <rect width="10" height="10" x="0" y="0" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="11" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="22" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="33" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="44" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="55" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="66" class="color-empty">
-                                <title></title>
-                            </rect>
-                        </g>
-                        <g transform="translate(341, 0)" class="react-calendar-heatmap-week">
-                            <rect width="10" height="10" x="0" y="0" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="11" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="22" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="33" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="44" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="55" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="66" class="color-empty">
-                                <title></title>
-                            </rect>
-                        </g>
-                        <g transform="translate(352, 0)" class="react-calendar-heatmap-week">
-                            <rect width="10" height="10" x="0" y="0" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="11" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="22" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="33" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="44" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="55" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="66" class="color-empty">
-                                <title></title>
-                            </rect>
-                        </g>
-                        <g transform="translate(363, 0)" class="react-calendar-heatmap-week">
-                            <rect width="10" height="10" x="0" y="0" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="11" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="22" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="33" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="44" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="55" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="66" class="color-empty">
-                                <title></title>
-                            </rect>
-                        </g>
-                        <g transform="translate(374, 0)" class="react-calendar-heatmap-week">
-                            <rect width="10" height="10" x="0" y="0" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="11" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="22" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="33" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="44" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="55" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="66" class="color-empty">
-                                <title></title>
-                            </rect>
-                        </g>
-                        <g transform="translate(385, 0)" class="react-calendar-heatmap-week">
-                            <rect width="10" height="10" x="0" y="0" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="11" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="22" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="33" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="44" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="55" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="66" class="color-empty">
-                                <title></title>
-                            </rect>
-                        </g>
-                        <g transform="translate(396, 0)" class="react-calendar-heatmap-week">
-                            <rect width="10" height="10" x="0" y="0" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="11" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="22" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="33" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="44" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="55" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="66" class="color-empty">
-                                <title></title>
-                            </rect>
-                        </g>
-                        <g transform="translate(407, 0)" class="react-calendar-heatmap-week">
-                            <rect width="10" height="10" x="0" y="0" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="11" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="22" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="33" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="44" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="55" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="66" class="color-empty">
-                                <title></title>
-                            </rect>
-                        </g>
-                        <g transform="translate(418, 0)" class="react-calendar-heatmap-week">
-                            <rect width="10" height="10" x="0" y="0" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="11" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="22" class="color-good-0" data-tooltip-id="streak-tooltip"
-                                data-tooltip-content="2025-07-29: 0:10">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="33" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="44" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="55" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="66" class="color-empty">
-                                <title></title>
-                            </rect>
-                        </g>
-                        <g transform="translate(429, 0)" class="react-calendar-heatmap-week">
-                            <rect width="10" height="10" x="0" y="0" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="11" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="22" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="33" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="44" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="55" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="66" class="color-empty">
-                                <title></title>
-                            </rect>
-                        </g>
-                        <g transform="translate(440, 0)" class="react-calendar-heatmap-week">
-                            <rect width="10" height="10" x="0" y="0" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="11" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="22" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="33" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="44" class="color-good-0" data-tooltip-id="streak-tooltip"
-                                data-tooltip-content="2025-08-14: 0:10">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="55" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="66" class="color-good-10" data-tooltip-id="streak-tooltip"
-                                data-tooltip-content="2025-08-16: 0:30">
-                                <title></title>
-                            </rect>
-                        </g>
-                        <g transform="translate(451, 0)" class="react-calendar-heatmap-week">
-                            <rect width="10" height="10" x="0" y="0" class="color-good-10" data-tooltip-id="streak-tooltip"
-                                data-tooltip-content="2025-08-17: 0:30">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="11" class="color-good-10" data-tooltip-id="streak-tooltip"
-                                data-tooltip-content="2025-08-18: 0:30">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="22" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="33" class="color-neutral-0"
-                                data-tooltip-id="streak-tooltip" data-tooltip-content="2025-08-20: 0:05">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="44" class="color-neutral-0"
-                                data-tooltip-id="streak-tooltip" data-tooltip-content="2025-08-21: 0:08">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="55" class="color-neutral-0"
-                                data-tooltip-id="streak-tooltip" data-tooltip-content="2025-08-22: 0:07">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="66" class="color-empty">
-                                <title></title>
-                            </rect>
-                        </g>
-                        <g transform="translate(462, 0)" class="react-calendar-heatmap-week">
-                            <rect width="10" height="10" x="0" y="0" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="11" class="color-good-10" data-tooltip-id="streak-tooltip"
-                                data-tooltip-content="2025-08-25: 0:40">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="22" class="color-good-0" data-tooltip-id="streak-tooltip"
-                                data-tooltip-content="2025-08-26: 0:15">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="33" class="color-good-10" data-tooltip-id="streak-tooltip"
-                                data-tooltip-content="2025-08-27: 0:20">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="44" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="55" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="66" class="color-good-10" data-tooltip-id="streak-tooltip"
-                                data-tooltip-content="2025-08-30: 0:20">
-                                <title></title>
-                            </rect>
-                        </g>
-                        <g transform="translate(473, 0)" class="react-calendar-heatmap-week">
-                            <rect width="10" height="10" x="0" y="0" class="color-good-0" data-tooltip-id="streak-tooltip"
-                                data-tooltip-content="2025-08-31: 0:10">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="11" class="color-good-0" data-tooltip-id="streak-tooltip"
-                                data-tooltip-content="2025-09-01: 0:10">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="22" class="color-good-0" data-tooltip-id="streak-tooltip"
-                                data-tooltip-content="2025-09-02: 0:15">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="33" class="color-good-10" data-tooltip-id="streak-tooltip"
-                                data-tooltip-content="2025-09-03: 0:30">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="44" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="55" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="66" class="color-empty">
-                                <title></title>
-                            </rect>
-                        </g>
-                        <g transform="translate(484, 0)" class="react-calendar-heatmap-week">
-                            <rect width="10" height="10" x="0" y="0" class="color-neutral-0"
-                                data-tooltip-id="streak-tooltip" data-tooltip-content="2025-09-07: 0:05">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="11" class="color-neutral-0"
-                                data-tooltip-id="streak-tooltip" data-tooltip-content="2025-09-08: 0:05">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="22" class="color-good-0" data-tooltip-id="streak-tooltip"
-                                data-tooltip-content="2025-09-09: 0:10">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="33" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="44" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="55" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="66" class="color-empty">
-                                <title></title>
-                            </rect>
-                        </g>
-                        <g transform="translate(495, 0)" class="react-calendar-heatmap-week">
-                            <rect width="10" height="10" x="0" y="0" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="11" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="22" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="33" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="44" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="55" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="66" class="color-empty">
-                                <title></title>
-                            </rect>
-                        </g>
-                        <g transform="translate(506, 0)" class="react-calendar-heatmap-week">
-                            <rect width="10" height="10" x="0" y="0" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="11" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="22" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="33" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="44" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="55" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="66" class="color-empty">
-                                <title></title>
-                            </rect>
-                        </g>
-                        <g transform="translate(517, 0)" class="react-calendar-heatmap-week">
-                            <rect width="10" height="10" x="0" y="0" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="11" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="22" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="33" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="44" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="55" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="66" class="color-empty">
-                                <title></title>
-                            </rect>
-                        </g>
-                        <g transform="translate(528, 0)" class="react-calendar-heatmap-week">
-                            <rect width="10" height="10" x="0" y="0" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="11" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="22" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="33" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="44" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="55" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="66" class="color-empty">
-                                <title></title>
-                            </rect>
-                        </g>
-                        <g transform="translate(539, 0)" class="react-calendar-heatmap-week">
-                            <rect width="10" height="10" x="0" y="0" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="11" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="22" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="33" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="44" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="55" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="66" class="color-empty">
-                                <title></title>
-                            </rect>
-                        </g>
-                        <g transform="translate(550, 0)" class="react-calendar-heatmap-week">
-                            <rect width="10" height="10" x="0" y="0" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="11" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="22" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="33" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="44" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="55" class="color-empty">
-                                <title></title>
-                            </rect>
-                            <rect width="10" height="10" x="0" y="66" class="color-empty">
-                                <title></title>
-                            </rect>
-                        </g>
-                        <g transform="translate(561, 0)" class="react-calendar-heatmap-week">
                             <rect width="10" height="10" x="0" y="0" class="color-empty">
                                 <title></title>
                             </rect>
@@ -1542,7 +928,7 @@ export const streakChart = `
                                 <title></title>
                             </rect>
                         </g>
-                        <g transform="translate(572, 0)" class="react-calendar-heatmap-week">
+                        <g transform="translate(286, 0)" class="react-calendar-heatmap-week">
                             <rect width="10" height="10" x="0" y="0" class="color-good-0" data-tooltip-id="streak-tooltip"
                                 data-tooltip-content="2025-11-02: 0:15">
                                 <title></title>
