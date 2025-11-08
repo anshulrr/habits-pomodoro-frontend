@@ -55,12 +55,14 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
             .then(response => {
                 const updated_data = {
                     data: [],
+                    totalTimeElapsed: 0
                 }
                 response.data.forEach((element, i) => {
                     updated_data.data.push({
                         date: element[1],
                         count: element[0]
                     })
+                    updated_data.totalTimeElapsed += element[0];
                 });
                 setChartData(updated_data)
                 setShowLoader(false)
@@ -151,7 +153,7 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
                             Total Time
                             <div className="">
                                 <i className="px-1 bi bi-clock" />
-                                {task.totalTimeElapsed !== undefined ? timeToDisplay(task.totalTimeElapsed / 60, true) : 0}
+                                {chartData.totalTimeElapsed !== undefined ? timeToDisplay(chartData.totalTimeElapsed, true) : 0}
                             </div>
                         </div>
                         <div className="col-4">
