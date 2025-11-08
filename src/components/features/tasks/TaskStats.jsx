@@ -11,7 +11,7 @@ import { getStatsPomodorosCountApi, getTaskPomodorosApi, getTaskPomodorosCountAp
 import { COLOR_MAP, formatDate, timeToDisplay } from 'services/helpers/listsHelper';
 import Pagination from 'services/pagination/Pagination';
 
-import { Buttons } from "components/stats/charts/Buttons";
+import { StreakButtons } from "components/stats/charts/StreakButtons";
 
 export const TaskStats = ({ task, setShowTaskStats }) => {
 
@@ -28,11 +28,9 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
     const [showLoader, setShowLoader] = useState(true)
 
     const [streakButtonsStates, setStreakButtonsStates] = useState({
-        startDate: moment().startOf('year').toISOString(),
-        endDate: moment().endOf('year').toISOString(),
-        limit: 'yearly',
+        limit: 'current',
         offset: 0,
-        dateString: moment().format('DD MMM')
+        dateString: 'Current'
     })
 
     useEffect(
@@ -167,11 +165,10 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
                     <div className="row mt-2">
                         <div className="col-12">
                             <div className="p-1 chart-card">
-                                <Buttons
+                                <StreakButtons
                                     retrievePomodoros={retrieveStatsPomodorosCount}
                                     buttonsStates={streakButtonsStates}
                                     setButtonsStates={setStreakButtonsStates}
-                                    showLimit={false}
                                 />
                                 <CalendarHeatmap
                                     startDate={streakButtonsStates.startDate}

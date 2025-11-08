@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react"
 import moment from "moment"
 
-export const Buttons = ({
+export const StreakButtons = ({
     retrievePomodoros,
     buttonsStates,
     setButtonsStates,
-    showDateString = true,
-    showLimit = true,
     isDummy = false
 }) => {
 
@@ -25,6 +23,8 @@ export const Buttons = ({
             }
             retrievePomodoros({ startDate: start, endDate: end, limit, offset })
             setButtonsStates({
+                startDate: start,   // used by streak chart
+                endDate: end,
                 limit: limit,
                 offset: offset,
                 dateString: str
@@ -49,26 +49,16 @@ export const Buttons = ({
 
     // need to get updated limit and offset (to avoid asynchronous execution)
     function updateDates(limit, offset) {
-        // console.debug('updated limit & offset: ', limit, offset)
         let start;
         let end;
         let str;
-        if (limit === 'daily') {
-            const date = moment().startOf('day').add(offset, 'd');
-            start = date.clone();
-            end = date.clone().endOf('day');
-            str = date.format('DD MMM');
-        } else if (limit === 'weekly') {
-            const date = moment().add(offset, 'w');
-            start = date.clone().startOf('isoWeek');
-            end = date.clone().endOf('isoWeek');
-            str = start.format('DD MMM') + "-" + end.format('DD MMM');
-        } else if (limit === 'monthly') {
-            const date = moment().add(offset, 'M');
-            start = date.clone().startOf('month');
-            end = date.clone().endOf('month');
-            str = date.format('MMM');
-        } else if (limit === 'yearly') {
+        // console.debug({ dateString, offset, limit })
+        if (limit === 'current') {
+            const date = moment();
+            start = date.clone().add(-1, 'y').startOf('day');
+            end = date.clone();
+            str = 'Current';
+        } else {
             const date = moment().add(offset, 'y');
             start = date.clone().startOf('year');
             end = date.clone().endOf('year');
@@ -84,27 +74,28 @@ export const Buttons = ({
 
     return (
         <div className="container">
-            {
-                showLimit &&
-                <div>
-                    <button type="button" className={"btn btn-sm py-0 px-1 btn-outline-secondary " + (limit === "daily" ? "active" : "")} onClick={() => updateLimit('daily')}>Daily</button>
-                    <button type="button" className={"btn btn-sm py-0 px-1 btn-outline-secondary " + (limit === "weekly" ? "active" : "")} onClick={() => updateLimit('weekly')}>Weekly</button>
-                    <button type="button" className={"btn btn-sm py-0 px-1 btn-outline-secondary " + (limit === "monthly" ? "active" : "")} onClick={() => updateLimit('monthly')}>Monthly</button>
-                    <button type="button" className={"btn btn-sm py-0 px-1 btn-outline-secondary " + (limit === "yearly" ? "active" : "")} onClick={() => updateLimit('yearly')}>Yearly</button>
-                </div>
-            }
+            <div>
+                <button type="button" className={"btn btn-sm py-0 px-1 btn-outline-secondary " + (limit === "current" ? "active" : "")} onClick={() => updateLimit('current')}>Current</button>
+                <button type="button" className={"btn btn-sm py-0 px-1 btn-outline-secondary " + (limit === "yearly" ? "active" : "")} onClick={() => updateLimit('yearly')}>Yearly</button>
+            </div>
 
             <div className="row">
                 <div className="col-3">
-                    <i className="btn btn-sm btn-outline-secondary py-0 px-1 lh-sm bi bi-arrow-left" onClick={() => updateOffset(-1)}></i>
+                    {
+                        limit === 'yearly' &&
+                        <i className="btn btn-sm btn-outline-secondary py-0 px-1 lh-sm bi bi-arrow-left" onClick={() => updateOffset(-1)}></i>
+                    }
                 </div>
                 <div className="col-6">
                     <small>
-                        {showDateString && dateString}
+                        {dateString}
                     </small>
                 </div>
                 <div className="col-3">
-                    <i className="btn btn-sm btn-outline-secondary py-0 px-1 lh-sm bi bi-arrow-right" onClick={() => updateOffset(1)}></i>
+                    {
+                        limit === 'yearly' &&
+                        <i className="btn btn-sm btn-outline-secondary py-0 px-1 lh-sm bi bi-arrow-right" onClick={() => updateOffset(1)}></i>
+                    }
                 </div>
             </div>
         </div>

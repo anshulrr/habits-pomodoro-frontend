@@ -64,11 +64,9 @@ export default function ListStatsComponent() {
     })
 
     const [streakButtonsStates, setStreakButtonsStates] = useState({
-        startDate: moment().startOf('year').toISOString(),
-        endDate: moment().endOf('year').toISOString(),
-        limit: 'yearly',
+        limit: 'current',
         offset: 0,
-        dateString: moment().format('YYYY')
+        dateString: 'Current'
     })
 
     const [subPage, setSubPage] = useState('')

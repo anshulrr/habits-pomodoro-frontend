@@ -6,7 +6,7 @@ import 'react-tooltip/dist/react-tooltip.css';
 
 import { timeToDisplay } from 'services/helpers/listsHelper';
 
-import { Buttons } from "components/stats/charts/Buttons";
+import { StreakButtons } from "components/stats/charts/StreakButtons";
 
 export const CalendarChart = ({ chartData,
     reloadData,
@@ -47,11 +47,10 @@ export const CalendarChart = ({ chartData,
 
     return (
         <div>
-            <Buttons
+            <StreakButtons
                 retrievePomodoros={retrievePomodoros}
                 buttonsStates={buttonsStates}
                 setButtonsStates={setButtonsStates}
-                showLimit={false}
             />
 
             <CalendarHeatmap
