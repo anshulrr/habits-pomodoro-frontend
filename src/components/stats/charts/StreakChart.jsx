@@ -44,7 +44,7 @@ export const StreakChart = ({ subject, categories, includeCategories, buttonsSta
             }
             retrieveStatsPomodorosCount(buttonsStates);
         },
-        [dataType, dataTypeId]
+        [dataType, dataTypeId] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
     const updateIncludedCategories = () => {

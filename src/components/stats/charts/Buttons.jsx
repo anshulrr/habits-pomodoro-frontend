@@ -36,7 +36,7 @@ export const Buttons = ({
         if (isDummy) {
             return;
         }
-        setOffset(offset + val);
+        setOffset(val);
     }
 
     function updateLimit(val) {
@@ -96,7 +96,7 @@ export const Buttons = ({
 
             <div className="row">
                 <div className="col-3">
-                    <i className="btn btn-sm btn-outline-secondary py-0 px-1 lh-sm bi bi-arrow-left" onClick={() => updateOffset(-1)}></i>
+                    <i className="btn btn-sm btn-outline-secondary py-0 px-1 lh-sm bi bi-arrow-left" onClick={() => updateOffset(offset - 1)}></i>
                 </div>
                 <div className="col-6">
                     <small>
@@ -104,7 +104,7 @@ export const Buttons = ({
                     </small>
                 </div>
                 <div className="col-3">
-                    <i className="btn btn-sm btn-outline-secondary py-0 px-1 lh-sm bi bi-arrow-right" onClick={() => updateOffset(1)}></i>
+                    <i className={"btn btn-sm btn-outline-secondary py-0 px-1 lh-sm bi bi-arrow-right" + (offset === 0 ? " disabled" : "")} onClick={() => updateOffset(offset + 1)}></i>
                 </div>
             </div>
         </div>

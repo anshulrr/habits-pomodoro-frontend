@@ -36,7 +36,7 @@ export const StreakButtons = ({
         if (isDummy) {
             return;
         }
-        setOffset(offset + val);
+        setOffset(val);
     }
 
     function updateLimit(val) {
@@ -83,7 +83,7 @@ export const StreakButtons = ({
                 <div className="col-3">
                     {
                         limit === 'yearly' &&
-                        <i className="btn btn-sm btn-outline-secondary py-0 px-1 lh-sm bi bi-arrow-left" onClick={() => updateOffset(-1)}></i>
+                        <i className="btn btn-sm btn-outline-secondary py-0 px-1 lh-sm bi bi-arrow-left" onClick={() => updateOffset(offset - 1)}></i>
                     }
                 </div>
                 <div className="col-6">
@@ -94,7 +94,7 @@ export const StreakButtons = ({
                 <div className="col-3">
                     {
                         limit === 'yearly' &&
-                        <i className="btn btn-sm btn-outline-secondary py-0 px-1 lh-sm bi bi-arrow-right" onClick={() => updateOffset(1)}></i>
+                        <i className={"btn btn-sm btn-outline-secondary py-0 px-1 lh-sm bi bi-arrow-right" + (offset === 0 ? " disabled" : "")} onClick={() => updateOffset(offset + 1)}></i>
                     }
                 </div>
             </div>
