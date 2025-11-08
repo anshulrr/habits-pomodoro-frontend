@@ -68,7 +68,7 @@ export default function ListStatsComponent() {
         endDate: moment().endOf('year').toISOString(),
         limit: 'yearly',
         offset: 0,
-        dateString: moment().format('DD MMM')
+        dateString: moment().format('YYYY')
     })
 
     const [subPage, setSubPage] = useState('')
