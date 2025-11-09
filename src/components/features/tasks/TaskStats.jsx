@@ -143,10 +143,9 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
                     </div>
                     <div className="row small">
                         <div className="col-4">
-                            Today's Time
+                            Number of Days
                             <div className="">
-                                <i className="px-1 bi bi-clock-fill" />
-                                {task.todaysTimeElapsed !== undefined ? timeToDisplay(task.todaysTimeElapsed / 60, true) : 0}
+                                # {chartData.data.length}
                             </div>
                         </div>
                         <div className="col-4">
@@ -157,9 +156,10 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
                             </div>
                         </div>
                         <div className="col-4">
-                            Number of Days
+                            Today's Time
                             <div className="">
-                                # {chartData.data.length}
+                                <i className="px-1 bi bi-clock-fill" />
+                                {task.todaysTimeElapsed !== undefined ? timeToDisplay(task.todaysTimeElapsed / 60, true) : 0}
                             </div>
                         </div>
                     </div>
@@ -294,10 +294,10 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
                                                 </div>
                                                 <div className="col-4 text-end">
                                                     <span className="small">
-                                                        <i className="bi bi-clock-fill" style={{ paddingRight: "0.1rem" }} />
                                                         <span style={{ fontVariantNumeric: "tabular-nums" }}>
                                                             {timeToDisplay(Math.round(pomodoro.timeElapsed / 60))}
                                                         </span>
+                                                        <i className="bi bi-clock-fill" style={{ paddingLeft: "0.1rem" }} />
                                                     </span>
                                                 </div>
                                             </div>

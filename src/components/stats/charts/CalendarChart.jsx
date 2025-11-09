@@ -53,6 +53,17 @@ export const CalendarChart = ({ chartData,
                 setButtonsStates={setButtonsStates}
             />
 
+            <div className="small">
+                <span className="pe-1">
+                    <i className="bi bi-hash" />
+                    {chartData.data.length}
+                </span>
+                <span>
+                    <i className="px-1 bi bi-clock" />
+                    {chartData.totalTimeElapsed !== undefined ? timeToDisplay(chartData.totalTimeElapsed, true) : 0}
+                </span>
+            </div>
+
             <CalendarHeatmap
                 startDate={buttonsStates.startDate}
                 endDate={buttonsStates.endDate}

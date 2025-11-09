@@ -66,6 +66,7 @@ export const StreakChart = ({ subject, categories, includeCategories, buttonsSta
                 const updated_data = {
                     data: [],
                     // label: `Project Categories (${label})`
+                    totalTimeElapsed: 0
                 }
                 response.data.forEach((element, i) => {
                     // console.debug(element);
@@ -73,6 +74,7 @@ export const StreakChart = ({ subject, categories, includeCategories, buttonsSta
                         date: element[1],
                         count: element[0]
                     })
+                    updated_data.totalTimeElapsed += element[0];
                 });
                 // console.debug(updated_data);
                 setChartData(updated_data)
