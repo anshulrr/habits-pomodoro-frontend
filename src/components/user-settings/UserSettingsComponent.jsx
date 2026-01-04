@@ -624,7 +624,7 @@ export default function UserSettingsComponent() {
                     <div className="col-lg-12">
                         <div className="input-group input-group-sm mb-2">
                             <label className="input-group-text" htmlFor="defaultStatsLimit">
-                                Limit
+                                Default Limit
                             </label>
                             <select
                                 className="form-select form-select-sm"
