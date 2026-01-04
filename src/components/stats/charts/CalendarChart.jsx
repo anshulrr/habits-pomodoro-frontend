@@ -6,13 +6,16 @@ import 'react-tooltip/dist/react-tooltip.css';
 
 import { timeToDisplay } from 'services/helpers/listsHelper';
 
+import { StreakButtons } from "components/stats/charts/StreakButtons";
+
 export const CalendarChart = ({ chartData,
-    startDate,
-    endDate,
     reloadData,
     tasksMap,
     projectsMap,
-    showLoader
+    showLoader,
+    retrievePomodoros,
+    buttonsStates,
+    setButtonsStates,
 }) => {
 
     // console.debug(tasksMap, projectsMap)
@@ -44,9 +47,26 @@ export const CalendarChart = ({ chartData,
 
     return (
         <div>
+            <StreakButtons
+                retrievePomodoros={retrievePomodoros}
+                buttonsStates={buttonsStates}
+                setButtonsStates={setButtonsStates}
+            />
+
+            <div className="small">
+                <span className="pe-1">
+                    <i className="bi bi-hash" />
+                    {chartData.data.length}
+                </span>
+                <span>
+                    <i className="px-1 bi bi-clock" />
+                    {chartData.totalTimeElapsed !== undefined ? timeToDisplay(chartData.totalTimeElapsed, true) : 0}
+                </span>
+            </div>
+
             <CalendarHeatmap
-                startDate={startDate}
-                endDate={endDate}
+                startDate={buttonsStates.startDate}
+                endDate={buttonsStates.endDate}
                 values={chartData.data}
                 showWeekdayLabels={true}
                 classForValue={(value) => {

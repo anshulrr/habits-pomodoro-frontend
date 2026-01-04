@@ -11,10 +11,12 @@ import { getStatsPomodorosCountApi, getTaskPomodorosApi, getTaskPomodorosCountAp
 import { COLOR_MAP, formatDate, timeToDisplay } from 'services/helpers/listsHelper';
 import Pagination from 'services/pagination/Pagination';
 
+import { StreakButtons } from "components/stats/charts/StreakButtons";
+
 export const TaskStats = ({ task, setShowTaskStats }) => {
 
-    const [startDate, setStartDate] = useState(moment().add(window.innerWidth <= 992 ? -0.5 : -1, 'y').toISOString());
-    const [endDate, setEndDate] = useState(moment().toISOString());
+    // const [startDate, setStartDate] = useState(moment().add(window.innerWidth <= 992 ? -0.5 : -1, 'y').toISOString());
+    // const [endDate, setEndDate] = useState(moment().toISOString());
     const [chartData, setChartData] = useState({ data: [] })
 
     const PAGESIZE = 7
@@ -25,9 +27,15 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
 
     const [showLoader, setShowLoader] = useState(true)
 
+    const [streakButtonsStates, setStreakButtonsStates] = useState({
+        limit: 'current',
+        offset: 0,
+        dateString: 'Current'
+    })
+
     useEffect(
         () => {
-            retrieveStatsPomodorosCount('task', task.id)
+            // retrieveStatsPomodorosCount('task', task.id)
             retrieveTaskPomodorosCount()
             retrieveTaskPomodoros()
         }, [] // eslint-disable-line react-hooks/exhaustive-deps
@@ -39,19 +47,22 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
         }, [currentPage] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
-    const retrieveStatsPomodorosCount = (type, typeId) => {
-        setStartDate(startDate);
-        setEndDate(endDate);
+    const retrieveStatsPomodorosCount = ({ startDate, endDate }) => {
+        // setStartDate(startDate);
+        // setEndDate(endDate);
+        const type = 'task', typeId = task.id;
         getStatsPomodorosCountApi({ startDate, endDate, type, typeId })
             .then(response => {
                 const updated_data = {
                     data: [],
+                    totalTimeElapsed: 0
                 }
                 response.data.forEach((element, i) => {
                     updated_data.data.push({
                         date: element[1],
                         count: element[0]
                     })
+                    updated_data.totalTimeElapsed += element[0];
                 });
                 setChartData(updated_data)
                 setShowLoader(false)
@@ -132,23 +143,23 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
                     </div>
                     <div className="row small">
                         <div className="col-4">
-                            Today's Time
+                            Number of Days
                             <div className="">
-                                <i className="px-1 bi bi-clock-fill" />
-                                {task.todaysTimeElapsed !== undefined ? timeToDisplay(task.todaysTimeElapsed / 60, true) : 0}
+                                # {chartData.data.length}
                             </div>
                         </div>
                         <div className="col-4">
                             Total Time
                             <div className="">
                                 <i className="px-1 bi bi-clock" />
-                                {task.totalTimeElapsed !== undefined ? timeToDisplay(task.totalTimeElapsed / 60, true) : 0}
+                                {chartData.totalTimeElapsed !== undefined ? timeToDisplay(chartData.totalTimeElapsed, true) : 0}
                             </div>
                         </div>
                         <div className="col-4">
-                            Number of Days
+                            Today's Time
                             <div className="">
-                                # {chartData.data.length}
+                                <i className="px-1 bi bi-clock-fill" />
+                                {task.todaysTimeElapsed !== undefined ? timeToDisplay(task.todaysTimeElapsed / 60, true) : 0}
                             </div>
                         </div>
                     </div>
@@ -156,9 +167,14 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
                     <div className="row mt-2">
                         <div className="col-12">
                             <div className="p-1 chart-card">
+                                <StreakButtons
+                                    retrievePomodoros={retrieveStatsPomodorosCount}
+                                    buttonsStates={streakButtonsStates}
+                                    setButtonsStates={setStreakButtonsStates}
+                                />
                                 <CalendarHeatmap
-                                    startDate={startDate}
-                                    endDate={endDate}
+                                    startDate={streakButtonsStates.startDate}
+                                    endDate={streakButtonsStates.endDate}
                                     values={chartData.data}
                                     showWeekdayLabels={true}
                                     classForValue={(value) => {
@@ -278,10 +294,10 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
                                                 </div>
                                                 <div className="col-4 text-end">
                                                     <span className="small">
-                                                        <i className="bi bi-clock-fill" style={{ paddingRight: "0.1rem" }} />
                                                         <span style={{ fontVariantNumeric: "tabular-nums" }}>
                                                             {timeToDisplay(Math.round(pomodoro.timeElapsed / 60))}
                                                         </span>
+                                                        <i className="bi bi-clock-fill" style={{ paddingLeft: "0.1rem" }} />
                                                     </span>
                                                 </div>
                                             </div>

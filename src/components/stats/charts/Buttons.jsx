@@ -15,14 +15,11 @@ export const Buttons = ({
 
     const [dateString, setDateString] = useState(buttonsStates.dateString)
 
-    const [startDate, setStartDate] = useState(moment().startOf('day').toISOString())
-    const [endDate, setEndDate] = useState(moment().endOf('day').toISOString())
-
     // to retrive data after click on bottons
     useEffect(
         () => {
             // update dates for component re render with updated limit and offset
-            const { start, end } = updateDates(limit, offset)
+            const { start, end, str } = updateDates(limit, offset)
             if (isDummy) {
                 return;
             }
@@ -30,25 +27,22 @@ export const Buttons = ({
             setButtonsStates({
                 limit: limit,
                 offset: offset,
-                dateString: dateString
+                dateString: str
             })
-        }, [startDate, endDate] // eslint-disable-line react-hooks/exhaustive-deps
+        }, [offset, limit] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
     function updateOffset(val) {
         if (isDummy) {
             return;
         }
-        updateDates(limit, offset + val)
-        setOffset(offset + val);
+        setOffset(val);
     }
 
     function updateLimit(val) {
         if (isDummy) {
             return;
         }
-        // console.debug('updating limit')
-        updateDates(val, 0)
         setLimit(val);
         setOffset(0);
     }
@@ -84,10 +78,8 @@ export const Buttons = ({
         end = end.toISOString();
 
         setDateString(str);
-        setStartDate(start);
-        setEndDate(end);
 
-        return { start, end }
+        return { start, end, str }
     }
 
     return (
@@ -104,7 +96,7 @@ export const Buttons = ({
 
             <div className="row">
                 <div className="col-3">
-                    <i className="btn btn-sm btn-outline-secondary py-0 px-1 lh-sm bi bi-arrow-left" onClick={() => updateOffset(-1)}></i>
+                    <i className="btn btn-sm btn-outline-secondary py-0 px-1 lh-sm bi bi-arrow-left" onClick={() => updateOffset(offset - 1)}></i>
                 </div>
                 <div className="col-6">
                     <small>
@@ -112,7 +104,7 @@ export const Buttons = ({
                     </small>
                 </div>
                 <div className="col-3">
-                    <i className="btn btn-sm btn-outline-secondary py-0 px-1 lh-sm bi bi-arrow-right" onClick={() => updateOffset(1)}></i>
+                    <i className={"btn btn-sm btn-outline-secondary py-0 px-1 lh-sm bi bi-arrow-right" + (offset === 0 ? " disabled" : "")} onClick={() => updateOffset(offset + 1)}></i>
                 </div>
             </div>
         </div>

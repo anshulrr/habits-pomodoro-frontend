@@ -63,6 +63,12 @@ export default function ListStatsComponent() {
         dateString: moment().format('DD MMM')
     })
 
+    const [streakButtonsStates, setStreakButtonsStates] = useState({
+        limit: 'current',
+        offset: 0,
+        dateString: 'Current'
+    })
+
     const [subPage, setSubPage] = useState('')
     const [showAll, setShowAll] = useState(true)
 
@@ -310,6 +316,8 @@ export default function ListStatsComponent() {
                                         includeCategories={includeCategories}
                                         categories={categories}
                                         subject={subject}
+                                        buttonsStates={streakButtonsStates}
+                                        setButtonsStates={setStreakButtonsStates}
                                     />
                                 </div>
                             </div >
