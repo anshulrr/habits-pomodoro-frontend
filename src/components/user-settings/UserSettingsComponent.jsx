@@ -36,6 +36,7 @@ export default function UserSettingsComponent() {
     const [tasksChartType, setTasksChartType] = useState('')
     const [projectsChartType, setProjectsChartType] = useState('')
     const [projectCategoriesChartType, setProjectCategoriesChartType] = useState('')
+    const [defaultStatsLimit, setDefaultStatsLimit] = useState('daily')
     const [homePageDefaultList, setHomePageDefaultList] = useState('')
     const [enableNotifications, setEnableNotifications] = useState('')
 
@@ -71,6 +72,7 @@ export default function UserSettingsComponent() {
             setTasksChartType(userSettings.tasksChartType || "doughnut")
             setProjectsChartType(userSettings.projectsChartType || "bar")
             setProjectCategoriesChartType(userSettings.projectCategoriesChartType || "bar")
+            setDefaultStatsLimit(userSettings.defaultStatsLimit || "daily")
             setHomePageDefaultList(userSettings.homePageDefaultList || "projects")
             setEnableNotifications(userSettings.enableNotifications)
         }
@@ -110,6 +112,7 @@ export default function UserSettingsComponent() {
             tasksChartType,
             projectsChartType,
             projectCategoriesChartType,
+            defaultStatsLimit,
             homePageDefaultList,
             enableNotifications
         }
@@ -614,6 +617,26 @@ export default function UserSettingsComponent() {
                             >
                                 <option value="bar">Bar</option>
                                 <option value="doughnut">Doughnut</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div className="col-lg-12">
+                        <div className="input-group input-group-sm mb-2">
+                            <label className="input-group-text" htmlFor="defaultStatsLimit">
+                                Limit
+                            </label>
+                            <select
+                                className="form-select form-select-sm"
+                                name="dafault-stats-limit"
+                                onChange={(e) => handleOnChange(setDefaultStatsLimit, e.target.value)}
+                                value={defaultStatsLimit}
+                                id="defaultStatsLimit"
+                            >
+                                <option value="daily">Daily</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="monthly">Monthly</option>
+                                <option value="yearly">Yearly</option>
                             </select>
                         </div>
                     </div>
