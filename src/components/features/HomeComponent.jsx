@@ -7,6 +7,11 @@ import ListProjectsComponent from 'components/features/projects/ListProjectsComp
 import ListTasksComponent from 'components/features/tasks/ListTasksComponent';
 import ListPomodorosComponent from 'components/stats/ListPomodorosComponent';
 import ListTagsComponent from 'components/features/tags/ListTagsComponents';
+import { TasksChart } from "components/stats/charts/TasksChart";
+import { TotalChart } from "components/stats/charts/TotalChart";
+import { ProjectsDistributionChart } from "components/stats/charts/ProjectsDistributionChart";
+import { ProjectCategoriesChart } from "components/stats/charts/ProjectCategoriesChart";
+import { StreakChart } from "components/stats/charts/StreakChart";
 
 import OutsideAlerter from 'services/hooks/OutsideAlerter';
 import { useAuth } from 'services/auth/AuthContext';
@@ -51,6 +56,38 @@ export default function HomeComponent({ setReloadHome }) {
     const [pomodorosListReload, setPomodorosListReload] = useState(0)
 
     const [categoryIds, setCategoryIds] = useState([]);
+    const [categories, setCategories] = useState([]);
+
+
+    const [tasksChartButtonsStates, setTasksChartButtonsStates] = useState({
+        limit: 'daily',
+        offset: 0,
+        dateString: moment().format('DD MMM')
+    })
+
+    const [totalChartButtonsStates, setTotalChartButtonsStates] = useState({
+        limit: 'daily',
+        offset: 0,
+        dateString: ''
+    })
+
+    const [projectsChartButtonsStates, setProjectsChartButtonsStates] = useState({
+        limit: 'daily',
+        offset: 0,
+        dateString: moment().format('DD MMM')
+    })
+
+    const [categoriesChartButtonsStates, setCategoriesChartButtonsStates] = useState({
+        limit: 'daily',
+        offset: 0,
+        dateString: moment().format('DD MMM')
+    })
+
+    const [streakButtonsStates, setStreakButtonsStates] = useState({
+        limit: 'current',
+        offset: 0,
+        dateString: 'Current'
+    })
 
     useEffect(
         () => {
@@ -63,6 +100,7 @@ export default function HomeComponent({ setReloadHome }) {
             retrieveAllProjectCategoriesApi(100, 0)
                 .then(response => {
                     setCategoryIds(response.data.map(c => c.id));
+                    setCategories(response.data);
                 })
                 .catch(error => console.error(error.message))
 
@@ -284,28 +322,145 @@ export default function HomeComponent({ setReloadHome }) {
                 </div>
 
                 <div className="col-lg-4">
-                    <div className="mt-3 mb-5 bg-white text-start text-secondary" style={{ minHeight: "30vh" }}>
-                        {
-                            categoryIds.length === 0 &&
-                            <span className="loader-container mt-5" >
-                                <span className="loader"></span>
-                            </span>
-                        }
-                        {
-                            categoryIds.length > 0 && pomodorosListReload !== 0 &&
-                            <ListPomodorosComponent
-                                key={[pomodorosListReload]}
-                                includeCategories={categoryIds}
-                                title={"Today's Pomodoros"}
-                                elementHeight={pomodorosHeight}
-                                setElementHeight={setPomodorosHeight}
-                                setTasksComponentReload={setTasksComponentReload}
-                                setProjects={setProjects}
-                                setTodaysPomodorosMap={setTodaysPomodorosMap}
-                            />
-
-                        }
+                    <div className="mt-3 bg-white text-center text-secondary">
+                        <div className="p-1 chart-card">
+                            {
+                                categoryIds.length === 0 &&
+                                <span className="loader-container mt-5" >
+                                    <span className="loader"></span>
+                                </span>
+                            }
+                            {
+                                categoryIds.length > 0 && pomodorosListReload !== 0 &&
+                                <ListPomodorosComponent
+                                    key={[pomodorosListReload]}
+                                    includeCategories={categoryIds}
+                                    title={"Today's Pomodoros"}
+                                    elementHeight={pomodorosHeight}
+                                    setElementHeight={setPomodorosHeight}
+                                    setTasksComponentReload={setTasksComponentReload}
+                                    setProjects={setProjects}
+                                    setTodaysPomodorosMap={setTodaysPomodorosMap}
+                                />
+                            }
+                        </div >
                     </div >
+                    {
+                        userSettings.homePageChart === 'tasks' &&
+                        <div className="mt-3 mb-5 bg-white text-center text-secondary" style={{ minHeight: "30vh" }}>
+                            <div className="p-1 chart-card">
+                                {
+                                    categoryIds.length === 0 && pomodorosListReload !== 0 &&
+                                    <span className="loader-container mt-5" >
+                                        <span className="loader"></span>
+                                    </span>
+                                }
+                                {
+                                    categoryIds.length > 0 && pomodorosListReload !== 0 &&
+                                    <TasksChart
+                                        key={[pomodorosListReload]}
+                                        includeCategories={categoryIds}
+                                        statsSettings={userSettings}
+                                        buttonsStates={tasksChartButtonsStates}
+                                        setButtonsStates={setTasksChartButtonsStates}
+                                    />
+                                }
+                            </div >
+                        </div >
+                    }
+                    {
+                        userSettings.homePageChart === 'total' &&
+                        <div className="mt-3 mb-5 bg-white text-center text-secondary" style={{ minHeight: "30vh" }}>
+                            <div className="p-1 chart-card">
+                                {
+                                    categoryIds.length === 0 &&
+                                    <span className="loader-container mt-5" >
+                                        <span className="loader"></span>
+                                    </span>
+                                }
+                                {
+                                    categoryIds.length > 0 && pomodorosListReload !== 0 &&
+                                    <TotalChart
+                                        key={[pomodorosListReload]}
+                                        includeCategories={categoryIds}
+                                        statsSettings={userSettings}
+                                        buttonsStates={totalChartButtonsStates}
+                                        setButtonsStates={setTotalChartButtonsStates}
+                                    />
+                                }
+                            </div >
+                        </div >
+                    }
+                    {
+                        userSettings.homePageChart === 'projects' &&
+                        <div className="mt-3 mb-5 bg-white text-center text-secondary" style={{ minHeight: "30vh" }}>
+                            <div className="p-1 chart-card">
+                                {
+                                    categoryIds.length === 0 &&
+                                    <span className="loader-container mt-5" >
+                                        <span className="loader"></span>
+                                    </span>
+                                }
+                                {
+                                    categoryIds.length > 0 && pomodorosListReload !== 0 &&
+                                    <ProjectsDistributionChart
+                                        key={[pomodorosListReload]}
+                                        includeCategories={categoryIds}
+                                        statsSettings={userSettings}
+                                        buttonsStates={projectsChartButtonsStates}
+                                        setButtonsStates={setProjectsChartButtonsStates}
+                                    />
+                                }
+                            </div >
+                        </div >
+                    }
+                    {
+                        userSettings.homePageChart === 'categories' &&
+                        <div className="mt-3 mb-5 bg-white text-center text-secondary" style={{ minHeight: "30vh" }}>
+                            <div className="p-1 chart-card">
+                                {
+                                    categoryIds.length === 0 &&
+                                    <span className="loader-container mt-5" >
+                                        <span className="loader"></span>
+                                    </span>
+                                }
+                                {
+                                    categoryIds.length > 0 && pomodorosListReload !== 0 &&
+                                    <ProjectCategoriesChart
+                                        key={[pomodorosListReload]}
+                                        includeCategories={categoryIds}
+                                        statsSettings={userSettings}
+                                        buttonsStates={categoriesChartButtonsStates}
+                                        setButtonsStates={setCategoriesChartButtonsStates}
+                                    />
+                                }
+                            </div >
+                        </div >
+                    }
+                    {
+                        userSettings.homePageChart === 'streak' &&
+                        <div className="mt-3 mb-5 bg-white text-center text-secondary" style={{ minHeight: "30vh" }}>
+                            <div className="p-1 chart-card">
+                                {
+                                    categoryIds.length === 0 &&
+                                    <span className="loader-container mt-5" >
+                                        <span className="loader"></span>
+                                    </span>
+                                }
+                                {
+                                    categoryIds.length > 0 && pomodorosListReload !== 0 &&
+                                    <StreakChart
+                                        key={[pomodorosListReload]}
+                                        includeCategories={categoryIds}
+                                        categories={categories}
+                                        statsSettings={userSettings}
+                                        buttonsStates={streakButtonsStates}
+                                        setButtonsStates={setStreakButtonsStates}
+                                    />
+                                }
+                            </div >
+                        </div >
+                    }
                 </div >
             </div>
 

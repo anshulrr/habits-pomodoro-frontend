@@ -38,6 +38,7 @@ export default function UserSettingsComponent() {
     const [projectCategoriesChartType, setProjectCategoriesChartType] = useState('')
     const [defaultStatsLimit, setDefaultStatsLimit] = useState('daily')
     const [homePageDefaultList, setHomePageDefaultList] = useState('')
+    const [homePageChart, setHomePageChart] = useState('')
     const [enableNotifications, setEnableNotifications] = useState('')
 
     const [errorMessage, setErrorMessage] = useState('')
@@ -74,6 +75,7 @@ export default function UserSettingsComponent() {
             setProjectCategoriesChartType(userSettings.projectCategoriesChartType || "bar")
             setDefaultStatsLimit(userSettings.defaultStatsLimit || "daily")
             setHomePageDefaultList(userSettings.homePageDefaultList || "projects")
+            setHomePageChart(userSettings.homePageChart || "tasks")
             setEnableNotifications(userSettings.enableNotifications)
         }
 
@@ -114,6 +116,7 @@ export default function UserSettingsComponent() {
             projectCategoriesChartType,
             defaultStatsLimit,
             homePageDefaultList,
+            homePageChart,
             enableNotifications
         }
         // console.debug(request_settings);
@@ -430,6 +433,28 @@ export default function UserSettingsComponent() {
                                 <option value="projects">Projects</option>
                                 <option value="filters">Filters</option>
                                 <option value="tags">Tags</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div className="col-lg-12">
+                        <div className="input-group input-group-sm mb-2">
+                            <label className="input-group-text" htmlFor="homePageChart">
+                                Home Page Chart
+                            </label>
+                            <select
+                                className="form-select form-select-sm"
+                                name="home-page-chart"
+                                onChange={(e) => handleOnChange(setHomePageChart, e.target.value)}
+                                value={homePageChart}   // using react's value instead of defaultValue to handle it with state variable
+                                id="homePageChart"
+                            >
+                                <option value="none">None</option>
+                                <option value="total">Total</option>
+                                <option value="tasks">Tasks</option>
+                                <option value="projects">Projects</option>
+                                <option value="categories">Project Categories</option>
+                                <option value="streak">Streak</option>
                             </select>
                         </div>
                     </div>

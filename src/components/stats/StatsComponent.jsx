@@ -10,13 +10,13 @@ import { retrieveAccountabilitySubjectsApi } from "services/api/AccountabilityPa
 import { TasksChart } from "components/stats/charts/TasksChart";
 import { ProjectsDistributionChart } from "components/stats/charts/ProjectsDistributionChart";
 import { TotalChart } from "components/stats/charts/TotalChart";
+import { StreakChart } from "components/stats/charts/StreakChart";
+import { ProjectCategoriesChart } from "components/stats/charts/ProjectCategoriesChart";
 import ListPomodorosComponent from "components/stats/ListPomodorosComponent";
 
 import CategoryChecklistComponent from "components/stats/CategoryChecklistComponent";
 import StatsSettingsComponent from "components/stats/StatsSettingsComponent";
 import SelectFriendsComponent from "components/stats/SelectFriendsComponent";
-import { StreakChart } from "components/stats/charts/StreakChart";
-import { ProjectCategoriesChart } from "components/stats/charts/ProjectCategoriesChart";
 import OutsideAlerter from "services/hooks/OutsideAlerter";
 import FooterComponent from "components/FooterComponent";
 import { getRunningPomodoroApi } from "services/api/PomodoroApiService";
@@ -44,19 +44,25 @@ export default function ListStatsComponent() {
 
     const [pomodorosHeight, setPomodorosHeight] = useState(0);
 
-    const [tasksChartButtonsStates, setTasksChartBButtonsStates] = useState({
+    const [tasksChartButtonsStates, setTasksChartButtonsStates] = useState({
         limit: userSettings.defaultStatsLimit,
         offset: 0,
         dateString: moment().format('DD MMM')
     })
 
-    const [projectsChartButtonsStates, setProjectsChartBButtonsStates] = useState({
+    const [projectsChartButtonsStates, setProjectsChartButtonsStates] = useState({
         limit: userSettings.defaultStatsLimit,
         offset: 0,
         dateString: moment().format('DD MMM')
     })
 
-    const [totalChartButtonsStates, setTotalChartBButtonsStates] = useState({
+    const [categoriesChartButtonsStates, setCategoriesChartButtonsStates] = useState({
+        limit: userSettings.defaultStatsLimit,
+        offset: 0,
+        dateString: moment().format('DD MMM')
+    })
+
+    const [totalChartButtonsStates, setTotalChartButtonsStates] = useState({
         limit: userSettings.defaultStatsLimit,
         offset: 0,
         dateString: ''
@@ -274,7 +280,7 @@ export default function ListStatsComponent() {
                                         subject={subject}
                                         statsSettings={statsSettings}
                                         buttonsStates={totalChartButtonsStates}
-                                        setButtonsStates={setTotalChartBButtonsStates}
+                                        setButtonsStates={setTotalChartButtonsStates}
                                     />
                                 </div>
                             </div>
@@ -286,7 +292,7 @@ export default function ListStatsComponent() {
                                         subject={subject}
                                         statsSettings={statsSettings}
                                         buttonsStates={tasksChartButtonsStates}
-                                        setButtonsStates={setTasksChartBButtonsStates}
+                                        setButtonsStates={setTasksChartButtonsStates}
                                     />
                                 </div>
                             </div>
@@ -298,7 +304,7 @@ export default function ListStatsComponent() {
                                         subject={subject}
                                         statsSettings={statsSettings}
                                         buttonsStates={projectsChartButtonsStates}
-                                        setButtonsStates={setProjectsChartBButtonsStates}
+                                        setButtonsStates={setProjectsChartButtonsStates}
                                     />
                                 </div>
                             </div>
@@ -309,8 +315,8 @@ export default function ListStatsComponent() {
                                         includeCategories={includeCategories}
                                         subject={subject}
                                         statsSettings={statsSettings}
-                                        buttonsStates={projectsChartButtonsStates}
-                                        setButtonsStates={setProjectsChartBButtonsStates}
+                                        buttonsStates={categoriesChartButtonsStates}
+                                        setButtonsStates={setCategoriesChartButtonsStates}
                                     />
                                 </div>
                             </div>
