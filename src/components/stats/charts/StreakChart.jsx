@@ -11,21 +11,21 @@ export const StreakChart = ({ subject, categories, includeCategories, buttonsSta
     const authContext = useAuth();
     const userSettings = authContext.userSettings;
 
-    const [categoryId, setCategoryId] = useState('0');
+    const [categoryId, setCategoryId] = useState(0);
     const [updatedCategories, setUpdatedCategories] = useState([]);
-    const [projectId, setProjectId] = useState('0');
+    const [projectId, setProjectId] = useState(0);
     const [projects, setProjects] = useState([]);
     const [projectsMap, setProjectsMap] = useState(null);
-    const [taskId, setTaskId] = useState('0');
+    const [taskId, setTaskId] = useState(0);
     const [tasks, setTasks] = useState([]);
     const [tasksMap, setTasksMap] = useState(null);
     const [chartData, setChartData] = useState({ label: '', labels: [], data: [], colors: [] })
-    const [reloadData, setReloadData] = useState({ dataType: 'user', dataTypeId: '0' });
+    const [reloadData, setReloadData] = useState({ dataType: 'user', dataTypeId: 0 });
 
     const [showLoader, setShowLoader] = useState(false);
 
     const [dataType, setDataType] = useState('user');
-    const [dataTypeId, setDataTypeId] = useState('0');
+    const [dataTypeId, setDataTypeId] = useState(0);
     const isMounted = useRef(false);
 
     useEffect(
@@ -104,13 +104,14 @@ export const StreakChart = ({ subject, categories, includeCategories, buttonsSta
 
     function refreshTasks(projectId) {
         setTasks([]);
-        retrieveAllTasksApi({ subject, projectId, status: 'current', limit: 100, offset: 0 })
+        // TODO: decide limit
+        retrieveAllTasksApi({ subject, projectId, status: 'current', limit: 1000, offset: 0 })
             .then(response => {
                 // console.debug(response)
                 const localTasks1 = response.data;
                 setTasks(response.data);
 
-                retrieveAllTasksApi({ subject, projectId, status: 'archived', limit: 100, offset: 0 })
+                retrieveAllTasksApi({ subject, projectId, status: 'archived', limit: 1000, offset: 0 })
                     .then(response => {
                         // console.debug(response)
                         const localTasks2 = localTasks1.concat(response.data);
@@ -127,9 +128,9 @@ export const StreakChart = ({ subject, categories, includeCategories, buttonsSta
 
     function updateCategory(id) {
         setCategoryId(id);
-        setProjectId('0');
-        setTaskId('0');
-        if (id === '0') {
+        setProjectId(0);
+        setTaskId(0);
+        if (id === 0) {
             setDataType('user');
             setProjects([]);
         } else {
@@ -142,8 +143,8 @@ export const StreakChart = ({ subject, categories, includeCategories, buttonsSta
 
     function updateProject(id) {
         setProjectId(id);
-        setTaskId('0');
-        if (id === '0') {
+        setTaskId(0);
+        if (id === 0) {
             setDataType('category');
             setDataTypeId(categoryId);
             setTasks([]);
@@ -156,7 +157,7 @@ export const StreakChart = ({ subject, categories, includeCategories, buttonsSta
 
     function updateTask(id) {
         setTaskId(id);
-        if (id === '0') {
+        if (id === 0) {
             setDataType('project');
             setDataTypeId(projectId);
         } else {
@@ -184,7 +185,7 @@ export const StreakChart = ({ subject, categories, includeCategories, buttonsSta
                         id="project_category_id"
                         name="project_category_id"
                         value={categoryId}
-                        onChange={(e) => updateCategory(e.target.value)}
+                        onChange={(e) => updateCategory(parseInt(e.target.value))}
                     >
                         <option value="0">Select Category</option>
                         {
@@ -203,7 +204,7 @@ export const StreakChart = ({ subject, categories, includeCategories, buttonsSta
                         id="project_id"
                         name="project_id"
                         value={projectId}
-                        onChange={(e) => updateProject(e.target.value)}
+                        onChange={(e) => updateProject(parseInt(e.target.value))}
                     >
                         <option value="0">Select Category's Project</option>
                         {
@@ -222,7 +223,7 @@ export const StreakChart = ({ subject, categories, includeCategories, buttonsSta
                         id="task_id"
                         name="task_id"
                         value={taskId}
-                        onChange={(e) => updateTask(e.target.value)}
+                        onChange={(e) => updateTask(parseInt(e.target.value))}
                     >
                         <option value="0">Select Project's Task</option>
                         {

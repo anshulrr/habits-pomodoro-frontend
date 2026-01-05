@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { putUserSettingsApi } from 'services/api/AuthApiService'
 import { useAuth } from 'services/auth/AuthContext';
+import { StreakChartDefaultSettings } from './StreakChartDefaultSettings';
 
 export default function UserSettingsComponent() {
 
@@ -39,6 +40,9 @@ export default function UserSettingsComponent() {
     const [defaultStatsLimit, setDefaultStatsLimit] = useState('daily')
     const [homePageDefaultList, setHomePageDefaultList] = useState('')
     const [homePageChart, setHomePageChart] = useState('')
+    const [streakDefaultCategory, setStreakDefaultCategory] = useState('')
+    const [streakDefaultProject, setStreakDefaultProject] = useState('')
+    const [streakDefaultTask, setStreakDefaultTask] = useState('')
     const [enableNotifications, setEnableNotifications] = useState('')
 
     const [errorMessage, setErrorMessage] = useState('')
@@ -76,6 +80,9 @@ export default function UserSettingsComponent() {
             setDefaultStatsLimit(userSettings.defaultStatsLimit || "daily")
             setHomePageDefaultList(userSettings.homePageDefaultList || "projects")
             setHomePageChart(userSettings.homePageChart || "tasks")
+            setStreakDefaultCategory(userSettings.streakDefaultCategory || 0)
+            setStreakDefaultProject(userSettings.streakDefaultProject || 0)
+            setStreakDefaultTask(userSettings.streakDefaultTask || 0)
             setEnableNotifications(userSettings.enableNotifications)
         }
 
@@ -117,6 +124,9 @@ export default function UserSettingsComponent() {
             defaultStatsLimit,
             homePageDefaultList,
             homePageChart,
+            streakDefaultCategory,
+            streakDefaultProject,
+            streakDefaultTask,
             enableNotifications
         }
         // console.debug(request_settings);
@@ -666,6 +676,22 @@ export default function UserSettingsComponent() {
                         </div>
                     </div>
 
+                </div>
+
+                <div className="col-lg-12">
+                    <div className="input-group input-group-sm mb-2">
+                        <label className="input-group-text" htmlFor="defaultStatsLimit">
+                            Streak Chart Default
+                        </label>
+                    </div>
+                    <StreakChartDefaultSettings
+                        categoryId={streakDefaultCategory}
+                        projectId={streakDefaultProject}
+                        taskId={streakDefaultTask}
+                        setCategoryId={setStreakDefaultCategory}
+                        setProjectId={setStreakDefaultProject}
+                        setTaskId={setStreakDefaultTask}
+                    />
                 </div>
             </div>
 
