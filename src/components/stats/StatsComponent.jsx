@@ -272,7 +272,7 @@ export default function ListStatsComponent() {
                     includeCategories.length !== 0 && Object.keys(statsSettings).length !== 0 &&
                     <div className="col-lg-8">
                         <div className="row">
-                            <div className="col-lg-6 px-0" style={{ display: subPage === "total" || showAll ? "block" : "none" }}>
+                            <div className="col-lg-6" style={{ display: subPage === "total" || showAll ? "block" : "none" }}>
                                 <div className="p-1 chart-card">
                                     <TotalChart
                                         key={reload}
@@ -284,7 +284,7 @@ export default function ListStatsComponent() {
                                     />
                                 </div>
                             </div>
-                            <div className="col-lg-6 px-0" style={{ display: subPage === "tasks" || showAll ? "block" : "none" }}>
+                            <div className="col-lg-6" style={{ display: subPage === "tasks" || showAll ? "block" : "none" }}>
                                 <div className="p-1 chart-card">
                                     <TasksChart
                                         key={reload}
@@ -296,7 +296,7 @@ export default function ListStatsComponent() {
                                     />
                                 </div>
                             </div>
-                            <div className="col-lg-6 px-0" style={{ display: subPage === "projects" || showAll ? "block" : "none" }}>
+                            <div className="col-lg-6" style={{ display: subPage === "projects" || showAll ? "block" : "none" }}>
                                 <div className="p-1 chart-card">
                                     <ProjectsDistributionChart
                                         key={reload}
@@ -308,7 +308,7 @@ export default function ListStatsComponent() {
                                     />
                                 </div>
                             </div>
-                            <div className="col-lg-6 px-0" style={{ display: subPage === "categories" || showAll ? "block" : "none" }}>
+                            <div className="col-lg-6" style={{ display: subPage === "categories" || showAll ? "block" : "none" }}>
                                 <div className="p-1 chart-card">
                                     <ProjectCategoriesChart
                                         key={reload}
@@ -320,7 +320,7 @@ export default function ListStatsComponent() {
                                     />
                                 </div>
                             </div>
-                            <div className="col-lg-12 px-0" style={{ display: subPage === "streak" || showAll ? "block" : "none" }}>
+                            <div className="col-lg-12" style={{ display: subPage === "streak" || showAll ? "block" : "none" }}>
                                 <div className="py-1 px-3 chart-card">
                                     <StreakChart
                                         key={reload}
@@ -332,7 +332,7 @@ export default function ListStatsComponent() {
                                     />
                                 </div>
                             </div >
-                            <div className="col-lg-6 px-0 mb-3" style={{ display: subPage === "pomodoros" || showAll ? "block" : "none" }}>
+                            <div className="col-lg-6 mb-4" style={{ display: subPage === "pomodoros" || showAll ? "block" : "none" }}>
                                 <div className="p-1 chart-card" style={{ height: "70vh", overflowY: "scroll" }}>
                                     <ListPomodorosComponent
                                         key={reload}
