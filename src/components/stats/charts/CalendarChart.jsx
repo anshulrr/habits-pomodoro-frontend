@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import CalendarHeatmap from 'react-calendar-heatmap';
 import 'react-calendar-heatmap/dist/styles.css';
 
@@ -19,6 +20,17 @@ export const CalendarChart = ({ chartData,
 }) => {
 
     // console.debug(tasksMap, projectsMap)
+    const streakElement = useRef(null);
+
+    useEffect(
+        () => {
+            if (buttonsStates.limit === 'current') {
+                streakElement.current.scrollLeft = streakElement.current.scrollWidth;
+            } else {
+                streakElement.current.scrollLeft = 0;
+            }
+        }, [buttonsStates]
+    )
 
     function checkType(elementsMap, hours, value) {
         let element = elementsMap.get(reloadData.dataTypeId);
@@ -64,41 +76,45 @@ export const CalendarChart = ({ chartData,
                 </span>
             </div>
 
-            <CalendarHeatmap
-                startDate={buttonsStates.startDate}
-                endDate={buttonsStates.endDate}
-                values={chartData.data}
-                showWeekdayLabels={true}
-                classForValue={(value) => {
-                    if (showLoader || !value) {
-                        return 'color-empty';
-                    }
+            <div style={{ overflowX: 'auto' }} ref={streakElement}>
+                <div style={{ minWidth: '800px' }}>
+                    <CalendarHeatmap
+                        startDate={buttonsStates.startDate}
+                        endDate={buttonsStates.endDate}
+                        values={chartData.data}
+                        showWeekdayLabels={true}
+                        classForValue={(value) => {
+                            if (showLoader || !value) {
+                                return 'color-empty';
+                            }
 
-                    if (reloadData.dataType === 'task' && reloadData.dataTypeId !== 0) {
-                        return checkType(tasksMap, 6, value);
-                    }
+                            if (reloadData.dataType === 'task' && reloadData.dataTypeId !== 0) {
+                                return checkType(tasksMap, 6, value);
+                            }
 
-                    if (reloadData.dataType === 'project' && reloadData.dataTypeId !== 0) {
-                        return checkType(projectsMap, 9, value);
-                    }
+                            if (reloadData.dataType === 'project' && reloadData.dataTypeId !== 0) {
+                                return checkType(projectsMap, 9, value);
+                            }
 
-                    // time spent above 12 hours has darkest color
-                    const max = 12 * 60;
-                    let range = Math.round(value.count / max * 10) * 10;
-                    range = range <= 100 ? range : 100;
-                    return `color-neutral-${range}`;
-                }}
-                tooltipDataAttrs={value => {
-                    if (!value || !value.date) {
-                        return null;
-                    }
-                    return {
-                        'data-tooltip-id': 'streak-tooltip',
-                        'data-tooltip-content': `${value.date}: ${timeToDisplay(value.count, true)}`
-                    };
-                }}
-            />
-            <Tooltip id="streak-tooltip" />
+                            // time spent above 12 hours has darkest color
+                            const max = 12 * 60;
+                            let range = Math.round(value.count / max * 10) * 10;
+                            range = range <= 100 ? range : 100;
+                            return `color-neutral-${range}`;
+                        }}
+                        tooltipDataAttrs={value => {
+                            if (!value || !value.date) {
+                                return null;
+                            }
+                            return {
+                                'data-tooltip-id': 'streak-tooltip',
+                                'data-tooltip-content': `${value.date}: ${timeToDisplay(value.count, true)}`
+                            };
+                        }}
+                    />
+                    <Tooltip id="streak-tooltip" />
+                </div>
+            </div>
 
         </div >
     )

@@ -24,6 +24,7 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
     const [pomodoros, setPomodoros] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
     const listElement = useRef(null);
+    const streakElement = useRef(null);
 
     const [showLoader, setShowLoader] = useState(true)
 
@@ -45,6 +46,16 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
         () => {
             retrieveTaskPomodoros()
         }, [currentPage] // eslint-disable-line react-hooks/exhaustive-deps
+    )
+
+    useEffect(
+        () => {
+            if (streakButtonsStates.limit === 'current') {
+                streakElement.current.scrollLeft = streakElement.current.scrollWidth;
+            } else {
+                streakElement.current.scrollLeft = 0;
+            }
+        }, [streakButtonsStates]
     )
 
     const retrieveStatsPomodorosCount = ({ startDate, endDate }) => {
@@ -172,47 +183,52 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
                                     buttonsStates={streakButtonsStates}
                                     setButtonsStates={setStreakButtonsStates}
                                 />
-                                <CalendarHeatmap
-                                    startDate={streakButtonsStates.startDate}
-                                    endDate={streakButtonsStates.endDate}
-                                    values={chartData.data}
-                                    showWeekdayLabels={true}
-                                    classForValue={(value) => {
-                                        if (!value) {
-                                            return 'color-empty';
-                                        }
-                                        let type = task.type;
-                                        if (task.type === 'bad') {
-                                            if (value.count > task.pomodoroLength * task.dailyLimit) {
-                                                type = 'bad';
-                                            } else {
-                                                type = `neutral`;
-                                            }
-                                        }
-                                        if (task.type === 'good') {
-                                            if (value.count >= task.pomodoroLength * task.dailyLimit) {
-                                                type = 'good';
-                                            } else {
-                                                type = `neutral`;
-                                            }
-                                        }
-                                        // a task above 6 hours has darkest color
-                                        const max = 6 * 60;
-                                        let range = Math.round(value.count / max * 10) * 10;
-                                        range = range <= 100 ? range : 100;
-                                        return `color-${type}-${range}`;
-                                    }}
-                                    tooltipDataAttrs={value => {
-                                        if (!value || !value.date) {
-                                            return null;
-                                        }
-                                        return {
-                                            'data-tooltip-id': 'streak-tooltip',
-                                            'data-tooltip-content': `${value.date}: ${timeToDisplay(value.count, true)}`
-                                        };
-                                    }}
-                                />
-                                <Tooltip id="streak-tooltip" />
+
+                                <div style={{ overflowX: 'auto' }} ref={streakElement}>
+                                    <div style={{ minWidth: '800px' }}>
+                                        <CalendarHeatmap
+                                            startDate={streakButtonsStates.startDate}
+                                            endDate={streakButtonsStates.endDate}
+                                            values={chartData.data}
+                                            showWeekdayLabels={true}
+                                            classForValue={(value) => {
+                                                if (!value) {
+                                                    return 'color-empty';
+                                                }
+                                                let type = task.type;
+                                                if (task.type === 'bad') {
+                                                    if (value.count > task.pomodoroLength * task.dailyLimit) {
+                                                        type = 'bad';
+                                                    } else {
+                                                        type = `neutral`;
+                                                    }
+                                                }
+                                                if (task.type === 'good') {
+                                                    if (value.count >= task.pomodoroLength * task.dailyLimit) {
+                                                        type = 'good';
+                                                    } else {
+                                                        type = `neutral`;
+                                                    }
+                                                }
+                                                // a task above 6 hours has darkest color
+                                                const max = 6 * 60;
+                                                let range = Math.round(value.count / max * 10) * 10;
+                                                range = range <= 100 ? range : 100;
+                                                return `color-${type}-${range}`;
+                                            }}
+                                            tooltipDataAttrs={value => {
+                                                if (!value || !value.date) {
+                                                    return null;
+                                                }
+                                                return {
+                                                    'data-tooltip-id': 'streak-tooltip',
+                                                    'data-tooltip-content': `${value.date}: ${timeToDisplay(value.count, true)}`
+                                                };
+                                            }}
+                                        />
+                                        <Tooltip id="streak-tooltip" />
+                                    </div >
+                                </div >
                             </div >
                         </div >
                     </div >
