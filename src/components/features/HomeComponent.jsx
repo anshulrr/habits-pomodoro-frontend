@@ -322,32 +322,9 @@ export default function HomeComponent({ setReloadHome }) {
                 </div>
 
                 <div className="col-lg-4">
-                    <div className="mt-1 bg-white text-center text-secondary">
-                        <div className="p-1 chart-card">
-                            {
-                                categoryIds.length === 0 &&
-                                <span className="loader-container mt-5" >
-                                    <span className="loader"></span>
-                                </span>
-                            }
-                            {
-                                categoryIds.length > 0 && pomodorosListReload !== 0 &&
-                                <ListPomodorosComponent
-                                    key={[pomodorosListReload]}
-                                    includeCategories={categoryIds}
-                                    title={"Today's Pomodoros"}
-                                    elementHeight={pomodorosHeight}
-                                    setElementHeight={setPomodorosHeight}
-                                    setTasksComponentReload={setTasksComponentReload}
-                                    setProjects={setProjects}
-                                    setTodaysPomodorosMap={setTodaysPomodorosMap}
-                                />
-                            }
-                        </div >
-                    </div >
                     {
                         userSettings.homePageChart !== 'none' &&
-                        <div className="mt-1 mb-4 bg-white text-center text-secondary" style={{ minHeight: "30vh" }}>
+                        <div className="mt-1 bg-white text-center text-secondary">
                             <div className="p-1 chart-card">
                                 {
                                     categoryIds.length === 0 &&
@@ -414,6 +391,29 @@ export default function HomeComponent({ setReloadHome }) {
                             </div >
                         </div >
                     }
+                    <div className="mt-1 mb-4 bg-white text-center text-secondary" style={{ minHeight: "30vh" }}>
+                        <div className="p-1 chart-card">
+                            {
+                                categoryIds.length === 0 &&
+                                <span className="loader-container mt-5" >
+                                    <span className="loader"></span>
+                                </span>
+                            }
+                            {
+                                categoryIds.length > 0 && pomodorosListReload !== 0 &&
+                                <ListPomodorosComponent
+                                    key={[pomodorosListReload]}
+                                    includeCategories={categoryIds}
+                                    title={"Today's Pomodoros"}
+                                    elementHeight={pomodorosHeight}
+                                    setElementHeight={setPomodorosHeight}
+                                    setTasksComponentReload={setTasksComponentReload}
+                                    setProjects={setProjects}
+                                    setTodaysPomodorosMap={setTodaysPomodorosMap}
+                                />
+                            }
+                        </div >
+                    </div >
                 </div >
             </div>
 
