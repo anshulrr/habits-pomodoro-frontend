@@ -55,7 +55,7 @@ export const StreakButtons = ({
         // console.debug({ dateString, offset, limit })
         if (limit === 'current') {
             const date = moment();
-            start = date.clone().add(window.innerWidth <= 992 ? -0.5 : -1, 'y').startOf('day');
+            start = date.clone().add(-1, 'y').startOf('day');
             end = date.clone();
             str = 'Current';
         } else {
