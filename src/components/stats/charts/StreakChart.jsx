@@ -178,7 +178,7 @@ export const StreakChart = ({ subject, categories, includeCategories, buttonsSta
                     </h6>
                 </div>
 
-                <div className="col-6 px-0 mb-1">
+                <div className="col-6 pe-0 mb-1">
                     <select
                         className="form-select form-select-sm"
                         id="project_category_id"
@@ -197,7 +197,7 @@ export const StreakChart = ({ subject, categories, includeCategories, buttonsSta
                     </select>
                 </div>
 
-                <div className="col-6 px-0 mb-1">
+                <div className="col-6 ps-0 mb-1">
                     <select
                         className="form-select form-select-sm"
                         id="project_id"
@@ -216,7 +216,7 @@ export const StreakChart = ({ subject, categories, includeCategories, buttonsSta
                     </select>
                 </div>
 
-                <div className="col-12 px-0 mb-1">
+                <div className="col-12 mb-1">
                     <select
                         className="form-select form-select-sm"
                         id="task_id"

@@ -10,13 +10,13 @@ import { retrieveAccountabilitySubjectsApi } from "services/api/AccountabilityPa
 import { TasksChart } from "components/stats/charts/TasksChart";
 import { ProjectsDistributionChart } from "components/stats/charts/ProjectsDistributionChart";
 import { TotalChart } from "components/stats/charts/TotalChart";
+import { StreakChart } from "components/stats/charts/StreakChart";
+import { ProjectCategoriesChart } from "components/stats/charts/ProjectCategoriesChart";
 import ListPomodorosComponent from "components/stats/ListPomodorosComponent";
 
 import CategoryChecklistComponent from "components/stats/CategoryChecklistComponent";
 import StatsSettingsComponent from "components/stats/StatsSettingsComponent";
 import SelectFriendsComponent from "components/stats/SelectFriendsComponent";
-import { StreakChart } from "components/stats/charts/StreakChart";
-import { ProjectCategoriesChart } from "components/stats/charts/ProjectCategoriesChart";
 import OutsideAlerter from "services/hooks/OutsideAlerter";
 import FooterComponent from "components/FooterComponent";
 import { getRunningPomodoroApi } from "services/api/PomodoroApiService";
@@ -44,19 +44,25 @@ export default function ListStatsComponent() {
 
     const [pomodorosHeight, setPomodorosHeight] = useState(0);
 
-    const [tasksChartButtonsStates, setTasksChartBButtonsStates] = useState({
+    const [tasksChartButtonsStates, setTasksChartButtonsStates] = useState({
         limit: userSettings.defaultStatsLimit,
         offset: 0,
         dateString: moment().format('DD MMM')
     })
 
-    const [projectsChartButtonsStates, setProjectsChartBButtonsStates] = useState({
+    const [projectsChartButtonsStates, setProjectsChartButtonsStates] = useState({
         limit: userSettings.defaultStatsLimit,
         offset: 0,
         dateString: moment().format('DD MMM')
     })
 
-    const [totalChartButtonsStates, setTotalChartBButtonsStates] = useState({
+    const [categoriesChartButtonsStates, setCategoriesChartButtonsStates] = useState({
+        limit: userSettings.defaultStatsLimit,
+        offset: 0,
+        dateString: moment().format('DD MMM')
+    })
+
+    const [totalChartButtonsStates, setTotalChartButtonsStates] = useState({
         limit: userSettings.defaultStatsLimit,
         offset: 0,
         dateString: ''
@@ -266,7 +272,7 @@ export default function ListStatsComponent() {
                     includeCategories.length !== 0 && Object.keys(statsSettings).length !== 0 &&
                     <div className="col-lg-8">
                         <div className="row">
-                            <div className="col-lg-6 px-0" style={{ display: subPage === "total" || showAll ? "block" : "none" }}>
+                            <div className="col-lg-6" style={{ display: subPage === "total" || showAll ? "block" : "none" }}>
                                 <div className="p-1 chart-card">
                                     <TotalChart
                                         key={reload}
@@ -274,11 +280,11 @@ export default function ListStatsComponent() {
                                         subject={subject}
                                         statsSettings={statsSettings}
                                         buttonsStates={totalChartButtonsStates}
-                                        setButtonsStates={setTotalChartBButtonsStates}
+                                        setButtonsStates={setTotalChartButtonsStates}
                                     />
                                 </div>
                             </div>
-                            <div className="col-lg-6 px-0" style={{ display: subPage === "tasks" || showAll ? "block" : "none" }}>
+                            <div className="col-lg-6" style={{ display: subPage === "tasks" || showAll ? "block" : "none" }}>
                                 <div className="p-1 chart-card">
                                     <TasksChart
                                         key={reload}
@@ -286,11 +292,11 @@ export default function ListStatsComponent() {
                                         subject={subject}
                                         statsSettings={statsSettings}
                                         buttonsStates={tasksChartButtonsStates}
-                                        setButtonsStates={setTasksChartBButtonsStates}
+                                        setButtonsStates={setTasksChartButtonsStates}
                                     />
                                 </div>
                             </div>
-                            <div className="col-lg-6 px-0" style={{ display: subPage === "projects" || showAll ? "block" : "none" }}>
+                            <div className="col-lg-6" style={{ display: subPage === "projects" || showAll ? "block" : "none" }}>
                                 <div className="p-1 chart-card">
                                     <ProjectsDistributionChart
                                         key={reload}
@@ -298,23 +304,23 @@ export default function ListStatsComponent() {
                                         subject={subject}
                                         statsSettings={statsSettings}
                                         buttonsStates={projectsChartButtonsStates}
-                                        setButtonsStates={setProjectsChartBButtonsStates}
+                                        setButtonsStates={setProjectsChartButtonsStates}
                                     />
                                 </div>
                             </div>
-                            <div className="col-lg-6 px-0" style={{ display: subPage === "categories" || showAll ? "block" : "none" }}>
+                            <div className="col-lg-6" style={{ display: subPage === "categories" || showAll ? "block" : "none" }}>
                                 <div className="p-1 chart-card">
                                     <ProjectCategoriesChart
                                         key={reload}
                                         includeCategories={includeCategories}
                                         subject={subject}
                                         statsSettings={statsSettings}
-                                        buttonsStates={projectsChartButtonsStates}
-                                        setButtonsStates={setProjectsChartBButtonsStates}
+                                        buttonsStates={categoriesChartButtonsStates}
+                                        setButtonsStates={setCategoriesChartButtonsStates}
                                     />
                                 </div>
                             </div>
-                            <div className="col-lg-12 px-0" style={{ display: subPage === "streak" || showAll ? "block" : "none" }}>
+                            <div className="col-lg-12" style={{ display: subPage === "streak" || showAll ? "block" : "none" }}>
                                 <div className="py-1 px-3 chart-card">
                                     <StreakChart
                                         key={reload}
@@ -326,7 +332,7 @@ export default function ListStatsComponent() {
                                     />
                                 </div>
                             </div >
-                            <div className="col-lg-6 px-0 mb-3" style={{ display: subPage === "pomodoros" || showAll ? "block" : "none" }}>
+                            <div className="col-lg-6 mb-4" style={{ display: subPage === "pomodoros" || showAll ? "block" : "none" }}>
                                 <div className="p-1 chart-card" style={{ height: "70vh", overflowY: "scroll" }}>
                                     <ListPomodorosComponent
                                         key={reload}
