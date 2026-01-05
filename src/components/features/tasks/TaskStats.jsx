@@ -55,7 +55,7 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
             } else {
                 streakElement.current.scrollLeft = 0;
             }
-        }, [streakButtonsStates] // eslint-disable-line react-hooks/exhaustive-deps
+        }, [streakButtonsStates]
     )
 
     const retrieveStatsPomodorosCount = ({ startDate, endDate }) => {

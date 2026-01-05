@@ -29,7 +29,7 @@ export const CalendarChart = ({ chartData,
             } else {
                 streakElement.current.scrollLeft = 0;
             }
-        }, [buttonsStates] // eslint-disable-line react-hooks/exhaustive-deps
+        }, [buttonsStates]
     )
 
     function checkType(elementsMap, hours, value) {
