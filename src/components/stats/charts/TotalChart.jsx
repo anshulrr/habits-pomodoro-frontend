@@ -20,7 +20,7 @@ const POMODORO_LENGTH = 25;
 const WEEKLY_DAYS = 7;
 const MONTHLY_AVG = 22;
 
-export const TotalChart = ({ includeCategories, subject, statsSettings, buttonsStates, setButtonsStates }) => {
+export const TotalChart = ({ entity, includeCategories, subject, statsSettings, buttonsStates, setButtonsStates }) => {
 
     const [datasets, setDatasets] = useState([])
 
@@ -46,12 +46,12 @@ export const TotalChart = ({ includeCategories, subject, statsSettings, buttonsS
         const { startDate, endDate } = calculateDates({ limit, offset });
         // console.debug({ limit, offset, startDate, endDate })
 
-        getTotalPomodorosApi({ limit, startDate, endDate, includeCategories, subject })
+        getTotalPomodorosApi({ limit, startDate, endDate, includeCategories, subject, entity })
             .then(response => {
                 // console.debug("stacked", response.data)
 
                 // set label after chart data is received
-                setChartLabel(`Total (${label})`);
+                setChartLabel(`${entity === 'task' ? 'Tasks' : 'Projects'} (${label})`);
 
                 for (const key in response.data) {
                     const dataset = {

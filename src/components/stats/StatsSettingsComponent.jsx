@@ -243,6 +243,7 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
                     >
                         <option value="bar">Bar</option>
                         <option value="doughnut">Doughnut</option>
+                        <option value="total">Total</option>
                     </select>
                 </div>
             </div>
@@ -261,6 +262,7 @@ export default function StatsSettingsComponent({ setStatsSettings, setReload }) 
                     >
                         <option value="bar">Bar</option>
                         <option value="doughnut">Doughnut</option>
+                        <option value="total">Total</option>
                     </select>
                 </div>
             </div>
