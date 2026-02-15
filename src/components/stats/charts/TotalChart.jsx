@@ -60,8 +60,10 @@ export const TotalChart = ({ entity, includeCategories, subject, statsSettings, 
                         data: new Array(X_COUNT).fill(0),
                         level1: response.data[key].level1, // for sort order
                         level2: response.data[key].level2, // for sort order
-                        level3: response.data[key].level3, // for sort order
                         maxBarThickness: 6 * 3,
+                    }
+                    if (entity === 'task') {
+                        dataset.level3 = response.data[key].level3; // for sort order
                     }
                     if (limit === 'daily') {
                         for (const val of response.data[key].dataArr) {
@@ -108,7 +110,9 @@ export const TotalChart = ({ entity, includeCategories, subject, statsSettings, 
                     // console.debug(dataset);
                     localDatasets.push(dataset);
                 }
-                localDatasets.sort((a, b) => +a.level3 - +b.level3);
+                if (entity === 'task') {
+                    localDatasets.sort((a, b) => +a.level3 - +b.level3);
+                }
                 localDatasets.sort((a, b) => +a.level2 - +b.level2);
                 localDatasets.sort((a, b) => +a.level1 - +b.level1);
                 // console.debug(localDatasets)
