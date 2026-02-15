@@ -240,7 +240,15 @@ export const TotalChart = ({ entity, includeCategories, subject, statsSettings, 
                                 display: true,
                                 position: 'top',
                                 labels: {
-                                    boxWidth: 10
+                                    boxWidth: 10,
+                                    // Use a callback to filter or slice the legend items
+                                    generateLabels: (chart) => {
+                                        // Generate the default labels
+                                        const defaultLabels = Chart.defaults.plugins.legend.labels.generateLabels(chart);
+
+                                        // Return only the first N labels (e.g., limit to 5)
+                                        return defaultLabels.slice(0, 10);
+                                    },
                                 }
                             },
                             // annotation: {
