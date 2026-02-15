@@ -450,7 +450,6 @@ export default function UserSettingsComponent() {
                                 id="homePageChart"
                             >
                                 <option value="none">None</option>
-                                <option value="total">Total</option>
                                 <option value="tasks">Tasks</option>
                                 <option value="projects">Projects</option>
                                 <option value="categories">Project Categories</option>

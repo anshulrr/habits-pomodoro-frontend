@@ -73,7 +73,7 @@ export const TasksChart = ({ includeCategories, subject, statsSettings, buttonsS
             }
 
             {
-                statsSettings.projectsChartType === 'total' &&
+                statsSettings.tasksChartType === 'total' &&
                 <TotalChart
                     entity="task"
                     includeCategories={includeCategories}
