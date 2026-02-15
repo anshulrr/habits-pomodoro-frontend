@@ -262,18 +262,6 @@ export default function ListStatsComponent() {
                     includeCategories.length !== 0 && Object.keys(statsSettings).length !== 0 &&
                     <div className="col-lg-8">
                         <div className="row">
-                            <div className="col-lg-6" style={{ display: subPage === "tasks" || showAll ? "block" : "none" }}>
-                                <div className="p-1 chart-card">
-                                    <TasksChart
-                                        key={reload}
-                                        includeCategories={includeCategories}
-                                        subject={subject}
-                                        statsSettings={statsSettings}
-                                        buttonsStates={tasksChartButtonsStates}
-                                        setButtonsStates={setTasksChartButtonsStates}
-                                    />
-                                </div>
-                            </div>
                             <div className="col-lg-6" style={{ display: subPage === "projects" || showAll ? "block" : "none" }}>
                                 <div className="p-1 chart-card">
                                     <ProjectsDistributionChart
@@ -283,6 +271,18 @@ export default function ListStatsComponent() {
                                         statsSettings={statsSettings}
                                         buttonsStates={projectsChartButtonsStates}
                                         setButtonsStates={setProjectsChartButtonsStates}
+                                    />
+                                </div>
+                            </div>
+                            <div className="col-lg-6" style={{ display: subPage === "tasks" || showAll ? "block" : "none" }}>
+                                <div className="p-1 chart-card">
+                                    <TasksChart
+                                        key={reload}
+                                        includeCategories={includeCategories}
+                                        subject={subject}
+                                        statsSettings={statsSettings}
+                                        buttonsStates={tasksChartButtonsStates}
+                                        setButtonsStates={setTasksChartButtonsStates}
                                     />
                                 </div>
                             </div>

@@ -55,7 +55,7 @@ export const TotalChart = ({ entity, includeCategories, subject, statsSettings, 
 
                 for (const key in response.data) {
                     const dataset = {
-                        label: key,
+                        label: response.data[key].entity,
                         backgroundColor: response.data[key].color,
                         data: new Array(X_COUNT).fill(0),
                         level: response.data[key].level, // for sort order
