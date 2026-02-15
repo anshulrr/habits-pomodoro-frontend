@@ -58,8 +58,9 @@ export const TotalChart = ({ entity, includeCategories, subject, statsSettings, 
                         label: response.data[key].entity,
                         backgroundColor: response.data[key].color,
                         data: new Array(X_COUNT).fill(0),
-                        level: response.data[key].level, // for sort order
-                        priority: response.data[key].priority, // for sort order
+                        level1: response.data[key].level1, // for sort order
+                        level2: response.data[key].level2, // for sort order
+                        level3: response.data[key].level3, // for sort order
                         maxBarThickness: 6 * 3,
                     }
                     if (limit === 'daily') {
@@ -107,8 +108,9 @@ export const TotalChart = ({ entity, includeCategories, subject, statsSettings, 
                     // console.debug(dataset);
                     localDatasets.push(dataset);
                 }
-                localDatasets.sort((a, b) => +a.priority - +b.priority);
-                localDatasets.sort((a, b) => +a.level - +b.level);
+                localDatasets.sort((a, b) => +a.level3 - +b.level3);
+                localDatasets.sort((a, b) => +a.level2 - +b.level2);
+                localDatasets.sort((a, b) => +a.level1 - +b.level1);
                 // console.debug(localDatasets)
                 setDatasets(localDatasets);
                 // setDatasets(structuredClone(datasets))
@@ -219,6 +221,9 @@ export const TotalChart = ({ entity, includeCategories, subject, statsSettings, 
                 buttonsStates={buttonsStates}
                 setButtonsStates={setButtonsStates}
                 showDateString={false}
+                // yearly view doesn't make sense for tasks as they are more short term, 
+                // and it also causes performance issues (chart is too slow to load with too many tasks in yearly view)
+                disableYearly={entity === 'task'}
             />
 
             <div className="chart-container">

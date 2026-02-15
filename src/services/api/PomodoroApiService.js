@@ -59,7 +59,13 @@ export const getProjectCategoriesPomodorosApi
 
 export const getTotalPomodorosApi
     = ({ limit, startDate, endDate, includeCategories, subject, entity }) => {
-        const url = `/stats/total-time?entity=${entity}&limit=${limit}&startDate=${startDate}&endDate=${endDate}&categoryIds=${includeCategories}&timezone=${timezone}`;
+        let url;
+        if (entity === 'task') {
+            url = '/stats/tasks-total-time';
+        } else {
+            url = '/stats/projects-total-time';
+        }
+        url += `?limit=${limit}&startDate=${startDate}&endDate=${endDate}&categoryIds=${includeCategories}&timezone=${timezone}`;
         if (!subject) {
             return apiClient.get(url);
         } else {
