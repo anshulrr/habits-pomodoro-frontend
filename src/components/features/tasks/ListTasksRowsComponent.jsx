@@ -5,7 +5,7 @@ import moment from "moment";
 
 import { useAuth } from "services/auth/AuthContext";
 import Pagination from "services/pagination/Pagination";
-import { getTasksTimeElapsedApi, retrieveAllTasksApi, updateTaskApi } from "services/api/TaskApiService";
+import { getTasksCommentsCountApi, getTasksTimeElapsedApi, retrieveAllTasksApi, updateTaskApi } from "services/api/TaskApiService";
 import { COLOR_MAP, formatDate, generateDateColor, timeToDisplay } from "services/helpers/listsHelper";
 import OutsideAlerter from "services/hooks/OutsideAlerter";
 import { getTasksTagsApi } from "services/api/TagApiService";
@@ -128,6 +128,7 @@ export default function ListTasksRowsComponent({
                 getTasksTodaysTimeElapsed(taskIds, map);
                 getTasksTotalTimeElapsed(taskIds, map);
                 getTasksTags(taskIds, map);
+                getTasksCommentsCount(taskIds, map);
             })
             .catch(error => console.error(error.message))
     }
@@ -149,6 +150,18 @@ export default function ListTasksRowsComponent({
                 // using Map for easy access and update
                 for (let i = 0; i < response.data.length; i++) {
                     map.get(response.data[i][0]).tags.push(tags.get(response.data[i][1]))
+                }
+                setTasks([...map.values()]);
+            })
+            .catch(error => console.error(error.message))
+    }
+
+    function getTasksCommentsCount(taskIds, map) {
+        getTasksCommentsCountApi(taskIds)
+            .then(response => {
+                // using Map for easy access and update
+                for (let i = 0; i < response.data.length; i++) {
+                    map.get(response.data[i][0]).commentsCount = parseInt(response.data[i][1]);
                 }
                 setTasks([...map.values()]);
             })
@@ -394,6 +407,16 @@ export default function ListTasksRowsComponent({
                                                         </span>
                                                     }
 
+                                                    {
+                                                        task.commentsCount !== undefined &&
+                                                        <span className="me-1" onClick={() => updateCommentsPopupData(task)}>
+                                                            <span>
+                                                                <i className="bi bi-journal-text" style={{ paddingRight: "0.1rem" }} />
+                                                            </span>
+                                                            {task.commentsCount}
+                                                        </span>
+                                                    }
+
                                                     <span style={{ float: "right" }}>
                                                         {
                                                             !project &&
@@ -424,7 +447,7 @@ export default function ListTasksRowsComponent({
                                                     <span className="">
                                                         <div className="update-popup">
                                                             <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => updateCommentsPopupData(task)}>
-                                                                Notes <i className="bi bi-journal-text" />
+                                                                Notes ({task.commentsCount !== undefined ? task.commentsCount : 0}) <i className="bi bi-journal-text" />
                                                             </button>
                                                             {
                                                                 task.status === 'current' &&
