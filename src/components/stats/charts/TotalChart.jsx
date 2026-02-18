@@ -256,7 +256,7 @@ export const TotalChart = ({ entity, includeCategories, subject, statsSettings, 
                                         const defaultLabels = Chart.defaults.plugins.legend.labels.generateLabels(chart);
 
                                         // Return only the first N labels (e.g., limit to 5)
-                                        return defaultLabels.slice(0, 10);
+                                        return defaultLabels.slice(0, 15);
                                     },
                                 }
                             },

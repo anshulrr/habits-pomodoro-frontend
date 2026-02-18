@@ -9,6 +9,7 @@ import CreateTaskComponent from "components/features/tasks/CreateTaskComponent";
 import PomodoroComponent from "components/features/pomodoros/PomodoroComponent";
 import ListCommentsComponent from "components/features/comments/ListCommentsComponent";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+import { getCommentsCountApi } from "services/api/CommentApiService";
 
 export default function ListTasksComponent({
     project,
@@ -37,6 +38,8 @@ export default function ListTasksComponent({
     const [archivedTasksCount, setArchivedTasksCount] = useState(0)
     const [showArchived, setShowArchived] = useState(false)
 
+    const [commentsCount, setCommentsCount] = useState(0)
+
     const [pomodoroStatus, setPomodoroStatus] = useState(null)
 
     const [currentTasksReload, setCurrentTasksReload] = useState(0)
@@ -59,6 +62,7 @@ export default function ListTasksComponent({
             // console.debug('re-render ListTasksComponents')
             getTasksCount('current', setTasksCount)
             getTasksCount('archived', setArchivedTasksCount)
+            project && getCommentsCount()
         }, [project, allTasksReload] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
@@ -79,6 +83,14 @@ export default function ListTasksComponent({
         getTasksCountApi(taskData)
             .then(response => {
                 setContainer(response.data)
+            })
+            .catch(error => console.error(error.message))
+    }
+
+    function getCommentsCount() {
+        getCommentsCountApi({ filterBy: 'project', id: project.id })
+            .then(response => {
+                setCommentsCount(response.data)
             })
             .catch(error => console.error(error.message))
     }
@@ -173,8 +185,14 @@ export default function ListTasksComponent({
                             }
                             {
                                 project &&
-                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-1 ms-1" onClick={() => setShowProjectCommentsId(project.id)}>
+                                <button type="button" className="btn btn-sm btn-outline-secondary position-relative py-0 px-1 ms-1" onClick={() => setShowProjectCommentsId(project.id)}>
                                     <i className="bi bi-journal-text" />
+                                    {
+                                        commentsCount !== 0 &&
+                                        <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">
+                                            {commentsCount}
+                                        </span>
+                                    }
                                 </button>
                             }
                         </h6>
