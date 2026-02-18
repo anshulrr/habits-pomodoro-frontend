@@ -450,7 +450,6 @@ export default function UserSettingsComponent() {
                                 id="homePageChart"
                             >
                                 <option value="none">None</option>
-                                <option value="total">Total</option>
                                 <option value="tasks">Tasks</option>
                                 <option value="projects">Projects</option>
                                 <option value="categories">Project Categories</option>
@@ -624,6 +623,7 @@ export default function UserSettingsComponent() {
                             >
                                 <option value="bar">Bar</option>
                                 <option value="doughnut">Doughnut</option>
+                                <option value="total">Total</option>
                             </select>
                         </div>
                     </div>
@@ -642,6 +642,7 @@ export default function UserSettingsComponent() {
                             >
                                 <option value="bar">Bar</option>
                                 <option value="doughnut">Doughnut</option>
+                                <option value="total">Total</option>
                             </select>
                         </div>
                     </div>

@@ -5,6 +5,7 @@ import { calculateScaleAndLabel, calculateScaleForAdjustedAvg } from "services/h
 
 import { BarChart } from "components/stats/charts/BarChart";
 import { DoughnutChart } from "components/stats/charts/DoughnutChart";
+import { TotalChart } from "./TotalChart";
 
 export const ProjectsDistributionChart = ({ includeCategories, subject, statsSettings, buttonsStates, setButtonsStates }) => {
     // console.debug("hi", chartData);
@@ -69,6 +70,18 @@ export const ProjectsDistributionChart = ({ includeCategories, subject, statsSet
                     buttonsStates={buttonsStates}
                     showLoader={showLoader}
                     thickness={3}
+                />
+            }
+
+            {
+                statsSettings.projectsChartType === 'total' &&
+                <TotalChart
+                    entity="project"
+                    includeCategories={includeCategories}
+                    subject={subject}
+                    statsSettings={statsSettings}
+                    setButtonsStates={setButtonsStates}
+                    buttonsStates={buttonsStates}
                 />
             }
         </>

@@ -4,6 +4,7 @@ import { getTasksPomodorosApi } from "services/api/PomodoroApiService";
 import { calculateScaleAndLabel, calculateScaleForAdjustedAvg, truncateString } from "services/helpers/chartHelper";
 import { BarChart } from "components/stats/charts/BarChart";
 import { DoughnutChart } from "components/stats/charts/DoughnutChart";
+import { TotalChart } from "./TotalChart";
 
 export const TasksChart = ({ includeCategories, subject, statsSettings, buttonsStates, setButtonsStates }) => {
     // console.debug('from TasksChart', includeCategories, statsSettings)
@@ -68,6 +69,18 @@ export const TasksChart = ({ includeCategories, subject, statsSettings, buttonsS
                     buttonsStates={buttonsStates}
                     showLoader={showLoader}
                     thickness={1}
+                />
+            }
+
+            {
+                statsSettings.tasksChartType === 'total' &&
+                <TotalChart
+                    entity="task"
+                    includeCategories={includeCategories}
+                    subject={subject}
+                    statsSettings={statsSettings}
+                    setButtonsStates={setButtonsStates}
+                    buttonsStates={buttonsStates}
                 />
             }
         </>

@@ -20,7 +20,7 @@ const POMODORO_LENGTH = 25;
 const WEEKLY_DAYS = 7;
 const MONTHLY_AVG = 22;
 
-export const TotalChart = ({ includeCategories, subject, statsSettings, buttonsStates, setButtonsStates }) => {
+export const TotalChart = ({ entity, includeCategories, subject, statsSettings, buttonsStates, setButtonsStates }) => {
 
     const [datasets, setDatasets] = useState([])
 
@@ -46,21 +46,24 @@ export const TotalChart = ({ includeCategories, subject, statsSettings, buttonsS
         const { startDate, endDate } = calculateDates({ limit, offset });
         // console.debug({ limit, offset, startDate, endDate })
 
-        getTotalPomodorosApi({ limit, startDate, endDate, includeCategories, subject })
+        getTotalPomodorosApi({ limit, startDate, endDate, includeCategories, subject, entity })
             .then(response => {
                 // console.debug("stacked", response.data)
 
                 // set label after chart data is received
-                setChartLabel(`Total (${label})`);
+                setChartLabel(`${entity === 'task' ? 'Tasks' : 'Projects'} (${label})`);
 
                 for (const key in response.data) {
                     const dataset = {
-                        label: key,
+                        label: response.data[key].entity,
                         backgroundColor: response.data[key].color,
                         data: new Array(X_COUNT).fill(0),
-                        level: response.data[key].level, // for sort order
-                        priority: response.data[key].priority, // for sort order
+                        level1: response.data[key].level1, // for sort order
+                        level2: response.data[key].level2, // for sort order
                         maxBarThickness: 6 * 3,
+                    }
+                    if (entity === 'task') {
+                        dataset.level3 = response.data[key].level3; // for sort order
                     }
                     if (limit === 'daily') {
                         for (const val of response.data[key].dataArr) {
@@ -107,8 +110,11 @@ export const TotalChart = ({ includeCategories, subject, statsSettings, buttonsS
                     // console.debug(dataset);
                     localDatasets.push(dataset);
                 }
-                localDatasets.sort((a, b) => +a.priority - +b.priority);
-                localDatasets.sort((a, b) => +a.level - +b.level);
+                if (entity === 'task') {
+                    localDatasets.sort((a, b) => +a.level3 - +b.level3);
+                }
+                localDatasets.sort((a, b) => +a.level2 - +b.level2);
+                localDatasets.sort((a, b) => +a.level1 - +b.level1);
                 // console.debug(localDatasets)
                 setDatasets(localDatasets);
                 // setDatasets(structuredClone(datasets))
@@ -219,6 +225,9 @@ export const TotalChart = ({ includeCategories, subject, statsSettings, buttonsS
                 buttonsStates={buttonsStates}
                 setButtonsStates={setButtonsStates}
                 showDateString={false}
+                // yearly view doesn't make sense for tasks as they are more short term, 
+                // and it also causes performance issues (chart is too slow to load with too many tasks in yearly view)
+                disableYearly={entity === 'task'}
             />
 
             <div className="chart-container">
@@ -240,7 +249,15 @@ export const TotalChart = ({ includeCategories, subject, statsSettings, buttonsS
                                 display: true,
                                 position: 'top',
                                 labels: {
-                                    boxWidth: 10
+                                    boxWidth: 10,
+                                    // Use a callback to filter or slice the legend items
+                                    generateLabels: (chart) => {
+                                        // Generate the default labels
+                                        const defaultLabels = Chart.defaults.plugins.legend.labels.generateLabels(chart);
+
+                                        // Return only the first N labels (e.g., limit to 5)
+                                        return defaultLabels.slice(0, 10);
+                                    },
                                 }
                             },
                             // annotation: {

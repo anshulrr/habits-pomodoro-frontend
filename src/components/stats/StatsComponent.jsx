@@ -9,7 +9,6 @@ import { retrieveAccountabilitySubjectsApi } from "services/api/AccountabilityPa
 
 import { TasksChart } from "components/stats/charts/TasksChart";
 import { ProjectsDistributionChart } from "components/stats/charts/ProjectsDistributionChart";
-import { TotalChart } from "components/stats/charts/TotalChart";
 import { StreakChart } from "components/stats/charts/StreakChart";
 import { ProjectCategoriesChart } from "components/stats/charts/ProjectCategoriesChart";
 import ListPomodorosComponent from "components/stats/ListPomodorosComponent";
@@ -60,12 +59,6 @@ export default function ListStatsComponent() {
         limit: userSettings.defaultStatsLimit,
         offset: 0,
         dateString: moment().format('DD MMM')
-    })
-
-    const [totalChartButtonsStates, setTotalChartButtonsStates] = useState({
-        limit: userSettings.defaultStatsLimit,
-        offset: 0,
-        dateString: ''
     })
 
     const [listPomodorosButtonsStates, setListPomodorosButtonsStates] = useState({
@@ -148,9 +141,6 @@ export default function ListStatsComponent() {
                 <div className="col-12">
                     <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1 " + (showAll ? "active" : "")} onClick={() => setShowAll(true)}>
                         Show All
-                    </button>
-                    <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1 " + (subPage === "total" && !showAll ? "active" : "")} onClick={() => { setSubPage("total"); setShowAll(false) }}>
-                        Total
                     </button>
                     <button type="button" className={"btn btn-sm btn-outline-secondary py-0 px-1 " + (subPage === "projects" && !showAll ? "active" : "")} onClick={() => { setSubPage("projects"); setShowAll(false) }}>
                         Projects
@@ -272,15 +262,15 @@ export default function ListStatsComponent() {
                     includeCategories.length !== 0 && Object.keys(statsSettings).length !== 0 &&
                     <div className="col-lg-8">
                         <div className="row">
-                            <div className="col-lg-6" style={{ display: subPage === "total" || showAll ? "block" : "none" }}>
+                            <div className="col-lg-6" style={{ display: subPage === "projects" || showAll ? "block" : "none" }}>
                                 <div className="p-1 chart-card">
-                                    <TotalChart
+                                    <ProjectsDistributionChart
                                         key={reload}
                                         includeCategories={includeCategories}
                                         subject={subject}
                                         statsSettings={statsSettings}
-                                        buttonsStates={totalChartButtonsStates}
-                                        setButtonsStates={setTotalChartButtonsStates}
+                                        buttonsStates={projectsChartButtonsStates}
+                                        setButtonsStates={setProjectsChartButtonsStates}
                                     />
                                 </div>
                             </div>
@@ -293,18 +283,6 @@ export default function ListStatsComponent() {
                                         statsSettings={statsSettings}
                                         buttonsStates={tasksChartButtonsStates}
                                         setButtonsStates={setTasksChartButtonsStates}
-                                    />
-                                </div>
-                            </div>
-                            <div className="col-lg-6" style={{ display: subPage === "projects" || showAll ? "block" : "none" }}>
-                                <div className="p-1 chart-card">
-                                    <ProjectsDistributionChart
-                                        key={reload}
-                                        includeCategories={includeCategories}
-                                        subject={subject}
-                                        statsSettings={statsSettings}
-                                        buttonsStates={projectsChartButtonsStates}
-                                        setButtonsStates={setProjectsChartButtonsStates}
                                     />
                                 </div>
                             </div>
