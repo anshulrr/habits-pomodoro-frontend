@@ -3,9 +3,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import moment from "moment";
 
+import { Reorder } from "framer-motion";
+
 import { useAuth } from "services/auth/AuthContext";
 import Pagination from "services/pagination/Pagination";
-import { getTasksCommentsCountApi, getTasksTimeElapsedApi, retrieveAllTasksApi, updateTaskApi } from "services/api/TaskApiService";
+import { getTasksCommentsCountApi, getTasksTimeElapsedApi, resetProjectTaskPrioritiesApi, retrieveAllTasksApi, updateTaskApi, updateTaskPriorityApi } from "services/api/TaskApiService";
 import { COLOR_MAP, formatDate, generateDateColor, timeToDisplay } from "services/helpers/listsHelper";
 import OutsideAlerter from "services/hooks/OutsideAlerter";
 import { getTasksTagsApi } from "services/api/TagApiService";
@@ -48,6 +50,7 @@ export default function ListTasksRowsComponent({
     const PAGESIZE = userSettings.pageTasksCount;
 
     const [tasks, setTasks] = useState([]);
+    const activeIdRef = useRef(null); // The real moved item
 
     const [currentPage, setCurrentPage] = useState(
         (status === 'current' && state?.currentTasksPage) ||
@@ -326,6 +329,56 @@ export default function ListTasksRowsComponent({
         return "";
     }
 
+    const handleDragStart = ({ id, index }) => {
+        // Capture the id & index before the user starts moving the item
+        console.debug('drag start', { id, index });
+        activeIdRef.current = { id, index };
+    };
+
+    const handleReorder = (newOrder) => {
+        setTasks(newOrder);
+    }
+
+    const handleDragEnd = ({ id, index }) => {
+        console.debug('drag end', { id, index });
+        // If dropped in the same position, do nothing
+        if (activeIdRef.current.id === id && activeIdRef.current.index === index)
+            return;
+
+        // Get the neighbors for the Integer Gap calculation
+        const prevItem = tasks[index - 1];
+        const nextItem = tasks[index + 1];
+
+        const prevOrder = prevItem ? prevItem.priority : null;
+        const nextOrder = nextItem ? nextItem.priority : null;
+        // console.debug(`Item ${id} moved. Neighbors:`, { prevOrder, nextOrder });
+
+        // if no space is left between prevOrder and nextOrder, call an API to reset order
+        if (prevOrder !== null && nextOrder !== null && prevOrder + 1 >= nextOrder) {
+            resetProjectTaskPrioritiesApi({ id: project.id })
+                .then(() => {
+                    window.alert("Failed to update task order. Please try again.");
+                    setTasksReload(prevReload => prevReload + 1);
+                    return;
+                })
+            return;
+        }
+
+        // API Call: Send only the specific data for the gap update
+        updateTaskPriorityApi({ id, map: { prevOrder, nextOrder } })
+            .then(response => {
+                setTasks(prevTasks => prevTasks.map(task => {
+                    if (task.id === id) {
+                        return { ...task, priority: response.data.priority };
+                    }
+                    return task;
+                }));
+            })
+            .catch(error => console.error(error.message))
+        // Reset ref
+        activeIdRef.current = null;
+    };
+
     return (
         <>
             {
@@ -334,14 +387,28 @@ export default function ListTasksRowsComponent({
                     <div className="loader"></div>
                 </div>
             }
-            <div id="tasks-list" ref={listElement}>
+            <Reorder.Group
+                id="tasks-list"
+                ref={listElement}
+                axis="y"
+                values={tasks}
+                onReorder={handleReorder}
+                style={{ listStyleType: "none", padding: 0, margin: 0 }}
+            >
                 {
                     tasks.map(
-                        task => {
+                        (task, index) => {
                             // TODO: find better way to handle this
                             task.pomodoroLength = task.pomodoroLength || task.project.pomodoroLength || userSettings.pomodoroLength;
                             return (
-                                <div key={task.id} className={"update-list-row" + (showUpdatePopupId === task.id ? " update-list-row-selected" : "")}>
+                                <Reorder.Item
+                                    key={task.id}
+                                    value={task}
+                                    className={"update-list-row" + (showUpdatePopupId === task.id ? " update-list-row-selected" : "")}
+                                    onDragStart={() => handleDragStart({ id: task.id, index })} // Mark the "Old" state
+                                    onDragEnd={() => handleDragEnd({ id: task.id, index })} // Handle the "New" state and API call
+                                    dragListener={!!project} // only allow drag when in project page, otherwise it will cause bug of dragging across projects
+                                >
                                     <div className="d-flex justify-content-start">
 
                                         <div className="mx-2 flex-grow-1 text-start update-popup-container">
@@ -414,6 +481,15 @@ export default function ListTasksRowsComponent({
                                                                 <i className="bi bi-journal-text" style={{ paddingRight: "0.1rem" }} />
                                                             </span>
                                                             {task.commentsCount}
+                                                        </span>
+                                                    }
+
+                                                    {
+                                                        <span className="me-1">
+                                                            <span>
+                                                                <i className="bi bi-arrow-up" style={{ paddingRight: "0.1rem" }} />
+                                                            </span>
+                                                            {task.priority}
                                                         </span>
                                                     }
 
@@ -574,12 +650,12 @@ export default function ListTasksRowsComponent({
                                             setShowTaskStats={setShowTaskStats}
                                         />
                                     }
-                                </div >
+                                </Reorder.Item >
                             )
                         }
                     )
                 }
-            </div>
+            </Reorder.Group>
 
             <Pagination
                 className="pagination-bar pagination-scroll ps-0"

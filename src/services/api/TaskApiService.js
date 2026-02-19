@@ -42,6 +42,12 @@ export const retrieveTaskApi
 export const updateTaskApi
     = ({ id, task }) => apiClient.put(`/tasks/${id}`, task)
 
+export const updateTaskPriorityApi
+    = ({ id, map }) => apiClient.put(`/tasks/${id}/priority`, map)
+
+export const resetProjectTaskPrioritiesApi
+    = ({ id }) => apiClient.put(`/projects/${id}/priority-reset`)
+
 export const getTasksTimeElapsedApi
     = ({ startDate, endDate, taskIds }) => apiClient.get(`/tasks/pomodoros/time-elapsed?startDate=${startDate}&endDate=${endDate}&taskIds=${taskIds}`)
 
