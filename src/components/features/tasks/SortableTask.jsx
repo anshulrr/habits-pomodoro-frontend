@@ -62,7 +62,7 @@ export default function SortableTask({
                 {
                     project &&
                     <motion.div
-                        className="my-auto ms-1 text-start"
+                        className="my-auto px-2 text-start"
                         onPointerDown={(e) => {
                             controls.start(e)
                             e.preventDefault();
@@ -74,7 +74,7 @@ export default function SortableTask({
                     </motion.div>
                 }
 
-                <div className="mx-1 flex-grow-1 text-start update-popup-container">
+                <div className={(!project ? "ms-2 " : "") + "me-2 flex-grow-1 text-start update-popup-container"}>
 
                     <div className="py-2" onClick={() => setShowUpdatePopupId(task.id)}>
                         <div className="description">
@@ -141,18 +141,9 @@ export default function SortableTask({
                                 task.commentsCount !== undefined &&
                                 <span className="me-1" onClick={() => updateCommentsPopupData(task)}>
                                     <span>
-                                        <i className="bi bi-journal-text" style={{ paddingRight: "0.1rem" }} />
+                                        <i className="bi bi-journal-text" style={{ paddingRight: "0.1rem", color: "green" }} />
                                     </span>
                                     {task.commentsCount}
-                                </span>
-                            }
-
-                            {
-                                <span className="me-1">
-                                    <span>
-                                        <i className="bi bi-arrow-up" style={{ paddingRight: "0.1rem" }} />
-                                    </span>
-                                    {task.priority}
                                 </span>
                             }
 
