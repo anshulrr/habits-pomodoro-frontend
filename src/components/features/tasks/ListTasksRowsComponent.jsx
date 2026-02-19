@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import moment from "moment";
 
-import { Reorder } from "framer-motion";
+import { Reorder, useDragControls } from "framer-motion";
 
 import { useAuth } from "services/auth/AuthContext";
 import Pagination from "services/pagination/Pagination";
@@ -39,6 +39,8 @@ export default function ListTasksRowsComponent({
 }) {
     const navigate = useNavigate()
     const { state } = useLocation();
+
+    const controls = useDragControls();
 
     const authContext = useAuth()
     const userSettings = authContext.userSettings
@@ -330,8 +332,8 @@ export default function ListTasksRowsComponent({
     }
 
     const handleDragStart = ({ id, index }) => {
+        // console.debug('drag start', { id, index });
         // Capture the id & index before the user starts moving the item
-        console.debug('drag start', { id, index });
         activeIdRef.current = { id, index };
     };
 
@@ -340,7 +342,7 @@ export default function ListTasksRowsComponent({
     }
 
     const handleDragEnd = ({ id, index }) => {
-        console.debug('drag end', { id, index });
+        // console.debug('drag end', { id, index });
         // If dropped in the same position, do nothing
         if (activeIdRef.current.id === id && activeIdRef.current.index === index)
             return;
@@ -403,11 +405,15 @@ export default function ListTasksRowsComponent({
                             return (
                                 <Reorder.Item
                                     key={task.id}
-                                    value={task}
                                     className={"update-list-row" + (showUpdatePopupId === task.id ? " update-list-row-selected" : "")}
+                                    value={task}
                                     onDragStart={() => handleDragStart({ id: task.id, index })} // Mark the "Old" state
                                     onDragEnd={() => handleDragEnd({ id: task.id, index })} // Handle the "New" state and API call
                                     dragListener={!!project} // only allow drag when in project page, otherwise it will cause bug of dragging across projects
+                                    style={{ cursor: "grab", touchAction: "none" }}
+                                    whileTap={{ scale: 0.98 }}
+                                    dragElastic={0.1}
+                                    dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
                                 >
                                     <div className="d-flex justify-content-start">
 
