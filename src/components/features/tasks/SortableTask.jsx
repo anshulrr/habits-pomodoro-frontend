@@ -6,7 +6,7 @@ import UpdateTaskComponent from "components/features/tasks/UpdateTaskComponent";
 import TaskDueDateComponent from "components/features/tasks/TaskDueDateComponent";
 import MapTagComponent from "components/features/tags/MapTagComponent";
 import { TaskStats } from "components/features/tasks/TaskStats";
-import { Reorder, useDragControls } from "framer-motion";
+import { motion, Reorder, useDragControls } from "framer-motion";
 
 export default function SortableTask({
     task,
@@ -52,20 +52,26 @@ export default function SortableTask({
             onDragEnd={() => handleDragEnd({ id: task.id, index })} // Handle the "New" state and API call
             dragListener={false} // only allow drag when in project page, otherwise it will cause bug of dragging across projects
             dragControls={controls} // Links this item to our custom controls
+            // Apply the "Pop" effect to the whole row when dragged
+            whileDrag={{
+                scale: 0.98,
+                boxShadow: "0px 5px 15px rgba(0,0,0,0.1)",
+            }}
         >
             <div className="d-flex justify-content-start">
                 {
                     project &&
-                    <div
+                    <motion.div
                         className="my-auto ms-1 text-start"
                         onPointerDown={(e) => {
                             controls.start(e)
                             e.preventDefault();
                         }} // Starts drag on click
                         style={{ cursor: "grab", touchAction: "none" }}
+                        whileTap={{ scale: 1.5 }} // Visual feedback for the click
                     >
                         <i className="bi bi-grip-vertical" />
-                    </div>
+                    </motion.div>
                 }
 
                 <div className="mx-1 flex-grow-1 text-start update-popup-container">

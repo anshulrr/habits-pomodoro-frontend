@@ -403,6 +403,7 @@ export default function ListTasksRowsComponent({
                                     index={index}
                                     handleDragStart={handleDragStart}
                                     handleDragEnd={handleDragEnd}
+                                    showUpdatePopupId={showUpdatePopupId}
                                     setShowUpdatePopupId={setShowUpdatePopupId}
                                     onUpdateDueDate={onUpdateDueDate}
                                     showUpdateDueDate={showUpdateDueDate}
