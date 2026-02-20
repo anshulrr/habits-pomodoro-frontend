@@ -17,7 +17,6 @@ export default function CreateTaskComponent({ project, setTasksReload, setTasksC
             description,
             pomodoroLength: 0,
             status: 'current',
-            priority: 1
         }
 
         createTaskApi({ projectId: project.id, task })

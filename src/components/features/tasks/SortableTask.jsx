@@ -62,13 +62,12 @@ export default function SortableTask({
                 {
                     project &&
                     <motion.div
-                        className="my-auto px-2 text-start"
+                        className="my-auto px-1 text-start"
                         onPointerDown={(e) => {
                             controls.start(e)
                             e.preventDefault();
                         }} // Starts drag on click
                         style={{ cursor: "grab", touchAction: "none" }}
-                        whileTap={{ scale: 1.5 }} // Visual feedback for the click
                     >
                         <i className="bi bi-grip-vertical" />
                     </motion.div>

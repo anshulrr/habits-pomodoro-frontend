@@ -16,7 +16,6 @@ export default function UpdateTaskComponent({
 
     const [description, setDescription] = useState('')
     const [pomodoroLength, setPomodoroLength] = useState(0)    // todo: get this from user settings
-    const [priority, setPriority] = useState(1)
     const [dueDate, setDueDate] = useState(null)
     const [status, setStatus] = useState('current')
     const [type, setType] = useState('neutral')
@@ -45,7 +44,6 @@ export default function UpdateTaskComponent({
                 const data = response.data
                 setDescription(data.description)
                 setPomodoroLength(data.pomodoroLength)
-                setPriority(data.priority)
                 setStatus(data.status)
                 setType(data.type)
                 if (data.dueDate) {
@@ -70,7 +68,6 @@ export default function UpdateTaskComponent({
             id: task.id,
             description,
             pomodoroLength,
-            priority,
             status,
             type,
             dueDate,
@@ -103,10 +100,6 @@ export default function UpdateTaskComponent({
         }
         if (task.pomodoroLength === '' || task.pomodoroLength < 0) {
             errors.pomodoroLength = 'Enter zero or positive value'
-            validated = false;
-        }
-        if (task.priority === '' || task.priority < 1) {
-            errors.priority = 'Enter positive value'
             validated = false;
         }
         if (dueDate && repeat && (repeatDays === '' || repeatDays < 1)) {
@@ -231,22 +224,6 @@ export default function UpdateTaskComponent({
                                 />
 
                                 <div className="row small text-secondary text-start">
-                                    <div className="col-lg-4 mb-3">
-                                        <label htmlFor="priority">Order <i className="bi bi-arrow-up" /></label>
-                                        <input
-                                            type="number"
-                                            className="form-control form-control-sm"
-                                            min="1"
-                                            id="priority"
-                                            name="priority"
-                                            placeholder="Order"
-                                            required
-                                            value={priority}
-                                            onChange={(e) => setPriority(e.target.value)}
-                                        />
-                                        <small>(Lower numbered tasks appears at the top of the list)</small>
-                                        <div className="text-danger small">{errors.priority}</div>
-                                    </div>
                                     <div className="col-lg-4 mb-3">
                                         <label htmlFor="status">Status</label>
                                         <select
