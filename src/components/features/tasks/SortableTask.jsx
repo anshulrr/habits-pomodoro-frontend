@@ -7,40 +7,145 @@ import TaskDueDateComponent from "components/features/tasks/TaskDueDateComponent
 import MapTagComponent from "components/features/tags/MapTagComponent";
 import { TaskStats } from "components/features/tasks/TaskStats";
 import { motion, Reorder, useDragControls } from "framer-motion";
+import { useRef, useState } from "react";
+import { resetProjectTaskPrioritiesApi, updateTaskApi, updateTaskPriorityApi } from "services/api/TaskApiService";
+import moment from "moment";
 
 export default function SortableTask({
     task,
     index,
-    handleDragStart,
-    handleDragEnd,
-    showUpdatePopupId,
-    setShowUpdatePopupId,
-    onUpdateDueDate,
-    showUpdateDueDate,
-    setShowUpdateDueDate,
-    onCreatePastPomodoro,
-    showCreatePastPomodoro,
-    setShowCreatePastPomodoro,
+    tasks,
+    setTasks,
     onCreateNewPomodoro,
     onUpdateTaskStatus,
-    onAddTag,
-    showMapTags,
-    setShowMapTags,
     tags,
     setTasksReload,
     setPomodorosListReload,
     project,
-    updateCommentsPopupData,
-    onClickStats,
-    showTaskStats,
-    setShowTaskStats,
-    setShowUpdateTaskId,
-    showUpdateTaskId,
+    setShowCommentsId,
     markCompleted,
-    generateTimeElapsedColor,
     setAllTasksReload
 }) {
     const controls = useDragControls();
+    const activeIdRef = useRef(null); // The real moved item
+
+    const [showUpdatePopupId, setShowUpdatePopupId] = useState(-1);
+
+    const [showUpdateTaskId, setShowUpdateTaskId] = useState(-1)
+
+    const [showCreatePastPomodoro, setShowCreatePastPomodoro] = useState(-1);
+    const [showTaskStats, setShowTaskStats] = useState(-1);
+    const [showUpdateDueDate, setShowUpdateDueDate] = useState(-1);
+    const [showMapTags, setShowMapTags] = useState(-1);
+
+    const handleDragStart = ({ id, index }) => {
+        // console.debug('drag start', { id, index });
+        // Capture the id & index before the user starts moving the item
+        activeIdRef.current = { id, index };
+    };
+
+    const handleDragEnd = ({ id, index }) => {
+        // console.debug('drag end', { id, index });
+        // If dropped in the same position, do nothing
+        if (activeIdRef.current.id === id && activeIdRef.current.index === index)
+            return;
+
+        // Get the neighbors for the Integer Gap calculation
+        const prevItem = tasks[index - 1];
+        const nextItem = tasks[index + 1];
+
+        const prevOrder = prevItem ? prevItem.priority : null;
+        const nextOrder = nextItem ? nextItem.priority : null;
+        // console.debug(`Item ${id} moved. Neighbors:`, { prevOrder, nextOrder });
+
+        // if no space is left between prevOrder and nextOrder, call an API to reset order
+        if (prevOrder !== null && nextOrder !== null && prevOrder + 1 >= nextOrder) {
+            resetProjectTaskPrioritiesApi({ id: project.id })
+                .then(() => {
+                    window.alert("Failed to update task order. Please try again.");
+                    setTasksReload(prevReload => prevReload + 1);
+                    return;
+                })
+            return;
+        }
+
+        // API Call: Send only the specific data for the gap update
+        updateTaskPriorityApi({ id, map: { prevOrder, nextOrder } })
+            .then(response => {
+                setTasks(prevTasks => prevTasks.map(task => {
+                    if (task.id === id) {
+                        return { ...task, priority: response.data.priority };
+                    }
+                    return task;
+                }));
+            })
+            .catch(error => console.error(error.message))
+        // Reset ref
+        activeIdRef.current = null;
+    };
+
+    function updateCommentsPopupData(task) {
+        setShowCommentsId(task.id)
+    }
+
+    function markCompleted(task) {
+        // if (!window.confirm(`Press OK to mark task as completed and update the due date`)) {
+        //     return;
+        // }
+        if (task.repeatDays === 0) {
+            task.dueDate = null;
+            task.enableNotifications = false;
+        } else {
+            task.dueDate = moment(task.dueDate).add(task.repeatDays, 'd').toDate();
+        }
+
+        updateTaskApi({ id: task.id, task })
+            .then(() => {
+                setAllTasksReload(prevReload => prevReload + 1)
+            })
+            .catch(error => console.error(error.message))
+    }
+
+    const generateTimeElapsedColor = (task) => {
+        if (task.type === 'bad') {
+            if (task.todaysTimeElapsed / 60 > (task.pomodoroLength) * task.dailyLimit) {
+                return "text-danger";
+            }
+        } else if (task.type === 'good') {
+            if (task.todaysTimeElapsed / 60 >= (task.pomodoroLength) * task.dailyLimit) {
+                return "text-success";
+            }
+        }
+        return "";
+    }
+
+    function onCreatePastPomodoro(task) {
+        setShowUpdateDueDate(-1)
+        setShowUpdatePopupId(-1);
+        // setElementHeight(listElement.current.offsetHeight);
+        setShowCreatePastPomodoro(task.id);
+    }
+
+    function onUpdateDueDate(task) {
+        setShowCreatePastPomodoro(-1)
+        setShowUpdatePopupId(-1);
+        // setElementHeight(listElement.current.offsetHeight);
+        setShowUpdateDueDate(task.id);
+    }
+
+    function onAddTag(task) {
+        setShowCreatePastPomodoro(-1)
+        setShowUpdatePopupId(-1);
+        // setElementHeight(listElement.current.offsetHeight);
+        setShowMapTags(task.id);
+    }
+
+    function onClickStats(task) {
+        setShowCreatePastPomodoro(-1)
+        setShowUpdatePopupId(-1);
+        // setElementHeight(listElement.current.offsetHeight);
+        setShowTaskStats(task.id);
+    }
 
     return (
         <Reorder.Item

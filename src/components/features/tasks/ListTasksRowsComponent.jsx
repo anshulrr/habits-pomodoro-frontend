@@ -7,7 +7,7 @@ import { Reorder } from "framer-motion";
 
 import { useAuth } from "services/auth/AuthContext";
 import Pagination from "services/pagination/Pagination";
-import { getTasksCommentsCountApi, getTasksTimeElapsedApi, resetProjectTaskPrioritiesApi, retrieveAllTasksApi, updateTaskApi, updateTaskPriorityApi } from "services/api/TaskApiService";
+import { getTasksCommentsCountApi, getTasksTimeElapsedApi, retrieveAllTasksApi, updateTaskApi } from "services/api/TaskApiService";
 import { generateDateColor } from "services/helpers/listsHelper";
 import { getTasksTagsApi } from "services/api/TagApiService";
 
@@ -29,37 +29,25 @@ export default function ListTasksRowsComponent({
     setElementHeight,
     startDate,
     endDate,
-    searchString,
-    isReversed
+    searchString
 }) {
     const navigate = useNavigate()
     const { state } = useLocation();
 
-
     const authContext = useAuth()
     const userSettings = authContext.userSettings
-
-    const [showUpdatePopupId, setShowUpdatePopupId] = useState(-1);
 
     const listElement = useRef(null);
 
     const PAGESIZE = userSettings.pageTasksCount;
 
     const [tasks, setTasks] = useState([]);
-    const activeIdRef = useRef(null); // The real moved item
 
     const [currentPage, setCurrentPage] = useState(
         (status === 'current' && state?.currentTasksPage) ||
         (status === 'archived' && state?.currentArchivedTasksPage) ||
         1
     )
-
-    const [showCreatePastPomodoro, setShowCreatePastPomodoro] = useState(-1);
-    const [showUpdateDueDate, setShowUpdateDueDate] = useState(-1);
-    const [showMapTags, setShowMapTags] = useState(-1);
-    const [showTaskStats, setShowTaskStats] = useState(-1);
-
-    const [showUpdateTaskId, setShowUpdateTaskId] = useState(-1)
 
     const [showCommentsId, setShowCommentsId] = useState(-1);
 
@@ -199,10 +187,6 @@ export default function ListTasksRowsComponent({
             .catch(error => console.error(error.message))
     }
 
-    function updateCommentsPopupData(task) {
-        setShowCommentsId(task.id)
-    }
-
     function onUpdateTaskStatus(task, status) {
         // setElementHeight(listElement.current.offsetHeight)
 
@@ -210,52 +194,6 @@ export default function ListTasksRowsComponent({
             return;
         }
         task.status = status;
-
-        updateTaskApi({ id: task.id, task })
-            .then(() => {
-                setAllTasksReload(prevReload => prevReload + 1)
-            })
-            .catch(error => console.error(error.message))
-    }
-
-    function onCreatePastPomodoro(task) {
-        setShowUpdateDueDate(-1)
-        setShowUpdatePopupId(-1);
-        // setElementHeight(listElement.current.offsetHeight);
-        setShowCreatePastPomodoro(task.id);
-    }
-
-    function onUpdateDueDate(task) {
-        setShowCreatePastPomodoro(-1)
-        setShowUpdatePopupId(-1);
-        // setElementHeight(listElement.current.offsetHeight);
-        setShowUpdateDueDate(task.id);
-    }
-
-    function onAddTag(task) {
-        setShowCreatePastPomodoro(-1)
-        setShowUpdatePopupId(-1);
-        // setElementHeight(listElement.current.offsetHeight);
-        setShowMapTags(task.id);
-    }
-
-    function onClickStats(task) {
-        setShowCreatePastPomodoro(-1)
-        setShowUpdatePopupId(-1);
-        // setElementHeight(listElement.current.offsetHeight);
-        setShowTaskStats(task.id);
-    }
-
-    function markCompleted(task) {
-        // if (!window.confirm(`Press OK to mark task as completed and update the due date`)) {
-        //     return;
-        // }
-        if (task.repeatDays === 0) {
-            task.dueDate = null;
-            task.enableNotifications = false;
-        } else {
-            task.dueDate = moment(task.dueDate).add(task.repeatDays, 'd').toDate();
-        }
 
         updateTaskApi({ id: task.id, task })
             .then(() => {
@@ -312,68 +250,10 @@ export default function ListTasksRowsComponent({
         return "secondary";
     }
 
-    const generateTimeElapsedColor = (task) => {
-        if (task.type === 'bad') {
-            if (task.todaysTimeElapsed / 60 > (task.pomodoroLength) * task.dailyLimit) {
-                return "text-danger";
-            }
-        } else if (task.type === 'good') {
-            if (task.todaysTimeElapsed / 60 >= (task.pomodoroLength) * task.dailyLimit) {
-                return "text-success";
-            }
-        }
-        return "";
-    }
-
-    const handleDragStart = ({ id, index }) => {
-        // console.debug('drag start', { id, index });
-        // Capture the id & index before the user starts moving the item
-        activeIdRef.current = { id, index };
-    };
 
     const handleReorder = (newOrder) => {
         setTasks(newOrder);
     }
-
-    const handleDragEnd = ({ id, index }) => {
-        // console.debug('drag end', { id, index });
-        // If dropped in the same position, do nothing
-        if (activeIdRef.current.id === id && activeIdRef.current.index === index)
-            return;
-
-        // Get the neighbors for the Integer Gap calculation
-        const prevItem = tasks[index - 1];
-        const nextItem = tasks[index + 1];
-
-        const prevOrder = prevItem ? prevItem.priority : null;
-        const nextOrder = nextItem ? nextItem.priority : null;
-        // console.debug(`Item ${id} moved. Neighbors:`, { prevOrder, nextOrder });
-
-        // if no space is left between prevOrder and nextOrder, call an API to reset order
-        if (prevOrder !== null && nextOrder !== null && prevOrder + 1 >= nextOrder) {
-            resetProjectTaskPrioritiesApi({ id: project.id })
-                .then(() => {
-                    window.alert("Failed to update task order. Please try again.");
-                    setTasksReload(prevReload => prevReload + 1);
-                    return;
-                })
-            return;
-        }
-
-        // API Call: Send only the specific data for the gap update
-        updateTaskPriorityApi({ id, map: { prevOrder, nextOrder } })
-            .then(response => {
-                setTasks(prevTasks => prevTasks.map(task => {
-                    if (task.id === id) {
-                        return { ...task, priority: response.data.priority };
-                    }
-                    return task;
-                }));
-            })
-            .catch(error => console.error(error.message))
-        // Reset ref
-        activeIdRef.current = null;
-    };
 
     return (
         <>
@@ -401,33 +281,15 @@ export default function ListTasksRowsComponent({
                                     key={task.id}
                                     task={task}
                                     index={index}
-                                    handleDragStart={handleDragStart}
-                                    handleDragEnd={handleDragEnd}
-                                    showUpdatePopupId={showUpdatePopupId}
-                                    setShowUpdatePopupId={setShowUpdatePopupId}
-                                    onUpdateDueDate={onUpdateDueDate}
-                                    showUpdateDueDate={showUpdateDueDate}
-                                    setShowUpdateDueDate={setShowUpdateDueDate}
-                                    onCreatePastPomodoro={onCreatePastPomodoro}
-                                    showCreatePastPomodoro={showCreatePastPomodoro}
-                                    setShowCreatePastPomodoro={setShowCreatePastPomodoro}
+                                    tasks={tasks}
+                                    setTasks={setTasks}
                                     onCreateNewPomodoro={onCreateNewPomodoro}
                                     onUpdateTaskStatus={onUpdateTaskStatus}
-                                    onAddTag={onAddTag}
-                                    showMapTags={showMapTags}
-                                    setShowMapTags={setShowMapTags}
                                     tags={tags}
                                     setTasksReload={setTasksReload}
                                     setPomodorosListReload={setPomodorosListReload}
                                     project={project}
-                                    updateCommentsPopupData={updateCommentsPopupData}
-                                    onClickStats={onClickStats}
-                                    showTaskStats={showTaskStats}
-                                    setShowTaskStats={setShowTaskStats}
-                                    setShowUpdateTaskId={setShowUpdateTaskId}
-                                    showUpdateTaskId={showUpdateTaskId}
-                                    markCompleted={markCompleted}
-                                    generateTimeElapsedColor={generateTimeElapsedColor}
+                                    setShowCommentsId={setShowCommentsId}
                                     setAllTasksReload={setAllTasksReload}
                                 />
                             )
