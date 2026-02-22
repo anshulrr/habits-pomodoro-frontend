@@ -12,6 +12,8 @@
     "chart.js": "^4.2.1",
     "chartjs-plugin-annotation": "^3.0.1",
     "classnames": "^2.3.2",
+    "dexie": "^4.3.0",
+    "dexie-react-hooks": "^4.2.0",
     "firebase": "^10.1.0",
     "framer-motion": "^12.34.2",
     "moment": "^2.29.4",

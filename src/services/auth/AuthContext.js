@@ -7,6 +7,7 @@ import { getUserSettingsApi } from "../api/AuthApiService";
 import { apiClient } from "../api/ApiClient";
 import FirebaseAuthService from "./FirebaseAuthService";
 import { disableToken } from "services/FirebaseFirestoreService";
+import { db } from "services/db";
 
 const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext)
@@ -141,8 +142,18 @@ export default function AuthProvider({ children }) {
         // sign out from firebase: removes data from firebaseLocalStorageDb
         try {
             await FirebaseAuthService.signOutUser();
-            // console.debug("signed out successfully")
+            // console.debug("signed out from firebase successfully")
             // console.debug('logging out ' + user)
+        } catch (error) {
+            console.error(error);
+        }
+
+        try {
+            // database delete won't work as then creation flow is difficult. 
+            // need to reload the page
+            // or during login create new database
+            await db.delete();
+            // console.debug("deleted dexie database successfully")
         } catch (error) {
             console.error(error);
         }

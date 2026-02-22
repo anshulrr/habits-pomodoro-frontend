@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { createProjectCategoryApi, retrieveProjectCategoryApi, updateProjectCategoryApi } from 'services/api/ProjectCategoryApiService'
+import { db } from 'services/db'
 
 export default function ProjectCategoryComponent({
     category,
@@ -43,6 +44,24 @@ export default function ProjectCategoryComponent({
             .catch(error => console.error(error.message))
     }
 
+    async function addCategoryToCache(category) {
+        try {
+            // Add the new category to db!
+            await db.categories.add(category)
+        } catch (error) {
+            console.error(`Failed to add ${category.name}: ${error}`)
+        }
+    }
+
+    async function putCategoryToCache(category) {
+        try {
+            // Add the new category to db!
+            await db.categories.put(category)
+        } catch (error) {
+            console.error(`Failed to update ${category.name}: ${error}`)
+        }
+    }
+
     function onSubmit(error) {
         error.preventDefault();
         // console.debug({ name, description, projectCategoryId, level, pomodoroLength })
@@ -63,9 +82,10 @@ export default function ProjectCategoryComponent({
         if (category === null) {
             createProjectCategoryApi(project_category)
                 .then(response => {
-                    // console.debug(response)
+                    console.debug(response)
                     setReload(prev => prev + 1)
                     setNewCategory(false)
+                    addCategoryToCache(response.data);
                 })
                 .catch(error => {
                     console.error(error.message)
@@ -76,9 +96,10 @@ export default function ProjectCategoryComponent({
         } else {
             updateProjectCategoryApi(category.id, project_category)
                 .then(response => {
-                    // console.debug(response)
+                    console.debug(response)
                     setReload(prev => prev + 1)
                     setCategory(null)
+                    putCategoryToCache(response.data);
                 })
                 .catch(error => {
                     console.error(error.message)

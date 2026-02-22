@@ -4,6 +4,7 @@ import { retrieveAllProjectCategoriesApi, getProjectCategoriesCountApi } from "s
 import Pagination from "services/pagination/Pagination"
 
 import ProjectCategoryComponent from "components/user-settings/ProjectCategoryComponent";
+import { db } from "services/db";
 
 const PAGESIZE = 5;
 
@@ -38,8 +39,19 @@ export default function ListProjectCategoriesComponent() {
                 // console.debug(response)
                 setCategories(response.data)
                 setShowLoader(false)
+                // db.categories.bulkPut(response.data)
+                bulkPutCategoriesToCache(response.data)
             })
             .catch(error => console.error(error.message))
+    }
+
+    async function bulkPutCategoriesToCache(categories) {
+        try {
+            // Add the categories to db!
+            await db.categories.bulkPut(categories)
+        } catch (error) {
+            console.error(`Failed to add ${categories}: ${error}`)
+        }
     }
 
     function getProjectCategoriesCount() {
