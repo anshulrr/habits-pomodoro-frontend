@@ -10,11 +10,11 @@ export default function ProjectCategoryComponent({
     categoriesCount
 }) {
 
-    const [name, setName] = useState('')
-    const [statsDefault, setStatsDefault] = useState(false)
-    const [visibleToPartners, setVisibleToPartners] = useState(true)
-    const [level, setLevel] = useState(1)
-    const [color, setColor] = useState('#a1a1a1')
+    const [name, setName] = useState(category?.name || '')
+    const [statsDefault, setStatsDefault] = useState(category?.statsDefault || false)
+    const [visibleToPartners, setVisibleToPartners] = useState(category?.visibleToPartners || false)
+    const [level, setLevel] = useState(category?.level || 1)
+    const [color, setColor] = useState(category?.color || '#a1a1a1')
 
     const [errors, setErrors] = useState({})
 
@@ -29,16 +29,13 @@ export default function ProjectCategoryComponent({
     function retrieveProjectCategory(category) {
 
         if (category === null) {
+            setShowLoader(false);
             return;
         }
-
+        setShowLoader(true);
         retrieveProjectCategoryApi(category.id)
             .then(response => {
-                setStatsDefault(response.data.statsDefault)
-                setVisibleToPartners(response.data.visibleToPartners)
-                setName(response.data.name)
-                setLevel(response.data.level)
-                setColor(response.data.color)
+                putCategoryToCache(response.data);
                 setShowLoader(false)
             })
             .catch(error => console.error(error.message))
@@ -83,28 +80,22 @@ export default function ProjectCategoryComponent({
         if (category === null) {
             createProjectCategoryApi(project_category)
                 .then(response => {
-                    console.debug(response)
+                    // console.debug(response)
                     setNewCategory(false)
                     addCategoryToCache(response.data);
                 })
                 .catch(error => {
                     console.error(error.message)
-                    // if (error.response.status === 409) {
-                    //     setErrorMessage("Priority must be unique")
-                    // }
                 })
         } else {
             updateProjectCategoryApi(category.id, project_category)
                 .then(response => {
-                    console.debug(response)
+                    // console.debug(response)
                     setCategory(null)
                     putCategoryToCache(response.data);
                 })
                 .catch(error => {
                     console.error(error.message)
-                    // if (error.response.status === 409) {
-                    //     setErrorMessage("Priority must be unique")
-                    // }
                 })
         }
     }
@@ -153,7 +144,6 @@ export default function ProjectCategoryComponent({
                             }
 
                             {
-                                !showLoader &&
                                 <div>
                                     <form onSubmit={onSubmit}>
                                         <div className="row">

@@ -13,9 +13,9 @@ export default function ListProjectCategoriesComponent() {
 
     const [currentPage, setCurrentPage] = useState(1)
 
-    const categories = useLiveQuery(getCategoryiesFromCache, [currentPage]);
+    const categories = useLiveQuery(getCategoriesFromCache, [currentPage]);
 
-    const categoriesCount = useLiveQuery(getCategoryiesCountFromCache);
+    const categoriesCount = useLiveQuery(getCategoriesCountFromCache);
 
     const [category, setCategory] = useState(null)
 
@@ -35,7 +35,7 @@ export default function ListProjectCategoriesComponent() {
     )
 
     // TODO: check why async await is not necessary here
-    async function getCategoryiesFromCache() {
+    async function getCategoriesFromCache() {
         try {
             // Add the new category to db!
             return await db.categories
@@ -49,7 +49,7 @@ export default function ListProjectCategoriesComponent() {
     }
 
     // TODO: check why async await is necessary here
-    async function getCategoryiesCountFromCache() {
+    async function getCategoriesCountFromCache() {
         try {
             const meta = await db.metadata.get('count')
             console.log({ meta })
