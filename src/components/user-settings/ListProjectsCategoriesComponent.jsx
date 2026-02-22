@@ -13,20 +13,9 @@ export default function ListProjectCategoriesComponent() {
 
     const [currentPage, setCurrentPage] = useState(1)
 
-    const categories = useLiveQuery(() => {
-        return db.categories
-            .orderBy('level')
-            .offset((currentPage - 1) * PAGESIZE)
-            .limit(PAGESIZE)
-            .toArray();
-    }, [currentPage]);
+    const categories = useLiveQuery(getCategoryiesFromCache, [currentPage]);
 
-    // const [categoriesCount, setCategoriesCount] = useState(-1)
-    const categoriesCount = useLiveQuery(async () => {
-        const meta = await db.metadata.get('count')
-        console.log({ meta })
-        return meta ? meta.value : -1;
-    });
+    const categoriesCount = useLiveQuery(getCategoryiesCountFromCache);
 
     const [category, setCategory] = useState(null)
 
@@ -34,25 +23,47 @@ export default function ListProjectCategoriesComponent() {
 
     const [showLoader, setShowLoader] = useState(true)
 
-    const [reload, setReload] = useState(0)
-
     useEffect(
         () => getProjectCategoriesCount(),
-        [reload]
+        []
     )
 
     useEffect(
         () => {
             refreshProjectCategories()
-        }, [currentPage, reload] // eslint-disable-line react-hooks/exhaustive-deps
+        }, [currentPage] // eslint-disable-line react-hooks/exhaustive-deps
     )
+
+    // TODO: check why async await is not necessary here
+    async function getCategoryiesFromCache() {
+        try {
+            // Add the new category to db!
+            return await db.categories
+                .orderBy('level')
+                .offset((currentPage - 1) * PAGESIZE)
+                .limit(PAGESIZE)
+                .toArray();
+        } catch (error) {
+            console.error(`Failed to get categories: ${error}`)
+        }
+    }
+
+    // TODO: check why async await is necessary here
+    async function getCategoryiesCountFromCache() {
+        try {
+            const meta = await db.metadata.get('count')
+            console.log({ meta })
+            return meta ? meta.value : -1;
+        } catch (error) {
+            console.error(`Cache: Failed to get categories count: ${error}`)
+        }
+    }
 
     function refreshProjectCategories() {
         setShowLoader(true)
         retrieveAllProjectCategoriesApi(PAGESIZE, (currentPage - 1) * PAGESIZE)
             .then(response => {
                 // console.debug(response)
-                // setCategories(response.data)
                 bulkPutCategoriesToCache(response.data)
                 setShowLoader(false)
             })
@@ -64,15 +75,15 @@ export default function ListProjectCategoriesComponent() {
             // Add the categories to db!
             await db.categories.bulkPut(categories)
         } catch (error) {
-            console.error(`Failed to add ${categories}: ${error}`)
+            console.error(`Cache: Failed to add ${categories}: ${error}`)
         }
     }
 
     function getProjectCategoriesCount() {
         getProjectCategoriesCountApi()
-            .then(async (response) => {
+            .then((response) => {
                 // console.debug(response.data);
-                await db.metadata.put({ id: 'count', value: response.data });
+                db.metadata.put({ id: 'count', value: response.data });
             })
             .catch(error => console.error(error.message))
     }
@@ -189,7 +200,7 @@ export default function ListProjectCategoriesComponent() {
                             category={category}
                             setCategory={setCategory}
                             setNewCategory={setNewCategory}
-                            setReload={setReload}
+                            categoriesCount={categoriesCount}
                         />
                     }
                 </div>

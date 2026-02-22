@@ -5,9 +5,9 @@ import { db } from 'services/db'
 
 export default function ProjectCategoryComponent({
     category,
-    setReload,
     setCategory,
-    setNewCategory
+    setNewCategory,
+    categoriesCount
 }) {
 
     const [name, setName] = useState('')
@@ -48,17 +48,18 @@ export default function ProjectCategoryComponent({
         try {
             // Add the new category to db!
             await db.categories.add(category)
+            await db.metadata.put({ id: 'count', value: categoriesCount + 1 });
         } catch (error) {
-            console.error(`Failed to add ${category.name}: ${error}`)
+            console.error(`Cache: Failed to add ${category.name}: ${error}`)
         }
     }
 
     async function putCategoryToCache(category) {
         try {
-            // Add the new category to db!
+            // Update category to db!
             await db.categories.put(category)
         } catch (error) {
-            console.error(`Failed to update ${category.name}: ${error}`)
+            console.error(`Cache: Failed to update ${category.name}: ${error}`)
         }
     }
 
@@ -83,7 +84,6 @@ export default function ProjectCategoryComponent({
             createProjectCategoryApi(project_category)
                 .then(response => {
                     console.debug(response)
-                    setReload(prev => prev + 1)
                     setNewCategory(false)
                     addCategoryToCache(response.data);
                 })
@@ -97,7 +97,6 @@ export default function ProjectCategoryComponent({
             updateProjectCategoryApi(category.id, project_category)
                 .then(response => {
                     console.debug(response)
-                    setReload(prev => prev + 1)
                     setCategory(null)
                     putCategoryToCache(response.data);
                 })
