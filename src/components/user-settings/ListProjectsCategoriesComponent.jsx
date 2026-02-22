@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { useLiveQuery } from "dexie-react-hooks";
 
 import { retrieveAllProjectCategoriesApi, getProjectCategoriesCountApi } from "services/api/ProjectCategoryApiService";
 import Pagination from "services/pagination/Pagination"
@@ -12,8 +13,21 @@ export default function ListProjectCategoriesComponent() {
 
     const [currentPage, setCurrentPage] = useState(1)
 
-    const [categoriesCount, setCategoriesCount] = useState(-1)
-    const [categories, setCategories] = useState([])
+    const categories = useLiveQuery(() => {
+        return db.categories
+            .orderBy('level')
+            .offset((currentPage - 1) * PAGESIZE)
+            .limit(PAGESIZE)
+            .toArray();
+    }, [currentPage]);
+
+    // const [categoriesCount, setCategoriesCount] = useState(-1)
+    const categoriesCount = useLiveQuery(async () => {
+        const meta = await db.metadata.get('count')
+        console.log({ meta })
+        return meta ? meta.value : -1;
+    });
+
     const [category, setCategory] = useState(null)
 
     const [isNewCategory, setNewCategory] = useState(false)
@@ -34,13 +48,13 @@ export default function ListProjectCategoriesComponent() {
     )
 
     function refreshProjectCategories() {
+        setShowLoader(true)
         retrieveAllProjectCategoriesApi(PAGESIZE, (currentPage - 1) * PAGESIZE)
             .then(response => {
                 // console.debug(response)
-                setCategories(response.data)
-                setShowLoader(false)
-                // db.categories.bulkPut(response.data)
+                // setCategories(response.data)
                 bulkPutCategoriesToCache(response.data)
+                setShowLoader(false)
             })
             .catch(error => console.error(error.message))
     }
@@ -56,8 +70,9 @@ export default function ListProjectCategoriesComponent() {
 
     function getProjectCategoriesCount() {
         getProjectCategoriesCountApi()
-            .then(response => {
-                setCategoriesCount(response.data)
+            .then(async (response) => {
+                // console.debug(response.data);
+                await db.metadata.put({ id: 'count', value: response.data });
             })
             .catch(error => console.error(error.message))
     }
@@ -72,6 +87,10 @@ export default function ListProjectCategoriesComponent() {
         setNewCategory(true)
     }
 
+    console.debug(categories, categoriesCount);
+
+    if (!categories || !categoriesCount)
+        return <div>Loading initial data...</div>;
 
     return (
         <div className="container">
