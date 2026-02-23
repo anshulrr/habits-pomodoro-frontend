@@ -36,6 +36,7 @@ export default function ListProjectCategoriesComponent() {
 
     // TODO: check why async await is not necessary here
     async function getCategoriesFromCache() {
+        // console.debug('load data from cache');
         try {
             // Add the new category to db!
             return await db.categories
@@ -59,15 +60,12 @@ export default function ListProjectCategoriesComponent() {
         }
     }
 
-    function refreshProjectCategories() {
-        setShowLoader(true)
-        retrieveAllProjectCategoriesApi(PAGESIZE, (currentPage - 1) * PAGESIZE)
-            .then(response => {
-                // console.debug(response)
-                bulkPutCategoriesToCache(response.data)
-                setShowLoader(false)
-            })
-            .catch(error => console.error(error.message))
+    async function putCategoriesCountToCache(count) {
+        try {
+            db.metadata.put({ id: 'count', value: count });
+        } catch (error) {
+            console.error(`Cache: Failed to put categories count: ${error}`)
+        }
     }
 
     async function bulkPutCategoriesToCache(categories) {
@@ -79,11 +77,22 @@ export default function ListProjectCategoriesComponent() {
         }
     }
 
+    function refreshProjectCategories() {
+        setShowLoader(true)
+        retrieveAllProjectCategoriesApi(PAGESIZE, (currentPage - 1) * PAGESIZE)
+            .then(response => {
+                // console.debug(response)
+                bulkPutCategoriesToCache(response.data)
+                setShowLoader(false)
+            })
+            .catch(error => console.error(error.message))
+    }
+
     function getProjectCategoriesCount() {
         getProjectCategoriesCountApi()
             .then((response) => {
                 // console.debug(response.data);
-                db.metadata.put({ id: 'count', value: response.data });
+                putCategoriesCountToCache(response.data);
             })
             .catch(error => console.error(error.message))
     }
@@ -98,7 +107,7 @@ export default function ListProjectCategoriesComponent() {
         setNewCategory(true)
     }
 
-    console.debug(categories, categoriesCount);
+    // console.debug(categories, categoriesCount);
 
     if (!categories || !categoriesCount)
         return <div>Loading initial data...</div>;
