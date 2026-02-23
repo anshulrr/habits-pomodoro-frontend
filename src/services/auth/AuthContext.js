@@ -152,7 +152,10 @@ export default function AuthProvider({ children }) {
             // database delete won't work as then creation flow is difficult. 
             // need to reload the page
             // or during login create new database
-            await db.delete();
+            await Promise.all([
+                db.categories.clear(),
+                db.metadata.clear()
+            ]);
             // console.debug("deleted dexie database successfully")
         } catch (error) {
             console.error(error);
