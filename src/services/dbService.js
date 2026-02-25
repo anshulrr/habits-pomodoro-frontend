@@ -54,7 +54,7 @@ export async function getItemsFromCache(entity, currentPage, pageSize) {
     try {
         // Add the new category to db!
         return await db[entity]
-            .orderBy('level')
+            .orderBy('priority')
             .offset((currentPage - 1) * pageSize)
             .limit(pageSize)
             .toArray();

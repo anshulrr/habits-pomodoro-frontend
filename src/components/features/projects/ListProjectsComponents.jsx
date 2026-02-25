@@ -1,11 +1,15 @@
 import { useEffect, useRef, useState } from "react"
 import { useNavigate, useLocation } from "react-router-dom";
 
+import { useLiveQuery } from "dexie-react-hooks";
+
 import { retrieveAllProjectsApi, getProjectsCountApi } from "services/api/ProjectApiService";
 import Pagination from "services/pagination/Pagination"
 import { useAuth } from "services/auth/AuthContext";
 import { COLOR_MAP, timeToDisplay, truncateString } from "services/helpers/listsHelper";
 import { isEmpty } from "services/helpers/helper";
+
+import { bulkPutItemsToCache, getItemsCountFromCache, getItemsFromCache, putItemsCountToCache } from "services/dbService";
 
 export default function ListProjectsComponent({
     projects,
@@ -31,7 +35,8 @@ export default function ListProjectsComponent({
     // for first time login default value is needed
     const IS_PROJECTS_DEFAULT = isEmpty(userSettings) || userSettings.homePageDefaultList === 'projects';
 
-    const [projectsCount, setProjectsCount] = useState(-1)
+    const projectsCount = useLiveQuery(() => getItemsCountFromCache('projects'));
+
     const [displayProjects, setDisplayProjects] = useState([]);
 
     // state might not be preset (eg. opening url in a new tab)
@@ -48,6 +53,8 @@ export default function ListProjectsComponent({
 
     useEffect(
         () => {
+            if (!projects)
+                return;
             // console.debug('re-render ListProjectsComponents')
             const firstPageIndex = (currentPage - 1) * PAGESIZE;
             const lastPageIndex = firstPageIndex + PAGESIZE;
@@ -56,8 +63,12 @@ export default function ListProjectsComponent({
         }, [projects, currentPage] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
+
+    if (!projects || !projectsCount)
+        return <div>Loading initial data...</div>;
+
+
     function refreshProjects() {
-        setProjects([]);
         retrieveAllProjectsApi({ limit: ALL_PAGESIZE, offset: 0 })
             .then(response => {
                 // console.debug(response)
@@ -71,7 +82,7 @@ export default function ListProjectsComponent({
                     });
                 }
 
-                setProjects(projectsList)
+                bulkPutItemsToCache('projects', projectsList)
                 // set project for first time load
                 // console.log(userSettings, state, IS_PROJECTS_DEFAULT);
                 if (IS_PROJECTS_DEFAULT && isEmpty(state) && !project && response.data.length > 0) {
@@ -86,7 +97,7 @@ export default function ListProjectsComponent({
     function getProjectsCount() {
         getProjectsCountApi()
             .then(response => {
-                setProjectsCount(response.data)
+                putItemsCountToCache('projects', response.data);
             })
             .catch(error => console.error(error.message))
     }

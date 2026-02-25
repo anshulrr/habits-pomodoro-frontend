@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom'
 
+import { useLiveQuery } from "dexie-react-hooks";
+
 import moment from 'moment';
 
 import ListProjectsComponent from 'components/features/projects/ListProjectsComponents';
@@ -23,6 +25,8 @@ import SearchTaskComponent from './tasks/SearchTaskComponent';
 import FooterComponent from 'components/FooterComponent';
 import { getRunningPomodoroApi } from 'services/api/PomodoroApiService';
 
+import { bulkPutItemsToCache, getItemsCountFromCache, getItemsFromCache, putItemsCountToCache } from "services/dbService";
+
 export default function HomeComponent({ setReloadHome }) {
 
     const { state } = useLocation();
@@ -34,7 +38,11 @@ export default function HomeComponent({ setReloadHome }) {
     const IS_FILTERS_DEFAULT = userSettings.homePageDefaultList === 'filters';
 
     const [todaysPomodorosMap, setTodaysPomodorosMap] = useState(null);
-    const [projects, setProjects] = useState([]);
+
+    const ALL_PAGESIZE = 1000;
+
+    const projects = useLiveQuery(() => getItemsFromCache('projects', 0, ALL_PAGESIZE));
+
     const [project, setProject] = useState(state && state.project);
     const [tag, setTag] = useState(state && state.tag);
     const [tags, setTags] = useState(null);
@@ -211,7 +219,6 @@ export default function HomeComponent({ setReloadHome }) {
                                         <div className="container">
                                             <ListProjectsComponent
                                                 projects={projects}
-                                                setProjects={setProjects}
                                                 project={project}
                                                 setProject={setProject}
                                                 setTag={setTag}
@@ -408,7 +415,6 @@ export default function HomeComponent({ setReloadHome }) {
                                     elementHeight={pomodorosHeight}
                                     setElementHeight={setPomodorosHeight}
                                     setTasksComponentReload={setTasksComponentReload}
-                                    setProjects={setProjects}
                                     setTodaysPomodorosMap={setTodaysPomodorosMap}
                                 />
                             }

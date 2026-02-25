@@ -112,13 +112,14 @@ export default function ListPomodorosComponent({
         }
         // for projects component
         setTodaysPomodorosMap(map)
-        setProjects(projects => projects.map((project) => {
-            // console.log(project.id)
-            if (map.has(project.id)) {
-                project.timeElapsed = map.get(project.id);
-            }
-            return project;
-        }))
+        // Todo: find better way of updating projects time elapsed in the cache
+        // setProjects(projects => projects.map((project) => {
+        //     // console.log(project.id)
+        //     if (map.has(project.id)) {
+        //         project.timeElapsed = map.get(project.id);
+        //     }
+        //     return project;
+        // }))
     }
 
     function deleltePastPomodoro(pomodoro) {
