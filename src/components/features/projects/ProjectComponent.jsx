@@ -1,15 +1,19 @@
+import { useLiveQuery } from 'dexie-react-hooks';
 import { useEffect, useState } from 'react'
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { createProjectApi, retrieveProjectApi, updateProjectApi } from 'services/api/ProjectApiService'
 import { retrieveAllProjectCategoriesApi } from "services/api/ProjectCategoryApiService";
+import { addItemToCache, getItemFromCache, getItemsFromCache, putItemToCache, syncDirtyItems } from 'services/dbService';
 import { calculateTextAreaRows } from 'services/helpers/helper';
 import { COLOR_MAP } from 'services/helpers/listsHelper';
 
 export default function ProjectComponent() {
 
     const { id } = useParams()
+
+    const [currentProject, setCurrentProject] = useState(null);
 
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
@@ -20,8 +24,19 @@ export default function ProjectComponent() {
     const [type, setType] = useState('neutral')
     const [dailyLimit, setDailyLimit] = useState(1)
 
-    const [projectCategories, setProjectCategories] = useState([])
-    const [categoriesMap, setCategoriesMap] = useState(new Map())
+    const projectCategories = useLiveQuery(() => {
+        return getItemsFromCache('categories', 0, 100)
+    });
+
+    const categoriesMap = useLiveQuery(async () => {
+        const categories = await getItemsFromCache('categories', 0, 100);
+        console.log({ categories });
+        const map = new Map();
+        for (const category of categories) {
+            map.set(category.id, category);
+        }
+        return map;
+    });
     const [errors, setErrors] = useState({ color: projectCategoryId === 0 ? 'To select a color, first select a project category' : '' })
     const [showLoader, setShowLoader] = useState(parseInt(id) !== -1)
 
@@ -29,39 +44,62 @@ export default function ProjectComponent() {
 
     const navigate = useNavigate()
     const { state } = useLocation();
+    console.log({ state })
 
     useEffect(
         () => {
             (() => {
                 // console.debug('re-render ProjectComponents')
                 retrieveProject()
-                retrieveProjectCategories()
+                // retrieveProjectCategories()
             })();
         }, [] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
-    function retrieveProjectCategories() {
-        // TODO: decide limit
-        retrieveAllProjectCategoriesApi(100, 0)
-            .then(response => {
-                setProjectCategories(response.data)
-                const map = new Map();
-                for (const category of response.data) {
-                    map.set(category.id, category);
-                }
-                setCategoriesMap(map);
-            })
-            .catch(error => console.error(error.message))
-    }
+    // function retrieveProjectCategories() {
+    //     // TODO: decide limit
+    //     retrieveAllProjectCategoriesApi(100, 0)
+    //         .then(response => {
+    //             setProjectCategories(response.data)
+    //             const map = new Map();
+    //             for (const category of response.data) {
+    //                 map.set(category.id, category);
+    //             }
+    //             setCategoriesMap(map);
+    //         })
+    //         .catch(error => console.error(error.message))
+    // }
 
-    function retrieveProject() {
+    async function retrieveProject() {
 
         if (parseInt(id) === -1) {
             return;
         }
 
+        try {
+            const project = await getItemFromCache('projects', parseInt(id));
+            console.log({ project });
+            setCurrentProject(project);
+
+            setDescription(project.description)
+            setName(project.name)
+            setColor(project.color)
+            setPomodoroLength(project.pomodoroLength)
+            setPriority(project.priority)
+            setType(project.type)
+            setDailyLimit(project.dailyLimit)
+            setProjectCategoryId(project.projectCategoryId)
+        } catch (error) {
+            console.error(`Failed to get project from cache: ${error}`)
+        }
+
+
         retrieveProjectApi(id)
             .then(response => {
+                // putItemToCache('projects', response.data);
+                setCurrentProject(response.data);
+                console.log({ response: response.data })
+
                 setDescription(response.data.description)
                 setName(response.data.name)
                 setColor(response.data.color)
@@ -70,19 +108,23 @@ export default function ProjectComponent() {
                 setType(response.data.type)
                 setDailyLimit(response.data.dailyLimit)
                 setProjectCategoryId(response.data.projectCategoryId)
+
                 errors.color = ''
                 setShowLoader(false)
             })
             .catch(error => console.error(error.message))
     }
 
-    function handleSubmit(error) {
+    async function handleSubmit(error) {
         error.preventDefault();
 
         // console.debug({ name, description, projectCategoryId, color, pomodoroLength })
         // console.debug(values)
+
+
         const project = {
             id,
+            publicId: currentProject?.publicId,
             name,
             description,
             color,
@@ -90,28 +132,42 @@ export default function ProjectComponent() {
             priority,
             type,
             dailyLimit,
-            projectCategoryId
+            projectCategoryId,
+            category: categoriesMap.get(projectCategoryId).name,
+            _dirty: 1
         }
 
         if (!validate(project)) {
             return;
         }
 
-        if (parseInt(id) === -1) {
-            createProjectApi(project)
-                .then(response => {
-                    state.project = response.data;
-                    navigate('/', { state })
-                    // navigate(-1, { state }) // NOTE: passing state with -1 doesn't work
-                })
-                .catch(error => console.error(error.message))
-        } else {
-            updateProjectApi(id, project)
-                .then(response => {
-                    state.project = response.data;
-                    navigate('/', { state })
-                })
-                .catch(error => console.error(error.message))
+        try {
+            if (parseInt(id) === -1) {
+                project.publicId = window.crypto.randomUUID();
+                project.id = -1;
+                console.log({ project })
+                await addItemToCache('projects', project)
+                if (navigator.onLine) {
+                    console.log('Online! Syncing dirty items...');
+                    syncDirtyItems('projects', createProjectApi, updateProjectApi); // Fire and forget in background
+                }
+                console.log({ state })
+                state.project = project;
+                console.log({ state })
+                navigate('/', { state })
+            } else {
+                await putItemToCache('projects', project);
+                if (navigator.onLine) {
+                    console.log('Online! Syncing dirty items...');
+                    syncDirtyItems('projects', createProjectApi, updateProjectApi); // Fire and forget in background
+                }
+                console.log({ state })
+                state.project = project;
+                console.log({ state })
+                navigate('/', { state })
+            }
+        } catch (error) {
+            console.error(`Failed to save project: ${error}`)
         }
     }
 
@@ -142,6 +198,12 @@ export default function ProjectComponent() {
         // console.debug(errors)
         return result;
     }
+
+    if (!projectCategories || !categoriesMap)
+        return <div>Loading initial data...</div>;
+
+    console.log({ categoriesMap, projectCategories });
+
 
     return (
         <div className="container mt-3">

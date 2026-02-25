@@ -41,7 +41,7 @@ export default function HomeComponent({ setReloadHome }) {
 
     const ALL_PAGESIZE = 1000;
 
-    const projects = useLiveQuery(() => getItemsFromCache('projects', 0, ALL_PAGESIZE));
+    const projects = useLiveQuery(async () => await getItemsFromCache('projects', 0, ALL_PAGESIZE));
 
     const [project, setProject] = useState(state && state.project);
     const [tag, setTag] = useState(state && state.tag);
@@ -312,7 +312,7 @@ export default function HomeComponent({ setReloadHome }) {
                                 />
                             }
 
-                            {
+                            {/* {
                                 !project && tag &&
                                 <ListTasksComponent
                                     key={[project, tag.id, tasksComponentReload]}
@@ -323,12 +323,12 @@ export default function HomeComponent({ setReloadHome }) {
                                     pomodoro={pomodoro}
                                     setPomodoro={setPomodoro}
                                 />
-                            }
+                            } */}
                         </div>
                     }
                 </div>
 
-                <div className="col-lg-4">
+                {/* <div className="col-lg-4">
                     {
                         userSettings.homePageChart !== 'none' &&
                         <div className="mt-1 bg-white text-center text-secondary">
@@ -420,7 +420,7 @@ export default function HomeComponent({ setReloadHome }) {
                             }
                         </div >
                     </div >
-                </div >
+                </div > */}
             </div>
 
             <FooterComponent

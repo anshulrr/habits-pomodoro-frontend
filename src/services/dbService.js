@@ -4,7 +4,9 @@ export async function addItemToCache(entity, item, prevCount) {
     try {
         // Add the new item to db!
         await db[entity].add(item)
-        await db.metadata.put({ id: entity + 'Count', value: prevCount + 1 });
+        if (!!prevCount) {
+            await db.metadata.put({ id: entity + 'Count', value: prevCount + 1 });
+        }
     } catch (error) {
         console.error(`Cache: Failed to add ${item.id}: ${error}`)
     }
@@ -41,7 +43,7 @@ export async function syncDirtyItems(entity, createApi, updateApi) {
             // Success! Clear the flag locally
             await db[entity].update(item.publicId, { _dirty: 0 });
         } catch (e) {
-            console.error("Could not sync item", item.id, e);
+            console.error(`Could not sync ${entity} `, item.id, e);
         }
     }
 }
@@ -54,12 +56,12 @@ export async function getItemsFromCache(entity, currentPage, pageSize) {
     try {
         // Add the new category to db!
         return await db[entity]
-            .orderBy('priority')
+            .orderBy(entity === 'categories' ? 'level' : 'priority')
             .offset((currentPage - 1) * pageSize)
             .limit(pageSize)
             .toArray();
     } catch (error) {
-        console.error(`Failed to get categories: ${error}`)
+        console.error(`Failed to get ${entity} : ${error}`)
     }
 }
 
@@ -70,7 +72,7 @@ export async function getItemsCountFromCache(entity) {
         console.log({ meta })
         return meta ? meta.value : -1;
     } catch (error) {
-        console.error(`Cache: Failed to get categories count: ${error}`)
+        console.error(`Cache: Failed to get ${entity}  count: ${error}`)
     }
 }
 
@@ -78,7 +80,7 @@ export async function putItemsCountToCache(entity, count) {
     try {
         db.metadata.put({ id: entity + 'Count', value: count });
     } catch (error) {
-        console.error(`Cache: Failed to put categories count: ${error}`)
+        console.error(`Cache: Failed to put ${entity} count: ${error}`)
     }
 }
 
@@ -88,5 +90,14 @@ export async function bulkPutItemsToCache(entity, categories) {
         await db[entity].bulkPut(categories)
     } catch (error) {
         console.error(`Cache: Failed to add ${categories}: ${error}`)
+    }
+}
+
+
+export async function getItemFromCache(entity, id) {
+    try {
+        return await db[entity].get({ id: id });
+    } catch (error) {
+        console.error(`Failed to get ${entity}: ${error}`)
     }
 }

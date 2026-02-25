@@ -71,7 +71,7 @@ export default function ListProjectsComponent({
     function refreshProjects() {
         retrieveAllProjectsApi({ limit: ALL_PAGESIZE, offset: 0 })
             .then(response => {
-                // console.debug(response)
+                console.debug(response.data)
                 const projectsList = response.data;
                 if (todaysPomodorosMap != null) {
                     projectsList.map((project) => {
