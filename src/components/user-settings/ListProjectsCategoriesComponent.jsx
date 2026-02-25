@@ -1,14 +1,13 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useLiveQuery } from "dexie-react-hooks";
 
-import { retrieveAllProjectCategoriesApi, getProjectCategoriesCountApi } from "services/api/ProjectCategoryApiService";
 import Pagination from "services/pagination/Pagination"
 
 import ProjectCategoryComponent from "components/user-settings/ProjectCategoryComponent";
 
-import { bulkPutItemsToCache, getItemsCountFromCache, getItemsFromCache, putItemsCountToCache } from "services/dbService";
+import { getItemsCountFromCache, getItemsFromCache } from "services/dbService";
 
-const PAGESIZE = 20;
+const PAGESIZE = 5;
 
 export default function ListProjectCategoriesComponent() {
 
@@ -21,39 +20,6 @@ export default function ListProjectCategoriesComponent() {
     const [category, setCategory] = useState(null)
 
     const [isNewCategory, setNewCategory] = useState(false)
-
-    const [showLoader, setShowLoader] = useState(true)
-
-    useEffect(
-        () => getProjectCategoriesCount(),
-        [] // eslint-disable-line react-hooks/exhaustive-deps
-    )
-
-    useEffect(
-        () => {
-            refreshProjectCategories()
-        }, [currentPage] // eslint-disable-line react-hooks/exhaustive-deps
-    )
-
-    function refreshProjectCategories() {
-        setShowLoader(true)
-        retrieveAllProjectCategoriesApi(PAGESIZE, (currentPage - 1) * PAGESIZE)
-            .then(response => {
-                // console.debug(response)
-                bulkPutItemsToCache('categories', response.data)
-                setShowLoader(false)
-            })
-            .catch(error => console.error(error.message))
-    }
-
-    function getProjectCategoriesCount() {
-        getProjectCategoriesCountApi()
-            .then((response) => {
-                // console.debug(response.data);
-                putItemsCountToCache('categories', response.data);
-            })
-            .catch(error => console.error(error.message))
-    }
 
     function updateProjectCategory(cat) {
         setCategory(cat)
@@ -80,16 +46,9 @@ export default function ListProjectCategoriesComponent() {
                                 <h6>
                                     Project Categories
                                     {
-                                        categoriesCount !== -1 &&
                                         <span className="ms-1 badge rounded-pill text-bg-secondary">
                                             {categoriesCount}
                                             <i className="ms-1 bi bi-link-45deg" />
-                                        </span>
-                                    }
-                                    {
-                                        showLoader &&
-                                        <span className="loader-container-2" >
-                                            <span className="ms-2 loader-2"></span>
                                         </span>
                                     }
                                 </h6>
@@ -168,6 +127,7 @@ export default function ListProjectCategoriesComponent() {
                             setCategory={setCategory}
                             setNewCategory={setNewCategory}
                             categoriesCount={categoriesCount}
+                            setCurrentPage={setCurrentPage}
                         />
                     }
                 </div>

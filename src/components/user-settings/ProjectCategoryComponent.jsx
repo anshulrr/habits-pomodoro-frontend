@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
-import { createProjectCategoryApi, retrieveProjectCategoryApi, updateProjectCategoryApi } from 'services/api/ProjectCategoryApiService'
+import { createProjectCategoryApi, updateProjectCategoryApi } from 'services/api/ProjectCategoryApiService'
 import { addItemToCache, putItemToCache, syncDirtyItems } from 'services/dbService'
 
 export default function ProjectCategoryComponent({
     category,
     setCategory,
     setNewCategory,
-    categoriesCount
+    setCurrentPage
 }) {
 
     const [name, setName] = useState(category?.name || '')
@@ -17,45 +17,6 @@ export default function ProjectCategoryComponent({
     const [color, setColor] = useState(category?.color || '#a1a1a1')
 
     const [errors, setErrors] = useState({})
-
-    const [showLoader, setShowLoader] = useState(category !== null)
-
-    useEffect(
-        () => {
-            retrieveProjectCategory(category)
-        }, [category] // eslint-disable-line react-hooks/exhaustive-deps
-    )
-
-
-    useEffect(() => {
-        const handleOnline = async () => {
-            console.log("Back online! Syncing...");
-            // console.log(syncDirtyItems);
-            await syncDirtyItems('categories', createProjectCategoryApi, updateProjectCategoryApi);
-            console.log("Sync complete! after comming online")
-        };
-        console.log('Adding event listener for online status');
-        window.addEventListener('online', handleOnline);
-        return () => {
-            console.log('Cleaning up event listener');
-            window.removeEventListener('online', handleOnline);
-        }
-    }, []);
-
-    function retrieveProjectCategory(category) {
-
-        if (category === null) {
-            setShowLoader(false);
-            return;
-        }
-        setShowLoader(true);
-        retrieveProjectCategoryApi(category.id)
-            .then(response => {
-                putItemToCache('categories', response.data);
-                setShowLoader(false)
-            })
-            .catch(error => console.error(error.message))
-    }
 
     function onSubmit(error) {
         error.preventDefault();
@@ -79,12 +40,13 @@ export default function ProjectCategoryComponent({
         if (category === null) {
             project_category.publicId = window.crypto.randomUUID();
             project_category.id = -1;
-            addItemToCache('categories', project_category, categoriesCount)
+            addItemToCache('categories', project_category)
             if (navigator.onLine) {
                 console.log('Online! Syncing dirty items...');
                 syncDirtyItems('categories', createProjectCategoryApi, updateProjectCategoryApi); // Fire and forget in background
             }
             setNewCategory(false)
+            setCurrentPage(1);
 
         } else {
             putItemToCache('categories', project_category);
@@ -110,12 +72,6 @@ export default function ProjectCategoryComponent({
     return (
         <div className="task-overlay">
             <div className="task-popup">
-                {
-                    showLoader &&
-                    <div className="alert alert-warning m-2" role="alert">
-                        OFFLINE MODE: Changes will be saved when you are back online!
-                    </div>
-                }
                 <div className="task-close-popup m-2">
                     <i className="p-1 bi bi-x-lg" onClick={() => {
                         setCategory(null);
@@ -135,12 +91,6 @@ export default function ProjectCategoryComponent({
                                 category !== null &&
                                 <h6>
                                     Update Project Category Details
-                                    {
-                                        showLoader &&
-                                        <span className="loader-container-2" >
-                                            <span className="ms-1 loader-2"></span>
-                                        </span>
-                                    }
                                 </h6>
                             }
 

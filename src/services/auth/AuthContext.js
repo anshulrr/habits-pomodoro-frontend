@@ -7,7 +7,11 @@ import { getUserSettingsApi } from "../api/AuthApiService";
 import { apiClient } from "../api/ApiClient";
 import FirebaseAuthService from "./FirebaseAuthService";
 import { disableToken } from "services/FirebaseFirestoreService";
+
 import { db } from "services/db";
+import { initCacheDb } from "services/dbService";
+import { syncDirtyItems } from 'services/dbService';
+import { createProjectCategoryApi, updateProjectCategoryApi } from 'services/api/ProjectCategoryApiService';
 
 const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext)
@@ -44,6 +48,22 @@ export default function AuthProvider({ children }) {
         }, []   // eslint-disable-line react-hooks/exhaustive-deps
     )
 
+    useEffect(() => {
+        if (!isAuthenticated)
+            return;
+        const handleOnline = async () => {
+            console.log("Back online! Syncing...");
+            await syncDirtyItems('categories', createProjectCategoryApi, updateProjectCategoryApi);
+            console.log("Sync complete! after coming online")
+        };
+        console.log('Adding event listener for online status');
+        window.addEventListener('online', handleOnline);
+        return () => {
+            console.log('Cleaning up event listener');
+            window.removeEventListener('online', handleOnline);
+        }
+    }, [isAuthenticated]);
+
     function parseJwt(token) {
         if (token === null)
             return false;
@@ -63,6 +83,8 @@ export default function AuthProvider({ children }) {
         if (response.status === 200) {
             updateUserSettings(response.data)
         }
+
+        initCacheDb();
 
         return response.data;
     }

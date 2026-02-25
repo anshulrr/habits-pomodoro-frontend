@@ -1,9 +1,25 @@
 import { db } from 'services/db'
 
-export async function addItemToCache(entity, item, prevCount) {
+import { getProjectCategoriesCountApi, retrieveAllProjectCategoriesApi } from './api/ProjectCategoryApiService';
+
+export async function initCacheDb() {
+    try {
+        const categoriesCount = (await getProjectCategoriesCountApi()).data;
+        console.log({ categoriesCount });
+        putItemsCountToCache('categories', categoriesCount);
+
+        const categories = (await retrieveAllProjectCategoriesApi(categoriesCount, 0)).data;
+        bulkPutItemsToCache('categories', categories);
+    } catch (error) {
+        console.error(`Cache: Failed to initialize cache: ${error}`)
+    }
+}
+
+export async function addItemToCache(entity, item) {
     try {
         // Add the new item to db!
         await db[entity].add(item)
+        const prevCount = await getItemsCountFromCache(entity);
         await db.metadata.put({ id: entity + 'Count', value: prevCount + 1 });
     } catch (error) {
         console.error(`Cache: Failed to add ${item.id}: ${error}`)
