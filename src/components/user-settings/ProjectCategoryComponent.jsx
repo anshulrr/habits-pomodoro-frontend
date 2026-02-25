@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { createProjectCategoryApi, retrieveProjectCategoryApi, updateProjectCategoryApi } from 'services/api/ProjectCategoryApiService'
-import { db } from 'services/db'
+import { addItemToCache, putItemToCache, syncDirtyItems } from 'services/dbService'
 
 export default function ProjectCategoryComponent({
     category,
@@ -31,7 +31,7 @@ export default function ProjectCategoryComponent({
         const handleOnline = async () => {
             console.log("Back online! Syncing...");
             // console.log(syncDirtyItems);
-            await syncDirtyItems('categories');
+            await syncDirtyItems('categories', createProjectCategoryApi, updateProjectCategoryApi);
             console.log("Sync complete! after comming online")
         };
         console.log('Adding event listener for online status');
@@ -51,30 +51,10 @@ export default function ProjectCategoryComponent({
         setShowLoader(true);
         retrieveProjectCategoryApi(category.id)
             .then(response => {
-                putCategoryToCache(response.data);
+                putItemToCache('categories', response.data);
                 setShowLoader(false)
             })
             .catch(error => console.error(error.message))
-    }
-
-    async function addCategoryToCache(category) {
-        try {
-            // Add the new category to db!
-            await db.categories.add(category)
-            await db.metadata.put({ id: 'count', value: categoriesCount + 1 });
-        } catch (error) {
-            console.error(`Cache: Failed to add ${category.name}: ${error}`)
-        }
-    }
-
-    async function putCategoryToCache(category) {
-        console.log({ category })
-        try {
-            // Update category to db!
-            await db.categories.put(category)
-        } catch (error) {
-            console.error(`Cache: Failed to update ${category.name}: ${error}`)
-        }
     }
 
     function onSubmit(error) {
@@ -99,18 +79,18 @@ export default function ProjectCategoryComponent({
         if (category === null) {
             project_category.publicId = window.crypto.randomUUID();
             project_category.id = -1;
-            addCategoryToCache(project_category)
+            addItemToCache('categories', project_category, categoriesCount)
             if (navigator.onLine) {
                 console.log('Online! Syncing dirty items...');
-                syncDirtyItems('categories'); // Fire and forget in background
+                syncDirtyItems('categories', createProjectCategoryApi, updateProjectCategoryApi); // Fire and forget in background
             }
             setNewCategory(false)
 
         } else {
-            putCategoryToCache(project_category);
+            putItemToCache('categories', project_category);
             if (navigator.onLine) {
                 console.log('Online! Syncing dirty items...');
-                syncDirtyItems('categories'); // Fire and forget in background
+                syncDirtyItems('categories', createProjectCategoryApi, updateProjectCategoryApi); // Fire and forget in background
             }
             setCategory(null);
         }
@@ -125,34 +105,6 @@ export default function ProjectCategoryComponent({
         }
         setErrors(errors);
         return validated;
-    }
-
-    async function syncDirtyItems(entity) {
-        console.log("Back online! Syncing dirty items...");
-        // return;
-        const dirtyItems = await db[entity].where('_dirty').equals(1).toArray();
-        console.log({ dirtyItems })
-        for (const item of dirtyItems) {
-            console.log("Syncing item", item);
-            try {
-                if (item.id !== -1) {
-                    await updateProjectCategoryApi(item.id, item)
-                    // await putCategoryToCache({ ...item, _dirty: 0 })
-                    await db[entity].update(item.publicId, { _dirty: 0 });
-                    setShowLoader(false);
-                } else {
-                    const response = await createProjectCategoryApi(item)
-                    // Update the item with the correct id from the backend and clear the dirty flag
-                    await db[entity].update(item.publicId, { id: response.data.id, _dirty: 0 });
-                    setShowLoader(false);
-                }
-
-                // Success! Clear the flag locally
-                await db[entity].update(item.publicId, { _dirty: 0 });
-            } catch (e) {
-                console.error("Could not sync item", item.id, e);
-            }
-        }
     }
 
     return (
