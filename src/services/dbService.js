@@ -53,7 +53,10 @@ export async function syncDirtyItems(entity, createApi, updateApi) {
                 // await db[entity].update(item.publicId, { _dirty: 0 });
                 // Atomic Check: Only clear _dirty if the timestamp matches what we just sent 
                 // (prevents clearing if user edited it again mid-sync)
-                await db[entity].where({ id: item.id, updatedAt: item.updatedAt }).modify({ _dirty: 0 });
+                await db[entity]
+                    .where({ id: item.id })
+                    .and(dbItem => dbItem.updatedAt === item.updatedAt)
+                    .modify({ _dirty: 0 });
             } else {
                 const response = await createApi(item)
                 // Update the item with the correct id from the backend and clear the dirty flag
