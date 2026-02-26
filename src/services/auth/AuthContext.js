@@ -11,7 +11,6 @@ import { disableToken } from "services/FirebaseFirestoreService";
 import { db } from "services/db";
 import { initCacheDb, syncItems } from "services/dbService";
 import { syncDirtyItems } from 'services/dbService';
-import { createProjectCategoryApi, retrieveSyncProjectCategoriesApi, updateProjectCategoryApi } from 'services/api/ProjectCategoryApiService';
 
 const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext)
@@ -53,7 +52,7 @@ export default function AuthProvider({ children }) {
             return;
         const handleOnline = async () => {
             console.log("Back online! Syncing...");
-            await syncDirtyItems('categories', createProjectCategoryApi, updateProjectCategoryApi);
+            await syncDirtyItems('categories');
             console.log("Sync complete! after coming online")
         };
         console.log('Adding event listener for online status');
@@ -72,8 +71,8 @@ export default function AuthProvider({ children }) {
 
         const interval = setInterval(() => {
             if (navigator.onLine) {
-                syncDirtyItems('categories', createProjectCategoryApi, updateProjectCategoryApi);
-                syncItems('categories', retrieveSyncProjectCategoriesApi);
+                syncDirtyItems('categories');
+                syncItems('categories');
             }
         }, 300000); // Every 300 seconds
 

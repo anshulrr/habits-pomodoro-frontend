@@ -1,17 +1,36 @@
 import { db } from 'services/db'
 
-import { getProjectCategoriesCountApi, retrieveAllProjectCategoriesApi } from './api/ProjectCategoryApiService';
+import {
+    createProjectCategoryApi,
+    getProjectCategoriesCountApi,
+    retrieveAllProjectCategoriesApi,
+    retrieveSyncProjectCategoriesApi,
+    updateProjectCategoryApi
+} from './api/ProjectCategoryApiService';
+
+const apiMap = {
+    'categories': {
+        createApi: createProjectCategoryApi,
+        updateApi: updateProjectCategoryApi,
+        retrieveAllApi: retrieveAllProjectCategoriesApi,
+        retrieveSyncAllApi: retrieveSyncProjectCategoriesApi,
+        getCountApi: getProjectCategoriesCountApi
+    }
+};
 
 export async function initCacheDb() {
     console.info("Initializing cache database...");
-    try {
-        const categoriesCount = (await getProjectCategoriesCountApi()).data;
-        putItemsCountToCache('categories', categoriesCount);
+    const entities = ['categories'];
+    for (const entity of entities) {
+        try {
+            const itemsCount = (await apiMap[entity].getCountApi()).data;
+            putItemsCountToCache(entity, itemsCount);
 
-        const categories = (await retrieveAllProjectCategoriesApi(categoriesCount, 0)).data;
-        bulkPutItemsToCache('categories', categories);
-    } catch (error) {
-        console.error(`Cache: Failed to initialize cache: ${error}`)
+            const items = (await apiMap[entity].retrieveAllApi(itemsCount, 0)).data;
+            bulkPutItemsToCache(entity, items);
+        } catch (error) {
+            console.error(`Cache: Failed to initialize cache of ${entity}: ${error}`)
+        }
     }
 }
 
@@ -27,7 +46,7 @@ export async function addItemToCache(entity, item) {
 }
 
 export async function putItemToCache(entity, item) {
-    console.log({ item })
+    // console.debug({ item })
     try {
         // Update item to db!
         await db[entity].put(item)
@@ -36,21 +55,19 @@ export async function putItemToCache(entity, item) {
     }
 }
 
-
-export async function syncDirtyItems(entity, createApi, updateApi) {
+export async function syncDirtyItems(entity) {
     const dirtyItems = await db[entity].where('_dirty').equals(1).toArray();
-    console.debug('dirtyItemsCount', dirtyItems.length)
+    console.info('dirtyItemsCount', dirtyItems.length)
     for (const item of dirtyItems) {
-        console.debug("Syncing item", item);
+        // console.debug("Syncing item", item);
         try {
             if (item.id !== -1) {
-                const response = await updateApi(item.id, item);
+                const response = await apiMap[entity].updateApi(item.id, item);
                 if (response.status === 409) {
                     console.info(`conflict detected for ${entity}: ${item.id}, will be corrected on next sync`);
                     // TODO: trigger syncItems
                     return;
                 }
-                // await db[entity].update(item.publicId, { _dirty: 0 });
                 // Atomic Check: Only clear _dirty if the timestamp matches what we just sent 
                 // (prevents clearing if user edited it again mid-sync)
                 await db[entity]
@@ -58,7 +75,7 @@ export async function syncDirtyItems(entity, createApi, updateApi) {
                     .and(dbItem => dbItem.updatedAt === item.updatedAt)
                     .modify({ _dirty: 0 });
             } else {
-                const response = await createApi(item)
+                const response = await apiMap[entity].createApi(item);
                 // Update the item with the correct id from the backend and clear the dirty flag
                 await db[entity].update(item.publicId, { id: response.data.id, _dirty: 0 });
             }
@@ -72,14 +89,14 @@ export async function syncDirtyItems(entity, createApi, updateApi) {
     }
 }
 
-export async function syncItems(entity, retrieveAllApi) {
-    console.log("Syncing items...");
+export async function syncItems(entity) {
+    console.info("Syncing items...");
     const lastSyncMeta = await db.metadata.get('last_sync_' + entity);
     const lastSyncTime = lastSyncMeta ? lastSyncMeta.value : '1970-01-01T00:00:00Z';
 
     try {
         // 1. Fetch only what changed since last time
-        const items = (await retrieveAllApi({ limit: 1000, offset: 0, lastSyncTime })).data;
+        const items = (await apiMap[entity].retrieveSyncAllApi({ limit: 1000, offset: 0, lastSyncTime })).data;
 
         // 2. Transaction: Save data and the NEW sync time together
         await db.transaction('rw', db[entity], db.metadata, async () => {
@@ -89,7 +106,7 @@ export async function syncItems(entity, retrieveAllApi) {
             // TODO: check if server time is better to use here instead of client time
             await db.metadata.put({ id: 'last_sync_' + entity, value: new Date().toISOString() });
         });
-        console.log(`Successfully synced ${items.length} items for ${entity}`);
+        console.info(`Successfully synced ${items.length} items of ${entity}`);
     } catch (error) {
         console.error(`Cache: Failed to sync items: ${error}`)
     }

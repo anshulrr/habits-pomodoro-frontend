@@ -1,6 +1,5 @@
 import { useState } from 'react'
 
-import { createProjectCategoryApi, updateProjectCategoryApi } from 'services/api/ProjectCategoryApiService'
 import { addItemToCache, putItemToCache, syncDirtyItems } from 'services/dbService'
 
 export default function ProjectCategoryComponent({
@@ -44,7 +43,7 @@ export default function ProjectCategoryComponent({
             addItemToCache('categories', project_category)
             if (navigator.onLine) {
                 console.log('Online! Syncing dirty items...');
-                syncDirtyItems('categories', createProjectCategoryApi, updateProjectCategoryApi); // Fire and forget in background
+                syncDirtyItems('categories'); // Fire and forget in background
             }
             setNewCategory(false)
             setCurrentPage(1);
@@ -53,7 +52,7 @@ export default function ProjectCategoryComponent({
             putItemToCache('categories', project_category);
             if (navigator.onLine) {
                 console.log('Online! Syncing dirty items...');
-                syncDirtyItems('categories', createProjectCategoryApi, updateProjectCategoryApi); // Fire and forget in background
+                syncDirtyItems('categories'); // Fire and forget in background
             }
             setCategory(null);
         }

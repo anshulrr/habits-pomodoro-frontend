@@ -23,7 +23,6 @@ export default function SortableTask({
     setPomodorosListReload,
     project,
     setShowCommentsId,
-    markCompleted,
     setAllTasksReload
 }) {
     const controls = useDragControls();
