@@ -44,9 +44,16 @@ export async function syncDirtyItems(entity, createApi, updateApi) {
         console.log("Syncing item", item);
         try {
             if (item.id !== -1) {
-                await updateApi(item.id, item)
-                // await putItemToCache({ ...item, _dirty: 0 })
-                await db[entity].update(item.publicId, { _dirty: 0 });
+                const response = await updateApi(item.id, item);
+                if (response.status === 409) {
+                    console.info(`conflict detected for ${entity}: ${item.id}, will be corrected on next sync`);
+                    // TODO: trigger syncItems
+                    return;
+                }
+                // await db[entity].update(item.publicId, { _dirty: 0 });
+                // Atomic Check: Only clear _dirty if the timestamp matches what we just sent 
+                // (prevents clearing if user edited it again mid-sync)
+                await db[entity].where({ id: item.id, updatedAt: item.updatedAt }).modify({ _dirty: 0 });
             } else {
                 const response = await createApi(item)
                 // Update the item with the correct id from the backend and clear the dirty flag
@@ -54,9 +61,10 @@ export async function syncDirtyItems(entity, createApi, updateApi) {
             }
 
             // Success! Clear the flag locally
+            console.log(`Successfully synced ${entity}: ${item.id}, clearing flag...`);
             await db[entity].update(item.publicId, { _dirty: 0 });
         } catch (e) {
-            console.error("Could not sync item", item.id, e);
+            console.error(`Could not sync ${entity}: ${item.id}`, e);
         }
     }
 }

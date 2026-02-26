@@ -66,8 +66,10 @@ export default function AuthProvider({ children }) {
 
     useEffect(() => {
         const interval = setInterval(() => {
-            if (navigator.onLine)
+            if (navigator.onLine) {
+                syncDirtyItems('categories', createProjectCategoryApi, updateProjectCategoryApi);
                 syncItems('categories', retrieveSyncProjectCategoriesApi);
+            }
         }, 300000); // Every 300 seconds
 
         return () => clearInterval(interval);

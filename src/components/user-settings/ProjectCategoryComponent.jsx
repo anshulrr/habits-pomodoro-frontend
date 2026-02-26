@@ -30,7 +30,8 @@ export default function ProjectCategoryComponent({
             visibleToPartners,
             level,
             color,
-            _dirty: 1
+            _dirty: 1,
+            updatedAt: new Date().toISOString()
         }
 
         if (!validate(project_category)) {

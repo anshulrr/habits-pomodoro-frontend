@@ -13,9 +13,9 @@ export default function ListProjectCategoriesComponent() {
 
     const [currentPage, setCurrentPage] = useState(1)
 
-    const categories = useLiveQuery(() => getItemsFromCache('categories', currentPage, PAGESIZE), [currentPage]);
+    const categories = useLiveQuery(async () => getItemsFromCache('categories', currentPage, PAGESIZE), [currentPage]);
 
-    const categoriesCount = useLiveQuery(() => getItemsCountFromCache('categories'));
+    const categoriesCount = useLiveQuery(async () => getItemsCountFromCache('categories'));
 
     const [category, setCategory] = useState(null)
 
