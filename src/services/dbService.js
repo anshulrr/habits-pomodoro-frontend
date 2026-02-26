@@ -5,7 +5,6 @@ import { getProjectCategoriesCountApi, retrieveAllProjectCategoriesApi } from '.
 export async function initCacheDb() {
     try {
         const categoriesCount = (await getProjectCategoriesCountApi()).data;
-        console.log({ categoriesCount });
         putItemsCountToCache('categories', categoriesCount);
 
         const categories = (await retrieveAllProjectCategoriesApi(categoriesCount, 0)).data;
@@ -20,7 +19,7 @@ export async function addItemToCache(entity, item) {
         // Add the new item to db!
         await db[entity].add(item)
         const prevCount = await getItemsCountFromCache(entity);
-        await db.metadata.put({ id: entity + 'Count', value: prevCount + 1 });
+        await db.metadata.put({ id: 'count_' + entity, value: prevCount + 1 });
     } catch (error) {
         console.error(`Cache: Failed to add ${item.id}: ${error}`)
     }
@@ -62,7 +61,27 @@ export async function syncDirtyItems(entity, createApi, updateApi) {
     }
 }
 
+export async function syncItems(entity, retrieveAllApi) {
+    console.log("Syncing items...");
+    const lastSyncMeta = await db.metadata.get('last_sync_' + entity);
+    const lastSyncTime = lastSyncMeta ? lastSyncMeta.value : '1970-01-01T00:00:00Z';
 
+    try {
+        // 1. Fetch only what changed since last time
+        const items = (await retrieveAllApi({ limit: 1000, offset: 0, lastSyncTime })).data;
+
+        // 2. Transaction: Save data and the NEW sync time together
+        await db.transaction('rw', db[entity], db.metadata, async () => {
+            if (items.length > 0) {
+                await db[entity].bulkPut(items);
+            }
+            // TODO: check if server time is better to use here instead of client time
+            await db.metadata.put({ id: 'last_sync_' + entity, value: new Date().toISOString() });
+        });
+    } catch (error) {
+        console.error(`Cache: Failed to sync items: ${error}`)
+    }
+}
 
 // TODO: check why async await is not necessary here
 export async function getItemsFromCache(entity, currentPage, pageSize) {
@@ -82,7 +101,7 @@ export async function getItemsFromCache(entity, currentPage, pageSize) {
 // TODO: check why async await is necessary here
 export async function getItemsCountFromCache(entity) {
     try {
-        const meta = await db.metadata.get(entity + 'Count')
+        const meta = await db.metadata.get('count_' + entity)
         console.log({ meta })
         return meta ? meta.value : -1;
     } catch (error) {
@@ -92,7 +111,7 @@ export async function getItemsCountFromCache(entity) {
 
 export async function putItemsCountToCache(entity, count) {
     try {
-        db.metadata.put({ id: entity + 'Count', value: count });
+        await db.metadata.put({ id: 'count_' + entity, value: count });
     } catch (error) {
         console.error(`Cache: Failed to put categories count: ${error}`)
     }
@@ -102,6 +121,8 @@ export async function bulkPutItemsToCache(entity, categories) {
     try {
         // Add the categories to db!
         await db[entity].bulkPut(categories)
+        const now = new Date().toISOString();
+        await db.metadata.put({ id: 'last_sync_' + entity, value: now });
     } catch (error) {
         console.error(`Cache: Failed to add ${categories}: ${error}`)
     }

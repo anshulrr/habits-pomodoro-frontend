@@ -9,9 +9,9 @@ import FirebaseAuthService from "./FirebaseAuthService";
 import { disableToken } from "services/FirebaseFirestoreService";
 
 import { db } from "services/db";
-import { initCacheDb } from "services/dbService";
+import { initCacheDb, syncItems } from "services/dbService";
 import { syncDirtyItems } from 'services/dbService';
-import { createProjectCategoryApi, updateProjectCategoryApi } from 'services/api/ProjectCategoryApiService';
+import { createProjectCategoryApi, retrieveSyncProjectCategoriesApi, updateProjectCategoryApi } from 'services/api/ProjectCategoryApiService';
 
 const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext)
@@ -62,6 +62,15 @@ export default function AuthProvider({ children }) {
             console.log('Cleaning up event listener');
             window.removeEventListener('online', handleOnline);
         }
+    }, [isAuthenticated]);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (navigator.onLine)
+                syncItems('categories', retrieveSyncProjectCategoriesApi);
+        }, 300000); // Every 300 seconds
+
+        return () => clearInterval(interval);
     }, [isAuthenticated]);
 
     function parseJwt(token) {
