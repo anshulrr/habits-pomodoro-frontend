@@ -65,6 +65,11 @@ export default function AuthProvider({ children }) {
     }, [isAuthenticated]);
 
     useEffect(() => {
+        if (!isAuthenticated)
+            return;
+        // if authenticated, initialize cache and start sync interval
+        initCacheDb();
+
         const interval = setInterval(() => {
             if (navigator.onLine) {
                 syncDirtyItems('categories', createProjectCategoryApi, updateProjectCategoryApi);
@@ -94,8 +99,6 @@ export default function AuthProvider({ children }) {
         if (response.status === 200) {
             updateUserSettings(response.data)
         }
-
-        initCacheDb();
 
         return response.data;
     }
@@ -182,9 +185,7 @@ export default function AuthProvider({ children }) {
         }
 
         try {
-            // database delete won't work as then creation flow is difficult. 
-            // need to reload the page
-            // or during login create new database
+            // delete indexedDB data to prevent data leak between users on same device. It will be re-created when new user logs in
             await Promise.all([
                 db.categories.clear(),
                 db.metadata.clear()

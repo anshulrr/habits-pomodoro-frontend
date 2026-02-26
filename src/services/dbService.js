@@ -3,6 +3,7 @@ import { db } from 'services/db'
 import { getProjectCategoriesCountApi, retrieveAllProjectCategoriesApi } from './api/ProjectCategoryApiService';
 
 export async function initCacheDb() {
+    console.info("Initializing cache database...");
     try {
         const categoriesCount = (await getProjectCategoriesCountApi()).data;
         putItemsCountToCache('categories', categoriesCount);
@@ -37,11 +38,10 @@ export async function putItemToCache(entity, item) {
 
 
 export async function syncDirtyItems(entity, createApi, updateApi) {
-    console.log("Back online! Syncing dirty items...");
     const dirtyItems = await db[entity].where('_dirty').equals(1).toArray();
-    console.log('dirtyItemsCount', dirtyItems.length)
+    console.debug('dirtyItemsCount', dirtyItems.length)
     for (const item of dirtyItems) {
-        console.log("Syncing item", item);
+        console.debug("Syncing item", item);
         try {
             if (item.id !== -1) {
                 const response = await updateApi(item.id, item);
@@ -61,7 +61,7 @@ export async function syncDirtyItems(entity, createApi, updateApi) {
             }
 
             // Success! Clear the flag locally
-            console.log(`Successfully synced ${entity}: ${item.id}, clearing flag...`);
+            console.info(`Successfully synced ${entity}: ${item.id}, clearing flag...`);
             await db[entity].update(item.publicId, { _dirty: 0 });
         } catch (e) {
             console.error(`Could not sync ${entity}: ${item.id}`, e);
@@ -86,6 +86,7 @@ export async function syncItems(entity, retrieveAllApi) {
             // TODO: check if server time is better to use here instead of client time
             await db.metadata.put({ id: 'last_sync_' + entity, value: new Date().toISOString() });
         });
+        console.log(`Successfully synced ${items.length} items for ${entity}`);
     } catch (error) {
         console.error(`Cache: Failed to sync items: ${error}`)
     }
@@ -110,7 +111,6 @@ export async function getItemsFromCache(entity, currentPage, pageSize) {
 export async function getItemsCountFromCache(entity) {
     try {
         const meta = await db.metadata.get('count_' + entity)
-        console.log({ meta })
         return meta ? meta.value : -1;
     } catch (error) {
         console.error(`Cache: Failed to get categories count: ${error}`)
