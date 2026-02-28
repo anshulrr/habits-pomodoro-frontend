@@ -7,6 +7,7 @@ import { timeToDisplay } from "services/helpers/listsHelper";
 import { Buttons } from "components/stats/charts/Buttons";
 import ListCommentsComponent from "components/features/comments/ListCommentsComponent";
 import OutsideAlerter from "services/hooks/OutsideAlerter";
+import { getItemFromCache, modifyItemInCache } from "services/dbService";
 
 export default function ListPomodorosComponent({
     includeCategories,
@@ -16,8 +17,6 @@ export default function ListPomodorosComponent({
     title = "Pomodoros",
     elementHeight,
     setElementHeight,
-    setTodaysPomodorosMap,
-    setProjects,
     setTasksComponentReload
 }) {
 
@@ -110,15 +109,11 @@ export default function ListPomodorosComponent({
                 map.set(projectId, pomodoro.timeElapsed);
             }
         }
-        // for projects component
-        setTodaysPomodorosMap(map)
-        setProjects(projects => projects.map((project) => {
-            // console.log(project.id)
-            if (map.has(project.id)) {
-                project.timeElapsed = map.get(project.id);
-            }
-            return project;
-        }))
+        // console.debug({ pomodoros }, map)
+        // update cache for displaying today's projects time elapsed
+        map.forEach((timeElapsed, projectId) => {
+            modifyItemInCache('projects', projectId, { timeElapsed });
+        });
     }
 
     function deleltePastPomodoro(pomodoro) {
@@ -126,12 +121,18 @@ export default function ListPomodorosComponent({
             return;
         }
         deletePastPomodoroApi(pomodoro.id)
-            .then(response => {
+            .then(async response => {
                 // console.debug(response)
                 setReload(prev => prev + 1);
                 if (setTasksComponentReload) {
                     setTasksComponentReload(prev => prev + 1);
                 }
+                // Update cache: reduce the time elapsed of the project by the time elapsed of the deleted pomodoro
+                // console.debug('pomodoro deleted, updating cache', { pomodoro })
+                const project = await getItemFromCache('projects', parseInt(pomodoro.projectId))
+                // console.debug({ project })
+                modifyItemInCache('projects', project.id, { timeElapsed: project.timeElapsed - pomodoro.timeElapsed });
+
                 // const total = pomodorosGroup.reduce((acc, curr) => acc + Math.round(curr.timeElapsed / 60), 0);
                 // setTotalTimeElapsed(timeToDisplay(total - pomodoro.timeElapsed / 60));
                 // setPomodorosGroup(pomodorosGroup.filter(p => p.id !== pomodoro.id))

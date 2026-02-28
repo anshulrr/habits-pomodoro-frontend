@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { useNavigate, useLocation } from "react-router-dom";
 
-import { retrieveAllProjectsApi, getProjectsCountApi } from "services/api/ProjectApiService";
 import Pagination from "services/pagination/Pagination"
 import { useAuth } from "services/auth/AuthContext";
 import { COLOR_MAP, timeToDisplay, truncateString } from "services/helpers/listsHelper";
@@ -9,12 +8,11 @@ import { isEmpty } from "services/helpers/helper";
 
 export default function ListProjectsComponent({
     projects,
-    setProjects,
+    projectsCount,
     project,
     setProject,
     setTag,
     setShowLeftMenu,
-    todaysPomodorosMap
 }) {
     const authContext = useAuth()
     const userSettings = authContext.userSettings
@@ -26,70 +24,41 @@ export default function ListProjectsComponent({
 
     // for first time login default value is needed
     const PAGESIZE = userSettings.pageProjectsCount || 5;
-    const ALL_PAGESIZE = 1000;
 
     // for first time login default value is needed
     const IS_PROJECTS_DEFAULT = isEmpty(userSettings) || userSettings.homePageDefaultList === 'projects';
-
-    const [projectsCount, setProjectsCount] = useState(-1)
-    const [displayProjects, setDisplayProjects] = useState([]);
 
     // state might not be preset (eg. opening url in a new tab)
     // const [project, setProject] = useState(state && state.project)
     const [currentPage, setCurrentPage] = useState((state && state.currentProjectsPage) || 1)
 
+    /*
+        if project is not set 
+            eg. opening url in a new tab
+                or if it's first time login and home page default list is projects,
+            set it to the first project in the list, 
+                and update state for further navigations. 
+        This is needed because project is used in other components, 
+            and also for page refresh to set it right away.
+    */
     useEffect(
         () => {
-            getProjectsCount()
-            refreshProjects()
+            if (IS_PROJECTS_DEFAULT && isEmpty(state) && !project && projects.length > 0) {
+                setProject(projects[0]);
+                // udpate state for first time load
+                updateAppStates(projects[0]);
+            }
         },
         [] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
-    useEffect(
-        () => {
-            // console.debug('re-render ListProjectsComponents')
-            const firstPageIndex = (currentPage - 1) * PAGESIZE;
-            const lastPageIndex = firstPageIndex + PAGESIZE;
-            setDisplayProjects(projects.slice(firstPageIndex, lastPageIndex))
-
-        }, [projects, currentPage] // eslint-disable-line react-hooks/exhaustive-deps
-    )
-
-    function refreshProjects() {
-        setProjects([]);
-        retrieveAllProjectsApi({ limit: ALL_PAGESIZE, offset: 0 })
-            .then(response => {
-                // console.debug(response)
-                const projectsList = response.data;
-                if (todaysPomodorosMap != null) {
-                    projectsList.map((project) => {
-                        if (todaysPomodorosMap.has(project.id)) {
-                            project.timeElapsed = todaysPomodorosMap.get(project.id);
-                        }
-                        return project;
-                    });
-                }
-
-                setProjects(projectsList)
-                // set project for first time load
-                // console.log(userSettings, state, IS_PROJECTS_DEFAULT);
-                if (IS_PROJECTS_DEFAULT && isEmpty(state) && !project && response.data.length > 0) {
-                    setProject(response.data[0]);
-                    // udpate state for first time load
-                    updateAppStates(response.data[0]);
-                }
-            })
-            .catch(error => console.error(error.message))
-    }
-
-    function getProjectsCount() {
-        getProjectsCountApi()
-            .then(response => {
-                setProjectsCount(response.data)
-            })
-            .catch(error => console.error(error.message))
-    }
+    // using useMemo to make sure displayProjects is always recomputed when projects or currentPage changes, to improve performance
+    const displayProjects = useMemo(() => {
+        // console.debug('recomputing displayProjects, project length is ', projects.length, { projects, currentPage })
+        const firstPageIndex = (currentPage - 1) * PAGESIZE;
+        const lastPageIndex = firstPageIndex + PAGESIZE;
+        return projects.slice(firstPageIndex, lastPageIndex);
+    }, [projects, currentPage])
 
     function addNewProject() {
         navigate(`/projects/-1`, { state })

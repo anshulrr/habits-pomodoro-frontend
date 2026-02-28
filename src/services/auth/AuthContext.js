@@ -9,8 +9,7 @@ import FirebaseAuthService from "./FirebaseAuthService";
 import { disableToken } from "services/FirebaseFirestoreService";
 
 import { db } from "services/db";
-import { initCacheDb, syncItems } from "services/dbService";
-import { syncDirtyItems } from 'services/dbService';
+import { clearCacheDb, syncDirtyEntities, syncEntitiesDelta } from "services/dbService";
 
 const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext)
@@ -23,6 +22,8 @@ export default function AuthProvider({ children }) {
     const [responseInterceptor, setResponseInterceptor] = useState(null)
 
     const [isAuthenticated, setAuthenticated] = useState(false)
+    const [isCacheDbAdded, setCacheDbAdded] = useState(false)
+
     const [isFirebaseAuthLoaded, setFirebaseAuthLoaded] = useState(false)
     const [user, setUser] = useState(null)
     const [userSettings, setUserSettings] = useState(null)
@@ -44,40 +45,51 @@ export default function AuthProvider({ children }) {
                 // logout user if settings are deleted
                 logout();
             }
+            // to handle page refresh
+            async function checkCache() {
+                // console.debug(await db.metadata.get('cache-init'));
+                if ((await db.metadata.get('cache-init')).value === 1) {
+                    setCacheDbAdded(true);
+                    // console.debug("Cache DB already initialized!")
+                }
+            }
+            checkCache();
         }, []   // eslint-disable-line react-hooks/exhaustive-deps
     )
 
+    // sync data when back online after being offline, to prevent data loss
     useEffect(() => {
-        if (!isAuthenticated)
+        if (!isAuthenticated || !isCacheDbAdded)
             return;
+
         const handleOnline = async () => {
-            console.log("Back online! Syncing...");
-            await syncDirtyItems('categories');
-            console.log("Sync complete! after coming online")
+            console.info("Back online! Syncing...");
+            await syncDirtyEntities();
+            console.debug("Sync complete! after coming online")
         };
-        console.log('Adding event listener for online status');
+        console.info('Adding event listener for online status');
         window.addEventListener('online', handleOnline);
         return () => {
-            console.log('Cleaning up event listener');
+            console.info('Cleaning up event listener');
             window.removeEventListener('online', handleOnline);
         }
-    }, [isAuthenticated]);
+    }, [isAuthenticated, isCacheDbAdded]);
 
+    // periodic sync every 300 seconds, to keep data in sync between multiple tabs and devices
     useEffect(() => {
-        if (!isAuthenticated)
+        if (!isAuthenticated || !isCacheDbAdded)
             return;
-        // if authenticated, initialize cache and start sync interval
-        initCacheDb();
 
+        console.info("Setting up periodic sync every 300 seconds");
         const interval = setInterval(() => {
             if (navigator.onLine) {
-                syncDirtyItems('categories');
-                syncItems('categories');
+                syncDirtyEntities();
+                syncEntitiesDelta();
             }
         }, 300000); // Every 300 seconds
 
         return () => clearInterval(interval);
-    }, [isAuthenticated]);
+    }, [isAuthenticated, isCacheDbAdded]);
 
     function parseJwt(token) {
         if (token === null)
@@ -183,19 +195,20 @@ export default function AuthProvider({ children }) {
             console.error(error);
         }
 
+        // delete indexedDB data to prevent data leak between users on same device. It will be re-created when new user logs in
         try {
-            // delete indexedDB data to prevent data leak between users on same device. It will be re-created when new user logs in
-            await Promise.all([
-                db.categories.clear(),
-                db.metadata.clear()
-            ]);
+            await clearCacheDb();
+            setCacheDbAdded(false);
             // console.debug("deleted dexie database successfully")
         } catch (error) {
             console.error(error);
         }
+
+        // extra safety to clear local state in case it is not cleared for some reason
+        setAuthenticated(false);
     }
 
-    const valuesToBeShared = { isAuthenticated, logout, user, getUserSettings, userSettings, updateUserSettings }
+    const valuesToBeShared = { isAuthenticated, logout, user, getUserSettings, userSettings, updateUserSettings, setCacheDbAdded, isCacheDbAdded }
 
     return (
         isFirebaseAuthLoaded &&

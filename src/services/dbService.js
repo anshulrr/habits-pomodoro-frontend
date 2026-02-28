@@ -7,6 +7,12 @@ import {
     retrieveSyncProjectCategoriesApi,
     updateProjectCategoryApi
 } from './api/ProjectCategoryApiService';
+import {
+    createProjectApi,
+    updateProjectApi,
+    retrieveAllProjectsApi,
+    getProjectsCountApi
+} from './api/ProjectApiService';
 
 const apiMap = {
     'categories': {
@@ -15,25 +21,72 @@ const apiMap = {
         retrieveAllApi: retrieveAllProjectCategoriesApi,
         retrieveSyncAllApi: retrieveSyncProjectCategoriesApi,
         getCountApi: getProjectCategoriesCountApi
+    },
+    'projects': {
+        createApi: createProjectApi,
+        updateApi: updateProjectApi,
+        retrieveAllApi: retrieveAllProjectsApi,
+        retrieveSyncAllApi: retrieveAllProjectsApi,
+        getCountApi: getProjectsCountApi
     }
 };
 
+// Initialize cache database on login
+// TODO: only sync first few items for first time load, and then sync the rest in background, to improve performance of first load
 export async function initCacheDb() {
     console.info("Initializing cache database...");
-    const entities = ['categories'];
+    const entities = ['categories', 'projects'];
+    const promises = [];
     for (const entity of entities) {
-        try {
-            const itemsCount = (await apiMap[entity].getCountApi()).data;
-            putItemsCountToCache(entity, itemsCount);
+        promises.push(initEntityCache(entity));
+    }
 
-            const items = (await apiMap[entity].retrieveAllApi(itemsCount, 0)).data;
-            bulkPutItemsToCache(entity, items);
-        } catch (error) {
-            console.error(`Cache: Failed to initialize cache of ${entity}: ${error}`)
-        }
+    try {
+        // Initialize cache for all entities in parallel, to improve performance
+        await Promise.all(promises);
+        // Set a flag in metadata to indicate cache has been initialized, so that we don't need to initialize it again on page refresh
+        await db.metadata.put({ id: 'cache-init', value: 1 });
+        console.info("Cache database initialization complete!");
+    } catch (error) {
+        console.error("One of the init chache tasks failed: please relogin", error);
     }
 }
 
+/*
+1. Get count of items from backend and put to cache, so that we can show the count in UI without fetching all items
+2. Get all items from backend and put to cache, so that we can show the items in UI without fetching from backend again
+*/
+async function initEntityCache(entity) {
+    try {
+        let itemsCount = (await apiMap[entity].getCountApi()).data;
+        await putItemsCountToCache(entity, itemsCount);
+
+        console.info(`Initializing cache for ${entity} with ${itemsCount} items...`);
+        if (entity === 'categories') {
+            const items = (await apiMap[entity].retrieveAllApi(itemsCount, 0)).data;
+            await bulkPutItemsToCache(entity, items);
+        } else {
+            const items = (await apiMap[entity].retrieveAllApi({ limit: itemsCount, offset: 0 })).data;
+            await bulkPutItemsToCache(entity, items);
+        }
+    } catch (error) {
+        console.error(`Cache: Failed to initialize cache of ${entity}: ${error}`)
+    }
+}
+
+// after logout, clear cache db to prevent data leak between accounts
+export function clearCacheDb() {
+    return Promise.all([
+        db.categories.clear(),
+        db.projects.clear(),
+        db.metadata.clear()
+    ]);
+}
+
+/*
+1. Add new item to cache with _dirty flag, so that it can be synced to backend later
+2. Update count of items in cache, so that we can show the updated count in UI without fetching from backend again
+*/
 export async function addItemToCache(entity, item) {
     try {
         // Add the new item to db!
@@ -45,6 +98,9 @@ export async function addItemToCache(entity, item) {
     }
 }
 
+/*
+1. Update item in cache with _dirty flag, so that it can be synced to backend later
+*/
 export async function putItemToCache(entity, item) {
     // console.debug({ item })
     try {
@@ -55,6 +111,25 @@ export async function putItemToCache(entity, item) {
     }
 }
 
+/*
+1. Sync all entities with dirty items parallelly, to improve performance
+*/
+export function syncDirtyEntities() {
+    for (const entity of ['categories', 'projects']) {
+        syncDirtyItems(entity).then(() => {
+            console.info(`Successfully synced dirty items for ${entity}`);
+        }).catch(error => {
+            console.error(`Cache: Failed to sync dirty items for ${entity}: ${error}`)
+        });
+    }
+}
+
+/*
+1. Get all dirty items from cache, and sync them to backend one by one
+2. After successful sync, clear the _dirty flag of the item in cache, so that it won't be synced again
+3. If the item is new (id === -1), create it in backend and update the id in cache, so that it can be synced correctly next time
+4. If there is a conflict (response status 409), it means the item has been updated in backend by another device, so we will skip syncing this item and it will be corrected on next sync (when user edit it again or come online again), to prevent data loss. TODO: we can also trigger a syncItems immediately to get the latest version from backend, to improve user experience.
+*/
 export async function syncDirtyItems(entity) {
     const dirtyItems = await db[entity].where('_dirty').equals(1).toArray();
     console.info('dirtyItemsCount', dirtyItems.length)
@@ -89,8 +164,26 @@ export async function syncDirtyItems(entity) {
     }
 }
 
-export async function syncItems(entity) {
-    console.info("Syncing items...");
+/*
+1. Sync all entities with delta items parallelly, to improve performance
+*/
+export function syncEntitiesDelta() {
+    for (const entity of ['categories', 'projects']) {
+        syncDeltaItems(entity).then(() => {
+            console.info(`Successfully syncd delta items for ${entity}`);
+        }).catch(error => {
+            console.error(`Cache: Failed to sync delta items for ${entity}: ${error}`)
+        });
+    }
+}
+
+/*
+1. Get items that are updated since last sync time from backend, 
+2. and update them in cache, 
+3. Update the last sync time in cache, so that we can fetch delta items later
+*/
+export async function syncDeltaItems(entity) {
+    console.info("Syncing delta items...");
     const lastSyncMeta = await db.metadata.get('last_sync_' + entity);
     const lastSyncTime = lastSyncMeta ? lastSyncMeta.value : '1970-01-01T00:00:00Z';
 
@@ -100,8 +193,15 @@ export async function syncItems(entity) {
 
         // 2. Transaction: Save data and the NEW sync time together
         await db.transaction('rw', db[entity], db.metadata, async () => {
-            if (items.length > 0) {
-                await db[entity].bulkPut(items);
+            // Instead of full update, only update recieved keys, so that old extra keys (eg. _dirty, timeElapsed) are not removed
+            for (const item of items) {
+                // Atomic Check: Only update if the item is not dirty locally (prevents overwriting unsynced local changes)
+                // Or if the item is newer than what we have locally (handles updates from other devices)
+                // otherwise local changes will be updated to server on next dirty sync, and we will get the latest version then
+                await db[entity]
+                    .where({ id: item.id })
+                    .and(dbItem => dbItem._dirty !== 1 || new Date(dbItem.updatedAt) < new Date(item.updatedAt))
+                    .modify(item);
             }
             // TODO: check if server time is better to use here instead of client time
             await db.metadata.put({ id: 'last_sync_' + entity, value: new Date().toISOString() });
@@ -113,12 +213,16 @@ export async function syncItems(entity) {
 }
 
 // TODO: check why async await is not necessary here
+/*
+1. Get items from cache with pagination, so that we can show the items in UI without fetching from backend again
+2. The items are ordered by priority
+*/
 export async function getItemsFromCache(entity, currentPage, pageSize) {
-    // console.debug('load data from cache');
+    console.debug('load data from cache');
     try {
         // Add the new category to db!
         return await db[entity]
-            .orderBy('level')
+            .orderBy(entity === 'categories' ? 'level' : '[categoryPriority+priority]')
             .offset((currentPage - 1) * pageSize)
             .limit(pageSize)
             .toArray();
@@ -128,6 +232,9 @@ export async function getItemsFromCache(entity, currentPage, pageSize) {
 }
 
 // TODO: check why async await is necessary here
+/*
+1. Get count of items from cache, so that we can show the count in UI without fetching from backend again
+*/
 export async function getItemsCountFromCache(entity) {
     try {
         const meta = await db.metadata.get('count_' + entity)
@@ -137,21 +244,57 @@ export async function getItemsCountFromCache(entity) {
     }
 }
 
+/*
+1. Update count of items in cache, so that we can show the updated count in UI without fetching from backend again
+*/
 export async function putItemsCountToCache(entity, count) {
     try {
         await db.metadata.put({ id: 'count_' + entity, value: count });
     } catch (error) {
         console.error(`Cache: Failed to put categories count: ${error}`)
     }
+    console.info(`Cache: Successfully put ${entity} count to cache: ${count}`)
 }
 
-export async function bulkPutItemsToCache(entity, categories) {
+/*
+1. Bulk add items to cache, used for first time load and sync delta
+2. Update the last sync time for the entity, so that we can fetch delta items later
+*/
+export async function bulkPutItemsToCache(entity, items) {
     try {
-        // Add the categories to db!
-        await db[entity].bulkPut(categories)
+        await db[entity].bulkPut(items)
         const now = new Date().toISOString();
         await db.metadata.put({ id: 'last_sync_' + entity, value: now });
     } catch (error) {
-        console.error(`Cache: Failed to add ${categories}: ${error}`)
+        console.error(`Cache: Failed to add ${entity}: ${error}`)
+    }
+    console.info(`Cache: Successfully added ${items.length} items to cache for ${entity}`)
+}
+
+/*
+1. add or update key value pairs of an item in cache, 
+2. used for adding data to be shown in the UI but not needed to be synced to backend
+*/
+export async function modifyItemInCache(entity, id, dataObject) {
+    // console.debug({ entity, id }, dataObject)
+    try {
+        await db[entity]
+            .where({ id })
+            .modify(dataObject);
+    } catch (error) {
+        console.error(`Cache: Failed to update ${entity}: ${error}`, id)
+    }
+}
+
+/*
+1. Get an item from cache by id, used for showing item details in UI in new page where list is not available
+*/
+export async function getItemFromCache(entity, id) {
+    // console.debug('loading data from cache');
+    // console.debug({ entity, id })
+    try {
+        return await db[entity].get({ id });
+    } catch (error) {
+        console.error(`Failed to get ${entity} with id: ${id}: ${error}`)
     }
 }
