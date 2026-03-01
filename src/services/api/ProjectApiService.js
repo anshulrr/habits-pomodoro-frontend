@@ -1,7 +1,7 @@
 import { apiClient } from "./ApiClient";
 
 export const retrieveAllProjectsApi
-    = ({ limit, offset, categoryId, subject }) => {
+    = ({ limit, offset, categoryId, subject, lastSyncTime }) => {
         let url;
         if (categoryId) {
             url = `/projects?categoryId=${categoryId}`;
@@ -10,6 +10,9 @@ export const retrieveAllProjectsApi
         }
         if (subject) {
             url += `&subjectId=${subject.id}`
+        }
+        if (lastSyncTime) {
+            url += `&lastSyncTime=${lastSyncTime}`
         }
         return apiClient.get(url);
     }
