@@ -26,6 +26,22 @@ export default function ProjectCategoryComponent({
         }, [category] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
+
+    useEffect(() => {
+        const handleOnline = async () => {
+            console.log("Back online! Syncing...");
+            // console.log(syncDirtyItems);
+            await syncDirtyItems('categories');
+            console.log("Sync complete! after comming online")
+        };
+        console.log('Adding event listener for online status');
+        window.addEventListener('online', handleOnline);
+        return () => {
+            console.log('Cleaning up event listener');
+            window.removeEventListener('online', handleOnline);
+        }
+    }, []);
+
     function retrieveProjectCategory(category) {
 
         if (category === null) {
@@ -52,6 +68,7 @@ export default function ProjectCategoryComponent({
     }
 
     async function putCategoryToCache(category) {
+        console.log({ category })
         try {
             // Update category to db!
             await db.categories.put(category)
@@ -66,11 +83,13 @@ export default function ProjectCategoryComponent({
         // setErrorMessage("")
         const project_category = {
             id: category?.id,
+            publicId: category?.publicId,
             name,
             statsDefault,
             visibleToPartners,
             level,
-            color
+            color,
+            _dirty: 1
         }
 
         if (!validate(project_category)) {
@@ -78,25 +97,22 @@ export default function ProjectCategoryComponent({
         }
 
         if (category === null) {
-            createProjectCategoryApi(project_category)
-                .then(response => {
-                    // console.debug(response)
-                    setNewCategory(false)
-                    addCategoryToCache(response.data);
-                })
-                .catch(error => {
-                    console.error(error.message)
-                })
+            project_category.publicId = window.crypto.randomUUID();
+            project_category.id = -1;
+            addCategoryToCache(project_category)
+            if (navigator.onLine) {
+                console.log('Online! Syncing dirty items...');
+                syncDirtyItems('categories'); // Fire and forget in background
+            }
+            setNewCategory(false)
+
         } else {
-            updateProjectCategoryApi(category.id, project_category)
-                .then(response => {
-                    // console.debug(response)
-                    setCategory(null)
-                    putCategoryToCache(response.data);
-                })
-                .catch(error => {
-                    console.error(error.message)
-                })
+            putCategoryToCache(project_category);
+            if (navigator.onLine) {
+                console.log('Online! Syncing dirty items...');
+                syncDirtyItems('categories'); // Fire and forget in background
+            }
+            setCategory(null);
         }
     }
 
@@ -111,10 +127,43 @@ export default function ProjectCategoryComponent({
         return validated;
     }
 
+    async function syncDirtyItems(entity) {
+        console.log("Back online! Syncing dirty items...");
+        // return;
+        const dirtyItems = await db[entity].where('_dirty').equals(1).toArray();
+        console.log({ dirtyItems })
+        for (const item of dirtyItems) {
+            console.log("Syncing item", item);
+            try {
+                if (item.id !== -1) {
+                    await updateProjectCategoryApi(item.id, item)
+                    // await putCategoryToCache({ ...item, _dirty: 0 })
+                    await db[entity].update(item.publicId, { _dirty: 0 });
+                    setShowLoader(false);
+                } else {
+                    const response = await createProjectCategoryApi(item)
+                    // Update the item with the correct id from the backend and clear the dirty flag
+                    await db[entity].update(item.publicId, { id: response.data.id, _dirty: 0 });
+                    setShowLoader(false);
+                }
+
+                // Success! Clear the flag locally
+                await db[entity].update(item.publicId, { _dirty: 0 });
+            } catch (e) {
+                console.error("Could not sync item", item.id, e);
+            }
+        }
+    }
+
     return (
         <div className="task-overlay">
             <div className="task-popup">
-
+                {
+                    showLoader &&
+                    <div className="alert alert-warning m-2" role="alert">
+                        OFFLINE MODE: Changes will be saved when you are back online!
+                    </div>
+                }
                 <div className="task-close-popup m-2">
                     <i className="p-1 bi bi-x-lg" onClick={() => {
                         setCategory(null);
@@ -189,7 +238,6 @@ export default function ProjectCategoryComponent({
                                                         className="form-control form-control-sm"
                                                         name="level"
                                                         id="level"
-                                                        min="1"
                                                         placeholder="Order"
                                                         required
                                                         value={level}
