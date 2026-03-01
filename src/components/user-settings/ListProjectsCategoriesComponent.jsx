@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useLiveQuery } from "dexie-react-hooks";
 
-import { retrieveAllProjectCategoriesApi, getProjectCategoriesCountApi } from "services/api/ProjectCategoryApiService";
 import Pagination from "services/pagination/Pagination"
 
 import ProjectCategoryComponent from "components/user-settings/ProjectCategoryComponent";
-import { db } from "services/db";
+
+import { getItemsCountFromCache, getItemsFromCache } from "services/dbService";
 
 const PAGESIZE = 5;
 
@@ -13,89 +13,13 @@ export default function ListProjectCategoriesComponent() {
 
     const [currentPage, setCurrentPage] = useState(1)
 
-    const categories = useLiveQuery(getCategoriesFromCache, [currentPage]);
+    const categories = useLiveQuery(async () => getItemsFromCache('categories', currentPage, PAGESIZE), [currentPage]);
 
-    const categoriesCount = useLiveQuery(getCategoriesCountFromCache);
+    const categoriesCount = useLiveQuery(async () => getItemsCountFromCache('categories'));
 
     const [category, setCategory] = useState(null)
 
     const [isNewCategory, setNewCategory] = useState(false)
-
-    const [showLoader, setShowLoader] = useState(true)
-
-    useEffect(
-        () => getProjectCategoriesCount(),
-        [] // eslint-disable-line react-hooks/exhaustive-deps
-    )
-
-    useEffect(
-        () => {
-            refreshProjectCategories()
-        }, [currentPage] // eslint-disable-line react-hooks/exhaustive-deps
-    )
-
-    // TODO: check why async await is not necessary here
-    async function getCategoriesFromCache() {
-        // console.debug('load data from cache');
-        try {
-            // Add the new category to db!
-            return await db.categories
-                .orderBy('level')
-                .offset((currentPage - 1) * PAGESIZE)
-                .limit(PAGESIZE)
-                .toArray();
-        } catch (error) {
-            console.error(`Failed to get categories: ${error}`)
-        }
-    }
-
-    // TODO: check why async await is necessary here
-    async function getCategoriesCountFromCache() {
-        try {
-            const meta = await db.metadata.get('count')
-            console.log({ meta })
-            return meta ? meta.value : -1;
-        } catch (error) {
-            console.error(`Cache: Failed to get categories count: ${error}`)
-        }
-    }
-
-    async function putCategoriesCountToCache(count) {
-        try {
-            db.metadata.put({ id: 'count', value: count });
-        } catch (error) {
-            console.error(`Cache: Failed to put categories count: ${error}`)
-        }
-    }
-
-    async function bulkPutCategoriesToCache(categories) {
-        try {
-            // Add the categories to db!
-            await db.categories.bulkPut(categories)
-        } catch (error) {
-            console.error(`Cache: Failed to add ${categories}: ${error}`)
-        }
-    }
-
-    function refreshProjectCategories() {
-        setShowLoader(true)
-        retrieveAllProjectCategoriesApi(PAGESIZE, (currentPage - 1) * PAGESIZE)
-            .then(response => {
-                // console.debug(response)
-                bulkPutCategoriesToCache(response.data)
-                setShowLoader(false)
-            })
-            .catch(error => console.error(error.message))
-    }
-
-    function getProjectCategoriesCount() {
-        getProjectCategoriesCountApi()
-            .then((response) => {
-                // console.debug(response.data);
-                putCategoriesCountToCache(response.data);
-            })
-            .catch(error => console.error(error.message))
-    }
 
     function updateProjectCategory(cat) {
         setCategory(cat)
@@ -122,16 +46,9 @@ export default function ListProjectCategoriesComponent() {
                                 <h6>
                                     Project Categories
                                     {
-                                        categoriesCount !== -1 &&
                                         <span className="ms-1 badge rounded-pill text-bg-secondary">
                                             {categoriesCount}
                                             <i className="ms-1 bi bi-link-45deg" />
-                                        </span>
-                                    }
-                                    {
-                                        showLoader &&
-                                        <span className="loader-container-2" >
-                                            <span className="ms-2 loader-2"></span>
                                         </span>
                                     }
                                 </h6>
@@ -210,6 +127,7 @@ export default function ListProjectCategoriesComponent() {
                             setCategory={setCategory}
                             setNewCategory={setNewCategory}
                             categoriesCount={categoriesCount}
+                            setCurrentPage={setCurrentPage}
                         />
                     }
                 </div>

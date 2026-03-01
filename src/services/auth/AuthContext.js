@@ -7,7 +7,10 @@ import { getUserSettingsApi } from "../api/AuthApiService";
 import { apiClient } from "../api/ApiClient";
 import FirebaseAuthService from "./FirebaseAuthService";
 import { disableToken } from "services/FirebaseFirestoreService";
+
 import { db } from "services/db";
+import { initCacheDb, syncItems } from "services/dbService";
+import { syncDirtyItems } from 'services/dbService';
 
 const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext)
@@ -43,6 +46,38 @@ export default function AuthProvider({ children }) {
             }
         }, []   // eslint-disable-line react-hooks/exhaustive-deps
     )
+
+    useEffect(() => {
+        if (!isAuthenticated)
+            return;
+        const handleOnline = async () => {
+            console.log("Back online! Syncing...");
+            await syncDirtyItems('categories');
+            console.log("Sync complete! after coming online")
+        };
+        console.log('Adding event listener for online status');
+        window.addEventListener('online', handleOnline);
+        return () => {
+            console.log('Cleaning up event listener');
+            window.removeEventListener('online', handleOnline);
+        }
+    }, [isAuthenticated]);
+
+    useEffect(() => {
+        if (!isAuthenticated)
+            return;
+        // if authenticated, initialize cache and start sync interval
+        initCacheDb();
+
+        const interval = setInterval(() => {
+            if (navigator.onLine) {
+                syncDirtyItems('categories');
+                syncItems('categories');
+            }
+        }, 300000); // Every 300 seconds
+
+        return () => clearInterval(interval);
+    }, [isAuthenticated]);
 
     function parseJwt(token) {
         if (token === null)
@@ -149,9 +184,7 @@ export default function AuthProvider({ children }) {
         }
 
         try {
-            // database delete won't work as then creation flow is difficult. 
-            // need to reload the page
-            // or during login create new database
+            // delete indexedDB data to prevent data leak between users on same device. It will be re-created when new user logs in
             await Promise.all([
                 db.categories.clear(),
                 db.metadata.clear()

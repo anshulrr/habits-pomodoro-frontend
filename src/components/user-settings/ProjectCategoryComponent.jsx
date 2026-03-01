@@ -1,13 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
-import { createProjectCategoryApi, retrieveProjectCategoryApi, updateProjectCategoryApi } from 'services/api/ProjectCategoryApiService'
-import { db } from 'services/db'
+import { addItemToCache, putItemToCache, syncDirtyItems } from 'services/dbService'
 
 export default function ProjectCategoryComponent({
     category,
     setCategory,
     setNewCategory,
-    categoriesCount
+    setCurrentPage
 }) {
 
     const [name, setName] = useState(category?.name || '')
@@ -17,65 +16,6 @@ export default function ProjectCategoryComponent({
     const [color, setColor] = useState(category?.color || '#a1a1a1')
 
     const [errors, setErrors] = useState({})
-
-    const [showLoader, setShowLoader] = useState(category !== null)
-
-    useEffect(
-        () => {
-            retrieveProjectCategory(category)
-        }, [category] // eslint-disable-line react-hooks/exhaustive-deps
-    )
-
-
-    useEffect(() => {
-        const handleOnline = async () => {
-            console.log("Back online! Syncing...");
-            // console.log(syncDirtyItems);
-            await syncDirtyItems('categories');
-            console.log("Sync complete! after comming online")
-        };
-        console.log('Adding event listener for online status');
-        window.addEventListener('online', handleOnline);
-        return () => {
-            console.log('Cleaning up event listener');
-            window.removeEventListener('online', handleOnline);
-        }
-    }, []);
-
-    function retrieveProjectCategory(category) {
-
-        if (category === null) {
-            setShowLoader(false);
-            return;
-        }
-        setShowLoader(true);
-        retrieveProjectCategoryApi(category.id)
-            .then(response => {
-                putCategoryToCache(response.data);
-                setShowLoader(false)
-            })
-            .catch(error => console.error(error.message))
-    }
-
-    async function addCategoryToCache(category) {
-        try {
-            // Add the new category to db!
-            await db.categories.add(category)
-            await db.metadata.put({ id: 'count', value: categoriesCount + 1 });
-        } catch (error) {
-            console.error(`Cache: Failed to add ${category.name}: ${error}`)
-        }
-    }
-
-    async function putCategoryToCache(category) {
-        console.log({ category })
-        try {
-            // Update category to db!
-            await db.categories.put(category)
-        } catch (error) {
-            console.error(`Cache: Failed to update ${category.name}: ${error}`)
-        }
-    }
 
     function onSubmit(error) {
         error.preventDefault();
@@ -89,7 +29,8 @@ export default function ProjectCategoryComponent({
             visibleToPartners,
             level,
             color,
-            _dirty: 1
+            _dirty: 1,
+            updatedAt: new Date().toISOString()
         }
 
         if (!validate(project_category)) {
@@ -99,15 +40,16 @@ export default function ProjectCategoryComponent({
         if (category === null) {
             project_category.publicId = window.crypto.randomUUID();
             project_category.id = -1;
-            addCategoryToCache(project_category)
+            addItemToCache('categories', project_category)
             if (navigator.onLine) {
                 console.log('Online! Syncing dirty items...');
                 syncDirtyItems('categories'); // Fire and forget in background
             }
             setNewCategory(false)
+            setCurrentPage(1);
 
         } else {
-            putCategoryToCache(project_category);
+            putItemToCache('categories', project_category);
             if (navigator.onLine) {
                 console.log('Online! Syncing dirty items...');
                 syncDirtyItems('categories'); // Fire and forget in background
@@ -127,43 +69,9 @@ export default function ProjectCategoryComponent({
         return validated;
     }
 
-    async function syncDirtyItems(entity) {
-        console.log("Back online! Syncing dirty items...");
-        // return;
-        const dirtyItems = await db[entity].where('_dirty').equals(1).toArray();
-        console.log({ dirtyItems })
-        for (const item of dirtyItems) {
-            console.log("Syncing item", item);
-            try {
-                if (item.id !== -1) {
-                    await updateProjectCategoryApi(item.id, item)
-                    // await putCategoryToCache({ ...item, _dirty: 0 })
-                    await db[entity].update(item.publicId, { _dirty: 0 });
-                    setShowLoader(false);
-                } else {
-                    const response = await createProjectCategoryApi(item)
-                    // Update the item with the correct id from the backend and clear the dirty flag
-                    await db[entity].update(item.publicId, { id: response.data.id, _dirty: 0 });
-                    setShowLoader(false);
-                }
-
-                // Success! Clear the flag locally
-                await db[entity].update(item.publicId, { _dirty: 0 });
-            } catch (e) {
-                console.error("Could not sync item", item.id, e);
-            }
-        }
-    }
-
     return (
         <div className="task-overlay">
             <div className="task-popup">
-                {
-                    showLoader &&
-                    <div className="alert alert-warning m-2" role="alert">
-                        OFFLINE MODE: Changes will be saved when you are back online!
-                    </div>
-                }
                 <div className="task-close-popup m-2">
                     <i className="p-1 bi bi-x-lg" onClick={() => {
                         setCategory(null);
@@ -183,12 +91,6 @@ export default function ProjectCategoryComponent({
                                 category !== null &&
                                 <h6>
                                     Update Project Category Details
-                                    {
-                                        showLoader &&
-                                        <span className="loader-container-2" >
-                                            <span className="ms-1 loader-2"></span>
-                                        </span>
-                                    }
                                 </h6>
                             }
 
