@@ -48,9 +48,13 @@ export default function AuthProvider({ children }) {
             // to handle page refresh
             async function checkCache() {
                 // console.debug(await db.metadata.get('cache-init'));
-                if ((await db.metadata.get('cache-init')).value === 1) {
+                if ((await db.metadata.get('cache-init'))?.value === 1) {
                     setCacheDbAdded(true);
                     // console.debug("Cache DB already initialized!")
+                    // sync data on page refresh
+                    // errors are handled in sync functions, so no need to catch here
+                    syncDirtyEntities();
+                    syncEntitiesDelta();
                 }
             }
             checkCache();
@@ -75,18 +79,22 @@ export default function AuthProvider({ children }) {
         }
     }, [isAuthenticated, isCacheDbAdded]);
 
-    // periodic sync every 300 seconds, to keep data in sync between multiple tabs and devices
+    /*
+    1. periodic sync every 12 hours, to keep data in sync between multiple tabs and devices
+    2. for user data that is sufficient, we should also sync on each page refresh
+    */
     useEffect(() => {
         if (!isAuthenticated || !isCacheDbAdded)
             return;
 
-        console.info("Setting up periodic sync every 300 seconds");
+        console.info("Setting up periodic sync every 12 hours");
         const interval = setInterval(() => {
             if (navigator.onLine) {
+                // errors are handled in sync functions, so no need to catch here
                 syncDirtyEntities();
                 syncEntitiesDelta();
             }
-        }, 300000); // Every 300 seconds
+        }, 12 * 60 * 60 * 1000); // Every 12 hours
 
         return () => clearInterval(interval);
     }, [isAuthenticated, isCacheDbAdded]);

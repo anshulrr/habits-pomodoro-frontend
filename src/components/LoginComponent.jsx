@@ -36,40 +36,43 @@ export default function LoginComponent() {
         // todo: decide and check password rules
         try {
             const response = await FirebaseAuthService.signInUser(email, password)
-            // console.debug(response);
-            if (response.user.emailVerified) {
-                await authContext.getUserSettings();
-                // initialize cache db after login
-                await initCacheDb();
-                console.info("Cache DB initialized! Navigating to home page...")
-                // console.debug(authContext.isCacheDbAdded)
-                // setting this state to true to indicate that cache db is initialized, and now HomeComponent can be loaded.
-                authContext.setCacheDbAdded(true);
-                // console.debug(authContext)
-                // navigate(`/welcome/${email}`);
-                navigate(`/`, { state: {} });
-            } else {
+            if (!response.user.emailVerified) {
                 FirebaseAuthService.signOutUser();
                 setErrorMessage("Please click on the verfication link sent to your email")
             }
         } catch (error) {
             setErrorMessage("Authentication Failed. Please check your credentials");
         }
+        // Once the user is authenticated, getUserData will be called
+        getUserData(); // error handling is done in the async function call
     }
 
     async function signInWithGoogle() {
         try {
             // console.debug('opening the popup');
             await FirebaseAuthService.signInWithGoogle();
+        } catch (error) {
+            setErrorMessage("Authentication Failed. Please check your credentials");
+        }
+        // Once the user is authenticated, getUserData will be called
+        getUserData();
+    }
+
+    async function getUserData() {
+        try {
+            // console.debug(response);
             await authContext.getUserSettings();
             // initialize cache db after login
             await initCacheDb();
             console.info("Cache DB initialized! Navigating to home page...")
             // console.debug(authContext.isCacheDbAdded)
+            // setting this state to true to indicate that cache db is initialized, and now HomeComponent can be loaded.
             authContext.setCacheDbAdded(true);
+            // console.debug(authContext)
+            // navigate(`/welcome/${email}`);
             navigate(`/`, { state: {} });
         } catch (error) {
-            setErrorMessage("Authentication Failed. Please check your credentials");
+            setErrorMessage("Something went wrong... Please try again later");
         }
     }
 
@@ -173,13 +176,15 @@ export default function LoginComponent() {
                 !authContext.isCacheDbAdded &&
                 <div className="alert alert-success text-center mb-0" role="alert">
                     Welcome back {authContext.user.displayName || authContext.user.email}!
-                    {
-                        <div>
-                            Loading your data from network ...
-                        </div>
-                    }
+                    <div>
+                        Loading your data from network ...
+                    </div>
+                    <div>
+                        <small>
+                            Taking longer than usual? Please check your network connection and refresh the page. If the problem persists, please logout and login again.
+                        </small>
+                    </div>
                 </div>
-
             }
             {
                 // don't load HomeComponent until userSettings and cache data is retrieved, to avoid multiple API calls during first time signin
