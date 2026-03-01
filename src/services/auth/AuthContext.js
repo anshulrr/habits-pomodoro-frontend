@@ -80,23 +80,34 @@ export default function AuthProvider({ children }) {
     }, [isAuthenticated, isCacheDbAdded]);
 
     /*
-    1. periodic sync every 12 hours, to keep data in sync between multiple tabs and devices
+    1. periodic sync to keep data in sync between multiple tabs and devices
     2. for user data that is sufficient, we should also sync on each page refresh
     */
     useEffect(() => {
         if (!isAuthenticated || !isCacheDbAdded)
             return;
 
-        console.info("Setting up periodic sync every 12 hours");
-        const interval = setInterval(() => {
+        // TODO: decide period for both syncs. Currently set to 1 hour for delta sync, and 5 mins for dirty entities sync, which can be changed later based on user feedback and data usage.
+        console.info("Setting up delta sync every hour");
+        const interval1 = setInterval(() => {
             if (navigator.onLine) {
-                // errors are handled in sync functions, so no need to catch here
-                syncDirtyEntities();
+                // errors are handled in sync function, so no need to catch here
                 syncEntitiesDelta();
             }
-        }, 12 * 60 * 60 * 1000); // Every 12 hours
+        }, 60 * 60 * 1000); // Every hour
 
-        return () => clearInterval(interval);
+        console.info("Setting up create/update sync every 5 mins");
+        const interval2 = setInterval(() => {
+            if (navigator.onLine) {
+                // errors are handled in sync function, so no need to catch here
+                syncDirtyEntities();
+            }
+        }, 5 * 60 * 1000); // Every 5 mins
+
+        return () => {
+            clearInterval(interval1)
+            clearInterval(interval2)
+        };
     }, [isAuthenticated, isCacheDbAdded]);
 
     function parseJwt(token) {
