@@ -51,6 +51,18 @@ function registerServiceWorker() {
       },
     );
 
+    console.log("Registering service worker static files cache...");
+    window.addEventListener('load', () => {
+      console.log("Registering service worker from App.js...");
+      navigator.serviceWorker.register('/sw.js')
+        .then(registration => {
+          console.log('Service worker registered with scope:', registration.scope);
+        })
+        .catch(error => {
+          console.error('Service worker registration failed:', error);
+        });
+    });
+
   } else {
     // not supported in http only
     console.error("Service workers are not supported.");
