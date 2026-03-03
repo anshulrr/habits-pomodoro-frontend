@@ -40,8 +40,11 @@ export const getSyncAllTasksCountApi
     }
 
 export const retrieveSyncAllTasksApi
-    = ({ limit, offset, subject }) => {
+    = ({ limit, offset, subject, lastSyncTime }) => {
         let url = `/tasks?limit=${limit}&offset=${offset}`;
+        if (lastSyncTime) {
+            url += `&lastSyncTime=${lastSyncTime}`
+        }
         if (subject) {
             url += `&subjectId=${subject.id}`
         }
