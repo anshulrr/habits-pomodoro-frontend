@@ -13,6 +13,14 @@ import {
     retrieveAllProjectsApi,
     getProjectsCountApi
 } from './api/ProjectApiService';
+import {
+    retrieveAllTasksApi,
+    getTasksCountApi,
+    updateTaskApi,
+    createTaskApi,
+    getSyncAllTasksCountApi,
+    retrieveSyncAllTasksApi
+} from './api/TaskApiService';
 
 const apiMap = {
     'categories': {
@@ -28,6 +36,14 @@ const apiMap = {
         retrieveAllApi: retrieveAllProjectsApi,
         retrieveSyncAllApi: retrieveAllProjectsApi,
         getCountApi: getProjectsCountApi
+    },
+    'tasks': {
+        createApi: createTaskApi,
+        updateApi: updateTaskApi,
+        retrieveAllApi: retrieveAllTasksApi,
+        retrieveSyncAllApi: retrieveSyncAllTasksApi,
+        getCountApi: getTasksCountApi,
+        getSyncCountApi: getSyncAllTasksCountApi
     }
 };
 
@@ -43,12 +59,46 @@ export async function initCacheDb() {
 
     try {
         // Initialize cache for all entities in parallel, to improve performance
-        await Promise.all(promises);
+        await Promise.all(promises)
+        // await initProjectTasksCache({ status: "current" });
+        // initProjectTasksCache({ status: "archived" })
+
+        await initAllTasksCache();
         // Set a flag in metadata to indicate cache has been initialized, so that we don't need to initialize it again on page refresh
         await db.metadata.put({ id: 'cache-init', value: 1 });
         console.info("Cache database initialization complete!");
     } catch (error) {
         console.error("One of the init chache tasks failed: please relogin", error);
+    }
+}
+
+// for 500 items around 100kb api response
+async function initAllTasksCache() {
+    try {
+        const projects = await getItemsFromCache('projects', 1, 1000);
+        console.log(projects);
+        let itemsCount = (await apiMap['tasks'].getSyncCountApi()).data;
+        console.info(`Initializing cache for tasks with ${itemsCount} items...`);
+        const items = (await apiMap['tasks'].retrieveSyncAllApi({ limit: itemsCount, offset: 0 })).data;
+        await bulkPutItemsToCache('tasks', items);
+    } catch (error) {
+        console.error(`Cache: Failed to initialize cache of tasks: ${error}`)
+    }
+}
+
+// for 50 projects 100 api calls
+async function initProjectTasksCache({ status }) {
+    try {
+        const projects = await getItemsFromCache('projects', 1, 1000);
+        console.log(projects);
+        for (const project of projects) {
+            let itemsCount = (await apiMap['tasks'].getCountApi({ projectId: project.id, status })).data;
+            console.info(`Initializing cache for ${status} tasks with ${itemsCount} items...`);
+            const items = (await apiMap['tasks'].retrieveAllApi({ projectId: project.id, status, limit: itemsCount, offset: 0 })).data;
+            await bulkPutItemsToCache('tasks', items);
+        }
+    } catch (error) {
+        console.error(`Cache: Failed to initialize cache of ${status} tasks: ${error}`)
     }
 }
 
@@ -90,9 +140,15 @@ export function clearCacheDb() {
 export async function addItemToCache(entity, item) {
     try {
         // Add the new item to db!
+        item._dirty = 1;
+        item.updatedAt = new Date().toISOString();
         await db[entity].add(item)
         const prevCount = await getItemsCountFromCache(entity);
         await db.metadata.put({ id: 'count_' + entity, value: prevCount + 1 });
+        if (navigator.onLine) {
+            console.info(`Online! Syncing added dirty ${entity}...`);
+            syncDirtyItems(entity); // Fire and forget in background
+        }
     } catch (error) {
         console.error(`Cache: Failed to add ${item.id}: ${error}`)
     }
@@ -105,7 +161,13 @@ export async function putItemToCache(entity, item) {
     // console.debug({ item })
     try {
         // Update item to db!
-        await db[entity].put(item)
+        item._dirty = 1;
+        item.updatedAt = new Date().toISOString();
+        await db[entity].put(item);
+        if (navigator.onLine) {
+            console.info(`Online! Syncing updated dirty ${entity}...`);
+            syncDirtyItems(entity); // Fire and forget in background
+        }
     } catch (error) {
         console.error(`Cache: Failed to update ${item.id}: ${error}`)
     }
@@ -115,7 +177,7 @@ export async function putItemToCache(entity, item) {
 1. Sync all entities with dirty items parallelly, to improve performance
 */
 export function syncDirtyEntities() {
-    for (const entity of ['categories', 'projects']) {
+    for (const entity of ['categories', 'projects', 'tasks']) {
         syncDirtyItems(entity).then(() => {
             console.info(`Successfully synced dirty items for ${entity}`);
         }).catch(error => {
@@ -168,9 +230,9 @@ export async function syncDirtyItems(entity) {
 1. Sync all entities with delta items parallelly, to improve performance
 */
 export function syncEntitiesDelta() {
-    for (const entity of ['categories', 'projects']) {
+    for (const entity of ['categories', 'projects', 'tasks']) {
         syncDeltaItems(entity).then(() => {
-            console.info(`Successfully syncd delta items for ${entity}`);
+            console.info(`Successfully synced delta items for ${entity}`);
         }).catch(error => {
             console.error(`Cache: Failed to sync delta items for ${entity}: ${error}`)
         });
@@ -183,13 +245,14 @@ export function syncEntitiesDelta() {
 3. Update the last sync time in cache, so that we can fetch delta items later
 */
 export async function syncDeltaItems(entity) {
-    console.info("Syncing delta items...");
+    console.info(`Syncing delta items of ${entity}...`);
     const lastSyncMeta = await db.metadata.get('last_sync_' + entity);
     const lastSyncTime = lastSyncMeta ? lastSyncMeta.value : '1970-01-01T00:00:00Z';
 
     try {
         // 1. Fetch only what changed since last time
-        const items = (await apiMap[entity].retrieveSyncAllApi({ limit: 1000, offset: 0, lastSyncTime })).data;
+        // TODO: decide limit
+        const items = (await apiMap[entity].retrieveSyncAllApi({ limit: 10000, offset: 0, lastSyncTime })).data;
 
         // 2. Transaction: Save data and the NEW sync time together
         await db.transaction('rw', db[entity], db.metadata, async () => {
@@ -206,7 +269,7 @@ export async function syncDeltaItems(entity) {
             // TODO: check if server time is better to use here instead of client time
             await db.metadata.put({ id: 'last_sync_' + entity, value: new Date().toISOString() });
         });
-        console.info(`Successfully synced ${items.length} items of ${entity}`);
+        console.info(`Successfully synced ${items.length} delta items of ${entity}`);
     } catch (error) {
         console.error(`Cache: Failed to sync items: ${error}`)
     }
@@ -221,13 +284,48 @@ export async function getItemsFromCache(entity, currentPage, pageSize) {
     console.debug('load data from cache');
     try {
         // Add the new category to db!
+        let orderBy = 'id';
+        if (entity === 'categories') {
+            orderBy = 'level';
+        } else if (entity === 'projects') {
+            orderBy = '[categoryPriority+priority]';
+        } else if (entity === 'tasks') {
+            orderBy = 'priority';
+        }
         return await db[entity]
-            .orderBy(entity === 'categories' ? 'level' : '[categoryPriority+priority]')
+            .orderBy(orderBy)
             .offset((currentPage - 1) * pageSize)
             .limit(pageSize)
             .toArray();
     } catch (error) {
         console.error(`Failed to get categories: ${error}`)
+    }
+}
+
+export async function getProjectTasksCountFromCache({ projectId, status }) {
+    console.debug('load tasks count from cache', { projectId, status });
+    try {
+        // Add the new category to db!
+        return await db['tasks']
+            .where({ projectId })
+            .and(task => task.status === status)
+            .count();
+    } catch (error) {
+        console.error(`Failed to get tasks count: ${error}`)
+    }
+}
+
+export async function getProjectTasksFromCache({ projectId, status, limit, offset }) {
+    // console.debug('load tasks from cache', { projectId, status, limit, offset });
+    try {
+        // Add the new category to db!
+        return await db['tasks']
+            .where({ projectId })
+            .and(task => task.status === status)
+            .sortBy('priority')
+            .then(tasks => tasks.slice(offset, offset + limit));
+    } catch (error) {
+        console.error(`Failed to get tasks: ${error}`)
     }
 }
 

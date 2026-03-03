@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom";
+import { useLiveQuery } from "dexie-react-hooks";
 
 import { createPomodoroApi } from "services/api/PomodoroApiService";
-import { getTasksCountApi } from "services/api/TaskApiService";
 
 import ListTasksRowsComponent from "components/features/tasks/ListTasksRowsComponent";
 import CreateTaskComponent from "components/features/tasks/CreateTaskComponent";
@@ -10,6 +10,7 @@ import PomodoroComponent from "components/features/pomodoros/PomodoroComponent";
 import ListCommentsComponent from "components/features/comments/ListCommentsComponent";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { getCommentsCountApi } from "services/api/CommentApiService";
+import { getProjectTasksCountFromCache } from "services/dbService";
 
 export default function ListTasksComponent({
     project,
@@ -30,12 +31,12 @@ export default function ListTasksComponent({
 
     const { state } = useLocation();
 
-    const [tasksCount, setTasksCount] = useState(-1)
+    const tasksCount = useLiveQuery(async () => getProjectTasksCountFromCache({ projectId: project?.id, status: 'current' }));
+    const archivedTasksCount = useLiveQuery(async () => getProjectTasksCountFromCache({ projectId: project?.id, status: 'archived' }));
 
     const [currentTasksHeight, setCurrentTasksHeight] = useState(0);
     const [archivedTasksHeight, setArchivedTasksHeight] = useState(0);
 
-    const [archivedTasksCount, setArchivedTasksCount] = useState(0)
     const [showArchived, setShowArchived] = useState(false)
 
     const [commentsCount, setCommentsCount] = useState(0)
@@ -44,7 +45,6 @@ export default function ListTasksComponent({
 
     const [currentTasksReload, setCurrentTasksReload] = useState(0)
     const [archivedTasksReload, setArchivedTasksReload] = useState(0)
-    const [allTasksReload, setAllTasksReload] = useState(0)
 
     const [message, setMessage] = useState('')
 
@@ -60,10 +60,8 @@ export default function ListTasksComponent({
             setShowArchived(state.showArchivedTasks || false)
 
             // console.debug('re-render ListTasksComponents')
-            getTasksCount('current', setTasksCount)
-            getTasksCount('archived', setArchivedTasksCount)
             project && getCommentsCount()
-        }, [project, allTasksReload] // eslint-disable-line react-hooks/exhaustive-deps
+        }, [project] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
     function getTasksCount(status, setContainer) {
@@ -80,9 +78,9 @@ export default function ListTasksComponent({
         } else {
             taskData.searchString = searchString;
         }
-        getTasksCountApi(taskData)
+        getProjectTasksCountFromCache(taskData)
             .then(response => {
-                setContainer(response.data)
+                setContainer(response)
             })
             .catch(error => console.error(error.message))
     }
@@ -131,6 +129,10 @@ export default function ListTasksComponent({
     const updateProject = (id) => {
         navigate(`/projects/${id}`, { state })
     }
+
+    // to prevent rendering the page before tasks are loaded from cache db
+    if (tasksCount == null || archivedTasksCount == null)
+        return <div>Loading initial data for tasks count...</div>;
 
     return (
         <div className="">
@@ -242,8 +244,6 @@ export default function ListTasksComponent({
                         <CreateTaskComponent
                             setShowCreateTask={setShowCreateTask}
                             project={project}
-                            setTasksReload={setCurrentTasksReload}
-                            setTasksCount={setTasksCount}
                         ></CreateTaskComponent>
                     }
 
@@ -259,7 +259,7 @@ export default function ListTasksComponent({
                         {
                             tasksCount > 0 &&
                             <ListTasksRowsComponent
-                                key={[pomodoroStatus, currentTasksReload, allTasksReload]}    // re-render ListTasksComponents for completed pomodoro'
+                                key={[]}    // re-render ListTasksComponents for completed pomodoro'
                                 status={'current'}
                                 tasksCount={tasksCount}
                                 project={project}
@@ -268,8 +268,9 @@ export default function ListTasksComponent({
                                 projects={projects}
                                 createNewPomodoro={createNewPomodoro}
                                 setPomodorosListReload={setPomodorosListReload}
+                                pomodoroStatus={pomodoroStatus}
+                                tasksReload={currentTasksReload}
                                 setTasksReload={setCurrentTasksReload}
-                                setAllTasksReload={setAllTasksReload}
                                 elementHeight={currentTasksHeight}
                                 setElementHeight={setCurrentTasksHeight}
                                 startDate={startDate}
@@ -310,7 +311,7 @@ export default function ListTasksComponent({
                                 showArchived && archivedTasksCount !== 0 &&
                                 <div className="mt-1">
                                     <ListTasksRowsComponent
-                                        key={[archivedTasksCount, archivedTasksReload, allTasksReload]}
+                                        key={[]}
                                         status={'archived'}
                                         tasksCount={archivedTasksCount}
                                         project={project}
@@ -318,8 +319,8 @@ export default function ListTasksComponent({
                                         tags={tags}
                                         projects={projects}
                                         createNewPomodoro={createNewPomodoro}
+                                        tasksReload={archivedTasksReload}
                                         setTasksReload={setArchivedTasksReload}
-                                        setAllTasksReload={setAllTasksReload}
                                         elementHeight={archivedTasksHeight}
                                         setElementHeight={setArchivedTasksHeight}
                                         startDate={startDate}

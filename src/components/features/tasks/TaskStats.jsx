@@ -133,7 +133,7 @@ export const TaskStats = ({ task, setShowTaskStats }) => {
         <div className="task-overlay">
             <div className="task-popup">
                 <div className="close-popup m-2">
-                    <i className="p-1 bi bi-x-lg" onClick={() => setShowTaskStats(-1)}></i>
+                    <i className="p-1 bi bi-x-lg" onClick={() => setShowTaskStats(0)}></i>
                 </div>
 
                 <div className="container my-5">

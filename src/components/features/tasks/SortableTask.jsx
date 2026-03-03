@@ -8,14 +8,14 @@ import MapTagComponent from "components/features/tags/MapTagComponent";
 import { TaskStats } from "components/features/tasks/TaskStats";
 import { motion, Reorder, useDragControls } from "framer-motion";
 import { useRef, useState } from "react";
-import { resetProjectTaskPrioritiesApi, updateTaskApi, updateTaskPriorityApi } from "services/api/TaskApiService";
+import { resetProjectTaskPrioritiesApi } from "services/api/TaskApiService";
 import moment from "moment";
+import { putItemToCache, syncDeltaItems } from "services/dbService";
 
 export default function SortableTask({
     task,
     index,
-    tasks,
-    setTasks,
+    sortableTasks,
     onCreateNewPomodoro,
     onUpdateTaskStatus,
     tags,
@@ -23,7 +23,6 @@ export default function SortableTask({
     setPomodorosListReload,
     project,
     setShowCommentsId,
-    setAllTasksReload
 }) {
     const controls = useDragControls();
     const activeIdRef = useRef(null); // The real moved item
@@ -33,7 +32,7 @@ export default function SortableTask({
     const [showUpdateTaskId, setShowUpdateTaskId] = useState(-1)
 
     const [showCreatePastPomodoro, setShowCreatePastPomodoro] = useState(-1);
-    const [showTaskStats, setShowTaskStats] = useState(-1);
+    const [showTaskStats, setShowTaskStats] = useState(0);  // NOTE: task id can be -1 for new task that is not yet saved to db
     const [showUpdateDueDate, setShowUpdateDueDate] = useState(-1);
     const [showMapTags, setShowMapTags] = useState(-1);
 
@@ -43,42 +42,46 @@ export default function SortableTask({
         activeIdRef.current = { id, index };
     };
 
-    const handleDragEnd = ({ id, index }) => {
-        // console.debug('drag end', { id, index });
+    const handleDragEnd = ({ task, index }) => {
+        const id = task.id;
+        console.debug('drag end', { id, index });
         // If dropped in the same position, do nothing
         if (activeIdRef.current.id === id && activeIdRef.current.index === index)
             return;
 
         // Get the neighbors for the Integer Gap calculation
-        const prevItem = tasks[index - 1];
-        const nextItem = tasks[index + 1];
+        const prevItem = sortableTasks[index - 1];
+        const nextItem = sortableTasks[index + 1];
 
         const prevOrder = prevItem ? prevItem.priority : null;
         const nextOrder = nextItem ? nextItem.priority : null;
-        // console.debug(`Item ${id} moved. Neighbors:`, { prevOrder, nextOrder });
+        console.debug(`Item ${id} moved. Neighbors:`, { prevOrder, nextOrder });
 
         // if no space is left between prevOrder and nextOrder, call an API to reset order
         if (prevOrder !== null && nextOrder !== null && prevOrder + 1 >= nextOrder) {
             resetProjectTaskPrioritiesApi({ id: project.id })
                 .then(() => {
+                    syncDeltaItems('tasks') // Sync with server to get the updated priorities, fire and forget in background
                     window.alert("Failed to update task order. Please try again.");
-                    setTasksReload(prevReload => prevReload + 1);
                     return;
                 })
             return;
         }
 
-        // API Call: Send only the specific data for the gap update
-        updateTaskPriorityApi({ id, map: { prevOrder, nextOrder } })
-            .then(response => {
-                setTasks(prevTasks => prevTasks.map(task => {
-                    if (task.id === id) {
-                        return { ...task, priority: response.data.priority };
-                    }
-                    return task;
-                }));
-            })
-            .catch(error => console.error(error.message))
+        // Calculate the new priority using Integer Gap method
+        let priority;
+        if (prevOrder == null) {
+            priority = nextOrder - 1000;
+        } else if (nextOrder == null) {
+            priority = prevOrder + 1000;
+        } else {
+            priority = parseInt((prevOrder + nextOrder) / 2);
+        }
+        task.priority = priority;
+
+        console.debug('updated priority', { task });
+        putItemToCache('tasks', task);
+
         // Reset ref
         activeIdRef.current = null;
     };
@@ -98,11 +101,8 @@ export default function SortableTask({
             task.dueDate = moment(task.dueDate).add(task.repeatDays, 'd').toDate();
         }
 
-        updateTaskApi({ id: task.id, task })
-            .then(() => {
-                setAllTasksReload(prevReload => prevReload + 1)
-            })
-            .catch(error => console.error(error.message))
+        console.debug('markCompleted task:', { task });
+        putItemToCache('tasks', task);
     }
 
     const generateTimeElapsedColor = (task) => {
@@ -153,7 +153,7 @@ export default function SortableTask({
             className={"update-list-row" + (showUpdatePopupId === task.id ? " update-list-row-selected" : "")}
             value={task}
             onDragStart={() => handleDragStart({ id: task.id, index })} // Mark the "Old" state
-            onDragEnd={() => handleDragEnd({ id: task.id, index })} // Handle the "New" state and API call
+            onDragEnd={() => handleDragEnd({ task, index })} // Handle the "New" state and API call
             dragListener={false} // only allow drag when in project page, otherwise it will cause bug of dragging across projects
             dragControls={controls} // Links this item to our custom controls
             // Apply the "Pop" effect to the whole row when dragged
@@ -247,6 +247,15 @@ export default function SortableTask({
                                         <i className="bi bi-journal-text" style={{ paddingRight: "0.1rem", color: "green" }} />
                                     </span>
                                     {task.commentsCount}
+                                </span>
+                            }
+
+                            {
+                                <span className="me-1">
+                                    <span>
+                                        <i className="bi bi-arrow-up" style={{ paddingRight: "0.1rem" }} />
+                                    </span>
+                                    {task.priority}
                                 </span>
                             }
 
@@ -377,7 +386,6 @@ export default function SortableTask({
                 <TaskDueDateComponent
                     setShowUpdateDueDate={setShowUpdateDueDate}
                     task={task}
-                    setTasksReload={setTasksReload}
                 />
             }
 
@@ -386,7 +394,6 @@ export default function SortableTask({
                 <UpdateTaskComponent
                     task={task}
                     setShowUpdateTaskId={setShowUpdateTaskId}
-                    setTasksReload={setAllTasksReload}
                 />
             }
 
