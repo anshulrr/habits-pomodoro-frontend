@@ -14,7 +14,7 @@ export default function CreateTaskComponent({ project }) {
         error.preventDefault();
 
         const task = {
-            id: -1,
+            id: 0,  // using 0 as a placeholder, -1 is used for task popups
             publicId: window.crypto.randomUUID(),
             description,
             pomodoroLength: 0,

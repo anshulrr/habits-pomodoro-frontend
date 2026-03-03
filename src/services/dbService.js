@@ -198,7 +198,7 @@ export async function syncDirtyItems(entity) {
     for (const item of dirtyItems) {
         // console.debug("Syncing item", item);
         try {
-            if (item.id !== -1) {
+            if (item.id !== -1 && item.id !== 0) {
                 const response = await apiMap[entity].updateApi(item.id, item);
                 if (response.status === 409) {
                     console.info(`conflict detected for ${entity}: ${item.id}, will be corrected on next sync`);

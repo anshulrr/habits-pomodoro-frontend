@@ -32,7 +32,7 @@ export default function SortableTask({
     const [showUpdateTaskId, setShowUpdateTaskId] = useState(-1)
 
     const [showCreatePastPomodoro, setShowCreatePastPomodoro] = useState(-1);
-    const [showTaskStats, setShowTaskStats] = useState(0);  // NOTE: task id can be -1 for new task that is not yet saved to db
+    const [showTaskStats, setShowTaskStats] = useState(-1);
     const [showUpdateDueDate, setShowUpdateDueDate] = useState(-1);
     const [showMapTags, setShowMapTags] = useState(-1);
 
