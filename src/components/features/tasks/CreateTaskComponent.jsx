@@ -3,7 +3,11 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { addItemToCache } from 'services/dbService';
 
-export default function CreateTaskComponent({ project }) {
+export default function CreateTaskComponent({
+    project,
+    tasksCount,
+    setCurrentPage
+}) {
 
     const navigate = useNavigate()
     const { state } = useLocation()
@@ -20,6 +24,11 @@ export default function CreateTaskComponent({ project }) {
             pomodoroLength: 0,
             projectId: project.id,
             status: 'current',
+            // default values for offline create and update
+            priority: -tasksCount * 1000,
+            type: "neutral",
+            repeatDays: 0,
+            dailyLimit: 1,
         }
 
         // TODO: handle scenario when a task is created while offline, and then updated while still offline
@@ -29,6 +38,7 @@ export default function CreateTaskComponent({ project }) {
 
         // cleanup
         setDescription('')
+        setCurrentPage(1)
         updateAppState()
     }
 

@@ -37,6 +37,9 @@ export default function ListTasksComponent({
     const [currentTasksHeight, setCurrentTasksHeight] = useState(0);
     const [archivedTasksHeight, setArchivedTasksHeight] = useState(0);
 
+    const [currentTasksPage, setCurrentTasksPage] = useState(state?.currentTasksPage || 1);
+    const [archivedTasksPage, setArchivedTasksPage] = useState(state?.archivedTasksPage || 1);
+
     const [showArchived, setShowArchived] = useState(false)
 
     const [commentsCount, setCommentsCount] = useState(0)
@@ -244,6 +247,8 @@ export default function ListTasksComponent({
                         <CreateTaskComponent
                             setShowCreateTask={setShowCreateTask}
                             project={project}
+                            tasksCount={tasksCount}
+                            setCurrentPage={setCurrentTasksPage}
                         ></CreateTaskComponent>
                     }
 
@@ -277,6 +282,8 @@ export default function ListTasksComponent({
                                 endDate={endDate}
                                 searchString={searchString}
                                 isReversed={isReversed}
+                                currentPage={currentTasksPage}
+                                setCurrentPage={setCurrentTasksPage}
                             />
                         }
 
@@ -327,6 +334,8 @@ export default function ListTasksComponent({
                                         endDate={endDate}
                                         searchString={searchString}
                                         isReversed={isReversed}
+                                        currentPage={archivedTasksPage}
+                                        setCurrentPage={setArchivedTasksPage}
                                     />
                                 </div>
                             }

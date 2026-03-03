@@ -33,7 +33,9 @@ export default function ListTasksRowsComponent({
     setElementHeight,
     startDate,
     endDate,
-    searchString
+    searchString,
+    currentPage,
+    setCurrentPage
 }) {
     const navigate = useNavigate()
     const { state } = useLocation();
@@ -45,17 +47,11 @@ export default function ListTasksRowsComponent({
 
     const PAGESIZE = userSettings.pageTasksCount;
 
-    const [currentPage, setCurrentPage] = useState(
-        (status === 'current' && state?.currentTasksPage) ||
-        (status === 'archived' && state?.currentArchivedTasksPage) ||
-        1
-    )
-
     const [sortableTasks, setSortableTasks] = useState([]);
 
     const tasks = useLiveQuery(async () => {
         const retrievedTasks = await getProjectTasksFromCache({ projectId: project?.id, status, limit: PAGESIZE, offset: (currentPage - 1) * PAGESIZE })
-        console.log('Retrieved tasks from cache after update:', { retrievedTasks });
+        console.log(`Retrieved ${status} tasks from cache after update:`, { retrievedTasks });
         setSortableTasks(retrievedTasks);
         return updateProjectData(retrievedTasks);
     }, [currentPage]);
