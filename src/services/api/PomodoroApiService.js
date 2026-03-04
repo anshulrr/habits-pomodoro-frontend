@@ -16,7 +16,10 @@ export const updatePomodoroApi
 
 export const getPomodorosApi
     = ({ startDate, endDate, includeCategories, subject }) => {
-        const url = `/pomodoros?startDate=${startDate}&endDate=${endDate}&categoryIds=${includeCategories}`;
+        let url = `/pomodoros?startDate=${startDate}&endDate=${endDate}`;
+        if (includeCategories) {
+            url += `&categoryIds=${includeCategories}`;
+        }
         if (!subject) {
             return apiClient.get(url);
         } else {

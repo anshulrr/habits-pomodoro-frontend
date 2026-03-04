@@ -24,6 +24,14 @@ import {
 import {
     getPomodorosApi
 } from './api/PomodoroApiService';
+import {
+    getTagsCountApi,
+    retrieveAllTagsApi
+} from './api/TagApiService';
+import {
+    getCommentsCountApi,
+    retrieveAllCommentsApi
+} from './api/CommentApiService';
 
 const apiMap = {
     'categories': {
@@ -53,6 +61,20 @@ const apiMap = {
             console.info('getCountApi is not supported for pomodoros')
             return { data: -1 };
         }
+    },
+    'tags': {
+        createApi: null,
+        updateApi: null,
+        retrieveAllApi: retrieveAllTagsApi,
+        retrieveSyncAllApi: retrieveAllTagsApi,
+        getCountApi: getTagsCountApi
+    },
+    'comments': {
+        createApi: null,
+        updateApi: null,
+        retrieveAllApi: retrieveAllCommentsApi,
+        retrieveSyncAllApi: retrieveAllCommentsApi,
+        getCountApi: getCommentsCountApi
     }
 };
 
@@ -67,9 +89,10 @@ export async function initCacheDb() {
     promises.push(initEntityCache('tasks', { limit: 10000, offset: 0 }));
     promises.push(initEntityCache('pomodoros', {
         startDate: '1970-01-01T00:00:00Z',
-        endDate: new Date().toISOString(),
-        includeCategories: []
+        endDate: new Date().toISOString()
     }));
+    promises.push(initEntityCache('tags', { limit: 10000, offset: 0 }));
+    promises.push(initEntityCache('comments', { limit: 10000, offset: 0, filterBy: 'user' }, { filterBy: 'user' }));
 
     try {
         // Initialize cache for all entities in parallel, to improve performance
@@ -86,9 +109,10 @@ export async function initCacheDb() {
 1. Get count of items from backend and put to cache, so that we can show the count in UI without fetching all items
 2. Get all items from backend and put to cache, so that we can show the items in UI without fetching from backend again
 */
-async function initEntityCache(entity, requestData) {
+async function initEntityCache(entity, requestData, requestCountData) {
+    // console.debug({ entity, requestData, requestCountData })
     try {
-        let itemsCount = (await apiMap[entity].getCountApi()).data;
+        let itemsCount = (await apiMap[entity].getCountApi(requestCountData)).data;
         await putItemsCountToCache(entity, itemsCount);
 
         console.info(`Initializing cache for ${entity} with ${itemsCount} items...`);
@@ -111,6 +135,8 @@ export function clearCacheDb() {
         db.projects.clear(),
         db.tasks.clear(),
         db.pomodoros.clear(),
+        db.tags.clear(),
+        db.comments.clear(),
         db.metadata.clear()
     ]);
 }

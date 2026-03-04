@@ -21,6 +21,10 @@ db.version(3).stores({
     tasks: "publicId, id, projectId, status, dueDate, priority, updatedAt, _dirty",
 
     pomodoros: "publicId, id, taskId, startTime, endTime, updatedAt, _dirty",
+
+    tags: "publicId, id, name, priority, createdAt, updatedAt, _dirty",
+
+    comments: "publicId, id, status, updatedAt, _dirty",
     /*
     1. key value pairs for storing metadata related to syncing, such as:
         entityCount,
