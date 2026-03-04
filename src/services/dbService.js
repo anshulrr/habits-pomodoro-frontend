@@ -21,6 +21,9 @@ import {
     getSyncAllTasksCountApi,
     retrieveSyncAllTasksApi
 } from './api/TaskApiService';
+import {
+    getPomodorosApi
+} from './api/PomodoroApiService';
 
 const apiMap = {
     'categories': {
@@ -40,10 +43,16 @@ const apiMap = {
     'tasks': {
         createApi: createTaskApi,
         updateApi: updateTaskApi,
-        retrieveAllApi: retrieveAllTasksApi,
+        retrieveAllApi: retrieveSyncAllTasksApi,
         retrieveSyncAllApi: retrieveSyncAllTasksApi,
-        getCountApi: getTasksCountApi,
-        getSyncCountApi: getSyncAllTasksCountApi
+        getCountApi: getSyncAllTasksCountApi,
+    },
+    'pomodoros': {
+        retrieveAllApi: getPomodorosApi,
+        getCountApi: () => {
+            console.info('getCountApi is not supported for pomodoros')
+            return { data: -1 };
+        }
     }
 };
 
@@ -51,19 +60,20 @@ const apiMap = {
 // TODO: only sync first few items for first time load, and then sync the rest in background, to improve performance of first load
 export async function initCacheDb() {
     console.info("Initializing cache database...");
-    const entities = ['categories', 'projects'];
+    // const entities = ['categories', 'projects'];
     const promises = [];
-    for (const entity of entities) {
-        promises.push(initEntityCache(entity));
-    }
+    promises.push(initEntityCache('categories'));
+    promises.push(initEntityCache('projects', { limit: 10000, offset: 0 }));
+    promises.push(initEntityCache('tasks', { limit: 10000, offset: 0 }));
+    promises.push(initEntityCache('pomodoros', {
+        startDate: '1970-01-01T00:00:00Z',
+        endDate: new Date().toISOString(),
+        includeCategories: []
+    }));
 
     try {
         // Initialize cache for all entities in parallel, to improve performance
         await Promise.all(promises)
-        // await initProjectTasksCache({ status: "current" });
-        // initProjectTasksCache({ status: "archived" })
-
-        await initAllTasksCache();
         // Set a flag in metadata to indicate cache has been initialized, so that we don't need to initialize it again on page refresh
         await db.metadata.put({ id: 'cache-init', value: 1 });
         console.info("Cache database initialization complete!");
@@ -72,41 +82,11 @@ export async function initCacheDb() {
     }
 }
 
-// for 500 items around 100kb api response
-async function initAllTasksCache() {
-    try {
-        const projects = await getItemsFromCache('projects', 1, 1000);
-        console.log(projects);
-        let itemsCount = (await apiMap['tasks'].getSyncCountApi()).data;
-        console.info(`Initializing cache for tasks with ${itemsCount} items...`);
-        const items = (await apiMap['tasks'].retrieveSyncAllApi({ limit: itemsCount, offset: 0 })).data;
-        await bulkPutItemsToCache('tasks', items);
-    } catch (error) {
-        console.error(`Cache: Failed to initialize cache of tasks: ${error}`)
-    }
-}
-
-// for 50 projects 100 api calls
-async function initProjectTasksCache({ status }) {
-    try {
-        const projects = await getItemsFromCache('projects', 1, 1000);
-        console.log(projects);
-        for (const project of projects) {
-            let itemsCount = (await apiMap['tasks'].getCountApi({ projectId: project.id, status })).data;
-            console.info(`Initializing cache for ${status} tasks with ${itemsCount} items...`);
-            const items = (await apiMap['tasks'].retrieveAllApi({ projectId: project.id, status, limit: itemsCount, offset: 0 })).data;
-            await bulkPutItemsToCache('tasks', items);
-        }
-    } catch (error) {
-        console.error(`Cache: Failed to initialize cache of ${status} tasks: ${error}`)
-    }
-}
-
 /*
 1. Get count of items from backend and put to cache, so that we can show the count in UI without fetching all items
 2. Get all items from backend and put to cache, so that we can show the items in UI without fetching from backend again
 */
-async function initEntityCache(entity) {
+async function initEntityCache(entity, requestData) {
     try {
         let itemsCount = (await apiMap[entity].getCountApi()).data;
         await putItemsCountToCache(entity, itemsCount);
@@ -116,7 +96,7 @@ async function initEntityCache(entity) {
             const items = (await apiMap[entity].retrieveAllApi(itemsCount, 0)).data;
             await bulkPutItemsToCache(entity, items);
         } else {
-            const items = (await apiMap[entity].retrieveAllApi({ limit: itemsCount, offset: 0 })).data;
+            const items = (await apiMap[entity].retrieveAllApi(requestData)).data;
             await bulkPutItemsToCache(entity, items);
         }
     } catch (error) {
@@ -129,6 +109,8 @@ export function clearCacheDb() {
     return Promise.all([
         db.categories.clear(),
         db.projects.clear(),
+        db.tasks.clear(),
+        db.pomodoros.clear(),
         db.metadata.clear()
     ]);
 }
@@ -289,8 +271,6 @@ export async function getItemsFromCache(entity, currentPage, pageSize) {
             orderBy = 'level';
         } else if (entity === 'projects') {
             orderBy = '[categoryPriority+priority]';
-        } else if (entity === 'tasks') {
-            orderBy = 'priority';
         }
         return await db[entity]
             .orderBy(orderBy)
