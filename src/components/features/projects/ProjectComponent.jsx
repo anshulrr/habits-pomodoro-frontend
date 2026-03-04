@@ -2,14 +2,18 @@ import { useEffect, useState } from 'react'
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
-import { createProjectApi, retrieveProjectApi, updateProjectApi } from 'services/api/ProjectApiService'
 import { retrieveAllProjectCategoriesApi } from "services/api/ProjectCategoryApiService";
 import { calculateTextAreaRows } from 'services/helpers/helper';
 import { COLOR_MAP } from 'services/helpers/listsHelper';
 
+import { addItemToCache, getItemFromCache, putItemToCache, syncDirtyItems } from 'services/dbService';
+
 export default function ProjectComponent() {
 
     const { id } = useParams()
+
+    // To store all project details together for easy access of non updatable details
+    const [project, setProject] = useState(null);
 
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
@@ -54,26 +58,26 @@ export default function ProjectComponent() {
             .catch(error => console.error(error.message))
     }
 
-    function retrieveProject() {
-
+    // set project details for form fields
+    async function retrieveProject() {
         if (parseInt(id) === -1) {
             return;
         }
 
-        retrieveProjectApi(id)
-            .then(response => {
-                setDescription(response.data.description)
-                setName(response.data.name)
-                setColor(response.data.color)
-                setPomodoroLength(response.data.pomodoroLength)
-                setPriority(response.data.priority)
-                setType(response.data.type)
-                setDailyLimit(response.data.dailyLimit)
-                setProjectCategoryId(response.data.projectCategoryId)
-                errors.color = ''
-                setShowLoader(false)
-            })
-            .catch(error => console.error(error.message))
+        const project = await getItemFromCache('projects', parseInt(id));
+        // console.debug({ project })
+        setProject(project)
+
+        setDescription(project.description)
+        setName(project.name)
+        setColor(project.color)
+        setPomodoroLength(project.pomodoroLength)
+        setPriority(project.priority)
+        setType(project.type)
+        setDailyLimit(project.dailyLimit)
+        setProjectCategoryId(project.projectCategoryId)
+        errors.color = ''
+        setShowLoader(false)
     }
 
     function handleSubmit(error) {
@@ -81,8 +85,11 @@ export default function ProjectComponent() {
 
         // console.debug({ name, description, projectCategoryId, color, pomodoroLength })
         // console.debug(values)
-        const project = {
-            id,
+
+        const category = projectCategories.find(category => category.id === projectCategoryId);
+
+        const updatedProject = {
+            ...project,     // don't miss any existing details like timeElapsed, publicId etc. while updating the project
             name,
             description,
             color,
@@ -90,29 +97,39 @@ export default function ProjectComponent() {
             priority,
             type,
             dailyLimit,
-            projectCategoryId
+            projectCategoryId,
+            // NOTE: make sure to add category details in project itself for new project
+            // TODO: decide way to add schema for cached data to avoid such issues
+            category: category.name,
+            categoryColor: category.color,
+            categoryPriority: category.level,
+            // for syncing data with server
+            _dirty: 1,
+            updatedAt: new Date().toISOString()
         }
 
-        if (!validate(project)) {
+        if (!validate(updatedProject)) {
             return;
         }
 
         if (parseInt(id) === -1) {
-            createProjectApi(project)
-                .then(response => {
-                    state.project = response.data;
-                    navigate('/', { state })
-                    // navigate(-1, { state }) // NOTE: passing state with -1 doesn't work
-                })
-                .catch(error => console.error(error.message))
+            updatedProject.publicId = window.crypto.randomUUID();
+            addItemToCache('projects', updatedProject);
+            // new project will be added to start of the ordered projects list
+            state.currentProjectsPage = 1;
         } else {
-            updateProjectApi(id, project)
-                .then(response => {
-                    state.project = response.data;
-                    navigate('/', { state })
-                })
-                .catch(error => console.error(error.message))
+            putItemToCache('projects', updatedProject);
         }
+
+        if (navigator.onLine) {
+            console.info('Online! Syncing dirty projects...');
+            syncDirtyItems('projects'); // Fire and forget in background
+        }
+        // console.debug({ updatedProject, state })
+
+        state.project = updatedProject;
+        navigate('/', { state })
+        // navigate(-1, { state }) // NOTE: passing state with -1 doesn't work
     }
 
     function validate(project) {

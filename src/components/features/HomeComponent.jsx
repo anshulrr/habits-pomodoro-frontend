@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom'
+import { useLiveQuery } from "dexie-react-hooks";
 
 import moment from 'moment';
 
@@ -23,6 +24,8 @@ import SearchTaskComponent from './tasks/SearchTaskComponent';
 import FooterComponent from 'components/FooterComponent';
 import { getRunningPomodoroApi } from 'services/api/PomodoroApiService';
 
+import { getItemsCountFromCache, getItemsFromCache } from "services/dbService";
+
 export default function HomeComponent({ setReloadHome }) {
 
     const { state } = useLocation();
@@ -34,7 +37,15 @@ export default function HomeComponent({ setReloadHome }) {
     const IS_FILTERS_DEFAULT = userSettings.homePageDefaultList === 'filters';
 
     const [todaysPomodorosMap, setTodaysPomodorosMap] = useState(null);
-    const [projects, setProjects] = useState([]);
+
+    /*
+        * using useLiveQuery to subscribe to changes in projects in cache db, 
+        * so that when projects are updated, the changes are reflected in the UI in real time without needing to manually refresh or refetch data.
+    */
+    const projectsCount = useLiveQuery(async () => getItemsCountFromCache('projects'));
+    const ALL_PAGESIZE = 1000;
+    const projects = useLiveQuery(async () => await getItemsFromCache('projects', 1, ALL_PAGESIZE));
+
     const [project, setProject] = useState(state && state.project);
     const [tag, setTag] = useState(state && state.tag);
     const [tags, setTags] = useState(null);
@@ -92,7 +103,7 @@ export default function HomeComponent({ setReloadHome }) {
     useEffect(
         () => {
             document.title = 'Habits Pomodoro';
-            // console.debug("home", authContext.userSettings)
+            // console.debug("home loaded", authContext.userSettings)
             if (tasksFilter) {
                 fetchTasks(tasksFilter);
             }
@@ -197,6 +208,10 @@ export default function HomeComponent({ setReloadHome }) {
         navigate('/', { state: local_state, replace: true });
     }
 
+    // to prevent rendering the page before projects are loaded from cache db, which causes some components to throw error as they rely on projects data.
+    if (!projects || !projectsCount)
+        return <div>Loading initial data...</div>;
+
     return (
         <div className="container">
             <div className="row">
@@ -211,7 +226,7 @@ export default function HomeComponent({ setReloadHome }) {
                                         <div className="container">
                                             <ListProjectsComponent
                                                 projects={projects}
-                                                setProjects={setProjects}
+                                                projectsCount={projectsCount}
                                                 project={project}
                                                 setProject={setProject}
                                                 setTag={setTag}
@@ -408,7 +423,7 @@ export default function HomeComponent({ setReloadHome }) {
                                     elementHeight={pomodorosHeight}
                                     setElementHeight={setPomodorosHeight}
                                     setTasksComponentReload={setTasksComponentReload}
-                                    setProjects={setProjects}
+                                    projects={projects}
                                     setTodaysPomodorosMap={setTodaysPomodorosMap}
                                 />
                             }
