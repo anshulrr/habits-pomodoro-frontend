@@ -12,7 +12,7 @@ import { generateDateColor } from "services/helpers/listsHelper";
 
 import ListCommentsComponent from "components/features/comments/ListCommentsComponent";
 import SortableTask from "./SortableTask";
-import { getProjectTasksFromCache, getTagTasksFromCache, putItemToCache } from "services/dbService";
+import { getTasksFromCache, putItemToCache } from "services/dbService";
 
 export default function ListTasksRowsComponent({
     project,
@@ -46,14 +46,17 @@ export default function ListTasksRowsComponent({
     const [sortableTasks, setSortableTasks] = useState([]);
 
     const tasks = useLiveQuery(async () => {
-        console.log({ project, tag, startDate, endDate, searchString });
-        let retrievedTasks;
-        if (project) {
-            retrievedTasks = await getProjectTasksFromCache({ projectId: project?.id, status, limit: PAGESIZE, offset: (currentPage - 1) * PAGESIZE })
-        } else if (tag) {
-            retrievedTasks = await getTagTasksFromCache({ tagId: tag?.id, status, limit: PAGESIZE, offset: (currentPage - 1) * PAGESIZE });
-        }
-        console.log(`Retrieved ${status} tasks from cache after update:`, { retrievedTasks });
+        const retrievedTasks = await getTasksFromCache({
+            status,
+            projectId: project?.id,
+            tagId: tag?.id,
+            startDate,
+            endDate,
+            searchString,
+            limit: PAGESIZE,
+            offset: (currentPage - 1) * PAGESIZE
+        })
+        console.debug(`Retrieved ${status} tasks from cache after update:`, { retrievedTasks });
         setSortableTasks(retrievedTasks);
         return updateProjectData(retrievedTasks);
     }, [currentPage]);
@@ -83,28 +86,6 @@ export default function ListTasksRowsComponent({
             setElementHeight(listElement.current.offsetHeight);
         }
     };
-
-    async function refreshTasks(status) {
-        console.debug('Refreshing tasks...', { status, tasks });
-        if (!tasks) {
-            return;
-        }
-        const taskData = {
-            status,
-            limit: PAGESIZE,
-            offset: (currentPage - 1) * PAGESIZE
-        }
-        if (project) {
-            taskData.projectId = project.id;
-        } else if (tag) {
-            taskData.tagId = tag.id;
-        } else if (startDate) {
-            taskData.startDate = startDate;
-            taskData.endDate = endDate;
-        } else {
-            taskData.searchString = searchString;
-        }
-    }
 
     function updateProjectData(tasks) {
         const projectsMap = new Map(projects.map(project => [project.id, project]));

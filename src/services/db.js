@@ -18,7 +18,7 @@ db.version(3).stores({
     /*
     1. added multiple indexes for sorting and filtering by different fields.
     */
-    tasks: "publicId, id, projectId, status, dueDate, priority, updatedAt, _dirty",
+    tasks: "publicId, id, description, projectId, status, dueDate, priority, updatedAt, _dirty",
 
     pomodoros: "publicId, id, taskId, startTime, endTime, updatedAt, _dirty",
 

@@ -313,30 +313,54 @@ export async function getItemsFromCache(entity, currentPage, pageSize) {
         console.error(`Failed to get categories: ${error}`)
     }
 }
-
-export async function getProjectTasksCountFromCache({ projectId, status }) {
-    console.debug('load project tasks count from cache', { projectId, status });
+export async function getTasksCountFromCache({ projectId, tagId, startDate, endDate, searchString, status }) {
+    // console.debug('load tasks count from cache', { projectId, tagId, startDate, endDate, searchString, status });
     try {
-        return await db['tasks']
-            .where({ projectId })
+        return (await createTasksFilterQuery({ projectId, tagId, startDate, endDate, searchString }))
             .and(task => task.status === status)
-            .count();
+            .count()
     } catch (error) {
-        console.error(`Failed to get project tasks count: ${error}`)
+        console.error(`Failed to get tasks count: ${error}`)
     }
 }
 
-export async function getProjectTasksFromCache({ projectId, status, limit, offset }) {
-    console.debug('load project tasks from cache', { projectId, status, limit, offset });
+export async function getTasksFromCache({ projectId, tagId, startDate, endDate, searchString, status, limit, offset }) {
+    // console.debug('load tasks from cache', { projectId, tagId, startDate, endDate, searchString, status, limit, offset });
     try {
-        return await db['tasks']
-            .where({ projectId })
+        return (await createTasksFilterQuery({ projectId, tagId, startDate, endDate, searchString }))
             .and(task => task.status === status)
             .sortBy('priority')
-            .then(tasks => tasks.slice(offset, offset + limit));
+            .then(tasks => tasks.slice(offset, offset + limit))
     } catch (error) {
-        console.error(`Failed to get project tasks: ${error}`)
+        console.error(`Failed to get tasks: ${error}`)
     }
+}
+
+async function createTasksFilterQuery({ projectId, tagId, startDate, endDate, searchString }) {
+    let query = db['tasks'];
+    if (projectId) {
+        query = query.where({ projectId })
+    } else if (tagId) {
+        const taskIds = await db['tasks_tags']
+            .where({ tagId })
+            .toArray()
+            .then(row => row.map(rel => rel.taskId));
+        query = query.where('id').anyOf(taskIds);
+    } else if (startDate && endDate) {
+        query = query.where('dueDate')
+            .between(startDate, endDate)
+    } else if (searchString) {
+        // TODO improve query 
+        /*
+        query = query.where('description')
+            .startsWithIgnoreCase(searchString)
+        */
+        const regex = new RegExp(searchString, 'i');
+        // TODO: improve query performance
+        query = query
+            .filter(task => regex.test(task.description))
+    }
+    return query;
 }
 
 export async function getTagTasksCountFromCache({ tagId, status }) {
