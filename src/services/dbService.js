@@ -342,6 +342,8 @@ export async function getItemsFromCache(entity, currentPage, pageSize) {
             orderBy = 'level';
         } else if (entity === 'projects') {
             orderBy = '[categoryPriority+priority]';
+        } else {
+            orderBy = 'priority';
         }
         return await db[entity]
             .orderBy(orderBy)
@@ -538,6 +540,7 @@ async function initView() {
     }
 }
 
+// Tasks Cache initView methods
 async function setTasksTodaysTimeElapsed({ taskMap, taskIds, startDate, endDate }) {
     try {
         const pomodoros = await db['pomodoros']
@@ -614,5 +617,54 @@ async function setTasksCommentsCount({ taskIds }) {
         }
     } catch (error) {
         console.error(`Cache VIEW: Failed to set tasks comments count: ${error}`)
+    }
+}
+
+// TAGS cache update methods for task mapping
+export async function updateTasksTag(updatedTag) {
+    try {
+        const taskIds = await db.tasks_tags
+            .where({ tagId: updatedTag.id })
+            .toArray()
+            .then(row => row.map(rel => rel.taskId));
+        // NOTE: TODO: check why in backend tasks_tags are store multiple time (not unique combination)
+        // console.debug({ taskIds }, taskIds.length);
+
+        // TODO: check efficiency of this method
+        await db.tasks
+            .where('id')
+            .anyOf(taskIds)
+            .modify(
+                task => {
+                    task.tags = task.tags.map(tag => {
+                        if (tag.id === updatedTag.id) {
+                            return updatedTag;
+                        }
+                        return tag;
+                    })
+                }
+            );
+        // console.debug(`successfully updated ${taskIds.length} tasks with updated tag data with id: ${updatedTag.id}`);
+    } catch (error) {
+        console.error(`Cache: failed to udpate tasks tag: ${error}`);
+    }
+}
+
+export async function updateTaskTags(taskId, tagsMap, tagIds) {
+    try {
+        // update tasks_tags table
+        // console.debug(tagIds.map(tagId => { return { taskId, tagId } }));
+        await db.tasks_tags
+            .bulkPut(tagIds.map(tagId => { return { taskId, tagId } }));
+
+        // update tags of the task
+        await db.tasks
+            .where({ id: taskId })
+            .modify({
+                tags: [...tagsMap.values()].filter(tag => tagIds.includes(tag.id))
+            })
+        // console.debug([...tagsMap.values()].filter(tag => tagIds.includes(tag.id)))
+    } catch (error) {
+        console.error(`Cache: failed to udpate task tags: ${error}`);
     }
 }

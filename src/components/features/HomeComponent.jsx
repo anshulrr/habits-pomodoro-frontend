@@ -46,9 +46,16 @@ export default function HomeComponent({ setReloadHome }) {
     const ALL_PAGESIZE = 1000;
     const projects = useLiveQuery(async () => await getItemsFromCache('projects', 1, ALL_PAGESIZE));
 
+    const tagsCount = useLiveQuery(async () => getItemsCountFromCache('tags'));
+    const [tagsMap, setTagsMap] = useState();
+    const tags = useLiveQuery(async () => {
+        const cachedTags = await getItemsFromCache('tags', 1, ALL_PAGESIZE);
+        setTagsMap(new Map(cachedTags.map(i => [i.id, i])));
+        return cachedTags;
+    }, []);
+
     const [project, setProject] = useState(state && state.project);
     const [tag, setTag] = useState(state && state.tag);
-    const [tags, setTags] = useState(null);
 
     const [tasksComponentReload, setTasksComponentReload] = useState(0)
 
@@ -209,7 +216,7 @@ export default function HomeComponent({ setReloadHome }) {
     }
 
     // to prevent rendering the page before projects are loaded from cache db, which causes some components to throw error as they rely on projects data.
-    if (!projects || !projectsCount)
+    if (!projects || !projectsCount || !tagsMap || !tagsCount)
         return <div>Loading initial data...</div>;
 
     return (
@@ -238,9 +245,9 @@ export default function HomeComponent({ setReloadHome }) {
                                                 <ListTagsComponent
                                                     setProject={setProject}
                                                     tag={tag}
+                                                    tagsCount={tagsCount}
+                                                    tags={tags}
                                                     setTag={setTag}
-                                                    setAllTags={setTags}
-                                                    setTasksComponentReload={setTasksComponentReload}
                                                     setShowLeftMenu={setShowLeftMenu}
                                                 />
                                             </div>
@@ -289,14 +296,14 @@ export default function HomeComponent({ setReloadHome }) {
 
                 <div className="col-lg-4 full-screen-height" style={{ backgroundColor: "#e9ecef" }}>
                     {
-                        tags !== null && projects.length !== 0 &&
+                        tagsMap !== null && projects.length !== 0 &&
                         <div>
                             {
                                 project &&
                                 <ListTasksComponent
                                     key={[project.id, tag, tasksComponentReload]}
                                     project={project}
-                                    tags={tags}
+                                    tags={tagsMap}
                                     projects={projects}
                                     setPomodorosListReload={setPomodorosListReload}
                                     pomodoro={pomodoro}
@@ -308,7 +315,7 @@ export default function HomeComponent({ setReloadHome }) {
                                 <ListTasksComponent
                                     key={[tasksComponentReload]}
                                     projects={projects}
-                                    tags={tags}
+                                    tags={tagsMap}
                                     startDate={startDate}
                                     endDate={endDate}
                                     searchString={searchString}
@@ -325,7 +332,7 @@ export default function HomeComponent({ setReloadHome }) {
                                 <ListTasksComponent
                                     key={[project, tag.id, tasksComponentReload]}
                                     projects={projects}
-                                    tags={tags}
+                                    tags={tagsMap}
                                     tag={tag}
                                     setPomodorosListReload={setPomodorosListReload}
                                     pomodoro={pomodoro}

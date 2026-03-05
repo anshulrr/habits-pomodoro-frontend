@@ -3,8 +3,6 @@ import { addItemToCache } from 'services/dbService';
 
 export default function CreateTagComponent({
     setShowCreateTag,
-    setTagsCount,
-    refreshAllTags
 }) {
 
     const [name, setName] = useState('')
@@ -23,8 +21,6 @@ export default function CreateTagComponent({
         addItemToCache('tags', tag);
 
         setShowCreateTag(false)
-        setTagsCount(prev => prev + 1)
-        refreshAllTags()
     }
 
     return (
