@@ -12,7 +12,7 @@ import { generateDateColor } from "services/helpers/listsHelper";
 
 import ListCommentsComponent from "components/features/comments/ListCommentsComponent";
 import SortableTask from "./SortableTask";
-import { getProjectTasksFromCache, putItemToCache } from "services/dbService";
+import { getProjectTasksFromCache, getTagTasksFromCache, putItemToCache } from "services/dbService";
 
 export default function ListTasksRowsComponent({
     project,
@@ -46,7 +46,13 @@ export default function ListTasksRowsComponent({
     const [sortableTasks, setSortableTasks] = useState([]);
 
     const tasks = useLiveQuery(async () => {
-        const retrievedTasks = await getProjectTasksFromCache({ projectId: project?.id, status, limit: PAGESIZE, offset: (currentPage - 1) * PAGESIZE })
+        console.log({ project, tag, startDate, endDate, searchString });
+        let retrievedTasks;
+        if (project) {
+            retrievedTasks = await getProjectTasksFromCache({ projectId: project?.id, status, limit: PAGESIZE, offset: (currentPage - 1) * PAGESIZE })
+        } else if (tag) {
+            retrievedTasks = await getTagTasksFromCache({ tagId: tag?.id, status, limit: PAGESIZE, offset: (currentPage - 1) * PAGESIZE });
+        }
         console.log(`Retrieved ${status} tasks from cache after update:`, { retrievedTasks });
         setSortableTasks(retrievedTasks);
         return updateProjectData(retrievedTasks);

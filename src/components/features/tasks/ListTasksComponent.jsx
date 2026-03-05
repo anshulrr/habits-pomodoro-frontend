@@ -10,7 +10,7 @@ import PomodoroComponent from "components/features/pomodoros/PomodoroComponent";
 import ListCommentsComponent from "components/features/comments/ListCommentsComponent";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { getCommentsCountApi } from "services/api/CommentApiService";
-import { getProjectTasksCountFromCache } from "services/dbService";
+import { getProjectTasksCountFromCache, getTagTasksCountFromCache } from "services/dbService";
 
 export default function ListTasksComponent({
     project,
@@ -31,8 +31,24 @@ export default function ListTasksComponent({
 
     const { state } = useLocation();
 
-    const tasksCount = useLiveQuery(async () => getProjectTasksCountFromCache({ projectId: project?.id, status: 'current' }));
-    const archivedTasksCount = useLiveQuery(async () => getProjectTasksCountFromCache({ projectId: project?.id, status: 'archived' }));
+    const tasksCount = useLiveQuery(async () => {
+        let count = -1;
+        if (project) {
+            count = await getProjectTasksCountFromCache({ projectId: project?.id, status: 'current' })
+        } else if (tag) {
+            count = await getTagTasksCountFromCache({ tagId: tag?.id, status: 'current' })
+        }
+        return count;
+    });
+    const archivedTasksCount = useLiveQuery(async () => {
+        let count = -1;
+        if (project) {
+            count = await getProjectTasksCountFromCache({ projectId: project?.id, status: 'archived' })
+        } else if (tag) {
+            count = await getTagTasksCountFromCache({ tagId: tag?.id, status: 'archived' })
+        }
+        return count;
+    });
 
     const [currentTasksHeight, setCurrentTasksHeight] = useState(0);
     const [archivedTasksHeight, setArchivedTasksHeight] = useState(0);

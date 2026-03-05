@@ -315,19 +315,19 @@ export async function getItemsFromCache(entity, currentPage, pageSize) {
 }
 
 export async function getProjectTasksCountFromCache({ projectId, status }) {
-    // console.debug('load tasks count from cache', { projectId, status });
+    console.debug('load project tasks count from cache', { projectId, status });
     try {
         return await db['tasks']
             .where({ projectId })
             .and(task => task.status === status)
             .count();
     } catch (error) {
-        console.error(`Failed to get tasks count: ${error}`)
+        console.error(`Failed to get project tasks count: ${error}`)
     }
 }
 
 export async function getProjectTasksFromCache({ projectId, status, limit, offset }) {
-    // console.debug('load tasks from cache', { projectId, status, limit, offset });
+    console.debug('load project tasks from cache', { projectId, status, limit, offset });
     try {
         return await db['tasks']
             .where({ projectId })
@@ -335,7 +335,42 @@ export async function getProjectTasksFromCache({ projectId, status, limit, offse
             .sortBy('priority')
             .then(tasks => tasks.slice(offset, offset + limit));
     } catch (error) {
-        console.error(`Failed to get tasks: ${error}`)
+        console.error(`Failed to get project tasks: ${error}`)
+    }
+}
+
+export async function getTagTasksCountFromCache({ tagId, status }) {
+    console.debug('load tag tasks count from cache', { tagId, status });
+    try {
+        const taskIds = await db['tasks_tags']
+            .where({ tagId })
+            .toArray()
+            .then(row => row.map(rel => rel.taskId));
+        return await db['tasks']
+            .where('id')
+            .anyOf(taskIds)
+            .and(task => task.status === status)
+            .count();
+    } catch (error) {
+        console.error(`Failed to get tag tasks count: ${error}`)
+    }
+}
+
+export async function getTagTasksFromCache({ tagId, status, limit, offset }) {
+    console.debug('load tag tasks from cache', { tagId, status, limit, offset });
+    try {
+        const taskIds = await db['tasks_tags']
+            .where({ tagId })
+            .toArray()
+            .then(row => row.map(rel => rel.taskId));
+        return await db['tasks']
+            .where('id')
+            .anyOf(taskIds)
+            .and(task => task.status === status)
+            .sortBy('priority')
+            .then(tasks => tasks.slice(offset, offset + limit));
+    } catch (error) {
+        console.error(`Failed to get tag tasks: ${error}`)
     }
 }
 
@@ -486,7 +521,12 @@ async function setTasksTags({ tasks, taskIds }) {
         }));
         console.log({ map });
         const response = await getTasksTagsApi(taskIds)
-        console.log('Retrieved tasks tags from api:', { data: response.data, tags });
+        console.log('Retrieved tasks tags from api:', { data: response.data });
+
+        // store relationship in cache
+        bulkPutItemsToCache('tasks_tags', response.data.map(item => ({ taskId: item[0], tagId: item[1] })));
+
+        // store tags data in tasks in cache
         // using Map for easy access and update
         for (let i = 0; i < response.data.length; i++) {
             const { id, color, name } = tagsMap.get(response.data[i][1]);

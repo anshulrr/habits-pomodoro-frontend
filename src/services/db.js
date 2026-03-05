@@ -25,6 +25,8 @@ db.version(3).stores({
     tags: "publicId, id, name, priority, createdAt, updatedAt, _dirty",
 
     comments: "publicId, id, status, updatedAt, _dirty",
+
+    tasks_tags: "++id, taskId, tagId",
     /*
     1. key value pairs for storing metadata related to syncing, such as:
         entityCount,
