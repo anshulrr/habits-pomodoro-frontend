@@ -28,11 +28,13 @@ import {
     updatePomodoroApi
 } from './api/PomodoroApiService';
 import {
+    createTagApi,
     getTagsCountApi,
     getTasksTagsApi,
     retrieveAllTagsApi
 } from './api/TagApiService';
 import {
+    createCommentApi,
     getCommentsCountApi,
     retrieveAllCommentsApi
 } from './api/CommentApiService';
@@ -70,14 +72,14 @@ const apiMap = {
         }
     },
     'tags': {
-        createApi: null,
+        createApi: createTagApi,
         updateApi: null,
         retrieveAllApi: retrieveAllTagsApi,
         retrieveSyncAllApi: retrieveAllTagsApi,
         getCountApi: getTagsCountApi
     },
     'comments': {
-        createApi: null,
+        createApi: createCommentApi,
         updateApi: null,
         retrieveAllApi: retrieveAllCommentsApi,
         retrieveSyncAllApi: retrieveAllCommentsApi,

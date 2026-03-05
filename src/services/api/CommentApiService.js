@@ -44,15 +44,16 @@ export const getCommentsCountApi
     }
 
 export const createCommentApi
-    = ({ filterBy, comment, id }) => {
+    = (comment) => {
+        const { filterBy, filterById } = comment;
         if (filterBy === 'user')
             return apiClient.post(`comments`, comment)
         else if (filterBy === 'category')
-            return apiClient.post(`project-categories/${id}/comments`, comment)
+            return apiClient.post(`project-categories/${filterById}/comments`, comment)
         else if (filterBy === 'project')
-            return apiClient.post(`projects/${id}/comments`, comment)
+            return apiClient.post(`projects/${filterById}/comments`, comment)
         else if (filterBy === 'task')
-            return apiClient.post(`tasks/${id}/comments`, comment)
+            return apiClient.post(`tasks/${filterById}/comments`, comment)
     }
 
 export const retrieveCommentApi

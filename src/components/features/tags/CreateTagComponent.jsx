@@ -1,9 +1,8 @@
 import { useState } from 'react'
-import { createTagApi } from 'services/api/TagApiService';
+import { addItemToCache } from 'services/dbService';
 
 export default function CreateTagComponent({
     setShowCreateTag,
-    setTags,
     setTagsCount,
     refreshAllTags
 }) {
@@ -20,16 +19,12 @@ export default function CreateTagComponent({
             priority,
             color
         }
+        console.debug('create tag:', { tag });
+        addItemToCache('tags', tag);
 
-        createTagApi(tag)
-            .then(response => {
-                // console.debug(response)
-                setTags(prevTag => [response.data, ...prevTag])
-                setShowCreateTag(false)
-                setTagsCount(prev => prev + 1)
-                refreshAllTags()
-            })
-            .catch(error => console.error(error.message))
+        setShowCreateTag(false)
+        setTagsCount(prev => prev + 1)
+        refreshAllTags()
     }
 
     return (
