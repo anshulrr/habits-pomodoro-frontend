@@ -2,7 +2,7 @@ import { Dexie } from "dexie"
 
 export const db = new Dexie("myDatabase")
 
-db.version(2).stores({
+db.version(3).stores({
     /*
     1. _dirty field is used to mark entities that are created/updated/deleted while offline, to be synced when back online.
     2. updatedAt field is used for conflict resolution, 
@@ -15,6 +15,18 @@ db.version(2).stores({
         for displaying in the order of category and then project priority within the category. 
     */
     projects: "publicId, id, name, [categoryPriority+priority], updatedAt, _dirty",
+    /*
+    1. added multiple indexes for sorting and filtering by different fields.
+    */
+    tasks: "publicId, id, description, projectId, status, dueDate, priority, updatedAt, _dirty",
+
+    pomodoros: "publicId, id, taskId, startTime, endTime, status, updatedAt, _dirty",
+
+    tags: "publicId, id, name, priority, createdAt, updatedAt, _dirty",
+
+    comments: "publicId, id, status, updatedAt, _dirty",
+
+    tasks_tags: "++id, taskId, tagId",
     /*
     1. key value pairs for storing metadata related to syncing, such as:
         entityCount,

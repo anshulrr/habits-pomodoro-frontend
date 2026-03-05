@@ -1,7 +1,13 @@
 import { apiClient } from "./ApiClient";
 
 export const retrieveAllTagsApi
-    = ({ limit, offset }) => apiClient.get(`/tags?limit=${limit}&offset=${offset}`)
+    = ({ limit, offset, lastSyncTime }) => {
+        let url = `/tags?limit=${limit}&offset=${offset}`;
+        if (lastSyncTime) {
+            url += `&lastSyncTime=${lastSyncTime}`;
+        }
+        return apiClient.get(url);
+    }
 
 export const getTagsCountApi
     = () => apiClient.get(`/tags/count`)
