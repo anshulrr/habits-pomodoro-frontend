@@ -15,10 +15,13 @@ export const updatePomodoroApi
     = (id, pomodoro) => apiClient.put(`/pomodoros/${id}`, pomodoro)
 
 export const getPomodorosApi
-    = ({ startDate, endDate, includeCategories, subject }) => {
+    = ({ startDate, endDate, includeCategories, subject, lastSyncTime }) => {
         let url = `/pomodoros?startDate=${startDate}&endDate=${endDate}`;
         if (includeCategories) {
             url += `&categoryIds=${includeCategories}`;
+        }
+        if (lastSyncTime) {
+            url += `&lastSyncTime=${lastSyncTime}`;
         }
         if (!subject) {
             return apiClient.get(url);

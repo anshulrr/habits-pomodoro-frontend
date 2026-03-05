@@ -8,6 +8,7 @@ import { generateInitialTimer, calculateTimeRemaining, generateTimer } from 'ser
 import BreakTimerComponent from 'components/features/pomodoros/BreakTimerComponent';
 import ListCommentsComponent from '../comments/ListCommentsComponent';
 import { putServerItemToCache, syncDeltaItems } from 'services/dbService';
+import moment from 'moment';
 
 export default function PomodoroComponent({
     pomodoro,
@@ -129,9 +130,15 @@ export default function PomodoroComponent({
         updatePomodoroApi(pomodoro.id, pomodoro_data)
             .then(response => {
                 // console.debug({ response })
-                // update cache
-                putServerItemToCache('pomodoros', response.data);
-                // syncDeltaItems('pomodoros');
+                // update cache if completed
+                if (response.data.status === 'completed') {
+                    // putServerItemToCache('pomodoros', response.data);
+                    syncDeltaItems('pomodoros', {
+                        startDate: '1970-01-01T00:00:00Z',
+                        endDate: new Date().toISOString()
+                        // endDate: moment().add(1, 'd').toISOString() // add 1 day to handle if server time is not exactly same
+                    });
+                }
 
                 if (local_status === 'completed') {
                     setTasksMessage('');

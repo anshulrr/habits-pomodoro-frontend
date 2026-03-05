@@ -11,6 +11,7 @@ import ListCommentsComponent from "components/features/comments/ListCommentsComp
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { getCommentsCountApi } from "services/api/CommentApiService";
 import { addServerItemToCache, getTasksCountFromCache, syncDeltaItems } from "services/dbService";
+import moment from "moment";
 
 export default function ListTasksComponent({
     project,
@@ -114,9 +115,13 @@ export default function ListTasksComponent({
                 pomodoro_task.project = task_project
                 response.data.task = pomodoro_task
 
+                // NO NEED TO SYNC: we don't show it in the list until it is completed
                 // update cache
-                addServerItemToCache('pomodoros', response.data);
-                // syncDeltaItems('pomodoros');
+                // addServerItemToCache('pomodoros', response.data);
+                // syncDeltaItems('pomodoros', {
+                //     startDate: '1970-01-01T00:00:00Z',
+                //     endDate: moment().add(1, 'd').toISOString()
+                // });
 
                 // console.debug(response.data)
                 setPomodoro(response.data)

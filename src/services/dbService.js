@@ -68,7 +68,7 @@ const apiMap = {
         createApi: createPastPomodoroApi,
         updateApi: updatePomodoroApi,
         retrieveAllApi: getPomodorosApi,
-        // retrieveSyncAllApi: getPomodorosApi,
+        retrieveSyncAllApi: getPomodorosApi,
         getCountApi: () => {
             console.info('getCountApi is not supported for pomodoros')
             return { data: -1 };
@@ -280,13 +280,15 @@ export async function syncDirtyItems(entity) {
 1. Sync all entities with delta items parallelly, to improve performance
 */
 export function syncEntitiesDelta() {
-    for (const entity of ['categories', 'projects', 'tasks', 'pomodoros', 'tags', 'comments']) {
-        syncDeltaItems(entity).then(() => {
-            console.info(`Successfully synced delta items for ${entity}`);
-        }).catch(error => {
-            console.error(`Cache: Failed to sync delta items for ${entity}: ${error}`)
-        });
-    }
+    syncDeltaItems('categories');
+    syncDeltaItems('projects');
+    syncDeltaItems('tasks');
+    syncDeltaItems('pomodoros', {
+        startDate: '1970-01-01T00:00:00Z',
+        endDate: new Date().toISOString()
+    });
+    syncDeltaItems('tags');
+    syncDeltaItems('comments', { filterBy: 'user' });
 }
 
 /*
@@ -294,7 +296,7 @@ export function syncEntitiesDelta() {
 2. and update them in cache, 
 3. Update the last sync time in cache, so that we can fetch delta items later
 */
-export async function syncDeltaItems(entity) {
+export async function syncDeltaItems(entity, requestData) {
     console.info(`Syncing delta items of ${entity}...`);
     const lastSyncMeta = await db.metadata.get('last_sync_' + entity);
     const lastSyncTime = lastSyncMeta ? lastSyncMeta.value : '1970-01-01T00:00:00Z';
@@ -302,12 +304,13 @@ export async function syncDeltaItems(entity) {
     try {
         // 1. Fetch only what changed since last time
         // TODO: decide limit
-        const items = (await apiMap[entity].retrieveSyncAllApi({ limit: 10000, offset: 0, lastSyncTime })).data;
+        const items = (await apiMap[entity].retrieveSyncAllApi({ limit: 10000, offset: 0, lastSyncTime, ...requestData })).data;
 
         // 2. Transaction: Save data and the NEW sync time together
         await db.transaction('rw', db[entity], db.metadata, async () => {
             // Instead of full update, only update recieved keys, so that old extra keys (eg. _dirty, timeElapsed) are not removed
             for (const item of items) {
+                // console.log({ item })
                 // Atomic Check: Only update if the item is not dirty locally (prevents overwriting unsynced local changes)
                 // Or if the item is newer than what we have locally (handles updates from other devices)
                 // otherwise local changes will be updated to server on next dirty sync, and we will get the latest version then
@@ -321,7 +324,7 @@ export async function syncDeltaItems(entity) {
         });
         console.info(`Successfully synced ${items.length} delta items of ${entity}`);
     } catch (error) {
-        console.error(`Cache: Failed to sync items: ${error}`)
+        console.error(`Cache: Failed to sync delta items of ${entity}: ${error}`)
     }
 }
 

@@ -10,13 +10,13 @@ import { apiClient } from "./ApiClient";
 //     = (comment) => apiClient.post(`comments`, comment)
 
 export const retrieveAllCommentsApi
-    = ({ limit, offset, filterBy, id, categoryIds, filterWithReviseDate, searchString }) => {
-        console.log({ limit, offset, filterBy, id, categoryIds, filterWithReviseDate, searchString })
+    = ({ limit, offset, filterBy, id, categoryIds, filterWithReviseDate, searchString, lastSyncTime }) => {
+        // console.debug({ limit, offset, filterBy, id, categoryIds, filterWithReviseDate, searchString })
         if (filterBy === 'user') {
             if (categoryIds) {
                 return apiClient.get(`/comments?limit=${limit}&offset=${offset}&categoryIds=${categoryIds}&filterWithReviseDate=${filterWithReviseDate}&searchString=${searchString}`)
             } else {
-                return apiClient.get(`/comments?limit=${limit}&offset=${offset}`)
+                return apiClient.get(`/comments?limit=${limit}&offset=${offset}&lastSyncTime=${lastSyncTime}`)
             }
         }
         else if (filterBy === 'category')
