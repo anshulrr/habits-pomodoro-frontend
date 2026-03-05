@@ -51,10 +51,6 @@ export default function AuthProvider({ children }) {
                 if ((await db.metadata.get('cache-init'))?.value === 1) {
                     setCacheDbAdded(true);
                     // console.debug("Cache DB already initialized!")
-                    // sync data on page refresh
-                    // errors are handled in sync functions, so no need to catch here
-                    syncDirtyEntities();
-                    syncEntitiesDelta();
                 }
             }
             checkCache();
@@ -88,6 +84,7 @@ export default function AuthProvider({ children }) {
             return;
 
         // TODO: decide period for both syncs. Currently set to 1 hour for delta sync, and 5 mins for dirty entities sync, which can be changed later based on user feedback and data usage.
+        syncEntitiesDelta();
         console.info("Setting up delta sync every hour");
         const interval1 = setInterval(() => {
             if (navigator.onLine) {
@@ -96,6 +93,7 @@ export default function AuthProvider({ children }) {
             }
         }, 60 * 60 * 1000); // Every hour
 
+        syncDirtyEntities();
         console.info("Setting up create/update sync every 5 mins");
         const interval2 = setInterval(() => {
             if (navigator.onLine) {
