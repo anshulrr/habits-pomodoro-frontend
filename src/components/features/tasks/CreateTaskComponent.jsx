@@ -18,8 +18,6 @@ export default function CreateTaskComponent({
         error.preventDefault();
 
         const task = {
-            id: 0,  // using 0 as a placeholder, -1 is used for task popups
-            publicId: window.crypto.randomUUID(),
             description,
             pomodoroLength: 0,
             projectId: project.id,
@@ -33,7 +31,7 @@ export default function CreateTaskComponent({
 
         // TODO: handle scenario when a task is created while offline, and then updated while still offline
         // TODO: make sure to add extra data for view such as projectName
-        console.debug('create task:', { task });
+        console.debug('create a task:', { task });
         addItemToCache('tasks', task);
 
         // cleanup

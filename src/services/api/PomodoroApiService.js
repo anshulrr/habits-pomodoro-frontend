@@ -4,7 +4,7 @@ export const createPomodoroApi
     = (pomodoro, task_id) => apiClient.post(`/pomodoros?taskId=${task_id}`, pomodoro)
 
 export const createPastPomodoroApi
-    = (pomodoro, task_id) => apiClient.post(`/pomodoros/past?taskId=${task_id}`, pomodoro)
+    = (pomodoro) => apiClient.post(`/pomodoros/past?taskId=${pomodoro.taskId}`, pomodoro)
 
 export const deletePastPomodoroApi
     = (pomodoro_id) => apiClient.delete(`/pomodoros/${pomodoro_id}`)

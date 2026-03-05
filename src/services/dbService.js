@@ -23,7 +23,9 @@ import {
     getTasksCommentsCountApi
 } from './api/TaskApiService';
 import {
-    getPomodorosApi
+    createPastPomodoroApi,
+    getPomodorosApi,
+    updatePomodoroApi
 } from './api/PomodoroApiService';
 import {
     getTagsCountApi,
@@ -59,6 +61,8 @@ const apiMap = {
         getCountApi: getSyncAllTasksCountApi,
     },
     'pomodoros': {
+        createApi: createPastPomodoroApi,
+        updateApi: updatePomodoroApi,
         retrieveAllApi: getPomodorosApi,
         getCountApi: () => {
             console.info('getCountApi is not supported for pomodoros')
@@ -153,9 +157,12 @@ export function clearCacheDb() {
 */
 export async function addItemToCache(entity, item) {
     try {
-        // Add the new item to db!
+        // new item default values
+        item.id = 0  // using 0 as a placeholder, -1 is used for task popups
+        item.publicId = window.crypto.randomUUID();
         item._dirty = 1;
         item.updatedAt = new Date().toISOString();
+
         await db[entity].add(item)
         const prevCount = await getItemsCountFromCache(entity);
         await db.metadata.put({ id: 'count_' + entity, value: prevCount + 1 });
@@ -338,7 +345,7 @@ export async function getTasksFromCache({ projectId, tagId, startDate, endDate, 
 
 async function createTasksFilterQuery({ projectId, tagId, startDate, endDate, searchString }) {
     let query = db['tasks'];
-    if (projectId) {
+    if (projectId || projectId === 0) { // check 0 for new project
         query = query.where({ projectId })
     } else if (tagId) {
         const taskIds = await db['tasks_tags']
