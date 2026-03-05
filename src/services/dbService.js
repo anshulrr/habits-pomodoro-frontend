@@ -19,19 +19,22 @@ import {
     updateTaskApi,
     createTaskApi,
     getSyncAllTasksCountApi,
-    retrieveSyncAllTasksApi
+    retrieveSyncAllTasksApi,
+    getTasksCommentsCountApi
 } from './api/TaskApiService';
 import {
     getPomodorosApi
 } from './api/PomodoroApiService';
 import {
     getTagsCountApi,
+    getTasksTagsApi,
     retrieveAllTagsApi
 } from './api/TagApiService';
 import {
     getCommentsCountApi,
     retrieveAllCommentsApi
 } from './api/CommentApiService';
+import moment from 'moment';
 
 const apiMap = {
     'categories': {
@@ -100,6 +103,9 @@ export async function initCacheDb() {
         // Set a flag in metadata to indicate cache has been initialized, so that we don't need to initialize it again on page refresh
         await db.metadata.put({ id: 'cache-init', value: 1 });
         console.info("Cache database initialization complete!");
+        // Init view related data in background, no need to wait for it to complete, to improve performance of first load
+        await initView(); // Fire and forget in background, no need to wait for it to complete
+        console.info("View data initialization complete!");
     } catch (error) {
         console.error("One of the init chache tasks failed: please relogin", error);
     }
@@ -309,9 +315,8 @@ export async function getItemsFromCache(entity, currentPage, pageSize) {
 }
 
 export async function getProjectTasksCountFromCache({ projectId, status }) {
-    console.debug('load tasks count from cache', { projectId, status });
+    // console.debug('load tasks count from cache', { projectId, status });
     try {
-        // Add the new category to db!
         return await db['tasks']
             .where({ projectId })
             .and(task => task.status === status)
@@ -324,7 +329,6 @@ export async function getProjectTasksCountFromCache({ projectId, status }) {
 export async function getProjectTasksFromCache({ projectId, status, limit, offset }) {
     // console.debug('load tasks from cache', { projectId, status, limit, offset });
     try {
-        // Add the new category to db!
         return await db['tasks']
             .where({ projectId })
             .and(task => task.status === status)
@@ -400,5 +404,112 @@ export async function getItemFromCache(entity, id) {
         return await db[entity].get({ id });
     } catch (error) {
         console.error(`Failed to get ${entity} with id: ${id}: ${error}`)
+    }
+}
+
+async function initView() {
+    try {
+        const tasks = await db.tasks.toArray();
+
+        const taskMap = new Map();
+        // storage for task data today's time elapsed, total time elapsed and tags
+        tasks.forEach(task => taskMap.set(task.id, {
+            id: task.id,
+            todaysTimeElapsed: 0,
+            totalTimeElapsed: 0,
+            tags: []
+        }));
+        const taskIds = tasks.map(task => task.id);
+
+        // set time elapsed for today and total time elapsed for all tasks
+        let startDate = moment().startOf('day').toISOString();
+        let endDate = moment().toISOString();
+        await setTasksTodaysTimeElapsed({ taskMap, taskIds, startDate, endDate });
+
+        startDate = moment().add(-10, 'y').toISOString();
+        await setTasksTotalTimeElapsed({ taskMap, taskIds, startDate, endDate });
+
+        // set tags for all tasks
+        await setTasksTags({ tasks, taskIds });
+
+        // set comments count for all tasks
+        await setTasksCommentsCount({ taskIds });
+
+    } catch (error) {
+        console.error(`Cache VIEW: Failed to initialize view data: ${error}`)
+    }
+}
+
+async function setTasksTodaysTimeElapsed({ taskMap, taskIds, startDate, endDate }) {
+    try {
+        const pomodoros = await db['pomodoros']
+            .where('taskId').anyOf(taskIds)
+            .and(pomodoro => new Date(pomodoro.startTime) >= new Date(startDate) && new Date(pomodoro.endTime) <= new Date(endDate))
+            .toArray();
+        for (const pomodoro of pomodoros) {
+            taskMap.get(pomodoro.taskId).todaysTimeElapsed += pomodoro.timeElapsed;
+        }
+        for (const taskId of taskIds) {
+            // console.log({ taskId }, taskMap.get(taskId).todaysTimeElapsed);
+            modifyItemInCache('tasks', taskId, { todaysTimeElapsed: taskMap.get(taskId).todaysTimeElapsed })
+        }
+        console.log(`Cache VIEW: Finished setting tasks time elapsed since ${startDate}`);
+    } catch (error) {
+        console.error(`Cache VIEW: Failed to set tasks time elapsed since ${startDate}: ${error}`)
+    }
+}
+
+async function setTasksTotalTimeElapsed({ taskMap, taskIds, startDate, endDate }) {
+    try {
+        const pomodoros = await db['pomodoros'].toArray();
+        for (const pomodoro of pomodoros) {
+            taskMap.get(pomodoro.taskId).totalTimeElapsed += pomodoro.timeElapsed;
+        }
+        for (const taskId of taskIds) {
+            // console.log({ taskId }, taskMap.get(taskId).totalTimeElapsed);
+            modifyItemInCache('tasks', taskId, { totalTimeElapsed: taskMap.get(taskId).totalTimeElapsed })
+        }
+        console.log(`Cache VIEW: Finished setting tasks time elapsed since ${startDate}`);
+    } catch (error) {
+        console.error(`Cache VIEW: Failed to set tasks time elapsed since ${startDate}: ${error}`)
+    }
+}
+
+async function setTasksTags({ tasks, taskIds }) {
+    try {
+        const tags = await db.tags.toArray();
+        const tagsMap = new Map(tags.map(i => [i.id, i]));
+        console.log('Retrieved tags from cache:', tags);
+        const map = new Map(tasks.map(task => {
+            task.tags = [];
+            return [task.id, task];
+        }));
+        console.log({ map });
+        const response = await getTasksTagsApi(taskIds)
+        console.log('Retrieved tasks tags from api:', { data: response.data, tags });
+        // using Map for easy access and update
+        for (let i = 0; i < response.data.length; i++) {
+            const { id, color, name } = tagsMap.get(response.data[i][1]);
+            map.get(response.data[i][0]).tags.push({ id, color, name });
+        }
+        console.log({ map });
+        for (const task of map.values()) {
+            modifyItemInCache('tasks', task.id, { tags: task.tags })
+        }
+    } catch (error) {
+        console.error(`Cache VIEW: Failed to set tasks tags: ${error}`)
+    }
+}
+
+async function setTasksCommentsCount({ taskIds }) {
+    try {
+        const response = await getTasksCommentsCountApi(taskIds)
+        console.log('Retrieved tasks comments count from api:', { data: response.data });
+        // using Map for easy access and update
+        for (let i = 0; i < response.data.length; i++) {
+            modifyItemInCache('tasks', response.data[i][0], { commentsCount: parseInt(response.data[i][1]) })
+        }
+    } catch (error) {
+        console.error(`Cache VIEW: Failed to set tasks comments count: ${error}`)
     }
 }

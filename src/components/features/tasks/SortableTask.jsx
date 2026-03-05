@@ -1,15 +1,17 @@
-import { COLOR_MAP, formatDate, timeToDisplay } from "services/helpers/listsHelper";
-import OutsideAlerter from "services/hooks/OutsideAlerter";
+import { motion, Reorder, useDragControls } from "framer-motion";
+import { useRef, useState } from "react";
+import moment from "moment";
+
 
 import PastPomodoroComponent from "components/features/tasks/PastPomodoroComponent";
 import UpdateTaskComponent from "components/features/tasks/UpdateTaskComponent";
 import TaskDueDateComponent from "components/features/tasks/TaskDueDateComponent";
 import MapTagComponent from "components/features/tags/MapTagComponent";
 import { TaskStats } from "components/features/tasks/TaskStats";
-import { motion, Reorder, useDragControls } from "framer-motion";
-import { useRef, useState } from "react";
+
+import OutsideAlerter from "services/hooks/OutsideAlerter";
+import { COLOR_MAP, formatDate, timeToDisplay } from "services/helpers/listsHelper";
 import { resetProjectTaskPrioritiesApi } from "services/api/TaskApiService";
-import moment from "moment";
 import { putItemToCache, syncDeltaItems } from "services/dbService";
 
 export default function SortableTask({
@@ -199,7 +201,7 @@ export default function SortableTask({
                             </span>
 
                             {
-                                task.totalTimeElapsed !== undefined &&
+                                !!task.totalTimeElapsed &&
                                 <span className="me-1">
                                     <i className="bi bi-clock" style={{ paddingRight: "0.1rem" }} />
                                     {timeToDisplay(task.totalTimeElapsed / 60)}
@@ -207,7 +209,7 @@ export default function SortableTask({
                             }
 
                             {
-                                task.todaysTimeElapsed !== undefined &&
+                                !!task.todaysTimeElapsed &&
                                 <span className="me-1">
                                     <span className={generateTimeElapsedColor(task)}>
                                         <i className="bi bi-clock-fill" style={{ paddingRight: "0.1rem" }} />

@@ -8,13 +8,11 @@ import { Reorder } from "framer-motion";
 
 import { useAuth } from "services/auth/AuthContext";
 import Pagination from "services/pagination/Pagination";
-import { getTasksCommentsCountApi, getTasksTimeElapsedApi } from "services/api/TaskApiService";
 import { generateDateColor } from "services/helpers/listsHelper";
-import { getTasksTagsApi } from "services/api/TagApiService";
 
 import ListCommentsComponent from "components/features/comments/ListCommentsComponent";
 import SortableTask from "./SortableTask";
-import { getProjectTasksFromCache, modifyItemInCache, putItemToCache } from "services/dbService";
+import { getProjectTasksFromCache, putItemToCache } from "services/dbService";
 
 export default function ListTasksRowsComponent({
     project,
@@ -25,8 +23,6 @@ export default function ListTasksRowsComponent({
     tasksCount,
     createNewPomodoro,
     setPomodorosListReload,
-    pomodoroStatus,
-    tasksReload,
     setTasksReload,
     setAllTasksReload,
     elementHeight,
@@ -75,12 +71,6 @@ export default function ListTasksRowsComponent({
         }, [] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
-    useEffect(
-        () => {
-            refreshTasks(status);
-        }, [currentPage, tasksReload, pomodoroStatus] // eslint-disable-line react-hooks/exhaustive-deps
-    )
-
     const handleResize = () => {
         if (listElement.current !== null && listElement.current.offsetHeight !== 0) {
             // console.debug(currentPage, listElement.current.offsetHeight);
@@ -88,7 +78,7 @@ export default function ListTasksRowsComponent({
         }
     };
 
-    function refreshTasks(status) {
+    async function refreshTasks(status) {
         console.debug('Refreshing tasks...', { status, tasks });
         if (!tasks) {
             return;
@@ -108,89 +98,15 @@ export default function ListTasksRowsComponent({
         } else {
             taskData.searchString = searchString;
         }
-
-        // retrieve task data today's time elapsed, total time elapsed and tags
-        const taskIds = tasks.map(task => task.id);
-
-        // TODO: find way to get all data together and without for loop
-        getTasksTodaysTimeElapsed(taskIds);
-        getTasksTotalTimeElapsed(taskIds);
-        getTasksTags(taskIds);
-        getTasksCommentsCount(taskIds);
     }
 
     function updateProjectData(tasks) {
         const projectsMap = new Map(projects.map(project => [project.id, project]));
         for (const i in tasks) {
             tasks[i].project = projectsMap.get(tasks[i].projectId);
-            tasks[i].tags = [];
         }
+        updateTasksDueDateColor(tasks);
         return tasks;
-    }
-
-    function getTasksTags(taskIds) {
-        if (tags.size === 0) {
-            return;
-        }
-
-        const map = new Map(tasks.map(task => {
-            task.tags = [];
-            return [task.id, task];
-        }));
-        getTasksTagsApi(taskIds)
-            .then(response => {
-                // using Map for easy access and update
-                for (let i = 0; i < response.data.length; i++) {
-                    map.get(response.data[i][0]).tags.push(tags.get(response.data[i][1]))
-                }
-
-                for (const task of map.values()) {
-                    modifyItemInCache('tasks', task.id, { tags: task.tags })
-                }
-            })
-            .catch(error => console.error(error.message))
-    }
-
-    function getTasksCommentsCount(taskIds) {
-        getTasksCommentsCountApi(taskIds)
-            .then(response => {
-                // using Map for easy access and update
-                for (let i = 0; i < response.data.length; i++) {
-                    // TODO: find way to update commentsCount for all task together instead of updating one by one
-                    modifyItemInCache('tasks', response.data[i][0], { commentsCount: parseInt(response.data[i][1]) })
-                }
-            })
-            .catch(error => console.error(error.message))
-    }
-
-    function getTasksTodaysTimeElapsed(taskIds) {
-        const startDate = moment().startOf('day').toISOString();
-        const endDate = moment().toISOString();
-
-        getTasksTimeElapsedApi({ startDate, endDate, taskIds })
-            .then(response => {
-                // using Map for easy access and update
-                for (let i = 0; i < response.data.length; i++) {
-                    modifyItemInCache('tasks', response.data[i][0], { todaysTimeElapsed: parseInt(response.data[i][1]) })
-                }
-                updateTasksDueDateColor();
-            })
-            .catch(error => console.error(error.message))
-    }
-
-    function getTasksTotalTimeElapsed(taskIds) {
-        // TODO: decide start date
-        const startDate = moment().add(-10, 'y').toISOString();
-        const endDate = moment().toISOString();
-
-        getTasksTimeElapsedApi({ startDate, endDate, taskIds })
-            .then(response => {
-                // using Map for easy access and update
-                for (let i = 0; i < response.data.length; i++) {
-                    modifyItemInCache('tasks', response.data[i][0], { totalTimeElapsed: parseInt(response.data[i][1]) })
-                }
-            })
-            .catch(error => console.error(error.message))
     }
 
     function onUpdateTaskStatus(task, status) {
@@ -218,13 +134,12 @@ export default function ListTasksRowsComponent({
         createNewPomodoro(task, task.project)
     }
 
-    function updateTasksDueDateColor() {
-        tasks.map(task => {
-            const color = generateDueDateColor(task);
-            // console.log({ color, taskId: task.id });
-            modifyItemInCache('tasks', task.id, { dueDateColor: 'text-' + color })
-            modifyItemInCache('tasks', task.id, { dueDateButtonColor: 'btn-outline-' + color })
-        });
+    function updateTasksDueDateColor(tasks) {
+        for (const i in tasks) {
+            const color = generateDueDateColor(tasks[i]);
+            tasks[i].dueDateColor = 'text-' + color;
+            tasks[i].dueDateButtonColor = 'btn-outline-' + color;
+        }
 
         // setTimeout to update color every 30 minutes
         const timeRemaining = 3 * 60 - (moment().minutes() % 3) * 60 - moment().seconds();
@@ -253,7 +168,6 @@ export default function ListTasksRowsComponent({
         }
         return "secondary";
     }
-
 
     const handleReorder = (newOrder) => {
         // console.debug({ newOrder });
