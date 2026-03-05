@@ -10,7 +10,7 @@ import PomodoroComponent from "components/features/pomodoros/PomodoroComponent";
 import ListCommentsComponent from "components/features/comments/ListCommentsComponent";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { getCommentsCountApi } from "services/api/CommentApiService";
-import { getTasksCountFromCache } from "services/dbService";
+import { addServerItemToCache, getTasksCountFromCache, syncDeltaItems } from "services/dbService";
 
 export default function ListTasksComponent({
     project,
@@ -104,14 +104,20 @@ export default function ListTasksComponent({
 
         const pomodoro_data = {
             startTime: new Date(),
+            publicId: window.crypto.randomUUID()
             // length: 1
         }
 
         createPomodoroApi(pomodoro_data, pomodoro_task.id)
             .then(response => {
-                // console.debug(response)
+                // console.debug({ response })
                 pomodoro_task.project = task_project
                 response.data.task = pomodoro_task
+
+                // update cache
+                addServerItemToCache('pomodoros', response.data);
+                // syncDeltaItems('pomodoros');
+
                 // console.debug(response.data)
                 setPomodoro(response.data)
                 setPomodoroStatus('started')

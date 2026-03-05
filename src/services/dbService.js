@@ -68,6 +68,7 @@ const apiMap = {
         createApi: createPastPomodoroApi,
         updateApi: updatePomodoroApi,
         retrieveAllApi: getPomodorosApi,
+        // retrieveSyncAllApi: getPomodorosApi,
         getCountApi: () => {
             console.info('getCountApi is not supported for pomodoros')
             return { data: -1 };
@@ -198,6 +199,30 @@ export async function putItemToCache(entity, item) {
     }
 }
 
+// TODO: use delta sync
+export async function addServerItemToCache(entity, item) {
+    // console.debug({ item })
+    try {
+        // Add item to cache
+        item._dirty = 0;
+        await db[entity].put(item)
+    } catch (error) {
+        console.error(`Cache: Failed to update server ${entity} ${item.id}: ${error}`)
+    }
+}
+
+export async function putServerItemToCache(entity, item) {
+    // console.debug({ item })
+    try {
+        // Update item to cache
+        await db[entity]
+            .where({ id: item.id })
+            .modify(item);
+    } catch (error) {
+        console.error(`Cache: Failed to update server ${entity} ${item.id}: ${error}`)
+    }
+}
+
 /*
 1. Sync all entities with dirty items parallelly, to improve performance
 */
@@ -255,7 +280,7 @@ export async function syncDirtyItems(entity) {
 1. Sync all entities with delta items parallelly, to improve performance
 */
 export function syncEntitiesDelta() {
-    for (const entity of ['categories', 'projects', 'tasks']) {
+    for (const entity of ['categories', 'projects', 'tasks', 'pomodoros', 'tags', 'comments']) {
         syncDeltaItems(entity).then(() => {
             console.info(`Successfully synced delta items for ${entity}`);
         }).catch(error => {

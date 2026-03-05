@@ -7,6 +7,7 @@ import { generateInitialTimer, calculateTimeRemaining, generateTimer } from 'ser
 
 import BreakTimerComponent from 'components/features/pomodoros/BreakTimerComponent';
 import ListCommentsComponent from '../comments/ListCommentsComponent';
+import { putServerItemToCache, syncDeltaItems } from 'services/dbService';
 
 export default function PomodoroComponent({
     pomodoro,
@@ -127,7 +128,11 @@ export default function PomodoroComponent({
 
         updatePomodoroApi(pomodoro.id, pomodoro_data)
             .then(response => {
-                // console.debug(response.status)
+                // console.debug({ response })
+                // update cache
+                putServerItemToCache('pomodoros', response.data);
+                // syncDeltaItems('pomodoros');
+
                 if (local_status === 'completed') {
                     setTasksMessage('');
                     setPomodoroStatus('completed');
