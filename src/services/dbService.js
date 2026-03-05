@@ -31,12 +31,14 @@ import {
     createTagApi,
     getTagsCountApi,
     getTasksTagsApi,
-    retrieveAllTagsApi
+    retrieveAllTagsApi,
+    updateTagApi
 } from './api/TagApiService';
 import {
     createCommentApi,
     getCommentsCountApi,
-    retrieveAllCommentsApi
+    retrieveAllCommentsApi,
+    updateCommentApi
 } from './api/CommentApiService';
 import moment from 'moment';
 
@@ -73,14 +75,14 @@ const apiMap = {
     },
     'tags': {
         createApi: createTagApi,
-        updateApi: null,
+        updateApi: updateTagApi,
         retrieveAllApi: retrieveAllTagsApi,
         retrieveSyncAllApi: retrieveAllTagsApi,
         getCountApi: getTagsCountApi
     },
     'comments': {
         createApi: createCommentApi,
-        updateApi: null,
+        updateApi: updateCommentApi,
         retrieveAllApi: retrieveAllCommentsApi,
         retrieveSyncAllApi: retrieveAllCommentsApi,
         getCountApi: getCommentsCountApi

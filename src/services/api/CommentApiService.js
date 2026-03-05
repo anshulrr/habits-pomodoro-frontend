@@ -60,7 +60,7 @@ export const retrieveCommentApi
     = ({ id }) => apiClient.get(`/comments/${id}`)
 
 export const updateCommentApi
-    = ({ id, comment }) => apiClient.put(`comments/${id}`, comment)
+    = (id, comment) => apiClient.put(`comments/${id}`, comment)
 
 export const getCommentsTagsApi
     = (commentIds) => apiClient.get(`comments/tags?commentIds=${commentIds}`)

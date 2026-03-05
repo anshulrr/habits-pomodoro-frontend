@@ -337,7 +337,7 @@ export default function ListFilteredCommentsComponent({
                                         {
                                             showUpdateComment === comment.id &&
                                             <UpdateCommentComponent
-                                                id={comment.id}
+                                                comment={comment}
                                                 setShowUpdateComment={setShowUpdateComment}
                                                 reloadComments={reloadComments}
                                             />
