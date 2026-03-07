@@ -1,55 +1,37 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import DatePicker from "react-datepicker";
 
 import moment from 'moment';
 
-import { retrieveCommentApi, updateCommentApi } from 'services/api/CommentApiService'
 import { calculateTextAreaRows, filterPastTime } from 'services/helpers/helper';
 import InsertLinkComponent from './InsertLinkComponent';
+import { putItemToCache } from 'services/dbService';
 
-export default function UpdateCommentComponent({ id, setShowUpdateComment, reloadComments }) {
+export default function UpdateCommentComponent({ comment, setShowUpdateComment }) {
 
-    const [description, setDescription] = useState('')
-    const [reviseDate, setReviseDate] = useState(null)
+    const [description, setDescription] = useState(comment.description)
+    const [reviseDate, setReviseDate] = useState(comment.reviseDate ? moment(comment.reviseDate).toDate() : null)
 
     const [showInput, setShowInput] = useState(true)
-    const [showLoader, setShowLoader] = useState(true)
 
     const [showInsertLink, setShowInsertLink] = useState(false);
 
     const [errorMessage, setErrorMessage] = useState('')
 
-    useEffect(
-        () => retrieveComment()
-        , []  // eslint-disable-line react-hooks/exhaustive-deps
-    )
-
-    function retrieveComment() {
-        retrieveCommentApi({ id })
-            .then(response => {
-                setDescription(response.data.description)
-                setReviseDate(response.data.reviseDate ? moment(response.data.reviseDate).toDate() : null)
-                setShowLoader(false)
-            })
-            .catch(error => console.error(error.message))
-    }
-
     function handleSubmit(error) {
         error.preventDefault();
 
-        const comment = {
+        const updated_comment = {
+            ...comment,
             description,
             reviseDate
         }
 
-        updateCommentApi({ comment, id })
-            .then(response => {
-                // console.debug(response)
-                reloadComments()
-                setShowUpdateComment(-1)
-            })
-            .catch(error => console.error(error.message))
+        console.debug('update comment:', { updated_comment });
+        putItemToCache('comments', updated_comment);
+
+        setShowUpdateComment(-1)
     }
 
     return (
@@ -78,12 +60,6 @@ export default function UpdateCommentComponent({ id, setShowUpdateComment, reloa
                                             </label>
                                         </button>
                                         <button type="button" className={"btn btn-sm btn-outline-secondary " + (!showInput ? "active" : "")} onClick={() => setShowInput(false)}>Preview</button>
-                                        {
-                                            showLoader &&
-                                            <span className="loader-container-2" >
-                                                <span className="ms-2 loader-2"></span>
-                                            </span>
-                                        }
                                     </div>
                                 </div>
                                 <div className="col-6 text-end">

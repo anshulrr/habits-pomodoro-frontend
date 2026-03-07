@@ -33,7 +33,7 @@ export default function ListProjectCategoriesComponent() {
 
     // console.debug(categories, categoriesCount);
 
-    if (!categories || !categoriesCount)
+    if (categoriesCount === undefined || !categories)
         return <div>Loading initial data...</div>;
 
     return (

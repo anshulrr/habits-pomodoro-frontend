@@ -4,11 +4,11 @@ import DatePicker from "react-datepicker";
 
 import moment from 'moment'
 
-import { createCommentApi } from 'services/api/CommentApiService'
 import { calculateTextAreaRows, filterPastTime } from 'services/helpers/helper';
 import InsertLinkComponent from './InsertLinkComponent';
+import { addItemToCache } from 'services/dbService';
 
-export default function CommentComponent({ filterBy, id, setShowCreateComment, reloadComments }) {
+export default function CommentComponent({ filterBy, id, setShowCreateComment, setCurrentPage }) {
 
     const [description, setDescription] = useState('')
     const [reviseDate, setReviseDate] = useState(null)
@@ -24,17 +24,16 @@ export default function CommentComponent({ filterBy, id, setShowCreateComment, r
 
         const comment = {
             description,
-            reviseDate
+            reviseDate,
+            filterBy,
+            filterById: id
         }
         // console.debug({ comment, filterBy, id })
+        console.debug('create comment:', { comment });
+        addItemToCache('comments', comment);
 
-        createCommentApi({ comment, filterBy, id })
-            .then(response => {
-                // console.debug(response)
-                reloadComments()
-                setShowCreateComment(false)
-            })
-            .catch(error => console.error(error.message))
+        setCurrentPage(1)
+        setShowCreateComment(false)
     }
 
     return (

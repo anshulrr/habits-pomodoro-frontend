@@ -1,11 +1,10 @@
 import { useState } from 'react'
-import { updateTagApi } from 'services/api/TagApiService';
+import { putItemToCache, updateTasksTag } from 'services/dbService';
 
 export default function UpdateTagComponent({
     tag,
+    setTag,
     setShowUpdateTag,
-    setTags,
-    refreshAllTags
 }) {
 
     const [name, setName] = useState(tag.name)
@@ -16,26 +15,21 @@ export default function UpdateTagComponent({
         error.preventDefault();
 
         const updated_tag = {
+            ...tag,
             name,
             priority,
             color
         }
 
-        updateTagApi(tag.id, updated_tag)
-            .then(response => {
-                // console.debug(response)
-                setShowUpdateTag(-1)
-                setTags(tags => tags.map(tg => {
-                    if (tg.id === tag.id) {
-                        tg.name = response.data.name
-                        tg.color = response.data.color
-                        tg.priority = response.data.priority
-                    }
-                    return tg;
-                }))
-                refreshAllTags();
-            })
-            .catch(error => console.error(error.message))
+        console.debug('update tag:', { updated_tag });
+        putItemToCache('tags', updated_tag);
+        // all tasks mapping needs to be corrected which only happens in login
+        updateTasksTag({ name, id: tag.id, color });
+        // update TasksList title
+        setTag(updated_tag);
+
+        // cleanup
+        setShowUpdateTag(-1)
     }
 
     return (

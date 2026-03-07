@@ -17,14 +17,12 @@ import { StreakChart } from "components/stats/charts/StreakChart";
 import OutsideAlerter from 'services/hooks/OutsideAlerter';
 import { useAuth } from 'services/auth/AuthContext';
 import { isEmpty } from 'services/helpers/helper';
-import { retrieveAllProjectCategoriesApi } from 'services/api/ProjectCategoryApiService';
 import { toast } from 'react-toastify';
-import { getTasksCountApi } from 'services/api/TaskApiService';
 import SearchTaskComponent from './tasks/SearchTaskComponent';
 import FooterComponent from 'components/FooterComponent';
 import { getRunningPomodoroApi } from 'services/api/PomodoroApiService';
 
-import { getItemsCountFromCache, getItemsFromCache } from "services/dbService";
+import { getItemsCountFromCache, getItemsFromCache, getTasksCountFromCache } from "services/dbService";
 
 export default function HomeComponent({ setReloadHome }) {
 
@@ -46,9 +44,23 @@ export default function HomeComponent({ setReloadHome }) {
     const ALL_PAGESIZE = 1000;
     const projects = useLiveQuery(async () => await getItemsFromCache('projects', 1, ALL_PAGESIZE));
 
+    const tagsCount = useLiveQuery(async () => getItemsCountFromCache('tags'));
+    const [tagsMap, setTagsMap] = useState();
+    const tags = useLiveQuery(async () => {
+        const cachedTags = await getItemsFromCache('tags', 1, ALL_PAGESIZE);
+        setTagsMap(new Map(cachedTags.map(i => [i.id, i])));
+        return cachedTags;
+    }, []);
+
+    const [categoryIds, setCategoryIds] = useState([]);
+    const categories = useLiveQuery(async () => {
+        const cachedCategories = await getItemsFromCache('categories', 1, ALL_PAGESIZE)
+        setCategoryIds(cachedCategories.map(c => c.id));
+        return cachedCategories;
+    })
+
     const [project, setProject] = useState(state && state.project);
     const [tag, setTag] = useState(state && state.tag);
-    const [tags, setTags] = useState(null);
 
     const [tasksComponentReload, setTasksComponentReload] = useState(0)
 
@@ -65,10 +77,6 @@ export default function HomeComponent({ setReloadHome }) {
 
     const [pomodorosHeight, setPomodorosHeight] = useState(0);
     const [pomodorosListReload, setPomodorosListReload] = useState(0)
-
-    const [categoryIds, setCategoryIds] = useState([]);
-    const [categories, setCategories] = useState([]);
-
 
     const [tasksChartButtonsStates, setTasksChartButtonsStates] = useState({
         limit: 'daily',
@@ -107,13 +115,6 @@ export default function HomeComponent({ setReloadHome }) {
             if (tasksFilter) {
                 fetchTasks(tasksFilter);
             }
-
-            retrieveAllProjectCategoriesApi(100, 0)
-                .then(response => {
-                    setCategoryIds(response.data.map(c => c.id));
-                    setCategories(response.data);
-                })
-                .catch(error => console.error(error.message))
 
             retrieveOverdewTasksCount();
 
@@ -156,10 +157,10 @@ export default function HomeComponent({ setReloadHome }) {
             startDate: moment().add(-10, 'y').toISOString(),
             endDate: moment().toISOString()
         }
-        getTasksCountApi(taskData)
+        getTasksCountFromCache(taskData)
             .then(response => {
-                if (response.data > 0) {
-                    toast.error(`Overdue Tasks: ${response.data}`, { autoClose: 2 * 1000, position: "bottom-left" });
+                if (response > 0) {
+                    toast.error(`Overdue Tasks: ${response}`, { autoClose: 2 * 1000, position: "bottom-left" });
                 }
             })
             .catch(error => console.error(error.message))
@@ -209,7 +210,7 @@ export default function HomeComponent({ setReloadHome }) {
     }
 
     // to prevent rendering the page before projects are loaded from cache db, which causes some components to throw error as they rely on projects data.
-    if (!projects || !projectsCount)
+    if (projectsCount === undefined || tagsCount === undefined || !projects || !tagsMap)
         return <div>Loading initial data...</div>;
 
     return (
@@ -238,9 +239,9 @@ export default function HomeComponent({ setReloadHome }) {
                                                 <ListTagsComponent
                                                     setProject={setProject}
                                                     tag={tag}
+                                                    tagsCount={tagsCount}
+                                                    tags={tags}
                                                     setTag={setTag}
-                                                    setAllTags={setTags}
-                                                    setTasksComponentReload={setTasksComponentReload}
                                                     setShowLeftMenu={setShowLeftMenu}
                                                 />
                                             </div>
@@ -289,14 +290,14 @@ export default function HomeComponent({ setReloadHome }) {
 
                 <div className="col-lg-4 full-screen-height" style={{ backgroundColor: "#e9ecef" }}>
                     {
-                        tags !== null && projects.length !== 0 &&
+                        tagsMap !== null && projects.length !== 0 &&
                         <div>
                             {
                                 project &&
                                 <ListTasksComponent
                                     key={[project.id, tag, tasksComponentReload]}
                                     project={project}
-                                    tags={tags}
+                                    tags={tagsMap}
                                     projects={projects}
                                     setPomodorosListReload={setPomodorosListReload}
                                     pomodoro={pomodoro}
@@ -308,7 +309,7 @@ export default function HomeComponent({ setReloadHome }) {
                                 <ListTasksComponent
                                     key={[tasksComponentReload]}
                                     projects={projects}
-                                    tags={tags}
+                                    tags={tagsMap}
                                     startDate={startDate}
                                     endDate={endDate}
                                     searchString={searchString}
@@ -325,7 +326,7 @@ export default function HomeComponent({ setReloadHome }) {
                                 <ListTasksComponent
                                     key={[project, tag.id, tasksComponentReload]}
                                     projects={projects}
-                                    tags={tags}
+                                    tags={tagsMap}
                                     tag={tag}
                                     setPomodorosListReload={setPomodorosListReload}
                                     pomodoro={pomodoro}

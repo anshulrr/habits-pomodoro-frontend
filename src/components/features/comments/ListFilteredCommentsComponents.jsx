@@ -5,7 +5,7 @@ import ReactMarkdown from 'react-markdown'
 import moment from "moment";
 
 import { useAuth } from "services/auth/AuthContext";
-import { retrieveAllCommentsApi, getCommentsCountApi, getCommentsTagsApi } from "services/api/CommentApiService";
+import { getCommentsTagsApi } from "services/api/CommentApiService";
 import Pagination from "services/pagination/Pagination"
 import { formatDate, generateDateColor, truncateParagraph } from "services/helpers/listsHelper";
 import OutsideAlerter from "services/hooks/OutsideAlerter";
@@ -14,11 +14,12 @@ import CommentComponent from "./CommentComponent";
 import UpdateCommentComponent from "./UpdateCommentComponent";
 import MapCommentTagsComponent from "../tags/MapCommentTagsComponent";
 import { useLocation } from "react-router-dom";
+import { useLiveQuery } from "dexie-react-hooks";
+import { getCommentsCountFromCache, getCommentsFromCache } from "services/dbService";
 
 export default function ListFilteredCommentsComponent({
     filterBy,
     id,
-    categoryIds,
     filterWithReviseDate,
     searchString,
     showSearched,
@@ -34,8 +35,36 @@ export default function ListFilteredCommentsComponent({
 
     const [currentPage, setCurrentPage] = useState(1)
 
-    const [commentsCount, setCommentsCount] = useState(-1)
-    const [comments, setComments] = useState([])
+    // const [commentsCount, setCommentsCount] = useState(-1)
+    // const [comments, setComments] = useState([])
+
+    const commentsCount = useLiveQuery(async () => {
+        return await getCommentsCountFromCache({
+            filterBy,
+            filterById: id,
+            filterWithReviseDate,
+            searchString,
+        })
+    });
+
+    const comments = useLiveQuery(async () => {
+        const retrievedComments = await getCommentsFromCache({
+            filterBy,
+            filterById: id,
+            filterWithReviseDate,
+            searchString,
+            limit: PAGESIZE,
+            offset: (currentPage - 1) * PAGESIZE
+        })
+
+        console.debug(`Retrieved comments from cache after update:`, { retrievedComments });
+        const truncated_comments = truncateComments(retrievedComments);
+        // TODO: enable this after implementing filter by tags and offline support
+        // getCommentsTags(truncated_comments);
+
+        return truncated_comments;
+    }, [currentPage]);
+
 
     const [showCreateComment, setShowCreateComment] = useState(false)
     const [showUpdateComment, setShowUpdateComment] = useState(-1)
@@ -50,22 +79,13 @@ export default function ListFilteredCommentsComponent({
 
     useEffect(
         () => {
-            getCommentsCount()
-
             const observer = new ResizeObserver(handleResize);
-            observer.observe(listElement.current);
+            // observer.observe(listElement.current);
             return () => {
                 // Cleanup the observer by unobserving all elements
                 observer.disconnect();
             };
         }, [] // eslint-disable-line react-hooks/exhaustive-deps
-    )
-
-    useEffect(
-        () => {
-            // console.debug('re-render ListCommentsComponents')
-            refreshComments()
-        }, [currentPage] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
     const handleResize = () => {
@@ -75,32 +95,11 @@ export default function ListFilteredCommentsComponent({
         }
     };
 
-    function refreshComments() {
-        setComments([]);
-        retrieveAllCommentsApi({ limit: PAGESIZE, offset: (currentPage - 1) * PAGESIZE, filterBy, id, categoryIds, filterWithReviseDate, searchString })
-            .then(response => {
-                // console.debug(response)
-                const truncated_comments = truncateComments(response.data);
-                setComments(truncated_comments);
-                getCommentsTags(truncated_comments);
-            })
-            .catch(error => console.error(error.message))
-    }
-
     function truncateComments(comments) {
         for (const element of comments) {
             [element.truncated_description, element.truncated] = truncateParagraph(element.description);
         }
         return comments;
-    }
-
-    function getCommentsCount() {
-        // console.log({ filterBy, id, categoryIds, filterWithReviseDate })
-        getCommentsCountApi({ filterBy, id, categoryIds, filterWithReviseDate, searchString })
-            .then(response => {
-                setCommentsCount(response.data)
-            })
-            .catch(error => console.error(error.message))
     }
 
     function getCommentsTags(comments) {
@@ -121,15 +120,19 @@ export default function ListFilteredCommentsComponent({
                 for (let i = 0; i < response.data.length; i++) {
                     map.get(response.data[i][0]).tags.push(tags.get(response.data[i][1]))
                 }
-                setComments([...map.values()]);
+                // setComments([...map.values()]);
             })
             .catch(error => console.error(error.message))
     }
 
     function reloadComments() {
-        getCommentsCount();
-        refreshComments();
+        console.log('asked for comments reload');
+        // getCommentsCount();
+        // refreshComments();
     }
+
+    if (commentsCount === undefined || !comments)
+        return <div>Loading initial comments data...</div>;
 
     return (
         <div className="">
@@ -195,7 +198,7 @@ export default function ListFilteredCommentsComponent({
                                 filterBy={filterBy}
                                 id={id}
                                 setShowCreateComment={setShowCreateComment}
-                                reloadComments={reloadComments}
+                                setCurrentPage={setCurrentPage}
                             />
                         </div>
                     }
@@ -297,9 +300,11 @@ export default function ListFilteredCommentsComponent({
                                                                 <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowUpdateComment(comment.id)}>
                                                                     Update Note <i className="bi bi-pencil-square"></i>
                                                                 </button>
-                                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowMapTags(comment.id)}>
+                                                                {/* // TODO: enable this after implementing filter by tags and offline support */}
+
+                                                                {/* <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowMapTags(comment.id)}>
                                                                     Add Tags <i className="bi bi-tags" />
-                                                                </button>
+                                                                </button> */}
                                                             </div>
                                                         </span>
                                                     </OutsideAlerter>
@@ -337,9 +342,8 @@ export default function ListFilteredCommentsComponent({
                                         {
                                             showUpdateComment === comment.id &&
                                             <UpdateCommentComponent
-                                                id={comment.id}
+                                                comment={comment}
                                                 setShowUpdateComment={setShowUpdateComment}
-                                                reloadComments={reloadComments}
                                             />
                                         }
 
@@ -347,7 +351,7 @@ export default function ListFilteredCommentsComponent({
                                             showMapTags === comment.id &&
                                             <MapCommentTagsComponent
                                                 id={comment.id}
-                                                setComments={setComments}
+                                                // setComments={setComments}
                                                 tagsMap={tags}
                                                 setShowMapTags={setShowMapTags}
                                             />
