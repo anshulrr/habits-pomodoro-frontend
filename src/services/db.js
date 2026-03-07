@@ -2,7 +2,7 @@ import { Dexie } from "dexie"
 
 export const db = new Dexie("myDatabase")
 
-db.version(3).stores({
+db.version(4).stores({
     /*
     1. _dirty field is used to mark entities that are created/updated/deleted while offline, to be synced when back online.
     2. updatedAt field is used for conflict resolution, 
@@ -24,7 +24,7 @@ db.version(3).stores({
 
     tags: "publicId, id, name, priority, createdAt, updatedAt, _dirty",
 
-    comments: "publicId, id, [categoryId+createdAt], [projectId+createdAt], [taskId+createdAt], reviseDate, updatedAt, _dirty",
+    comments: "publicId, id, [categoryId+createdAt], [projectId+createdAt], [taskId+createdAt], reviseDate, createdAt, updatedAt, _dirty",
 
     tasks_tags: "++id, taskId, tagId",
     /*

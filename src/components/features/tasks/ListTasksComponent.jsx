@@ -138,9 +138,9 @@ export default function ListTasksComponent({
         navigate(`/projects/${id}`, { state })
     }
 
-    // to prevent rendering the page before tasks are loaded from cache db
-    if (tasksCount === undefined || archivedTasksCount === undefined)
-        return <div>Loading initial data for tasks count...</div>;
+    // Commented: as this creates a glitch effect
+    // if (tasksCount === undefined || archivedTasksCount === undefined)
+    //     return <div>Loading initial data for tasks count...</div>;
 
     return (
         <div className="">

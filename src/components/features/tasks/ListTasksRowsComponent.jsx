@@ -161,6 +161,8 @@ export default function ListTasksRowsComponent({
         setSortableTasks(newOrder);
     }
 
+    // console.log({ tasksCount, tasks })
+    // to prevent rendering the page before tasks are loaded from cache db
     if (!tasks)
         return <div>Loading initial data for tasks...</div>;
 
