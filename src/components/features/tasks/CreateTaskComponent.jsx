@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { addItemToCache, initEntityCache } from 'services/dbService';
+import { addItemToCache } from 'services/dbService';
 
 export default function CreateTaskComponent({
     project,
@@ -16,8 +16,6 @@ export default function CreateTaskComponent({
 
     function handleSubmit(error) {
         error.preventDefault();
-
-        initEntityCache('comments', { limit: 10000, offset: 0 }, { filterBy: 'user' })
 
         const task = {
             description,

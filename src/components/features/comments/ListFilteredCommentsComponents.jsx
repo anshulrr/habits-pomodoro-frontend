@@ -5,7 +5,7 @@ import ReactMarkdown from 'react-markdown'
 import moment from "moment";
 
 import { useAuth } from "services/auth/AuthContext";
-import { retrieveAllCommentsApi, getCommentsCountApi, getCommentsTagsApi } from "services/api/CommentApiService";
+import { getCommentsTagsApi } from "services/api/CommentApiService";
 import Pagination from "services/pagination/Pagination"
 import { formatDate, generateDateColor, truncateParagraph } from "services/helpers/listsHelper";
 import OutsideAlerter from "services/hooks/OutsideAlerter";
@@ -59,7 +59,8 @@ export default function ListFilteredCommentsComponent({
 
         console.debug(`Retrieved comments from cache after update:`, { retrievedComments });
         const truncated_comments = truncateComments(retrievedComments);
-        getCommentsTags(truncated_comments);
+        // TODO: enable this after implementing filter by tags and offline support
+        // getCommentsTags(truncated_comments);
 
         return truncated_comments;
     }, [currentPage]);
@@ -299,9 +300,11 @@ export default function ListFilteredCommentsComponent({
                                                                 <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowUpdateComment(comment.id)}>
                                                                     Update Note <i className="bi bi-pencil-square"></i>
                                                                 </button>
-                                                                <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowMapTags(comment.id)}>
+                                                                {/* // TODO: enable this after implementing filter by tags and offline support */}
+
+                                                                {/* <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => setShowMapTags(comment.id)}>
                                                                     Add Tags <i className="bi bi-tags" />
-                                                                </button>
+                                                                </button> */}
                                                             </div>
                                                         </span>
                                                     </OutsideAlerter>
