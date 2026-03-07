@@ -9,16 +9,19 @@ import { apiClient } from "./ApiClient";
 // export const createCommentApi
 //     = (comment) => apiClient.post(`comments`, comment)
 
-export const retrieveAllCommentsApi
-    = ({ limit, offset, filterBy, id, categoryIds, filterWithReviseDate, searchString, lastSyncTime }) => {
-        // console.debug({ limit, offset, filterBy, id, categoryIds, filterWithReviseDate, searchString })
-        if (filterBy === 'user') {
-            if (categoryIds) {
-                return apiClient.get(`/comments?limit=${limit}&offset=${offset}&categoryIds=${categoryIds}&filterWithReviseDate=${filterWithReviseDate}&searchString=${searchString}`)
-            } else {
-                return apiClient.get(`/comments?limit=${limit}&offset=${offset}&lastSyncTime=${lastSyncTime}`)
-            }
+export const retrieveSyncAllCommentsApi
+    = ({ limit, offset, lastSyncTime }) => {
+        let url = `/comments/sync?limit=${limit}&offset=${offset}`;
+        if (lastSyncTime) {
+            url += `&lastSyncTime=${lastSyncTime}`;
         }
+        return apiClient.get(url);
+    }
+
+export const retrieveAllCommentsApi
+    = ({ limit, offset, filterBy, id, categoryIds, filterWithReviseDate, searchString }) => {
+        if (filterBy === 'user')
+            return apiClient.get(`/comments?limit=${limit}&offset=${offset}&categoryIds=${categoryIds}&filterWithReviseDate=${filterWithReviseDate}&searchString=${searchString}`)
         else if (filterBy === 'category')
             return apiClient.get(`project-categories/${id}/comments?limit=${limit}&offset=${offset}`)
         else if (filterBy === 'project')

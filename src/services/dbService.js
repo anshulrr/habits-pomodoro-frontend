@@ -1,3 +1,6 @@
+import moment from 'moment';
+import Dexie from 'dexie';
+
 import { db } from 'services/db'
 
 import {
@@ -14,8 +17,6 @@ import {
     getProjectsCountApi
 } from './api/ProjectApiService';
 import {
-    retrieveAllTasksApi,
-    getTasksCountApi,
     updateTaskApi,
     createTaskApi,
     getSyncAllTasksCountApi,
@@ -37,10 +38,9 @@ import {
 import {
     createCommentApi,
     getCommentsCountApi,
-    retrieveAllCommentsApi,
+    retrieveSyncAllCommentsApi,
     updateCommentApi
 } from './api/CommentApiService';
-import moment from 'moment';
 
 const apiMap = {
     'categories': {
@@ -84,8 +84,8 @@ const apiMap = {
     'comments': {
         createApi: createCommentApi,
         updateApi: updateCommentApi,
-        retrieveAllApi: retrieveAllCommentsApi,
-        retrieveSyncAllApi: retrieveAllCommentsApi,
+        retrieveAllApi: retrieveSyncAllCommentsApi,
+        retrieveSyncAllApi: retrieveSyncAllCommentsApi,
         getCountApi: getCommentsCountApi
     }
 };
@@ -104,7 +104,7 @@ export async function initCacheDb() {
         endDate: new Date().toISOString()
     }));
     promises.push(initEntityCache('tags', { limit: 10000, offset: 0 }));
-    promises.push(initEntityCache('comments', { limit: 10000, offset: 0, filterBy: 'user' }, { filterBy: 'user' }));
+    promises.push(initEntityCache('comments', { limit: 10000, offset: 0 }, { filterBy: 'user' }));
 
     try {
         // Initialize cache for all entities in parallel, to improve performance
@@ -124,7 +124,7 @@ export async function initCacheDb() {
 1. Get count of items from backend and put to cache, so that we can show the count in UI without fetching all items
 2. Get all items from backend and put to cache, so that we can show the items in UI without fetching from backend again
 */
-async function initEntityCache(entity, requestData, requestCountData) {
+export async function initEntityCache(entity, requestData, requestCountData) {
     // console.debug({ entity, requestData, requestCountData })
     try {
         let itemsCount = (await apiMap[entity].getCountApi(requestCountData)).data;
@@ -227,7 +227,15 @@ export async function putServerItemToCache(entity, item) {
 1. Sync all entities with dirty items parallelly, to improve performance
 */
 export function syncDirtyEntities() {
-    for (const entity of ['categories', 'projects', 'tasks']) {
+    const entities = [
+        'categories',
+        'projects',
+        'tasks',
+        'tags',
+        'comments',
+        'pomodoros' // TODO: check if needed
+    ]
+    for (const entity of entities) {
         syncDirtyItems(entity).then(() => {
             console.info(`Successfully synced dirty items for ${entity}`);
         }).catch(error => {
@@ -244,7 +252,7 @@ export function syncDirtyEntities() {
 */
 export async function syncDirtyItems(entity) {
     const dirtyItems = await db[entity].where('_dirty').equals(1).toArray();
-    console.info('dirtyItemsCount', dirtyItems.length)
+    console.info(entity, 'dirtyItemsCount', dirtyItems.length)
     for (const item of dirtyItems) {
         // console.debug("Syncing item", item);
         try {
@@ -265,6 +273,11 @@ export async function syncDirtyItems(entity) {
                 const response = await apiMap[entity].createApi(item);
                 // Update the item with the correct id from the backend and clear the dirty flag
                 await db[entity].update(item.publicId, { id: response.data.id, _dirty: 0 });
+            }
+
+            // TODO: find better solution
+            if (entity === 'comments') {
+                syncDeltaItems('comments', { filterBy: 'user' });
             }
 
             // Success! Clear the flag locally
@@ -354,6 +367,85 @@ export async function getItemsFromCache(entity, currentPage, pageSize) {
         console.error(`Failed to get categories: ${error}`)
     }
 }
+
+// COMMENTS
+// for dropdowns
+export async function getFilteredItemsFromCache(entity, filterBy, { limit, offset }) {
+    // console.debug(`load filtered ${entity} from cache`);
+    try {
+        // Add the new category to db!
+        let sortBy = 'priority';
+        if (entity === 'categories') {
+            sortBy = 'level';
+        }
+        return await db[entity]
+            .where(filterBy)
+            .sortBy(sortBy)
+            .then(tasks => tasks.slice(offset, offset + limit))
+    } catch (error) {
+        console.error(`Failed to get ${entity}: ${error}`)
+    }
+}
+
+export async function getCommentsCountFromCache({ filterBy, filterById, filterWithReviseDate, searchString }) {
+    // console.debug('load comments count from cache', { filterBy, filterById, filterWithReviseDate, searchString });
+    try {
+        let query = await createCommentsFilterQuery({ filterBy, filterById, filterWithReviseDate, searchString });
+        if (filterWithReviseDate) {
+            query = query
+                .filter(comment => !!comment.reviseDate)
+        }
+        return query
+            .count()
+    } catch (error) {
+        console.error(`Failed to get comments count: ${error}`)
+    }
+}
+
+export async function getCommentsFromCache({ filterBy, filterById, filterWithReviseDate, searchString, limit, offset }) {
+    // console.debug('load comments from cache', { filterBy, filterById, filterWithReviseDate, searchString, limit, offset });
+    try {
+        let query = await createCommentsFilterQuery({ filterBy, filterById, filterWithReviseDate, searchString });
+        if (filterWithReviseDate) {
+            query = query
+                .filter(comment => !!comment.reviseDate)
+        }
+        return query
+            .offset(offset)
+            .limit(limit)
+            .toArray()
+    } catch (error) {
+        console.error(`Failed to get comments: ${error}`)
+    }
+}
+
+async function createCommentsFilterQuery({ filterBy, filterById, filterWithReviseDate, searchString }) {
+    let query = db['comments'];
+    if (filterBy === 'task') {
+        query = query.where('[taskId+createdAt]')
+    } else if (filterBy === 'project') {
+        query = query.where('[projectId+createdAt]')
+    } else if (filterBy === 'category') {
+        query = query.where('[categoryId+createdAt]')
+    } else if (filterBy === 'user') {
+        query = query.orderBy('createdAt')
+            .reverse();
+        if (searchString) {
+            const regex = new RegExp(searchString, 'i');
+            // TODO: improve query performance
+            query = query
+                .filter(comment => regex.test(comment.description))
+        }
+        return query;
+    }
+    query = query
+        .between([parseInt(filterById), Dexie.minKey], [parseInt(filterById), Dexie.maxKey])
+        .reverse()
+
+    return query;
+}
+
+// TASKS
 export async function getTasksCountFromCache({ projectId, tagId, startDate, endDate, searchString, status }) {
     // console.debug('load tasks count from cache', { projectId, tagId, startDate, endDate, searchString, status });
     try {
@@ -439,6 +531,7 @@ export async function getTagTasksFromCache({ tagId, status, limit, offset }) {
     }
 }
 
+// COMMON
 // TODO: check why async await is necessary here
 /*
 1. Get count of items from cache, so that we can show the count in UI without fetching from backend again
@@ -507,6 +600,7 @@ export async function getItemFromCache(entity, id) {
     }
 }
 
+// TASKS: view
 async function initView() {
     try {
         const tasks = await db.tasks.toArray();

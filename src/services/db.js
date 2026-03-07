@@ -14,7 +14,7 @@ db.version(3).stores({
     1. using composite index for sorting by categoryPriority and priority, 
         for displaying in the order of category and then project priority within the category. 
     */
-    projects: "publicId, id, name, [categoryPriority+priority], updatedAt, _dirty",
+    projects: "publicId, id, name, [categoryPriority+priority], projectCategoryId, updatedAt, _dirty",
     /*
     1. added multiple indexes for sorting and filtering by different fields.
     */
@@ -24,7 +24,7 @@ db.version(3).stores({
 
     tags: "publicId, id, name, priority, createdAt, updatedAt, _dirty",
 
-    comments: "publicId, id, status, updatedAt, _dirty",
+    comments: "publicId, id, [categoryId+createdAt], [projectId+createdAt], [taskId+createdAt], reviseDate, updatedAt, _dirty",
 
     tasks_tags: "++id, taskId, tagId",
     /*
