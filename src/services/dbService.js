@@ -113,7 +113,7 @@ export async function initCacheDb() {
         await db.metadata.put({ id: 'cache-init', value: 1 });
         console.info("Cache database initialization complete!");
         // Init view related data in background, no need to wait for it to complete, to improve performance of first load
-        await initView(); // Fire and forget in background, no need to wait for it to complete
+        await initView();
         console.info("View data initialization complete!");
     } catch (error) {
         console.error("One of the init chache tasks failed: please relogin", error);
@@ -278,6 +278,12 @@ export async function syncDirtyItems(entity) {
             // TODO: find better solution
             if (entity === 'comments') {
                 syncDeltaItems('comments', { filterBy: 'user' });
+            }
+            if (entity === 'pomodoros') {
+                syncDeltaItems('pomodoros', {
+                    startDate: '1970-01-01T00:00:00Z',
+                    endDate: new Date().toISOString()
+                });
             }
 
             // Success! Clear the flag locally
@@ -445,6 +451,23 @@ async function createCommentsFilterQuery({ filterBy, filterById, filterWithRevis
     return query;
 }
 
+// POMODOROS
+export async function getPomodorosFromCache({ startDate, endDate, includeCategories }) {
+    // console.debug('load pomodoros from cache', { projectId, tagId, startDate, endDate, searchString, status, limit, offset });
+    try {
+        let query = db['pomodoros'];
+        query = query.where('endTime')
+            .between(startDate, endDate, true, true)
+            .reverse();
+        // TODO: handle include categories
+        return await query
+            .filter(pomodoro => pomodoro.status !== 'deleted')
+            .toArray();
+    } catch (error) {
+        console.error(`Failed to get pomodoros: ${error}`)
+    }
+}
+
 // TASKS
 export async function getTasksCountFromCache({ projectId, tagId, startDate, endDate, searchString, status }) {
     // console.debug('load tasks count from cache', { projectId, tagId, startDate, endDate, searchString, status });
@@ -600,8 +623,14 @@ export async function getItemFromCache(entity, id) {
     }
 }
 
-// TASKS: view
+// VIEW
 async function initView() {
+    await initTaskView();
+    await initProjectView();
+}
+
+// TASKS: view
+async function initTaskView() {
     try {
         const tasks = await db.tasks.toArray();
 
@@ -760,5 +789,38 @@ export async function updateTaskTags(taskId, tagsMap, tagIds) {
         // console.debug([...tagsMap.values()].filter(tag => tagIds.includes(tag.id)))
     } catch (error) {
         console.error(`Cache: failed to udpate task tags: ${error}`);
+    }
+}
+
+// PROJECTS
+async function initProjectView() {
+    // set time elapsed for today and total time elapsed for all tasks
+    let startDate = moment().startOf('day').toISOString();
+    let endDate0 = moment().toISOString();
+    let endDate = moment().startOf('day').add(1, 'd').toISOString();
+    // TODO: check issue with timezone
+    console.debug({ startDate, endDate0, endDate })
+
+    try {
+        const pomodoros = await getPomodorosFromCache({ startDate, endDate });
+        const map = new Map();
+        console.debug({ pomodoros }, map)
+        for (let i = 0; i < pomodoros.length; i++) {
+            const pomodoro = pomodoros[i];
+            const projectId = parseInt(pomodoro.projectId);
+            if (map.has(projectId)) {
+                map.set(projectId, map.get(projectId) + pomodoro.timeElapsed);
+            } else {
+                map.set(projectId, pomodoro.timeElapsed);
+            }
+        }
+        console.debug({ pomodoros }, map)
+        // update cache for displaying today's projects time elapsed
+        map.forEach((timeElapsed, projectId) => {
+            modifyItemInCache('projects', projectId, { timeElapsed });
+        });
+        console.info(`Cache VIEW: Finished setting projects time elapsed since ${startDate}`);
+    } catch (error) {
+        console.error(`Cache VIEW: Failed to set projects time elapsed since ${startDate}: ${error}`)
     }
 }

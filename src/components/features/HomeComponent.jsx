@@ -419,11 +419,9 @@ export default function HomeComponent({ setReloadHome }) {
                                 categoryIds.length > 0 && pomodorosListReload !== 0 &&
                                 <ListPomodorosComponent
                                     key={[pomodorosListReload]}
-                                    includeCategories={categoryIds}
                                     title={"Today's Pomodoros"}
                                     elementHeight={pomodorosHeight}
                                     setElementHeight={setPomodorosHeight}
-                                    setTasksComponentReload={setTasksComponentReload}
                                     projects={projects}
                                     setTodaysPomodorosMap={setTodaysPomodorosMap}
                                 />

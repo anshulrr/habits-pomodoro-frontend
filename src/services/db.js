@@ -20,7 +20,7 @@ db.version(4).stores({
     */
     tasks: "publicId, id, description, projectId, status, dueDate, priority, updatedAt, _dirty",
 
-    pomodoros: "publicId, id, taskId, startTime, endTime, status, updatedAt, _dirty",
+    pomodoros: "publicId, id, taskId, projectId, startTime, endTime, status, updatedAt, _dirty",
 
     tags: "publicId, id, name, priority, createdAt, updatedAt, _dirty",
 

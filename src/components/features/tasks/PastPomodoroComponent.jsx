@@ -6,7 +6,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 import { useAuth } from 'services/auth/AuthContext';
-import { addItemToCache } from 'services/dbService';
+import { addItemToCache, getItemFromCache, modifyItemInCache } from 'services/dbService';
 
 export default function PastPomodoroComponent({
     setShowCreatePastPomodoro,
@@ -35,10 +35,10 @@ export default function PastPomodoroComponent({
         createPastPomodoro();
     }
 
-    function createPastPomodoro() {
+    async function createPastPomodoro() {
         const pomodoro = {
-            startTime: date,
-            endTime: date,
+            startTime: date.toISOString(),
+            endTime: date.toISOString(),
             timeElapsed: minutesElapsed * 60,
             taskId: task.id
         }
@@ -46,6 +46,14 @@ export default function PastPomodoroComponent({
         console.debug('create pomodoro:', { pomodoro });
         addItemToCache('pomodoros', pomodoro);
 
+        // modify view data
+        modifyItemInCache('tasks', task.id, { todaysTimeElapsed: task.todaysTimeElapsed + pomodoro.timeElapsed });
+        modifyItemInCache('tasks', task.id, { totalTimeElapsed: task.totalTimeElapsed + pomodoro.timeElapsed });
+
+        const project = await getItemFromCache('projects', parseInt(task.projectId))
+        modifyItemInCache('projects', project.id, { timeElapsed: (project.timeElapsed || 0) + pomodoro.timeElapsed });
+
+        // cleanup
         setShowCreatePastPomodoro(-1)
         // setPomodorosListReload(prevReload => prevReload + 1)
         setTasksReload(prevReload => prevReload + 1)
