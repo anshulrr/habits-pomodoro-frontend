@@ -379,7 +379,6 @@ export default function SortableTask({
                     setShowCreatePastPomodoro={setShowCreatePastPomodoro}
                     task={task}
                     setPomodorosListReload={setPomodorosListReload}
-                    setTasksReload={setTasksReload}
                 />
             }
 
@@ -405,7 +404,6 @@ export default function SortableTask({
                     task={task}
                     tagsMap={tags}
                     setShowMapTags={setShowMapTags}
-                    setTasksReload={setTasksReload}
                 />
             }
 

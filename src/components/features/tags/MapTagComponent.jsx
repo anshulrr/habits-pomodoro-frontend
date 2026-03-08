@@ -8,7 +8,6 @@ export default function MapTagComponent({
     task,
     tagsMap,
     setShowMapTags,
-    setTasksReload
 }) {
 
     const [tagsCount, setTagsCount] = useState(-1)
@@ -81,7 +80,6 @@ export default function MapTagComponent({
                 updateTaskTags(task.id, tagsMap, selectedTags);
                 // cleanup
                 setShowMapTags(-1)
-                setTasksReload(prev => prev + 1);
             })
             .catch(error => console.error(error.message))
 

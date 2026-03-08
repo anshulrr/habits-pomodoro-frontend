@@ -211,7 +211,11 @@ export default function HomeComponent({ setReloadHome }) {
 
     // to prevent rendering the page before projects are loaded from cache db, which causes some components to throw error as they rely on projects data.
     if (projectsCount === undefined || tagsCount === undefined || !projects || !tagsMap)
-        return <div>Loading initial data...</div>;
+        return (
+            <div className="loader-container my-1">
+                <div className="loader"></div>...
+            </div >
+        )
 
     return (
         <div className="container">
@@ -418,7 +422,6 @@ export default function HomeComponent({ setReloadHome }) {
                             {
                                 categoryIds.length > 0 && pomodorosListReload !== 0 &&
                                 <ListPomodorosComponent
-                                    key={[pomodorosListReload]}
                                     title={"Today's Pomodoros"}
                                     elementHeight={pomodorosHeight}
                                     setElementHeight={setPomodorosHeight}

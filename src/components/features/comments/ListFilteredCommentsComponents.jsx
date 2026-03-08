@@ -132,7 +132,11 @@ export default function ListFilteredCommentsComponent({
     }
 
     if (commentsCount === undefined || !comments)
-        return <div>Loading initial comments data...</div>;
+        return (
+            <div className="loader-container my-1">
+                <div className="loader"></div>...
+            </div >
+        )
 
     return (
         <div className="">

@@ -10,9 +10,8 @@ import { addItemToCache, getItemFromCache, modifyItemInCache } from 'services/db
 
 export default function PastPomodoroComponent({
     setShowCreatePastPomodoro,
+    setPomodorosListReload,
     task,
-    // setPomodorosListReload,
-    setTasksReload
 }) {
     const authContext = useAuth()
     const userSettings = authContext.userSettings
@@ -55,8 +54,7 @@ export default function PastPomodoroComponent({
 
         // cleanup
         setShowCreatePastPomodoro(-1)
-        // setPomodorosListReload(prevReload => prevReload + 1)
-        setTasksReload(prevReload => prevReload + 1)
+        setPomodorosListReload(prevReload => prevReload + 1)
     }
 
     const filterFutureTime = (time) => {

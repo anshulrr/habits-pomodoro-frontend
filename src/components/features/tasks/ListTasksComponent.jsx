@@ -51,9 +51,6 @@ export default function ListTasksComponent({
         })
     });
 
-    const [currentTasksHeight, setCurrentTasksHeight] = useState(0);
-    const [archivedTasksHeight, setArchivedTasksHeight] = useState(0);
-
     const [currentTasksPage, setCurrentTasksPage] = useState(state?.currentTasksPage || 1);
     const [archivedTasksPage, setArchivedTasksPage] = useState(state?.archivedTasksPage || 1);
 
@@ -69,9 +66,6 @@ export default function ListTasksComponent({
     }, [project]);
 
     const [pomodoroStatus, setPomodoroStatus] = useState(null)
-
-    const [currentTasksReload, setCurrentTasksReload] = useState(0)
-    const [archivedTasksReload, setArchivedTasksReload] = useState(0)
 
     const [message, setMessage] = useState('')
 
@@ -279,10 +273,6 @@ export default function ListTasksComponent({
                                 createNewPomodoro={createNewPomodoro}
                                 setPomodorosListReload={setPomodorosListReload}
                                 pomodoroStatus={pomodoroStatus}
-                                tasksReload={currentTasksReload}
-                                setTasksReload={setCurrentTasksReload}
-                                elementHeight={currentTasksHeight}
-                                setElementHeight={setCurrentTasksHeight}
                                 startDate={startDate}
                                 endDate={endDate}
                                 searchString={searchString}
@@ -294,7 +284,7 @@ export default function ListTasksComponent({
 
                         <div className="my-1">
                             {
-                                archivedTasksCount !== 0 &&
+                                archivedTasksCount > 0 &&
                                 <div className="d-flex justify-content-center">
                                     <div
                                         onClick={() => {
@@ -331,10 +321,6 @@ export default function ListTasksComponent({
                                         tags={tags}
                                         projects={projects}
                                         createNewPomodoro={createNewPomodoro}
-                                        tasksReload={archivedTasksReload}
-                                        setTasksReload={setArchivedTasksReload}
-                                        elementHeight={archivedTasksHeight}
-                                        setElementHeight={setArchivedTasksHeight}
                                         startDate={startDate}
                                         endDate={endDate}
                                         searchString={searchString}

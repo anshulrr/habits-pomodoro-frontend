@@ -108,7 +108,11 @@ export const CommentsFilterComponent = ({ setFilterType, setFilterTypeId, resetF
     }
 
     if (!categories)
-        return <div>Loading initial data...</div>;
+        return (
+            <div className="loader-container my-1">
+                <div className="loader"></div>...
+            </div >
+        )
 
     return (
         <div>
