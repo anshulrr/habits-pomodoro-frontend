@@ -33,8 +33,12 @@ export default function ListProjectCategoriesComponent() {
 
     // console.debug(categories, categoriesCount);
 
-    if (!categories || !categoriesCount)
-        return <div>Loading initial data...</div>;
+    if (categoriesCount === undefined || !categories)
+        return (
+            <div className="loader-container my-1">
+                <div className="loader"></div>...
+            </div >
+        )
 
     return (
         <div className="container">

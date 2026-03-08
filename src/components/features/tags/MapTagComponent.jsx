@@ -2,12 +2,12 @@ import { useEffect, useState } from "react"
 
 import { mapTagsApi } from "services/api/TagApiService";
 import { retrieveTaskApi } from "services/api/TaskApiService";
+import { updateTaskTags } from "services/dbService";
 
 export default function MapTagComponent({
     task,
     tagsMap,
     setShowMapTags,
-    setTasksReload
 }) {
 
     const [tagsCount, setTagsCount] = useState(-1)
@@ -76,8 +76,10 @@ export default function MapTagComponent({
 
         mapTagsApi(task.id, { tagIds: selectedTags })
             .then(response => {
+                // udpate cache
+                updateTaskTags(task.id, tagsMap, selectedTags);
+                // cleanup
                 setShowMapTags(-1)
-                setTasksReload(prev => prev + 1);
             })
             .catch(error => console.error(error.message))
 

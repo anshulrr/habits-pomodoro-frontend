@@ -103,9 +103,6 @@ export default function ProjectComponent() {
             category: category.name,
             categoryColor: category.color,
             categoryPriority: category.level,
-            // for syncing data with server
-            _dirty: 1,
-            updatedAt: new Date().toISOString()
         }
 
         if (!validate(updatedProject)) {
@@ -113,17 +110,11 @@ export default function ProjectComponent() {
         }
 
         if (parseInt(id) === -1) {
-            updatedProject.publicId = window.crypto.randomUUID();
             addItemToCache('projects', updatedProject);
             // new project will be added to start of the ordered projects list
             state.currentProjectsPage = 1;
         } else {
             putItemToCache('projects', updatedProject);
-        }
-
-        if (navigator.onLine) {
-            console.info('Online! Syncing dirty projects...');
-            syncDirtyItems('projects'); // Fire and forget in background
         }
         // console.debug({ updatedProject, state })
 

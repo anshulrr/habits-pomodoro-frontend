@@ -2,16 +2,15 @@ import { useEffect, useState } from 'react'
 
 import moment from 'moment'
 
-import { retrieveTaskApi, updateTaskApi } from 'services/api/TaskApiService'
 import { COLOR_MAP } from 'services/helpers/listsHelper'
 
 import { SwitchProjectComponent } from './SwitchProjectComponent'
 import DueDateInputComponent from './DueDateInputComponent'
+import { putItemToCache } from 'services/dbService'
 
 export default function UpdateTaskComponent({
     task,
     setShowUpdateTaskId,
-    setTasksReload
 }) {
 
     const [description, setDescription] = useState('')
@@ -39,25 +38,20 @@ export default function UpdateTaskComponent({
     )
 
     function retrieveTask() {
-        retrieveTaskApi({ id: task.id })
-            .then(response => {
-                const data = response.data
-                setDescription(data.description)
-                setPomodoroLength(data.pomodoroLength)
-                setStatus(data.status)
-                setType(data.type)
-                if (data.dueDate) {
-                    setDueDate(moment(data.dueDate).toDate())
-                }
-                if (data.repeatDays !== 0) {
-                    setRepeat(true)
-                }
-                setRepeatDays(data.repeatDays)
-                setDailyLimit(data.dailyLimit)
-                setEnableNotifications(data.enableNotifications)
-                setShowLoader(false)
-            })
-            .catch(error => console.error(error.message))
+        setDescription(task.description)
+        setPomodoroLength(task.pomodoroLength)
+        setStatus(task.status)
+        setType(task.type)
+        if (task.dueDate) {
+            setDueDate(moment(task.dueDate).toDate())
+        }
+        if (task.repeatDays !== 0) {
+            setRepeat(true)
+        }
+        setRepeatDays(task.repeatDays)
+        setDailyLimit(task.dailyLimit)
+        setEnableNotifications(task.enableNotifications)
+        setShowLoader(false)
     }
 
     function onSubmit(error) {
@@ -65,6 +59,7 @@ export default function UpdateTaskComponent({
 
         // console.debug(values)
         const updated_task = {
+            ...task,
             id: task.id,
             description,
             pomodoroLength,
@@ -72,26 +67,26 @@ export default function UpdateTaskComponent({
             type,
             dueDate,
             repeatDays: repeat ? repeatDays : 0,
-            dailyLimit,
+            dailyLimit: dailyLimit,
             enableNotifications,
-            projectId
+            projectId,
         }
 
         if (!validate(updated_task)) {
             return;
         }
 
-        updateTaskApi({ id: task.id, task: updated_task })
-            .then(response => {
-                // console.debug(response)
-                // navigate(-1, { state })
-                setShowUpdateTaskId(-1)
-                setTasksReload(prevReload => prevReload + 1)
-            })
-            .catch(error => console.error(error.message))
+        // TODO: Note: make sure numbers are correctly formatted, as form inputs return string values, storing them as string in cache will cause issues with validation and calculations in other parts of the app.
+        console.debug('update task:', { updated_task });
+        putItemToCache('tasks', updated_task);
+
+        // cleanup
+        setShowUpdateTaskId(-1)
     }
 
     function validate(task) {
+        // make sure numbers are not in string format
+        console.debug('validating task:', { task });
         let errors = {}
         let validated = true;
         if (task.description.length < 2) {
@@ -187,7 +182,7 @@ export default function UpdateTaskComponent({
                                             placeholder="Default Pomodoro Length (mins)"
                                             required
                                             value={pomodoroLength}
-                                            onChange={(e) => setPomodoroLength(e.target.value)}
+                                            onChange={(e) => setPomodoroLength(parseInt(e.target.value))}
                                         />
                                         <small>(To use Default Pomodoro Length of the Project, set value to zero)</small>
                                         <div className="text-danger small">{errors.pomodoroLength}</div>
@@ -202,7 +197,7 @@ export default function UpdateTaskComponent({
                                             placeholder="Expected Count"
                                             required
                                             value={dailyLimit}
-                                            onChange={(e) => setDailyLimit(e.target.value)}
+                                            onChange={(e) => setDailyLimit(parseInt(e.target.value))}
                                         />
                                         <div className="text-danger small">{errors.dailyLimit}</div>
                                     </div>
