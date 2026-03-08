@@ -453,7 +453,7 @@ async function createCommentsFilterQuery({ filterBy, filterById, filterWithRevis
 
 // POMODOROS
 export async function getPomodorosFromCache({ startDate, endDate, includeCategories }) {
-    // console.debug('load pomodoros from cache', { projectId, tagId, startDate, endDate, searchString, status, limit, offset });
+    console.debug('load pomodoros from cache', { startDate, endDate, });
     try {
         let query = db['pomodoros'];
         query = query.where('endTime')

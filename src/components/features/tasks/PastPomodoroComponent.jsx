@@ -54,8 +54,8 @@ export default function PastPomodoroComponent({
         addItemToCache('pomodoros', pomodoro);
 
         // modify view data
-        modifyItemInCache('tasks', task.id, { todaysTimeElapsed: task.todaysTimeElapsed + pomodoro.timeElapsed });
-        modifyItemInCache('tasks', task.id, { totalTimeElapsed: task.totalTimeElapsed + pomodoro.timeElapsed });
+        modifyItemInCache('tasks', task.id, { todaysTimeElapsed: (task.todaysTimeElapsed || 0) + pomodoro.timeElapsed });
+        modifyItemInCache('tasks', task.id, { totalTimeElapsed: (task.totalTimeElapsed || 0) + pomodoro.timeElapsed });
 
         modifyItemInCache('projects', project.id, { timeElapsed: (project.timeElapsed || 0) + pomodoro.timeElapsed });
 
