@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { useNavigate, useLocation } from "react-router-dom";
 
-import { retrieveAllTagsApi, getTagsCountApi } from "services/api/TagApiService";
 import Pagination from "services/pagination/Pagination"
 import { useAuth } from "services/auth/AuthContext";
 import { isEmpty } from "services/helpers/helper";
@@ -9,7 +8,14 @@ import { isEmpty } from "services/helpers/helper";
 import CreateTagComponent from "./CreateTagComponent";
 import UpdateTagComponent from "./UpdateTagComponent";
 
-export default function ListTagsComponent({ setProject, tag, setTag, setAllTags, setTasksComponentReload, setShowLeftMenu }) {
+export default function ListTagsComponent({
+    setProject,
+    tag,
+    setTag,
+    tagsCount,
+    tags,
+    setShowLeftMenu
+}) {
     const authContext = useAuth()
     const userSettings = authContext.userSettings
 
@@ -20,68 +26,34 @@ export default function ListTagsComponent({ setProject, tag, setTag, setAllTags,
 
     // for first time login default value is needed
     const PAGESIZE = userSettings.pageTagsCount || 5;
-    const ALL_TAGS_PAGESIZE = 1000;
 
     const IS_TAGS_DEFAULT = userSettings.homePageDefaultList === 'tags';
-
-    const [tagsCount, setTagsCount] = useState(-1)
-    const [tags, setTags] = useState([])
-
-    const [showCreateTag, setShowCreateTag] = useState(false)
-    const [showUpdateTag, setShowUpdateTag] = useState(-1)
 
     // state might not be preset (eg. opening url in a new tab)
     // const [tag, setTag] = useState(state && state.tag)
     const [currentPage, setCurrentPage] = useState((state && state.currentTagsPage) || 1)
 
-    useEffect(
-        () => {
-            getTagsCount()
-            refreshAllTags()
-        },
-        [] // eslint-disable-line react-hooks/exhaustive-deps
-    )
+
+    const displayTags = useMemo(() => {
+        // console.debug('recomputing displayTags, tag length is ', tags.length, { tags, currentPage })
+        const firstPageIndex = (currentPage - 1) * PAGESIZE;
+        const lastPageIndex = firstPageIndex + PAGESIZE;
+        return tags.slice(firstPageIndex, lastPageIndex);
+    }, [tags, currentPage])
+
+    const [showCreateTag, setShowCreateTag] = useState(false)
+    const [showUpdateTag, setShowUpdateTag] = useState(-1)
 
     useEffect(
         () => {
             // console.debug('re-render ListTagsComponents')
-            refreshTags()
-        }, [currentPage] // eslint-disable-line react-hooks/exhaustive-deps
+            if (IS_TAGS_DEFAULT && isEmpty(state) && !tag && !!tags) {
+                // udpate state for first time load
+                updateAppStates(tags[0]);
+            }
+        },
+        [] // eslint-disable-line react-hooks/exhaustive-deps
     )
-
-    function refreshAllTags() {
-        retrieveAllTagsApi({ limit: ALL_TAGS_PAGESIZE, offset: 0 })
-            .then(response => {
-                const map = new Map(response.data.map(i => [i.id, i]));
-                setAllTags(map);
-                // TODO: check if needed
-                setTasksComponentReload(prevReload => prevReload + 1)
-            })
-            .catch(error => console.error(error.message))
-    }
-
-    function refreshTags() {
-        setTags([]);
-        retrieveAllTagsApi({ limit: PAGESIZE, offset: (currentPage - 1) * PAGESIZE })
-            .then(response => {
-                // console.debug(response)
-                setTags(response.data)
-                if (IS_TAGS_DEFAULT && isEmpty(state) && !tag && response.data.length > 0) {
-                    setTag(response.data[0]);
-                    // udpate state for first time load
-                    updateAppStates(response.data[0]);
-                }
-            })
-            .catch(error => console.error(error.message))
-    }
-
-    function getTagsCount() {
-        getTagsCountApi()
-            .then(response => {
-                setTagsCount(response.data)
-            })
-            .catch(error => console.error(error.message))
-    }
 
     function onUpdateTag(tg) {
         setProject(null);
@@ -144,10 +116,7 @@ export default function ListTagsComponent({ setProject, tag, setTag, setAllTags,
                     showCreateTag &&
                     <div className="row">
                         <CreateTagComponent
-                            setTags={setTags}
                             setShowCreateTag={setShowCreateTag}
-                            setTagsCount={setTagsCount}
-                            refreshAllTags={refreshAllTags}
                         />
                     </div>
                 }
@@ -159,7 +128,7 @@ export default function ListTagsComponent({ setProject, tag, setTag, setAllTags,
                     </div>
                 }
                 {
-                    tagsCount !== 0 && tags.length === 0 &&
+                    tagsCount !== 0 && displayTags.length === 0 &&
                     <div className="loader-container" style={{ height: tagsListElement.current ? tagsListElement.current.offsetHeight : 0 }}>
                         <div className="loader"></div>
                     </div>
@@ -168,7 +137,7 @@ export default function ListTagsComponent({ setProject, tag, setTag, setAllTags,
                     <div>
                         <div id="tags-list" ref={tagsListElement}>
                             {
-                                tags.map(
+                                displayTags.map(
                                     tg => (
                                         <div
                                             key={tg.id}
@@ -200,9 +169,8 @@ export default function ListTagsComponent({ setProject, tag, setTag, setAllTags,
                                                 showUpdateTag === tg.id &&
                                                 <UpdateTagComponent
                                                     tag={tg}
-                                                    setTags={setTags}
+                                                    setTag={setTag}
                                                     setShowUpdateTag={setShowUpdateTag}
-                                                    refreshAllTags={refreshAllTags}
                                                 />
                                             }
                                         </div>

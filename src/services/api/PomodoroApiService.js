@@ -4,7 +4,7 @@ export const createPomodoroApi
     = (pomodoro, task_id) => apiClient.post(`/pomodoros?taskId=${task_id}`, pomodoro)
 
 export const createPastPomodoroApi
-    = (pomodoro, task_id) => apiClient.post(`/pomodoros/past?taskId=${task_id}`, pomodoro)
+    = (pomodoro) => apiClient.post(`/pomodoros/past?taskId=${pomodoro.taskId}`, pomodoro)
 
 export const deletePastPomodoroApi
     = (pomodoro_id) => apiClient.delete(`/pomodoros/${pomodoro_id}`)
@@ -12,11 +12,23 @@ export const deletePastPomodoroApi
 const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 export const updatePomodoroApi
-    = (id, pomodoro) => apiClient.put(`/pomodoros/${id}`, pomodoro)
+    = (id, pomodoro) => {
+        if (pomodoro.status === 'deleted') {
+            return apiClient.delete(`/pomodoros/${id}`)
+        } else {
+            return apiClient.put(`/pomodoros/${id}`, pomodoro)
+        }
+    }
 
 export const getPomodorosApi
-    = ({ startDate, endDate, includeCategories, subject }) => {
-        const url = `/pomodoros?startDate=${startDate}&endDate=${endDate}&categoryIds=${includeCategories}`;
+    = ({ startDate, endDate, includeCategories, subject, lastSyncTime }) => {
+        let url = `/pomodoros?startDate=${startDate}&endDate=${endDate}`;
+        if (includeCategories) {
+            url += `&categoryIds=${includeCategories}`;
+        }
+        if (lastSyncTime) {
+            url += `&lastSyncTime=${lastSyncTime}`;
+        }
         if (!subject) {
             return apiClient.get(url);
         } else {

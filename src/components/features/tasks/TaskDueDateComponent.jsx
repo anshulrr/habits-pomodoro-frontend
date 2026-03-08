@@ -4,13 +4,12 @@ import moment from 'moment';
 
 import "react-datepicker/dist/react-datepicker.css";
 
-import { updateTaskApi } from 'services/api/TaskApiService';
 import DueDateInputComponent from './DueDateInputComponent';
+import { putItemToCache } from 'services/dbService';
 
 export default function TaskDueDateComponent({
     setShowUpdateDueDate,
     task,
-    setTasksReload
 }) {
 
     const [dueDate, setDueDate] = useState(task.dueDate ? moment(task.dueDate).toDate() : null);
@@ -43,13 +42,11 @@ export default function TaskDueDateComponent({
         task.repeatDays = repeat ? repeatDays : 0;
         task.enableNotifications = enableNotifications;
 
-        updateTaskApi({ id: task.id, task })
-            .then(response => {
-                // console.debug(response)
-                setShowUpdateDueDate(-1)
-                setTasksReload(prevReload => prevReload + 1)
-            })
-            .catch(error => console.error(error.message))
+        console.debug('update Due Date:', { task });
+        putItemToCache('tasks', task);
+
+        // cleanup
+        setShowUpdateDueDate(-1)
     }
 
     return (
