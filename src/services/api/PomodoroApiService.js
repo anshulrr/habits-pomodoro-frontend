@@ -12,7 +12,13 @@ export const deletePastPomodoroApi
 const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 export const updatePomodoroApi
-    = (id, pomodoro) => apiClient.put(`/pomodoros/${id}`, pomodoro)
+    = (id, pomodoro) => {
+        if (pomodoro.status === 'deleted') {
+            return apiClient.delete(`/pomodoros/${id}`)
+        } else {
+            return apiClient.put(`/pomodoros/${id}`, pomodoro)
+        }
+    }
 
 export const getPomodorosApi
     = ({ startDate, endDate, includeCategories, subject, lastSyncTime }) => {

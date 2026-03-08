@@ -17,6 +17,7 @@ export default function ListPomodorosComponent({
     title = "Pomodoros",
     elementHeight,
     setElementHeight,
+    setChartReload
 }) {
 
     const listElement = useRef(null);
@@ -107,10 +108,7 @@ export default function ListPomodorosComponent({
         // Use update API instead of delete
         // TODO: check if this is the best solution
         modifyItemInCache('pomodoros', pomodoro.id, { status: 'deleted', _dirty: 1 });
-        if (navigator.onLine) {
-            console.info(`Online! Syncing deleted dirty pomodoros...`);
-            syncDirtyItems('pomodoros'); // Fire and forget in background
-        }
+        syncPomodoros();
 
         // Update cache view data: reduce the time elapsed of the project and task by the time elapsed of the deleted pomodoro
         const task = await getItemFromCache('tasks', parseInt(pomodoro.taskId))
@@ -121,7 +119,16 @@ export default function ListPomodorosComponent({
             modifyItemInCache('projects', project.id, { timeElapsed: project.timeElapsed - pomodoro.timeElapsed });
         }
 
+        // cleanup
         setReload(prev => prev + 1);
+    }
+
+    async function syncPomodoros() {
+        if (navigator.onLine) {
+            console.info(`Online! Syncing deleted dirty pomodoros...`);
+            await syncDirtyItems('pomodoros'); // Fire and forget in background
+            setChartReload(prevReload => prevReload + 1)    // for chart reload
+        }
     }
 
     function updateCommentsData(pomodoro) {

@@ -427,6 +427,7 @@ export default function HomeComponent({ setReloadHome }) {
                                     setElementHeight={setPomodorosHeight}
                                     projects={projects}
                                     setTodaysPomodorosMap={setTodaysPomodorosMap}
+                                    setChartReload={setPomodorosListReload}
                                 />
                             }
                         </div >

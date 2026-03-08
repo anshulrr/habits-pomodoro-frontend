@@ -323,6 +323,7 @@ export default function ListStatsComponent() {
                                             setButtonsStates={setListPomodorosButtonsStates}
                                             elementHeight={pomodorosHeight}
                                             setElementHeight={setPomodorosHeight}
+                                            setChartReload={setReload}
                                         />
                                     </div>
                                 </div >
