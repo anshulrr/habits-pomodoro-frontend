@@ -589,10 +589,10 @@ export async function bulkPutItemsToCache(entity, items) {
         await db[entity].bulkPut(items)
         const now = new Date().toISOString();
         await db.metadata.put({ id: 'last_sync_' + entity, value: now });
+        console.info(`Cache: Successfully added ${items.length} items to cache for ${entity}`)
     } catch (error) {
         console.error(`Cache: Failed to add ${entity}: ${error}`)
     }
-    console.info(`Cache: Successfully added ${items.length} items to cache for ${entity}`)
 }
 
 /*
