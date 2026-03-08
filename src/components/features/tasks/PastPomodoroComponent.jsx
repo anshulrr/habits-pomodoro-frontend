@@ -35,11 +35,19 @@ export default function PastPomodoroComponent({
     }
 
     async function createPastPomodoro() {
+        const project = await getItemFromCache('projects', parseInt(task.projectId))
+
         const pomodoro = {
             startTime: date.toISOString(),
             endTime: date.toISOString(),
             timeElapsed: minutesElapsed * 60,
-            taskId: task.id
+            taskId: task.id,
+            // view data
+            status: 'past',
+            task: task.description,
+            projectId: task.projectId,
+            color: project.color,
+            categoryId: project.projectCategoryId
         }
 
         console.debug('create pomodoro:', { pomodoro });
@@ -49,7 +57,6 @@ export default function PastPomodoroComponent({
         modifyItemInCache('tasks', task.id, { todaysTimeElapsed: task.todaysTimeElapsed + pomodoro.timeElapsed });
         modifyItemInCache('tasks', task.id, { totalTimeElapsed: task.totalTimeElapsed + pomodoro.timeElapsed });
 
-        const project = await getItemFromCache('projects', parseInt(task.projectId))
         modifyItemInCache('projects', project.id, { timeElapsed: (project.timeElapsed || 0) + pomodoro.timeElapsed });
 
         // cleanup

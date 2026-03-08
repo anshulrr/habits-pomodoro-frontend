@@ -27,6 +27,7 @@ export default function CommentComponent({ filterBy, id, setShowCreateComment, s
             reviseDate,
             filterBy,
             filterById: id
+            // TODO: add view data
         }
         // console.debug({ comment, filterBy, id })
         console.debug('create comment:', { comment });
