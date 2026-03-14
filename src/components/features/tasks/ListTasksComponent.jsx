@@ -94,7 +94,7 @@ export default function ListTasksComponent({
 
         const pomodoro_data = {
             startTime: new Date(),
-            publicId: window.crypto.randomUUID()
+            id: window.crypto.randomUUID()
             // length: 1
         }
 

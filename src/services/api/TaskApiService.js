@@ -73,4 +73,4 @@ export const getTasksTimeElapsedApi
     = ({ startDate, endDate, taskIds }) => apiClient.get(`/tasks/pomodoros/time-elapsed?startDate=${startDate}&endDate=${endDate}&taskIds=${taskIds}`)
 
 export const getTasksCommentsCountApi
-    = (taskIds) => apiClient.get(`tasks/comments/count?taskIds=${taskIds}`)
+    = (taskIds) => apiClient.post(`tasks/comments/count`, taskIds)

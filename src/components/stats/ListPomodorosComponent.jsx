@@ -111,11 +111,11 @@ export default function ListPomodorosComponent({
         syncPomodoros();
 
         // Update cache view data: reduce the time elapsed of the project and task by the time elapsed of the deleted pomodoro
-        const task = await getItemFromCache('tasks', parseInt(pomodoro.taskId))
+        const task = await getItemFromCache('tasks', pomodoro.taskId)
         modifyItemInCache('tasks', task.id, { totalTimeElapsed: task.totalTimeElapsed - pomodoro.timeElapsed });
         if (title === "Today's Pomodoros") {
             modifyItemInCache('tasks', task.id, { todaysTimeElapsed: task.todaysTimeElapsed - pomodoro.timeElapsed });
-            const project = await getItemFromCache('projects', parseInt(pomodoro.projectId))
+            const project = await getItemFromCache('projects', pomodoro.projectId)
             modifyItemInCache('projects', project.id, { timeElapsed: project.timeElapsed - pomodoro.timeElapsed });
         }
 

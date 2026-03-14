@@ -87,7 +87,10 @@ export const getTotalPomodorosApi
 
 export const getStatsPomodorosCountApi
     = ({ startDate, endDate, subject, type, typeId, includeCategories }) => {
-        let url = `/stats/pomodoros-count?startDate=${startDate}&endDate=${endDate}&timezone=${timezone}&type=${type}&typeId=${typeId}`;
+        let url = `/stats/pomodoros-count?startDate=${startDate}&endDate=${endDate}&timezone=${timezone}&type=${type}`;
+        if (typeId !== '0') {
+            url += `&typeId=${typeId}`;
+        }
         if (type === 'user') {
             url += `&categoryIds=${includeCategories}`;
         }

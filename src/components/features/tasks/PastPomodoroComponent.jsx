@@ -35,11 +35,11 @@ export default function PastPomodoroComponent({
     }
 
     async function createPastPomodoro() {
-        const project = await getItemFromCache('projects', parseInt(task.projectId))
+        const project = await getItemFromCache('projects', task.projectId)
 
         const pomodoro = {
-            startTime: date.toISOString(),
-            endTime: date.toISOString(),
+            startTime: moment().toISOString(),
+            endTime: moment().toISOString(),
             timeElapsed: minutesElapsed * 60,
             taskId: task.id,
             // view data

@@ -163,9 +163,9 @@ export function clearCacheDb() {
 export async function addItemToCache(entity, item) {
     try {
         // new item default values
-        item.id = 0  // using 0 as a placeholder, -1 is used for task popups
-        item.publicId = window.crypto.randomUUID();
+        item.id = window.crypto.randomUUID();
         item._dirty = 1;
+        item.createdAt = new Date().toISOString();
         item.updatedAt = new Date().toISOString();
 
         await db[entity].add(item)
@@ -256,7 +256,7 @@ export async function syncDirtyItems(entity) {
     for (const item of dirtyItems) {
         // console.debug("Syncing item", item);
         try {
-            if (item.id !== -1 && item.id !== 0) {
+            if (!item.createdAt) {
                 const response = await apiMap[entity].updateApi(item.id, item);
                 if (response.status === 409) {
                     console.info(`conflict detected for ${entity}: ${item.id}, will be corrected on next sync`);
@@ -270,25 +270,13 @@ export async function syncDirtyItems(entity) {
                     .and(dbItem => dbItem.updatedAt === item.updatedAt)
                     .modify({ _dirty: 0 });
             } else {
-                const response = await apiMap[entity].createApi(item);
+                await apiMap[entity].createApi(item);
                 // Update the item with the correct id from the backend and clear the dirty flag
-                await db[entity].update(item.publicId, { id: response.data.id, _dirty: 0 });
-            }
-
-            // TODO: find better solution
-            if (entity === 'comments') {
-                syncDeltaItems('comments', { filterBy: 'user' });
-            }
-            if (entity === 'pomodoros') {
-                syncDeltaItems('pomodoros', {
-                    startDate: '1970-01-01T00:00:00Z',
-                    endDate: new Date().toISOString()
-                });
+                await db[entity].update(item.id, { _dirty: 0, createdAt: undefined });
             }
 
             // Success! Clear the flag locally
             console.info(`Successfully synced ${entity}: ${item.id}, clearing flag...`);
-            await db[entity].update(item.publicId, { _dirty: 0 });
         } catch (e) {
             console.error(`Could not sync ${entity}: ${item.id}`, e);
         }
@@ -713,13 +701,13 @@ async function setTasksTags({ tasks, taskIds }) {
         console.log('Retrieved tasks tags from api:', { data: response.data });
 
         // store relationship in cache
-        bulkPutItemsToCache('tasks_tags', response.data.map(item => ({ taskId: item[0], tagId: item[1] })));
+        bulkPutItemsToCache('tasks_tags', response.data.map(item => ({ taskId: item[2], tagId: item[3] })));
 
         // store tags data in tasks in cache
         // using Map for easy access and update
         for (let i = 0; i < response.data.length; i++) {
-            const { id, color, name } = tagsMap.get(response.data[i][1]);
-            map.get(response.data[i][0]).tags.push({ id, color, name });
+            const { id, color, name } = tagsMap.get(response.data[i][3]);
+            map.get(response.data[i][2]).tags.push({ id, color, name });
         }
         console.log({ map });
         for (const task of map.values()) {

@@ -42,7 +42,7 @@ export const CommentsFilterComponent = ({ setFilterType, setFilterTypeId, resetF
     }
 
     function refreshProjects(categoryId) {
-        getFilteredItemsFromCache('projects', { projectCategoryId: parseInt(categoryId) }, { limit: ALL_PAGESIZE, offset: 0 })
+        getFilteredItemsFromCache('projects', { projectCategoryId: categoryId }, { limit: ALL_PAGESIZE, offset: 0 })
             .then(response => {
                 // console.debug(response)
                 setProjects(response);
@@ -54,13 +54,13 @@ export const CommentsFilterComponent = ({ setFilterType, setFilterTypeId, resetF
     function refreshTasks(projectId) {
         setShowLoader(true);
         setTasks([]);
-        getFilteredItemsFromCache('tasks', { projectId: parseInt(projectId), status: 'current' }, { limit: TASKS_COUNT, offset: 0 })
+        getFilteredItemsFromCache('tasks', { projectId: projectId, status: 'current' }, { limit: TASKS_COUNT, offset: 0 })
             .then(response => {
                 // console.debug(response)
                 const localTasks1 = response;
                 setTasks(response);
 
-                getFilteredItemsFromCache('tasks', { projectId: parseInt(projectId), status: 'archived' }, { limit: TASKS_COUNT, offset: 0 })
+                getFilteredItemsFromCache('tasks', { projectId: projectId, status: 'archived' }, { limit: TASKS_COUNT, offset: 0 })
                     .then(response => {
                         // console.debug(response)
                         const localTasks2 = localTasks1.concat(response);

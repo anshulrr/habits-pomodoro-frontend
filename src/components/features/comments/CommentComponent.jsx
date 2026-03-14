@@ -35,7 +35,7 @@ export default function CommentComponent({ filterBy, id, setShowCreateComment, s
 
         // modify view
         if (filterBy === 'task') {
-            const task = await getItemFromCache('tasks', parseInt(comment.filterById))
+            const task = await getItemFromCache('tasks', comment.filterById)
             modifyItemInCache('tasks', task.id, { commentsCount: (task.commentsCount || 0) + 1 });
         }
 
