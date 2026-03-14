@@ -27,7 +27,7 @@ export default function ProjectComponent() {
     const [projectCategories, setProjectCategories] = useState([])
     const [categoriesMap, setCategoriesMap] = useState(new Map())
     const [errors, setErrors] = useState({ color: projectCategoryId === 0 ? 'To select a color, first select a project category' : '' })
-    const [showLoader, setShowLoader] = useState(parseInt(id) !== -1)
+    const [showLoader, setShowLoader] = useState(id !== 'create')
 
     const [showInput, setShowInput] = useState(true)
 
@@ -60,11 +60,11 @@ export default function ProjectComponent() {
 
     // set project details for form fields
     async function retrieveProject() {
-        if (parseInt(id) === -1) {
+        if (id === 'create') {
             return;
         }
 
-        const project = await getItemFromCache('projects', parseInt(id));
+        const project = await getItemFromCache('projects', id);
         // console.debug({ project })
         setProject(project)
 
@@ -109,7 +109,7 @@ export default function ProjectComponent() {
             return;
         }
 
-        if (parseInt(id) === -1) {
+        if (id === 'create') {
             addItemToCache('projects', updatedProject);
             // new project will be added to start of the ordered projects list
             state.currentProjectsPage = 1;
@@ -155,13 +155,13 @@ export default function ProjectComponent() {
         <div className="container mt-3">
 
             {
-                parseInt(id) === -1 &&
+                id === 'create' &&
                 <h6>
                     Add New Project
                 </h6>
             }
             {
-                parseInt(id) !== -1 &&
+                id !== 'create' &&
                 <h6>
                     Update Project Details
                     {
@@ -202,7 +202,7 @@ export default function ProjectComponent() {
                                     name="projectCategoryId"
                                     value={projectCategoryId}
                                     onChange={(e) => {
-                                        const id = parseInt(e.target.value);
+                                        const id = e.target.value;
                                         setProjectCategoryId(id)
                                         setColor(categoriesMap.get(id).color)
                                         errors.color = '';

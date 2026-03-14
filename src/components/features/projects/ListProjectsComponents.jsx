@@ -61,7 +61,7 @@ export default function ListProjectsComponent({
     }, [projects, currentPage])
 
     function addNewProject() {
-        navigate(`/projects/-1`, { state })
+        navigate(`/projects/create`, { state })
     }
 
     function onUpdateProject(proj) {
