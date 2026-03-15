@@ -28,8 +28,6 @@ export default function SortableTask({
 }) {
     const dataContext = useData();
 
-    const [tagsMap, setTagsMap] = useState(dataContext.tagsMap);
-
     const controls = useDragControls();
     const activeIdRef = useRef(null); // The real moved item
 
@@ -41,13 +39,6 @@ export default function SortableTask({
     const [showTaskStats, setShowTaskStats] = useState(-1);
     const [showUpdateDueDate, setShowUpdateDueDate] = useState(-1);
     const [showMapTags, setShowMapTags] = useState(-1);
-
-    useEffect(
-        () => {
-            setTagsMap(dataContext.tagsMap)
-        },
-        [dataContext]
-    )
 
     const handleDragStart = ({ id, index }) => {
         // console.debug('drag start', { id, index });
@@ -276,8 +267,8 @@ export default function SortableTask({
                                 {
                                     !project &&
                                     <span className="me-1">
-                                        <span style={{ color: task.project.color, paddingRight: "0.1rem" }}>&#9632;</span>
-                                        {task.project.name}
+                                        <span style={{ color: dataContext.projectsMap.get(task.projectId).color, paddingRight: "0.1rem" }}>&#9632;</span>
+                                        {dataContext.projectsMap.get(task.projectId).name}
                                     </span>
                                 }
                             </span>
@@ -287,8 +278,8 @@ export default function SortableTask({
                                     task.tags.map(
                                         (tagId, tag_index) => (
                                             <span key={tag_index} className="me-1">
-                                                <i className="bi bi-tag-fill" style={{ color: tagsMap.get(tagId).color, paddingRight: "0.1rem" }} />
-                                                {tagsMap.get(tagId).name}
+                                                <i className="bi bi-tag-fill" style={{ color: dataContext.tagsMap.get(tagId).color, paddingRight: "0.1rem" }} />
+                                                {dataContext.tagsMap.get(tagId).name}
                                             </span>
                                         )
                                     )

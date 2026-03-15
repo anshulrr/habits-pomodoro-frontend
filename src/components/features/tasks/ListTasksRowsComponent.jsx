@@ -13,11 +13,11 @@ import { generateDateColor } from "services/helpers/listsHelper";
 import ListCommentsComponent from "components/features/comments/ListCommentsComponent";
 import SortableTask from "./SortableTask";
 import { getTasksFromCache, putItemToCache } from "services/dbService";
+import { useData } from "services/DataContext";
 
 export default function ListTasksRowsComponent({
     project,
     tag,
-    projects,
     status,
     tasksCount,
     createNewPomodoro,
@@ -30,6 +30,8 @@ export default function ListTasksRowsComponent({
 }) {
     const navigate = useNavigate()
     const { state } = useLocation();
+
+    const dataContext = useData();
 
     const authContext = useAuth()
     const userSettings = authContext.userSettings
@@ -68,10 +70,10 @@ export default function ListTasksRowsComponent({
     )
 
     function updateProjectData(tasks) {
-        const projectsMap = new Map(projects.map(project => [project.id, project]));
-        for (const i in tasks) {
-            tasks[i].project = projectsMap.get(tasks[i].projectId);
-        }
+        // const projectsMap = new Map(projects.map(project => [project.id, project]));
+        // for (const i in tasks) {
+        //     tasks[i].project = projectsMap.get(tasks[i].projectId);
+        // }
         updateTasksDueDateColor(tasks);
         return tasks;
     }
@@ -94,7 +96,7 @@ export default function ListTasksRowsComponent({
     }
 
     function onCreateNewPomodoro(task) {
-        createNewPomodoro(task, task.project)
+        createNewPomodoro(task, dataContext.projectsMap.get(task.projectId))
     }
 
     function updateTasksDueDateColor(tasks) {
@@ -159,7 +161,7 @@ export default function ListTasksRowsComponent({
                     sortableTasks.map(
                         (task, index) => {
                             // TODO: find better way to handle this
-                            task.pomodoroLength = task.pomodoroLength || task.project.pomodoroLength || userSettings.pomodoroLength;
+                            task.pomodoroLength = task.pomodoroLength || dataContext.projectsMap.get(task.projectId).pomodoroLength || userSettings.pomodoroLength;
                             return (
                                 <SortableTask
                                     key={task.id}

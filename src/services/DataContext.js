@@ -13,32 +13,36 @@ export const useData = () => useContext(DataContext)
 
 export default function DataProvider({ children }) {
 
-    const [reloadTags, setReloadTags] = useState(0);
-
     const ALL_PAGESIZE = 1000;
-    const projectsCount = useLiveQuery(async () => getItemsCountFromCache('projects'));
     const projectsMap = useLiveQuery(async () => {
         const cachedProjects = await getItemsFromCache('projects', 1, ALL_PAGESIZE)
 
         return new Map(cachedProjects.map(item => [item.id, item]));
     }, []);
 
-    const tagsCount = useLiveQuery(async () => getItemsCountFromCache('tags'));
     const tagsMap = useLiveQuery(async () => {
         const cachedTags = await getItemsFromCache('tags', 1, ALL_PAGESIZE);
-        setReloadTags(prev => prev + 1);
+        console.log({ cachedTags })
         return new Map(cachedTags.map(item => [item.id, item]));
     }, []);
 
     const categoriesMap = useLiveQuery(async () => {
         const cachedCategories = await getItemsFromCache('categories', 1, ALL_PAGESIZE)
+        console.log({ cachedCategories })
         return new Map(cachedCategories.map(item => [item.id, item]));
     })
 
     const valuesToBeShared = { projectsMap, tagsMap, categoriesMap }
 
+    // to prevent rendering the page before data is loaded from cache db, which causes some components to throw error as they rely on data.
+    if (!tagsMap || !projectsMap || !categoriesMap)
+        return (
+            <div className="loader-container my-1">
+                <div className="loader"></div>
+            </div >
+        )
+
     return (
-        tagsMap &&
         <DataContext.Provider value={valuesToBeShared}>
             {children}
         </DataContext.Provider>

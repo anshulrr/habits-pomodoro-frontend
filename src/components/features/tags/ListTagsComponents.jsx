@@ -7,13 +7,12 @@ import { isEmpty } from "services/helpers/helper";
 
 import CreateTagComponent from "./CreateTagComponent";
 import UpdateTagComponent from "./UpdateTagComponent";
+import { useData } from "services/DataContext";
 
 export default function ListTagsComponent({
     setProject,
     tag,
     setTag,
-    tagsCount,
-    tags,
     setShowLeftMenu
 }) {
     const authContext = useAuth()
@@ -21,6 +20,18 @@ export default function ListTagsComponent({
 
     const navigate = useNavigate()
     const { state } = useLocation();
+
+    const dataContext = useData();
+
+    const [tags, setTags] = useState([...dataContext.tagsMap.values()]);
+    const tagsCount = tags.length;
+
+    useEffect(
+        () => {
+            setTags([...dataContext.tagsMap.values()]);
+        },
+        [dataContext]
+    )
 
     const tagsListElement = useRef(null);
 

@@ -11,7 +11,7 @@ export default function MapTagComponent({
 }) {
     const dataContext = useData();
 
-    const [tagsMap, setTagsMap] = useState(dataContext.tagsMap);
+    const tagsMap = dataContext.tagsMap;
 
     const [tagsCount, setTagsCount] = useState(-1)
     const [tags, setTags] = useState([])
@@ -23,7 +23,6 @@ export default function MapTagComponent({
     useEffect(
         () => {
             console.debug("MapTagComponent: dataContext updated")
-            setTagsMap(dataContext.tagsMap)
             // TODO: check how refreshTags is getting updated tagsMap
             refreshTags();
         }, [dataContext] // eslint-disable-line react-hooks/exhaustive-deps

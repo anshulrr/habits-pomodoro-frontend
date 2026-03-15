@@ -5,15 +5,19 @@ import Pagination from "services/pagination/Pagination"
 import { useAuth } from "services/auth/AuthContext";
 import { COLOR_MAP, timeToDisplay, truncateString } from "services/helpers/listsHelper";
 import { isEmpty } from "services/helpers/helper";
+import { useData } from "services/DataContext";
 
 export default function ListProjectsComponent({
-    projects,
-    projectsCount,
     project,
     setProject,
     setTag,
     setShowLeftMenu,
 }) {
+    const dataContext = useData();
+
+    const projects = [...dataContext.projectsMap.values()];
+    const projectsCount = projects.length;
+
     const authContext = useAuth()
     const userSettings = authContext.userSettings
 

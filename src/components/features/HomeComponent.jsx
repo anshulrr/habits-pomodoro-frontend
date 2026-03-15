@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useLiveQuery } from "dexie-react-hooks";
 
 import moment from 'moment';
 
@@ -23,7 +22,7 @@ import SearchTaskComponent from './tasks/SearchTaskComponent';
 import FooterComponent from 'components/FooterComponent';
 import { getRunningPomodoroApi } from 'services/api/PomodoroApiService';
 
-import { getItemsCountFromCache, getItemsFromCache, getTasksCountFromCache } from "services/dbService";
+import { getTasksCountFromCache } from "services/dbService";
 
 export default function HomeComponent({ setReloadHome }) {
 
@@ -43,26 +42,6 @@ export default function HomeComponent({ setReloadHome }) {
         * using useLiveQuery to subscribe to changes in projects in cache db, 
         * so that when projects are updated, the changes are reflected in the UI in real time without needing to manually refresh or refetch data.
     */
-    const projectsCount = useLiveQuery(async () => getItemsCountFromCache('projects'));
-    const ALL_PAGESIZE = 1000;
-    const projects = useLiveQuery(async () => await getItemsFromCache('projects', 1, ALL_PAGESIZE));
-
-    const tagsCount = useLiveQuery(async () => getItemsCountFromCache('tags'));
-    const [tags, setTags] = useState([...dataContext.tagsMap.values()]);
-
-    useEffect(
-        () => {
-            setTags([...dataContext.tagsMap.values()]);
-        },
-        [dataContext]
-    )
-
-    const [categoryIds, setCategoryIds] = useState([]);
-    const categories = useLiveQuery(async () => {
-        const cachedCategories = await getItemsFromCache('categories', 1, ALL_PAGESIZE)
-        setCategoryIds(cachedCategories.map(c => c.id));
-        return cachedCategories;
-    })
 
     const [project, setProject] = useState(state && state.project);
     const [tag, setTag] = useState(state && state.tag);
@@ -214,14 +193,6 @@ export default function HomeComponent({ setReloadHome }) {
         navigate('/', { state: local_state, replace: true });
     }
 
-    // to prevent rendering the page before projects are loaded from cache db, which causes some components to throw error as they rely on projects data.
-    if (projectsCount === undefined || tagsCount === undefined || !projects)
-        return (
-            <div className="loader-container my-1">
-                <div className="loader"></div>...
-            </div >
-        )
-
     return (
         <div className="container">
             <div className="row">
@@ -235,8 +206,6 @@ export default function HomeComponent({ setReloadHome }) {
 
                                         <div className="container">
                                             <ListProjectsComponent
-                                                projects={projects}
-                                                projectsCount={projectsCount}
                                                 project={project}
                                                 setProject={setProject}
                                                 setTag={setTag}
@@ -248,8 +217,6 @@ export default function HomeComponent({ setReloadHome }) {
                                                 <ListTagsComponent
                                                     setProject={setProject}
                                                     tag={tag}
-                                                    tagsCount={tagsCount}
-                                                    tags={tags}
                                                     setTag={setTag}
                                                     setShowLeftMenu={setShowLeftMenu}
                                                 />
@@ -299,14 +266,12 @@ export default function HomeComponent({ setReloadHome }) {
 
                 <div className="col-lg-4 full-screen-height" style={{ backgroundColor: "#e9ecef" }}>
                     {
-                        projects.length !== 0 &&
                         <div>
                             {
                                 project &&
                                 <ListTasksComponent
                                     key={[project.id, tag, tasksComponentReload]}
                                     project={project}
-                                    projects={projects}
                                     setPomodorosListReload={setPomodorosListReload}
                                     pomodoro={pomodoro}
                                     setPomodoro={setPomodoro}
@@ -316,7 +281,6 @@ export default function HomeComponent({ setReloadHome }) {
                                 !project && !tag && tasksFilter &&
                                 <ListTasksComponent
                                     key={[tasksComponentReload]}
-                                    projects={projects}
                                     startDate={startDate}
                                     endDate={endDate}
                                     searchString={searchString}
@@ -332,7 +296,6 @@ export default function HomeComponent({ setReloadHome }) {
                                 !project && tag &&
                                 <ListTasksComponent
                                     key={[project, tag.id, tasksComponentReload]}
-                                    projects={projects}
                                     tag={tag}
                                     setPomodorosListReload={setPomodorosListReload}
                                     pomodoro={pomodoro}
@@ -349,19 +312,13 @@ export default function HomeComponent({ setReloadHome }) {
                         <div className="mt-1 bg-white text-center text-secondary">
                             <div className="p-1 chart-card">
                                 {
-                                    categoryIds.length === 0 &&
-                                    <span className="loader-container mt-5" >
-                                        <span className="loader"></span>
-                                    </span>
-                                }
-                                {
-                                    categoryIds.length > 0 && pomodorosListReload !== 0 &&
+                                    pomodorosListReload !== 0 &&
                                     <div>
                                         {
                                             userSettings.homePageChart === 'tasks' &&
                                             <TasksChart
                                                 key={[pomodorosListReload]}
-                                                includeCategories={categoryIds}
+                                                includeCategories={[...dataContext.categoriesMap.keys()]}
                                                 statsSettings={userSettings}
                                                 buttonsStates={tasksChartButtonsStates}
                                                 setButtonsStates={setTasksChartButtonsStates}
@@ -371,7 +328,7 @@ export default function HomeComponent({ setReloadHome }) {
                                             userSettings.homePageChart === 'total' &&
                                             <TotalChart
                                                 key={[pomodorosListReload]}
-                                                includeCategories={categoryIds}
+                                                includeCategories={[...dataContext.categoriesMap.keys()]}
                                                 statsSettings={userSettings}
                                                 buttonsStates={totalChartButtonsStates}
                                                 setButtonsStates={setTotalChartButtonsStates}
@@ -381,7 +338,7 @@ export default function HomeComponent({ setReloadHome }) {
                                             userSettings.homePageChart === 'projects' &&
                                             <ProjectsDistributionChart
                                                 key={[pomodorosListReload]}
-                                                includeCategories={categoryIds}
+                                                includeCategories={[...dataContext.categoriesMap.keys()]}
                                                 statsSettings={userSettings}
                                                 buttonsStates={projectsChartButtonsStates}
                                                 setButtonsStates={setProjectsChartButtonsStates}
@@ -391,7 +348,7 @@ export default function HomeComponent({ setReloadHome }) {
                                             userSettings.homePageChart === 'categories' &&
                                             <ProjectCategoriesChart
                                                 key={[pomodorosListReload]}
-                                                includeCategories={categoryIds}
+                                                includeCategories={[...dataContext.categoriesMap.keys()]}
                                                 statsSettings={userSettings}
                                                 buttonsStates={categoriesChartButtonsStates}
                                                 setButtonsStates={setCategoriesChartButtonsStates}
@@ -401,8 +358,8 @@ export default function HomeComponent({ setReloadHome }) {
                                             userSettings.homePageChart === 'streak' &&
                                             <StreakChart
                                                 key={[pomodorosListReload]}
-                                                includeCategories={categoryIds}
-                                                categories={categories}
+                                                includeCategories={[...dataContext.categoriesMap.keys()]}
+                                                categories={[...dataContext.categoriesMap.values()]}
                                                 statsSettings={userSettings}
                                                 buttonsStates={streakButtonsStates}
                                                 setButtonsStates={setStreakButtonsStates}
@@ -416,18 +373,11 @@ export default function HomeComponent({ setReloadHome }) {
                     <div className="mt-1 mb-4 bg-white text-center text-secondary" style={{ minHeight: "30vh" }}>
                         <div className="p-1 chart-card">
                             {
-                                categoryIds.length === 0 &&
-                                <span className="loader-container mt-5" >
-                                    <span className="loader"></span>
-                                </span>
-                            }
-                            {
-                                categoryIds.length > 0 && pomodorosListReload !== 0 &&
+                                pomodorosListReload !== 0 &&
                                 <ListPomodorosComponent
                                     title={"Today's Pomodoros"}
                                     elementHeight={pomodorosHeight}
                                     setElementHeight={setPomodorosHeight}
-                                    projects={projects}
                                     setTodaysPomodorosMap={setTodaysPomodorosMap}
                                     setChartReload={setPomodorosListReload}
                                 />

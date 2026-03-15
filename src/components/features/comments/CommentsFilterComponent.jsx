@@ -1,7 +1,7 @@
-import { useLiveQuery } from 'dexie-react-hooks';
 import { useState } from 'react';
+import { useData } from 'services/DataContext';
 
-import { getFilteredItemsFromCache, getItemsFromCache } from 'services/dbService';
+import { getFilteredItemsFromCache } from 'services/dbService';
 
 export const CommentsFilterComponent = ({ setFilterType, setFilterTypeId, resetFiltersAndReload }) => {
 
@@ -9,7 +9,9 @@ export const CommentsFilterComponent = ({ setFilterType, setFilterTypeId, resetF
     const TASKS_COUNT = 100;
     const ALL_PAGESIZE = 100;
 
-    const categories = useLiveQuery(async () => await getItemsFromCache('categories', 1, ALL_PAGESIZE));
+    const dataContext = useData();
+
+    const categories = [...dataContext.categoriesMap.values()];
 
     const [categoryId, setCategoryId] = useState('0');
     const [projectId, setProjectId] = useState('0');

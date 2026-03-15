@@ -1,25 +1,21 @@
 import { useEffect, useState } from "react"
-import { useLiveQuery } from "dexie-react-hooks"
 
 import ListFilteredCommentsComponent from "./ListFilteredCommentsComponents"
 import OutsideAlerter from "services/hooks/OutsideAlerter"
 import { CommentsFilterComponent } from "./CommentsFilterComponent"
 import SearchCommentComponent from "./SearchCommentComponent"
 import FooterComponent from "components/FooterComponent"
-import { getItemsFromCache } from "services/dbService"
+import { useData } from "services/DataContext"
 
 export default function ListCommentsComponent({
     filterBy = 'user',
     id,
 }) {
-    const ALL_PAGESIZE = 1000;
+    const dataContext = useData();
 
-    const [tagsMap, setTagsMap] = useState();
-    const tags = useLiveQuery(async () => {
-        const cachedTags = await getItemsFromCache('tags', 1, ALL_PAGESIZE);
-        setTagsMap(new Map(cachedTags.map(i => [i.id, i])));
-        return cachedTags;
-    }, []);
+    const tagsMap = dataContext.tagsMap;
+
+    const tags = [...tagsMap.values()];
 
     const [reload, setReload] = useState(0)
 
