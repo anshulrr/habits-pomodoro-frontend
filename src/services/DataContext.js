@@ -3,39 +3,45 @@
 // Share the created context with other components
 
 import { useLiveQuery } from "dexie-react-hooks";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext } from "react";
 
 import { db } from "services/db";
-import { clearCacheDb, getItemsCountFromCache, getItemsFromCache, syncDirtyEntities, syncEntitiesDelta } from "services/dbService";
 
 const DataContext = createContext();
 export const useData = () => useContext(DataContext)
 
 export default function DataProvider({ children }) {
 
+    // TODO: don't initialize anything until login data is loaded
     const ALL_PAGESIZE = 1000;
     const projectsMap = useLiveQuery(async () => {
-        const cachedProjects = await getItemsFromCache('projects', 1, ALL_PAGESIZE)
+        const cachedProjects = await db['projects'].toArray();
 
         return new Map(cachedProjects.map(item => [item.id, item]));
     }, []);
 
     const tagsMap = useLiveQuery(async () => {
-        const cachedTags = await getItemsFromCache('tags', 1, ALL_PAGESIZE);
+        const cachedTags = await db['tags'].toArray();
         console.log({ cachedTags })
         return new Map(cachedTags.map(item => [item.id, item]));
     }, []);
 
     const categoriesMap = useLiveQuery(async () => {
-        const cachedCategories = await getItemsFromCache('categories', 1, ALL_PAGESIZE)
+        const cachedCategories = await db['categories'].toArray();
         console.log({ cachedCategories })
         return new Map(cachedCategories.map(item => [item.id, item]));
     })
 
-    const valuesToBeShared = { projectsMap, tagsMap, categoriesMap }
+    const tasksMap = useLiveQuery(async () => {
+        const cachedTasks = await db['tasks'].toArray();
+        console.log({ cachedTasks })
+        return new Map(cachedTasks.map(item => [item.id, item]));
+    }, []);
+
+    const valuesToBeShared = { projectsMap, tagsMap, categoriesMap, tasksMap }
 
     // to prevent rendering the page before data is loaded from cache db, which causes some components to throw error as they rely on data.
-    if (!tagsMap || !projectsMap || !categoriesMap)
+    if (!tagsMap || !projectsMap || !categoriesMap || !tasksMap)
         return (
             <div className="loader-container my-1">
                 <div className="loader"></div>

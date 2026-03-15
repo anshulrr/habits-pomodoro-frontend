@@ -8,6 +8,7 @@ import { Buttons } from "components/stats/charts/Buttons";
 import ListCommentsComponent from "components/features/comments/ListCommentsComponent";
 import OutsideAlerter from "services/hooks/OutsideAlerter";
 import { getItemFromCache, getPomodorosFromCache, modifyItemInCache, syncDirtyItems } from "services/dbService";
+import { useData } from "services/DataContext";
 
 export default function ListPomodorosComponent({
     includeCategories,
@@ -19,6 +20,8 @@ export default function ListPomodorosComponent({
     setElementHeight,
     setChartReload
 }) {
+
+    const dataContext = useData();
 
     const listElement = useRef(null);
 
@@ -216,7 +219,7 @@ export default function ListPomodorosComponent({
                                                     <div className="mx-2 d-flex text-start small text-secondary">
                                                         <div className={"flex-grow-1 " + (!subject ? "update-popup-container" : "")}>
                                                             <span>
-                                                                {pomodoro.index}. {pomodoro.task}
+                                                                {pomodoro.index}. {dataContext.tasksMap.get(pomodoro.taskId).description}
                                                             </span>
                                                             <span className="align-middle" style={{ float: "right" }}>
                                                                 {showPomodoroUpdateId !== pomodoro.id &&
@@ -238,7 +241,7 @@ export default function ListPomodorosComponent({
                                                                                 {timeToDisplay(Math.round(pomodoro.timeElapsed / 60))}
                                                                             </span>
                                                                         </span>
-                                                                        <span className="ms-1" style={{ color: pomodoro.color }}>&#9632;</span>
+                                                                        <span className="ms-1" style={{ color: dataContext.projectsMap.get(pomodoro.projectId).color }}>&#9632;</span>
                                                                     </span>
                                                                 }
 
