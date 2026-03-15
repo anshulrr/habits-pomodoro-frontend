@@ -7,7 +7,7 @@ import { generateInitialTimer, calculateTimeRemaining, generateTimer } from 'ser
 
 import BreakTimerComponent from 'components/features/pomodoros/BreakTimerComponent';
 import ListCommentsComponent from '../comments/ListCommentsComponent';
-import { putServerItemToCache, syncDeltaItems } from 'services/dbService';
+import { modifyItemInCache, putServerItemToCache, syncDeltaItems } from 'services/dbService';
 import moment from 'moment';
 
 export default function PomodoroComponent({
@@ -129,15 +129,15 @@ export default function PomodoroComponent({
 
         updatePomodoroApi(pomodoro.id, pomodoro_data)
             .then(response => {
-                // console.debug({ response })
-                // update cache if completed
-                if (response.data.status === 'completed') {
-                    // putServerItemToCache('pomodoros', response.data);
-                    syncDeltaItems('pomodoros', {
-                        startDate: '1970-01-01T00:00:00Z',
-                        endDate: new Date().toISOString()
-                        // endDate: moment().add(1, 'd').toISOString() // add 1 day to handle if server time is not exactly same
-                    });
+                console.debug({ response, pomodoro })
+                // update cache
+                putServerItemToCache('pomodoros', response.data);
+                if (local_status === 'completed') {
+                    // modify view data
+                    modifyItemInCache('tasks', pomodoro.task.id, { todaysTimeElapsed: (pomodoro.task.todaysTimeElapsed || 0) + response.data.timeElapsed });
+                    modifyItemInCache('tasks', pomodoro.task.id, { totalTimeElapsed: (pomodoro.task.totalTimeElapsed || 0) + response.data.timeElapsed });
+
+                    modifyItemInCache('projects', pomodoro.task.project.id, { timeElapsed: (pomodoro.task.project.timeElapsed || 0) + response.data.timeElapsed });
                 }
 
                 if (local_status === 'completed') {

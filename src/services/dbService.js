@@ -312,8 +312,10 @@ export async function syncDeltaItems(entity, requestData) {
         // 1. Fetch only what changed since last time
         // TODO: decide limit
         const items = (await apiMap[entity].retrieveSyncAllApi({ limit: 10000, offset: 0, lastSyncTime, ...requestData })).data;
+        // console.debug('delta items', { items });
 
         // 2. Transaction: Save data and the NEW sync time together
+        // TODO: check if new items are synced or not with this way
         await db.transaction('rw', db[entity], db.metadata, async () => {
             // Instead of full update, only update recieved keys, so that old extra keys (eg. _dirty, timeElapsed) are not removed
             for (const item of items) {
@@ -449,7 +451,7 @@ export async function getPomodorosFromCache({ startDate, endDate, includeCategor
             .reverse();
         // TODO: handle include categories
         return await query
-            .filter(pomodoro => pomodoro.status !== 'deleted')
+            .filter(pomodoro => pomodoro.status === 'past' || pomodoro.status === 'completed')
             .toArray();
     } catch (error) {
         console.error(`Failed to get pomodoros: ${error}`)
