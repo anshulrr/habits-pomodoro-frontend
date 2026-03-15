@@ -173,8 +173,8 @@ export default function ListProjectsComponent({
                                                         </span>
                                                     }
                                                     <span className="">
-                                                        <i className="ps-1 bi bi-link-45deg" style={{ paddingRight: '0.1rem', color: proj.categoryColor }} />
-                                                        {truncateString(proj.category, 8)}
+                                                        <i className="ps-1 bi bi-link-45deg" style={{ paddingRight: '0.1rem', color: dataContext.categoriesMap.get(proj.projectCategoryId).color }} />
+                                                        {truncateString(dataContext.categoriesMap.get(proj.projectCategoryId).name, 8)}
                                                     </span>
                                                     <span className="ps-1">
                                                         <span>

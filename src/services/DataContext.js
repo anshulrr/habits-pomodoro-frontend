@@ -6,6 +6,7 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { createContext, useContext } from "react";
 
 import { db } from "services/db";
+import { getItemsFromCache } from "./dbService";
 
 const DataContext = createContext();
 export const useData = () => useContext(DataContext)
@@ -15,19 +16,19 @@ export default function DataProvider({ children }) {
     // TODO: don't initialize anything until login data is loaded
     const ALL_PAGESIZE = 1000;
     const projectsMap = useLiveQuery(async () => {
-        const cachedProjects = await db['projects'].toArray();
+        const cachedProjects = await getItemsFromCache('projects', 1, ALL_PAGESIZE)
 
         return new Map(cachedProjects.map(item => [item.id, item]));
     }, []);
 
     const tagsMap = useLiveQuery(async () => {
-        const cachedTags = await db['tags'].toArray();
+        const cachedTags = await getItemsFromCache('tags', 1, ALL_PAGESIZE);
         console.log({ cachedTags })
         return new Map(cachedTags.map(item => [item.id, item]));
     }, []);
 
     const categoriesMap = useLiveQuery(async () => {
-        const cachedCategories = await db['categories'].toArray();
+        const cachedCategories = await getItemsFromCache('categories', 1, ALL_PAGESIZE)
         console.log({ cachedCategories })
         return new Map(cachedCategories.map(item => [item.id, item]));
     })
