@@ -7,8 +7,11 @@ import { calculateTextAreaRows } from 'services/helpers/helper';
 import { COLOR_MAP } from 'services/helpers/listsHelper';
 
 import { addItemToCache, getItemFromCache, putItemToCache, syncDirtyItems } from 'services/dbService';
+import { useData } from 'services/DataContext';
 
 export default function ProjectComponent() {
+
+    const dataContext = useData();
 
     const { id } = useParams()
 
@@ -24,8 +27,8 @@ export default function ProjectComponent() {
     const [type, setType] = useState('neutral')
     const [dailyLimit, setDailyLimit] = useState(1)
 
-    const [projectCategories, setProjectCategories] = useState([])
-    const [categoriesMap, setCategoriesMap] = useState(new Map())
+    const categoriesMap = dataContext.categoriesMap;
+    const projectCategories = [...categoriesMap.values()];
     const [errors, setErrors] = useState({ color: projectCategoryId === 0 ? 'To select a color, first select a project category' : '' })
     const [showLoader, setShowLoader] = useState(id !== 'create')
 
@@ -39,24 +42,9 @@ export default function ProjectComponent() {
             (() => {
                 // console.debug('re-render ProjectComponents')
                 retrieveProject()
-                retrieveProjectCategories()
             })();
         }, [] // eslint-disable-line react-hooks/exhaustive-deps
     )
-
-    function retrieveProjectCategories() {
-        // TODO: decide limit
-        retrieveAllProjectCategoriesApi(100, 0)
-            .then(response => {
-                setProjectCategories(response.data)
-                const map = new Map();
-                for (const category of response.data) {
-                    map.set(category.id, category);
-                }
-                setCategoriesMap(map);
-            })
-            .catch(error => console.error(error.message))
-    }
 
     // set project details for form fields
     async function retrieveProject() {
