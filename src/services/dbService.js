@@ -165,6 +165,7 @@ export async function addItemToCache(entity, item) {
         // new item default values
         item.id = window.crypto.randomUUID();
         item._dirty = 1;
+        item.isCreated = true;
         item.createdAt = new Date().toISOString();
         item.updatedAt = new Date().toISOString();
 
@@ -256,7 +257,7 @@ export async function syncDirtyItems(entity) {
     for (const item of dirtyItems) {
         // console.debug("Syncing item", item);
         try {
-            if (!item.createdAt) {
+            if (!item.isCreated) {
                 const response = await apiMap[entity].updateApi(item.id, item);
                 if (response.status === 409) {
                     console.info(`conflict detected for ${entity}: ${item.id}, will be corrected on next sync`);
@@ -272,7 +273,7 @@ export async function syncDirtyItems(entity) {
             } else {
                 await apiMap[entity].createApi(item);
                 // Update the item with the correct id from the backend and clear the dirty flag
-                await db[entity].update(item.id, { _dirty: 0, createdAt: undefined });
+                await db[entity].update(item.id, { _dirty: 0, isCreated: undefined });
             }
 
             // Success! Clear the flag locally

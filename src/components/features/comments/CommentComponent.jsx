@@ -7,8 +7,11 @@ import moment from 'moment'
 import { calculateTextAreaRows, filterPastTime } from 'services/helpers/helper';
 import InsertLinkComponent from './InsertLinkComponent';
 import { addItemToCache, getItemFromCache, modifyItemInCache } from 'services/dbService';
+import { useData } from 'services/DataContext';
 
 export default function CommentComponent({ filterBy, id, setShowCreateComment, setCurrentPage }) {
+
+    const dataContext = useData();
 
     const [description, setDescription] = useState('')
     const [reviseDate, setReviseDate] = useState(null)
@@ -29,6 +32,20 @@ export default function CommentComponent({ filterBy, id, setShowCreateComment, s
             filterById: id
             // TODO: add view data
         }
+        // add data for cache
+        if (filterBy === 'category') {
+            comment.categoryId = id;
+        }
+        else if (filterBy === 'project') {
+            comment.projectId = id;
+            comment.categoryId = dataContext.projectsMap.get(id).projectCategoryId;
+        }
+        else if (filterBy === 'task') {
+            comment.taskId = id;
+            comment.projectId = dataContext.tasksMap.get(id).projectId;
+            comment.categoryId = dataContext.projectsMap.get(comment.projectId).projectCategoryId;
+        }
+
         // console.debug({ comment, filterBy, id })
         console.debug('create comment:', { comment });
         addItemToCache('comments', comment);

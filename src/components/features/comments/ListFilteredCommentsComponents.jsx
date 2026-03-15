@@ -16,6 +16,7 @@ import MapCommentTagsComponent from "../tags/MapCommentTagsComponent";
 import { useLocation } from "react-router-dom";
 import { useLiveQuery } from "dexie-react-hooks";
 import { getCommentsCountFromCache, getCommentsFromCache } from "services/dbService";
+import { useData } from "services/DataContext";
 
 export default function ListFilteredCommentsComponent({
     filterBy,
@@ -25,6 +26,8 @@ export default function ListFilteredCommentsComponent({
     showSearched,
     tags,
 }) {
+
+    const dataContext = useData();
 
     const { pathname: url } = useLocation();
 
@@ -236,24 +239,24 @@ export default function ListFilteredCommentsComponent({
                                                     }
                                                 </div>
                                                 {
-                                                    comment.category &&
+                                                    comment.categoryId &&
                                                     <div className="me-2 text-secondary fw-normal text-start">
-                                                        <i className="bi bi-link-45deg" />
-                                                        {comment.category}
+                                                        <i className="bi bi-link-45deg" style={{ color: dataContext.categoriesMap.get(comment.categoryId).color }} />
+                                                        {dataContext.categoriesMap.get(comment.categoryId).name}
                                                     </div>
                                                 }
                                                 {
-                                                    comment.project &&
+                                                    comment.projectId &&
                                                     <div className="me-2 text-secondary fw-normal text-start">
-                                                        <span style={{ color: comment.color, paddingRight: "0.1rem" }}>&#9632;</span>
-                                                        {comment.project}
+                                                        <span style={{ color: dataContext.projectsMap.get(comment.projectId).color, paddingRight: "0.1rem" }}>&#9632;</span>
+                                                        {dataContext.projectsMap.get(comment.projectId).name}
                                                     </div>
                                                 }
                                                 {
-                                                    comment.task &&
+                                                    comment.taskId &&
                                                     <div className="me-2 text-secondary fw-normal text-start">
                                                         <i className="bi bi-list-ul" style={{ paddingRight: "0.1rem" }} />
-                                                        {comment.task}
+                                                        {dataContext.tasksMap.get(comment.taskId).description}
                                                     </div>
                                                 }
                                                 {
