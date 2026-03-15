@@ -5,15 +5,19 @@ import Pagination from "services/pagination/Pagination"
 import { useAuth } from "services/auth/AuthContext";
 import { COLOR_MAP, timeToDisplay, truncateString } from "services/helpers/listsHelper";
 import { isEmpty } from "services/helpers/helper";
+import { useData } from "services/DataContext";
 
 export default function ListProjectsComponent({
-    projects,
-    projectsCount,
     project,
     setProject,
     setTag,
     setShowLeftMenu,
 }) {
+    const dataContext = useData();
+
+    const projects = [...dataContext.projectsMap.values()];
+    const projectsCount = projects.length;
+
     const authContext = useAuth()
     const userSettings = authContext.userSettings
 
@@ -61,7 +65,7 @@ export default function ListProjectsComponent({
     }, [projects, currentPage])
 
     function addNewProject() {
-        navigate(`/projects/-1`, { state })
+        navigate(`/projects/create`, { state })
     }
 
     function onUpdateProject(proj) {
@@ -169,8 +173,8 @@ export default function ListProjectsComponent({
                                                         </span>
                                                     }
                                                     <span className="">
-                                                        <i className="ps-1 bi bi-link-45deg" style={{ paddingRight: '0.1rem', color: proj.categoryColor }} />
-                                                        {truncateString(proj.category, 8)}
+                                                        <i className="ps-1 bi bi-link-45deg" style={{ paddingRight: '0.1rem', color: dataContext.categoriesMap.get(proj.projectCategoryId).color }} />
+                                                        {truncateString(dataContext.categoriesMap.get(proj.projectCategoryId).name, 8)}
                                                     </span>
                                                     <span className="ps-1">
                                                         <span>

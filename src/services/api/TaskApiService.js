@@ -33,14 +33,35 @@ export const retrieveAllTasksApi
         return apiClient.get(url)
     }
 
+export const getSyncAllTasksCountApi
+    = () => {
+        let url = `/tasks/count`;
+        return apiClient.get(url)
+    }
+
+export const retrieveSyncAllTasksApi
+    = ({ limit, offset, subject, lastSyncTime }) => {
+        let url = `/tasks?limit=${limit}&offset=${offset}`;
+        if (lastSyncTime) {
+            url += `&lastSyncTime=${lastSyncTime}`
+        }
+        if (subject) {
+            url += `&subjectId=${subject.id}`
+        }
+        return apiClient.get(url)
+    }
+
 export const createTaskApi
-    = ({ projectId, task }) => apiClient.post(`/tasks?projectId=${projectId}`, task)
+    = (task) => {
+        const { projectId } = task;
+        return apiClient.post(`/tasks?projectId=${projectId}`, task)
+    }
 
 export const retrieveTaskApi
     = ({ id }) => apiClient.get(`/tasks/${id}`)
 
 export const updateTaskApi
-    = ({ id, task }) => apiClient.put(`/tasks/${id}`, task)
+    = (id, task) => apiClient.put(`/tasks/${id}`, task)
 
 export const updateTaskPriorityApi
     = ({ id, map }) => apiClient.put(`/tasks/${id}/priority`, map)
@@ -52,4 +73,4 @@ export const getTasksTimeElapsedApi
     = ({ startDate, endDate, taskIds }) => apiClient.get(`/tasks/pomodoros/time-elapsed?startDate=${startDate}&endDate=${endDate}&taskIds=${taskIds}`)
 
 export const getTasksCommentsCountApi
-    = (taskIds) => apiClient.get(`tasks/comments/count?taskIds=${taskIds}`)
+    = (taskIds) => apiClient.post(`tasks/comments/count`, taskIds)

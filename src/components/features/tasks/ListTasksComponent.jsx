@@ -1,20 +1,18 @@
 import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom";
+import { useLiveQuery } from "dexie-react-hooks";
 
 import { createPomodoroApi } from "services/api/PomodoroApiService";
-import { getTasksCountApi } from "services/api/TaskApiService";
 
 import ListTasksRowsComponent from "components/features/tasks/ListTasksRowsComponent";
 import CreateTaskComponent from "components/features/tasks/CreateTaskComponent";
 import PomodoroComponent from "components/features/pomodoros/PomodoroComponent";
 import ListCommentsComponent from "components/features/comments/ListCommentsComponent";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-import { getCommentsCountApi } from "services/api/CommentApiService";
+import { addServerItemToCache, getCommentsCountFromCache, getTasksCountFromCache } from "services/dbService";
 
 export default function ListTasksComponent({
     project,
-    projects,
-    tags,
     startDate,
     endDate,
     searchString,
@@ -30,21 +28,42 @@ export default function ListTasksComponent({
 
     const { state } = useLocation();
 
-    const [tasksCount, setTasksCount] = useState(-1)
+    const tasksCount = useLiveQuery(async () => {
+        return await getTasksCountFromCache({
+            status: 'current',
+            projectId: project?.id,
+            tagId: tag?.id,
+            startDate,
+            endDate,
+            searchString,
+        })
+    });
+    const archivedTasksCount = useLiveQuery(async () => {
+        return await getTasksCountFromCache({
+            status: 'archived',
+            projectId: project?.id,
+            tagId: tag?.id,
+            startDate,
+            endDate,
+            searchString,
+        })
+    });
 
-    const [currentTasksHeight, setCurrentTasksHeight] = useState(0);
-    const [archivedTasksHeight, setArchivedTasksHeight] = useState(0);
+    const [currentTasksPage, setCurrentTasksPage] = useState(state?.currentTasksPage || 1);
+    const [archivedTasksPage, setArchivedTasksPage] = useState(state?.archivedTasksPage || 1);
 
-    const [archivedTasksCount, setArchivedTasksCount] = useState(0)
     const [showArchived, setShowArchived] = useState(false)
 
-    const [commentsCount, setCommentsCount] = useState(0)
+    const commentsCount = useLiveQuery(async () => {
+        if (!project)
+            return 0;
+        return await getCommentsCountFromCache({
+            filterBy: 'project',
+            filterById: project?.id,
+        })
+    }, [project]);
 
     const [pomodoroStatus, setPomodoroStatus] = useState(null)
-
-    const [currentTasksReload, setCurrentTasksReload] = useState(0)
-    const [archivedTasksReload, setArchivedTasksReload] = useState(0)
-    const [allTasksReload, setAllTasksReload] = useState(0)
 
     const [message, setMessage] = useState('')
 
@@ -54,46 +73,13 @@ export default function ListTasksComponent({
 
     useEffect(
         () => {
+            // console.debug('re-render ListTasksComponents')
             // need to set it in useEffect, instead of top level, 
             // complete component won't reload
             // as project is not a key during component call
             setShowArchived(state.showArchivedTasks || false)
-
-            // console.debug('re-render ListTasksComponents')
-            getTasksCount('current', setTasksCount)
-            getTasksCount('archived', setArchivedTasksCount)
-            project && getCommentsCount()
-        }, [project, allTasksReload] // eslint-disable-line react-hooks/exhaustive-deps
+        }, [project] // eslint-disable-line react-hooks/exhaustive-deps
     )
-
-    function getTasksCount(status, setContainer) {
-        const taskData = {
-            status
-        }
-        if (project) {
-            taskData.projectId = project.id;
-        } else if (tag) {
-            taskData.tagId = tag.id;
-        } else if (startDate) {
-            taskData.startDate = startDate;
-            taskData.endDate = endDate;
-        } else {
-            taskData.searchString = searchString;
-        }
-        getTasksCountApi(taskData)
-            .then(response => {
-                setContainer(response.data)
-            })
-            .catch(error => console.error(error.message))
-    }
-
-    function getCommentsCount() {
-        getCommentsCountApi({ filterBy: 'project', id: project.id })
-            .then(response => {
-                setCommentsCount(response.data)
-            })
-            .catch(error => console.error(error.message))
-    }
 
     function createNewPomodoro(pomodoro_task, task_project, start_again = false) {
         // console.debug(pomodoro_task.id)
@@ -104,17 +90,28 @@ export default function ListTasksComponent({
         // if break is running, first remove the component
         setPomodoro(null);
 
+        // Currently only availble when online
+        // TODO: show warning
         const pomodoro_data = {
             startTime: new Date(),
+            id: window.crypto.randomUUID()
             // length: 1
         }
 
         createPomodoroApi(pomodoro_data, pomodoro_task.id)
             .then(response => {
-                // console.debug(response)
+                // add to cache
+                const cachePomodoro = {
+                    ...response.data,
+                    taskId: pomodoro_task.id,
+                    projectId: task_project.id,
+                }
+                addServerItemToCache('pomodoros', cachePomodoro);
+
+                // update Pomodoro for PomodoroComponent
                 pomodoro_task.project = task_project
                 response.data.task = pomodoro_task
-                // console.debug(response.data)
+
                 setPomodoro(response.data)
                 setPomodoroStatus('started')
                 setMessage('')
@@ -131,6 +128,10 @@ export default function ListTasksComponent({
     const updateProject = (id) => {
         navigate(`/projects/${id}`, { state })
     }
+
+    // Commented: as this creates a glitch effect
+    // if (tasksCount === undefined || archivedTasksCount === undefined)
+    //     return <div>Loading initial data for tasks count...</div>;
 
     return (
         <div className="">
@@ -242,8 +243,8 @@ export default function ListTasksComponent({
                         <CreateTaskComponent
                             setShowCreateTask={setShowCreateTask}
                             project={project}
-                            setTasksReload={setCurrentTasksReload}
-                            setTasksCount={setTasksCount}
+                            tasksCount={tasksCount}
+                            setCurrentPage={setCurrentTasksPage}
                         ></CreateTaskComponent>
                     }
 
@@ -259,29 +260,26 @@ export default function ListTasksComponent({
                         {
                             tasksCount > 0 &&
                             <ListTasksRowsComponent
-                                key={[pomodoroStatus, currentTasksReload, allTasksReload]}    // re-render ListTasksComponents for completed pomodoro'
+                                key={[]}    // re-render ListTasksComponents for completed pomodoro'
                                 status={'current'}
                                 tasksCount={tasksCount}
                                 project={project}
                                 tag={tag}
-                                tags={tags}
-                                projects={projects}
                                 createNewPomodoro={createNewPomodoro}
                                 setPomodorosListReload={setPomodorosListReload}
-                                setTasksReload={setCurrentTasksReload}
-                                setAllTasksReload={setAllTasksReload}
-                                elementHeight={currentTasksHeight}
-                                setElementHeight={setCurrentTasksHeight}
+                                pomodoroStatus={pomodoroStatus}
                                 startDate={startDate}
                                 endDate={endDate}
                                 searchString={searchString}
                                 isReversed={isReversed}
+                                currentPage={currentTasksPage}
+                                setCurrentPage={setCurrentTasksPage}
                             />
                         }
 
                         <div className="my-1">
                             {
-                                archivedTasksCount !== 0 &&
+                                archivedTasksCount > 0 &&
                                 <div className="d-flex justify-content-center">
                                     <div
                                         onClick={() => {
@@ -310,22 +308,18 @@ export default function ListTasksComponent({
                                 showArchived && archivedTasksCount !== 0 &&
                                 <div className="mt-1">
                                     <ListTasksRowsComponent
-                                        key={[archivedTasksCount, archivedTasksReload, allTasksReload]}
+                                        key={[]}
                                         status={'archived'}
                                         tasksCount={archivedTasksCount}
                                         project={project}
                                         tag={tag}
-                                        tags={tags}
-                                        projects={projects}
                                         createNewPomodoro={createNewPomodoro}
-                                        setTasksReload={setArchivedTasksReload}
-                                        setAllTasksReload={setAllTasksReload}
-                                        elementHeight={archivedTasksHeight}
-                                        setElementHeight={setArchivedTasksHeight}
                                         startDate={startDate}
                                         endDate={endDate}
                                         searchString={searchString}
                                         isReversed={isReversed}
+                                        currentPage={archivedTasksPage}
+                                        setCurrentPage={setArchivedTasksPage}
                                     />
                                 </div>
                             }

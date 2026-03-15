@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState } from "react"
+import { useLiveQuery } from "dexie-react-hooks";
 import moment from "moment"
 
-import { deletePastPomodoroApi, getPomodorosApi } from "services/api/PomodoroApiService";
 import { timeToDisplay } from "services/helpers/listsHelper";
 
 import { Buttons } from "components/stats/charts/Buttons";
 import ListCommentsComponent from "components/features/comments/ListCommentsComponent";
 import OutsideAlerter from "services/hooks/OutsideAlerter";
-import { getItemFromCache, modifyItemInCache } from "services/dbService";
+import { getItemFromCache, getPomodorosFromCache, modifyItemInCache, syncDirtyItems } from "services/dbService";
+import { useData } from "services/DataContext";
 
 export default function ListPomodorosComponent({
     includeCategories,
@@ -17,13 +18,39 @@ export default function ListPomodorosComponent({
     title = "Pomodoros",
     elementHeight,
     setElementHeight,
-    setTasksComponentReload
+    setChartReload
 }) {
+
+    const dataContext = useData();
 
     const listElement = useRef(null);
 
     const [pomodorosGroup, setPomodorosGroup] = useState([])
     const [pomodorosCount, setPomodorosCount] = useState(-1);
+
+    const pomodoros = useLiveQuery(async () => {
+        const retrievedPomodoros = await getPomodorosFromCache({
+            startDate: moment().startOf('day').toISOString(),
+            endDate: moment().startOf('day').add(1, 'd').toISOString(),
+            includeCategories
+        });
+        console.debug(`Retrieved pomodoros from cache after update:`, { retrievedPomodoros });
+
+        retrievedPomodoros.map((x, index) => x.index = retrievedPomodoros.length - index);
+
+        const timeSlots = groupBy(retrievedPomodoros, 'endTime');
+        setPomodorosGroup(timeSlots.reverse());
+        for (let i = 0; i < timeSlots.length; i++) {
+            timeSlots[i].totalTimeElapsed = timeSlots[i].reduce((acc, curr) => acc + Math.round(curr.timeElapsed / 60), 0);
+        }
+        // console.debug(timeSlots);
+
+        setPomodorosCount(retrievedPomodoros.length);
+        const total = retrievedPomodoros.reduce((acc, curr) => acc + Math.round(curr.timeElapsed / 60), 0);
+        setTotalTimeElapsed(timeToDisplay(total));
+
+        return retrievedPomodoros;
+    })
 
     const [totalTimeElapsed, setTotalTimeElapsed] = useState('0');
 
@@ -36,22 +63,6 @@ export default function ListPomodorosComponent({
     useEffect(
         () => {
             // console.debug('re-render ListPomodorosComponent')
-            async function fetchAPI() {
-                try {
-                    if (title === "Today's Pomodoros") {
-                        // TODO: decide limit
-                        // TODO: find better way of getting all categories
-                        // console.debug('useEffect', { includeCategories })
-                        // initial state
-                        const startDate = moment().startOf('day').toISOString();
-                        const endDate = moment().startOf('day').add(1, 'd').toISOString();
-                        retrieveTodayPomodoros({ startDate, endDate })
-                    }
-                } catch (error) {
-                    console.error(error.message)
-                }
-            }
-            fetchAPI()
 
             const observer = new ResizeObserver(handleResize);
             observer.observe(listElement.current);
@@ -69,75 +80,58 @@ export default function ListPomodorosComponent({
         }
     }
 
-    function retrieveTodayPomodoros({ startDate, endDate }) {
+    function retrievePomodoros({ startDate, endDate }) {
         // console.debug('api call', { allCategories, includeCategories })
         setPomodorosGroup([]);
         setPomodorosCount(-1);
-        getPomodorosApi({ startDate, endDate, includeCategories, subject })
+        getPomodorosFromCache({ startDate, endDate, includeCategories })
             .then(response => {
                 // console.debug(response)
-                response.data.map((x, index) => x.index = response.data.length - index);
+                response.map((x, index) => x.index = response.length - index);
 
-                const timeSlots = groupBy(response.data, 'endTime');
+                const timeSlots = groupBy(response, 'endTime');
                 setPomodorosGroup(timeSlots.reverse());
                 for (let i = 0; i < timeSlots.length; i++) {
                     timeSlots[i].totalTimeElapsed = timeSlots[i].reduce((acc, curr) => acc + Math.round(curr.timeElapsed / 60), 0);
                 }
                 // console.debug(timeSlots);
 
-                // update today's project's time elapsed
-                updateTodaysProjectsTimeElapsed(response.data);
-
-                setPomodorosCount(response.data.length);
-                const total = response.data.reduce((acc, curr) => acc + Math.round(curr.timeElapsed / 60), 0);
+                setPomodorosCount(response.length);
+                const total = response.reduce((acc, curr) => acc + Math.round(curr.timeElapsed / 60), 0);
                 setTotalTimeElapsed(timeToDisplay(total));
             })
             .catch(error => console.error(error.message))
     }
 
-    function updateTodaysProjectsTimeElapsed(pomodoros) {
-        if (title !== "Today's Pomodoros") {
-            return;
-        }
-        const map = new Map();
-        for (let i = 0; i < pomodoros.length; i++) {
-            const pomodoro = pomodoros[i];
-            const projectId = parseInt(pomodoro.projectId);
-            if (map.has(projectId)) {
-                map.set(projectId, map.get(projectId) + pomodoro.timeElapsed);
-            } else {
-                map.set(projectId, pomodoro.timeElapsed);
-            }
-        }
-        // console.debug({ pomodoros }, map)
-        // update cache for displaying today's projects time elapsed
-        map.forEach((timeElapsed, projectId) => {
-            modifyItemInCache('projects', projectId, { timeElapsed });
-        });
-    }
-
-    function deleltePastPomodoro(pomodoro) {
+    async function deleltePastPomodoro(pomodoro) {
         if (!window.confirm("Are you sure? Press OK to delete.")) {
             return;
         }
-        deletePastPomodoroApi(pomodoro.id)
-            .then(async response => {
-                // console.debug(response)
-                setReload(prev => prev + 1);
-                if (setTasksComponentReload) {
-                    setTasksComponentReload(prev => prev + 1);
-                }
-                // Update cache: reduce the time elapsed of the project by the time elapsed of the deleted pomodoro
-                // console.debug('pomodoro deleted, updating cache', { pomodoro })
-                const project = await getItemFromCache('projects', parseInt(pomodoro.projectId))
-                // console.debug({ project })
-                modifyItemInCache('projects', project.id, { timeElapsed: project.timeElapsed - pomodoro.timeElapsed });
 
-                // const total = pomodorosGroup.reduce((acc, curr) => acc + Math.round(curr.timeElapsed / 60), 0);
-                // setTotalTimeElapsed(timeToDisplay(total - pomodoro.timeElapsed / 60));
-                // setPomodorosGroup(pomodorosGroup.filter(p => p.id !== pomodoro.id))
-            })
-            .catch(error => console.error(error.message))
+        // Use update API instead of delete
+        // TODO: check if this is the best solution
+        modifyItemInCache('pomodoros', pomodoro.id, { status: 'deleted', _dirty: 1 });
+        syncPomodoros();
+
+        // Update cache view data: reduce the time elapsed of the project and task by the time elapsed of the deleted pomodoro
+        const task = await getItemFromCache('tasks', pomodoro.taskId)
+        modifyItemInCache('tasks', task.id, { totalTimeElapsed: task.totalTimeElapsed - pomodoro.timeElapsed });
+        if (title === "Today's Pomodoros") {
+            modifyItemInCache('tasks', task.id, { todaysTimeElapsed: task.todaysTimeElapsed - pomodoro.timeElapsed });
+            const project = await getItemFromCache('projects', pomodoro.projectId)
+            modifyItemInCache('projects', project.id, { timeElapsed: project.timeElapsed - pomodoro.timeElapsed });
+        }
+
+        // cleanup
+        setReload(prev => prev + 1);
+    }
+
+    async function syncPomodoros() {
+        if (navigator.onLine) {
+            console.info(`Online! Syncing deleted dirty pomodoros...`);
+            await syncDirtyItems('pomodoros'); // Fire and forget in background
+            setChartReload(prevReload => prevReload + 1)    // for chart reload
+        }
     }
 
     function updateCommentsData(pomodoro) {
@@ -175,7 +169,7 @@ export default function ListPomodorosComponent({
                 <div className="mb-2">
                     <Buttons
                         key={[reload]}
-                        retrievePomodoros={retrieveTodayPomodoros}
+                        retrievePomodoros={retrievePomodoros}
                         buttonsStates={buttonsStates}
                         setButtonsStates={setButtonsStates}
                         showLimit={false}
@@ -225,7 +219,7 @@ export default function ListPomodorosComponent({
                                                     <div className="mx-2 d-flex text-start small text-secondary">
                                                         <div className={"flex-grow-1 " + (!subject ? "update-popup-container" : "")}>
                                                             <span>
-                                                                {pomodoro.index}. {pomodoro.task}
+                                                                {pomodoro.index}. {dataContext.tasksMap.get(pomodoro.taskId).description}
                                                             </span>
                                                             <span className="align-middle" style={{ float: "right" }}>
                                                                 {showPomodoroUpdateId !== pomodoro.id &&
@@ -247,7 +241,7 @@ export default function ListPomodorosComponent({
                                                                                 {timeToDisplay(Math.round(pomodoro.timeElapsed / 60))}
                                                                             </span>
                                                                         </span>
-                                                                        <span className="ms-1" style={{ color: pomodoro.color }}>&#9632;</span>
+                                                                        <span className="ms-1" style={{ color: dataContext.projectsMap.get(pomodoro.projectId).color }}>&#9632;</span>
                                                                     </span>
                                                                 }
 

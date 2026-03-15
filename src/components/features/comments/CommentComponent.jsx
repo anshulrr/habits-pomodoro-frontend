@@ -4,11 +4,14 @@ import DatePicker from "react-datepicker";
 
 import moment from 'moment'
 
-import { createCommentApi } from 'services/api/CommentApiService'
 import { calculateTextAreaRows, filterPastTime } from 'services/helpers/helper';
 import InsertLinkComponent from './InsertLinkComponent';
+import { addItemToCache, getItemFromCache, modifyItemInCache } from 'services/dbService';
+import { useData } from 'services/DataContext';
 
-export default function CommentComponent({ filterBy, id, setShowCreateComment, reloadComments }) {
+export default function CommentComponent({ filterBy, id, setShowCreateComment, setCurrentPage }) {
+
+    const dataContext = useData();
 
     const [description, setDescription] = useState('')
     const [reviseDate, setReviseDate] = useState(null)
@@ -19,22 +22,43 @@ export default function CommentComponent({ filterBy, id, setShowCreateComment, r
 
     const [errorMessage, setErrorMessage] = useState('')
 
-    function handleSubmit(error) {
+    async function handleSubmit(error) {
         error.preventDefault();
 
         const comment = {
             description,
-            reviseDate
+            reviseDate,
+            filterBy,
+            filterById: id
+            // TODO: add view data
         }
-        // console.debug({ comment, filterBy, id })
+        // add data for cache
+        if (filterBy === 'category') {
+            comment.categoryId = id;
+        }
+        else if (filterBy === 'project') {
+            comment.projectId = id;
+            comment.categoryId = dataContext.projectsMap.get(id).projectCategoryId;
+        }
+        else if (filterBy === 'task') {
+            comment.taskId = id;
+            comment.projectId = dataContext.tasksMap.get(id).projectId;
+            comment.categoryId = dataContext.projectsMap.get(comment.projectId).projectCategoryId;
+        }
 
-        createCommentApi({ comment, filterBy, id })
-            .then(response => {
-                // console.debug(response)
-                reloadComments()
-                setShowCreateComment(false)
-            })
-            .catch(error => console.error(error.message))
+        // console.debug({ comment, filterBy, id })
+        console.debug('create comment:', { comment });
+        addItemToCache('comments', comment);
+
+        // modify view
+        if (filterBy === 'task') {
+            const task = await getItemFromCache('tasks', comment.filterById)
+            modifyItemInCache('tasks', task.id, { commentsCount: (task.commentsCount || 0) + 1 });
+        }
+
+        // cleanup
+        setCurrentPage(1)
+        setShowCreateComment(false)
     }
 
     return (

@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react"
 
+import { useData } from "services/DataContext";
 import { mapTagsApi } from "services/api/TagApiService";
 import { retrieveTaskApi } from "services/api/TaskApiService";
+import { updateTaskTags } from "services/dbService";
 
 export default function MapTagComponent({
     task,
-    tagsMap,
     setShowMapTags,
-    setTasksReload
 }) {
+    const dataContext = useData();
+
+    const tagsMap = dataContext.tagsMap;
 
     const [tagsCount, setTagsCount] = useState(-1)
     const [tags, setTags] = useState([])
@@ -19,8 +22,10 @@ export default function MapTagComponent({
 
     useEffect(
         () => {
+            console.debug("MapTagComponent: dataContext updated")
+            // TODO: check how refreshTags is getting updated tagsMap
             refreshTags();
-        }, [] // eslint-disable-line react-hooks/exhaustive-deps
+        }, [dataContext] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
     const handleOnChange = (position) => {
@@ -76,8 +81,10 @@ export default function MapTagComponent({
 
         mapTagsApi(task.id, { tagIds: selectedTags })
             .then(response => {
+                // udpate cache
+                updateTaskTags(task.id, selectedTags);
+                // cleanup
                 setShowMapTags(-1)
-                setTasksReload(prev => prev + 1);
             })
             .catch(error => console.error(error.message))
 

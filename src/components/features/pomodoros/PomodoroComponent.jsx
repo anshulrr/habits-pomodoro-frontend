@@ -7,6 +7,8 @@ import { generateInitialTimer, calculateTimeRemaining, generateTimer } from 'ser
 
 import BreakTimerComponent from 'components/features/pomodoros/BreakTimerComponent';
 import ListCommentsComponent from '../comments/ListCommentsComponent';
+import { modifyItemInCache, putServerItemToCache, syncDeltaItems } from 'services/dbService';
+import moment from 'moment';
 
 export default function PomodoroComponent({
     pomodoro,
@@ -127,7 +129,17 @@ export default function PomodoroComponent({
 
         updatePomodoroApi(pomodoro.id, pomodoro_data)
             .then(response => {
-                // console.debug(response.status)
+                console.debug({ response, pomodoro })
+                // update cache
+                putServerItemToCache('pomodoros', response.data);
+                if (local_status === 'completed') {
+                    // modify view data
+                    modifyItemInCache('tasks', pomodoro.task.id, { todaysTimeElapsed: (pomodoro.task.todaysTimeElapsed || 0) + response.data.timeElapsed });
+                    modifyItemInCache('tasks', pomodoro.task.id, { totalTimeElapsed: (pomodoro.task.totalTimeElapsed || 0) + response.data.timeElapsed });
+
+                    modifyItemInCache('projects', pomodoro.task.project.id, { timeElapsed: (pomodoro.task.project.timeElapsed || 0) + response.data.timeElapsed });
+                }
+
                 if (local_status === 'completed') {
                     setTasksMessage('');
                     setPomodoroStatus('completed');

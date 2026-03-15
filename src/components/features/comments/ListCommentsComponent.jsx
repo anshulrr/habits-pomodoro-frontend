@@ -1,23 +1,21 @@
 import { useEffect, useState } from "react"
 
-import { retrieveAllProjectCategoriesApi } from "services/api/ProjectCategoryApiService"
-
 import ListFilteredCommentsComponent from "./ListFilteredCommentsComponents"
 import OutsideAlerter from "services/hooks/OutsideAlerter"
-import { retrieveAllTagsApi } from "services/api/TagApiService"
 import { CommentsFilterComponent } from "./CommentsFilterComponent"
 import SearchCommentComponent from "./SearchCommentComponent"
 import FooterComponent from "components/FooterComponent"
+import { useData } from "services/DataContext"
 
 export default function ListCommentsComponent({
     filterBy = 'user',
     id,
 }) {
-    const ALL_TAGS_PAGESIZE = 1000;
-    const [tags, setTags] = useState(null);
+    const dataContext = useData();
 
-    const [categories, setCategories] = useState([])
-    const [includedCategoryIds, setIncludedCategoryIds] = useState([])
+    const tagsMap = dataContext.tagsMap;
+
+    const tags = [...tagsMap.values()];
 
     const [reload, setReload] = useState(0)
 
@@ -32,46 +30,9 @@ export default function ListCommentsComponent({
 
     useEffect(
         () => {
-            refreshAllTags();
-            if (filterBy === 'user') {
-                retrieveProjectCategories();
-            }
-        }, [] // eslint-disable-line react-hooks/exhaustive-deps
-    )
-
-    useEffect(
-        () => {
             setShowLeftMenu(false);
         }, [filterWithReviseDate, reload]
     )
-
-    function retrieveProjectCategories() {
-        retrieveAllProjectCategoriesApi(100, 0)
-            .then(response => {
-                // console.debug(response)
-                setCategories(response.data
-                    .map(c => {
-                        c.statsDefault = true;
-                        return c;
-                    })
-                );
-                setIncludedCategoryIds(response.data
-                    .filter(c => c.statsDefault === true)
-                    .map(c => c.id)
-                );
-                setReload(prev => prev + 1)
-            })
-            .catch(error => console.error(error.message))
-    }
-
-    function refreshAllTags() {
-        retrieveAllTagsApi({ limit: ALL_TAGS_PAGESIZE, offset: 0 })
-            .then(response => {
-                const map = new Map(response.data.map(i => [i.id, i]));
-                setTags(map);
-            })
-            .catch(error => console.error(error.message))
-    }
 
     function resetFiltersAndReload(type) {
         if (type === 'fetch') {
@@ -89,6 +50,13 @@ export default function ListCommentsComponent({
         setReload(prev => prev + 1);
     }
 
+    if (!tags)
+        return (
+            <div className="loader-container my-1">
+                <div className="loader"></div>...
+            </div >
+        )
+
     return (
         <div className={"comments-list " + (filterBy === 'user' ? 'container' : '')} style={{ backgroundColor: "#e9ecef" }}>
             <div className="row">
@@ -104,9 +72,6 @@ export default function ListCommentsComponent({
 
                                             <div className="container pt-3 pb-1 border-bottom">
                                                 <CommentsFilterComponent
-                                                    key={[categories]}
-                                                    categories={categories}
-                                                    includeCategories={includedCategoryIds}
                                                     setFilterType={setFilterType}
                                                     setFilterTypeId={setFilterTypeId}
                                                     resetFiltersAndReload={resetFiltersAndReload}
@@ -114,7 +79,6 @@ export default function ListCommentsComponent({
                                             </div>
 
                                             {
-                                                filterType === 'user' &&
                                                 <div>
                                                     <div className="container py-1 border-bottom">
                                                         <div className="row">
@@ -151,23 +115,16 @@ export default function ListCommentsComponent({
                 }
 
                 {
-                    !tags &&
-                    <span className="loader-container col-lg-8 mt-5" style={{ backgroundColor: "#e9ecef" }}>
-                        <span className="loader"></span>
-                    </span>
-                }
-                {
-                    tags &&
+                    tagsMap &&
                     <div className={"pt-3 col-lg-8 " + (filterBy !== 'user' ? "offset-lg-2" : "")} style={{ backgroundColor: "#e9ecef" }}>
                         <ListFilteredCommentsComponent
                             key={[reload]}
                             filterBy={filterType}
                             id={filterTypeId}
-                            categoryIds={includedCategoryIds}
                             filterWithReviseDate={filterWithReviseDate}
                             searchString={searchString}
                             showSearched={showSearched}
-                            tags={tags}
+                            tags={tagsMap}
                         />
                     </div >
                 }

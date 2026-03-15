@@ -1,14 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useData } from 'services/DataContext';
 
-import { retrieveAllProjectsApi } from 'services/api/ProjectApiService';
-import { retrieveAllTasksApi } from 'services/api/TaskApiService';
+import { getFilteredItemsFromCache } from 'services/dbService';
 
-export const CommentsFilterComponent = ({ categories, includeCategories, setFilterType, setFilterTypeId, resetFiltersAndReload }) => {
+export const CommentsFilterComponent = ({ setFilterType, setFilterTypeId, resetFiltersAndReload }) => {
 
+    // TODO: decide count for dropdowns
     const TASKS_COUNT = 100;
+    const ALL_PAGESIZE = 100;
+
+    const dataContext = useData();
+
+    const categories = [...dataContext.categoriesMap.values()];
 
     const [categoryId, setCategoryId] = useState('0');
-    const [updatedCategories, setUpdatedCategories] = useState([]);
     const [projectId, setProjectId] = useState('0');
     const [projects, setProjects] = useState([]);
     const [taskId, setTaskId] = useState('0');
@@ -18,25 +23,6 @@ export const CommentsFilterComponent = ({ categories, includeCategories, setFilt
     const [errorMessage, setErrorMessage] = useState("");
 
     const [showLoader, setShowLoader] = useState(false);
-
-    useEffect(
-        () => {
-            updateIncludedCategories()
-        },
-        [] // eslint-disable-line react-hooks/exhaustive-deps
-    )
-
-    const updateIncludedCategories = () => {
-        const localUpdatedCategories = [];
-        for (const id of includeCategories) {
-            for (const category of categories) {
-                if (category.id === id) {
-                    localUpdatedCategories.push(category);
-                }
-            }
-        }
-        setUpdatedCategories(localUpdatedCategories);
-    }
 
     const updateDataType = (dataType, dataTypeId = 0) => {
         setReloadData({
@@ -58,12 +44,10 @@ export const CommentsFilterComponent = ({ categories, includeCategories, setFilt
     }
 
     function refreshProjects(categoryId) {
-        setShowLoader(true);
-        setProjects([]);
-        retrieveAllProjectsApi({ categoryId })
+        getFilteredItemsFromCache('projects', { projectCategoryId: categoryId }, { limit: ALL_PAGESIZE, offset: 0 })
             .then(response => {
                 // console.debug(response)
-                setProjects(response.data);
+                setProjects(response);
                 setShowLoader(false);
             })
             .catch(error => console.error(error.message))
@@ -72,16 +56,16 @@ export const CommentsFilterComponent = ({ categories, includeCategories, setFilt
     function refreshTasks(projectId) {
         setShowLoader(true);
         setTasks([]);
-        retrieveAllTasksApi({ projectId, status: 'current', limit: TASKS_COUNT, offset: 0 })
+        getFilteredItemsFromCache('tasks', { projectId: projectId, status: 'current' }, { limit: TASKS_COUNT, offset: 0 })
             .then(response => {
                 // console.debug(response)
-                const localTasks1 = response.data;
-                setTasks(response.data);
+                const localTasks1 = response;
+                setTasks(response);
 
-                retrieveAllTasksApi({ projectId, status: 'archived', limit: TASKS_COUNT, offset: 0 })
+                getFilteredItemsFromCache('tasks', { projectId: projectId, status: 'archived' }, { limit: TASKS_COUNT, offset: 0 })
                     .then(response => {
                         // console.debug(response)
-                        const localTasks2 = localTasks1.concat(response.data);
+                        const localTasks2 = localTasks1.concat(response);
                         setTasks(localTasks2);
                         setShowLoader(false);
                     })
@@ -125,6 +109,13 @@ export const CommentsFilterComponent = ({ categories, includeCategories, setFilt
         }
     }
 
+    if (!categories)
+        return (
+            <div className="loader-container my-1">
+                <div className="loader"></div>...
+            </div >
+        )
+
     return (
         <div>
 
@@ -148,7 +139,7 @@ export const CommentsFilterComponent = ({ categories, includeCategories, setFilt
                     >
                         <option value="0">All Notes</option>
                         {
-                            updatedCategories.map(
+                            categories.map(
                                 projectCategory => (
                                     <option key={projectCategory.id} value={projectCategory.id}>{projectCategory.name}</option>
                                 )

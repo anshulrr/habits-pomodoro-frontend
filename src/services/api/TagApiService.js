@@ -1,7 +1,13 @@
 import { apiClient } from "./ApiClient";
 
 export const retrieveAllTagsApi
-    = ({ limit, offset }) => apiClient.get(`/tags?limit=${limit}&offset=${offset}`)
+    = ({ limit, offset, lastSyncTime }) => {
+        let url = `/tags?limit=${limit}&offset=${offset}`;
+        if (lastSyncTime) {
+            url += `&lastSyncTime=${lastSyncTime}`;
+        }
+        return apiClient.get(url);
+    }
 
 export const getTagsCountApi
     = () => apiClient.get(`/tags/count`)
@@ -19,7 +25,7 @@ export const mapTagsApi
     = (task_id, data) => apiClient.post(`tasks/${task_id}/tags`, data)
 
 export const getTasksTagsApi
-    = (taskIds) => apiClient.get(`tasks/tags?taskIds=${taskIds}`)
+    = (taskIds) => apiClient.post(`tasks/tags`, taskIds)
 
 export const mapCommentTagsApi
     = (comment_id, data) => apiClient.post(`comments/${comment_id}/tags`, data)
