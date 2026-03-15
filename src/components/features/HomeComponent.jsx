@@ -16,6 +16,7 @@ import { StreakChart } from "components/stats/charts/StreakChart";
 
 import OutsideAlerter from 'services/hooks/OutsideAlerter';
 import { useAuth } from 'services/auth/AuthContext';
+import { useData } from "services/DataContext";
 import { isEmpty } from 'services/helpers/helper';
 import { toast } from 'react-toastify';
 import SearchTaskComponent from './tasks/SearchTaskComponent';
@@ -29,6 +30,8 @@ export default function HomeComponent({ setReloadHome }) {
     const { state } = useLocation();
 
     const navigate = useNavigate();
+
+    const dataContext = useData();
 
     const authContext = useAuth();
     const userSettings = authContext.userSettings;
@@ -45,12 +48,14 @@ export default function HomeComponent({ setReloadHome }) {
     const projects = useLiveQuery(async () => await getItemsFromCache('projects', 1, ALL_PAGESIZE));
 
     const tagsCount = useLiveQuery(async () => getItemsCountFromCache('tags'));
-    const [tagsMap, setTagsMap] = useState();
-    const tags = useLiveQuery(async () => {
-        const cachedTags = await getItemsFromCache('tags', 1, ALL_PAGESIZE);
-        setTagsMap(new Map(cachedTags.map(i => [i.id, i])));
-        return cachedTags;
-    }, []);
+    const [tags, setTags] = useState([...dataContext.tagsMap.values()]);
+
+    useEffect(
+        () => {
+            setTags([...dataContext.tagsMap.values()]);
+        },
+        [dataContext]
+    )
 
     const [categoryIds, setCategoryIds] = useState([]);
     const categories = useLiveQuery(async () => {
@@ -210,7 +215,7 @@ export default function HomeComponent({ setReloadHome }) {
     }
 
     // to prevent rendering the page before projects are loaded from cache db, which causes some components to throw error as they rely on projects data.
-    if (projectsCount === undefined || tagsCount === undefined || !projects || !tagsMap)
+    if (projectsCount === undefined || tagsCount === undefined || !projects)
         return (
             <div className="loader-container my-1">
                 <div className="loader"></div>...
@@ -294,14 +299,13 @@ export default function HomeComponent({ setReloadHome }) {
 
                 <div className="col-lg-4 full-screen-height" style={{ backgroundColor: "#e9ecef" }}>
                     {
-                        tagsMap !== null && projects.length !== 0 &&
+                        projects.length !== 0 &&
                         <div>
                             {
                                 project &&
                                 <ListTasksComponent
                                     key={[project.id, tag, tasksComponentReload]}
                                     project={project}
-                                    tags={tagsMap}
                                     projects={projects}
                                     setPomodorosListReload={setPomodorosListReload}
                                     pomodoro={pomodoro}
@@ -313,7 +317,6 @@ export default function HomeComponent({ setReloadHome }) {
                                 <ListTasksComponent
                                     key={[tasksComponentReload]}
                                     projects={projects}
-                                    tags={tagsMap}
                                     startDate={startDate}
                                     endDate={endDate}
                                     searchString={searchString}
@@ -330,7 +333,6 @@ export default function HomeComponent({ setReloadHome }) {
                                 <ListTasksComponent
                                     key={[project, tag.id, tasksComponentReload]}
                                     projects={projects}
-                                    tags={tagsMap}
                                     tag={tag}
                                     setPomodorosListReload={setPomodorosListReload}
                                     pomodoro={pomodoro}

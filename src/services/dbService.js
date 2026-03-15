@@ -433,7 +433,7 @@ async function createCommentsFilterQuery({ filterBy, filterById, filterWithRevis
         return query;
     }
     query = query
-        .between([parseInt(filterById), Dexie.minKey], [parseInt(filterById), Dexie.maxKey])
+        .between([filterById, Dexie.minKey], [filterById, Dexie.maxKey])
         .reverse()
 
     return query;
@@ -641,7 +641,7 @@ async function initTaskView() {
         await setTasksTotalTimeElapsed({ taskMap, taskIds, startDate, endDate });
 
         // set tags for all tasks
-        await setTasksTags({ tasks, taskIds });
+        await setTasksTags({ taskIds });
 
         // set comments count for all tasks
         await setTasksCommentsCount({ taskIds });
@@ -687,16 +687,8 @@ async function setTasksTotalTimeElapsed({ taskMap, taskIds, startDate, endDate }
     }
 }
 
-async function setTasksTags({ tasks, taskIds }) {
+async function setTasksTags({ taskIds }) {
     try {
-        const tags = await db.tags.toArray();
-        const tagsMap = new Map(tags.map(i => [i.id, i]));
-        console.log('Retrieved tags from cache:', tags);
-        const map = new Map(tasks.map(task => {
-            task.tags = [];
-            return [task.id, task];
-        }));
-        console.log({ map });
         const response = await getTasksTagsApi(taskIds)
         console.log('Retrieved tasks tags from api:', { data: response.data });
 
@@ -705,13 +697,19 @@ async function setTasksTags({ tasks, taskIds }) {
 
         // store tags data in tasks in cache
         // using Map for easy access and update
+        const map = new Map();
         for (let i = 0; i < response.data.length; i++) {
-            const { id, color, name } = tagsMap.get(response.data[i][3]);
-            map.get(response.data[i][2]).tags.push({ id, color, name });
+            const tagId = response.data[i][3];
+            const taskId = response.data[i][2];
+            if (!map.has(taskId)) {
+                map.set(taskId, []);
+            }
+            map.get(taskId).push(tagId);
         }
-        console.log({ map });
-        for (const task of map.values()) {
-            modifyItemInCache('tasks', task.id, { tags: task.tags })
+        console.debug({ tasks_tags_map: map });
+        // TODO: update in one query
+        for (const taskId of map.keys()) {
+            modifyItemInCache('tasks', taskId, { tags: map.get(taskId) })
         }
     } catch (error) {
         console.error(`Cache VIEW: Failed to set tasks tags: ${error}`)
@@ -761,7 +759,7 @@ export async function updateTasksTag(updatedTag) {
     }
 }
 
-export async function updateTaskTags(taskId, tagsMap, tagIds) {
+export async function updateTaskTags(taskId, tagIds) {
     try {
         // update tasks_tags table
         // console.debug(tagIds.map(tagId => { return { taskId, tagId } }));
@@ -772,7 +770,7 @@ export async function updateTaskTags(taskId, tagsMap, tagIds) {
         await db.tasks
             .where({ id: taskId })
             .modify({
-                tags: [...tagsMap.values()].filter(tag => tagIds.includes(tag.id))
+                tags: [...tagIds]
             })
         // console.debug([...tagsMap.values()].filter(tag => tagIds.includes(tag.id)))
     } catch (error) {
@@ -795,7 +793,7 @@ async function initProjectView() {
         console.debug({ pomodoros }, map)
         for (let i = 0; i < pomodoros.length; i++) {
             const pomodoro = pomodoros[i];
-            const projectId = parseInt(pomodoro.projectId);
+            const projectId = pomodoro.projectId;
             if (map.has(projectId)) {
                 map.set(projectId, map.get(projectId) + pomodoro.timeElapsed);
             } else {

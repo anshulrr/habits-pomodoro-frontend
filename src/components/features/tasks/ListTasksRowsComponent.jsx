@@ -17,7 +17,6 @@ import { getTasksFromCache, putItemToCache } from "services/dbService";
 export default function ListTasksRowsComponent({
     project,
     tag,
-    tags,
     projects,
     status,
     tasksCount,
@@ -169,7 +168,6 @@ export default function ListTasksRowsComponent({
                                     sortableTasks={sortableTasks}
                                     onCreateNewPomodoro={onCreateNewPomodoro}
                                     onUpdateTaskStatus={onUpdateTaskStatus}
-                                    tags={tags}
                                     setPomodorosListReload={setPomodorosListReload}
                                     project={project}
                                     setShowCommentsId={setShowCommentsId}

@@ -23,8 +23,6 @@ export default function UpdateTagComponent({
 
         console.debug('update tag:', { updated_tag });
         putItemToCache('tags', updated_tag);
-        // all tasks mapping needs to be corrected which only happens in login
-        updateTasksTag({ name, id: tag.id, color });
         // update TasksList title
         setTag(updated_tag);
 

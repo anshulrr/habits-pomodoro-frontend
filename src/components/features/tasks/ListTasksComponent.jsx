@@ -14,7 +14,6 @@ import { getCommentsCountFromCache, getTasksCountFromCache } from "services/dbSe
 export default function ListTasksComponent({
     project,
     projects,
-    tags,
     startDate,
     endDate,
     searchString,
@@ -268,7 +267,6 @@ export default function ListTasksComponent({
                                 tasksCount={tasksCount}
                                 project={project}
                                 tag={tag}
-                                tags={tags}
                                 projects={projects}
                                 createNewPomodoro={createNewPomodoro}
                                 setPomodorosListReload={setPomodorosListReload}
@@ -318,7 +316,6 @@ export default function ListTasksComponent({
                                         tasksCount={archivedTasksCount}
                                         project={project}
                                         tag={tag}
-                                        tags={tags}
                                         projects={projects}
                                         createNewPomodoro={createNewPomodoro}
                                         startDate={startDate}

@@ -1,5 +1,5 @@
 import { motion, Reorder, useDragControls } from "framer-motion";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import moment from "moment";
 
 
@@ -9,6 +9,7 @@ import TaskDueDateComponent from "components/features/tasks/TaskDueDateComponent
 import MapTagComponent from "components/features/tags/MapTagComponent";
 import { TaskStats } from "components/features/tasks/TaskStats";
 
+import { useData } from "services/DataContext";
 import OutsideAlerter from "services/hooks/OutsideAlerter";
 import { COLOR_MAP, formatDate, timeToDisplay } from "services/helpers/listsHelper";
 import { resetProjectTaskPrioritiesApi } from "services/api/TaskApiService";
@@ -20,12 +21,15 @@ export default function SortableTask({
     sortableTasks,
     onCreateNewPomodoro,
     onUpdateTaskStatus,
-    tags,
     setTasksReload,
     setPomodorosListReload,
     project,
     setShowCommentsId,
 }) {
+    const dataContext = useData();
+
+    const [tagsMap, setTagsMap] = useState(dataContext.tagsMap);
+
     const controls = useDragControls();
     const activeIdRef = useRef(null); // The real moved item
 
@@ -37,6 +41,13 @@ export default function SortableTask({
     const [showTaskStats, setShowTaskStats] = useState(-1);
     const [showUpdateDueDate, setShowUpdateDueDate] = useState(-1);
     const [showMapTags, setShowMapTags] = useState(-1);
+
+    useEffect(
+        () => {
+            setTagsMap(dataContext.tagsMap)
+        },
+        [dataContext]
+    )
 
     const handleDragStart = ({ id, index }) => {
         // console.debug('drag start', { id, index });
@@ -274,10 +285,10 @@ export default function SortableTask({
                                 {
                                     task.tags && task.tags.length > 0 &&
                                     task.tags.map(
-                                        (tag, tag_index) => (
+                                        (tagId, tag_index) => (
                                             <span key={tag_index} className="me-1">
-                                                <i className="bi bi-tag-fill" style={{ color: tag.color, paddingRight: "0.1rem" }} />
-                                                {tag.name}
+                                                <i className="bi bi-tag-fill" style={{ color: tagsMap.get(tagId).color, paddingRight: "0.1rem" }} />
+                                                {tagsMap.get(tagId).name}
                                             </span>
                                         )
                                     )
@@ -402,7 +413,6 @@ export default function SortableTask({
                 showMapTags === task.id &&
                 <MapTagComponent
                     task={task}
-                    tagsMap={tags}
                     setShowMapTags={setShowMapTags}
                 />
             }
