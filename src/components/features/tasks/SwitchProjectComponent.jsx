@@ -52,13 +52,13 @@ export const SwitchProjectComponent = ({ projectId, setProjectId }) => {
     }
 
     function updateCategory(id) {
-        setCategoryId(parseInt(id));
+        setCategoryId(id);
         setProjectId(0);
         refreshProjects(id);
     }
 
     function updateProject(id) {
-        setProjectId(parseInt(id));
+        setProjectId(id);
     }
 
     return (
