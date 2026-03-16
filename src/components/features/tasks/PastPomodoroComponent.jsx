@@ -38,8 +38,8 @@ export default function PastPomodoroComponent({
         const project = await getItemFromCache('projects', task.projectId)
 
         const pomodoro = {
-            startTime: moment().toISOString(),
-            endTime: moment().toISOString(),
+            startTime: date.toISOString(),
+            endTime: date.toISOString(),
             timeElapsed: minutesElapsed * 60,
             taskId: task.id,
             // view data
@@ -54,7 +54,9 @@ export default function PastPomodoroComponent({
         addItemToCache('pomodoros', pomodoro);
 
         // modify view data
-        modifyItemInCache('tasks', task.id, { todaysTimeElapsed: (task.todaysTimeElapsed || 0) + pomodoro.timeElapsed });
+        if (moment(date).isAfter(moment().startOf('day'))) {
+            modifyItemInCache('tasks', task.id, { todaysTimeElapsed: (task.todaysTimeElapsed || 0) + pomodoro.timeElapsed });
+        }
         modifyItemInCache('tasks', task.id, { totalTimeElapsed: (task.totalTimeElapsed || 0) + pomodoro.timeElapsed });
 
         modifyItemInCache('projects', project.id, { timeElapsed: (project.timeElapsed || 0) + pomodoro.timeElapsed });

@@ -448,7 +448,7 @@ export async function getPomodorosFromCache({ startDate, endDate, includeCategor
     try {
         let query = db['pomodoros'];
         query = query.where('endTime')
-            .between(startDate, endDate, true, true)
+            .between(startDate, endDate, false, true)
             .reverse();
         // TODO: handle include categories
         return await query
@@ -660,7 +660,7 @@ async function setTasksTodaysTimeElapsed({ taskMap, taskIds, startDate, endDate 
     try {
         const pomodoros = await db['pomodoros']
             .where('taskId').anyOf(taskIds)
-            .and(pomodoro => new Date(pomodoro.startTime) >= new Date(startDate) && new Date(pomodoro.endTime) <= new Date(endDate))
+            .and(pomodoro => new Date(pomodoro.endTime) >= new Date(startDate) && new Date(pomodoro.endTime) <= new Date(endDate))
             .toArray();
         for (const pomodoro of pomodoros) {
             taskMap.get(pomodoro.taskId).todaysTimeElapsed += pomodoro.timeElapsed;
@@ -674,7 +674,7 @@ async function setTasksTodaysTimeElapsed({ taskMap, taskIds, startDate, endDate 
     }
 }
 
-async function setTasksTotalTimeElapsed({ taskMap, taskIds, startDate, endDate }) {
+async function setTasksTotalTimeElapsed({ taskMap, taskIds, startDate }) {
     try {
         const pomodoros = await db['pomodoros'].toArray();
         for (const pomodoro of pomodoros) {
@@ -782,10 +782,7 @@ export async function updateTaskTags(taskId, tagIds) {
 async function initProjectView() {
     // set time elapsed for today and total time elapsed for all tasks
     let startDate = moment().startOf('day').toISOString();
-    let endDate0 = moment().toISOString();
-    let endDate = moment().startOf('day').add(1, 'd').toISOString();
-    // TODO: check issue with timezone
-    console.debug({ startDate, endDate0, endDate })
+    let endDate = moment().toISOString();
 
     try {
         const pomodoros = await getPomodorosFromCache({ startDate, endDate });
