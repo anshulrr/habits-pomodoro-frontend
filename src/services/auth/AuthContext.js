@@ -216,7 +216,7 @@ export default function AuthProvider({ children }) {
         try {
             await clearCacheDb();
             setCacheDbAdded(false);
-            // console.debug("deleted dexie database successfully")
+            console.info("Deleted your data in cache successfully")
         } catch (error) {
             console.error(error);
         }

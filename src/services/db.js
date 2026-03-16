@@ -1,8 +1,8 @@
 import { Dexie } from "dexie"
 
-export const db = new Dexie("myDatabase")
+export const db = new Dexie("habits-pomodoro-database")
 
-db.version(5).stores({
+db.version(1).stores({
     /*
     1. _dirty field is used to mark entities that are created/updated/deleted while offline, to be synced when back online.
     2. updatedAt field is used for conflict resolution, 

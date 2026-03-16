@@ -145,6 +145,7 @@ export async function initEntityCache(entity, requestData, requestCountData) {
 
 // after logout, clear cache db to prevent data leak between accounts
 export function clearCacheDb() {
+    checkAndDeleteOldDb()
     return Promise.all([
         db.categories.clear(),
         db.projects.clear(),
@@ -154,6 +155,20 @@ export function clearCacheDb() {
         db.comments.clear(),
         db.metadata.clear()
     ]);
+}
+
+async function checkAndDeleteOldDb() {
+    // temp fix for primary key update
+    const dbs = await window.indexedDB.databases();
+    if (dbs.some(db => db.name === 'myDatabase')) {
+        console.debug('old database exists');
+        Dexie.delete('myDatabase')
+            .then(() => {
+                console.log("Old Database successfully deleted");
+            }).catch((err) => {
+                console.error("Could not delete database");
+            })
+    }
 }
 
 /*
