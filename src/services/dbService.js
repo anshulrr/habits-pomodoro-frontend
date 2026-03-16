@@ -110,11 +110,11 @@ export async function initCacheDb() {
         // Initialize cache for all entities in parallel, to improve performance
         await Promise.all(promises)
         // Set a flag in metadata to indicate cache has been initialized, so that we don't need to initialize it again on page refresh
-        await db.metadata.put({ id: 'cache-init', value: 1 });
-        console.info("Cache database initialization complete!");
+        console.info("Cache database initialization complete!", moment().toISOString());
         // Init view related data in background, no need to wait for it to complete, to improve performance of first load
         await initView();
-        console.info("View data initialization complete!");
+        console.info("View data initialization complete!", moment().toISOString());
+        await db.metadata.put({ id: 'cache-init', value: 1 });
     } catch (error) {
         console.error("One of the init chache tasks failed: please relogin", error);
     }
@@ -638,6 +638,7 @@ async function initTaskView() {
         // set time elapsed for today and total time elapsed for all tasks
         let startDate = moment().startOf('day').toISOString();
         let endDate = moment().toISOString();
+        // TODO: cleanup taskMap and taskIds
         await setTasksTodaysTimeElapsed({ taskMap, taskIds, startDate, endDate });
 
         startDate = moment().add(-10, 'y').toISOString();
@@ -664,11 +665,10 @@ async function setTasksTodaysTimeElapsed({ taskMap, taskIds, startDate, endDate 
         for (const pomodoro of pomodoros) {
             taskMap.get(pomodoro.taskId).todaysTimeElapsed += pomodoro.timeElapsed;
         }
-        for (const taskId of taskIds) {
-            // console.log({ taskId }, taskMap.get(taskId).todaysTimeElapsed);
-            modifyItemInCache('tasks', taskId, { todaysTimeElapsed: taskMap.get(taskId).todaysTimeElapsed })
-        }
-        console.log(`Cache VIEW: Finished setting tasks time elapsed since ${startDate}`);
+        // update cache
+        const bulkData = taskIds.map(taskId => ({ key: taskId, changes: { todaysTimeElapsed: taskMap.get(taskId).todaysTimeElapsed } }));
+        db['tasks'].bulkUpdate(bulkData);
+        console.info(`Cache VIEW: Finished setting tasks time elapsed since ${startDate}`);
     } catch (error) {
         console.error(`Cache VIEW: Failed to set tasks time elapsed since ${startDate}: ${error}`)
     }
@@ -680,11 +680,10 @@ async function setTasksTotalTimeElapsed({ taskMap, taskIds, startDate, endDate }
         for (const pomodoro of pomodoros) {
             taskMap.get(pomodoro.taskId).totalTimeElapsed += pomodoro.timeElapsed;
         }
-        for (const taskId of taskIds) {
-            // console.log({ taskId }, taskMap.get(taskId).totalTimeElapsed);
-            modifyItemInCache('tasks', taskId, { totalTimeElapsed: taskMap.get(taskId).totalTimeElapsed })
-        }
-        console.log(`Cache VIEW: Finished setting tasks time elapsed since ${startDate}`);
+        // update cache
+        const bulkData = taskIds.map(taskId => ({ key: taskId, changes: { totalTimeElapsed: taskMap.get(taskId).totalTimeElapsed } }));
+        db['tasks'].bulkUpdate(bulkData);
+        console.info(`Cache VIEW: Finished setting tasks time elapsed since ${startDate}`);
     } catch (error) {
         console.error(`Cache VIEW: Failed to set tasks time elapsed since ${startDate}: ${error}`)
     }
@@ -693,27 +692,26 @@ async function setTasksTotalTimeElapsed({ taskMap, taskIds, startDate, endDate }
 async function setTasksTags({ taskIds }) {
     try {
         const response = await getTasksTagsApi(taskIds)
-        console.log('Retrieved tasks tags from api:', { data: response.data });
+        // console.debug('Retrieved tasks tags from api:', { data: response.data });
 
         // store relationship in cache
         bulkPutItemsToCache('tasks_tags', response.data.map(item => ({ taskId: item[2], tagId: item[3] })));
 
         // store tags data in tasks in cache
         // using Map for easy access and update
-        const map = new Map();
+        const tasksTagsMap = new Map();
         for (let i = 0; i < response.data.length; i++) {
             const tagId = response.data[i][3];
             const taskId = response.data[i][2];
-            if (!map.has(taskId)) {
-                map.set(taskId, []);
+            if (!tasksTagsMap.has(taskId)) {
+                tasksTagsMap.set(taskId, []);
             }
-            map.get(taskId).push(tagId);
+            tasksTagsMap.get(taskId).push(tagId);
         }
-        console.debug({ tasks_tags_map: map });
-        // TODO: update in one query
-        for (const taskId of map.keys()) {
-            modifyItemInCache('tasks', taskId, { tags: map.get(taskId) })
-        }
+        // console.debug({ tasks_tags_map: tasksTagsMap });
+        // update cache
+        const bulkData = taskIds.map(taskId => ({ key: taskId, changes: { tags: tasksTagsMap.get(taskId) } }));
+        db['tasks'].bulkUpdate(bulkData);
     } catch (error) {
         console.error(`Cache VIEW: Failed to set tasks tags: ${error}`)
     }
@@ -722,11 +720,10 @@ async function setTasksTags({ taskIds }) {
 async function setTasksCommentsCount({ taskIds }) {
     try {
         const response = await getTasksCommentsCountApi(taskIds)
-        console.log('Retrieved tasks comments count from api:', { data: response.data });
-        // using Map for easy access and update
-        for (let i = 0; i < response.data.length; i++) {
-            modifyItemInCache('tasks', response.data[i][0], { commentsCount: parseInt(response.data[i][1]) })
-        }
+        // console.debug('Retrieved tasks comments count from api:', { data: response.data });
+        // update cache
+        const bulkData = response.data.map(([taskId, commentsCount]) => ({ key: taskId, changes: { commentsCount: parseInt(commentsCount) } }));
+        db['tasks'].bulkUpdate(bulkData);
     } catch (error) {
         console.error(`Cache VIEW: Failed to set tasks comments count: ${error}`)
     }
@@ -792,22 +789,21 @@ async function initProjectView() {
 
     try {
         const pomodoros = await getPomodorosFromCache({ startDate, endDate });
-        const map = new Map();
-        console.debug({ pomodoros }, map)
+        const projectsMap = new Map();
+        // console.debug({ pomodoros }, projectsMap)
         for (let i = 0; i < pomodoros.length; i++) {
             const pomodoro = pomodoros[i];
             const projectId = pomodoro.projectId;
-            if (map.has(projectId)) {
-                map.set(projectId, map.get(projectId) + pomodoro.timeElapsed);
+            if (projectsMap.has(projectId)) {
+                projectsMap.set(projectId, projectsMap.get(projectId) + pomodoro.timeElapsed);
             } else {
-                map.set(projectId, pomodoro.timeElapsed);
+                projectsMap.set(projectId, pomodoro.timeElapsed);
             }
         }
-        console.debug({ pomodoros }, map)
+        // console.debug({ pomodoros }, projectsMap)
         // update cache for displaying today's projects time elapsed
-        map.forEach((timeElapsed, projectId) => {
-            modifyItemInCache('projects', projectId, { timeElapsed });
-        });
+        const bulkData = [...projectsMap].map(([projectId, timeElapsed]) => ({ key: projectId, changes: { timeElapsed } }));
+        db['projects'].bulkUpdate(bulkData);
         console.info(`Cache VIEW: Finished setting projects time elapsed since ${startDate}`);
     } catch (error) {
         console.error(`Cache VIEW: Failed to set projects time elapsed since ${startDate}: ${error}`)

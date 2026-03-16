@@ -17,7 +17,7 @@ export default function DataProvider({ children }) {
     const ALL_PAGESIZE = 1000;
     const projectsMap = useLiveQuery(async () => {
         const cachedProjects = await getItemsFromCache('projects', 1, ALL_PAGESIZE)
-
+        console.log({ cachedProjects })
         return new Map(cachedProjects.map(item => [item.id, item]));
     }, []);
 
