@@ -30,8 +30,8 @@ function App() {
 function registerServiceWorker() {
 
   if ("serviceWorker" in navigator) {
-    console.log("Registering service worker static files cache...");
-    navigator.serviceWorker.register('/sw.js', { scope: '/' })
+    console.log("Registering service workers...");
+    navigator.serviceWorker.register('/firebase-messaging-sw.js')
       .then(registration => {
         // log registration events
         logRegistrationEvent(registration);
@@ -45,27 +45,6 @@ function registerServiceWorker() {
   // disabled in mobile device
   // if (navigator?.userAgentData?.mobile) {
   //   return;
-  // }
-
-  // if ("serviceWorker" in navigator) {
-  //   // Register a service worker hosted at the root of the
-  //   // site using the default scope.
-  //   // console.debug("available")
-
-  //   navigator.serviceWorker.register("service_worker.js").then(
-  //     (registration) => {
-  //       // log registration events
-  //       // logRegistrationEvent(registration);
-  //       console.debug("Service worker registration succeeded for service_worker");
-  //       // console.debug("registration:", registration);
-  //     },
-  //     (error) => {
-  //       console.error(`Service worker registration failed: ${error}`);
-  //     },
-  //   );
-  // } else {
-  //   // not supported in http only
-  //   console.error("Service workers are not supported.");
   // }
 }
 

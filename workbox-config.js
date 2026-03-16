@@ -3,10 +3,6 @@ module.exports = {
 	globPatterns: [
 		'**/*.{js,txt,json,png,html,svg,ico,woff2,woff,mp3,css}'
 	],
-	swDest: 'build/sw.js',
-	ignoreURLParametersMatching: [
-		/^utm_/,
-		/^fbclid$/
-	],
-	navigateFallback: '/index.html', // Essential for BrowserRouter
+	swSrc: 'src/sw.js',
+	swDest: 'build/firebase-messaging-sw.js',
 };
