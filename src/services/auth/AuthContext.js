@@ -100,7 +100,7 @@ export default function AuthProvider({ children }) {
                 // errors are handled in sync function, so no need to catch here
                 syncDirtyEntities();
             }
-        }, 5 * 60 * 1000); // Every 5 mins
+        }, 60 * 60 * 1000); // Every hour
 
         return () => {
             clearInterval(interval1)

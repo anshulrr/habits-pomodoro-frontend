@@ -331,18 +331,28 @@ export async function syncDeltaItems(entity, requestData) {
         // console.debug('delta items', { items });
 
         // 2. Transaction: Save data and the NEW sync time together
-        // TODO: check if new items are synced or not with this way
         await db.transaction('rw', db[entity], db.metadata, async () => {
-            // Instead of full update, only update recieved keys, so that old extra keys (eg. _dirty, timeElapsed) are not removed
             for (const item of items) {
-                // console.log({ item })
-                // Atomic Check: Only update if the item is not dirty locally (prevents overwriting unsynced local changes)
-                // Or if the item is newer than what we have locally (handles updates from other devices)
-                // otherwise local changes will be updated to server on next dirty sync, and we will get the latest version then
-                await db[entity]
-                    .where({ id: item.id })
-                    .and(dbItem => dbItem._dirty !== 1 || new Date(dbItem.updatedAt) < new Date(item.updatedAt))
-                    .modify(item);
+                // 1. Fetch the existing local item
+                const localItem = await db[entity].get(item.id);
+
+                if (!localItem) {
+                    // 2. NEW ITEM: If it doesn't exist locally, add it
+                    await db[entity].add(item);
+                } else {
+                    // 3. EXISTING ITEM: Apply your atomic sync logic
+                    // Atomic Check: Only update if the item is not dirty locally (prevents overwriting unsynced local changes)
+                    // Or if the item is newer than what we have locally (handles updates from other devices)
+                    // otherwise local changes will be updated to server on next dirty sync
+                    const isNotDirty = localItem._dirty !== 1;
+                    const isServerNewer = new Date(localItem.updatedAt) < new Date(item.updatedAt);
+
+                    if (isNotDirty || isServerNewer) {
+                        // Use update() to only change the keys received from server, 
+                        // preserving local-only keys like '_dirty' or 'timeElapsed'
+                        await db[entity].update(item.id, item);
+                    }
+                }
             }
             // TODO: check if server time is better to use here instead of client time
             await db.metadata.put({ id: 'last_sync_' + entity, value: new Date().toISOString() });
