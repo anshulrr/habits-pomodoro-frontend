@@ -53,8 +53,8 @@ export default function PastPomodoroComponent({
         console.debug('create pomodoro:', { pomodoro });
         addItemToCache('pomodoros', pomodoro);
 
-        // modify view data
-        modifyItemInCache('projects', project.id, { timeElapsed: (project.timeElapsed || 0) + pomodoro.timeElapsed });
+        // // modify view data
+        // modifyItemInCache('projects', project.id, { timeElapsed: (project.timeElapsed || 0) + pomodoro.timeElapsed });
 
         // cleanup
         setShowCreatePastPomodoro(-1)
