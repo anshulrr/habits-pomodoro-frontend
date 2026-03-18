@@ -42,16 +42,25 @@ export default function ListTasksRowsComponent({
     const [sortableTasks, setSortableTasks] = useState([]);
 
     const tasks = useLiveQuery(async () => {
-        const retrievedTasks = await getTasksFromCache({
+        let retrievedTasks = await getTasksFromCache({
             status,
             projectId: project?.id,
             tagId: tag?.id,
             startDate,
             endDate,
             searchString,
-            limit: PAGESIZE,
-            offset: (currentPage - 1) * PAGESIZE
+            limit: 10000,
+            offset: 0
         })
+        // TODO: find better solution: temp fix for order by
+        // Sort by category first, then project, then task priority
+        retrievedTasks.sort((a, b) => {
+            return a.categoryPriority - b.categoryPriority || a.projectPriority - b.projectPriority || a.priority - b.priority;
+        });
+        const startIndex = (currentPage - 1) * PAGESIZE;
+        const endIndex = startIndex + PAGESIZE;
+        retrievedTasks = retrievedTasks.slice(startIndex, endIndex);
+
         console.debug(`Retrieved ${status} tasks from cache after update:`, { retrievedTasks });
 
         // update view data from cache
