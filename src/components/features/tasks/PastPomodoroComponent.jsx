@@ -54,16 +54,14 @@ export default function PastPomodoroComponent({
         addItemToCache('pomodoros', pomodoro);
 
         // modify view data
-        if (moment(date).isAfter(moment().startOf('day'))) {
-            modifyItemInCache('tasks', task.id, { todaysTimeElapsed: (task.todaysTimeElapsed || 0) + pomodoro.timeElapsed });
-        }
-        modifyItemInCache('tasks', task.id, { totalTimeElapsed: (task.totalTimeElapsed || 0) + pomodoro.timeElapsed });
-
         modifyItemInCache('projects', project.id, { timeElapsed: (project.timeElapsed || 0) + pomodoro.timeElapsed });
 
         // cleanup
         setShowCreatePastPomodoro(-1)
-        setPomodorosListReload(prevReload => prevReload + 1)
+        // TODO: chart should reload only after dirty items are synced to new pomodoro in backend
+        setTimeout(() => {
+            setPomodorosListReload(prevReload => prevReload + 1)
+        }, 1000);
     }
 
     const filterFutureTime = (time) => {

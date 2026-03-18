@@ -12,8 +12,9 @@ import { generateDateColor } from "services/helpers/listsHelper";
 
 import ListCommentsComponent from "components/features/comments/ListCommentsComponent";
 import SortableTask from "./SortableTask";
-import { getTasksFromCache, putItemToCache } from "services/dbService";
+import { getPomodorosFromCache, getTasksFromCache, putItemToCache } from "services/dbService";
 import { useData } from "services/DataContext";
+import { db } from "services/db";
 
 export default function ListTasksRowsComponent({
     project,
@@ -52,8 +53,23 @@ export default function ListTasksRowsComponent({
             offset: (currentPage - 1) * PAGESIZE
         })
         console.debug(`Retrieved ${status} tasks from cache after update:`, { retrievedTasks });
-        setSortableTasks(retrievedTasks);
-        return updateProjectData(retrievedTasks);
+
+        // update view data from cache
+        const todaysPomodoros = await db['pomodoros']
+            .where('taskId')
+            .anyOf(retrievedTasks.map(task => task.id))
+            .filter(task => task.status !== 'deleted')
+            .toArray();
+        console.debug(`Retrieved today's pomodoros from cache after update:`, { todaysPomodoros });
+
+        const viewUpdatedTasks = updateTasksTodaysTimeElpased(retrievedTasks, todaysPomodoros);
+
+        // calculate data for view
+        updateTasksDueDateColor(viewUpdatedTasks);
+        // set tasks for view
+        setSortableTasks(viewUpdatedTasks);
+
+        return viewUpdatedTasks;
     }, [currentPage]);
 
     const [showCommentsId, setShowCommentsId] = useState(-1);
@@ -69,13 +85,21 @@ export default function ListTasksRowsComponent({
         }, [] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
-    function updateProjectData(tasks) {
-        // const projectsMap = new Map(projects.map(project => [project.id, project]));
-        // for (const i in tasks) {
-        //     tasks[i].project = projectsMap.get(tasks[i].projectId);
-        // }
-        updateTasksDueDateColor(tasks);
-        return tasks;
+    function updateTasksTodaysTimeElpased(retrievedTasks, pomodoros) {
+        retrievedTasks.forEach(task => {
+            task.todaysTimeElapsed = 0;
+            task.totalTimeElapsed = 0;
+            return task;
+        })
+        const tasksMap = new Map(retrievedTasks.map(item => [item.id, item]));
+        for (const pomodoro of pomodoros) {
+            const task = tasksMap.get(pomodoro.taskId);
+            if (moment(pomodoro.endTime).isAfter(moment().startOf('day'))) {
+                task.todaysTimeElapsed += pomodoro.timeElapsed;
+            }
+            task.totalTimeElapsed += pomodoro.timeElapsed;
+        }
+        return [...tasksMap.values()];
     }
 
     function onUpdateTaskStatus(task, status) {

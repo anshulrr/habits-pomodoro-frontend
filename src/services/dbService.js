@@ -660,15 +660,6 @@ async function initTaskView() {
         }));
         const taskIds = tasks.map(task => task.id);
 
-        // set time elapsed for today and total time elapsed for all tasks
-        let startDate = moment().startOf('day').toISOString();
-        let endDate = moment().toISOString();
-        // TODO: cleanup taskMap and taskIds
-        await setTasksTodaysTimeElapsed({ taskMap, taskIds, startDate, endDate });
-
-        startDate = moment().add(-10, 'y').toISOString();
-        await setTasksTotalTimeElapsed({ taskMap, taskIds, startDate, endDate });
-
         // set tags for all tasks
         await setTasksTags({ taskIds });
 
@@ -681,39 +672,6 @@ async function initTaskView() {
 }
 
 // Tasks Cache initView methods
-async function setTasksTodaysTimeElapsed({ taskMap, taskIds, startDate, endDate }) {
-    try {
-        const pomodoros = await db['pomodoros']
-            .where('taskId').anyOf(taskIds)
-            .and(pomodoro => new Date(pomodoro.endTime) >= new Date(startDate) && new Date(pomodoro.endTime) <= new Date(endDate))
-            .toArray();
-        for (const pomodoro of pomodoros) {
-            taskMap.get(pomodoro.taskId).todaysTimeElapsed += pomodoro.timeElapsed;
-        }
-        // update cache
-        const bulkData = taskIds.map(taskId => ({ key: taskId, changes: { todaysTimeElapsed: taskMap.get(taskId).todaysTimeElapsed } }));
-        db['tasks'].bulkUpdate(bulkData);
-        console.info(`Cache VIEW: Finished setting tasks time elapsed since ${startDate}`);
-    } catch (error) {
-        console.error(`Cache VIEW: Failed to set tasks time elapsed since ${startDate}: ${error}`)
-    }
-}
-
-async function setTasksTotalTimeElapsed({ taskMap, taskIds, startDate }) {
-    try {
-        const pomodoros = await db['pomodoros'].toArray();
-        for (const pomodoro of pomodoros) {
-            taskMap.get(pomodoro.taskId).totalTimeElapsed += pomodoro.timeElapsed;
-        }
-        // update cache
-        const bulkData = taskIds.map(taskId => ({ key: taskId, changes: { totalTimeElapsed: taskMap.get(taskId).totalTimeElapsed } }));
-        db['tasks'].bulkUpdate(bulkData);
-        console.info(`Cache VIEW: Finished setting tasks time elapsed since ${startDate}`);
-    } catch (error) {
-        console.error(`Cache VIEW: Failed to set tasks time elapsed since ${startDate}: ${error}`)
-    }
-}
-
 async function setTasksTags({ taskIds }) {
     try {
         const response = await getTasksTagsApi(taskIds)

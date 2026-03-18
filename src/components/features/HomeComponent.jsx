@@ -372,16 +372,13 @@ export default function HomeComponent({ setReloadHome }) {
                     }
                     <div className="mt-1 mb-4 bg-white text-center text-secondary" style={{ minHeight: "30vh" }}>
                         <div className="p-1 chart-card">
-                            {
-                                pomodorosListReload !== 0 &&
-                                <ListPomodorosComponent
-                                    title={"Today's Pomodoros"}
-                                    elementHeight={pomodorosHeight}
-                                    setElementHeight={setPomodorosHeight}
-                                    setTodaysPomodorosMap={setTodaysPomodorosMap}
-                                    setChartReload={setPomodorosListReload}
-                                />
-                            }
+                            <ListPomodorosComponent
+                                title={"Today's Pomodoros"}
+                                elementHeight={pomodorosHeight}
+                                setElementHeight={setPomodorosHeight}
+                                setTodaysPomodorosMap={setTodaysPomodorosMap}
+                                setChartReload={setPomodorosListReload}
+                            />
                         </div >
                     </div >
                 </div >
