@@ -42,6 +42,19 @@ export default function ChangePasswordComponent({ setShowChangePassword }) {
         }
     }
 
+    if (!navigator.onLine)
+        return (
+            <div className="sticky-menu pb-0" style={{ backgroundColor: "unset" }}>
+                <div className="row px-0">
+                    <div className="col-12 px-0">
+                        <div className="alert alert-danger mb-0 py-1" role="alert">
+                            You Are Offline, You can change password once online...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+
     return (
         <div className="task-overlay">
             <div className="task-popup">

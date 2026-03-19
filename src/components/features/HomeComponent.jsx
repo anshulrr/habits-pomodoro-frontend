@@ -308,7 +308,7 @@ export default function HomeComponent({ setReloadHome }) {
 
                 <div className="col-lg-4">
                     {
-                        userSettings.homePageChart !== 'none' &&
+                        userSettings.homePageChart !== 'none' && navigator.onLine &&
                         <div className="mt-1 bg-white text-center text-secondary">
                             <div className="p-1 chart-card">
                                 {
