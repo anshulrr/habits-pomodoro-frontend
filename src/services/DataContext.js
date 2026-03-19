@@ -42,10 +42,11 @@ export default function DataProvider({ children }) {
 
     const todaysPomodoros = useLiveQuery(async () => {
         let startDate = moment().startOf('day').toISOString();
-        let endDate = moment().toISOString();
+        let endDate = moment().startOf('day').add(1, 'd').toISOString();
         return await db['pomodoros']
             .where('endTime')
             .between(startDate, endDate, false, true)
+            .filter(pomodoro => pomodoro.status === 'past' || pomodoro.status === 'completed')
             .toArray();
     }, []);
 
