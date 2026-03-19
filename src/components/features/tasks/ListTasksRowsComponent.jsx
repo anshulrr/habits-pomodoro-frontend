@@ -64,14 +64,14 @@ export default function ListTasksRowsComponent({
         console.debug(`Retrieved ${status} tasks from cache after update:`, { retrievedTasks });
 
         // update view data from cache
-        const todaysPomodoros = await db['pomodoros']
+        const tasksPomodoros = await db['pomodoros']
             .where('taskId')
             .anyOf(retrievedTasks.map(task => task.id))
             .filter(task => task.status !== 'deleted')
             .toArray();
-        console.debug(`Retrieved today's pomodoros from cache after update:`, { todaysPomodoros });
+        console.debug(`Retrieved tasks' pomodoros from cache after update:`, { tasksPomodoros });
 
-        const viewUpdatedTasks = updateTasksTodaysTimeElpased(retrievedTasks, todaysPomodoros);
+        const viewUpdatedTasks = updateTasksTodaysTimeElpased(retrievedTasks, tasksPomodoros);
 
         // calculate data for view
         updateTasksDueDateColor(viewUpdatedTasks);

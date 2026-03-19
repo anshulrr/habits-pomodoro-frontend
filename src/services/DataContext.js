@@ -7,6 +7,7 @@ import { createContext, useContext } from "react";
 
 import { db } from "services/db";
 import { getItemsFromCache } from "./dbService";
+import moment from "moment";
 
 const DataContext = createContext();
 export const useData = () => useContext(DataContext)
@@ -39,10 +40,22 @@ export default function DataProvider({ children }) {
         return new Map(cachedTasks.map(item => [item.id, item]));
     }, []);
 
-    const valuesToBeShared = { projectsMap, tagsMap, categoriesMap, tasksMap }
+    const todaysPomodoros = useLiveQuery(async () => {
+        let startDate = moment().startOf('day').toISOString();
+        let endDate = moment().startOf('day').add(1, 'd').toISOString();    // NOTE: exact current moment not working for new pomodoro
+        const pomodoros = await db['pomodoros']
+            .where('endTime')
+            .between(startDate, endDate, false, true)
+            .filter(pomodoro => pomodoro.status === 'past' || pomodoro.status === 'completed')
+            .toArray();
+        console.debug(`Retrieved today's pomodoros from cache after update:`, { pomodoros });
+        return pomodoros;
+    }, []);
+
+    const valuesToBeShared = { projectsMap, tagsMap, categoriesMap, tasksMap, todaysPomodoros }
 
     // to prevent rendering the page before data is loaded from cache db, which causes some components to throw error as they rely on data.
-    if (!tagsMap || !projectsMap || !categoriesMap || !tasksMap)
+    if (!tagsMap || !projectsMap || !categoriesMap || !tasksMap || !todaysPomodoros)
         return (
             <div className="loader-container my-1">
                 <div className="loader"></div>

@@ -53,9 +53,6 @@ export default function PastPomodoroComponent({
         console.debug('create pomodoro:', { pomodoro });
         addItemToCache('pomodoros', pomodoro);
 
-        // modify view data
-        modifyItemInCache('projects', project.id, { timeElapsed: (project.timeElapsed || 0) + pomodoro.timeElapsed });
-
         // cleanup
         setShowCreatePastPomodoro(-1)
         // TODO: chart should reload only after dirty items are synced to new pomodoro in backend

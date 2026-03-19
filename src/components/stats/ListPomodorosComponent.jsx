@@ -95,12 +95,6 @@ export default function ListPomodorosComponent({
         // TODO: check if this is the best solution
         await modifyItemInCache('pomodoros', pomodoro.id, { status: 'deleted', _dirty: 1 });
         syncPomodoros();
-
-        // Update cache view data: reduce the time elapsed of the project and task by the time elapsed of the deleted pomodoro
-        if (moment(pomodoro.endTime).isAfter(moment().startOf('day'))) {
-            const project = await getItemFromCache('projects', pomodoro.projectId)
-            modifyItemInCache('projects', project.id, { timeElapsed: project.timeElapsed - pomodoro.timeElapsed });
-        }
     }
 
     async function syncPomodoros() {

@@ -132,13 +132,6 @@ export default function PomodoroComponent({
                 console.debug({ response, pomodoro })
                 // update cache
                 putServerItemToCache('pomodoros', response.data);
-                if (local_status === 'completed') {
-                    // modify view data
-                    modifyItemInCache('tasks', pomodoro.task.id, { todaysTimeElapsed: (pomodoro.task.todaysTimeElapsed || 0) + response.data.timeElapsed });
-                    modifyItemInCache('tasks', pomodoro.task.id, { totalTimeElapsed: (pomodoro.task.totalTimeElapsed || 0) + response.data.timeElapsed });
-
-                    modifyItemInCache('projects', pomodoro.task.project.id, { timeElapsed: (pomodoro.task.project.timeElapsed || 0) + response.data.timeElapsed });
-                }
 
                 if (local_status === 'completed') {
                     setTasksMessage('');

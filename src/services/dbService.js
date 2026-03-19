@@ -642,7 +642,6 @@ export async function getItemFromCache(entity, id) {
 // VIEW
 async function initView() {
     await initTaskView();
-    await initProjectView();
 }
 
 // TASKS: view
@@ -758,34 +757,5 @@ export async function updateTaskTags(taskId, tagIds) {
         // console.debug([...tagsMap.values()].filter(tag => tagIds.includes(tag.id)))
     } catch (error) {
         console.error(`Cache: failed to udpate task tags: ${error}`);
-    }
-}
-
-// PROJECTS
-async function initProjectView() {
-    // set time elapsed for today and total time elapsed for all tasks
-    let startDate = moment().startOf('day').toISOString();
-    let endDate = moment().toISOString();
-
-    try {
-        const pomodoros = await getPomodorosFromCache({ startDate, endDate });
-        const projectsMap = new Map();
-        // console.debug({ pomodoros }, projectsMap)
-        for (let i = 0; i < pomodoros.length; i++) {
-            const pomodoro = pomodoros[i];
-            const projectId = pomodoro.projectId;
-            if (projectsMap.has(projectId)) {
-                projectsMap.set(projectId, projectsMap.get(projectId) + pomodoro.timeElapsed);
-            } else {
-                projectsMap.set(projectId, pomodoro.timeElapsed);
-            }
-        }
-        // console.debug({ pomodoros }, projectsMap)
-        // update cache for displaying today's projects time elapsed
-        const bulkData = [...projectsMap].map(([projectId, timeElapsed]) => ({ key: projectId, changes: { timeElapsed } }));
-        db['projects'].bulkUpdate(bulkData);
-        console.info(`Cache VIEW: Finished setting projects time elapsed since ${startDate}`);
-    } catch (error) {
-        console.error(`Cache VIEW: Failed to set projects time elapsed since ${startDate}: ${error}`)
     }
 }
