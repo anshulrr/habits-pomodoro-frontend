@@ -128,7 +128,8 @@ export default function HomeComponent({ setReloadHome }) {
                     setPomodoro(running_pomodoro);
                 }
                 // to handle completion of old pomodoro, update pomodoro list now
-                setPomodorosListReload(prev => prev + 1);
+                // TODO: check if needed
+                // setPomodorosListReload(prev => prev + 1);
             })
             .catch(error => {
                 console.error(error.message)
@@ -312,7 +313,6 @@ export default function HomeComponent({ setReloadHome }) {
                         <div className="mt-1 bg-white text-center text-secondary">
                             <div className="p-1 chart-card">
                                 {
-                                    pomodorosListReload !== 0 &&
                                     <div>
                                         {
                                             userSettings.homePageChart === 'tasks' &&
