@@ -27,7 +27,7 @@ export default function UpdateTaskComponent({
 
     const [errors, setErrors] = useState({})
 
-    const [projectId, setProjectId] = useState(task.project.id);
+    const [projectId, setProjectId] = useState(task.projectId);
     const [switchProject, setSwitchProject] = useState(false);
 
     const [showLoader, setShowLoader] = useState(true)

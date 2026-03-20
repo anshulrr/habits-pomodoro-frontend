@@ -9,12 +9,10 @@ import CreateTaskComponent from "components/features/tasks/CreateTaskComponent";
 import PomodoroComponent from "components/features/pomodoros/PomodoroComponent";
 import ListCommentsComponent from "components/features/comments/ListCommentsComponent";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-import { getCommentsCountFromCache, getTasksCountFromCache } from "services/dbService";
+import { addServerItemToCache, getCommentsCountFromCache, getTasksCountFromCache } from "services/dbService";
 
 export default function ListTasksComponent({
     project,
-    projects,
-    tags,
     startDate,
     endDate,
     searchString,
@@ -75,7 +73,8 @@ export default function ListTasksComponent({
 
     useEffect(
         () => {
-            // console.debug('re-render ListTasksComponents')
+            console.debug('re-render ListTasksComponents')
+            // console.debug({ project, tag })
             // need to set it in useEffect, instead of top level, 
             // complete component won't reload
             // as project is not a key during component call
@@ -92,29 +91,28 @@ export default function ListTasksComponent({
         // if break is running, first remove the component
         setPomodoro(null);
 
+        // Currently only availble when online
+        // TODO: show warning
         const pomodoro_data = {
             startTime: new Date(),
-            publicId: window.crypto.randomUUID()
+            id: window.crypto.randomUUID()
             // length: 1
         }
 
         createPomodoroApi(pomodoro_data, pomodoro_task.id)
             .then(response => {
-                // console.debug({ response })
+                // add to cache
+                const cachePomodoro = {
+                    ...response.data,
+                    taskId: pomodoro_task.id,
+                    projectId: task_project.id,
+                }
+                addServerItemToCache('pomodoros', cachePomodoro);
+
+                // update Pomodoro for PomodoroComponent
                 pomodoro_task.project = task_project
                 response.data.task = pomodoro_task
 
-                // NO NEED TO SYNC: we don't show it in the list until it is completed
-                // currently not available offline
-
-                // update cache
-                // addServerItemToCache('pomodoros', response.data);
-                // syncDeltaItems('pomodoros', {
-                //     startDate: '1970-01-01T00:00:00Z',
-                //     endDate: moment().add(1, 'd').toISOString()
-                // });
-
-                // console.debug(response.data)
                 setPomodoro(response.data)
                 setPomodoroStatus('started')
                 setMessage('')
@@ -268,8 +266,6 @@ export default function ListTasksComponent({
                                 tasksCount={tasksCount}
                                 project={project}
                                 tag={tag}
-                                tags={tags}
-                                projects={projects}
                                 createNewPomodoro={createNewPomodoro}
                                 setPomodorosListReload={setPomodorosListReload}
                                 pomodoroStatus={pomodoroStatus}
@@ -318,8 +314,6 @@ export default function ListTasksComponent({
                                         tasksCount={archivedTasksCount}
                                         project={project}
                                         tag={tag}
-                                        tags={tags}
-                                        projects={projects}
                                         createNewPomodoro={createNewPomodoro}
                                         startDate={startDate}
                                         endDate={endDate}

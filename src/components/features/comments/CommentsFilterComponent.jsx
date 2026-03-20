@@ -1,7 +1,7 @@
-import { useLiveQuery } from 'dexie-react-hooks';
 import { useState } from 'react';
+import { useData } from 'services/DataContext';
 
-import { getFilteredItemsFromCache, getItemsFromCache } from 'services/dbService';
+import { getFilteredItemsFromCache } from 'services/dbService';
 
 export const CommentsFilterComponent = ({ setFilterType, setFilterTypeId, resetFiltersAndReload }) => {
 
@@ -9,7 +9,9 @@ export const CommentsFilterComponent = ({ setFilterType, setFilterTypeId, resetF
     const TASKS_COUNT = 100;
     const ALL_PAGESIZE = 100;
 
-    const categories = useLiveQuery(async () => await getItemsFromCache('categories', 1, ALL_PAGESIZE));
+    const dataContext = useData();
+
+    const categories = [...dataContext.categoriesMap.values()];
 
     const [categoryId, setCategoryId] = useState('0');
     const [projectId, setProjectId] = useState('0');
@@ -42,7 +44,7 @@ export const CommentsFilterComponent = ({ setFilterType, setFilterTypeId, resetF
     }
 
     function refreshProjects(categoryId) {
-        getFilteredItemsFromCache('projects', { projectCategoryId: parseInt(categoryId) }, { limit: ALL_PAGESIZE, offset: 0 })
+        getFilteredItemsFromCache('projects', { projectCategoryId: categoryId }, { limit: ALL_PAGESIZE, offset: 0 })
             .then(response => {
                 // console.debug(response)
                 setProjects(response);
@@ -54,13 +56,13 @@ export const CommentsFilterComponent = ({ setFilterType, setFilterTypeId, resetF
     function refreshTasks(projectId) {
         setShowLoader(true);
         setTasks([]);
-        getFilteredItemsFromCache('tasks', { projectId: parseInt(projectId), status: 'current' }, { limit: TASKS_COUNT, offset: 0 })
+        getFilteredItemsFromCache('tasks', { projectId: projectId, status: 'current' }, { limit: TASKS_COUNT, offset: 0 })
             .then(response => {
                 // console.debug(response)
                 const localTasks1 = response;
                 setTasks(response);
 
-                getFilteredItemsFromCache('tasks', { projectId: parseInt(projectId), status: 'archived' }, { limit: TASKS_COUNT, offset: 0 })
+                getFilteredItemsFromCache('tasks', { projectId: projectId, status: 'archived' }, { limit: TASKS_COUNT, offset: 0 })
                     .then(response => {
                         // console.debug(response)
                         const localTasks2 = localTasks1.concat(response);

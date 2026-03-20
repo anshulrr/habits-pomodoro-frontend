@@ -12,13 +12,13 @@ import { generateDateColor } from "services/helpers/listsHelper";
 
 import ListCommentsComponent from "components/features/comments/ListCommentsComponent";
 import SortableTask from "./SortableTask";
-import { getTasksFromCache, putItemToCache } from "services/dbService";
+import { getPomodorosFromCache, getTasksFromCache, putItemToCache } from "services/dbService";
+import { useData } from "services/DataContext";
+import { db } from "services/db";
 
 export default function ListTasksRowsComponent({
     project,
     tag,
-    tags,
-    projects,
     status,
     tasksCount,
     createNewPomodoro,
@@ -32,6 +32,8 @@ export default function ListTasksRowsComponent({
     const navigate = useNavigate()
     const { state } = useLocation();
 
+    const dataContext = useData();
+
     const authContext = useAuth()
     const userSettings = authContext.userSettings
 
@@ -40,19 +42,43 @@ export default function ListTasksRowsComponent({
     const [sortableTasks, setSortableTasks] = useState([]);
 
     const tasks = useLiveQuery(async () => {
-        const retrievedTasks = await getTasksFromCache({
+        let retrievedTasks = await getTasksFromCache({
             status,
             projectId: project?.id,
             tagId: tag?.id,
             startDate,
             endDate,
             searchString,
-            limit: PAGESIZE,
-            offset: (currentPage - 1) * PAGESIZE
+            limit: 10000,
+            offset: 0
         })
+        // TODO: find better solution: temp fix for order by
+        // Sort by category first, then project, then task priority
+        retrievedTasks.sort((a, b) => {
+            return a.categoryPriority - b.categoryPriority || a.projectPriority - b.projectPriority || a.priority - b.priority;
+        });
+        const startIndex = (currentPage - 1) * PAGESIZE;
+        const endIndex = startIndex + PAGESIZE;
+        retrievedTasks = retrievedTasks.slice(startIndex, endIndex);
+
         console.debug(`Retrieved ${status} tasks from cache after update:`, { retrievedTasks });
-        setSortableTasks(retrievedTasks);
-        return updateProjectData(retrievedTasks);
+
+        // update view data from cache
+        const tasksPomodoros = await db['pomodoros']
+            .where('taskId')
+            .anyOf(retrievedTasks.map(task => task.id))
+            .filter(task => task.status !== 'deleted')
+            .toArray();
+        console.debug(`Retrieved tasks' pomodoros from cache after update:`, { tasksPomodoros });
+
+        const viewUpdatedTasks = updateTasksTodaysTimeElpased(retrievedTasks, tasksPomodoros);
+
+        // calculate data for view
+        updateTasksDueDateColor(viewUpdatedTasks);
+        // set tasks for view
+        setSortableTasks(viewUpdatedTasks);
+
+        return viewUpdatedTasks;
     }, [currentPage]);
 
     const [showCommentsId, setShowCommentsId] = useState(-1);
@@ -68,13 +94,21 @@ export default function ListTasksRowsComponent({
         }, [] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
-    function updateProjectData(tasks) {
-        const projectsMap = new Map(projects.map(project => [project.id, project]));
-        for (const i in tasks) {
-            tasks[i].project = projectsMap.get(tasks[i].projectId);
+    function updateTasksTodaysTimeElpased(retrievedTasks, pomodoros) {
+        retrievedTasks.forEach(task => {
+            task.todaysTimeElapsed = 0;
+            task.totalTimeElapsed = 0;
+            return task;
+        })
+        const tasksMap = new Map(retrievedTasks.map(item => [item.id, item]));
+        for (const pomodoro of pomodoros) {
+            const task = tasksMap.get(pomodoro.taskId);
+            if (moment(pomodoro.endTime).isAfter(moment().startOf('day'))) {
+                task.todaysTimeElapsed += pomodoro.timeElapsed;
+            }
+            task.totalTimeElapsed += pomodoro.timeElapsed;
         }
-        updateTasksDueDateColor(tasks);
-        return tasks;
+        return [...tasksMap.values()];
     }
 
     function onUpdateTaskStatus(task, status) {
@@ -95,7 +129,7 @@ export default function ListTasksRowsComponent({
     }
 
     function onCreateNewPomodoro(task) {
-        createNewPomodoro(task, task.project)
+        createNewPomodoro(task, dataContext.projectsMap.get(task.projectId))
     }
 
     function updateTasksDueDateColor(tasks) {
@@ -160,7 +194,7 @@ export default function ListTasksRowsComponent({
                     sortableTasks.map(
                         (task, index) => {
                             // TODO: find better way to handle this
-                            task.pomodoroLength = task.pomodoroLength || task.project.pomodoroLength || userSettings.pomodoroLength;
+                            task.pomodoroLength = task.pomodoroLength || dataContext.projectsMap.get(task.projectId).pomodoroLength || userSettings.pomodoroLength;
                             return (
                                 <SortableTask
                                     key={task.id}
@@ -169,7 +203,6 @@ export default function ListTasksRowsComponent({
                                     sortableTasks={sortableTasks}
                                     onCreateNewPomodoro={onCreateNewPomodoro}
                                     onUpdateTaskStatus={onUpdateTaskStatus}
-                                    tags={tags}
                                     setPomodorosListReload={setPomodorosListReload}
                                     project={project}
                                     setShowCommentsId={setShowCommentsId}

@@ -19,6 +19,7 @@ import SignupComponent from 'components/SignupComponent'
 import ForgotPasswordComponent from 'components/ForgotPasswordComponent'
 import AboutComponent from 'components/AboutComponent'
 import ListCommentsComponent from './features/comments/ListCommentsComponent'
+import DataProvider from 'services/DataContext'
 
 function AuthenticatedRoute({ children }) {
     const authContext = useAuth()
@@ -33,54 +34,56 @@ export default function AppRoutes() {
     return (
         <div className="AppRoutes mb-5">
             <AuthProvider>
-                <BrowserRouter>
-                    <HeaderComponent />
+                <DataProvider>
+                    <BrowserRouter>
+                        <HeaderComponent />
 
-                    <Routes>
-                        <Route path='/' element={<LoginComponent />} />
-                        <Route path='/login' element={<LoginComponent />} />
-                        <Route path='/signup' element={<SignupComponent />} />
-                        <Route path='/forgot-password' element={<ForgotPasswordComponent />} />
+                        <Routes>
+                            <Route path='/' element={<LoginComponent />} />
+                            <Route path='/login' element={<LoginComponent />} />
+                            <Route path='/signup' element={<SignupComponent />} />
+                            <Route path='/forgot-password' element={<ForgotPasswordComponent />} />
 
-                        <Route path='/welcome/:username' element={
-                            <AuthenticatedRoute>
-                                <HomeComponent />
-                            </AuthenticatedRoute>
-                        } />
+                            <Route path='/welcome/:username' element={
+                                <AuthenticatedRoute>
+                                    <HomeComponent />
+                                </AuthenticatedRoute>
+                            } />
 
-                        <Route path='/projects/:id' element={
-                            <AuthenticatedRoute>
-                                <ProjectComponent />
-                            </AuthenticatedRoute>
-                        } />
+                            <Route path='/projects/:id' element={
+                                <AuthenticatedRoute>
+                                    <ProjectComponent />
+                                </AuthenticatedRoute>
+                            } />
 
-                        <Route path='/about' element={
-                            <AboutComponent />
-                        } />
+                            <Route path='/about' element={
+                                <AboutComponent />
+                            } />
 
 
-                        <Route path='/notes' element={
-                            <AuthenticatedRoute>
-                                <ListCommentsComponent />
-                            </AuthenticatedRoute>
-                        } />
+                            <Route path='/notes' element={
+                                <AuthenticatedRoute>
+                                    <ListCommentsComponent />
+                                </AuthenticatedRoute>
+                            } />
 
-                        <Route path='/stats' element={
-                            <AuthenticatedRoute>
-                                <StatsComponent />
-                            </AuthenticatedRoute>
-                        } />
+                            <Route path='/stats' element={
+                                <AuthenticatedRoute>
+                                    <StatsComponent />
+                                </AuthenticatedRoute>
+                            } />
 
-                        <Route path='/settings' element={
-                            <AuthenticatedRoute>
-                                <SettingsComponent />
-                            </AuthenticatedRoute>
-                        } />
+                            <Route path='/settings' element={
+                                <AuthenticatedRoute>
+                                    <SettingsComponent />
+                                </AuthenticatedRoute>
+                            } />
 
-                        <Route path='*' element={<ErrorComponent />} />
-                    </Routes>
+                            <Route path='*' element={<ErrorComponent />} />
+                        </Routes>
 
-                </BrowserRouter>
+                    </BrowserRouter>
+                </DataProvider>
             </AuthProvider>
 
 

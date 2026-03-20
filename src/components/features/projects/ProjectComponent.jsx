@@ -7,8 +7,11 @@ import { calculateTextAreaRows } from 'services/helpers/helper';
 import { COLOR_MAP } from 'services/helpers/listsHelper';
 
 import { addItemToCache, getItemFromCache, putItemToCache, syncDirtyItems } from 'services/dbService';
+import { useData } from 'services/DataContext';
 
 export default function ProjectComponent() {
+
+    const dataContext = useData();
 
     const { id } = useParams()
 
@@ -24,10 +27,10 @@ export default function ProjectComponent() {
     const [type, setType] = useState('neutral')
     const [dailyLimit, setDailyLimit] = useState(1)
 
-    const [projectCategories, setProjectCategories] = useState([])
-    const [categoriesMap, setCategoriesMap] = useState(new Map())
+    const categoriesMap = dataContext.categoriesMap;
+    const projectCategories = [...categoriesMap.values()];
     const [errors, setErrors] = useState({ color: projectCategoryId === 0 ? 'To select a color, first select a project category' : '' })
-    const [showLoader, setShowLoader] = useState(parseInt(id) !== -1)
+    const [showLoader, setShowLoader] = useState(id !== 'create')
 
     const [showInput, setShowInput] = useState(true)
 
@@ -39,32 +42,17 @@ export default function ProjectComponent() {
             (() => {
                 // console.debug('re-render ProjectComponents')
                 retrieveProject()
-                retrieveProjectCategories()
             })();
         }, [] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
-    function retrieveProjectCategories() {
-        // TODO: decide limit
-        retrieveAllProjectCategoriesApi(100, 0)
-            .then(response => {
-                setProjectCategories(response.data)
-                const map = new Map();
-                for (const category of response.data) {
-                    map.set(category.id, category);
-                }
-                setCategoriesMap(map);
-            })
-            .catch(error => console.error(error.message))
-    }
-
     // set project details for form fields
     async function retrieveProject() {
-        if (parseInt(id) === -1) {
+        if (id === 'create') {
             return;
         }
 
-        const project = await getItemFromCache('projects', parseInt(id));
+        const project = await getItemFromCache('projects', id);
         // console.debug({ project })
         setProject(project)
 
@@ -109,7 +97,7 @@ export default function ProjectComponent() {
             return;
         }
 
-        if (parseInt(id) === -1) {
+        if (id === 'create') {
             addItemToCache('projects', updatedProject);
             // new project will be added to start of the ordered projects list
             state.currentProjectsPage = 1;
@@ -155,13 +143,13 @@ export default function ProjectComponent() {
         <div className="container mt-3">
 
             {
-                parseInt(id) === -1 &&
+                id === 'create' &&
                 <h6>
                     Add New Project
                 </h6>
             }
             {
-                parseInt(id) !== -1 &&
+                id !== 'create' &&
                 <h6>
                     Update Project Details
                     {
@@ -202,7 +190,7 @@ export default function ProjectComponent() {
                                     name="projectCategoryId"
                                     value={projectCategoryId}
                                     onChange={(e) => {
-                                        const id = parseInt(e.target.value);
+                                        const id = e.target.value;
                                         setProjectCategoryId(id)
                                         setColor(categoriesMap.get(id).color)
                                         errors.color = '';

@@ -35,7 +35,7 @@ export default function PastPomodoroComponent({
     }
 
     async function createPastPomodoro() {
-        const project = await getItemFromCache('projects', parseInt(task.projectId))
+        const project = await getItemFromCache('projects', task.projectId)
 
         const pomodoro = {
             startTime: date.toISOString(),
@@ -53,15 +53,12 @@ export default function PastPomodoroComponent({
         console.debug('create pomodoro:', { pomodoro });
         addItemToCache('pomodoros', pomodoro);
 
-        // modify view data
-        modifyItemInCache('tasks', task.id, { todaysTimeElapsed: (task.todaysTimeElapsed || 0) + pomodoro.timeElapsed });
-        modifyItemInCache('tasks', task.id, { totalTimeElapsed: (task.totalTimeElapsed || 0) + pomodoro.timeElapsed });
-
-        modifyItemInCache('projects', project.id, { timeElapsed: (project.timeElapsed || 0) + pomodoro.timeElapsed });
-
         // cleanup
         setShowCreatePastPomodoro(-1)
-        setPomodorosListReload(prevReload => prevReload + 1)
+        // TODO: chart should reload only after dirty items are synced to new pomodoro in backend
+        setTimeout(() => {
+            setPomodorosListReload(prevReload => prevReload + 1)
+        }, 1000);
     }
 
     const filterFutureTime = (time) => {

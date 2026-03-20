@@ -8,6 +8,7 @@ import { Buttons } from "components/stats/charts/Buttons";
 import ListCommentsComponent from "components/features/comments/ListCommentsComponent";
 import OutsideAlerter from "services/hooks/OutsideAlerter";
 import { getItemFromCache, getPomodorosFromCache, modifyItemInCache, syncDirtyItems } from "services/dbService";
+import { useData } from "services/DataContext";
 
 export default function ListPomodorosComponent({
     includeCategories,
@@ -16,9 +17,10 @@ export default function ListPomodorosComponent({
     setButtonsStates,
     title = "Pomodoros",
     elementHeight,
-    setElementHeight,
     setChartReload
 }) {
+
+    const dataContext = useData();
 
     const listElement = useRef(null);
 
@@ -53,29 +55,13 @@ export default function ListPomodorosComponent({
 
     const [showCommentsId, setShowCommentsId] = useState(-1);
 
-    const [reload, setReload] = useState(0);
-
     const [showPomodoroUpdateId, setShowPomodoroUpdateId] = useState(-1);
 
     useEffect(
         () => {
             // console.debug('re-render ListPomodorosComponent')
-
-            const observer = new ResizeObserver(handleResize);
-            observer.observe(listElement.current);
-            return () => {
-                // Cleanup the observer by unobserving all elements
-                observer.disconnect();
-            };
-        }, [reload]   // eslint-disable-line react-hooks/exhaustive-deps
+        }, []   // eslint-disable-line react-hooks/exhaustive-deps
     )
-
-    const handleResize = () => {
-        if (listElement.current !== null) {
-            // console.debug(listElement.current.offsetHeight);
-            setElementHeight(listElement.current.offsetHeight);
-        }
-    }
 
     function retrievePomodoros({ startDate, endDate }) {
         // console.debug('api call', { allCategories, includeCategories })
@@ -107,27 +93,17 @@ export default function ListPomodorosComponent({
 
         // Use update API instead of delete
         // TODO: check if this is the best solution
-        modifyItemInCache('pomodoros', pomodoro.id, { status: 'deleted', _dirty: 1 });
+        await modifyItemInCache('pomodoros', pomodoro.id, { status: 'deleted', _dirty: 1 });
         syncPomodoros();
-
-        // Update cache view data: reduce the time elapsed of the project and task by the time elapsed of the deleted pomodoro
-        const task = await getItemFromCache('tasks', parseInt(pomodoro.taskId))
-        modifyItemInCache('tasks', task.id, { totalTimeElapsed: task.totalTimeElapsed - pomodoro.timeElapsed });
-        if (title === "Today's Pomodoros") {
-            modifyItemInCache('tasks', task.id, { todaysTimeElapsed: task.todaysTimeElapsed - pomodoro.timeElapsed });
-            const project = await getItemFromCache('projects', parseInt(pomodoro.projectId))
-            modifyItemInCache('projects', project.id, { timeElapsed: project.timeElapsed - pomodoro.timeElapsed });
-        }
-
-        // cleanup
-        setReload(prev => prev + 1);
     }
 
     async function syncPomodoros() {
         if (navigator.onLine) {
             console.info(`Online! Syncing deleted dirty pomodoros...`);
             await syncDirtyItems('pomodoros'); // Fire and forget in background
-            setChartReload(prevReload => prevReload + 1)    // for chart reload
+            setTimeout(() => {
+                setChartReload(prevReload => prevReload + 1)    // for chart reload
+            }, 1000);
         }
     }
 
@@ -165,7 +141,6 @@ export default function ListPomodorosComponent({
                 title === 'Pomodoros' &&
                 <div className="mb-2">
                     <Buttons
-                        key={[reload]}
                         retrievePomodoros={retrievePomodoros}
                         buttonsStates={buttonsStates}
                         setButtonsStates={setButtonsStates}
@@ -216,7 +191,7 @@ export default function ListPomodorosComponent({
                                                     <div className="mx-2 d-flex text-start small text-secondary">
                                                         <div className={"flex-grow-1 " + (!subject ? "update-popup-container" : "")}>
                                                             <span>
-                                                                {pomodoro.index}. {pomodoro.task}
+                                                                {pomodoro.index}. {dataContext.tasksMap.get(pomodoro.taskId).description}
                                                             </span>
                                                             <span className="align-middle" style={{ float: "right" }}>
                                                                 {showPomodoroUpdateId !== pomodoro.id &&
@@ -238,7 +213,7 @@ export default function ListPomodorosComponent({
                                                                                 {timeToDisplay(Math.round(pomodoro.timeElapsed / 60))}
                                                                             </span>
                                                                         </span>
-                                                                        <span className="ms-1" style={{ color: pomodoro.color }}>&#9632;</span>
+                                                                        <span className="ms-1" style={{ color: dataContext.projectsMap.get(pomodoro.projectId).color }}>&#9632;</span>
                                                                     </span>
                                                                 }
 

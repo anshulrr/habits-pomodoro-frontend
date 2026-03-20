@@ -23,7 +23,6 @@ export default function ProjectCategoryComponent({
         // setErrorMessage("")
         const project_category = {
             id: category?.id,
-            publicId: category?.publicId,
             name,
             statsDefault,
             visibleToPartners,

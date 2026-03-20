@@ -195,6 +195,19 @@ export default function UserSettingsComponent() {
         ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
 
+    if (!navigator.onLine)
+        return (
+            <div className="sticky-menu pb-0" style={{ backgroundColor: "unset" }}>
+                <div className="row px-0">
+                    <div className="col-12 px-0">
+                        <div className="alert alert-danger mb-0 py-1" role="alert">
+                            You Are Offline, User settings will be available once online...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+
     if (showLoader) {
         return (
             <div>
