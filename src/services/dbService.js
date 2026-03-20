@@ -23,16 +23,22 @@ import {
     getTasksCommentsCountApi
 } from './api/TaskApiService';
 import {
-    getPomodorosApi
+    createPastPomodoroApi,
+    getPomodorosApi,
+    updatePomodoroApi
 } from './api/PomodoroApiService';
 import {
+    createTagApi,
     getTagsCountApi,
     getTasksTagsApi,
-    retrieveAllTagsApi
+    retrieveAllTagsApi,
+    updateTagApi
 } from './api/TagApiService';
 import {
+    createCommentApi,
     getCommentsCountApi,
-    retrieveAllCommentsApi
+    retrieveAllCommentsApi,
+    updateCommentApi
 } from './api/CommentApiService';
 import moment from 'moment';
 
@@ -59,22 +65,25 @@ const apiMap = {
         getCountApi: getSyncAllTasksCountApi,
     },
     'pomodoros': {
+        createApi: createPastPomodoroApi,
+        updateApi: updatePomodoroApi,
         retrieveAllApi: getPomodorosApi,
+        retrieveSyncAllApi: getPomodorosApi,
         getCountApi: () => {
             console.info('getCountApi is not supported for pomodoros')
             return { data: -1 };
         }
     },
     'tags': {
-        createApi: null,
-        updateApi: null,
+        createApi: createTagApi,
+        updateApi: updateTagApi,
         retrieveAllApi: retrieveAllTagsApi,
         retrieveSyncAllApi: retrieveAllTagsApi,
         getCountApi: getTagsCountApi
     },
     'comments': {
-        createApi: null,
-        updateApi: null,
+        createApi: createCommentApi,
+        updateApi: updateCommentApi,
         retrieveAllApi: retrieveAllCommentsApi,
         retrieveSyncAllApi: retrieveAllCommentsApi,
         getCountApi: getCommentsCountApi
@@ -153,9 +162,12 @@ export function clearCacheDb() {
 */
 export async function addItemToCache(entity, item) {
     try {
-        // Add the new item to db!
+        // new item default values
+        item.id = 0  // using 0 as a placeholder, -1 is used for task popups
+        item.publicId = window.crypto.randomUUID();
         item._dirty = 1;
         item.updatedAt = new Date().toISOString();
+
         await db[entity].add(item)
         const prevCount = await getItemsCountFromCache(entity);
         await db.metadata.put({ id: 'count_' + entity, value: prevCount + 1 });
@@ -184,6 +196,30 @@ export async function putItemToCache(entity, item) {
         }
     } catch (error) {
         console.error(`Cache: Failed to update ${item.id}: ${error}`)
+    }
+}
+
+// TODO: use delta sync
+export async function addServerItemToCache(entity, item) {
+    // console.debug({ item })
+    try {
+        // Add item to cache
+        item._dirty = 0;
+        await db[entity].put(item)
+    } catch (error) {
+        console.error(`Cache: Failed to update server ${entity} ${item.id}: ${error}`)
+    }
+}
+
+export async function putServerItemToCache(entity, item) {
+    // console.debug({ item })
+    try {
+        // Update item to cache
+        await db[entity]
+            .where({ id: item.id })
+            .modify(item);
+    } catch (error) {
+        console.error(`Cache: Failed to update server ${entity} ${item.id}: ${error}`)
     }
 }
 
@@ -244,13 +280,15 @@ export async function syncDirtyItems(entity) {
 1. Sync all entities with delta items parallelly, to improve performance
 */
 export function syncEntitiesDelta() {
-    for (const entity of ['categories', 'projects', 'tasks']) {
-        syncDeltaItems(entity).then(() => {
-            console.info(`Successfully synced delta items for ${entity}`);
-        }).catch(error => {
-            console.error(`Cache: Failed to sync delta items for ${entity}: ${error}`)
-        });
-    }
+    syncDeltaItems('categories');
+    syncDeltaItems('projects');
+    syncDeltaItems('tasks');
+    syncDeltaItems('pomodoros', {
+        startDate: '1970-01-01T00:00:00Z',
+        endDate: new Date().toISOString()
+    });
+    syncDeltaItems('tags');
+    syncDeltaItems('comments', { filterBy: 'user' });
 }
 
 /*
@@ -258,7 +296,7 @@ export function syncEntitiesDelta() {
 2. and update them in cache, 
 3. Update the last sync time in cache, so that we can fetch delta items later
 */
-export async function syncDeltaItems(entity) {
+export async function syncDeltaItems(entity, requestData) {
     console.info(`Syncing delta items of ${entity}...`);
     const lastSyncMeta = await db.metadata.get('last_sync_' + entity);
     const lastSyncTime = lastSyncMeta ? lastSyncMeta.value : '1970-01-01T00:00:00Z';
@@ -266,12 +304,13 @@ export async function syncDeltaItems(entity) {
     try {
         // 1. Fetch only what changed since last time
         // TODO: decide limit
-        const items = (await apiMap[entity].retrieveSyncAllApi({ limit: 10000, offset: 0, lastSyncTime })).data;
+        const items = (await apiMap[entity].retrieveSyncAllApi({ limit: 10000, offset: 0, lastSyncTime, ...requestData })).data;
 
         // 2. Transaction: Save data and the NEW sync time together
         await db.transaction('rw', db[entity], db.metadata, async () => {
             // Instead of full update, only update recieved keys, so that old extra keys (eg. _dirty, timeElapsed) are not removed
             for (const item of items) {
+                // console.log({ item })
                 // Atomic Check: Only update if the item is not dirty locally (prevents overwriting unsynced local changes)
                 // Or if the item is newer than what we have locally (handles updates from other devices)
                 // otherwise local changes will be updated to server on next dirty sync, and we will get the latest version then
@@ -285,7 +324,7 @@ export async function syncDeltaItems(entity) {
         });
         console.info(`Successfully synced ${items.length} delta items of ${entity}`);
     } catch (error) {
-        console.error(`Cache: Failed to sync items: ${error}`)
+        console.error(`Cache: Failed to sync delta items of ${entity}: ${error}`)
     }
 }
 
@@ -338,7 +377,7 @@ export async function getTasksFromCache({ projectId, tagId, startDate, endDate, 
 
 async function createTasksFilterQuery({ projectId, tagId, startDate, endDate, searchString }) {
     let query = db['tasks'];
-    if (projectId) {
+    if (projectId || projectId === 0) { // check 0 for new project
         query = query.where({ projectId })
     } else if (tagId) {
         const taskIds = await db['tasks_tags']

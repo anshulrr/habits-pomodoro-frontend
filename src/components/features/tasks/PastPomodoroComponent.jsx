@@ -6,12 +6,12 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 import { useAuth } from 'services/auth/AuthContext';
-import { createPastPomodoroApi } from "services/api/PomodoroApiService";
+import { addItemToCache } from 'services/dbService';
 
 export default function PastPomodoroComponent({
     setShowCreatePastPomodoro,
     task,
-    setPomodorosListReload,
+    // setPomodorosListReload,
     setTasksReload
 }) {
     const authContext = useAuth()
@@ -36,22 +36,19 @@ export default function PastPomodoroComponent({
     }
 
     function createPastPomodoro() {
-        const pomodoro_data = {
+        const pomodoro = {
             startTime: date,
             endTime: date,
-            timeElapsed: minutesElapsed * 60
+            timeElapsed: minutesElapsed * 60,
+            taskId: task.id
         }
 
-        createPastPomodoroApi(pomodoro_data, task.id)
-            .then(response => {
-                // console.debug(response)
-                setShowCreatePastPomodoro(-1)
-                setPomodorosListReload(prevReload => prevReload + 1)
-                setTasksReload(prevReload => prevReload + 1)
-            })
-            .catch(error => {
-                console.error(error.message)
-            })
+        console.debug('create pomodoro:', { pomodoro });
+        addItemToCache('pomodoros', pomodoro);
+
+        setShowCreatePastPomodoro(-1)
+        // setPomodorosListReload(prevReload => prevReload + 1)
+        setTasksReload(prevReload => prevReload + 1)
     }
 
     const filterFutureTime = (time) => {

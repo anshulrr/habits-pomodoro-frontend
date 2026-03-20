@@ -29,8 +29,6 @@ export default function ProjectCategoryComponent({
             visibleToPartners,
             level,
             color,
-            _dirty: 1,
-            updatedAt: new Date().toISOString()
         }
 
         if (!validate(project_category)) {
@@ -38,22 +36,12 @@ export default function ProjectCategoryComponent({
         }
 
         if (category === null) {
-            project_category.publicId = window.crypto.randomUUID();
-            project_category.id = -1;
             addItemToCache('categories', project_category)
-            if (navigator.onLine) {
-                console.log('Online! Syncing dirty items...');
-                syncDirtyItems('categories'); // Fire and forget in background
-            }
             setNewCategory(false)
             setCurrentPage(1);
 
         } else {
             putItemToCache('categories', project_category);
-            if (navigator.onLine) {
-                console.log('Online! Syncing dirty items...');
-                syncDirtyItems('categories'); // Fire and forget in background
-            }
             setCategory(null);
         }
     }
