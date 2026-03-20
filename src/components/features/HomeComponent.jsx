@@ -36,8 +36,6 @@ export default function HomeComponent({ setReloadHome }) {
     const userSettings = authContext.userSettings;
     const IS_FILTERS_DEFAULT = userSettings.homePageDefaultList === 'filters';
 
-    const [todaysPomodorosMap, setTodaysPomodorosMap] = useState(null);
-
     /*
         * using useLiveQuery to subscribe to changes in projects in cache db, 
         * so that when projects are updated, the changes are reflected in the UI in real time without needing to manually refresh or refetch data.
@@ -211,13 +209,12 @@ export default function HomeComponent({ setReloadHome }) {
                                                 setProject={setProject}
                                                 setTag={setTag}
                                                 setShowLeftMenu={setShowLeftMenu}
-                                                todaysPomodorosMap={todaysPomodorosMap}
                                             />
 
                                             <div className="mb-3">
                                                 <ListTagsComponent
-                                                    setProject={setProject}
                                                     tag={tag}
+                                                    setProject={setProject}
                                                     setTag={setTag}
                                                     setShowLeftMenu={setShowLeftMenu}
                                                 />
@@ -376,7 +373,6 @@ export default function HomeComponent({ setReloadHome }) {
                                 title={"Today's Pomodoros"}
                                 elementHeight={pomodorosHeight}
                                 setElementHeight={setPomodorosHeight}
-                                setTodaysPomodorosMap={setTodaysPomodorosMap}
                                 setChartReload={setPomodorosListReload}
                             />
                         </div >
