@@ -1,9 +1,13 @@
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { createTaskApi } from 'services/api/TaskApiService';
+import { addItemToCache } from 'services/dbService';
 
-export default function CreateTaskComponent({ project, setTasksReload, setTasksCount }) {
+export default function CreateTaskComponent({
+    project,
+    tasksCount,
+    setCurrentPage
+}) {
 
     const navigate = useNavigate()
     const { state } = useLocation()
@@ -14,20 +18,28 @@ export default function CreateTaskComponent({ project, setTasksReload, setTasksC
         error.preventDefault();
 
         const task = {
+            id: 0,  // using 0 as a placeholder, -1 is used for task popups
+            publicId: window.crypto.randomUUID(),
             description,
             pomodoroLength: 0,
+            projectId: project.id,
             status: 'current',
+            // default values for offline create and update
+            priority: -tasksCount * 1000,
+            type: "neutral",
+            repeatDays: 0,
+            dailyLimit: 1,
         }
 
-        createTaskApi({ projectId: project.id, task })
-            .then(response => {
-                // console.debug(response)
-                setTasksReload(prev => prev + 1);
-                setTasksCount(prev => prev + 1)
-                setDescription('')
-                updateAppState()
-            })
-            .catch(error => console.error(error.message))
+        // TODO: handle scenario when a task is created while offline, and then updated while still offline
+        // TODO: make sure to add extra data for view such as projectName
+        console.debug('create task:', { task });
+        addItemToCache('tasks', task);
+
+        // cleanup
+        setDescription('')
+        setCurrentPage(1)
+        updateAppState()
     }
 
     function updateAppState() {

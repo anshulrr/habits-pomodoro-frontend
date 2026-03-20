@@ -11,8 +11,14 @@ import { apiClient } from "./ApiClient";
 
 export const retrieveAllCommentsApi
     = ({ limit, offset, filterBy, id, categoryIds, filterWithReviseDate, searchString }) => {
-        if (filterBy === 'user')
-            return apiClient.get(`/comments?limit=${limit}&offset=${offset}&categoryIds=${categoryIds}&filterWithReviseDate=${filterWithReviseDate}&searchString=${searchString}`)
+        console.log({ limit, offset, filterBy, id, categoryIds, filterWithReviseDate, searchString })
+        if (filterBy === 'user') {
+            if (categoryIds) {
+                return apiClient.get(`/comments?limit=${limit}&offset=${offset}&categoryIds=${categoryIds}&filterWithReviseDate=${filterWithReviseDate}&searchString=${searchString}`)
+            } else {
+                return apiClient.get(`/comments?limit=${limit}&offset=${offset}`)
+            }
+        }
         else if (filterBy === 'category')
             return apiClient.get(`project-categories/${id}/comments?limit=${limit}&offset=${offset}`)
         else if (filterBy === 'project')
@@ -23,9 +29,13 @@ export const retrieveAllCommentsApi
 
 export const getCommentsCountApi
     = ({ filterBy, id, categoryIds, filterWithReviseDate, searchString }) => {
-        if (filterBy === 'user')
-            return apiClient.get(`/comments/count?categoryIds=${categoryIds}&filterWithReviseDate=${filterWithReviseDate}&searchString=${searchString}`)
-        else if (filterBy === 'category')
+        if (filterBy === 'user') {
+            if (categoryIds) {
+                return apiClient.get(`/comments/count?categoryIds=${categoryIds}&filterWithReviseDate=${filterWithReviseDate}&searchString=${searchString}`)
+            } else {
+                return apiClient.get(`/comments/count`)
+            }
+        } else if (filterBy === 'category')
             return apiClient.get(`project-categories/${id}/comments/count`)
         else if (filterBy === 'project')
             return apiClient.get(`projects/${id}/comments/count`)
