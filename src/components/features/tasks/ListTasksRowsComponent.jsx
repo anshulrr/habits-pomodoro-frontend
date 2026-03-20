@@ -6,6 +6,8 @@ import moment from "moment";
 
 import { Reorder } from "framer-motion";
 
+import { toast } from "react-toastify";
+
 import { useAuth } from "services/auth/AuthContext";
 import Pagination from "services/pagination/Pagination";
 import { generateDateColor } from "services/helpers/listsHelper";
@@ -38,10 +40,14 @@ export default function ListTasksRowsComponent({
     const userSettings = authContext.userSettings
 
     const PAGESIZE = userSettings.pageTasksCount;
+    const elementHeight = Math.min(tasksCount, PAGESIZE) * 60.6;
+    const [showLoader, setShowLoader] = useState(true);
 
     const [sortableTasks, setSortableTasks] = useState([]);
 
     const tasks = useLiveQuery(async () => {
+        setShowLoader(true);
+        const startTime = new Date().getTime();
         let retrievedTasks = await getTasksFromCache({
             status,
             projectId: project?.id,
@@ -52,6 +58,12 @@ export default function ListTasksRowsComponent({
             limit: 10000,
             offset: 0
         })
+        // log for performance check
+        const endTime = new Date().getTime();
+        const duration = endTime - startTime;
+        if (duration > 500) {
+            toast.info(`Tasks QueryDuration: ${duration} ms`, { position: "bottom-right" });
+        }
         // TODO: find better solution: temp fix for order by
         // Sort by category first, then project, then task priority
         retrievedTasks.sort((a, b) => {
@@ -73,11 +85,19 @@ export default function ListTasksRowsComponent({
 
         const viewUpdatedTasks = updateTasksTodaysTimeElpased(retrievedTasks, tasksPomodoros);
 
+        // log for performance check
+        const endTime2 = new Date().getTime();
+        const duration2 = endTime2 - startTime;
+        if (duration2 > 500) {
+            toast.info(`Tasks & Pomodoros QueryDuration: ${duration2} ms`, { position: "bottom-right" });
+        }
+
         // calculate data for view
         updateTasksDueDateColor(viewUpdatedTasks);
         // set tasks for view
         setSortableTasks(viewUpdatedTasks);
 
+        setShowLoader(false);
         return viewUpdatedTasks;
     }, [currentPage]);
 
@@ -174,10 +194,10 @@ export default function ListTasksRowsComponent({
 
     // console.log({ tasksCount, tasks })
     // to prevent rendering the page before tasks are loaded from cache db
-    if (!tasks)
+    if (showLoader)
         return (
-            <div className="loader-container my-1">
-                <div className="loader"></div>...
+            <div className="loader-container my-1" style={{ height: elementHeight }}>
+                <div className="loader"></div>
             </div >
         )
 
