@@ -57,7 +57,7 @@ export default function ListTagsComponent({
 
     useEffect(
         () => {
-            console.debug('re-render ListTagsComponents')
+            // console.debug('re-render ListTagsComponents')
             if (IS_TAGS_DEFAULT && isEmpty(state) && !tag && !!tags) {
                 setTag(tags[0]);
                 // udpate state for first time load

@@ -18,25 +18,25 @@ export default function DataProvider({ children }) {
     const ALL_PAGESIZE = 1000;
     const projectsMap = useLiveQuery(async () => {
         const cachedProjects = await getItemsFromCache('projects', 1, ALL_PAGESIZE)
-        console.log({ cachedProjects })
+        // console.log({ cachedProjects })
         return new Map(cachedProjects.map(item => [item.id, item]));
     }, []);
 
     const tagsMap = useLiveQuery(async () => {
         const cachedTags = await getItemsFromCache('tags', 1, ALL_PAGESIZE);
-        console.log({ cachedTags })
+        // console.log({ cachedTags })
         return new Map(cachedTags.map(item => [item.id, item]));
     }, []);
 
     const categoriesMap = useLiveQuery(async () => {
         const cachedCategories = await getItemsFromCache('categories', 1, ALL_PAGESIZE)
-        console.log({ cachedCategories })
+        // console.log({ cachedCategories })
         return new Map(cachedCategories.map(item => [item.id, item]));
     })
 
     const tasksMap = useLiveQuery(async () => {
         const cachedTasks = await db['tasks'].toArray();
-        console.log({ cachedTasks })
+        // console.log({ cachedTasks })
         return new Map(cachedTasks.map(item => [item.id, item]));
     }, []);
 
@@ -48,7 +48,7 @@ export default function DataProvider({ children }) {
             .between(startDate, endDate, false, true)
             .filter(pomodoro => pomodoro.status === 'past' || pomodoro.status === 'completed')
             .toArray();
-        console.debug(`Retrieved today's pomodoros from cache after update:`, { pomodoros });
+        // console.debug(`Retrieved today's pomodoros from cache after update:`, { pomodoros });
         return pomodoros;
     }, []);
 

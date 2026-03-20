@@ -25,7 +25,7 @@ export const storeToken = async (uid, token) => {
             });
             // console.log("Enable Transaction successfully committed!");
         } catch (e) {
-            console.log("Transaction failed: ", e);
+            // console.log("Transaction failed: ", e);
         }
     }
 }
@@ -48,6 +48,6 @@ export const disableToken = async (uid) => {
         });
         // console.log("Disable Transaction successfully committed!");
     } catch (e) {
-        console.log("Transaction failed: ", e);
+        // console.log("Transaction failed: ", e);
     }
 }

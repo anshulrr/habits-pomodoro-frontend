@@ -63,14 +63,14 @@ export default function AuthProvider({ children }) {
             return;
 
         const handleOnline = async () => {
-            console.info("Back online! Syncing...");
+            // console.info("Back online! Syncing...");
             await syncDirtyEntities();
-            console.debug("Sync complete! after coming online")
+            // console.debug("Sync complete! after coming online")
         };
-        console.info('Adding event listener for online status');
+        // console.info('Adding event listener for online status');
         window.addEventListener('online', handleOnline);
         return () => {
-            console.info('Cleaning up event listener');
+            // console.info('Cleaning up event listener');
             window.removeEventListener('online', handleOnline);
         }
     }, [isAuthenticated, isCacheDbAdded]);
@@ -85,7 +85,7 @@ export default function AuthProvider({ children }) {
 
         // TODO: decide period for both syncs. Currently set to 1 hour for delta sync, and 5 mins for dirty entities sync, which can be changed later based on user feedback and data usage.
         syncEntitiesDelta();
-        console.info("Setting up delta sync every hour");
+        // console.info("Setting up delta sync every hour");
         const interval1 = setInterval(() => {
             if (navigator.onLine) {
                 // errors are handled in sync function, so no need to catch here
@@ -94,7 +94,7 @@ export default function AuthProvider({ children }) {
         }, 60 * 60 * 1000); // Every hour
 
         syncDirtyEntities();
-        console.info("Setting up create/update sync every 5 mins");
+        // console.info("Setting up create/update sync every 5 mins");
         const interval2 = setInterval(() => {
             if (navigator.onLine) {
                 // errors are handled in sync function, so no need to catch here
@@ -216,7 +216,7 @@ export default function AuthProvider({ children }) {
         try {
             await clearCacheDb();
             setCacheDbAdded(false);
-            console.info("Deleted your data in cache successfully")
+            // console.info("Deleted your data in cache successfully")
         } catch (error) {
             console.error(error);
         }

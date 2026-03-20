@@ -73,7 +73,7 @@ export default function ListTasksRowsComponent({
         const endIndex = startIndex + PAGESIZE;
         retrievedTasks = retrievedTasks.slice(startIndex, endIndex);
 
-        console.debug(`Retrieved ${status} tasks from cache after update:`, { retrievedTasks });
+        // console.debug(`Retrieved ${status} tasks from cache after update:`, { retrievedTasks });
 
         // update view data from cache
         const tasksPomodoros = await db['pomodoros']
@@ -81,7 +81,7 @@ export default function ListTasksRowsComponent({
             .anyOf(retrievedTasks.map(task => task.id))
             .filter(task => task.status !== 'deleted')
             .toArray();
-        console.debug(`Retrieved tasks' pomodoros from cache after update:`, { tasksPomodoros });
+        // console.debug(`Retrieved tasks' pomodoros from cache after update:`, { tasksPomodoros });
 
         const viewUpdatedTasks = updateTasksTodaysTimeElpased(retrievedTasks, tasksPomodoros);
 
@@ -107,7 +107,7 @@ export default function ListTasksRowsComponent({
 
     useEffect(
         () => {
-            console.debug('re-render ListTasksRowsComponents')
+            // console.debug('re-render ListTasksRowsComponents')
             return () => {
                 clearTimeout(timeoutIdObj.id);
             };
@@ -137,7 +137,7 @@ export default function ListTasksRowsComponent({
         }
         task.status = status;
 
-        console.debug('onUpdateTaskStatus task:', { task });
+        // console.debug('onUpdateTaskStatus task:', { task });
         putItemToCache('tasks', task);
     }
 

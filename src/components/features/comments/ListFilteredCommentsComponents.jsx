@@ -60,7 +60,7 @@ export default function ListFilteredCommentsComponent({
             offset: (currentPage - 1) * PAGESIZE
         })
 
-        console.debug(`Retrieved comments from cache after update:`, { retrievedComments });
+        // console.debug(`Retrieved comments from cache after update:`, { retrievedComments });
         const truncated_comments = truncateComments(retrievedComments);
         // TODO: enable this after implementing filter by tags and offline support
         // getCommentsTags(truncated_comments);
@@ -129,7 +129,7 @@ export default function ListFilteredCommentsComponent({
     }
 
     function reloadComments() {
-        console.log('asked for comments reload');
+        // console.log('asked for comments reload');
         // getCommentsCount();
         // refreshComments();
     }

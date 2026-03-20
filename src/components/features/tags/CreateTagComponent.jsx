@@ -17,7 +17,7 @@ export default function CreateTagComponent({
             priority,
             color
         }
-        console.debug('create tag:', { tag });
+        // console.debug('create tag:', { tag });
         addItemToCache('tags', tag);
 
         setShowCreateTag(false)

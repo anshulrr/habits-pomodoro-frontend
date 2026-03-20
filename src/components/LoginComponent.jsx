@@ -64,7 +64,7 @@ export default function LoginComponent() {
             await authContext.getUserSettings();
             // initialize cache db after login
             await initCacheDb();
-            console.info("Cache DB initialized! Navigating to home page...")
+            // console.info("Cache DB initialized! Navigating to home page...")
             // console.debug(authContext.isCacheDbAdded)
             // setting this state to true to indicate that cache db is initialized, and now HomeComponent can be loaded.
             authContext.setCacheDbAdded(true);

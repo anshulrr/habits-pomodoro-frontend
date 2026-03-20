@@ -73,7 +73,7 @@ export default function ListTasksComponent({
 
     useEffect(
         () => {
-            console.debug('re-render ListTasksComponents')
+            // console.debug('re-render ListTasksComponents')
             // console.debug({ project, tag })
             // need to set it in useEffect, instead of top level, 
             // complete component won't reload

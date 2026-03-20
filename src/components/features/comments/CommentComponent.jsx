@@ -47,7 +47,7 @@ export default function CommentComponent({ filterBy, id, setShowCreateComment, s
         }
 
         // console.debug({ comment, filterBy, id })
-        console.debug('create comment:', { comment });
+        // console.debug('create comment:', { comment });
         addItemToCache('comments', comment);
 
         // modify view

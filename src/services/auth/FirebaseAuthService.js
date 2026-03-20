@@ -26,7 +26,7 @@ const registerUser = async (email, password) => {
         } else if (errorCode === AuthErrorCodes.EMAIL_EXISTS) {
             throw Error("Email is already registered")
         } else {
-            console.debug(error.code, error.message)
+            // console.debug(error.code, error.message)
             // todo: don't show firebase error to user
             // let message = error.message;
             // message = message.slice(10);
@@ -40,7 +40,7 @@ const signInUser = async (email, password) => {
         return await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
         // console.error(error);
-        console.debug(error.code, error.message)
+        // console.debug(error.code, error.message)
         throw Error("Something went wrong")
     }
 };
@@ -61,7 +61,7 @@ const changePassword = async (password) => {
             throw Error("Password should be at least 6 characters");
         } else {
             // todo: don't show firebase error to user
-            console.debug(error.code, error.message);
+            // console.debug(error.code, error.message);
             // let message = error.message;
             // message = message.slice(10);
             throw Error("Something went wrong");
@@ -78,7 +78,7 @@ const signInWithGoogle = async () => {
         return await signInWithPopup(auth, provider);
     } catch (error) {
         // console.error(error);
-        console.debug(error.code, error.message);
+        // console.debug(error.code, error.message);
         throw Error("Something went wrong");
     }
 };
