@@ -29,32 +29,23 @@ function App() {
 
 function registerServiceWorker() {
 
-  // disabled in mobile device
-  if (navigator?.userAgentData?.mobile) {
-    return;
-  }
-
   if ("serviceWorker" in navigator) {
-    // Register a service worker hosted at the root of the
-    // site using the default scope.
-    // console.debug("available")
-
-    navigator.serviceWorker.register("service_worker.js").then(
-      (registration) => {
+    console.log("Registering service workers...");
+    navigator.serviceWorker.register('/firebase-messaging-sw.js')
+      .then(registration => {
         // log registration events
         logRegistrationEvent(registration);
-        // console.debug("Service worker registration succeeded");
-        // console.debug("registration:", registration);
-      },
-      (error) => {
-        console.error(`Service worker registration failed: ${error}`);
-      },
-    );
-
-  } else {
-    // not supported in http only
-    console.error("Service workers are not supported.");
+        console.log('Service worker registered with scope:', registration.scope);
+      })
+      .catch(error => {
+        console.error('Service worker registration failed:', error);
+      });
   }
+
+  // disabled in mobile device
+  // if (navigator?.userAgentData?.mobile) {
+  //   return;
+  // }
 }
 
 // for testing purpose only
