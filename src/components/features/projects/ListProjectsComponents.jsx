@@ -182,9 +182,8 @@ export default function ListProjectsComponent({
                                                 <div className="col-4 ps-0 subscript text-secondary text-truncate text-end">
 
                                                     {
-                                                        proj.timeElapsed &&
+                                                        proj.timeElapsed !== 0 &&
                                                         <span>
-
                                                             <span className={generateTimeElapsedColor(proj)}>
                                                                 <i className="bi bi-clock-fill" style={{ paddingRight: "0.1rem" }} />
                                                             </span>

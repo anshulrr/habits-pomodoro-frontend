@@ -254,14 +254,14 @@ export default function SortableTask({
                                 </span>
                             }
 
-                            {
+                            {/* {
                                 <span className="me-1">
                                     <span>
                                         <i className="bi bi-arrow-up" style={{ paddingRight: "0.1rem" }} />
                                     </span>
                                     {task.priority}
                                 </span>
-                            }
+                            } */}
 
                             <span style={{ float: "right" }}>
                                 {
