@@ -1,3 +1,6 @@
+import moment from 'moment';
+import Dexie from 'dexie';
+
 import { db } from 'services/db'
 
 import {
@@ -14,8 +17,6 @@ import {
     getProjectsCountApi
 } from './api/ProjectApiService';
 import {
-    retrieveAllTasksApi,
-    getTasksCountApi,
     updateTaskApi,
     createTaskApi,
     getSyncAllTasksCountApi,
@@ -37,10 +38,9 @@ import {
 import {
     createCommentApi,
     getCommentsCountApi,
-    retrieveAllCommentsApi,
+    retrieveSyncAllCommentsApi,
     updateCommentApi
 } from './api/CommentApiService';
-import moment from 'moment';
 
 const apiMap = {
     'categories': {
@@ -84,8 +84,8 @@ const apiMap = {
     'comments': {
         createApi: createCommentApi,
         updateApi: updateCommentApi,
-        retrieveAllApi: retrieveAllCommentsApi,
-        retrieveSyncAllApi: retrieveAllCommentsApi,
+        retrieveAllApi: retrieveSyncAllCommentsApi,
+        retrieveSyncAllApi: retrieveSyncAllCommentsApi,
         getCountApi: getCommentsCountApi
     }
 };
@@ -104,7 +104,7 @@ export async function initCacheDb() {
         endDate: new Date().toISOString()
     }));
     promises.push(initEntityCache('tags', { limit: 10000, offset: 0 }));
-    promises.push(initEntityCache('comments', { limit: 10000, offset: 0, filterBy: 'user' }, { filterBy: 'user' }));
+    promises.push(initEntityCache('comments', { limit: 10000, offset: 0 }, { filterBy: 'user' }));
 
     try {
         // Initialize cache for all entities in parallel, to improve performance
@@ -113,7 +113,7 @@ export async function initCacheDb() {
         await db.metadata.put({ id: 'cache-init', value: 1 });
         console.info("Cache database initialization complete!");
         // Init view related data in background, no need to wait for it to complete, to improve performance of first load
-        await initView(); // Fire and forget in background, no need to wait for it to complete
+        await initView();
         console.info("View data initialization complete!");
     } catch (error) {
         console.error("One of the init chache tasks failed: please relogin", error);
@@ -124,7 +124,7 @@ export async function initCacheDb() {
 1. Get count of items from backend and put to cache, so that we can show the count in UI without fetching all items
 2. Get all items from backend and put to cache, so that we can show the items in UI without fetching from backend again
 */
-async function initEntityCache(entity, requestData, requestCountData) {
+export async function initEntityCache(entity, requestData, requestCountData) {
     // console.debug({ entity, requestData, requestCountData })
     try {
         let itemsCount = (await apiMap[entity].getCountApi(requestCountData)).data;
@@ -227,7 +227,15 @@ export async function putServerItemToCache(entity, item) {
 1. Sync all entities with dirty items parallelly, to improve performance
 */
 export function syncDirtyEntities() {
-    for (const entity of ['categories', 'projects', 'tasks']) {
+    const entities = [
+        'categories',
+        'projects',
+        'tasks',
+        'tags',
+        'comments',
+        'pomodoros' // TODO: check if needed
+    ]
+    for (const entity of entities) {
         syncDirtyItems(entity).then(() => {
             console.info(`Successfully synced dirty items for ${entity}`);
         }).catch(error => {
@@ -244,7 +252,7 @@ export function syncDirtyEntities() {
 */
 export async function syncDirtyItems(entity) {
     const dirtyItems = await db[entity].where('_dirty').equals(1).toArray();
-    console.info('dirtyItemsCount', dirtyItems.length)
+    console.info(entity, 'dirtyItemsCount', dirtyItems.length)
     for (const item of dirtyItems) {
         // console.debug("Syncing item", item);
         try {
@@ -265,6 +273,17 @@ export async function syncDirtyItems(entity) {
                 const response = await apiMap[entity].createApi(item);
                 // Update the item with the correct id from the backend and clear the dirty flag
                 await db[entity].update(item.publicId, { id: response.data.id, _dirty: 0 });
+            }
+
+            // TODO: find better solution
+            if (entity === 'comments') {
+                syncDeltaItems('comments', { filterBy: 'user' });
+            }
+            if (entity === 'pomodoros') {
+                syncDeltaItems('pomodoros', {
+                    startDate: '1970-01-01T00:00:00Z',
+                    endDate: new Date().toISOString()
+                });
             }
 
             // Success! Clear the flag locally
@@ -342,6 +361,8 @@ export async function getItemsFromCache(entity, currentPage, pageSize) {
             orderBy = 'level';
         } else if (entity === 'projects') {
             orderBy = '[categoryPriority+priority]';
+        } else {
+            orderBy = 'priority';
         }
         return await db[entity]
             .orderBy(orderBy)
@@ -352,6 +373,102 @@ export async function getItemsFromCache(entity, currentPage, pageSize) {
         console.error(`Failed to get categories: ${error}`)
     }
 }
+
+// COMMENTS
+// for dropdowns
+export async function getFilteredItemsFromCache(entity, filterBy, { limit, offset }) {
+    // console.debug(`load filtered ${entity} from cache`);
+    try {
+        // Add the new category to db!
+        let sortBy = 'priority';
+        if (entity === 'categories') {
+            sortBy = 'level';
+        }
+        return await db[entity]
+            .where(filterBy)
+            .sortBy(sortBy)
+            .then(tasks => tasks.slice(offset, offset + limit))
+    } catch (error) {
+        console.error(`Failed to get ${entity}: ${error}`)
+    }
+}
+
+export async function getCommentsCountFromCache({ filterBy, filterById, filterWithReviseDate, searchString }) {
+    // console.debug('load comments count from cache', { filterBy, filterById, filterWithReviseDate, searchString });
+    try {
+        let query = await createCommentsFilterQuery({ filterBy, filterById, filterWithReviseDate, searchString });
+        if (filterWithReviseDate) {
+            query = query
+                .filter(comment => !!comment.reviseDate)
+        }
+        return query
+            .count()
+    } catch (error) {
+        console.error(`Failed to get comments count: ${error}`)
+    }
+}
+
+export async function getCommentsFromCache({ filterBy, filterById, filterWithReviseDate, searchString, limit, offset }) {
+    // console.debug('load comments from cache', { filterBy, filterById, filterWithReviseDate, searchString, limit, offset });
+    try {
+        let query = await createCommentsFilterQuery({ filterBy, filterById, filterWithReviseDate, searchString });
+        if (filterWithReviseDate) {
+            query = query
+                .filter(comment => !!comment.reviseDate)
+        }
+        return query
+            .offset(offset)
+            .limit(limit)
+            .toArray()
+    } catch (error) {
+        console.error(`Failed to get comments: ${error}`)
+    }
+}
+
+async function createCommentsFilterQuery({ filterBy, filterById, filterWithReviseDate, searchString }) {
+    let query = db['comments'];
+    if (filterBy === 'task') {
+        query = query.where('[taskId+createdAt]')
+    } else if (filterBy === 'project') {
+        query = query.where('[projectId+createdAt]')
+    } else if (filterBy === 'category') {
+        query = query.where('[categoryId+createdAt]')
+    } else if (filterBy === 'user') {
+        query = query.orderBy('createdAt')
+            .reverse();
+        if (searchString) {
+            const regex = new RegExp(searchString, 'i');
+            // TODO: improve query performance
+            query = query
+                .filter(comment => regex.test(comment.description))
+        }
+        return query;
+    }
+    query = query
+        .between([parseInt(filterById), Dexie.minKey], [parseInt(filterById), Dexie.maxKey])
+        .reverse()
+
+    return query;
+}
+
+// POMODOROS
+export async function getPomodorosFromCache({ startDate, endDate, includeCategories }) {
+    console.debug('load pomodoros from cache', { startDate, endDate, });
+    try {
+        let query = db['pomodoros'];
+        query = query.where('endTime')
+            .between(startDate, endDate, true, true)
+            .reverse();
+        // TODO: handle include categories
+        return await query
+            .filter(pomodoro => pomodoro.status !== 'deleted')
+            .toArray();
+    } catch (error) {
+        console.error(`Failed to get pomodoros: ${error}`)
+    }
+}
+
+// TASKS
 export async function getTasksCountFromCache({ projectId, tagId, startDate, endDate, searchString, status }) {
     // console.debug('load tasks count from cache', { projectId, tagId, startDate, endDate, searchString, status });
     try {
@@ -437,6 +554,7 @@ export async function getTagTasksFromCache({ tagId, status, limit, offset }) {
     }
 }
 
+// COMMON
 // TODO: check why async await is necessary here
 /*
 1. Get count of items from cache, so that we can show the count in UI without fetching from backend again
@@ -471,10 +589,10 @@ export async function bulkPutItemsToCache(entity, items) {
         await db[entity].bulkPut(items)
         const now = new Date().toISOString();
         await db.metadata.put({ id: 'last_sync_' + entity, value: now });
+        console.info(`Cache: Successfully added ${items.length} items to cache for ${entity}`)
     } catch (error) {
         console.error(`Cache: Failed to add ${entity}: ${error}`)
     }
-    console.info(`Cache: Successfully added ${items.length} items to cache for ${entity}`)
 }
 
 /*
@@ -505,7 +623,14 @@ export async function getItemFromCache(entity, id) {
     }
 }
 
+// VIEW
 async function initView() {
+    await initTaskView();
+    await initProjectView();
+}
+
+// TASKS: view
+async function initTaskView() {
     try {
         const tasks = await db.tasks.toArray();
 
@@ -538,6 +663,7 @@ async function initView() {
     }
 }
 
+// Tasks Cache initView methods
 async function setTasksTodaysTimeElapsed({ taskMap, taskIds, startDate, endDate }) {
     try {
         const pomodoros = await db['pomodoros']
@@ -614,5 +740,87 @@ async function setTasksCommentsCount({ taskIds }) {
         }
     } catch (error) {
         console.error(`Cache VIEW: Failed to set tasks comments count: ${error}`)
+    }
+}
+
+// TAGS cache update methods for task mapping
+export async function updateTasksTag(updatedTag) {
+    try {
+        const taskIds = await db.tasks_tags
+            .where({ tagId: updatedTag.id })
+            .toArray()
+            .then(row => row.map(rel => rel.taskId));
+        // NOTE: TODO: check why in backend tasks_tags are store multiple time (not unique combination)
+        // console.debug({ taskIds }, taskIds.length);
+
+        // TODO: check efficiency of this method
+        await db.tasks
+            .where('id')
+            .anyOf(taskIds)
+            .modify(
+                task => {
+                    task.tags = task.tags.map(tag => {
+                        if (tag.id === updatedTag.id) {
+                            return updatedTag;
+                        }
+                        return tag;
+                    })
+                }
+            );
+        // console.debug(`successfully updated ${taskIds.length} tasks with updated tag data with id: ${updatedTag.id}`);
+    } catch (error) {
+        console.error(`Cache: failed to udpate tasks tag: ${error}`);
+    }
+}
+
+export async function updateTaskTags(taskId, tagsMap, tagIds) {
+    try {
+        // update tasks_tags table
+        // console.debug(tagIds.map(tagId => { return { taskId, tagId } }));
+        await db.tasks_tags
+            .bulkPut(tagIds.map(tagId => { return { taskId, tagId } }));
+
+        // update tags of the task
+        await db.tasks
+            .where({ id: taskId })
+            .modify({
+                tags: [...tagsMap.values()].filter(tag => tagIds.includes(tag.id))
+            })
+        // console.debug([...tagsMap.values()].filter(tag => tagIds.includes(tag.id)))
+    } catch (error) {
+        console.error(`Cache: failed to udpate task tags: ${error}`);
+    }
+}
+
+// PROJECTS
+async function initProjectView() {
+    // set time elapsed for today and total time elapsed for all tasks
+    let startDate = moment().startOf('day').toISOString();
+    let endDate0 = moment().toISOString();
+    let endDate = moment().startOf('day').add(1, 'd').toISOString();
+    // TODO: check issue with timezone
+    console.debug({ startDate, endDate0, endDate })
+
+    try {
+        const pomodoros = await getPomodorosFromCache({ startDate, endDate });
+        const map = new Map();
+        console.debug({ pomodoros }, map)
+        for (let i = 0; i < pomodoros.length; i++) {
+            const pomodoro = pomodoros[i];
+            const projectId = parseInt(pomodoro.projectId);
+            if (map.has(projectId)) {
+                map.set(projectId, map.get(projectId) + pomodoro.timeElapsed);
+            } else {
+                map.set(projectId, pomodoro.timeElapsed);
+            }
+        }
+        console.debug({ pomodoros }, map)
+        // update cache for displaying today's projects time elapsed
+        map.forEach((timeElapsed, projectId) => {
+            modifyItemInCache('projects', projectId, { timeElapsed });
+        });
+        console.info(`Cache VIEW: Finished setting projects time elapsed since ${startDate}`);
+    } catch (error) {
+        console.error(`Cache VIEW: Failed to set projects time elapsed since ${startDate}: ${error}`)
     }
 }

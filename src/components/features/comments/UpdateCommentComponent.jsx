@@ -8,7 +8,7 @@ import { calculateTextAreaRows, filterPastTime } from 'services/helpers/helper';
 import InsertLinkComponent from './InsertLinkComponent';
 import { putItemToCache } from 'services/dbService';
 
-export default function UpdateCommentComponent({ comment, setShowUpdateComment, reloadComments }) {
+export default function UpdateCommentComponent({ comment, setShowUpdateComment }) {
 
     const [description, setDescription] = useState(comment.description)
     const [reviseDate, setReviseDate] = useState(comment.reviseDate ? moment(comment.reviseDate).toDate() : null)
@@ -31,7 +31,6 @@ export default function UpdateCommentComponent({ comment, setShowUpdateComment, 
         console.debug('update comment:', { updated_comment });
         putItemToCache('comments', updated_comment);
 
-        reloadComments()
         setShowUpdateComment(-1)
     }
 

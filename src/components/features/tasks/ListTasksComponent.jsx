@@ -9,9 +9,7 @@ import CreateTaskComponent from "components/features/tasks/CreateTaskComponent";
 import PomodoroComponent from "components/features/pomodoros/PomodoroComponent";
 import ListCommentsComponent from "components/features/comments/ListCommentsComponent";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-import { getCommentsCountApi } from "services/api/CommentApiService";
-import { addServerItemToCache, getTasksCountFromCache, syncDeltaItems } from "services/dbService";
-import moment from "moment";
+import { getCommentsCountFromCache, getTasksCountFromCache } from "services/dbService";
 
 export default function ListTasksComponent({
     project,
@@ -53,20 +51,21 @@ export default function ListTasksComponent({
         })
     });
 
-    const [currentTasksHeight, setCurrentTasksHeight] = useState(0);
-    const [archivedTasksHeight, setArchivedTasksHeight] = useState(0);
-
     const [currentTasksPage, setCurrentTasksPage] = useState(state?.currentTasksPage || 1);
     const [archivedTasksPage, setArchivedTasksPage] = useState(state?.archivedTasksPage || 1);
 
     const [showArchived, setShowArchived] = useState(false)
 
-    const [commentsCount, setCommentsCount] = useState(0)
+    const commentsCount = useLiveQuery(async () => {
+        if (!project)
+            return 0;
+        return await getCommentsCountFromCache({
+            filterBy: 'project',
+            filterById: project?.id,
+        })
+    }, [project]);
 
     const [pomodoroStatus, setPomodoroStatus] = useState(null)
-
-    const [currentTasksReload, setCurrentTasksReload] = useState(0)
-    const [archivedTasksReload, setArchivedTasksReload] = useState(0)
 
     const [message, setMessage] = useState('')
 
@@ -76,23 +75,13 @@ export default function ListTasksComponent({
 
     useEffect(
         () => {
+            // console.debug('re-render ListTasksComponents')
             // need to set it in useEffect, instead of top level, 
             // complete component won't reload
             // as project is not a key during component call
             setShowArchived(state.showArchivedTasks || false)
-
-            // console.debug('re-render ListTasksComponents')
-            project && getCommentsCount()
         }, [project] // eslint-disable-line react-hooks/exhaustive-deps
     )
-
-    function getCommentsCount() {
-        getCommentsCountApi({ filterBy: 'project', id: project.id })
-            .then(response => {
-                setCommentsCount(response.data)
-            })
-            .catch(error => console.error(error.message))
-    }
 
     function createNewPomodoro(pomodoro_task, task_project, start_again = false) {
         // console.debug(pomodoro_task.id)
@@ -116,6 +105,8 @@ export default function ListTasksComponent({
                 response.data.task = pomodoro_task
 
                 // NO NEED TO SYNC: we don't show it in the list until it is completed
+                // currently not available offline
+
                 // update cache
                 // addServerItemToCache('pomodoros', response.data);
                 // syncDeltaItems('pomodoros', {
@@ -141,9 +132,9 @@ export default function ListTasksComponent({
         navigate(`/projects/${id}`, { state })
     }
 
-    // to prevent rendering the page before tasks are loaded from cache db
-    if (tasksCount == null || archivedTasksCount == null)
-        return <div>Loading initial data for tasks count...</div>;
+    // Commented: as this creates a glitch effect
+    // if (tasksCount === undefined || archivedTasksCount === undefined)
+    //     return <div>Loading initial data for tasks count...</div>;
 
     return (
         <div className="">
@@ -282,10 +273,6 @@ export default function ListTasksComponent({
                                 createNewPomodoro={createNewPomodoro}
                                 setPomodorosListReload={setPomodorosListReload}
                                 pomodoroStatus={pomodoroStatus}
-                                tasksReload={currentTasksReload}
-                                setTasksReload={setCurrentTasksReload}
-                                elementHeight={currentTasksHeight}
-                                setElementHeight={setCurrentTasksHeight}
                                 startDate={startDate}
                                 endDate={endDate}
                                 searchString={searchString}
@@ -297,7 +284,7 @@ export default function ListTasksComponent({
 
                         <div className="my-1">
                             {
-                                archivedTasksCount !== 0 &&
+                                archivedTasksCount > 0 &&
                                 <div className="d-flex justify-content-center">
                                     <div
                                         onClick={() => {
@@ -334,10 +321,6 @@ export default function ListTasksComponent({
                                         tags={tags}
                                         projects={projects}
                                         createNewPomodoro={createNewPomodoro}
-                                        tasksReload={archivedTasksReload}
-                                        setTasksReload={setArchivedTasksReload}
-                                        elementHeight={archivedTasksHeight}
-                                        setElementHeight={setArchivedTasksHeight}
                                         startDate={startDate}
                                         endDate={endDate}
                                         searchString={searchString}

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useLiveQuery } from "dexie-react-hooks";
 
@@ -23,10 +23,6 @@ export default function ListTasksRowsComponent({
     tasksCount,
     createNewPomodoro,
     setPomodorosListReload,
-    setTasksReload,
-    setAllTasksReload,
-    elementHeight,
-    setElementHeight,
     startDate,
     endDate,
     searchString,
@@ -38,8 +34,6 @@ export default function ListTasksRowsComponent({
 
     const authContext = useAuth()
     const userSettings = authContext.userSettings
-
-    const listElement = useRef(null);
 
     const PAGESIZE = userSettings.pageTasksCount;
 
@@ -68,24 +62,11 @@ export default function ListTasksRowsComponent({
     useEffect(
         () => {
             console.debug('re-render ListTasksRowsComponents')
-            // TODO: decide if Resize observer is required after caching all data
-            const observer = new ResizeObserver(handleResize);
-            // observer.observe(listElement.current);
             return () => {
-                // Cleanup the observer by unobserving all elements
-                observer.disconnect();
-                // console.debug(timeoutIdObj);
                 clearTimeout(timeoutIdObj.id);
             };
         }, [] // eslint-disable-line react-hooks/exhaustive-deps
     )
-
-    const handleResize = () => {
-        if (listElement.current !== null && listElement.current.offsetHeight !== 0) {
-            // console.debug(currentPage, listElement.current.offsetHeight);
-            setElementHeight(listElement.current.offsetHeight);
-        }
-    };
 
     function updateProjectData(tasks) {
         const projectsMap = new Map(projects.map(project => [project.id, project]));
@@ -97,8 +78,6 @@ export default function ListTasksRowsComponent({
     }
 
     function onUpdateTaskStatus(task, status) {
-        // setElementHeight(listElement.current.offsetHeight)
-
         if (!window.confirm(`Press OK to move task to ${status}.`)) {
             return;
         }
@@ -109,7 +88,6 @@ export default function ListTasksRowsComponent({
     }
 
     function updateOnPageChange(page) {
-        // setElementHeight(listElement.current.offsetHeight)
         setCurrentPage(page)
         status === 'current' && (state.currentTasksPage = page);
         status === 'archived' && (state.currentArchivedTasksPage = page);
@@ -117,7 +95,6 @@ export default function ListTasksRowsComponent({
     }
 
     function onCreateNewPomodoro(task) {
-        // setElementHeight(listElement.current.offsetHeight)
         createNewPomodoro(task, task.project)
     }
 
@@ -161,20 +138,19 @@ export default function ListTasksRowsComponent({
         setSortableTasks(newOrder);
     }
 
+    // console.log({ tasksCount, tasks })
+    // to prevent rendering the page before tasks are loaded from cache db
     if (!tasks)
-        return <div>Loading initial data for tasks...</div>;
+        return (
+            <div className="loader-container my-1">
+                <div className="loader"></div>...
+            </div >
+        )
 
     return (
         <>
-            {
-                tasks.length === 0 &&
-                <div className="loader-container my-1" style={{ height: elementHeight }}>
-                    <div className="loader"></div>
-                </div>
-            }
             <Reorder.Group
                 id="tasks-list"
-                ref={listElement}
                 axis="y"
                 values={sortableTasks}
                 onReorder={handleReorder}
@@ -194,11 +170,9 @@ export default function ListTasksRowsComponent({
                                     onCreateNewPomodoro={onCreateNewPomodoro}
                                     onUpdateTaskStatus={onUpdateTaskStatus}
                                     tags={tags}
-                                    setTasksReload={setTasksReload}
                                     setPomodorosListReload={setPomodorosListReload}
                                     project={project}
                                     setShowCommentsId={setShowCommentsId}
-                                    setAllTasksReload={setAllTasksReload}
                                 />
                             )
                         }

@@ -4,12 +4,11 @@ import DatePicker from "react-datepicker";
 
 import moment from 'moment'
 
-import { createCommentApi } from 'services/api/CommentApiService'
 import { calculateTextAreaRows, filterPastTime } from 'services/helpers/helper';
 import InsertLinkComponent from './InsertLinkComponent';
-import { addItemToCache } from 'services/dbService';
+import { addItemToCache, getItemFromCache, modifyItemInCache } from 'services/dbService';
 
-export default function CommentComponent({ filterBy, id, setShowCreateComment, reloadComments }) {
+export default function CommentComponent({ filterBy, id, setShowCreateComment, setCurrentPage }) {
 
     const [description, setDescription] = useState('')
     const [reviseDate, setReviseDate] = useState(null)
@@ -20,7 +19,7 @@ export default function CommentComponent({ filterBy, id, setShowCreateComment, r
 
     const [errorMessage, setErrorMessage] = useState('')
 
-    function handleSubmit(error) {
+    async function handleSubmit(error) {
         error.preventDefault();
 
         const comment = {
@@ -28,12 +27,20 @@ export default function CommentComponent({ filterBy, id, setShowCreateComment, r
             reviseDate,
             filterBy,
             filterById: id
+            // TODO: add view data
         }
         // console.debug({ comment, filterBy, id })
         console.debug('create comment:', { comment });
         addItemToCache('comments', comment);
 
-        reloadComments()
+        // modify view
+        if (filterBy === 'task') {
+            const task = await getItemFromCache('tasks', parseInt(comment.filterById))
+            modifyItemInCache('tasks', task.id, { commentsCount: (task.commentsCount || 0) + 1 });
+        }
+
+        // cleanup
+        setCurrentPage(1)
         setShowCreateComment(false)
     }
 

@@ -310,19 +310,24 @@ export default function ListStatsComponent() {
                                     />
                                 </div>
                             </div >
-                            <div className="col-lg-6 mb-4" style={{ display: subPage === "pomodoros" || showAll ? "block" : "none" }}>
-                                <div className="p-1 chart-card" style={{ height: "70vh", overflowY: "scroll" }}>
-                                    <ListPomodorosComponent
-                                        key={reload}
-                                        includeCategories={includeCategories}
-                                        subject={subject}
-                                        buttonsStates={listPomodorosButtonsStates}
-                                        setButtonsStates={setListPomodorosButtonsStates}
-                                        elementHeight={pomodorosHeight}
-                                        setElementHeight={setPomodorosHeight}
-                                    />
-                                </div>
-                            </div >
+                            {
+                                // disabled for accountibility partners (to handle offline support)
+                                !subject &&
+                                <div className="col-lg-6 mb-4" style={{ display: subPage === "pomodoros" || showAll ? "block" : "none" }}>
+                                    <div className="p-1 chart-card" style={{ height: "70vh", overflowY: "scroll" }}>
+                                        <ListPomodorosComponent
+                                            key={reload}
+                                            includeCategories={includeCategories}
+                                            subject={subject}
+                                            buttonsStates={listPomodorosButtonsStates}
+                                            setButtonsStates={setListPomodorosButtonsStates}
+                                            elementHeight={pomodorosHeight}
+                                            setElementHeight={setPomodorosHeight}
+                                            setChartReload={setReload}
+                                        />
+                                    </div>
+                                </div >
+                            }
                         </div>
                     </div>
                 }
