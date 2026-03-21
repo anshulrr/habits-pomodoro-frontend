@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import moment from "moment";
@@ -94,9 +94,26 @@ export default function ListTasksRowsComponent({
         return tasks.slice(startIndex, endIndex);
     }
 
+    const prevDeps = useRef({ cachedTasks: dataContext.tasksMap, pomodoros, currentPage });
+
     const tasks = useMemo(async () => {
+        const changed = [];
+
+        if (prevDeps.current.cachedTasks !== dataContext.tasksMap) changed.push('cachedTasks');
+        if (prevDeps.current.pomodoros !== pomodoros) changed.push('pomodoros');
+        if (prevDeps.current.currentPage !== currentPage) changed.push('currentPage');
+
+        if (changed.length > 0) {
+            console.log('Changed dependencies:', changed.join(', '));
+        }
+
+        // Update the ref for the next render
+        prevDeps.current = { cachedTasks: dataContext.tasksMap, pomodoros, currentPage };
+
+
         setShowLoader(true);
         const startTime = new Date().getTime();
+        console.log('useMemo', startTime);
         let retrievedTasks = await getTasksFromInMemory({
             status,
             projectId: project?.id,

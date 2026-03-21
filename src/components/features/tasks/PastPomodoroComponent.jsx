@@ -50,8 +50,10 @@ export default function PastPomodoroComponent({
             categoryId: project.projectCategoryId
         }
 
-        // console.debug('create pomodoro:', { pomodoro });
+        console.debug('create pomodoro:', { pomodoro });
         addItemToCache('pomodoros', pomodoro);
+        const startTime = new Date().getTime();
+        console.log('create pomodoro', startTime);
 
         // cleanup
         setShowCreatePastPomodoro(-1)

@@ -185,10 +185,13 @@ export async function addItemToCache(entity, item) {
         item.updatedAt = new Date().toISOString();
 
         await db[entity].add(item)
+
+        const startTime = new Date().getTime();
+        console.log('added pomodoro', startTime);
         const prevCount = await getItemsCountFromCache(entity);
         await db.metadata.put({ id: 'count_' + entity, value: prevCount + 1 });
         if (navigator.onLine) {
-            // console.info(`Online! Syncing added dirty ${entity}...`);
+            console.info(`Online! Syncing added dirty ${entity}...`);
             syncDirtyItems(entity); // Fire and forget in background
         }
     } catch (error) {
@@ -289,6 +292,9 @@ export async function syncDirtyItems(entity) {
                 await apiMap[entity].createApi(item);
                 // Update the item with the correct id from the backend and clear the dirty flag
                 await db[entity].update(item.id, { _dirty: 0, isCreated: undefined });
+
+                const startTime = new Date().getTime();
+                console.log('synced dirty items', startTime);
             }
 
             // Success! Clear the flag locally
