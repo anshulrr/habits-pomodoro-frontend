@@ -40,22 +40,25 @@ export default function DataProvider({ children }) {
         return new Map(cachedTasks.map(item => [item.id, item]));
     }, []);
 
-    const todaysPomodoros = useLiveQuery(async () => {
-        let startDate = moment().startOf('day').toISOString();
-        let endDate = moment().startOf('day').add(1, 'd').toISOString();    // NOTE: exact current moment not working for new pomodoro
+    const pomodoros = useLiveQuery(async () => {
         const pomodoros = await db['pomodoros']
-            .where('endTime')
-            .between(startDate, endDate, false, true)
             .filter(pomodoro => pomodoro.status === 'past' || pomodoro.status === 'completed')
             .toArray();
-        // console.debug(`Retrieved today's pomodoros from cache after update:`, { pomodoros });
+        // console.debug(`Retrieved all pomodoros from cache after update:`, { pomodoros });
         return pomodoros;
     }, []);
 
-    const valuesToBeShared = { projectsMap, tagsMap, categoriesMap, tasksMap, todaysPomodoros }
+    const tasks_tags = useLiveQuery(async () => {
+        const tasks_tags = await db['tasks_tags']
+            .toArray();
+        // console.debug(`Retrieved  tasks_tags from cache after update:`, { tasks_tags });
+        return tasks_tags;
+    }, []);
+
+    const valuesToBeShared = { projectsMap, tagsMap, categoriesMap, tasksMap, pomodoros, tasks_tags }
 
     // to prevent rendering the page before data is loaded from cache db, which causes some components to throw error as they rely on data.
-    if (!tagsMap || !projectsMap || !categoriesMap || !tasksMap || !todaysPomodoros)
+    if (!tagsMap || !projectsMap || !categoriesMap || !tasksMap || !pomodoros || !tasks_tags)
         return (
             <div className="loader-container my-1">
                 <div className="loader"></div>

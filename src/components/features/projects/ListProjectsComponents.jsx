@@ -16,7 +16,7 @@ export default function ListProjectsComponent({
 }) {
     const dataContext = useData();
 
-    const todaysPomodoros = dataContext.todaysPomodoros;
+    const pomodoros = dataContext.pomodoros;
     const projects = [...dataContext.projectsMap.values()];
     const projectsCount = projects.length;
 
@@ -66,17 +66,18 @@ export default function ListProjectsComponent({
         const endIndex = startIndex + PAGESIZE;
         const retrievedProjects = projects.slice(startIndex, endIndex);
         // TODO: why it is called multiple times on pomodoro update
-        // console.log(moment().toISOString(), { projects, todaysPomodoros, currentPage });
-        return updateProjectsTodaysTimeElpased(retrievedProjects, todaysPomodoros);
-    }, [projects, todaysPomodoros, currentPage])
+        // console.log(moment().toISOString(), { projects, pomodoros, currentPage });
+        return updateProjectsTodaysTimeElpased(retrievedProjects);
+    }, [projects, pomodoros, currentPage])
 
-    function updateProjectsTodaysTimeElpased(retrievedProjects, pomodoros) {
+    function updateProjectsTodaysTimeElpased(retrievedProjects) {
+        const todaysPomodoros = pomodoros.filter(p => moment(p.endTime).isAfter(moment().startOf('day')))
         retrievedProjects.forEach(project => {
             project.timeElapsed = 0;
             return project;
         })
         const projectsMap = new Map(retrievedProjects.map(item => [item.id, item]));
-        for (const pomodoro of pomodoros) {
+        for (const pomodoro of todaysPomodoros) {
             if (projectsMap.has(pomodoro.projectId)) {
                 const project = projectsMap.get(pomodoro.projectId);
                 project.timeElapsed += pomodoro.timeElapsed;

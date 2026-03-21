@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useLiveQuery } from "dexie-react-hooks";
 
 import moment from "moment";
 
@@ -14,9 +13,8 @@ import { generateDateColor } from "services/helpers/listsHelper";
 
 import ListCommentsComponent from "components/features/comments/ListCommentsComponent";
 import SortableTask from "./SortableTask";
-import { getPomodorosFromCache, getTasksFromCache, putItemToCache } from "services/dbService";
+import { putItemToCache } from "services/dbService";
 import { useData } from "services/DataContext";
-import { db } from "services/db";
 
 export default function ListTasksRowsComponent({
     project,
@@ -35,6 +33,7 @@ export default function ListTasksRowsComponent({
     const { state } = useLocation();
 
     const dataContext = useData();
+    const pomodoros = dataContext.pomodoros;
 
     const authContext = useAuth()
     const userSettings = authContext.userSettings
@@ -44,62 +43,6 @@ export default function ListTasksRowsComponent({
     const [showLoader, setShowLoader] = useState(true);
 
     const [sortableTasks, setSortableTasks] = useState([]);
-
-    const tasks = useLiveQuery(async () => {
-        setShowLoader(true);
-        const startTime = new Date().getTime();
-        let retrievedTasks = await getTasksFromCache({
-            status,
-            projectId: project?.id,
-            tagId: tag?.id,
-            startDate,
-            endDate,
-            searchString,
-            limit: 10000,
-            offset: 0
-        })
-        // log for performance check
-        const endTime = new Date().getTime();
-        const duration = endTime - startTime;
-        if (duration > 500) {
-            toast.info(`Tasks QueryDuration: ${duration} ms`, { position: "bottom-right" });
-        }
-        // TODO: find better solution: temp fix for order by
-        // Sort by category first, then project, then task priority
-        retrievedTasks.sort((a, b) => {
-            return a.categoryPriority - b.categoryPriority || a.projectPriority - b.projectPriority || a.priority - b.priority;
-        });
-        const startIndex = (currentPage - 1) * PAGESIZE;
-        const endIndex = startIndex + PAGESIZE;
-        retrievedTasks = retrievedTasks.slice(startIndex, endIndex);
-
-        // console.debug(`Retrieved ${status} tasks from cache after update:`, { retrievedTasks });
-
-        // update view data from cache
-        const tasksPomodoros = await db['pomodoros']
-            .where('taskId')
-            .anyOf(retrievedTasks.map(task => task.id))
-            .filter(task => task.status !== 'deleted')
-            .toArray();
-        // console.debug(`Retrieved tasks' pomodoros from cache after update:`, { tasksPomodoros });
-
-        const viewUpdatedTasks = updateTasksTodaysTimeElpased(retrievedTasks, tasksPomodoros);
-
-        // log for performance check
-        const endTime2 = new Date().getTime();
-        const duration2 = endTime2 - startTime;
-        if (duration2 > 500) {
-            toast.info(`Tasks & Pomodoros QueryDuration: ${duration2} ms`, { position: "bottom-right" });
-        }
-
-        // calculate data for view
-        updateTasksDueDateColor(viewUpdatedTasks);
-        // set tasks for view
-        setSortableTasks(viewUpdatedTasks);
-
-        setShowLoader(false);
-        return viewUpdatedTasks;
-    }, [currentPage]);
 
     const [showCommentsId, setShowCommentsId] = useState(-1);
 
@@ -114,7 +57,80 @@ export default function ListTasksRowsComponent({
         }, [] // eslint-disable-line react-hooks/exhaustive-deps
     )
 
-    function updateTasksTodaysTimeElpased(retrievedTasks, pomodoros) {
+    const getTasksFromInMemory = async function ({
+        status,
+        projectId,
+        tagId,
+        startDate,
+        endDate,
+        searchString
+    }) {
+        const taskIds = dataContext.tasks_tags
+            .filter((row => row.tagId === tagId))
+            .map(row => row.taskId);
+        const tasks = [...dataContext.tasksMap.values()]
+            .filter(task => {
+                if (task.status != status) {
+                    return false;
+                }
+                if (!!projectId) {
+                    return task.projectId === projectId
+                } else if (!!tagId) {
+                    return taskIds.includes(task.id)
+                } else if (!!endDate) {
+                    return moment(task.dueDate).isSameOrBefore(endDate) && moment(task.dueDate).isSameOrAfter(startDate)
+                } else {
+                    const regex = new RegExp(searchString, 'i');
+                    return regex.test(task.description);
+                }
+            })
+            .sort((a, b) => // Sort by category first, then project, then task priority
+                a.categoryPriority - b.categoryPriority
+                || a.projectPriority - b.projectPriority
+                || a.priority - b.priority)
+
+        const startIndex = (currentPage - 1) * PAGESIZE;
+        const endIndex = startIndex + PAGESIZE;
+        return tasks.slice(startIndex, endIndex);
+    }
+
+    const tasks = useMemo(async () => {
+        setShowLoader(true);
+        const startTime = new Date().getTime();
+        let retrievedTasks = await getTasksFromInMemory({
+            status,
+            projectId: project?.id,
+            tagId: tag?.id,
+            startDate,
+            endDate,
+            searchString
+        })
+        // log for performance check
+        const endTime = new Date().getTime();
+        const duration = endTime - startTime;
+        if (duration > 40) {
+            toast.info(`Tasks QueryDuration: ${duration} ms`, { position: "bottom-right" });
+        }
+        // console.debug(`Retrieved ${status} tasks from cache after update:`, { retrievedTasks });
+
+        setSortableTasks(retrievedTasks);
+
+        // calculate data for view
+        updateTasksTimeElpased(retrievedTasks);
+        updateTasksDueDateColor(retrievedTasks);
+
+        setShowLoader(false);
+
+        // log for performance check
+        const endTime2 = new Date().getTime();
+        const duration2 = endTime2 - startTime;
+        if (duration2 > 50) {
+            toast.info(`View Update duration: ${duration2} ms`, { position: "bottom-right" });
+        }
+        return retrievedTasks;
+    }, [dataContext.tasksMap, pomodoros, currentPage]);
+
+    function updateTasksTimeElpased(retrievedTasks) {
         retrievedTasks.forEach(task => {
             task.todaysTimeElapsed = 0;
             task.totalTimeElapsed = 0;
@@ -122,13 +138,14 @@ export default function ListTasksRowsComponent({
         })
         const tasksMap = new Map(retrievedTasks.map(item => [item.id, item]));
         for (const pomodoro of pomodoros) {
-            const task = tasksMap.get(pomodoro.taskId);
-            if (moment(pomodoro.endTime).isAfter(moment().startOf('day'))) {
-                task.todaysTimeElapsed += pomodoro.timeElapsed;
+            if (tasksMap.has(pomodoro.taskId)) {
+                const task = tasksMap.get(pomodoro.taskId);
+                if (moment(pomodoro.endTime).isAfter(moment().startOf('day'))) {
+                    task.todaysTimeElapsed += pomodoro.timeElapsed;
+                }
+                task.totalTimeElapsed += pomodoro.timeElapsed;
             }
-            task.totalTimeElapsed += pomodoro.timeElapsed;
         }
-        return [...tasksMap.values()];
     }
 
     function onUpdateTaskStatus(task, status) {
