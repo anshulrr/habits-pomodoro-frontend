@@ -148,7 +148,7 @@ export default function ListFilteredCommentsComponent({
             <div className="row mb-3">
                 <div className="col-lg-12">
 
-                    <div className="d-flex justify-content-between">
+                    <div className="d-flex justify-content-between text-uppercase text-info-emphasis">
                         <h6>
                             {
                                 filterBy !== 'user' && filterBy.charAt(0).toUpperCase() + filterBy.slice(1)

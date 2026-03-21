@@ -235,7 +235,7 @@ export default function UserSettingsComponent() {
             </div>
 
             <div ref={generalSettingsRef}>
-                <h6 className='text-start'>General Settings</h6>
+                <h6 className='text-start text-uppercase text-info-emphasis'>General Settings</h6>
 
                 <div className="row">
                     <div className="col-lg-12">
@@ -373,7 +373,7 @@ export default function UserSettingsComponent() {
             </div>
 
             <div ref={displaySettingsRef}>
-                <h6 className='text-start mt-2'>Display Settings</h6>
+                <h6 className='text-start mt-2 text-uppercase text-info-emphasis'>Display Settings</h6>
 
                 <div className="row">
 
@@ -474,7 +474,7 @@ export default function UserSettingsComponent() {
             </div>
 
             <div ref={statsSettingsRef}>
-                <h6 className='text-start mt-2'>Stats Settings</h6>
+                <h6 className='text-start mt-2 text-uppercase text-info-emphasis'>Stats Settings</h6>
 
                 <div className="row">
 

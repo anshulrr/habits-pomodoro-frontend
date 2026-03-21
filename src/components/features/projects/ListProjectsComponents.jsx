@@ -133,10 +133,10 @@ export default function ListProjectsComponent({
         <div className="mt-3 mb-3">
             {/* {message && <div className="alert alert-warning">{message}</div>} */}
             <div>
-                <div className="d-flex justify-content-between">
+                <div className="d-flex justify-content-between text-info-emphasis">
                     <h6>
                         <span>
-                            Projects
+                            PROJECTS
                         </span>
                         {
                             projectsCount !== -1 &&

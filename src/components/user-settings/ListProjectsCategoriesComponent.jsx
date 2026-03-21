@@ -46,7 +46,7 @@ export default function ListProjectCategoriesComponent() {
                 <div className="col-lg-12">
                     <div>
                         <div className="row px-0">
-                            <div className="col-10 text-start px-0">
+                            <div className="col-10 text-start px-0 text-uppercase text-info-emphasis">
                                 <h6>
                                     Project Categories
                                     {

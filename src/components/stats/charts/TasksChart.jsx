@@ -30,7 +30,7 @@ export const TasksChart = ({ includeCategories, subject, statsSettings, buttonsS
                     labels: [],
                     data: [],
                     colors: [],
-                    label: `Tasks (${label})`
+                    label: `TASKS (${label})`
                 }
                 response.data.forEach(element => {
                     // console.debug(element);

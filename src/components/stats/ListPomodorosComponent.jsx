@@ -129,7 +129,7 @@ export default function ListPomodorosComponent({
     return (
         <div>
             <h6>
-                <span>
+                <span className="text-uppercase">
                     {title}
                 </span>
                 <span className="ms-1 badge rounded-pill text-bg-secondary">

@@ -67,7 +67,7 @@ export default function SettingsComponent() {
                     <div className="px-2 py-2" style={{ display: subPage === "settings" || showAll ? "block" : "none" }}>
                         <UserSettingsComponent />
                         <hr />
-                        <h6 className="text-start pb-2">
+                        <h6 className="text-start pb-2 text-uppercase text-info-emphasis">
                             Change Password &nbsp;
                             <button
                                 type="button"

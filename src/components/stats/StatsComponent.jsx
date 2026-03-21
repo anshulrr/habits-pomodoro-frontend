@@ -185,7 +185,7 @@ export default function ListStatsComponent() {
 
                                         <div className="container mt-1 py-2 border-bottom">
                                             <div className="d-flex justify-content-between">
-                                                <h6 className="mb-0">
+                                                <h6 className="mb-0 text-uppercase text-info-emphasis">
                                                     Stats Settings
                                                 </h6>
                                             </div>
@@ -202,7 +202,7 @@ export default function ListStatsComponent() {
                                         <div className="container py-2 border-bottom">
 
                                             <div className="d-flex justify-content-between">
-                                                <h6 className="mb-0">
+                                                <h6 className="mb-0 text-uppercase text-info-emphasis">
                                                     Included Project Categories
                                                     {
                                                         categories.length !== 0 &&
@@ -234,7 +234,7 @@ export default function ListStatsComponent() {
 
                                             <div className="d-flex justify-content-between">
                                                 <div className="d-flex dustify-content-start my-auto">
-                                                    <h6 className="mb-0">
+                                                    <h6 className="mb-0 text-uppercase text-info-emphasis">
                                                         Mentees Stats
                                                     </h6>
                                                     {

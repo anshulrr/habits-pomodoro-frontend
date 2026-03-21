@@ -171,7 +171,7 @@ export const StreakChart = ({ subject, categories, includeCategories, buttonsSta
             <div className="row">
                 <div className="col-lg-12 mb-1">
                     <h6 className='mb-0'>
-                        Daily Streak<wbr />
+                        DAILY STREAK<wbr />
                         <span className="loader-container-2" >
                             <span className="ms-1 loader-2" style={{ display: showLoader ? "inline" : "none" }}></span>
                         </span>

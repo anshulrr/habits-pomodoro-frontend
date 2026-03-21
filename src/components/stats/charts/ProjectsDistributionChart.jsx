@@ -31,7 +31,7 @@ export const ProjectsDistributionChart = ({ includeCategories, subject, statsSet
                     labels: [],
                     data: [],
                     colors: [],
-                    label: `Projects (${label})`
+                    label: `PROJECTS (${label})`
                 }
                 response.data.forEach(element => {
                     // console.debug(element);
