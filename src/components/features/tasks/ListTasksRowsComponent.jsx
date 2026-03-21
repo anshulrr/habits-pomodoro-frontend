@@ -40,7 +40,7 @@ export default function ListTasksRowsComponent({
     const userSettings = authContext.userSettings
 
     const PAGESIZE = userSettings.pageTasksCount;
-    const elementHeight = Math.min(tasksCount, PAGESIZE) * 60.6;
+    const elementHeight = Math.min(tasksCount, PAGESIZE) * 60.6; // required when showing loader while changing project
     const [showLoader, setShowLoader] = useState(true);
 
     const [sortableTasks, setSortableTasks] = useState([]);
@@ -192,9 +192,8 @@ export default function ListTasksRowsComponent({
         setSortableTasks(newOrder);
     }
 
-    // console.log({ tasksCount, tasks })
-    // to prevent rendering the page before tasks are loaded from cache db
-    if (showLoader)
+    // to prevent rendering the page before tasks are loaded from cache db while project changed
+    if (showLoader && !tasks)
         return (
             <div className="loader-container my-1" style={{ height: elementHeight }}>
                 <div className="loader"></div>
@@ -203,6 +202,12 @@ export default function ListTasksRowsComponent({
 
     return (
         <>
+            {
+                showLoader &&
+                <span className="loader-container-2" >
+                    <span className="my-5 loader-2"></span>
+                </span>
+            }
             <Reorder.Group
                 id="tasks-list"
                 axis="y"
