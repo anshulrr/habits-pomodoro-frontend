@@ -57,7 +57,7 @@ export default function ListTagsComponent({
 
     useEffect(
         () => {
-            console.debug('re-render ListTagsComponents')
+            // console.debug('re-render ListTagsComponents')
             if (IS_TAGS_DEFAULT && isEmpty(state) && !tag && !!tags) {
                 setTag(tags[0]);
                 // udpate state for first time load
@@ -98,10 +98,10 @@ export default function ListTagsComponent({
         <div className="mt-3 mb-3">
             {/* {message && <div className="alert alert-warning">{message}</div>} */}
             <div>
-                <div className="d-flex justify-content-between">
+                <div className="d-flex justify-content-between text-info-emphasis">
                     <h6>
                         <span>
-                            Tags
+                            TAGS
                         </span>
                         {
                             tagsCount !== -1 &&

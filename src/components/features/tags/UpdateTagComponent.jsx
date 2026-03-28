@@ -21,7 +21,7 @@ export default function UpdateTagComponent({
             color
         }
 
-        console.debug('update tag:', { updated_tag });
+        // console.debug('update tag:', { updated_tag });
         putItemToCache('tags', updated_tag);
         // update TasksList title
         setTag(updated_tag);

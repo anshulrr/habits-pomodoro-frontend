@@ -30,12 +30,12 @@ function App() {
 function registerServiceWorker() {
 
   if ("serviceWorker" in navigator) {
-    console.log("Registering service workers...");
+    // console.log("Registering service workers...");
     navigator.serviceWorker.register('/firebase-messaging-sw.js')
       .then(registration => {
         // log registration events
         logRegistrationEvent(registration);
-        console.log('Service worker registered with scope:', registration.scope);
+        // console.log('Service worker registered with scope:', registration.scope);
       })
       .catch(error => {
         console.error('Service worker registration failed:', error);

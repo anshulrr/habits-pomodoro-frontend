@@ -23,7 +23,7 @@ export default function SearchTaskComponent({
                                     name="search task"
                                     className="form-control form-control-sm"
                                     value={searchString}
-                                    placeholder="Search Task"
+                                    placeholder="Search a task..."
                                     onChange={(e) => setSearchString(e.target.value)}
                                     required
                                 />

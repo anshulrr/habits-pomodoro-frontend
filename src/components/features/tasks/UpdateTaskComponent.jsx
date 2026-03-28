@@ -77,7 +77,7 @@ export default function UpdateTaskComponent({
         }
 
         // TODO: Note: make sure numbers are correctly formatted, as form inputs return string values, storing them as string in cache will cause issues with validation and calculations in other parts of the app.
-        console.debug('update task:', { updated_task });
+        // console.debug('update task:', { updated_task });
         putItemToCache('tasks', updated_task);
 
         // cleanup
@@ -86,7 +86,7 @@ export default function UpdateTaskComponent({
 
     function validate(task) {
         // make sure numbers are not in string format
-        console.debug('validating task:', { task });
+        // console.debug('validating task:', { task });
         let errors = {}
         let validated = true;
         if (task.description.length < 2) {

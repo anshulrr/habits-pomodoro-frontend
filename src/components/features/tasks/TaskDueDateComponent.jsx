@@ -42,7 +42,7 @@ export default function TaskDueDateComponent({
         task.repeatDays = repeat ? repeatDays : 0;
         task.enableNotifications = enableNotifications;
 
-        console.debug('update Due Date:', { task });
+        // console.debug('update Due Date:', { task });
         putItemToCache('tasks', task);
 
         // cleanup

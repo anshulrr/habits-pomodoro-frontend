@@ -28,7 +28,7 @@ export default function UpdateCommentComponent({ comment, setShowUpdateComment }
             reviseDate
         }
 
-        console.debug('update comment:', { updated_comment });
+        // console.debug('update comment:', { updated_comment });
         putItemToCache('comments', updated_comment);
 
         setShowUpdateComment(-1)

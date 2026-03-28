@@ -33,7 +33,7 @@ export default function ListPomodorosComponent({
             endDate: moment().startOf('day').add(1, 'd').toISOString(),
             includeCategories
         });
-        console.debug(`Retrieved pomodoros from cache after update:`, { retrievedPomodoros });
+        // console.debug(`Retrieved pomodoros from cache after update:`, { retrievedPomodoros });
 
         retrievedPomodoros.map((x, index) => x.index = retrievedPomodoros.length - index);
 
@@ -99,7 +99,7 @@ export default function ListPomodorosComponent({
 
     async function syncPomodoros() {
         if (navigator.onLine) {
-            console.info(`Online! Syncing deleted dirty pomodoros...`);
+            // console.info(`Online! Syncing deleted dirty pomodoros...`);
             await syncDirtyItems('pomodoros'); // Fire and forget in background
             setTimeout(() => {
                 setChartReload(prevReload => prevReload + 1)    // for chart reload
@@ -129,7 +129,7 @@ export default function ListPomodorosComponent({
     return (
         <div>
             <h6>
-                <span>
+                <span className="text-uppercase">
                     {title}
                 </span>
                 <span className="ms-1 badge rounded-pill text-bg-secondary">

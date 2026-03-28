@@ -51,7 +51,7 @@ export const TotalChart = ({ entity, includeCategories, subject, statsSettings, 
                 // console.debug("stacked", response.data)
 
                 // set label after chart data is received
-                setChartLabel(`${entity === 'task' ? 'Tasks' : 'Projects'} (${label})`);
+                setChartLabel(`${entity === 'task' ? 'TASKS' : 'PROJECTS'} (${label})`);
 
                 for (const key in response.data) {
                     const dataset = {

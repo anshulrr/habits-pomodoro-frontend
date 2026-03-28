@@ -73,7 +73,7 @@ export default function ListTasksComponent({
 
     useEffect(
         () => {
-            console.debug('re-render ListTasksComponents')
+            // console.debug('re-render ListTasksComponents')
             // console.debug({ project, tag })
             // need to set it in useEffect, instead of top level, 
             // complete component won't reload
@@ -160,14 +160,14 @@ export default function ListTasksComponent({
                             }
                             {
                                 !project && !tag && startDate &&
-                                <span>
+                                <span className="text-uppercase text-info-emphasis">
                                     <i className={(title === "Overdue" ? "text-danger " : "") + "px-1 bi bi-calendar2-event"} />
                                     {title} Tasks
                                 </span>
                             }
                             {
                                 !project && !tag && !startDate &&
-                                <span>
+                                <span className="text-uppercase text-info-emphasis">
                                     <i className="px-1 bi bi-search" />
                                     {title} Tasks
                                 </span>

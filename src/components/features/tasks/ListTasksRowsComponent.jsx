@@ -6,6 +6,8 @@ import moment from "moment";
 
 import { Reorder } from "framer-motion";
 
+import { toast } from "react-toastify";
+
 import { useAuth } from "services/auth/AuthContext";
 import Pagination from "services/pagination/Pagination";
 import { generateDateColor } from "services/helpers/listsHelper";
@@ -38,10 +40,14 @@ export default function ListTasksRowsComponent({
     const userSettings = authContext.userSettings
 
     const PAGESIZE = userSettings.pageTasksCount;
+    const elementHeight = Math.min(tasksCount, PAGESIZE) * 60.6; // required when showing loader while changing project
+    const [showLoader, setShowLoader] = useState(true);
 
     const [sortableTasks, setSortableTasks] = useState([]);
 
     const tasks = useLiveQuery(async () => {
+        setShowLoader(true);
+        const startTime = new Date().getTime();
         let retrievedTasks = await getTasksFromCache({
             status,
             projectId: project?.id,
@@ -52,6 +58,12 @@ export default function ListTasksRowsComponent({
             limit: 10000,
             offset: 0
         })
+        // log for performance check
+        const endTime = new Date().getTime();
+        const duration = endTime - startTime;
+        if (duration > 500) {
+            toast.info(`Tasks QueryDuration: ${duration} ms`, { position: "bottom-right" });
+        }
         // TODO: find better solution: temp fix for order by
         // Sort by category first, then project, then task priority
         retrievedTasks.sort((a, b) => {
@@ -61,7 +73,7 @@ export default function ListTasksRowsComponent({
         const endIndex = startIndex + PAGESIZE;
         retrievedTasks = retrievedTasks.slice(startIndex, endIndex);
 
-        console.debug(`Retrieved ${status} tasks from cache after update:`, { retrievedTasks });
+        // console.debug(`Retrieved ${status} tasks from cache after update:`, { retrievedTasks });
 
         // update view data from cache
         const tasksPomodoros = await db['pomodoros']
@@ -69,15 +81,23 @@ export default function ListTasksRowsComponent({
             .anyOf(retrievedTasks.map(task => task.id))
             .filter(task => task.status !== 'deleted')
             .toArray();
-        console.debug(`Retrieved tasks' pomodoros from cache after update:`, { tasksPomodoros });
+        // console.debug(`Retrieved tasks' pomodoros from cache after update:`, { tasksPomodoros });
 
         const viewUpdatedTasks = updateTasksTodaysTimeElpased(retrievedTasks, tasksPomodoros);
+
+        // log for performance check
+        const endTime2 = new Date().getTime();
+        const duration2 = endTime2 - startTime;
+        if (duration2 > 500) {
+            toast.info(`Tasks & Pomodoros QueryDuration: ${duration2} ms`, { position: "bottom-right" });
+        }
 
         // calculate data for view
         updateTasksDueDateColor(viewUpdatedTasks);
         // set tasks for view
         setSortableTasks(viewUpdatedTasks);
 
+        setShowLoader(false);
         return viewUpdatedTasks;
     }, [currentPage]);
 
@@ -87,7 +107,7 @@ export default function ListTasksRowsComponent({
 
     useEffect(
         () => {
-            console.debug('re-render ListTasksRowsComponents')
+            // console.debug('re-render ListTasksRowsComponents')
             return () => {
                 clearTimeout(timeoutIdObj.id);
             };
@@ -117,7 +137,7 @@ export default function ListTasksRowsComponent({
         }
         task.status = status;
 
-        console.debug('onUpdateTaskStatus task:', { task });
+        // console.debug('onUpdateTaskStatus task:', { task });
         putItemToCache('tasks', task);
     }
 
@@ -172,17 +192,22 @@ export default function ListTasksRowsComponent({
         setSortableTasks(newOrder);
     }
 
-    // console.log({ tasksCount, tasks })
-    // to prevent rendering the page before tasks are loaded from cache db
-    if (!tasks)
+    // to prevent rendering the page before tasks are loaded from cache db while project changed
+    if (showLoader && !tasks)
         return (
-            <div className="loader-container my-1">
-                <div className="loader"></div>...
+            <div className="loader-container my-1" style={{ height: elementHeight }}>
+                <div className="loader"></div>
             </div >
         )
 
     return (
         <>
+            {
+                showLoader &&
+                <span className="loader-container-2" >
+                    <span className="my-5 loader-2"></span>
+                </span>
+            }
             <Reorder.Group
                 id="tasks-list"
                 axis="y"

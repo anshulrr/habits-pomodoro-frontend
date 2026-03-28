@@ -221,9 +221,9 @@ export default function HomeComponent({ setReloadHome }) {
                                             </div>
 
                                             <div className="mb-3">
-                                                <div className="d-flex justify-content-between">
+                                                <div className="d-flex justify-content-between text-info-emphasis">
                                                     <h6>
-                                                        Tasks Filters
+                                                        TASKS FILTERS
                                                     </h6>
                                                 </div>
                                                 {
@@ -231,26 +231,36 @@ export default function HomeComponent({ setReloadHome }) {
                                                         <div className={(!project && !tag && tasksFilter === "Overdue" ? "list-selected " : "") + "py-2 small row list-row"} onClick={() => fetchTasksAndUpdateAppStates('Overdue')}>
                                                             <div className="col-12">
                                                                 <i className="pe-1 bi bi-calendar2-event text-danger" />
-                                                                Overdue
+                                                                OVERDUE
                                                             </div>
                                                         </div>
                                                         <div className={(!project && !tag && tasksFilter === "Upcoming" ? "list-selected " : "") + "py-2 small row list-row"} onClick={() => fetchTasksAndUpdateAppStates('Upcoming')}>
                                                             <div className="col-12">
                                                                 <i className="pe-1 bi bi-calendar2-event" />
-                                                                Upcoming
+                                                                UPCOMING
                                                             </div>
                                                         </div>
-                                                        <div className={(!project && !tag && tasksFilter === "Searched" ? "list-selected " : "") + "py-2 small row list-row"} >
-                                                            <div className="col-12" style={{ pointerEvents: 'all' }}>
-                                                                <SearchTaskComponent
-                                                                    searchString={searchString}
-                                                                    setSearchString={setSearchString}
-                                                                    fetchTasksAndUpdateAppStates={fetchTasksAndUpdateAppStates}
-                                                                />
-                                                            </div>
-                                                        </div>
+
+
                                                     </div>
                                                 }
+                                            </div>
+
+                                            <div className="mb-3">
+                                                <div className="mt-3 d-flex justify-content-between text-info-emphasis">
+                                                    <h6>
+                                                        SEARCH
+                                                    </h6>
+                                                </div>
+                                                <div className={(!project && !tag && tasksFilter === "Searched" ? "list-selected " : "") + "py-2 small row list-row"} >
+                                                    <div className="col-12" style={{ pointerEvents: 'all' }}>
+                                                        <SearchTaskComponent
+                                                            searchString={searchString}
+                                                            setSearchString={setSearchString}
+                                                            fetchTasksAndUpdateAppStates={fetchTasksAndUpdateAppStates}
+                                                        />
+                                                    </div>
+                                                </div>
                                             </div>
 
                                         </div>

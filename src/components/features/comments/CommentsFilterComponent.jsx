@@ -121,7 +121,7 @@ export const CommentsFilterComponent = ({ setFilterType, setFilterTypeId, resetF
 
             <div className="row">
                 <div className="col-lg-12 mb-1">
-                    <h6 className='mb-0'>
+                    <h6 className='mb-0 text-uppercase text-info-emphasis'>
                         Filter Notes
                         <span className="loader-container-2" >
                             <span className="ms-1 loader-2" style={{ display: showLoader ? "inline" : "none" }}></span>
@@ -137,7 +137,7 @@ export const CommentsFilterComponent = ({ setFilterType, setFilterTypeId, resetF
                         value={categoryId}
                         onChange={(e) => updateCategory(e.target.value)}
                     >
-                        <option value="0">All Notes</option>
+                        <option value="0">Select a category...</option>
                         {
                             categories.map(
                                 projectCategory => (
@@ -156,7 +156,7 @@ export const CommentsFilterComponent = ({ setFilterType, setFilterTypeId, resetF
                         value={projectId}
                         onChange={(e) => updateProject(e.target.value)}
                     >
-                        <option value="0">All Selected Category Notes</option>
+                        <option value="0">Select a project...</option>
                         {
                             projects.map(
                                 project => (
@@ -175,7 +175,7 @@ export const CommentsFilterComponent = ({ setFilterType, setFilterTypeId, resetF
                         value={taskId}
                         onChange={(e) => updateTask(e.target.value)}
                     >
-                        <option value="0">All Selected Project Notes</option>
+                        <option value="0">Select a task...</option>
                         {
                             tasks.map(
                                 task => (

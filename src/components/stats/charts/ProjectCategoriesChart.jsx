@@ -26,7 +26,7 @@ export const ProjectCategoriesChart = ({ includeCategories, subject, statsSettin
                     labels: [],
                     data: [],
                     colors: [],
-                    label: `Project Categories (${label})`
+                    label: `PROJECT CATEGORIES (${label})`
                 }
                 response.data.forEach((element, i) => {
                     // console.debug(element);

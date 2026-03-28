@@ -31,7 +31,7 @@ export default function CreateTaskComponent({
 
         // TODO: handle scenario when a task is created while offline, and then updated while still offline
         // TODO: make sure to add extra data for view such as projectName
-        console.debug('create a task:', { task });
+        // console.debug('create a task:', { task });
         addItemToCache('tasks', task);
 
         // cleanup

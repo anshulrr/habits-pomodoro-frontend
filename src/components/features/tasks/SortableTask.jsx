@@ -48,7 +48,7 @@ export default function SortableTask({
 
     const handleDragEnd = ({ task, index }) => {
         const id = task.id;
-        console.debug('drag end', { id, index });
+        // console.debug('drag end', { id, index });
         // If dropped in the same position, do nothing
         if (activeIdRef.current.id === id && activeIdRef.current.index === index)
             return;
@@ -59,7 +59,7 @@ export default function SortableTask({
 
         const prevOrder = prevItem ? prevItem.priority : null;
         const nextOrder = nextItem ? nextItem.priority : null;
-        console.debug(`Item ${id} moved. Neighbors:`, { prevOrder, nextOrder });
+        // console.debug(`Item ${id} moved. Neighbors:`, { prevOrder, nextOrder });
 
         // if no space is left between prevOrder and nextOrder, call an API to reset order
         if (prevOrder !== null && nextOrder !== null && prevOrder + 1 >= nextOrder) {
@@ -83,7 +83,7 @@ export default function SortableTask({
         }
         task.priority = priority;
 
-        console.debug('updated priority', { task });
+        // console.debug('updated priority', { task });
         putItemToCache('tasks', task);
 
         // Reset ref
@@ -105,7 +105,7 @@ export default function SortableTask({
             task.dueDate = moment(task.dueDate).add(task.repeatDays, 'd').toDate();
         }
 
-        console.debug('markCompleted task:', { task });
+        // console.debug('markCompleted task:', { task });
         putItemToCache('tasks', task);
     }
 
@@ -254,14 +254,14 @@ export default function SortableTask({
                                 </span>
                             }
 
-                            {
+                            {/* {
                                 <span className="me-1">
                                     <span>
                                         <i className="bi bi-arrow-up" style={{ paddingRight: "0.1rem" }} />
                                     </span>
                                     {task.priority}
                                 </span>
-                            }
+                            } */}
 
                             <span style={{ float: "right" }}>
                                 {

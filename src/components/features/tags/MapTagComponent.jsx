@@ -22,7 +22,7 @@ export default function MapTagComponent({
 
     useEffect(
         () => {
-            console.debug("MapTagComponent: dataContext updated")
+            // console.debug("MapTagComponent: dataContext updated")
             // TODO: check how refreshTags is getting updated tagsMap
             refreshTags();
         }, [dataContext] // eslint-disable-line react-hooks/exhaustive-deps

@@ -49,7 +49,7 @@ export default function ListProjectsComponent({
     */
     useEffect(
         () => {
-            console.debug('re-render ListProjectsComponents')
+            // console.debug('re-render ListProjectsComponents')
             if (IS_PROJECTS_DEFAULT && isEmpty(state) && !project && projects.length > 0) {
                 setProject(projects[0]);
                 // udpate state for first time load
@@ -66,7 +66,7 @@ export default function ListProjectsComponent({
         const endIndex = startIndex + PAGESIZE;
         const retrievedProjects = projects.slice(startIndex, endIndex);
         // TODO: why it is called multiple times on pomodoro update
-        console.log(moment().toISOString(), { projects, todaysPomodoros, currentPage });
+        // console.log(moment().toISOString(), { projects, todaysPomodoros, currentPage });
         return updateProjectsTodaysTimeElpased(retrievedProjects, todaysPomodoros);
     }, [projects, todaysPomodoros, currentPage])
 
@@ -133,10 +133,10 @@ export default function ListProjectsComponent({
         <div className="mt-3 mb-3">
             {/* {message && <div className="alert alert-warning">{message}</div>} */}
             <div>
-                <div className="d-flex justify-content-between">
+                <div className="d-flex justify-content-between text-info-emphasis">
                     <h6>
                         <span>
-                            Projects
+                            PROJECTS
                         </span>
                         {
                             projectsCount !== -1 &&
@@ -182,9 +182,8 @@ export default function ListProjectsComponent({
                                                 <div className="col-4 ps-0 subscript text-secondary text-truncate text-end">
 
                                                     {
-                                                        proj.timeElapsed &&
+                                                        proj.timeElapsed !== 0 &&
                                                         <span>
-
                                                             <span className={generateTimeElapsedColor(proj)}>
                                                                 <i className="bi bi-clock-fill" style={{ paddingRight: "0.1rem" }} />
                                                             </span>

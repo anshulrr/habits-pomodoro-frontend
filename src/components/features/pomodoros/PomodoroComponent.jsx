@@ -129,7 +129,7 @@ export default function PomodoroComponent({
 
         updatePomodoroApi(pomodoro.id, pomodoro_data)
             .then(response => {
-                console.debug({ response, pomodoro })
+                // console.debug({ response, pomodoro })
                 // update cache
                 putServerItemToCache('pomodoros', response.data);
 
@@ -169,7 +169,7 @@ export default function PomodoroComponent({
                 // We need to ask the user for permission
                 Notification.requestPermission().then((permission) => {
                     if (permission === "granted") {
-                        console.info('got the permission for notifications')
+                        // console.info('got the permission for notifications')
                     }
                 });
             }
