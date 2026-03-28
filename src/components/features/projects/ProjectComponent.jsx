@@ -2,11 +2,10 @@ import { useEffect, useState } from 'react'
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
-import { retrieveAllProjectCategoriesApi } from "services/api/ProjectCategoryApiService";
 import { calculateTextAreaRows } from 'services/helpers/helper';
 import { COLOR_MAP } from 'services/helpers/listsHelper';
 
-import { addItemToCache, getItemFromCache, putItemToCache, syncDirtyItems } from 'services/dbService';
+import { addItemToCache, getItemFromCache, putItemToCache } from 'services/dbService';
 import { useData } from 'services/DataContext';
 
 export default function ProjectComponent() {

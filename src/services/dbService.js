@@ -1,4 +1,3 @@
-import moment from 'moment';
 import Dexie from 'dexie';
 
 import { db } from 'services/db'

@@ -14,7 +14,7 @@ import { generateDateColor } from "services/helpers/listsHelper";
 
 import ListCommentsComponent from "components/features/comments/ListCommentsComponent";
 import SortableTask from "./SortableTask";
-import { getPomodorosFromCache, getTasksFromCache, putItemToCache } from "services/dbService";
+import { getTasksFromCache, putItemToCache } from "services/dbService";
 import { useData } from "services/DataContext";
 import { db } from "services/db";
 

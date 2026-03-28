@@ -7,7 +7,7 @@ import { timeToDisplay } from "services/helpers/listsHelper";
 import { Buttons } from "components/stats/charts/Buttons";
 import ListCommentsComponent from "components/features/comments/ListCommentsComponent";
 import OutsideAlerter from "services/hooks/OutsideAlerter";
-import { getItemFromCache, getPomodorosFromCache, modifyItemInCache, syncDirtyItems } from "services/dbService";
+import { getPomodorosFromCache, modifyItemInCache, syncDirtyItems } from "services/dbService";
 import { useData } from "services/DataContext";
 
 export default function ListPomodorosComponent({
@@ -27,7 +27,7 @@ export default function ListPomodorosComponent({
     const [pomodorosGroup, setPomodorosGroup] = useState([])
     const [pomodorosCount, setPomodorosCount] = useState(-1);
 
-    const pomodoros = useLiveQuery(async () => {
+    useLiveQuery(async () => {
         const retrievedPomodoros = await getPomodorosFromCache({
             startDate: moment().startOf('day').toISOString(),
             endDate: moment().startOf('day').add(1, 'd').toISOString(),
