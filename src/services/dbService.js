@@ -334,6 +334,7 @@ export async function syncDeltaItems(entity, requestData) {
             for (const item of items) {
                 // 1. Fetch the existing local item
                 const localItem = await db[entity].get(item.id);
+                updateViewDataForDeltaItem(entity, item, localItem);
 
                 if (!localItem) {
                     // 2. NEW ITEM: If it doesn't exist locally, add it
@@ -359,6 +360,30 @@ export async function syncDeltaItems(entity, requestData) {
         // console.info(`Successfully synced ${items.length} delta items of ${entity}`);
     } catch (error) {
         console.error(`Cache: Failed to sync delta items of ${entity}: ${error}`)
+    }
+}
+
+// TODO: this is a temp solution, decide if it is better to store the data needed for view in the db directly
+/*
+other approach:
+    for new comment is added, update the comments count of the related task in cache
+    for deleted comment, update the comments count of the related task in cache
+    sync the updated task to backend 
+*/
+async function updateViewDataForDeltaItem(entity, serverItem, localItem) {
+    if (entity === 'comments') {
+        if (!localItem && serverItem.taskId) {
+            // new comment, update the comments count of the related task
+            await db.tasks
+                .where({ id: serverItem.taskId })
+                .modify(task => {
+                    if (task.commentsCount) {
+                        task.commentsCount += 1;
+                    } else {
+                        task.commentsCount = 1;
+                    }
+                });
+        }
     }
 }
 
