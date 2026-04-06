@@ -330,7 +330,7 @@ export async function syncDeltaItems(entity, requestData) {
         // console.debug('delta items', { items });
 
         // 2. Transaction: Save data and the NEW sync time together
-        await db.transaction('rw', db[entity], db.metadata, async () => {
+        await db.transaction('rw', db[entity], db.metadata, db.tasks, async () => {
             for (const item of items) {
                 // 1. Fetch the existing local item
                 const localItem = await db[entity].get(item.id);
@@ -371,20 +371,26 @@ other approach:
     sync the updated task to backend 
 */
 async function updateViewDataForDeltaItem(entity, serverItem, localItem) {
-    if (entity === 'comments') {
-        if (!localItem && serverItem.taskId) {
-            // new comment, update the comments count of the related task
-            await db.tasks
-                .where({ id: serverItem.taskId })
-                .modify(task => {
-                    if (task.commentsCount) {
-                        task.commentsCount += 1;
-                    } else {
-                        task.commentsCount = 1;
-                    }
-                });
+    try {
+        if (entity === 'comments') {
+            console.debug({serverItem, localItem});
+            if (!localItem && serverItem.taskId) {
+                // new comment, update the comments count of the related task
+                await db.tasks
+                    .where({ id: serverItem.taskId })
+                    .modify(task => {
+                        console.log('Updating comments count for task in cache', task.id);
+                        if (task.commentsCount) {
+                            task.commentsCount += 1;
+                        } else {
+                            task.commentsCount = 1;
+                        }
+                    });
+            }
         }
-    }
+    } catch (error) {
+        console.error(`Cache: Failed to update view data for delta item of ${entity}: ${error}`)
+    }   
 }
 
 // TODO: check why async await is not necessary here
