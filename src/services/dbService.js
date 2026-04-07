@@ -20,7 +20,8 @@ import {
     createTaskApi,
     getSyncAllTasksCountApi,
     retrieveSyncAllTasksApi,
-    getTasksCommentsCountApi
+    getTasksCommentsCountApi,
+    retrieveTaskApi
 } from './api/TaskApiService';
 import {
     createPastPomodoroApi,
@@ -330,11 +331,10 @@ export async function syncDeltaItems(entity, requestData) {
         // console.debug('delta items', { items });
 
         // 2. Transaction: Save data and the NEW sync time together
-        await db.transaction('rw', db[entity], db.metadata, db.tasks, async () => {
+        await db.transaction('rw', db[entity], db.metadata, async () => {
             for (const item of items) {
                 // 1. Fetch the existing local item
                 const localItem = await db[entity].get(item.id);
-                updateViewDataForDeltaItem(entity, item, localItem);
 
                 if (!localItem) {
                     // 2. NEW ITEM: If it doesn't exist locally, add it
@@ -357,6 +357,8 @@ export async function syncDeltaItems(entity, requestData) {
             // TODO: check if server time is better to use here instead of client time
             await db.metadata.put({ id: 'last_sync_' + entity, value: new Date().toISOString() });
         });
+        updateViewDataForDeltaItem(entity, items, lastSyncTime);
+
         // console.info(`Successfully synced ${items.length} delta items of ${entity}`);
     } catch (error) {
         console.error(`Cache: Failed to sync delta items of ${entity}: ${error}`)
@@ -370,21 +372,35 @@ other approach:
     for deleted comment, update the comments count of the related task in cache
     sync the updated task to backend 
 */
-async function updateViewDataForDeltaItem(entity, serverItem, localItem) {
+async function updateViewDataForDeltaItem(entity, serverItems, lastSyncTime) {
     try {
-        if (entity === 'comments') {
-            console.debug({serverItem, localItem});
-            if (!localItem && serverItem.taskId) {
-                // new comment, update the comments count of the related task
+        for (const serverItem of serverItems) {
+            // 1. Fetch the existing local item
+            const localItem = await db[entity].get(serverItem.id);
+            
+            if (entity === 'comments') {
+                console.debug({serverItem, localItem});
+                if (new Date(localItem.createdAt) > new Date(lastSyncTime) && !!serverItem.taskId) {
+                    // new comment, update the comments count of the related task
+                    await db.tasks
+                        .where({ id: serverItem.taskId })
+                        .modify(task => {
+                            console.log('Updating comments count for task in cache', task.id);
+                            if (task.commentsCount) {
+                                task.commentsCount += 1;
+                            } else {
+                                task.commentsCount = 1;
+                            }
+                        });
+                }
+            } else if (entity === 'tasks') {
+                // temporary solution
+                const serverTask = (await retrieveTaskApi({ id: serverItem.id })).data;
+                // console.log(serverTask.tags.map(t => t.id))
                 await db.tasks
-                    .where({ id: serverItem.taskId })
+                    .where({ id: serverTask.id })
                     .modify(task => {
-                        console.log('Updating comments count for task in cache', task.id);
-                        if (task.commentsCount) {
-                            task.commentsCount += 1;
-                        } else {
-                            task.commentsCount = 1;
-                        }
+                        task.tagIds = serverTask.tags.map(t => t.id);
                     });
             }
         }
