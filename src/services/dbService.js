@@ -559,11 +559,8 @@ async function createTasksFilterQuery({ projectId, tagId, startDate, endDate, se
     if (projectId || projectId === 0) { // check 0 for new project
         query = query.where({ projectId })
     } else if (tagId) {
-        const taskIds = await db['tasks_tags']
-            .where({ tagId })
-            .toArray()
-            .then(row => row.map(rel => rel.taskId));
-        query = query.where('id').anyOf(taskIds);
+        query = query.where('tagIds')
+            .equals(tagId)
     } else if (startDate && endDate) {
         query = query.where('dueDate')
             .between(startDate, endDate)

@@ -2,7 +2,7 @@ import { Dexie } from "dexie"
 
 export const db = new Dexie("habits-pomodoro-database")
 
-db.version(1).stores({
+db.version(2).stores({
     /*
     1. _dirty field is used to mark entities that are created/updated/deleted while offline, to be synced when back online.
     2. updatedAt field is used for conflict resolution, 
@@ -18,7 +18,7 @@ db.version(1).stores({
     /*
     1. added multiple indexes for sorting and filtering by different fields.
     */
-    tasks: "id, description, projectId, status, dueDate, priority, updatedAt, _dirty",
+    tasks: "id, description, projectId, status, dueDate, priority, *tagIds, updatedAt, _dirty",
 
     pomodoros: "id, taskId, projectId, startTime, endTime, status, updatedAt, _dirty",
 
