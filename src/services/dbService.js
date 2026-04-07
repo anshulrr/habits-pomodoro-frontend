@@ -722,7 +722,7 @@ async function setTasksTags({ taskIds }) {
         }
         // console.debug({ tasks_tags_map: tasksTagsMap });
         // update cache
-        const bulkData = taskIds.map(taskId => ({ key: taskId, changes: { tags: tasksTagsMap.get(taskId) } }));
+        const bulkData = taskIds.map(taskId => ({ key: taskId, changes: { tagIds: tasksTagsMap.get(taskId) } }));
         db['tasks'].bulkUpdate(bulkData);
     } catch (error) {
         console.error(`Cache VIEW: Failed to set tasks tags: ${error}`)
@@ -742,6 +742,7 @@ async function setTasksCommentsCount({ taskIds }) {
 }
 
 // TAGS cache update methods for task mapping
+// TODO: remove if not needed
 export async function updateTasksTag(updatedTag) {
     try {
         const taskIds = await db.tasks_tags
@@ -771,6 +772,7 @@ export async function updateTasksTag(updatedTag) {
     }
 }
 
+// TODO: remove if not needed
 export async function updateTaskTags(taskId, tagIds) {
     try {
         // update tasks_tags table

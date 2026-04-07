@@ -274,8 +274,8 @@ export default function SortableTask({
                             </span>
                             <span style={{ float: "right" }}>
                                 {
-                                    task.tags && task.tags.length > 0 &&
-                                    task.tags.map(
+                                    task.tagIds && task.tagIds.length > 0 &&
+                                    task.tagIds.map(
                                         (tagId, tag_index) => (
                                             <span key={tag_index} className="me-1">
                                                 <i className="bi bi-tag-fill" style={{ color: dataContext.tagsMap.get(tagId).color, paddingRight: "0.1rem" }} />
@@ -344,7 +344,7 @@ export default function SortableTask({
                                     }
                                     {
                                         <button type="button" className="btn btn-sm btn-outline-secondary py-0 px-2" onClick={() => onAddTag(task)}>
-                                            Add Tags <i className="ps-1 bi bi-tag" />
+                                            Update Tags <i className="ps-1 bi bi-tag" />
                                         </button>
                                     }
                                     {
