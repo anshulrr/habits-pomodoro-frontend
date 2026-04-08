@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { putItemToCache, updateTasksTag } from 'services/dbService';
+import { putItemToCache } from 'services/dbService';
 
 export default function UpdateTagComponent({
     tag,

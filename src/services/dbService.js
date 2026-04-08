@@ -1,4 +1,3 @@
-import moment from 'moment';
 import Dexie from 'dexie';
 
 import { db } from 'services/db'
@@ -21,7 +20,8 @@ import {
     createTaskApi,
     getSyncAllTasksCountApi,
     retrieveSyncAllTasksApi,
-    getTasksCommentsCountApi
+    getTasksCommentsCountApi,
+    retrieveTaskApi
 } from './api/TaskApiService';
 import {
     createPastPomodoroApi,
@@ -357,10 +357,56 @@ export async function syncDeltaItems(entity, requestData) {
             // TODO: check if server time is better to use here instead of client time
             await db.metadata.put({ id: 'last_sync_' + entity, value: new Date().toISOString() });
         });
+        updateViewDataForDeltaItem(entity, items, lastSyncTime);
+
         // console.info(`Successfully synced ${items.length} delta items of ${entity}`);
     } catch (error) {
         console.error(`Cache: Failed to sync delta items of ${entity}: ${error}`)
     }
+}
+
+// TODO: this is a temp solution, decide if it is better to store the data needed for view in the db directly
+/*
+other approach:
+    for new comment is added, update the comments count of the related task in cache
+    for deleted comment, update the comments count of the related task in cache
+    sync the updated task to backend 
+*/
+async function updateViewDataForDeltaItem(entity, serverItems, lastSyncTime) {
+    try {
+        for (const serverItem of serverItems) {
+            // 1. Fetch the existing local item
+            const localItem = await db[entity].get(serverItem.id);
+            
+            if (entity === 'comments') {
+                console.debug({serverItem, localItem});
+                if (new Date(localItem.createdAt) > new Date(lastSyncTime) && !!serverItem.taskId) {
+                    // new comment, update the comments count of the related task
+                    await db.tasks
+                        .where({ id: serverItem.taskId })
+                        .modify(task => {
+                            console.log('Updating comments count for task in cache', task.id);
+                            if (task.commentsCount) {
+                                task.commentsCount += 1;
+                            } else {
+                                task.commentsCount = 1;
+                            }
+                        });
+                }
+            } else if (entity === 'tasks') {
+                // temporary solution
+                const serverTask = (await retrieveTaskApi({ id: serverItem.id })).data;
+                // console.log(serverTask.tags.map(t => t.id))
+                await db.tasks
+                    .where({ id: serverTask.id })
+                    .modify(task => {
+                        task.tagIds = serverTask.tags.map(t => t.id);
+                    });
+            }
+        }
+    } catch (error) {
+        console.error(`Cache: Failed to update view data for delta item of ${entity}: ${error}`)
+    }   
 }
 
 // TODO: check why async await is not necessary here
@@ -513,11 +559,8 @@ async function createTasksFilterQuery({ projectId, tagId, startDate, endDate, se
     if (projectId || projectId === 0) { // check 0 for new project
         query = query.where({ projectId })
     } else if (tagId) {
-        const taskIds = await db['tasks_tags']
-            .where({ tagId })
-            .toArray()
-            .then(row => row.map(rel => rel.taskId));
-        query = query.where('id').anyOf(taskIds);
+        query = query.where('tagIds')
+            .equals(tagId)
     } else if (startDate && endDate) {
         query = query.where('dueDate')
             .between(startDate, endDate)
@@ -533,41 +576,6 @@ async function createTasksFilterQuery({ projectId, tagId, startDate, endDate, se
             .filter(task => regex.test(task.description))
     }
     return query;
-}
-
-export async function getTagTasksCountFromCache({ tagId, status }) {
-    // console.debug('load tag tasks count from cache', { tagId, status });
-    try {
-        const taskIds = await db['tasks_tags']
-            .where({ tagId })
-            .toArray()
-            .then(row => row.map(rel => rel.taskId));
-        return await db['tasks']
-            .where('id')
-            .anyOf(taskIds)
-            .and(task => task.status === status)
-            .count();
-    } catch (error) {
-        console.error(`Failed to get tag tasks count: ${error}`)
-    }
-}
-
-export async function getTagTasksFromCache({ tagId, status, limit, offset }) {
-    // console.debug('load tag tasks from cache', { tagId, status, limit, offset });
-    try {
-        const taskIds = await db['tasks_tags']
-            .where({ tagId })
-            .toArray()
-            .then(row => row.map(rel => rel.taskId));
-        return await db['tasks']
-            .where('id')
-            .anyOf(taskIds)
-            .and(task => task.status === status)
-            .sortBy('priority')
-            .then(tasks => tasks.slice(offset, offset + limit));
-    } catch (error) {
-        console.error(`Failed to get tag tasks: ${error}`)
-    }
 }
 
 // COMMON
@@ -653,8 +661,6 @@ async function initTaskView() {
         // storage for task data today's time elapsed, total time elapsed and tags
         tasks.forEach(task => taskMap.set(task.id, {
             id: task.id,
-            todaysTimeElapsed: 0,
-            totalTimeElapsed: 0,
             tags: []
         }));
         const taskIds = tasks.map(task => task.id);
@@ -676,10 +682,7 @@ async function setTasksTags({ taskIds }) {
         const response = await getTasksTagsApi(taskIds)
         // console.debug('Retrieved tasks tags from api:', { data: response.data });
 
-        // store relationship in cache
-        bulkPutItemsToCache('tasks_tags', response.data.map(item => ({ taskId: item[2], tagId: item[3] })));
-
-        // store tags data in tasks in cache
+        // store tags data in tasks cache
         // using Map for easy access and update
         const tasksTagsMap = new Map();
         for (let i = 0; i < response.data.length; i++) {
@@ -692,7 +695,7 @@ async function setTasksTags({ taskIds }) {
         }
         // console.debug({ tasks_tags_map: tasksTagsMap });
         // update cache
-        const bulkData = taskIds.map(taskId => ({ key: taskId, changes: { tags: tasksTagsMap.get(taskId) } }));
+        const bulkData = taskIds.map(taskId => ({ key: taskId, changes: { tagIds: tasksTagsMap.get(taskId) } }));
         db['tasks'].bulkUpdate(bulkData);
     } catch (error) {
         console.error(`Cache VIEW: Failed to set tasks tags: ${error}`)
@@ -708,54 +711,5 @@ async function setTasksCommentsCount({ taskIds }) {
         db['tasks'].bulkUpdate(bulkData);
     } catch (error) {
         console.error(`Cache VIEW: Failed to set tasks comments count: ${error}`)
-    }
-}
-
-// TAGS cache update methods for task mapping
-export async function updateTasksTag(updatedTag) {
-    try {
-        const taskIds = await db.tasks_tags
-            .where({ tagId: updatedTag.id })
-            .toArray()
-            .then(row => row.map(rel => rel.taskId));
-        // NOTE: TODO: check why in backend tasks_tags are store multiple time (not unique combination)
-        // console.debug({ taskIds }, taskIds.length);
-
-        // TODO: check efficiency of this method
-        await db.tasks
-            .where('id')
-            .anyOf(taskIds)
-            .modify(
-                task => {
-                    task.tags = task.tags.map(tag => {
-                        if (tag.id === updatedTag.id) {
-                            return updatedTag;
-                        }
-                        return tag;
-                    })
-                }
-            );
-        // console.debug(`successfully updated ${taskIds.length} tasks with updated tag data with id: ${updatedTag.id}`);
-    } catch (error) {
-        console.error(`Cache: failed to udpate tasks tag: ${error}`);
-    }
-}
-
-export async function updateTaskTags(taskId, tagIds) {
-    try {
-        // update tasks_tags table
-        // console.debug(tagIds.map(tagId => { return { taskId, tagId } }));
-        await db.tasks_tags
-            .bulkPut(tagIds.map(tagId => { return { taskId, tagId } }));
-
-        // update tags of the task
-        await db.tasks
-            .where({ id: taskId })
-            .modify({
-                tags: [...tagIds]
-            })
-        // console.debug([...tagsMap.values()].filter(tag => tagIds.includes(tag.id)))
-    } catch (error) {
-        console.error(`Cache: failed to udpate task tags: ${error}`);
     }
 }

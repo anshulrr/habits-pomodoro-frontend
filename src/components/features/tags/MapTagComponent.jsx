@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react"
 
 import { useData } from "services/DataContext";
-import { mapTagsApi } from "services/api/TagApiService";
 import { retrieveTaskApi } from "services/api/TaskApiService";
-import { updateTaskTags } from "services/dbService";
+import { putItemToCache } from "services/dbService";
 
 export default function MapTagComponent({
     task,
@@ -79,15 +78,15 @@ export default function MapTagComponent({
         );
         // console.debug(selectedTags)
 
-        mapTagsApi(task.id, { tagIds: selectedTags })
-            .then(response => {
-                // udpate cache
-                updateTaskTags(task.id, selectedTags);
-                // cleanup
-                setShowMapTags(-1)
-            })
-            .catch(error => console.error(error.message))
+        const updated_task = {
+            ...task,
+            tagIds: selectedTags
+        };
 
+        // udpate cache
+        putItemToCache('tasks', updated_task);
+        // cleanup
+        setShowMapTags(-1)
     }
 
     return (
@@ -110,7 +109,7 @@ export default function MapTagComponent({
 
                                 <div className="small text-secondary text-start mb-2">
                                     <div>
-                                        Add Tags
+                                        Update Tags
                                         {
                                             tagsCount !== -1 &&
                                             <span className="ms-1 badge rounded-pill text-bg-secondary">

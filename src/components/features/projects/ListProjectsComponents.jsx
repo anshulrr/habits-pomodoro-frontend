@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useNavigate, useLocation } from "react-router-dom";
-import moment from "moment";
 
 import Pagination from "services/pagination/Pagination"
 import { useAuth } from "services/auth/AuthContext";
@@ -68,7 +67,7 @@ export default function ListProjectsComponent({
         // TODO: why it is called multiple times on pomodoro update
         // console.log(moment().toISOString(), { projects, todaysPomodoros, currentPage });
         return updateProjectsTodaysTimeElpased(retrievedProjects, todaysPomodoros);
-    }, [projects, todaysPomodoros, currentPage])
+    }, [projects, todaysPomodoros, currentPage, PAGESIZE])
 
     function updateProjectsTodaysTimeElpased(retrievedProjects, pomodoros) {
         retrievedProjects.forEach(project => {

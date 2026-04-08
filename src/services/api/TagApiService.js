@@ -21,6 +21,7 @@ export const updateTagApi
 export const createTagApi
     = (tag) => apiClient.post(`tags`, tag)
 
+// TODO: remove if not needed
 export const mapTagsApi
     = (task_id, data) => apiClient.post(`tasks/${task_id}/tags`, data)
 

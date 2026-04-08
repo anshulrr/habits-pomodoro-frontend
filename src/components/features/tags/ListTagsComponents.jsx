@@ -50,7 +50,7 @@ export default function ListTagsComponent({
         const firstPageIndex = (currentPage - 1) * PAGESIZE;
         const lastPageIndex = firstPageIndex + PAGESIZE;
         return tags.slice(firstPageIndex, lastPageIndex);
-    }, [tags, currentPage])
+    }, [tags, currentPage, PAGESIZE])
 
     const [showCreateTag, setShowCreateTag] = useState(false)
     const [showUpdateTag, setShowUpdateTag] = useState(-1)
