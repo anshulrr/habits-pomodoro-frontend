@@ -578,41 +578,6 @@ async function createTasksFilterQuery({ projectId, tagId, startDate, endDate, se
     return query;
 }
 
-export async function getTagTasksCountFromCache({ tagId, status }) {
-    // console.debug('load tag tasks count from cache', { tagId, status });
-    try {
-        const taskIds = await db['tasks_tags']
-            .where({ tagId })
-            .toArray()
-            .then(row => row.map(rel => rel.taskId));
-        return await db['tasks']
-            .where('id')
-            .anyOf(taskIds)
-            .and(task => task.status === status)
-            .count();
-    } catch (error) {
-        console.error(`Failed to get tag tasks count: ${error}`)
-    }
-}
-
-export async function getTagTasksFromCache({ tagId, status, limit, offset }) {
-    // console.debug('load tag tasks from cache', { tagId, status, limit, offset });
-    try {
-        const taskIds = await db['tasks_tags']
-            .where({ tagId })
-            .toArray()
-            .then(row => row.map(rel => rel.taskId));
-        return await db['tasks']
-            .where('id')
-            .anyOf(taskIds)
-            .and(task => task.status === status)
-            .sortBy('priority')
-            .then(tasks => tasks.slice(offset, offset + limit));
-    } catch (error) {
-        console.error(`Failed to get tag tasks: ${error}`)
-    }
-}
-
 // COMMON
 // TODO: check why async await is necessary here
 /*
@@ -696,8 +661,6 @@ async function initTaskView() {
         // storage for task data today's time elapsed, total time elapsed and tags
         tasks.forEach(task => taskMap.set(task.id, {
             id: task.id,
-            todaysTimeElapsed: 0,
-            totalTimeElapsed: 0,
             tags: []
         }));
         const taskIds = tasks.map(task => task.id);
@@ -719,10 +682,7 @@ async function setTasksTags({ taskIds }) {
         const response = await getTasksTagsApi(taskIds)
         // console.debug('Retrieved tasks tags from api:', { data: response.data });
 
-        // store relationship in cache
-        bulkPutItemsToCache('tasks_tags', response.data.map(item => ({ taskId: item[2], tagId: item[3] })));
-
-        // store tags data in tasks in cache
+        // store tags data in tasks cache
         // using Map for easy access and update
         const tasksTagsMap = new Map();
         for (let i = 0; i < response.data.length; i++) {
@@ -751,56 +711,5 @@ async function setTasksCommentsCount({ taskIds }) {
         db['tasks'].bulkUpdate(bulkData);
     } catch (error) {
         console.error(`Cache VIEW: Failed to set tasks comments count: ${error}`)
-    }
-}
-
-// TAGS cache update methods for task mapping
-// TODO: remove if not needed
-export async function updateTasksTag(updatedTag) {
-    try {
-        const taskIds = await db.tasks_tags
-            .where({ tagId: updatedTag.id })
-            .toArray()
-            .then(row => row.map(rel => rel.taskId));
-        // NOTE: TODO: check why in backend tasks_tags are store multiple time (not unique combination)
-        // console.debug({ taskIds }, taskIds.length);
-
-        // TODO: check efficiency of this method
-        await db.tasks
-            .where('id')
-            .anyOf(taskIds)
-            .modify(
-                task => {
-                    task.tags = task.tags.map(tag => {
-                        if (tag.id === updatedTag.id) {
-                            return updatedTag;
-                        }
-                        return tag;
-                    })
-                }
-            );
-        // console.debug(`successfully updated ${taskIds.length} tasks with updated tag data with id: ${updatedTag.id}`);
-    } catch (error) {
-        console.error(`Cache: failed to udpate tasks tag: ${error}`);
-    }
-}
-
-// TODO: remove if not needed
-export async function updateTaskTags(taskId, tagIds) {
-    try {
-        // update tasks_tags table
-        // console.debug(tagIds.map(tagId => { return { taskId, tagId } }));
-        await db.tasks_tags
-            .bulkPut(tagIds.map(tagId => { return { taskId, tagId } }));
-
-        // update tags of the task
-        await db.tasks
-            .where({ id: taskId })
-            .modify({
-                tags: [...tagIds]
-            })
-        // console.debug([...tagsMap.values()].filter(tag => tagIds.includes(tag.id)))
-    } catch (error) {
-        console.error(`Cache: failed to udpate task tags: ${error}`);
     }
 }
