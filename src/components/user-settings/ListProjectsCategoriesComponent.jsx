@@ -5,7 +5,7 @@ import Pagination from "services/pagination/Pagination"
 
 import ProjectCategoryComponent from "components/user-settings/ProjectCategoryComponent";
 
-import { getItemsCountFromCache, getItemsFromCache } from "services/dbService";
+import { getItemsCountFromCache, getItemsFromCache } from "services/db/dbService";
 
 const PAGESIZE = 5;
 

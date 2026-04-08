@@ -7,8 +7,8 @@ import { timeToDisplay } from "services/helpers/listsHelper";
 import { Buttons } from "components/stats/charts/Buttons";
 import ListCommentsComponent from "components/features/comments/ListCommentsComponent";
 import OutsideAlerter from "services/hooks/OutsideAlerter";
-import { getPomodorosFromCache, modifyItemInCache, syncDirtyItems } from "services/dbService";
-import { useData } from "services/DataContext";
+import { getPomodorosFromCache, modifyItemInCache, syncDirtyItems } from "services/db/dbService";
+import { useData } from "services/db/DataContext";
 
 export default function ListPomodorosComponent({
     includeCategories,

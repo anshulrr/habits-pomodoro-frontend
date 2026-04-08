@@ -1,18 +1,18 @@
-export { clearCacheDb } from './db/dbCleanup';
-export { initCacheDb } from './db/dbInit';
+export { clearCacheDb } from './dbCleanup';
+export { initCacheDb } from './dbInit';
 export {
     syncDirtyEntities,
     syncDirtyItems,
     syncEntitiesDelta,
     syncDeltaItems
-} from './db/dbSync';
+} from './dbSync';
 export {
     modifyItemInCache,
     addItemToCache,
     putItemToCache,
     addServerItemToCache,
     putServerItemToCache
-} from './db/dbWrite';
+} from './dbWrite';
 export {
     getItemsCountFromCache,
     getItemsFromCache, 
@@ -23,4 +23,4 @@ export {
     getPomodorosFromCache,
     getTasksCountFromCache,
     getTasksFromCache
-} from './db/dbRead';
+} from './dbRead';

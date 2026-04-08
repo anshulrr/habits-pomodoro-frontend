@@ -9,7 +9,7 @@ import CreateTaskComponent from "components/features/tasks/CreateTaskComponent";
 import PomodoroComponent from "components/features/pomodoros/PomodoroComponent";
 import ListCommentsComponent from "components/features/comments/ListCommentsComponent";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-import { addServerItemToCache, getCommentsCountFromCache, getTasksCountFromCache } from "services/dbService";
+import { addServerItemToCache, getCommentsCountFromCache, getTasksCountFromCache } from "services/db/dbService";
 
 export default function ListTasksComponent({
     project,

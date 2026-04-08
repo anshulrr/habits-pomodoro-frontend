@@ -6,7 +6,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 import { useAuth } from 'services/auth/AuthContext';
-import { addItemToCache, getItemFromCache } from 'services/dbService';
+import { addItemToCache, getItemFromCache } from 'services/db/dbService';
 
 export default function PastPomodoroComponent({
     setShowCreatePastPomodoro,

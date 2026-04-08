@@ -5,7 +5,7 @@ import Pagination from "services/pagination/Pagination"
 import { useAuth } from "services/auth/AuthContext";
 import { COLOR_MAP, timeToDisplay, truncateString } from "services/helpers/listsHelper";
 import { isEmpty } from "services/helpers/helper";
-import { useData } from "services/DataContext";
+import { useData } from "services/db/DataContext";
 
 export default function ListProjectsComponent({
     project,

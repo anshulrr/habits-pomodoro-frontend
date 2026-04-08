@@ -15,14 +15,14 @@ import { StreakChart } from "components/stats/charts/StreakChart";
 
 import OutsideAlerter from 'services/hooks/OutsideAlerter';
 import { useAuth } from 'services/auth/AuthContext';
-import { useData } from "services/DataContext";
+import { useData } from "services/db/DataContext";
 import { isEmpty } from 'services/helpers/helper';
 import { toast } from 'react-toastify';
 import SearchTaskComponent from './tasks/SearchTaskComponent';
 import FooterComponent from 'components/FooterComponent';
 import { getRunningPomodoroApi } from 'services/api/PomodoroApiService';
 
-import { getTasksCountFromCache } from "services/dbService";
+import { getTasksCountFromCache } from "services/db/dbService";
 
 export default function HomeComponent({ setReloadHome }) {
 

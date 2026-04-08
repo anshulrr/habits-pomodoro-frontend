@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { useData } from 'services/DataContext';
+import { useData } from 'services/db/DataContext';
 
-import { getFilteredItemsFromCache } from 'services/dbService';
+import { getFilteredItemsFromCache } from 'services/db/dbService';
 
 export const CommentsFilterComponent = ({ setFilterType, setFilterTypeId, resetFiltersAndReload }) => {
 

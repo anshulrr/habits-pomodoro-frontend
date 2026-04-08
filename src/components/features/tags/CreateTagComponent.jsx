@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { addItemToCache } from 'services/dbService';
+import { addItemToCache } from 'services/db/dbService';
 
 export default function CreateTagComponent({
     setShowCreateTag,
