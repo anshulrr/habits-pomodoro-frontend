@@ -16,7 +16,7 @@ import ListCommentsComponent from "components/features/comments/ListCommentsComp
 import SortableTask from "./SortableTask";
 import { getTasksFromCache, putItemToCache } from "services/dbService";
 import { useData } from "services/DataContext";
-import { db } from "services/db";
+import { db } from "services/db/db";
 
 export default function ListTasksRowsComponent({
     project,

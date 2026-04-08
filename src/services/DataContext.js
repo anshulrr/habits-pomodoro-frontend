@@ -5,7 +5,7 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { createContext, useContext } from "react";
 
-import { db } from "services/db";
+import { db } from "services/db/db";
 import { getItemsFromCache } from "./dbService";
 import moment from "moment";
 

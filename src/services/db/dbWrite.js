@@ -1,4 +1,4 @@
-import { db } from "services/db";
+import { db } from "services/db/db";
 import { syncDirtyItems } from "./dbSync";
 import { getItemsCountFromCache } from "./dbRead";
 

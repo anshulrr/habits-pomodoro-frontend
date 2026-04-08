@@ -1,5 +1,5 @@
 import Dexie from "dexie";
-import { db } from "services/db";
+import { db } from "services/db/db";
 
 // TODO: check why async await is necessary here
 /*

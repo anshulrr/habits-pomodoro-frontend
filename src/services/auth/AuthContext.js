@@ -8,7 +8,7 @@ import { apiClient } from "../api/ApiClient";
 import FirebaseAuthService from "./FirebaseAuthService";
 import { disableToken } from "services/FirebaseFirestoreService";
 
-import { db } from "services/db";
+import { db } from "services/db/db";
 import { clearCacheDb, syncDirtyEntities, syncEntitiesDelta } from "services/dbService";
 
 const AuthContext = createContext();

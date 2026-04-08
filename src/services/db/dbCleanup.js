@@ -1,5 +1,5 @@
 import Dexie from "dexie";
-import { db } from "services/db";
+import { db } from "services/db/db";
 
 // after logout, clear cache db to prevent data leak between accounts
 export function clearCacheDb() {
