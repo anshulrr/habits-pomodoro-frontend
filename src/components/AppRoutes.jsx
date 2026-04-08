@@ -19,7 +19,7 @@ import SignupComponent from 'components/SignupComponent'
 import ForgotPasswordComponent from 'components/ForgotPasswordComponent'
 import AboutComponent from 'components/AboutComponent'
 import ListCommentsComponent from './features/comments/ListCommentsComponent'
-import DataProvider from 'services/DataContext'
+import DataProvider from 'services/db/DataContext'
 
 function AuthenticatedRoute({ children }) {
     const authContext = useAuth()

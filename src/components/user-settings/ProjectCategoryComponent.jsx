@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { addItemToCache, putItemToCache } from 'services/dbService'
+import { addItemToCache, putItemToCache } from 'services/db/dbService'
 
 export default function ProjectCategoryComponent({
     category,

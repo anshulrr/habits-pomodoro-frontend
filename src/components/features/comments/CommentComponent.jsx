@@ -6,8 +6,8 @@ import moment from 'moment'
 
 import { calculateTextAreaRows, filterPastTime } from 'services/helpers/helper';
 import InsertLinkComponent from './InsertLinkComponent';
-import { addItemToCache, getItemFromCache, modifyItemInCache } from 'services/dbService';
-import { useData } from 'services/DataContext';
+import { addItemToCache, getItemFromCache, modifyItemInCache } from 'services/db/dbService';
+import { useData } from 'services/db/DataContext';
 
 export default function CommentComponent({ filterBy, id, setShowCreateComment, setCurrentPage }) {
 

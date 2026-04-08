@@ -14,9 +14,9 @@ import { generateDateColor } from "services/helpers/listsHelper";
 
 import ListCommentsComponent from "components/features/comments/ListCommentsComponent";
 import SortableTask from "./SortableTask";
-import { getTasksFromCache, putItemToCache } from "services/dbService";
-import { useData } from "services/DataContext";
-import { db } from "services/db";
+import { getTasksFromCache, putItemToCache } from "services/db/dbService";
+import { useData } from "services/db/DataContext";
+import { db } from "services/db/db";
 
 export default function ListTasksRowsComponent({
     project,

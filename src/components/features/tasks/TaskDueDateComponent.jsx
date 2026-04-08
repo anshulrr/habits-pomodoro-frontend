@@ -5,7 +5,7 @@ import moment from 'moment';
 import "react-datepicker/dist/react-datepicker.css";
 
 import DueDateInputComponent from './DueDateInputComponent';
-import { putItemToCache } from 'services/dbService';
+import { putItemToCache } from 'services/db/dbService';
 
 export default function TaskDueDateComponent({
     setShowUpdateDueDate,

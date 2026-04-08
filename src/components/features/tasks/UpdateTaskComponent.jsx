@@ -6,7 +6,7 @@ import { COLOR_MAP } from 'services/helpers/listsHelper'
 
 import { SwitchProjectComponent } from './SwitchProjectComponent'
 import DueDateInputComponent from './DueDateInputComponent'
-import { putItemToCache } from 'services/dbService'
+import { putItemToCache } from 'services/db/dbService'
 
 export default function UpdateTaskComponent({
     task,

@@ -15,8 +15,8 @@ import UpdateCommentComponent from "./UpdateCommentComponent";
 import MapCommentTagsComponent from "../tags/MapCommentTagsComponent";
 import { useLocation } from "react-router-dom";
 import { useLiveQuery } from "dexie-react-hooks";
-import { getCommentsCountFromCache, getCommentsFromCache } from "services/dbService";
-import { useData } from "services/DataContext";
+import { getCommentsCountFromCache, getCommentsFromCache } from "services/db/dbService";
+import { useData } from "services/db/DataContext";
 
 export default function ListFilteredCommentsComponent({
     filterBy,

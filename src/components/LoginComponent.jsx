@@ -4,7 +4,7 @@ import { useAuth } from 'services/auth/AuthContext'
 import HomeComponent from 'components/features/HomeComponent'
 import FirebaseAuthService from 'services/auth/FirebaseAuthService'
 import FooterComponent from './FooterComponent'
-import { initCacheDb } from 'services/dbService'
+import { initCacheDb } from 'services/db/dbService'
 
 export default function LoginComponent() {
 

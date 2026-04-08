@@ -7,7 +7,7 @@ import { isEmpty } from "services/helpers/helper";
 
 import CreateTagComponent from "./CreateTagComponent";
 import UpdateTagComponent from "./UpdateTagComponent";
-import { useData } from "services/DataContext";
+import { useData } from "services/db/DataContext";
 
 export default function ListTagsComponent({
     setProject,

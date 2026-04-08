@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
 
-import { useData } from "services/DataContext";
+import { useData } from "services/db/DataContext";
 import { retrieveTaskApi } from "services/api/TaskApiService";
-import { putItemToCache } from "services/dbService";
+import { putItemToCache } from "services/db/dbService";
 
 export default function MapTagComponent({
     task,

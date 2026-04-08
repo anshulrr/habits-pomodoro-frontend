@@ -6,7 +6,7 @@ import moment from 'moment';
 
 import { calculateTextAreaRows, filterPastTime } from 'services/helpers/helper';
 import InsertLinkComponent from './InsertLinkComponent';
-import { putItemToCache } from 'services/dbService';
+import { putItemToCache } from 'services/db/dbService';
 
 export default function UpdateCommentComponent({ comment, setShowUpdateComment }) {
 

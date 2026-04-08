@@ -9,11 +9,11 @@ import TaskDueDateComponent from "components/features/tasks/TaskDueDateComponent
 import MapTagComponent from "components/features/tags/MapTagComponent";
 import { TaskStats } from "components/features/tasks/TaskStats";
 
-import { useData } from "services/DataContext";
+import { useData } from "services/db/DataContext";
 import OutsideAlerter from "services/hooks/OutsideAlerter";
 import { COLOR_MAP, formatDate, timeToDisplay } from "services/helpers/listsHelper";
 import { resetProjectTaskPrioritiesApi } from "services/api/TaskApiService";
-import { putItemToCache, syncDeltaItems } from "services/dbService";
+import { putItemToCache, syncDeltaItems } from "services/db/dbService";
 
 export default function SortableTask({
     task,

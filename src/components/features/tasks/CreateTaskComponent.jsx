@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { addItemToCache } from 'services/dbService';
+import { addItemToCache } from 'services/db/dbService';
 
 export default function CreateTaskComponent({
     project,

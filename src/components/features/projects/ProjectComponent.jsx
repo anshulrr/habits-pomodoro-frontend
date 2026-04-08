@@ -5,8 +5,8 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { calculateTextAreaRows } from 'services/helpers/helper';
 import { COLOR_MAP } from 'services/helpers/listsHelper';
 
-import { addItemToCache, getItemFromCache, putItemToCache } from 'services/dbService';
-import { useData } from 'services/DataContext';
+import { addItemToCache, getItemFromCache, putItemToCache } from 'services/db/dbService';
+import { useData } from 'services/db/DataContext';
 
 export default function ProjectComponent() {
 

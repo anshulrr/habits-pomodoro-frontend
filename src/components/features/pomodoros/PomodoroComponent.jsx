@@ -7,7 +7,7 @@ import { generateInitialTimer, calculateTimeRemaining, generateTimer } from 'ser
 
 import BreakTimerComponent from 'components/features/pomodoros/BreakTimerComponent';
 import ListCommentsComponent from '../comments/ListCommentsComponent';
-import { putServerItemToCache } from 'services/dbService';
+import { putServerItemToCache } from 'services/db/dbService';
 
 export default function PomodoroComponent({
     pomodoro,

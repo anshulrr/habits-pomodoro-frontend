@@ -5,7 +5,7 @@ import OutsideAlerter from "services/hooks/OutsideAlerter"
 import { CommentsFilterComponent } from "./CommentsFilterComponent"
 import SearchCommentComponent from "./SearchCommentComponent"
 import FooterComponent from "components/FooterComponent"
-import { useData } from "services/DataContext"
+import { useData } from "services/db/DataContext"
 
 export default function ListCommentsComponent({
     filterBy = 'user',
