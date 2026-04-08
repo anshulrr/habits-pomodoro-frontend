@@ -78,7 +78,7 @@ export default function BreakTimerComponent({ startAgain }) {
         if (local_status === 'break_finished') {
             // console.debug(audio);
             if (userSettings.enableStopwatch && userSettings.enableStopwatchAudio) {
-                const local_audio = new Audio(process.env.PUBLIC_URL + '/audio/ticking-clock_1-27477.mp3')
+                const local_audio = new Audio(import.meta.env.PUBLIC_URL + '/audio/ticking-clock_1-27477.mp3')
                 local_audio.setAttribute('loop', true)
                 local_audio.play()
                 setAudio(local_audio)

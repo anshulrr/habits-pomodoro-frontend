@@ -14,7 +14,7 @@ import { clearCacheDb, syncDirtyEntities, syncEntitiesDelta } from "services/db/
 const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext)
 
-const TIME_WINDOW_FOR_REFRESH_JWT = parseInt(process.env.REACT_APP_JWT_REFRESH_WINDOW) || 60;
+const TIME_WINDOW_FOR_REFRESH_JWT = parseInt(import.meta.env.VITE_JWT_REFRESH_WINDOW) || 60;
 
 export default function AuthProvider({ children }) {
 

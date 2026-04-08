@@ -2,10 +2,10 @@ import { getToken, onMessage } from "firebase/messaging";
 import { storeToken } from "./FirebaseFirestoreService";
 import { toast } from 'react-toastify';
 
-const { messaging } = require("./firebaseConfig");
+import { messaging } from "./firebaseConfig";
 
 export const getAndStoreNotificationsToken = (userId) => {
-    getToken(messaging, { vapidKey: process.env.REACT_APP_FIREBASE_MESSAGING })
+    getToken(messaging, { vapidKey: import.meta.env.VITE_FIREBASE_MESSAGING })
         .then((currentToken) => {
             if (currentToken) {
                 // Send the token to your server and update the UI if necessary
