@@ -90,6 +90,7 @@ const apiMap = {
     }
 };
 
+// **** INIT ****
 // Initialize cache database on login
 // TODO: only sync first few items for first time load, and then sync the rest in background, to improve performance of first load
 export async function initCacheDb() {
@@ -124,7 +125,7 @@ export async function initCacheDb() {
 1. Get count of items from backend and put to cache, so that we can show the count in UI without fetching all items
 2. Get all items from backend and put to cache, so that we can show the items in UI without fetching from backend again
 */
-export async function initEntityCache(entity, requestData, requestCountData) {
+async function initEntityCache(entity, requestData, requestCountData) {
     // console.debug({ entity, requestData, requestCountData })
     try {
         let itemsCount = (await apiMap[entity].getCountApi(requestCountData)).data;
@@ -143,6 +144,7 @@ export async function initEntityCache(entity, requestData, requestCountData) {
     }
 }
 
+// **** CLEANUP ****
 // after logout, clear cache db to prevent data leak between accounts
 export function clearCacheDb() {
     checkAndDeleteOldDb()
@@ -168,6 +170,115 @@ async function checkAndDeleteOldDb() {
             }).catch((err) => {
                 console.error("Could not delete database");
             })
+    }
+}
+
+// **** INIT CACHE ****
+/*
+1. Update count of items in cache, so that we can show the updated count in UI without fetching from backend again
+*/
+async function putItemsCountToCache(entity, count) {
+    try {
+        await db.metadata.put({ id: 'count_' + entity, value: count });
+    } catch (error) {
+        console.error(`Cache: Failed to put categories count: ${error}`)
+    }
+    // console.info(`Cache: Successfully put ${entity} count to cache: ${count}`)
+}
+
+/*
+1. Bulk add items to cache, used for first time load and sync delta
+2. Update the last sync time for the entity, so that we can fetch delta items later
+*/
+async function bulkPutItemsToCache(entity, items) {
+    try {
+        await db[entity].bulkPut(items)
+        const now = new Date().toISOString();
+        await db.metadata.put({ id: 'last_sync_' + entity, value: now });
+        // console.info(`Cache: Successfully added ${items.length} items to cache for ${entity}`)
+    } catch (error) {
+        console.error(`Cache: Failed to add ${entity}: ${error}`)
+    }
+}
+
+// **** INIT CACHE: VIEW DATA ****
+async function initView() {
+    await initTaskView();
+}
+
+async function initTaskView() {
+    try {
+        const tasks = await db.tasks.toArray();
+
+        const taskMap = new Map();
+        // storage for task data today's time elapsed, total time elapsed and tags
+        tasks.forEach(task => taskMap.set(task.id, {
+            id: task.id,
+            tags: []
+        }));
+        const taskIds = tasks.map(task => task.id);
+
+        // set tags for all tasks
+        await setTasksTags({ taskIds });
+
+        // set comments count for all tasks
+        await setTasksCommentsCount({ taskIds });
+
+    } catch (error) {
+        console.error(`Cache VIEW: Failed to initialize view data: ${error}`)
+    }
+}
+
+async function setTasksTags({ taskIds }) {
+    try {
+        const response = await getTasksTagsApi(taskIds)
+        // console.debug('Retrieved tasks tags from api:', { data: response.data });
+
+        // store tags data in tasks cache
+        // using Map for easy access and update
+        const tasksTagsMap = new Map();
+        for (let i = 0; i < response.data.length; i++) {
+            const tagId = response.data[i][3];
+            const taskId = response.data[i][2];
+            if (!tasksTagsMap.has(taskId)) {
+                tasksTagsMap.set(taskId, []);
+            }
+            tasksTagsMap.get(taskId).push(tagId);
+        }
+        // console.debug({ tasks_tags_map: tasksTagsMap });
+        // update cache
+        const bulkData = taskIds.map(taskId => ({ key: taskId, changes: { tagIds: tasksTagsMap.get(taskId) } }));
+        db['tasks'].bulkUpdate(bulkData);
+    } catch (error) {
+        console.error(`Cache VIEW: Failed to set tasks tags: ${error}`)
+    }
+}
+
+async function setTasksCommentsCount({ taskIds }) {
+    try {
+        const response = await getTasksCommentsCountApi(taskIds)
+        // console.debug('Retrieved tasks comments count from api:', { data: response.data });
+        // update cache
+        const bulkData = response.data.map(([taskId, commentsCount]) => ({ key: taskId, changes: { commentsCount: parseInt(commentsCount) } }));
+        db['tasks'].bulkUpdate(bulkData);
+    } catch (error) {
+        console.error(`Cache VIEW: Failed to set tasks comments count: ${error}`)
+    }
+}
+
+// **** UPDATE CACHE ****
+/*
+1. add or update key value pairs of an item in cache, 
+2. used for adding data to be shown in the UI but not needed to be synced to backend
+*/
+export async function modifyItemInCache(entity, id, dataObject) {
+    // console.debug({ entity, id }, dataObject)
+    try {
+        await db[entity]
+            .where({ id })
+            .modify(dataObject);
+    } catch (error) {
+        console.error(`Cache: Failed to update ${entity}: ${error}`, id)
     }
 }
 
@@ -239,6 +350,7 @@ export async function putServerItemToCache(entity, item) {
     }
 }
 
+// **** SYNC CACHE ****
 /*
 1. Sync all entities with dirty items parallelly, to improve performance
 */
@@ -299,6 +411,7 @@ export async function syncDirtyItems(entity) {
     }
 }
 
+// **** SYNC SERVER ****
 /*
 1. Sync all entities with delta items parallelly, to improve performance
 */
@@ -409,6 +522,20 @@ async function updateViewDataForDeltaItem(entity, serverItems, lastSyncTime) {
     }   
 }
 
+// **** READ CACHE ****
+// TODO: check why async await is necessary here
+/*
+1. Get count of items from cache, so that we can show the count in UI without fetching from backend again
+*/
+export async function getItemsCountFromCache(entity) {
+    try {
+        const meta = await db.metadata.get('count_' + entity)
+        return meta ? meta.value : -1;
+    } catch (error) {
+        console.error(`Cache: Failed to get categories count: ${error}`)
+    }
+}
+
 // TODO: check why async await is not necessary here
 /*
 1. Get items from cache with pagination, so that we can show the items in UI without fetching from backend again
@@ -436,7 +563,20 @@ export async function getItemsFromCache(entity, currentPage, pageSize) {
     }
 }
 
-// COMMENTS
+/*
+1. Get an item from cache by id, used for showing item details in UI in new page where list is not available
+*/
+export async function getItemFromCache(entity, id) {
+    // console.debug('loading data from cache');
+    // console.debug({ entity, id })
+    try {
+        return await db[entity].get({ id });
+    } catch (error) {
+        console.error(`Failed to get ${entity} with id: ${id}: ${error}`)
+    }
+}
+
+// READ COMMENTS
 // for dropdowns
 export async function getFilteredItemsFromCache(entity, filterBy, { limit, offset }) {
     // console.debug(`load filtered ${entity} from cache`);
@@ -513,7 +653,7 @@ async function createCommentsFilterQuery({ filterBy, filterById, filterWithRevis
     return query;
 }
 
-// POMODOROS
+// READ POMODOROS
 export async function getPomodorosFromCache({ startDate, endDate, includeCategories }) {
     // console.debug('load pomodoros from cache', { startDate, endDate, });
     try {
@@ -530,7 +670,7 @@ export async function getPomodorosFromCache({ startDate, endDate, includeCategor
     }
 }
 
-// TASKS
+// READ TASKS
 export async function getTasksCountFromCache({ projectId, tagId, startDate, endDate, searchString, status }) {
     // console.debug('load tasks count from cache', { projectId, tagId, startDate, endDate, searchString, status });
     try {
@@ -576,140 +716,4 @@ async function createTasksFilterQuery({ projectId, tagId, startDate, endDate, se
             .filter(task => regex.test(task.description))
     }
     return query;
-}
-
-// COMMON
-// TODO: check why async await is necessary here
-/*
-1. Get count of items from cache, so that we can show the count in UI without fetching from backend again
-*/
-export async function getItemsCountFromCache(entity) {
-    try {
-        const meta = await db.metadata.get('count_' + entity)
-        return meta ? meta.value : -1;
-    } catch (error) {
-        console.error(`Cache: Failed to get categories count: ${error}`)
-    }
-}
-
-/*
-1. Update count of items in cache, so that we can show the updated count in UI without fetching from backend again
-*/
-export async function putItemsCountToCache(entity, count) {
-    try {
-        await db.metadata.put({ id: 'count_' + entity, value: count });
-    } catch (error) {
-        console.error(`Cache: Failed to put categories count: ${error}`)
-    }
-    // console.info(`Cache: Successfully put ${entity} count to cache: ${count}`)
-}
-
-/*
-1. Bulk add items to cache, used for first time load and sync delta
-2. Update the last sync time for the entity, so that we can fetch delta items later
-*/
-export async function bulkPutItemsToCache(entity, items) {
-    try {
-        await db[entity].bulkPut(items)
-        const now = new Date().toISOString();
-        await db.metadata.put({ id: 'last_sync_' + entity, value: now });
-        // console.info(`Cache: Successfully added ${items.length} items to cache for ${entity}`)
-    } catch (error) {
-        console.error(`Cache: Failed to add ${entity}: ${error}`)
-    }
-}
-
-/*
-1. add or update key value pairs of an item in cache, 
-2. used for adding data to be shown in the UI but not needed to be synced to backend
-*/
-export async function modifyItemInCache(entity, id, dataObject) {
-    // console.debug({ entity, id }, dataObject)
-    try {
-        await db[entity]
-            .where({ id })
-            .modify(dataObject);
-    } catch (error) {
-        console.error(`Cache: Failed to update ${entity}: ${error}`, id)
-    }
-}
-
-/*
-1. Get an item from cache by id, used for showing item details in UI in new page where list is not available
-*/
-export async function getItemFromCache(entity, id) {
-    // console.debug('loading data from cache');
-    // console.debug({ entity, id })
-    try {
-        return await db[entity].get({ id });
-    } catch (error) {
-        console.error(`Failed to get ${entity} with id: ${id}: ${error}`)
-    }
-}
-
-// VIEW
-async function initView() {
-    await initTaskView();
-}
-
-// TASKS: view
-async function initTaskView() {
-    try {
-        const tasks = await db.tasks.toArray();
-
-        const taskMap = new Map();
-        // storage for task data today's time elapsed, total time elapsed and tags
-        tasks.forEach(task => taskMap.set(task.id, {
-            id: task.id,
-            tags: []
-        }));
-        const taskIds = tasks.map(task => task.id);
-
-        // set tags for all tasks
-        await setTasksTags({ taskIds });
-
-        // set comments count for all tasks
-        await setTasksCommentsCount({ taskIds });
-
-    } catch (error) {
-        console.error(`Cache VIEW: Failed to initialize view data: ${error}`)
-    }
-}
-
-// Tasks Cache initView methods
-async function setTasksTags({ taskIds }) {
-    try {
-        const response = await getTasksTagsApi(taskIds)
-        // console.debug('Retrieved tasks tags from api:', { data: response.data });
-
-        // store tags data in tasks cache
-        // using Map for easy access and update
-        const tasksTagsMap = new Map();
-        for (let i = 0; i < response.data.length; i++) {
-            const tagId = response.data[i][3];
-            const taskId = response.data[i][2];
-            if (!tasksTagsMap.has(taskId)) {
-                tasksTagsMap.set(taskId, []);
-            }
-            tasksTagsMap.get(taskId).push(tagId);
-        }
-        // console.debug({ tasks_tags_map: tasksTagsMap });
-        // update cache
-        const bulkData = taskIds.map(taskId => ({ key: taskId, changes: { tagIds: tasksTagsMap.get(taskId) } }));
-        db['tasks'].bulkUpdate(bulkData);
-    } catch (error) {
-        console.error(`Cache VIEW: Failed to set tasks tags: ${error}`)
-    }
-}
-
-async function setTasksCommentsCount({ taskIds }) {
-    try {
-        const response = await getTasksCommentsCountApi(taskIds)
-        // console.debug('Retrieved tasks comments count from api:', { data: response.data });
-        // update cache
-        const bulkData = response.data.map(([taskId, commentsCount]) => ({ key: taskId, changes: { commentsCount: parseInt(commentsCount) } }));
-        db['tasks'].bulkUpdate(bulkData);
-    } catch (error) {
-        console.error(`Cache VIEW: Failed to set tasks comments count: ${error}`)
-    }
 }
