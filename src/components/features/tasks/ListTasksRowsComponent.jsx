@@ -62,7 +62,7 @@ export default function ListTasksRowsComponent({
         const endTime = new Date().getTime();
         const duration = endTime - startTime;
         if (duration > 500) {
-            toast.info(`Tasks QueryDuration: ${duration} ms`, { position: "bottom-right" });
+            toast.info(`Tasks List QueryDuration: ${duration} ms`, { autoClose: 5 * 1000, position: "bottom-right" });
         }
         // TODO: find better solution: temp fix for order by
         // Sort by category first, then project, then task priority
@@ -89,7 +89,7 @@ export default function ListTasksRowsComponent({
         const endTime2 = new Date().getTime();
         const duration2 = endTime2 - startTime;
         if (duration2 > 500) {
-            toast.info(`Tasks & Pomodoros QueryDuration: ${duration2} ms`, { position: "bottom-right" });
+            toast.info(`Tasks & Pomodoros QueryDuration: ${duration2} ms`, { autoClose: 5 * 1000, position: "bottom-right" });
         }
 
         // calculate data for view
