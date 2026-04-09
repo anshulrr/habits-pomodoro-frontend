@@ -16,7 +16,7 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,woff,mp3,txt,json}'], // Files to precache
       },
       devOptions: {
-        enabled: true,               // Allows testing SW in dev mode!
+        // enabled: true,               // don't Allows testing SW in dev mode!, as it causes issues with hot reload, so keeping it disabled
         type: 'module',
       },
     }),
