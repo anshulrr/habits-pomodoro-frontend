@@ -13,7 +13,7 @@ export default defineConfig({
       filename: 'firebase-messaging-sw.js',            // Name of your source file
       registerType: 'autoUpdate',
       injectManifest: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg}'], // Files to precache
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,woff,mp3,txt,json}'], // Files to precache
       },
       devOptions: {
         enabled: true,               // Allows testing SW in dev mode!
