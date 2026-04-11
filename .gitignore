@@ -23,3 +23,10 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Ignore Android release artifacts
+android/app/release/
+*.jks
+*.keystore
+*.apk
+*.aab
