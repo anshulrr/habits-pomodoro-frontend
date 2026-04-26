@@ -1,8 +1,9 @@
 {
-    "compilerOptions": {
-        "baseUrl": "src"
-    },
-    "include": [
-        "src"
-    ]
+  "compilerOptions": {
+    // removing "baseUrl" as it is deprecated in favor of "paths"
+    "paths": {
+      "services/*": ["./src/services/*"],
+      "components/*": ["./src/components/*"],
+    }
+  }
 }

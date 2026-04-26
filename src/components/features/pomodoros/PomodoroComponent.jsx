@@ -65,7 +65,7 @@ export default function PomodoroComponent({
             // timeRemaing in this thread has different value
             // hence passing it as method parameter
             updatePomodoro('completed', 0);
-            const audio = new Audio(process.env.PUBLIC_URL + '/audio/success-1-6297.mp3')
+            const audio = new Audio(import.meta.env.PUBLIC_URL + '/audio/success-1-6297.mp3')
             audio.play();
             // document.title = 'Habits Pomodoro';
         }
