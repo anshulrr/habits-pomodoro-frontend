@@ -11,7 +11,7 @@ export default function HeaderComponent() {
     const user = authContext.user;
 
     return (
-        <header style={{ paddingTop: "56px" }}>
+        <header style={{ paddingTop: "48px" }}>
             <nav className="fixed-top header-shadow bg-light border-bottom border-2">
                 <div className="container">
                     <div className="d-flex justify-content-between header-menu">
